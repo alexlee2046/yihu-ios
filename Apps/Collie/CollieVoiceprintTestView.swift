@@ -1,4 +1,9 @@
+import Foundation
 import SwiftUI
+
+private func voiceprintText(_ key: String) -> String {
+    NSLocalizedString(key, tableName: "Yihu", comment: "")
+}
 
 /// A local calibration aid, not an identity-verification or automatic model switch.
 struct CollieVoiceprintTestView: View {
@@ -42,7 +47,7 @@ struct CollieVoiceprintTestView: View {
     var body: some View {
         Form {
             Section {
-                Text("请在安静和另一处日常环境各试几句。每句分别显示 WeSpeaker 与 CAM++ 对本机声纹的得分；两模型的分数不能直接互比。目前只使用 WeSpeaker 决定是否自动填入。")
+                Text(voiceprintText("请在安静和另一处日常环境各试几句。每句分别显示 WeSpeaker 与 CAM++ 对本机声纹的得分；两模型的分数不能直接互比。目前只使用 WeSpeaker 决定是否自动填入。"))
                     .fixedSize(horizontal: false, vertical: true)
                 if hasOldReference && !store.captureModeMatches(currentNearFieldEnabled: nearFieldEnabled) {
                     Text(CollieVoiceprint.captureModeChangedNotice)
@@ -51,31 +56,31 @@ struct CollieVoiceprintTestView: View {
                         .accessibilityIdentifier("collie-voiceprint-test-capture-mode-warning")
                 }
                 if !hasOldReference {
-                    Label("请先返回录制本人声纹。", systemImage: "exclamationmark.circle")
+                    Label(voiceprintText("请先返回录制本人声纹。"), systemImage: "exclamationmark.circle")
                 } else if !hasCAMReference {
-                    Label("CAM++ 暂无可用基准（旧版三句声纹或候选模型录制失败）；WeSpeaker 仍可测试。", systemImage: "info.circle")
+                    Label(voiceprintText("CAM++ 暂无可用基准（旧版三句声纹或候选模型录制失败）；WeSpeaker 仍可测试。"), systemImage: "info.circle")
                 }
-                Picker("本句是谁说的", selection: $speaker) {
-                    ForEach(Speaker.allCases, id: \.self) { kind in Text(kind.rawValue).tag(kind) }
+                Picker(voiceprintText("本句是谁说的"), selection: $speaker) {
+                    ForEach(Speaker.allCases, id: \.self) { kind in Text(voiceprintText(kind.rawValue)).tag(kind) }
                 }
                 .pickerStyle(.segmented)
                 .disabled(recording || processing)
                 .accessibilityIdentifier("collie-voiceprint-test-speaker")
-                Button(recording ? "结束测试录音" : "录制一句并查看得分") {
+                Button(recording ? voiceprintText("结束测试录音") : voiceprintText("录制一句并查看得分")) {
                     if recording { stop() } else { start() }
                 }
                 .disabled(!recording && (!hasOldReference || requesting || processing || voice.canCancel || voice.phase == .delivering))
                 .accessibilityIdentifier("collie-voiceprint-test-record")
-                if processing { ProgressView(hasCAMReference ? "正在本机计算两模型得分…" : "正在本机计算 WeSpeaker 得分…") }
+                if processing { ProgressView(hasCAMReference ? voiceprintText("正在本机计算两模型得分…") : voiceprintText("正在本机计算 WeSpeaker 得分…")) }
                 if let status { Text(status).foregroundStyle(.secondary).accessibilityIdentifier("collie-voiceprint-test-status") }
-            } header: { Text("声纹测试") } footer: {
-                Text("建议单句说话约 1–10 秒；本页有效语音满 1 秒即可打分。开启声纹过滤后，1–2 秒照常由 WeSpeaker 判定，少于 1 秒保留文字供手动确认。本页只保留本次查看的分数，退出即清空，不上传声音或向量。")
+            } header: { Text(voiceprintText("声纹测试")) } footer: {
+                Text(voiceprintText("建议单句说话约 1–10 秒；本页有效语音满 1 秒即可打分。开启声纹过滤后，1–2 秒照常由 WeSpeaker 判定，少于 1 秒保留文字供手动确认。本页只保留本次查看的分数，退出即清空，不上传声音或向量。"))
             }
             if !rows.isEmpty {
-                Section("本轮每句得分") {
+                Section(voiceprintText("本轮每句得分")) {
                     ForEach(rows) { row in
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("第 \(row.index) 句 · \(row.speaker.rawValue) · 录音 \(String(format: "%.1f", row.seconds)) 秒 / 有效 \(String(format: "%.1f", row.voicedSeconds)) 秒")
+                            Text(String(format: voiceprintText("第 %lld 句 · %@ · 录音 %@ 秒 / 有效 %@ 秒"), Int64(row.index), voiceprintText(row.speaker.rawValue), String(format: "%.1f", row.seconds), String(format: "%.1f", row.voicedSeconds)))
                                 .font(.headline)
                             HStack {
                                 Text("WeSpeaker：\(formatted(row.old))")
@@ -88,11 +93,11 @@ struct CollieVoiceprintTestView: View {
                     }
                     if let hint = calibrationHint(\.old, model: "WeSpeaker") { Text(hint).font(.footnote) }
                     if let hint = calibrationHint(\.cam, model: "CAM++") { Text(hint).font(.footnote) }
-                    Button("清空本轮分数") { rows = []; status = nil }
+                    Button(voiceprintText("清空本轮分数")) { rows = []; status = nil }
                 }
             }
         }
-        .navigationTitle("声纹测试")
+        .navigationTitle(voiceprintText("声纹测试"))
         .onAppear {
             visible = true
             hasOldReference = store.load() != nil
@@ -103,7 +108,7 @@ struct CollieVoiceprintTestView: View {
             if phase == .background {
                 cancel()
                 rows = []
-                status = "应用已进入后台，请重新测试"
+                status = voiceprintText("应用已进入后台，请重新测试")
             }
         }
         .onDisappear {
@@ -115,7 +120,7 @@ struct CollieVoiceprintTestView: View {
         .onChange(of: voice.phase) { _, _ in
             if (recording || requesting) && (voice.canCancel || voice.phase == .delivering) {
                 cancel()
-                status = "语音输入已启动，测试录音已安全结束；请重试"
+                status = voiceprintText("语音输入已启动，测试录音已安全结束；请重试")
             }
         }
     }
@@ -128,12 +133,12 @@ struct CollieVoiceprintTestView: View {
         let owner = rows.filter { $0.speaker == .owner }.compactMap { $0[keyPath: score] }
         let others = rows.filter { $0.speaker == .other }.compactMap { $0[keyPath: score] }
         guard let lowestOwner = owner.min(), let highestOther = others.max() else { return nil }
-        let gap = lowestOwner > highestOther ? "本轮有间隔，仍需更多真机样本" : "得分重叠，不能可靠设门槛"
-        return "\(model)：本人最低 \(formatted(lowestOwner))，他人最高 \(formatted(highestOther))；\(gap)。"
+        let gap = lowestOwner > highestOther ? voiceprintText("本轮有间隔，仍需更多真机样本") : voiceprintText("得分重叠，不能可靠设门槛")
+        return String(format: voiceprintText("%@：本人最低 %@，他人最高 %@；%@。"), model, formatted(lowestOwner), formatted(highestOther), gap)
     }
 
     private func formatted(_ value: Float?) -> String {
-        guard let value else { return "不可用" }
+        guard let value else { return voiceprintText("不可用") }
         return String(format: "%.3f", value)
     }
 
@@ -151,7 +156,7 @@ struct CollieVoiceprintTestView: View {
     private func start() {
         guard visible, scenePhase == .active, !requesting, !processing else { return }
         guard voice.claimVoiceprintTestMic() else {
-            status = "语音输入正在使用麦克风，请结束后再测试"
+            status = voiceprintText("语音输入正在使用麦克风，请结束后再测试")
             return
         }
         let token = generation
@@ -162,21 +167,21 @@ struct CollieVoiceprintTestView: View {
             requesting = false
             guard scenePhase == .active else {
                 voice.releaseVoiceprintTestMic()
-                status = "请返回应用后重新测试"
+                status = voiceprintText("请返回应用后重新测试")
                 return
             }
             guard allowed else {
                 voice.releaseVoiceprintTestMic()
-                status = "请先允许本机麦克风权限"
+                status = voiceprintText("请先允许本机麦克风权限")
                 return
             }
             do {
                 try recorder.start()
                 recording = true
-                status = "正在录音；请说一句话后结束"
+                status = voiceprintText("正在录音；请说一句话后结束")
             } catch {
                 voice.releaseVoiceprintTestMic()
-                status = "无法启动麦克风，请稍后重试"
+                status = voiceprintText("无法启动麦克风，请稍后重试")
             }
         }
     }
@@ -195,17 +200,17 @@ struct CollieVoiceprintTestView: View {
         switch result {
         case .failure:
             processing = false
-            status = "录音中断，请重试这一句"
+            status = voiceprintText("录音中断，请重试这一句")
         case .success(let samples):
             guard Self.acceptsRecording(samples.count) else {
                 processing = false
-                status = "录音请控制在约 1–10 秒；本句未比对"
+                status = voiceprintText("录音请控制在约 1–10 秒；本句未比对")
                 return
             }
             let voiced = CollieVoiceprint.voicedRange(samples)
             guard voiced.count >= CollieVoiceprint.minimumVoicedSamples else {
                 processing = false
-                status = "有效语音不足约 1 秒，本句未比对"
+                status = voiceprintText("有效语音不足约 1 秒，本句未比对")
                 return
             }
             let token = generation
@@ -231,7 +236,7 @@ struct CollieVoiceprintTestView: View {
                                      old: safeOld, cam: safeCAM))
                 processing = false
                 task = nil
-                status = safeOld == nil ? "WeSpeaker 暂不可用；本句未参与判断" : "本句得分仅供校准，未改变填入门槛"
+                status = safeOld == nil ? voiceprintText("WeSpeaker 暂不可用；本句未参与判断") : voiceprintText("本句得分仅供校准，未改变填入门槛")
             }
         }
     }

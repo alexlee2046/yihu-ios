@@ -42,6 +42,8 @@ targets:
     sources:
       - Extensions/CollieShare
       - Shared/CollieShareInbox.swift
+      - path: Apps/Collie/Yihu.xcstrings
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).share

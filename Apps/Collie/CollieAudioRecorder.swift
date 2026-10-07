@@ -413,17 +413,17 @@ enum CollieAudioRecorderError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .startFailed:
-            return "无法启动录音，请重试。"
+            return NSLocalizedString("无法启动录音，请重试。", tableName: "Yihu", comment: "")
         case .interrupted:
-            return "录音被系统中断，请重试。"
+            return NSLocalizedString("录音被系统中断，请重试。", tableName: "Yihu", comment: "")
         case .tooShort:
-            return "录音太短，请按住片刻后再试。"
+            return NSLocalizedString("录音太短，请按住片刻后再试。", tableName: "Yihu", comment: "")
         case .permissionDenied:
-            return "请先允许麦克风权限。"
+            return NSLocalizedString("请先允许麦克风权限。", tableName: "Yihu", comment: "")
         case .notRecording:
-            return "当前没有录音。"
+            return NSLocalizedString("当前没有录音。", tableName: "Yihu", comment: "")
         case .busy:
-            return "上一段录音仍在结束，请稍后重试。"
+            return NSLocalizedString("上一段录音仍在结束，请稍后重试。", tableName: "Yihu", comment: "")
         }
     }
 }

@@ -20,7 +20,7 @@ struct CollieSharedItem: Codable, Equatable, Identifiable, Sendable {
         switch kind {
         case .text: return text.map { String($0.prefix(40)) } ?? ""
         case .url: return text ?? ""
-        case .file: return fileName ?? "文件"
+        case .file: return fileName ?? NSLocalizedString("文件", tableName: "Yihu", comment: "")
         }
     }
 }
@@ -36,8 +36,8 @@ enum CollieShareInboxError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .unavailable: return "无法访问一呼的共享收件箱。"
-        case .tooLarge: return "内容太大（单次最多 \(CollieShareInbox.maxBatchBytes / 1_048_576) MB）。"
+        case .unavailable: return NSLocalizedString("无法访问一呼的共享收件箱。", tableName: "Yihu", comment: "")
+        case .tooLarge: return String(format: NSLocalizedString("内容太大（单次最多 %lld MB）。", tableName: "Yihu", comment: ""), CollieShareInbox.maxBatchBytes / 1_048_576)
         }
     }
 }

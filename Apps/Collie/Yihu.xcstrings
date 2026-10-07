@@ -1,6 +1,1601 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
+    "内容太大（单次最多 %lld MB）。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Content is too large (maximum %lld MB per batch)." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "内容太大（单次最多 %lld MB）。" } }
+      }
+    },
+    "无法访问一呼的共享收件箱。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Cannot access Yihu's shared inbox." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法访问一呼的共享收件箱。" } }
+      }
+    },
+    "旧版 3 句声纹：建议重录 6 句": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Legacy 3-phrase voiceprint: please record 6 new phrases"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "旧版 3 句声纹：建议重录 6 句"
+          }
+        }
+      }
+    },
+    "已录制 6 句声纹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6-phrase voiceprint recorded"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已录制 6 句声纹"
+          }
+        }
+      }
+    },
+    "声纹不可用，请重新录制，或关闭开关。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voiceprint unavailable. Record it again or turn this off."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "声纹不可用，请重新录制，或关闭开关。"
+          }
+        }
+      }
+    },
+    "尚未录制声纹。先完成录制才能开启。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No voiceprint recorded. Complete enrollment before enabling this."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚未录制声纹。先完成录制才能开启。"
+          }
+        }
+      }
+    },
+    "仅在语音填入前比对，不影响语音记录；有效语音不足约 1 秒才保留文字供手动确认，1–2 秒照常比对。声纹只保存在本机、不上传、不备份；可能误判，不可用于身份验证。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checked only before inserting dictated text, not for voice notes. Speech shorter than about 1 second is held for manual confirmation; 1–2 seconds is checked normally. Voiceprints stay on this device, without upload or backup. Results can be wrong and must not be used for identity verification."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅在语音填入前比对，不影响语音记录；有效语音不足约 1 秒才保留文字供手动确认，1–2 秒照常比对。声纹只保存在本机、不上传、不备份；可能误判，不可用于身份验证。"
+          }
+        }
+      }
+    },
+    "按顺序念 6 句，每句约 5–10 秒。前 3 句在安静环境，后 3 句请换到不同的日常环境（例如窗边或室外），正常音量说话。旧声纹保留至六句全部录完。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read 6 phrases in order, about 5–10 seconds each. Record the first 3 somewhere quiet, then move to another everyday setting, such as near a window or outdoors. Speak at your normal volume. Your previous voiceprint stays until all six are complete."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按顺序念 6 句，每句约 5–10 秒。前 3 句在安静环境，后 3 句请换到不同的日常环境（例如窗边或室外），正常音量说话。旧声纹保留至六句全部录完。"
+          }
+        }
+      }
+    },
+    "安静环境": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quiet setting"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安静环境"
+          }
+        }
+      }
+    },
+    "另一日常环境": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Another everyday setting"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "另一日常环境"
+          }
+        }
+      }
+    },
+    "结束这一句": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish This Phrase"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "结束这一句"
+          }
+        }
+      }
+    },
+    "开始录制": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start Recording"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开始录制"
+          }
+        }
+      }
+    },
+    "正在本机提取声纹…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extracting voiceprint on this device…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在本机提取声纹…"
+          }
+        }
+      }
+    },
+    "重新录制六句": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record All Six Again"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重新录制六句"
+          }
+        }
+      }
+    },
+    "重录声纹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record Voiceprint Again"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重录声纹"
+          }
+        }
+      }
+    },
+    "录制声纹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record Voiceprint"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录制声纹"
+          }
+        }
+      }
+    },
+    "WeSpeaker 暂继续用于填入前确认；CAM++ 仅作本机对照候选。两模型的实际得分可在下方测试页查看，不能直接比较分数高低。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WeSpeaker remains the check before insertion; CAM++ is only a local comparison candidate. View their scores on the test page below. Scores from the two models are not directly comparable."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WeSpeaker 暂继续用于填入前确认；CAM++ 仅作本机对照候选。两模型的实际得分可在下方测试页查看，不能直接比较分数高低。"
+          }
+        }
+      }
+    },
+    "声纹测试（两模型得分）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voiceprint Test (Two Models)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "声纹测试（两模型得分）"
+          }
+        }
+      }
+    },
+    "使用本机麦克风录制不同环境的多句短语。显示每句与本人基准的余弦得分；不同模型没有统一阈值，需用真实本人及他人声音数据校准。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record several phrases in different settings using this device. Each cosine score compares a phrase with your enrolled reference. Models have no shared threshold; calibration requires real samples from you and other speakers."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用本机麦克风录制不同环境的多句短语。显示每句与本人基准的余弦得分；不同模型没有统一阈值，需用真实本人及他人声音数据校准。"
+          }
+        }
+      }
+    },
+    "请先录完六句或重新开始，本轮未完成时不可进入测试页。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish all six phrases or start again before opening the test page."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先录完六句或重新开始，本轮未完成时不可进入测试页。"
+          }
+        }
+      }
+    },
+    "删除声纹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Voiceprint"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "删除声纹"
+          }
+        }
+      }
+    },
+    "删除本机声纹？": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the voiceprint on this device?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "删除本机声纹？"
+          }
+        }
+      }
+    },
+    "声纹已从本机删除": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voiceprint deleted from this device"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "声纹已从本机删除"
+          }
+        }
+      }
+    },
+    "删除失败，请重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not delete. Please try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "删除失败，请重试"
+          }
+        }
+      }
+    },
+    "已进入后台，请重新录制六句": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The app entered the background. Record all six phrases again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已进入后台，请重新录制六句"
+          }
+        }
+      }
+    },
+    "请返回应用后重新录制": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to the app and record again"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请返回应用后重新录制"
+          }
+        }
+      }
+    },
+    "无法使用麦克风，请检查权限": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone unavailable. Check microphone permission."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法使用麦克风，请检查权限"
+          }
+        }
+      }
+    },
+    "正在结束录音…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finishing recording…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在结束录音…"
+          }
+        }
+      }
+    },
+    "录音被系统中断，请重试这一句": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording was interrupted by the system. Try this phrase again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音被系统中断，请重试这一句"
+          }
+        }
+      }
+    },
+    "录音已超时，请将每句控制在约 5–10 秒": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording timed out. Keep each phrase to about 5–10 seconds."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音已超时，请将每句控制在约 5–10 秒"
+          }
+        }
+      }
+    },
+    "每句请录制约 5–10 秒，再试一次": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record each phrase for about 5–10 seconds. Try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每句请录制约 5–10 秒，再试一次"
+          }
+        }
+      }
+    },
+    "有效语音不足约 2 秒，请重录这一句": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Less than about 2 seconds of speech detected. Record this phrase again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有效语音不足约 2 秒，请重录这一句"
+          }
+        }
+      }
+    },
+    "有效语音不足或 WeSpeaker 不可用，请重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough speech, or WeSpeaker is unavailable. Try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有效语音不足或 WeSpeaker 不可用，请重试"
+          }
+        }
+      }
+    },
+    "录音间差异过大，请确认均为本人并重新录制六句": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The recordings differ too much. Make sure they are all your voice and record all six again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音间差异过大，请确认均为本人并重新录制六句"
+          }
+        }
+      }
+    },
+    "六句声纹已保存在本机，可打开测试页查看两模型得分": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All six phrases are saved on this device. Open the test page to see both models' scores."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "六句声纹已保存在本机，可打开测试页查看两模型得分"
+          }
+        }
+      }
+    },
+    "WeSpeaker 声纹已保存；CAM++ 本轮不可用，测试页仅显示 WeSpeaker 得分": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WeSpeaker voiceprint saved. CAM++ was unavailable this time; the test page will show only WeSpeaker scores."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WeSpeaker 声纹已保存；CAM++ 本轮不可用，测试页仅显示 WeSpeaker 得分"
+          }
+        }
+      }
+    },
+    "新声纹已保存，但旧版声纹清理失败；请删除声纹后重新录制": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New voiceprint saved, but the legacy voiceprint could not be removed. Delete the voiceprint and record again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新声纹已保存，但旧版声纹清理失败；请删除声纹后重新录制"
+          }
+        }
+      }
+    },
+    "保存失败，旧声纹仍有效，请重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save. Your previous voiceprint remains active. Try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存失败，旧声纹仍有效，请重试"
+          }
+        }
+      }
+    },
+    "请在安静和另一处日常环境各试几句。每句分别显示 WeSpeaker 与 CAM++ 对本机声纹的得分；两模型的分数不能直接互比。目前只使用 WeSpeaker 决定是否自动填入。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try several phrases somewhere quiet and in another everyday setting. Each phrase shows WeSpeaker and CAM++ scores against your local voiceprint. Their scores are not directly comparable. Only WeSpeaker currently decides whether to insert text automatically."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在安静和另一处日常环境各试几句。每句分别显示 WeSpeaker 与 CAM++ 对本机声纹的得分；两模型的分数不能直接互比。目前只使用 WeSpeaker 决定是否自动填入。"
+          }
+        }
+      }
+    },
+    "请先返回录制本人声纹。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go back and record your own voiceprint first."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先返回录制本人声纹。"
+          }
+        }
+      }
+    },
+    "CAM++ 暂无可用基准（旧版三句声纹或候选模型录制失败）；WeSpeaker 仍可测试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CAM++ has no usable reference (legacy three-phrase enrollment or candidate model failure). You can still test WeSpeaker."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CAM++ 暂无可用基准（旧版三句声纹或候选模型录制失败）；WeSpeaker 仍可测试。"
+          }
+        }
+      }
+    },
+    "本句是谁说的": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Who Is Speaking?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本句是谁说的"
+          }
+        }
+      }
+    },
+    "本人": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Me"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本人"
+          }
+        }
+      }
+    },
+    "他人": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Someone Else"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "他人"
+          }
+        }
+      }
+    },
+    "结束测试录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish Test Recording"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "结束测试录音"
+          }
+        }
+      }
+    },
+    "录制一句并查看得分": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record a Phrase and View Scores"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录制一句并查看得分"
+          }
+        }
+      }
+    },
+    "正在本机计算两模型得分…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calculating both models' scores on this device…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在本机计算两模型得分…"
+          }
+        }
+      }
+    },
+    "正在本机计算 WeSpeaker 得分…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calculating WeSpeaker scores on this device…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在本机计算 WeSpeaker 得分…"
+          }
+        }
+      }
+    },
+    "声纹测试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voiceprint Test"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "声纹测试"
+          }
+        }
+      }
+    },
+    "建议单句说话约 1–10 秒；本页有效语音满 1 秒即可打分。开启声纹过滤后，1–2 秒照常由 WeSpeaker 判定，少于 1 秒保留文字供手动确认。本页只保留本次查看的分数，退出即清空，不上传声音或向量。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speak for about 1–10 seconds per phrase; this page can score at least 1 second of detected speech. With voiceprint filtering enabled, WeSpeaker checks 1–2 seconds normally; shorter speech is held for manual confirmation. Scores are kept only for this visit and cleared when you leave. Audio and vectors are not uploaded."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "建议单句说话约 1–10 秒；本页有效语音满 1 秒即可打分。开启声纹过滤后，1–2 秒照常由 WeSpeaker 判定，少于 1 秒保留文字供手动确认。本页只保留本次查看的分数，退出即清空，不上传声音或向量。"
+          }
+        }
+      }
+    },
+    "本轮每句得分": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scores for This Round"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本轮每句得分"
+          }
+        }
+      }
+    },
+    "清空本轮分数": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear This Round's Scores"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清空本轮分数"
+          }
+        }
+      }
+    },
+    "应用已进入后台，请重新测试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The app entered the background. Test again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "应用已进入后台，请重新测试"
+          }
+        }
+      }
+    },
+    "语音输入已启动，测试录音已安全结束；请重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice input started. The test recording was safely stopped; please try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "语音输入已启动，测试录音已安全结束；请重试"
+          }
+        }
+      }
+    },
+    "本轮有间隔，仍需更多真机样本": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scores are separated in this round, but more device samples are needed"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本轮有间隔，仍需更多真机样本"
+          }
+        }
+      }
+    },
+    "得分重叠，不能可靠设门槛": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scores overlap; a reliable threshold cannot be set"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "得分重叠，不能可靠设门槛"
+          }
+        }
+      }
+    },
+    "不可用": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unavailable"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不可用"
+          }
+        }
+      }
+    },
+    "语音输入正在使用麦克风，请结束后再测试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice input is using the microphone. Finish it before testing."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "语音输入正在使用麦克风，请结束后再测试"
+          }
+        }
+      }
+    },
+    "请返回应用后重新测试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to the app and test again"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请返回应用后重新测试"
+          }
+        }
+      }
+    },
+    "请先允许本机麦克风权限": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow microphone access first"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先允许本机麦克风权限"
+          }
+        }
+      }
+    },
+    "正在录音；请说一句话后结束": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording. Say one phrase, then finish."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在录音；请说一句话后结束"
+          }
+        }
+      }
+    },
+    "无法启动麦克风，请稍后重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start the microphone. Try again later."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法启动麦克风，请稍后重试"
+          }
+        }
+      }
+    },
+    "录音中断，请重试这一句": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording interrupted. Try this phrase again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音中断，请重试这一句"
+          }
+        }
+      }
+    },
+    "录音请控制在约 1–10 秒；本句未比对": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep recordings to about 1–10 seconds. This phrase was not compared."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音请控制在约 1–10 秒；本句未比对"
+          }
+        }
+      }
+    },
+    "有效语音不足约 1 秒，本句未比对": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Less than about 1 second of speech detected. This phrase was not compared."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有效语音不足约 1 秒，本句未比对"
+          }
+        }
+      }
+    },
+    "WeSpeaker 暂不可用；本句未参与判断": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WeSpeaker is unavailable. This phrase was not used for evaluation."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WeSpeaker 暂不可用；本句未参与判断"
+          }
+        }
+      }
+    },
+    "本句得分仅供校准，未改变填入门槛": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This score is for calibration only. The insertion threshold has not changed."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本句得分仅供校准，未改变填入门槛"
+          }
+        }
+      }
+    },
+    "近场收音设置已变，建议重新录制声纹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Near-field capture settings changed. Please record your voiceprint again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "近场收音设置已变，建议重新录制声纹"
+          }
+        }
+      }
+    },
+    "该工作台不在最近用过的列表中。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This workbench is not in the recent list."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "该工作台不在最近用过的列表中。"
+          }
+        }
+      }
+    },
+    "请在系统设置中允许一呼发送通知。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Yihu notifications in system settings."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在系统设置中允许一呼发送通知。"
+          }
+        }
+      }
+    },
+    "请在系统设置中允许一呼使用「实时活动」。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Yihu Live Activities in system settings."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在系统设置中允许一呼使用「实时活动」。"
+          }
+        }
+      }
+    },
+    "无法开启推送，请检查网络后重试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not enable push notifications. Check your connection and try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法开启推送，请检查网络后重试。"
+          }
+        }
+      }
+    },
+    "无法连接 Hermes 提醒服务，请确认已开启 Tailscale。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not connect to the Hermes reminder service. Make sure Tailscale is enabled."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法连接 Hermes 提醒服务，请确认已开启 Tailscale。"
+          }
+        }
+      }
+    },
+    "存储空间不足或写入失败，记录已保存到出错之前。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storage is full or writing failed. The recording was saved up to the error."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "存储空间不足或写入失败，记录已保存到出错之前。"
+          }
+        }
+      }
+    },
+    "录音被来电或其他应用打断，已保存到打断之前。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A call or another app interrupted recording. Audio was saved up to the interruption."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音被来电或其他应用打断，已保存到打断之前。"
+          }
+        }
+      }
+    },
+    "系统音频服务重置，记录已保存到此前。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The system audio service reset. Audio recorded before the reset was saved."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统音频服务重置，记录已保存到此前。"
+          }
+        }
+      }
+    },
+    "录音设备变化后无法继续，记录已保存到此前。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording could not continue after the audio device changed. Earlier audio was saved."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音设备变化后无法继续，记录已保存到此前。"
+          }
+        }
+      }
+    },
+    "正在语音输入，结束后再开始记录。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice input is active. Finish it before starting a voice note."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在语音输入，结束后再开始记录。"
+          }
+        }
+      }
+    },
+    "无法开始记录：麦克风暂时不可用。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start recording: the microphone is unavailable."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法开始记录：麦克风暂时不可用。"
+          }
+        }
+      }
+    },
+    "没有录到声音。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No audio was recorded."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有录到声音。"
+          }
+        }
+      }
+    },
+    "转写失败，请重试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcription failed. Try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "转写失败，请重试。"
+          }
+        }
+      }
+    },
+    "这条记录没有识别出文字。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No text was recognized in this note."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这条记录没有识别出文字。"
+          }
+        }
+      }
+    },
+    "打开系统麦克风模式": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open System Microphone Modes"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开系统麦克风模式"
+          }
+        }
+      }
+    },
+    "人声突显：只收离手机最近的人声，适合旁边有人说话时。系统模式会在支持的音频路由上生效。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice Isolation emphasizes speech closest to the phone, useful when others are talking nearby. System modes apply on supported audio routes."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人声突显：只收离手机最近的人声，适合旁边有人说话时。系统模式会在支持的音频路由上生效。"
+          }
+        }
+      }
+    },
+    "标准": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "标准"
+          }
+        }
+      }
+    },
+    "人声突显": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice Isolation"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人声突显"
+          }
+        }
+      }
+    },
+    "宽频谱": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wide Spectrum"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "宽频谱"
+          }
+        }
+      }
+    },
+    "系统模式": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System Mode"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统模式"
+          }
+        }
+      }
+    },
+    "第 %lld 句 · %@：%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phrase %lld · %@: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %lld 句 · %@：%@"
+          }
+        }
+      }
+    },
+    "正在录制第 %lld 句（5–10 秒）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording phrase %lld (5–10 seconds)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在录制第 %lld 句（5–10 秒）"
+          }
+        }
+      }
+    },
+    "第 %lld 句已完成，请继续换环境录制": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phrase %lld complete. Continue recording in another setting."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %lld 句已完成，请继续换环境录制"
+          }
+        }
+      }
+    },
+    "第 %lld 句已完成；CAM++ 本轮不可用，仍可完成 WeSpeaker 注册": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phrase %lld complete. CAM++ is unavailable this time; you can still finish WeSpeaker enrollment."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %lld 句已完成；CAM++ 本轮不可用，仍可完成 WeSpeaker 注册"
+          }
+        }
+      }
+    },
+    "第 %lld 句 · %@ · 录音 %@ 秒 / 有效 %@ 秒": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phrase %lld · %@ · recorded %@ s / speech %@ s"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %lld 句 · %@ · 录音 %@ 秒 / 有效 %@ 秒"
+          }
+        }
+      }
+    },
+    "%@：本人最低 %@，他人最高 %@；%@。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: lowest own score %@, highest other score %@; %@."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@：本人最低 %@，他人最高 %@；%@。"
+          }
+        }
+      }
+    },
+    "当前麦克风模式：%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current microphone mode: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前麦克风模式：%@"
+          }
+        }
+      }
+    },
     "版本": {
       "extractionState": "manual",
       "localizations": {
@@ -307,7 +1902,153 @@
     "会放进「收到分享」，回到工作台点一下输入框，再点「填入」。长转写以文本附件形式交给工作台。不会自动发送。": { "extractionState": "manual", "localizations": {
       "en": { "stringUnit": { "state": "translated", "value": "Placed in Received shares. Return to your workbench, tap the text field, then Insert. Long transcripts are handed over as text attachments. Nothing is sent automatically." } },
       "zh-Hans": { "stringUnit": { "state": "translated", "value": "会放进「收到分享」，回到工作台点一下输入框，再点「填入」。长转写以文本附件形式交给工作台。不会自动发送。" } }
-    } }
+    } },
+    "录音或转写正在进行，请先完成或取消，不能在此时切换服务。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Recording or transcription is in progress. Finish or cancel it before switching services." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音或转写正在进行，请先完成或取消，不能在此时切换服务。" } } } },
+    "转写文字正在交付，请等待完成后再切换服务。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "A transcript is being delivered. Wait for it to finish before switching services." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "转写文字正在交付，请等待完成后再切换服务。" } } } },
+    "存在尚未填入的转写文字，请先填入或明确放弃，避免丢失草稿。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "A transcript has not been inserted. Insert or explicitly discard it before switching, so the draft is not lost." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "存在尚未填入的转写文字，请先填入或明确放弃，避免丢失草稿。" } } } },
+    "正在开启或停用通知，请等待完成后再切换工作台。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notifications are being enabled or disabled. Wait for that to finish before switching workbenches." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在开启或停用通知，请等待完成后再切换工作台。" } } } },
+    "无法检查语音输入状态，请稍后重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Voice input status could not be checked. Try again shortly." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法检查语音输入状态，请稍后重试。" } } } },
+    "正在连接工作台…": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Connecting to workbench…" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在连接工作台…" } } } },
+    "正在建立安全连接": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Establishing a secure connection" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在建立安全连接" } } } },
+    "仍然填入": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Insert anyway" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "仍然填入" } } } },
+    "再次填入": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Insert again" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "再次填入" } } } },
+    "重新连接并填入": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Reconnect and insert" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "重新连接并填入" } } } },
+    "录音被系统中断，请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Recording was interrupted by the system. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音被系统中断，请重试。" } } } },
+    "重命名工作台": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Rename workbench" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "重命名工作台" } } } },
+    "工作台名称": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Workbench name" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "工作台名称" } } } },
+    "保存": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Save" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "保存" } } } },
+    "名称保存在本机的本地设置中；清空可恢复页面标题或地址。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The name is saved in this iPhone's local settings. Clear it to restore the page title or address." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "名称保存在本机的本地设置中；清空可恢复页面标题或地址。" } } } },
+    "仍无法连接，文字已保存在本机。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Still unable to connect. The text remains saved on this iPhone." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "仍无法连接，文字已保存在本机。" } } } },
+    "一呼": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Yihu" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "一呼" } } } },
+    "工作台": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Workbenches" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "工作台" } } } },
+    "%1$@，%2$@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "%1$@, %2$@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "%1$@，%2$@" } } } },
+    "正在语音记录": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Recording a voice note" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在语音记录" } } } },
+    "松开取消": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Release to cancel" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "松开取消" } } } },
+    "放弃这段文字？": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Discard this text?" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "放弃这段文字？" } } } },
+    "放弃文字": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Discard text" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "放弃文字" } } } },
+    "保留": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Keep" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "保留" } } } },
+    "%lld 秒": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "%lld sec" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "%lld 秒" } } } },
+    "正在录音": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Recording" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在录音" } } } },
+    "松开或双击完成录音": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Release or double-tap to finish recording" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "松开或双击完成录音" } } } },
+    "点按开始，或按住说话": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Tap to start, or press and hold to speak" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "点按开始，或按住说话" } } } },
+    "放弃录音": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Cancel recording" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "放弃录音" } } } },
+    "移到右侧": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Move to the right" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "移到右侧" } } } },
+    "移到左侧": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Move to the left" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "移到左侧" } } } },
+    "录音没有开始，请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Recording did not start. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音没有开始，请重试。" } } } },
+    "下载语音模型": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Download voice model" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "下载语音模型" } } } },
+    "约 950 MB，建议连接 Wi‑Fi。下载时请停留在一呼，完成后可离线使用。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "About 950 MB. Wi-Fi is recommended. Stay in Yihu while downloading. Voice input can then be used offline." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "约 950 MB，建议连接 Wi‑Fi。下载时请停留在一呼，完成后可离线使用。" } } } },
+    "下载": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Download" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "下载" } } } },
+    "%1$@（%2$@）": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "%1$@ (%2$@)" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "%1$@（%2$@）" } } } },
+    "下载源：%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Download source: %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "下载源：%@" } } } },
+    "语音模型下载进度 %lld%%": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Voice model download progress %lld%%" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "语音模型下载进度 %lld%%" } } } },
+    "请停留在一呼，下载完成后可离线使用。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Stay in Yihu while downloading. Voice input can then be used offline." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "请停留在一呼，下载完成后可离线使用。" } } } },
+    "去设置": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Open Settings" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "去设置" } } } },
+    "重试": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Try again" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "重试" } } } },
+    "换下载源": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Change download source" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "换下载源" } } } },
+    "再录一次": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Record again" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "再录一次" } } } },
+    "关闭": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Close" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "关闭" } } } },
+    "放弃": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Discard" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "放弃" } } } },
+    "无法连接工作台": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Unable to connect to the workbench" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法连接工作台" } } } },
+    "工作台%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Workbench %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "工作台%@" } } } },
+    "国内源": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "China source" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "国内源" } } } },
+    "海外源": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "International source" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "海外源" } } } },
+    "适合中国大陆网络": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "For networks in mainland China" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "适合中国大陆网络" } } } },
+    "适合中国大陆以外网络": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "For networks outside mainland China" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "适合中国大陆以外网络" } } } },
+    "正在连接": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Connecting" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在连接" } } } },
+    "连接失败": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Connection failed" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "连接失败" } } } },
+    "已连接": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Connected" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "已连接" } } } },
+    "未连接": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Not connected" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "未连接" } } } },
+    "当前工作台页面没有能接收这类文件的上传入口，文件先留在一呼里。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "This workbench page has no upload control for these files. They remain in Yihu." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "当前工作台页面没有能接收这类文件的上传入口，文件先留在一呼里。" } } } },
+    "这个页面一次只能上传一个文件，请逐个分享。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "This page can upload only one file at a time. Share them individually." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "这个页面一次只能上传一个文件，请逐个分享。" } } } },
+    "文件没能交给工作台，请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The file could not be handed to the workbench. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "文件没能交给工作台，请重试。" } } } },
+    "请先点一下工作台的输入框，再点「填入」。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Tap the workbench text field first, then tap Insert." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "请先点一下工作台的输入框，再点「填入」。" } } } },
+    "收到分享 · %lld 项": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Received shares · %lld" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "收到分享 · %lld 项" } } } },
+    "、": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": ", " } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "、" } } } },
+    "正在填入…": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Inserting…" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在填入…" } } } },
+    "填入当前工作台": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Insert into current workbench" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "填入当前工作台" } } } },
+    "清除": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Clear" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "清除" } } } },
+    "文件": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "File" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "文件" } } } },
+    "链接：%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Link: %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "链接：%@" } } } },
+    "文件：%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "File: %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "文件：%@" } } } },
+    "文字：%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Text: %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "文字：%@" } } } },
+    "没有可以转给一呼的内容。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "There is nothing Yihu can receive." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "没有可以转给一呼的内容。" } } } },
+    "发到一呼": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Send to Yihu" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "发到一呼" } } } },
+    "放入一呼": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Add to Yihu" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "放入一呼" } } } },
+    "正在读取分享内容…": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Reading shared content…" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在读取分享内容…" } } } },
+    "放入后，打开一呼点「填入当前工作台」。不会自动发送。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "After adding it, open Yihu and tap Insert into current workbench. Nothing is sent automatically." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "放入后，打开一呼点「填入当前工作台」。不会自动发送。" } } } },
+    "正在保存…": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Saving…" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在保存…" } } } },
+    "已放入一呼。打开一呼即可填入当前工作台。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Added to Yihu. Open Yihu to insert it into the current workbench." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "已放入一呼。打开一呼即可填入当前工作台。" } } } },
+    "通知未开启": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notifications off" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "通知未开启" } } } },
+    "正在开启通知…": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Turning on notifications…" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在开启通知…" } } } },
+    "正在更新通知…": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Updating notifications…" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在更新通知…" } } } },
+    "通知已开启": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notifications on" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "通知已开启" } } } },
+    "系统通知已关闭": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "System notifications are off" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "系统通知已关闭" } } } },
+    "当前无法开启通知": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notifications cannot be turned on right now" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "当前无法开启通知" } } } },
+    "需要先完成工作台配对": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Pair this workbench first" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "需要先完成工作台配对" } } } },
+    "正在完成停用…": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Finishing deactivation…" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在完成停用…" } } } },
+    "当前工作台地址不支持通知，请使用 HTTPS 地址。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "This workbench address does not support notifications. Use an HTTPS address." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "当前工作台地址不支持通知，请使用 HTTPS 地址。" } } } },
+    "为避免通知发错工作台，当前还不能开启通知。原工作台可能最多继续收到 7 天通用提醒。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notifications cannot be turned on yet, so they are not sent to the wrong workbench. The previous workbench may keep receiving general reminders for up to 7 days." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "为避免通知发错工作台，当前还不能开启通知。原工作台可能最多继续收到 7 天通用提醒。" } } } },
+    "当前工作台暂时无法开启通知。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notifications cannot be turned on for this workbench right now." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "当前工作台暂时无法开启通知。" } } } },
+    "请在 iPhone“设置”中允许一呼发送通知。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Allow Yihu to send notifications in iPhone Settings." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "请在 iPhone“设置”中允许一呼发送通知。" } } } },
+    "无法开启通知，请稍后重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notifications could not be turned on. Try again shortly." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法开启通知，请稍后重试。" } } } },
+    "正在联系原工作台，请稍候。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Contacting the previous workbench. Please wait." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在联系原工作台，请稍候。" } } } },
+    "无法连接工作台，请保持工作台已加载后重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Unable to connect to the workbench. Keep it loaded and try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法连接工作台，请保持工作台已加载后重试。" } } } },
+    "无法完成停用，请稍后重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Deactivation could not be completed. Try again shortly." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法完成停用，请稍后重试。" } } } },
+    "停用已在工作台完成，但本机还未保存结果。请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The workbench completed deactivation, but this iPhone has not saved the result yet. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "停用已在工作台完成，但本机还未保存结果。请重试。" } } } },
+    "请先完成语音输入或处理保留文字。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Finish voice input or handle the retained text first." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "请先完成语音输入或处理保留文字。" } } } },
+    "无法切换到通知所属的工作台，请手动检查。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Unable to switch to the workbench for this notification. Check it manually." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法切换到通知所属的工作台，请手动检查。" } } } },
+    "无法保存通知设置，请稍后重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notification settings could not be saved. Try again shortly." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法保存通知设置，请稍后重试。" } } } },
+    "通知开启未完成。为避免通知发错工作台，请先重试停用；原工作台可能最多继续收到 7 天通用提醒。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Turning on notifications did not finish. Retry deactivation so notifications are not sent to the wrong workbench. The previous workbench may keep receiving general reminders for up to 7 days." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "通知开启未完成。为避免通知发错工作台，请先重试停用；原工作台可能最多继续收到 7 天通用提醒。" } } } },
+    "请先在当前工作台完成配对，再开启通知。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Pair the current workbench before turning on notifications." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "请先在当前工作台完成配对，再开启通知。" } } } },
+    "关闭通知": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Turn off notifications" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "关闭通知" } } } },
+    "重试停用": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Retry deactivation" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "重试停用" } } } },
+    "去系统设置允许通知": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Allow notifications in Settings" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "去系统设置允许通知" } } } },
+    "返回工作台完成配对": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Return to the workbench to pair" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "返回工作台完成配对" } } } },
+    "重试检查": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Check again" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "重试检查" } } } },
+    "开启通知": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Turn on notifications" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "开启通知" } } } },
+    "通知": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notifications" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "通知" } } } },
+    "开启后，在当前工作台接收通用提醒。\n不会自动发送消息。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "When on, receive general reminders from the current workbench.\nMessages are not sent automatically." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "开启后，在当前工作台接收通用提醒。\n不会自动发送消息。" } } } },
+    "正在准备本机通知，请稍候。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Preparing notifications on this iPhone. Please wait." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在准备本机通知，请稍候。" } } } },
+    "正在确认当前工作台的通知设置。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Checking notification settings for the current workbench." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在确认当前工作台的通知设置。" } } } },
+    "当前工作台会发送通用提醒。\n不会自动发送消息。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "This workbench can send general reminders.\nMessages are not sent automatically." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "当前工作台会发送通用提醒。\n不会自动发送消息。" } } } },
+    "请检查工作台连接后重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Check the workbench connection and try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "请检查工作台连接后重试。" } } } },
+    "为避免通知发错工作台，当前还不能开启通知。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notifications cannot be turned on yet, so they are not sent to the wrong workbench." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "为避免通知发错工作台，当前还不能开启通知。" } } } },
+    "请稍后重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Try again shortly." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "请稍后重试。" } } } },
+    "模型尚未就绪": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The model is not ready" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "模型尚未就绪" } } } },
+    "语音模型无法加载，请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The voice model could not be loaded. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "语音模型无法加载，请重试。" } } } },
+    "正在声纹测试，请先结束测试录音": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "A voiceprint test is in progress. Finish that recording first." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在声纹测试，请先结束测试录音" } } } },
+    "麦克风权限已关闭，请在系统设置中允许一呼使用麦克风。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Microphone access is off. Allow Yihu to use the microphone in Settings." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "麦克风权限已关闭，请在系统设置中允许一呼使用麦克风。" } } } },
+    "录音因应用离开前台而取消，请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Recording was canceled because Yihu left the foreground. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音因应用离开前台而取消，请重试。" } } } },
+    "已取消": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Canceled" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "已取消" } } } },
+    "已放弃": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Discarded" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "已放弃" } } } },
+    "%@下载没有完成，请检查网络后重试，或换一个下载源。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The %@ download did not finish. Check the network and try again, or choose another source." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "%@下载没有完成，请检查网络后重试，或换一个下载源。" } } } },
+    "麦克风暂时无法使用，请稍后再试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The microphone is unavailable right now. Try again shortly." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "麦克风暂时无法使用，请稍后再试。" } } } },
+    "这段不像你的声音，未填入": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "This does not sound like your voice. It was not inserted." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "这段不像你的声音，未填入" } } } },
+    "有效语音不足约 1 秒，无法核对声纹；文字未填入": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Less than about 1 second of speech was detected, so the voiceprint could not be checked. The text was not inserted." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "有效语音不足约 1 秒，无法核对声纹；文字未填入" } } } },
+    "声纹不可用，请重新录制；文字未填入": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The voiceprint is unavailable. Record it again. The text was not inserted." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "声纹不可用，请重新录制；文字未填入" } } } },
+    "录音中断了，请再录一次。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Recording was interrupted. Record again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音中断了，请再录一次。" } } } },
+    "已填入，请确认后发送": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Inserted. Review it before sending." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "已填入，请确认后发送" } } } },
+    "没有识别到语音，请再说一次。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "No speech was recognized. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "没有识别到语音，请再说一次。" } } } },
+    "这段录音没能识别，请再说一次。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "This recording could not be recognized. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "这段录音没能识别，请再说一次。" } } } },
+    "模型下载被服务器拒绝：%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The model server rejected the download: %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "模型下载被服务器拒绝：%@" } } } },
+    "模型下载服务器不支持分段：%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The model server does not support partial downloads: %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "模型下载服务器不支持分段：%@" } } } },
+    "模型文件大小校验失败：%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The model file size check failed: %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "模型文件大小校验失败：%@" } } } },
+    "模型文件完整性校验失败：%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The model file integrity check failed: %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "模型文件完整性校验失败：%@" } } } },
+    "模型分段无法合并：%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The model segments could not be combined: %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "模型分段无法合并：%@" } } } },
+    "无法启动录音，请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Recording could not start. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法启动录音，请重试。" } } } },
+    "录音太短，请按住片刻后再试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The recording was too short. Press and hold a little longer." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音太短，请按住片刻后再试。" } } } },
+    "请先允许麦克风权限。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Allow microphone access first." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "请先允许麦克风权限。" } } } },
+    "当前没有录音。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "No recording is in progress." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "当前没有录音。" } } } },
+    "上一段录音仍在结束，请稍后重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The previous recording is still finishing. Try again shortly." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "上一段录音仍在结束，请稍后重试。" } } } },
+    "录音格式不受支持，请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "This recording format is not supported. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音格式不受支持，请重试。" } } } },
+    "录音处理失败，请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The recording could not be processed. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音处理失败，请重试。" } } } },
+    "录音超过时长限制，请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The recording exceeded the time limit. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音超过时长限制，请重试。" } } } },
+    "录音处理跟不上输入，请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Recording processing fell behind the input. Try again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音处理跟不上输入，请重试。" } } } },
+    "录音已取消。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Recording was canceled." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音已取消。" } } } },
+    "Qwen3-ASR 模型尚未下载。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The Qwen3-ASR model has not been downloaded." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "Qwen3-ASR 模型尚未下载。" } } } },
+    "Qwen3-ASR 模型无法加载：%@": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The Qwen3-ASR model could not be loaded: %@" } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "Qwen3-ASR 模型无法加载：%@" } } } },
+    "录音格式无法读取，请重新录音。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The recording format could not be read. Record again." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音格式无法读取，请重新录音。" } } } },
+    "没有识别到语音，请再试一次。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "No speech was recognized. Try once more." } }, "zh-Hans": { "stringUnit": { "state": "translated", "value": "没有识别到语音，请再试一次。" } } } }
   },
   "version": "1.0"
 }

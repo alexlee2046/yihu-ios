@@ -2,6 +2,10 @@ import Foundation
 import Observation
 import UIKit
 
+private func voiceText(_ key: String) -> String {
+    NSLocalizedString(key, tableName: "Yihu", comment: "")
+}
+
 @MainActor
 @Observable
 final class CollieVoiceController {
@@ -149,7 +153,7 @@ final class CollieVoiceController {
     }
 
     func validateInstalledModel() async -> String? {
-        guard phase == .ready else { return "模型尚未就绪" }
+        guard phase == .ready else { return voiceText("模型尚未就绪") }
         cancelPrewarm()
         phase = .checkingModel
         do {
@@ -158,7 +162,7 @@ final class CollieVoiceController {
             phase = .ready
             return nil
         } catch {
-            fail("语音模型无法加载，请重试。", kind: .model)
+            fail(voiceText("语音模型无法加载，请重试。"), kind: .model)
             return error.localizedDescription
         }
     }
@@ -169,7 +173,7 @@ final class CollieVoiceController {
         case .ready:
             guard pendingTranscript == nil, isForeground() else { return }
             guard !voiceprintTestMicActive else {
-                notice = "正在声纹测试，请先结束测试录音"
+                notice = voiceText("正在声纹测试，请先结束测试录音")
                 return
             }
             sessionID = UUID()
@@ -184,7 +188,7 @@ final class CollieVoiceController {
             guard sessionID == id, phase == .preparing else { return }
             isRequestingPermission = false
             guard allowed else {
-                fail("麦克风权限已关闭，请在系统设置中允许一呼使用麦克风。", kind: .microphonePermission)
+                fail(voiceText("麦克风权限已关闭，请在系统设置中允许一呼使用麦克风。"), kind: .microphonePermission)
                 return
             }
             permissionGranted = true
@@ -208,7 +212,7 @@ final class CollieVoiceController {
         // Consent itself makes the scene inactive. A real background transition
         // still invalidates the request, including a late permission response.
         if !isBackground, phase == .preparing, isRequestingPermission { return }
-        cancelRecording(reason: "录音因应用离开前台而取消，请重试。")
+        cancelRecording(reason: voiceText("录音因应用离开前台而取消，请重试。"))
     }
 
     func cancelRecording(reason: String? = nil) {
@@ -229,7 +233,7 @@ final class CollieVoiceController {
             fail(reason)
         } else {
             phase = .ready
-            showTransientNotice("已取消")
+            showTransientNotice(voiceText("已取消"))
         }
     }
 
@@ -238,7 +242,7 @@ final class CollieVoiceController {
         guard canRetryDelivery else { return }
         pendingTranscript = nil
         voiceprintBlocked = false
-        showTransientNotice("已放弃")
+        showTransientNotice(voiceText("已放弃"))
     }
 
     func recordingSeconds(at date: Date) -> Int {
@@ -264,7 +268,7 @@ final class CollieVoiceController {
             phase = .ready
             hasAttemptedPrewarm = false
             prewarmModelIfIdle()
-        } catch { fail("\(source.shortLabel)下载没有完成，请检查网络后重试，或换一个下载源。", kind: .modelDownload) }
+        } catch { fail(String(format: voiceText("%@下载没有完成，请检查网络后重试，或换一个下载源。"), source.shortLabel), kind: .modelDownload) }
     }
 
     private func prewarmModelIfIdle() {
@@ -305,7 +309,7 @@ final class CollieVoiceController {
             prewarmModelIfIdle()
             startPreview(id: sessionID)
         } catch {
-            let failure = Self.captureFailure(error, fallback: "麦克风暂时无法使用，请稍后再试。")
+            let failure = Self.captureFailure(error, fallback: voiceText("麦克风暂时无法使用，请稍后再试。"))
             fail(failure.message, kind: failure.kind)
         }
     }
@@ -403,15 +407,15 @@ final class CollieVoiceController {
                         case .mismatch:
                             pendingTranscript = transcript
                             voiceprintBlocked = true
-                            notice = "这段不像你的声音，未填入"
+                            notice = voiceText("这段不像你的声音，未填入")
                             phase = .ready
                             return
                         case .unavailable:
                             pendingTranscript = transcript
                             voiceprintBlocked = true
                             notice = segment.count < CollieVoiceprint.minimumVoicedSamples
-                                ? "有效语音不足约 1 秒，无法核对声纹；文字未填入"
-                                : "声纹不可用，请重新录制；文字未填入"
+                                ? voiceText("有效语音不足约 1 秒，无法核对声纹；文字未填入")
+                                : voiceText("声纹不可用，请重新录制；文字未填入")
                             phase = .ready
                             return
                         case .bypass, .match: break
@@ -428,7 +432,7 @@ final class CollieVoiceController {
             }
         case .failure(let error):
             previewText = ""
-            let failure = Self.captureFailure(error, fallback: "录音中断了，请再录一次。")
+            let failure = Self.captureFailure(error, fallback: voiceText("录音中断了，请再录一次。"))
             fail(failure.message, kind: failure.kind)
         }
     }
@@ -448,7 +452,7 @@ final class CollieVoiceController {
         pendingTranscript = accepted ? nil : transcript
         voiceprintBlocked = false
         phase = .ready
-        if accepted { showTransientNotice("已填入，请确认后发送", duration: .seconds(2)) }
+        if accepted { showTransientNotice(voiceText("已填入，请确认后发送"), duration: .seconds(2)) }
     }
 
     private func showTransientNotice(_ message: String, duration: Duration = .seconds(2)) {
@@ -480,7 +484,7 @@ final class CollieVoiceController {
     static func captureFailure(_ error: Error, fallback: String) -> (message: String, kind: FailureKind) {
         switch error {
         case CollieAudioRecorderError.permissionDenied:
-            return ("麦克风权限已关闭，请在系统设置中允许一呼使用麦克风。", .microphonePermission)
+            return (voiceText("麦克风权限已关闭，请在系统设置中允许一呼使用麦克风。"), .microphonePermission)
         case let error as CollieAudioRecorderError: return (error.localizedDescription, .recording)
         case let error as ColliePCMError: return (error.localizedDescription, .recording)
         default: return (fallback, .recording)
@@ -489,10 +493,10 @@ final class CollieVoiceController {
 
     static func recognitionFailure(_ error: Error) -> (message: String, kind: FailureKind) {
         switch error {
-        case Qwen3TranscriberError.emptyTranscript: return ("没有识别到语音，请再说一次。", .recording)
+        case Qwen3TranscriberError.emptyTranscript: return (voiceText("没有识别到语音，请再说一次。"), .recording)
         case Qwen3TranscriberError.modelMissing, Qwen3TranscriberError.modelLoadFailed:
-            return ("语音模型无法加载，请重试。", .model)
-        default: return ("这段录音没能识别，请再说一次。", .recording)
+            return (voiceText("语音模型无法加载，请重试。"), .model)
+        default: return (voiceText("这段录音没能识别，请再说一次。"), .recording)
         }
     }
 

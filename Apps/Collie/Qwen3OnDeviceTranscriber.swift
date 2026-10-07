@@ -151,13 +151,13 @@ enum Qwen3TranscriberError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .modelMissing:
-            return "Qwen3-ASR 模型尚未下载。"
+            return NSLocalizedString("Qwen3-ASR 模型尚未下载。", tableName: "Yihu", comment: "")
         case .modelLoadFailed(let detail):
-            return "Qwen3-ASR 模型无法加载：\(detail)"
+            return String(format: NSLocalizedString("Qwen3-ASR 模型无法加载：%@", tableName: "Yihu", comment: ""), detail)
         case .unsupportedAudio:
-            return "录音格式无法读取，请重新录音。"
+            return NSLocalizedString("录音格式无法读取，请重新录音。", tableName: "Yihu", comment: "")
         case .emptyTranscript:
-            return "没有识别到语音，请再试一次。"
+            return NSLocalizedString("没有识别到语音，请再试一次。", tableName: "Yihu", comment: "")
         }
     }
 }

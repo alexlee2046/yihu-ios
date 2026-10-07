@@ -131,7 +131,7 @@ final class CollieNoteRecorder {
             while let self, self.isRecording, !Task.isCancelled {
                 self.level = self.writer?.level ?? 0
                 if self.writer?.failed == true {
-                    self.onInterrupted?("存储空间不足或写入失败，记录已保存到出错之前。")
+                    self.onInterrupted?(NSLocalizedString("存储空间不足或写入失败，记录已保存到出错之前。", tableName: "Yihu", comment: ""))
                     return
                 }
                 try? await Task.sleep(for: .milliseconds(100))
@@ -142,10 +142,10 @@ final class CollieNoteRecorder {
             center.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: .main) { [weak self] note in
                 guard let raw = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
                       AVAudioSession.InterruptionType(rawValue: raw) == .began else { return }
-                Task { @MainActor in self?.onInterrupted?("录音被来电或其他应用打断，已保存到打断之前。") }
+                Task { @MainActor in self?.onInterrupted?(NSLocalizedString("录音被来电或其他应用打断，已保存到打断之前。", tableName: "Yihu", comment: "")) }
             },
             center.addObserver(forName: AVAudioSession.mediaServicesWereResetNotification, object: nil, queue: .main) { [weak self] _ in
-                Task { @MainActor in self?.onInterrupted?("系统音频服务重置，记录已保存到此前。") }
+                Task { @MainActor in self?.onInterrupted?(NSLocalizedString("系统音频服务重置，记录已保存到此前。", tableName: "Yihu", comment: "")) }
             },
             center.addObserver(forName: .AVAudioEngineConfigurationChange, object: audioEngine, queue: .main) { [weak self] _ in
                 Task { @MainActor in await self?.inputChanged() }
@@ -167,7 +167,7 @@ final class CollieNoteRecorder {
             engine.prepare()
             try engine.start()
         } catch {
-            onInterrupted?("录音设备变化后无法继续，记录已保存到此前。")
+            onInterrupted?(NSLocalizedString("录音设备变化后无法继续，记录已保存到此前。", tableName: "Yihu", comment: ""))
         }
     }
 

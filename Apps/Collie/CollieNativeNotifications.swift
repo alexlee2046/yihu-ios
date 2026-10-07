@@ -1,5 +1,9 @@
 import CryptoKit
 import Foundation
+
+private func notifyText(_ key: String) -> String {
+    NSLocalizedString(key, tableName: "Yihu", comment: "")
+}
 import Observation
 import Security
 import SwiftUI
@@ -255,15 +259,15 @@ enum CollieNativePushStatus: Equatable, Sendable {
 
     var title: String {
         switch self {
-        case .disabled: return "通知未开启"
-        case .checkingService, .requestingPermission, .waitingForDeviceToken, .registering: return "正在开启通知…"
-        case .refreshing: return "正在更新通知…"
-        case .enabled: return "通知已开启"
-        case .authorizationDenied: return "系统通知已关闭"
-        case .serviceUnavailable: return "当前无法开启通知"
-        case .needsPairing: return "需要先完成工作台配对"
-        case .unregistering: return "正在完成停用…"
-        case .unbindPending: return "上一次停用未完成"
+        case .disabled: return notifyText("通知未开启")
+        case .checkingService, .requestingPermission, .waitingForDeviceToken, .registering: return notifyText("正在开启通知…")
+        case .refreshing: return notifyText("正在更新通知…")
+        case .enabled: return notifyText("通知已开启")
+        case .authorizationDenied: return notifyText("系统通知已关闭")
+        case .serviceUnavailable: return notifyText("当前无法开启通知")
+        case .needsPairing: return notifyText("需要先完成工作台配对")
+        case .unregistering: return notifyText("正在完成停用…")
+        case .unbindPending: return notifyText("上一次停用未完成")
         case .error(let reason): return reason
         }
     }
@@ -369,14 +373,14 @@ final class CollieNativeNotificationsController {
         notice = nil
         guard let origin = activeOrigin else {
             status = .serviceUnavailable
-            notice = "当前工作台地址不支持通知，请使用 HTTPS 地址。"
+            notice = notifyText("当前工作台地址不支持通知，请使用 HTTPS 地址。")
             return
         }
         if isEnabled(for: origin) {
             status = .enabled
         } else if let binding = keychain.load(origin: origin.absoluteString), binding.unregisterPending || binding.registrationId != nil {
             status = .unbindPending
-            notice = "为避免通知发错工作台，当前还不能开启通知。原工作台可能最多继续收到 7 天通用提醒。"
+            notice = notifyText("为避免通知发错工作台，当前还不能开启通知。原工作台可能最多继续收到 7 天通用提醒。")
         } else {
             status = .disabled
         }
@@ -408,12 +412,12 @@ final class CollieNativeNotificationsController {
         status = .checkingService
 
         guard let configuration = apnsConfiguration else {
-            fail(.serviceUnavailable, "当前工作台暂时无法开启通知。")
+            fail(.serviceUnavailable, notifyText("当前工作台暂时无法开启通知。"))
             return
         }
         guard let service = await webRequest("status", payload: [:], session: session, timeout: .seconds(10)) else {
             guard isCurrent(requestGeneration, session: session) else { return }
-            fail(.serviceUnavailable, "当前工作台暂时无法开启通知。")
+            fail(.serviceUnavailable, notifyText("当前工作台暂时无法开启通知。"))
             return
         }
         guard isCurrent(requestGeneration, session: session) else { return }
@@ -421,7 +425,7 @@ final class CollieNativeNotificationsController {
               service.available == true,
               service.environment == configuration.environment.rawValue,
               service.topic == configuration.topic else {
-            fail(.serviceUnavailable, "当前工作台暂时无法开启通知。")
+            fail(.serviceUnavailable, notifyText("当前工作台暂时无法开启通知。"))
             return
         }
 
@@ -431,7 +435,7 @@ final class CollieNativeNotificationsController {
             let granted = await notificationCenter.requestAuthorization()
             guard isCurrent(requestGeneration, session: session) else { return }
             guard granted else {
-                fail(.authorizationDenied, "请在 iPhone“设置”中允许一呼发送通知。")
+                fail(.authorizationDenied, notifyText("请在 iPhone“设置”中允许一呼发送通知。"))
                 return
             }
             authorization = await notificationCenter.settings()
@@ -439,7 +443,7 @@ final class CollieNativeNotificationsController {
         }
         guard isCurrent(requestGeneration, session: session) else { return }
         guard authorization.isUsable else {
-            fail(.authorizationDenied, "请在 iPhone“设置”中允许一呼发送通知。")
+            fail(.authorizationDenied, notifyText("请在 iPhone“设置”中允许一呼发送通知。"))
             return
         }
 
@@ -450,7 +454,7 @@ final class CollieNativeNotificationsController {
         guard let token = await waitForDeviceToken(generation: requestGeneration, session: session) else {
             guard isCurrent(requestGeneration, session: session) else { return }
             registrationGeneration = nil
-            fail(.error("无法开启通知，请稍后重试。"), nil)
+            fail(.error(notifyText("无法开启通知，请稍后重试。")), nil)
             return
         }
         guard isCurrent(requestGeneration, session: session) else { return }
@@ -478,7 +482,7 @@ final class CollieNativeNotificationsController {
         pendingDeviceToken = nil
         defaults.set(false, forKey: originKey(for: origin)!)
         status = .unbindPending
-        notice = "为避免通知发错工作台，当前还不能开启通知。原工作台可能最多继续收到 7 天通用提醒。"
+        notice = notifyText("为避免通知发错工作台，当前还不能开启通知。原工作台可能最多继续收到 7 天通用提醒。")
 
         guard let binding = keychain.load(origin: origin.absoluteString) else {
             status = .disabled
@@ -514,7 +518,7 @@ final class CollieNativeNotificationsController {
               !isEnabled(for: origin) else { return }
         generation += 1
         status = .unregistering
-        notice = "正在联系原工作台，请稍候。"
+        notice = notifyText("正在联系原工作台，请稍候。")
         let response = await webRequest(
             "unregister",
             payload: ["installationId": binding.installationId, "secret": binding.secret],
@@ -524,17 +528,17 @@ final class CollieNativeNotificationsController {
         guard activeSession === session else { return }
         guard let response else {
             status = .unbindPending
-            notice = "无法连接工作台，请保持工作台已加载后重试。"
+            notice = notifyText("无法连接工作台，请保持工作台已加载后重试。")
             return
         }
         guard response.ok else {
             status = .unbindPending
-            notice = response.reason?.localizedPushReason ?? "无法完成停用，请稍后重试。"
+            notice = response.reason?.localizedPushReason ?? notifyText("无法完成停用，请稍后重试。")
             return
         }
         guard rotateUnregisteredBinding(binding, origin: origin) else {
             status = .unbindPending
-            notice = "停用已在工作台完成，但本机还未保存结果。请重试。"
+            notice = notifyText("停用已在工作台完成，但本机还未保存结果。请重试。")
             return
         }
         status = .disabled
@@ -550,7 +554,7 @@ final class CollieNativeNotificationsController {
         guard registrationGeneration == generation else { return }
         registrationGeneration = nil
         notice = nil
-        status = .error("无法开启通知，请稍后重试。")
+        status = .error(notifyText("无法开启通知，请稍后重试。"))
     }
 
     func shouldPresent(notificationUserInfo: [AnyHashable: Any]) -> Bool {
@@ -609,12 +613,12 @@ final class CollieNativeNotificationsController {
         guard let origin = origin(for: payload),
               let route = CollieNativeNotificationRoute.resolve(payload.path, relativeTo: origin) else { return }
         guard canNavigate() else {
-            blockNavigation(navigationBlockReason() ?? "请先完成语音输入或处理保留文字。")
+            blockNavigation(navigationBlockReason() ?? notifyText("请先完成语音输入或处理保留文字。"))
             return
         }
         if activeOrigin != origin {
             guard let onSwitchOrigin else {
-                blockNavigation("无法切换到通知所属的工作台，请手动检查。")
+                blockNavigation(notifyText("无法切换到通知所属的工作台，请手动检查。"))
                 return
             }
             if let reason = onSwitchOrigin(origin) {
@@ -622,7 +626,7 @@ final class CollieNativeNotificationsController {
                 return
             }
             guard activeOrigin == origin else {
-                blockNavigation("无法切换到通知所属的工作台，请手动检查。")
+                blockNavigation(notifyText("无法切换到通知所属的工作台，请手动检查。"))
                 return
             }
             pendingNotification = payload
@@ -644,7 +648,7 @@ final class CollieNativeNotificationsController {
         guard let configuration = apnsConfiguration else {
             if isCurrent(generation, session: session) {
                 status = .serviceUnavailable
-                notice = "当前工作台暂时无法开启通知。"
+                notice = notifyText("当前工作台暂时无法开启通知。")
             }
             return
         }
@@ -655,7 +659,7 @@ final class CollieNativeNotificationsController {
               service.topic == configuration.topic else {
             if isCurrent(generation, session: session) {
                 status = .serviceUnavailable
-                notice = "当前工作台暂时无法开启通知。"
+                notice = notifyText("当前工作台暂时无法开启通知。")
             }
             return
         }
@@ -669,7 +673,7 @@ final class CollieNativeNotificationsController {
         registrar.registerForRemoteNotifications()
         guard let token = await waitForDeviceToken(generation: generation, session: session) else {
             if isCurrent(generation, session: session) {
-                status = .error("无法开启通知，请稍后重试。")
+                status = .error(notifyText("无法开启通知，请稍后重试。"))
             }
             return
         }
@@ -700,7 +704,7 @@ final class CollieNativeNotificationsController {
         var pending = binding
         pending.unregisterPending = true
         if !keychain.save(pending, origin: origin.absoluteString) {
-            fail(.error("无法保存通知设置，请稍后重试。"), nil)
+            fail(.error(notifyText("无法保存通知设置，请稍后重试。")), nil)
             return
         }
         let response = await webRequest(
@@ -723,7 +727,7 @@ final class CollieNativeNotificationsController {
             let reason = response?.reason ?? "network"
             if response == nil || response?.ok == true || reason == "network" {
                 status = .unbindPending
-                notice = "通知开启未完成。为避免通知发错工作台，请先重试停用；原工作台可能最多继续收到 7 天通用提醒。"
+                notice = notifyText("通知开启未完成。为避免通知发错工作台，请先重试停用；原工作台可能最多继续收到 7 天通用提醒。")
                 return
             }
             _ = keychain.save(binding, origin: origin.absoluteString)
@@ -739,7 +743,7 @@ final class CollieNativeNotificationsController {
         committed.expiresAt = expiresAt
         committed.unregisterPending = false
         guard keychain.save(committed, origin: origin.absoluteString) else {
-            fail(.error("无法保存通知设置，请稍后重试。"), nil)
+            fail(.error(notifyText("无法保存通知设置，请稍后重试。")), nil)
             return
         }
         defaults.set(true, forKey: originKey(for: origin)!)
@@ -833,12 +837,12 @@ private extension String {
     var localizedPushReason: String {
         let lower = lowercased()
         if lower.contains("pair") || lower.contains("auth") || lower.contains("credential") {
-            return "请先在当前工作台完成配对，再开启通知。"
+            return notifyText("请先在当前工作台完成配对，再开启通知。")
         }
         if lower.contains("available") || lower.contains("config") {
-            return "当前工作台暂时无法开启通知。"
+            return notifyText("当前工作台暂时无法开启通知。")
         }
-        return "无法连接工作台，请保持工作台已加载后重试。"
+        return notifyText("无法连接工作台，请保持工作台已加载后重试。")
     }
 }
 
@@ -1096,21 +1100,21 @@ struct CollieNativeNotificationsSection: View {
             if !controller.isBusy {
                 switch controller.status {
                 case .enabled:
-                    Button("关闭通知", role: .destructive) {
+                    Button(notifyText("关闭通知"), role: .destructive) {
                         Task { await controller.disable(session: session) }
                     }
                     .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
                     .contentShape(Rectangle())
                     .accessibilityIdentifier("collie-native-notifications-disable")
                 case .unbindPending:
-                    Button("重试停用") {
+                    Button(notifyText("重试停用")) {
                         Task { await controller.retryUnregister(session: session) }
                     }
                     .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
                     .contentShape(Rectangle())
                     .accessibilityIdentifier("collie-native-notifications-retry-unregister")
                 case .authorizationDenied:
-                    Button("去系统设置允许通知") {
+                    Button(notifyText("去系统设置允许通知")) {
                         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                         UIApplication.shared.open(url)
                     }
@@ -1118,20 +1122,20 @@ struct CollieNativeNotificationsSection: View {
                     .contentShape(Rectangle())
                     .accessibilityIdentifier("collie-native-notifications-system-settings")
                 case .needsPairing:
-                    Button("返回工作台完成配对") { dismiss() }
+                    Button(notifyText("返回工作台完成配对")) { dismiss() }
                         .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
                         .contentShape(Rectangle())
                         .accessibilityIdentifier("collie-native-notifications-return-to-workbench")
                 case .serviceUnavailable, .error:
                     if controller.isEnabled {
-                        Button("关闭通知", role: .destructive) {
+                        Button(notifyText("关闭通知"), role: .destructive) {
                             Task { await controller.disable(session: session) }
                         }
                         .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
                         .contentShape(Rectangle())
                         .accessibilityIdentifier("collie-native-notifications-disable")
                     } else {
-                        Button("重试检查") {
+                        Button(notifyText("重试检查")) {
                             Task { await controller.enable(session: session) }
                         }
                         .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
@@ -1139,7 +1143,7 @@ struct CollieNativeNotificationsSection: View {
                         .accessibilityIdentifier("collie-native-notifications-enable")
                     }
                 case .disabled:
-                    Button("开启通知") {
+                    Button(notifyText("开启通知")) {
                         Task { await controller.enable(session: session) }
                     }
                     .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
@@ -1150,32 +1154,32 @@ struct CollieNativeNotificationsSection: View {
                 }
             }
         } header: {
-            Text("通知")
+            Text(notifyText("通知"))
         }
     }
 
     private var guidance: String {
         switch controller.status {
         case .disabled:
-            return "开启后，在当前工作台接收通用提醒。\n不会自动发送消息。"
+            return notifyText("开启后，在当前工作台接收通用提醒。\n不会自动发送消息。")
         case .checkingService, .requestingPermission, .waitingForDeviceToken, .registering:
-            return "正在准备本机通知，请稍候。"
+            return notifyText("正在准备本机通知，请稍候。")
         case .refreshing:
-            return "正在确认当前工作台的通知设置。"
+            return notifyText("正在确认当前工作台的通知设置。")
         case .enabled:
-            return "当前工作台会发送通用提醒。\n不会自动发送消息。"
+            return notifyText("当前工作台会发送通用提醒。\n不会自动发送消息。")
         case .authorizationDenied:
-            return "请在 iPhone“设置”中允许一呼发送通知。"
+            return notifyText("请在 iPhone“设置”中允许一呼发送通知。")
         case .serviceUnavailable:
-            return "请检查工作台连接后重试。"
+            return notifyText("请检查工作台连接后重试。")
         case .needsPairing:
-            return "请先在当前工作台完成配对，再开启通知。"
+            return notifyText("请先在当前工作台完成配对，再开启通知。")
         case .unregistering:
-            return "正在联系原工作台，请稍候。"
+            return notifyText("正在联系原工作台，请稍候。")
         case .unbindPending:
-            return "为避免通知发错工作台，当前还不能开启通知。"
+            return notifyText("为避免通知发错工作台，当前还不能开启通知。")
         case .error:
-            return "请稍后重试。"
+            return notifyText("请稍后重试。")
         }
     }
 }

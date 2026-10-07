@@ -45,16 +45,16 @@ final class ShareModel {
         for provider in providers {
             if let url = await Self.webURL(provider) {
                 urls.append(url)
-                summary.append("链接：\(url.host() ?? url.absoluteString)")
+                summary.append(String(format: NSLocalizedString("链接：%@", tableName: "Yihu", comment: ""), url.host() ?? url.absoluteString))
             } else if let file = await Self.file(provider, into: staging) {
                 files.append(file)
-                summary.append("文件：\(file.lastPathComponent)")
+                summary.append(String(format: NSLocalizedString("文件：%@", tableName: "Yihu", comment: ""), file.lastPathComponent))
             } else if let text = await Self.text(provider) {
                 texts.append(text)
-                summary.append("文字：\(text.prefix(30))")
+                summary.append(String(format: NSLocalizedString("文字：%@", tableName: "Yihu", comment: ""), String(text.prefix(30))))
             }
         }
-        state = summary.isEmpty ? .failed("没有可以转给一呼的内容。") : .ready
+        state = summary.isEmpty ? .failed(NSLocalizedString("没有可以转给一呼的内容。", tableName: "Yihu", comment: "")) : .ready
     }
 
     func save() {
@@ -143,14 +143,14 @@ struct ShareView: View {
                     Text(footer)
                 }
             }
-            .navigationTitle("发到一呼")
+            .navigationTitle(NSLocalizedString("发到一呼", tableName: "Yihu", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消", action: cancel)
+                    Button(NSLocalizedString("取消", tableName: "Yihu", comment: ""), action: cancel)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(model.state == .saved ? "完成" : "放入一呼") {
+                    Button(model.state == .saved ? NSLocalizedString("完成", tableName: "Yihu", comment: "") : NSLocalizedString("放入一呼", tableName: "Yihu", comment: "")) {
                         if model.state == .saved { done() } else { model.save() }
                     }
                     .disabled(model.state != .ready && model.state != .saved)
@@ -168,10 +168,10 @@ struct ShareView: View {
 
     private var footer: String {
         switch model.state {
-        case .loading: return "正在读取分享内容…"
-        case .ready: return "放入后，打开一呼点「填入当前工作台」。不会自动发送。"
-        case .saving: return "正在保存…"
-        case .saved: return "已放入一呼。打开一呼即可填入当前工作台。"
+        case .loading: return NSLocalizedString("正在读取分享内容…", tableName: "Yihu", comment: "")
+        case .ready: return NSLocalizedString("放入后，打开一呼点「填入当前工作台」。不会自动发送。", tableName: "Yihu", comment: "")
+        case .saving: return NSLocalizedString("正在保存…", tableName: "Yihu", comment: "")
+        case .saved: return NSLocalizedString("已放入一呼。打开一呼即可填入当前工作台。", tableName: "Yihu", comment: "")
         case .failed(let message): return message
         }
     }

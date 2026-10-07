@@ -8,17 +8,17 @@ struct CollieMicrophoneModeControl: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: compact ? 4 : 8) {
-            Label("当前麦克风模式：\(title(for: activeMode))", systemImage: "mic")
+            Label(String(format: NSLocalizedString("当前麦克风模式：%@", tableName: "Yihu", comment: ""), title(for: activeMode)), systemImage: "mic")
                 .font(compact ? .footnote : .body)
-                .accessibilityLabel("当前麦克风模式：\(title(for: activeMode))")
+                .accessibilityLabel(String(format: NSLocalizedString("当前麦克风模式：%@", tableName: "Yihu", comment: ""), title(for: activeMode)))
             Button {
                 AVCaptureDevice.showSystemUserInterface(.microphoneModes)
             } label: {
-                Label("打开系统麦克风模式", systemImage: "slider.horizontal.3")
+                Label(NSLocalizedString("打开系统麦克风模式", tableName: "Yihu", comment: ""), systemImage: "slider.horizontal.3")
             }
             .font(compact ? .footnote : .body)
             if !compact {
-                Text("人声突显：只收离手机最近的人声，适合旁边有人说话时。系统模式会在支持的音频路由上生效。")
+                Text(NSLocalizedString("人声突显：只收离手机最近的人声，适合旁边有人说话时。系统模式会在支持的音频路由上生效。", tableName: "Yihu", comment: ""))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -35,10 +35,10 @@ struct CollieMicrophoneModeControl: View {
 
     private func title(for mode: AVCaptureDevice.MicrophoneMode) -> String {
         switch mode {
-        case .standard: "标准"
-        case .voiceIsolation: "人声突显"
-        case .wideSpectrum: "宽频谱"
-        @unknown default: "系统模式"
+        case .standard: NSLocalizedString("标准", tableName: "Yihu", comment: "")
+        case .voiceIsolation: NSLocalizedString("人声突显", tableName: "Yihu", comment: "")
+        case .wideSpectrum: NSLocalizedString("宽频谱", tableName: "Yihu", comment: "")
+        @unknown default: NSLocalizedString("系统模式", tableName: "Yihu", comment: "")
         }
     }
 }

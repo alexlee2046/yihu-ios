@@ -1,5 +1,10 @@
 import AVFoundation
+import Foundation
 import SwiftUI
+
+private func shellText(_ key: String) -> String {
+    NSLocalizedString(key, tableName: "Yihu", comment: "")
+}
 
 @main
 struct CollieShellApp: App {
@@ -42,16 +47,16 @@ final class CollieConnectionRuntime {
     @ObservationIgnored private(set) weak var transcriptTarget: CollieWebSession?
 
     static func voiceBlockReason(_ voice: CollieVoiceController) -> String? {
-        if voice.canCancel { return "录音或转写正在进行，请先完成或取消，不能在此时切换服务。" }
-        if voice.phase == .delivering { return "转写文字正在交付，请等待完成后再切换服务。" }
-        if voice.canRetryDelivery { return "存在尚未填入的转写文字，请先填入或明确放弃，避免丢失草稿。" }
+        if voice.canCancel { return shellText("录音或转写正在进行，请先完成或取消，不能在此时切换服务。") }
+        if voice.phase == .delivering { return shellText("转写文字正在交付，请等待完成后再切换服务。") }
+        if voice.canRetryDelivery { return shellText("存在尚未填入的转写文字，请先填入或明确放弃，避免丢失草稿。") }
         return nil
     }
 
     func switchBlockReason(to origin: URL, voice: CollieVoiceController,
                            notifications: CollieNativeNotificationsController) -> String? {
         if webSession?.baseURL == origin { return nil }
-        if notifications.isBusy { return "正在开启或停用通知，请等待完成后再切换工作台。" }
+        if notifications.isBusy { return shellText("正在开启或停用通知，请等待完成后再切换工作台。") }
         return Self.voiceBlockReason(voice)
     }
 
@@ -66,7 +71,7 @@ final class CollieConnectionRuntime {
             return Self.voiceBlockReason(voice) == nil
         }
         notifications.navigationBlockReason = { [weak voice] in
-            guard let voice else { return "无法检查语音输入状态，请稍后重试。" }
+            guard let voice else { return shellText("无法检查语音输入状态，请稍后重试。") }
             return Self.voiceBlockReason(voice)
         }
         // activate can synchronously deliver a cold-start tap and reenter here.
@@ -226,9 +231,9 @@ struct CollieShellView: View {
                     ProgressView()
                         .controlSize(.large)
                         .tint(BenchsideStyle.accent)
-                    Text("正在连接工作台…")
+                    Text(shellText("正在连接工作台…"))
                         .font(.headline)
-                    Text("正在建立安全连接")
+                    Text(shellText("正在建立安全连接"))
                         .font(.footnote)
                         .foregroundStyle(BenchsideStyle.secondary)
                 }
@@ -254,7 +259,7 @@ struct CollieShellView: View {
                     CollieVoiceBar(
                         voice: voice,
                         beforeVoiceStart: { webSession.dismissKeyboard() },
-                        pendingRecoveryTitle: webSession.isConnected ? (voice.voiceprintBlocked ? "仍然填入" : "再次填入") : "重新连接并填入",
+                        pendingRecoveryTitle: webSession.isConnected ? (voice.voiceprintBlocked ? shellText("仍然填入") : shellText("再次填入")) : shellText("重新连接并填入"),
                         pendingRecoveryNotice: pendingRecoveryMessage ?? (voice.voiceprintBlocked ? voice.notice : nil),
                         recoverPendingTranscript: recoverPendingTranscript,
                         side: placement.side,
@@ -274,7 +279,7 @@ struct CollieShellView: View {
         }
         .background {
             // Hardware keyboard: ⌘⇧D starts or finishes voice input.
-            Button("语音输入") { shortcuts.requestToggle() }
+            Button(shellText("语音输入")) { shortcuts.requestToggle() }
                 .keyboardShortcut("d", modifiers: [.command, .shift])
                 .opacity(0)
                 .allowsHitTesting(false)
@@ -333,7 +338,7 @@ struct CollieShellView: View {
                 let rawValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
                 AVAudioSession.InterruptionType(rawValue: rawValue) == .began
             else { return }
-            voice.cancelRecording(reason: "录音被系统中断，请重试。")
+            voice.cancelRecording(reason: shellText("录音被系统中断，请重试。"))
         }
         .sheet(isPresented: $notesPresented) {
             if let voiceNotes {
@@ -344,15 +349,15 @@ struct CollieShellView: View {
                 .presentationBackground(BenchsideStyle.canvas)
             }
         }
-        .alert("重命名工作台", isPresented: $showRename) {
-            TextField("工作台名称", text: $renameDraft)
-            Button("取消", role: .cancel) { renameOrigin = nil }
-            Button("保存") {
+        .alert(shellText("重命名工作台"), isPresented: $showRename) {
+            TextField(shellText("工作台名称"), text: $renameDraft)
+            Button(shellText("取消"), role: .cancel) { renameOrigin = nil }
+            Button(shellText("保存")) {
                 if let renameOrigin { connectionSettings?.rename(renameOrigin, to: renameDraft) }
                 renameOrigin = nil
             }
         } message: {
-            Text("名称只保存在本机；清空可恢复页面标题或地址。")
+            Text(shellText("名称保存在本机的本地设置中；清空可恢复页面标题或地址。"))
         }
         .sheet(isPresented: $settingsPresented) {
             NavigationStack {
@@ -453,7 +458,7 @@ struct CollieShellView: View {
             }
         }
         guard webSession.isConnected else {
-            pendingRecoveryMessage = "仍无法连接，文字已保存在本机。"
+            pendingRecoveryMessage = shellText("仍无法连接，文字已保存在本机。")
             return
         }
         await voice.retryDelivery()
@@ -463,7 +468,7 @@ struct CollieShellView: View {
         VStack(spacing: 8) {
             if dynamicTypeSize.isAccessibilitySize {
                 HStack {
-                    Text("一呼")
+                    Text(shellText("一呼"))
                         .font(.headline.weight(.bold))
                     Spacer()
                     notesButton
@@ -475,7 +480,7 @@ struct CollieShellView: View {
                 }
             } else {
                 ZStack {
-                    Text("一呼")
+                    Text(shellText("一呼"))
                         .font(.headline.weight(.bold))
                     HStack {
                         if !webSession.isConnected { connectionPill }
@@ -496,7 +501,7 @@ struct CollieShellView: View {
 
     private func quickSwitchRow(_ settings: CollieConnectionSettings) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("工作台")
+            Text(shellText("工作台"))
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(BenchsideStyle.secondary)
             ScrollViewReader { proxy in
@@ -539,8 +544,8 @@ struct CollieShellView: View {
             .overlay { Capsule().stroke(selected ? BenchsideStyle.accent : BenchsideStyle.border, lineWidth: 1) }
         }
         .buttonStyle(.plain)
-        .contextMenu { Button("重命名工作台") { beginRename(origin) } }
-        .accessibilityLabel("\(name)，\(selected ? "当前工作台" : "切换工作台")")
+        .contextMenu { Button(shellText("重命名工作台")) { beginRename(origin) } }
+        .accessibilityLabel(String(format: shellText("%1$@，%2$@"), name, selected ? shellText("当前工作台") : shellText("切换工作台")))
         .accessibilityIdentifier("collie-workbench-\(origin.absoluteString)")
     }
 
@@ -560,7 +565,7 @@ struct CollieShellView: View {
         .background(BenchsideStyle.accent.opacity(webSession.isConnected ? 0.10 : 0.04), in: Capsule())
         .overlay { Capsule().stroke(BenchsideStyle.border, lineWidth: 1) }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("工作台\(webSession.connectionStatusLabel)")
+        .accessibilityLabel(String(format: shellText("工作台%@"), webSession.connectionStatusLabel))
     }
 
     @ViewBuilder
@@ -580,14 +585,14 @@ struct CollieShellView: View {
                 .background(BenchsideStyle.surfaceRaised, in: Circle())
             }
             .buttonStyle(ColliePressButtonStyle())
-            .accessibilityLabel(voiceNotes.recorder.isRecording ? "正在语音记录" : "语音记录")
+            .accessibilityLabel(voiceNotes.recorder.isRecording ? shellText("正在语音记录") : shellText("语音记录"))
             .accessibilityIdentifier("collie-voice-notes")
         }
     }
 
     private var settingsButton: some View {
         Button { settingsPresented = true } label: {
-            Label("一呼设置", systemImage: "gearshape")
+            Label(shellText("一呼设置"), systemImage: "gearshape")
                 .labelStyle(.iconOnly)
                 .font(.title3)
                 .frame(width: 44, height: 44)
@@ -621,7 +626,7 @@ struct ColliePressButtonStyle: ButtonStyle {
 struct CollieVoiceBar: View {
     let voice: CollieVoiceController
     var beforeVoiceStart: @MainActor () async -> Void = {}
-    var pendingRecoveryTitle = "再次填入"
+    var pendingRecoveryTitle = shellText("再次填入")
     var pendingRecoveryNotice: String? = nil
     var recoverPendingTranscript: @MainActor () async -> Void = {}
     var side: CollieVoicePlacement.Side = .trailing
@@ -681,7 +686,7 @@ struct CollieVoiceBar: View {
                     liveTranscript
                 }
                 if cancelsOnRelease, voice.canCancel {
-                    Text("松开取消")
+                    Text(shellText("松开取消"))
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.red)
                         .padding(.horizontal, 12)
@@ -716,9 +721,9 @@ struct CollieVoiceBar: View {
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: voice.phase)
         .sensoryFeedback(.selection, trigger: voice.isRecording)
         .sensoryFeedback(.impact(weight: .light), trigger: isRepositioning) { _, moving in moving }
-        .confirmationDialog("放弃这段文字？", isPresented: $confirmingDiscard, titleVisibility: .visible) {
-            Button("放弃文字", role: .destructive) { voice.discardPendingTranscript() }
-            Button("保留", role: .cancel) {}
+        .confirmationDialog(shellText("放弃这段文字？"), isPresented: $confirmingDiscard, titleVisibility: .visible) {
+            Button(shellText("放弃文字"), role: .destructive) { voice.discardPendingTranscript() }
+            Button(shellText("保留"), role: .cancel) {}
         }
         .onChange(of: scenePhase) { _, phase in
             if phase != .active {
@@ -741,7 +746,7 @@ struct CollieVoiceBar: View {
         HStack(spacing: 12) {
             if voice.isRecording {
                 TimelineView(.periodic(from: .now, by: 1)) { context in
-                    Text("\(voice.recordingSeconds(at: context.date)) 秒")
+                    Text(String(format: shellText("%lld 秒"), Int64(voice.recordingSeconds(at: context.date))))
                         .font(.callout.weight(.semibold).monospacedDigit())
                         .foregroundStyle(BenchsideStyle.ink.opacity(0.85))
                         .accessibilityIdentifier("collie-recording-time")
@@ -787,8 +792,8 @@ struct CollieVoiceBar: View {
             .allowsHitTesting(voice.phase == .ready || voice.phase == .preparing || voice.isRecording)
             .accessibilityElement(children: .ignore)
             .accessibilityAddTraits(.isButton)
-            .accessibilityLabel(voice.isRecording ? "正在录音" : "语音输入")
-            .accessibilityHint(voice.isRecording ? "松开或双击完成录音" : "点按开始，或按住说话")
+            .accessibilityLabel(voice.isRecording ? shellText("正在录音") : shellText("语音输入"))
+            .accessibilityHint(voice.isRecording ? shellText("松开或双击完成录音") : shellText("点按开始，或按住说话"))
             .accessibilityIdentifier("collie-voice-primary")
             .accessibilityAction {
                 Task { @MainActor in
@@ -796,10 +801,10 @@ struct CollieVoiceBar: View {
                     await voice.performPrimaryAction()
                 }
             }
-            .accessibilityAction(named: "放弃录音") {
+            .accessibilityAction(named: shellText("放弃录音")) {
                 voice.cancelRecording()
             }
-            .accessibilityAction(named: side == .leading ? "移到右侧" : "移到左侧") {
+            .accessibilityAction(named: side == .leading ? shellText("移到右侧") : shellText("移到左侧")) {
                 onFlipSide()
             }
         }
@@ -894,7 +899,7 @@ struct CollieVoiceBar: View {
             if voice.phase != .preparing { return }
             try? await Task.sleep(for: .milliseconds(50))
         }
-        if voice.canCancel { voice.cancelRecording(reason: "录音没有开始，请重试。") }
+        if voice.canCancel { voice.cancelRecording(reason: shellText("录音没有开始，请重试。")) }
     }
 
     private var liveTranscript: some View {
@@ -915,14 +920,14 @@ struct CollieVoiceBar: View {
         VStack(alignment: .leading, spacing: 10) {
             switch voice.phase {
             case .needsModel:
-                Text("下载语音模型")
+                Text(shellText("下载语音模型"))
                     .font(.callout.weight(.semibold))
-                Text("约 950 MB，建议连接 Wi‑Fi。下载时请停留在一呼，完成后可离线使用。")
+                Text(shellText("约 950 MB，建议连接 Wi‑Fi。下载时请停留在一呼，完成后可离线使用。"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 actionRow {
-                    Button("下载") { Task { await voice.performPrimaryAction() } }
+                    Button(shellText("下载")) { Task { await voice.performPrimaryAction() } }
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("collie-voice-primary")
                     Menu {
@@ -931,19 +936,19 @@ struct CollieVoiceBar: View {
                                 voice.setModelDownloadSource(source)
                             } label: {
                                 if source == voice.modelDownloadSource {
-                                    Label("\(source.shortLabel)（\(source.detail)）", systemImage: "checkmark")
+                                    Label(String(format: shellText("%1$@（%2$@）"), source.shortLabel, source.detail), systemImage: "checkmark")
                                 } else {
-                                    Text("\(source.shortLabel)（\(source.detail)）")
+                                    Text(String(format: shellText("%1$@（%2$@）"), source.shortLabel, source.detail))
                                 }
                             }
                         }
                     } label: {
-                        Label("下载源：\(voice.modelDownloadSource.shortLabel)", systemImage: "chevron.up.chevron.down")
+                        Label(String(format: shellText("下载源：%@"), voice.modelDownloadSource.shortLabel), systemImage: "chevron.up.chevron.down")
                             .labelStyle(TrailingIconLabelStyle())
                             .font(.callout)
                             .frame(minHeight: 44)
                     }
-                    .accessibilityLabel("下载源：\(voice.modelDownloadSource.shortLabel)")
+                    .accessibilityLabel(String(format: shellText("下载源：%@"), voice.modelDownloadSource.shortLabel))
                 }
             case .downloading:
                 HStack(spacing: 10) {
@@ -952,8 +957,8 @@ struct CollieVoiceBar: View {
                         .font(.caption.monospacedDigit())
                 }
                 .accessibilityElement(children: .combine)
-                .accessibilityLabel("语音模型下载进度 \(Int(voice.downloadProgress * 100))%")
-                Text("请停留在一呼，下载完成后可离线使用。")
+                .accessibilityLabel(String(format: shellText("语音模型下载进度 %lld%%"), Int64(voice.downloadProgress * 100)))
+                Text(shellText("请停留在一呼，下载完成后可离线使用。"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -981,7 +986,7 @@ struct CollieVoiceBar: View {
         switch voice.failureKind {
         case .microphonePermission:
             actionRow {
-                Button("去设置") {
+                Button(shellText("去设置")) {
                     guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                     UIApplication.shared.open(url)
                 }
@@ -991,14 +996,14 @@ struct CollieVoiceBar: View {
             }
         case .modelDownload:
             actionRow {
-                Button("重试") {
+                Button(shellText("重试")) {
                     Task { await voice.retryModelDownload(using: voice.modelDownloadSource) }
                 }
                 .buttonStyle(.borderedProminent)
                 .accessibilityIdentifier("collie-voice-primary")
-                Menu("换下载源") {
+                Menu(shellText("换下载源")) {
                     ForEach(Qwen3ModelDownloadSource.allCases) { source in
-                        Button("\(source.shortLabel)（\(source.detail)）") {
+                        Button(String(format: shellText("%1$@（%2$@）"), source.shortLabel, source.detail)) {
                             Task { await voice.retryModelDownload(using: source) }
                         }
                     }
@@ -1007,13 +1012,13 @@ struct CollieVoiceBar: View {
             }
         case .model:
             actionRow {
-                Button("重试") { Task { await voice.performPrimaryAction() } }
+                Button(shellText("重试")) { Task { await voice.performPrimaryAction() } }
                     .buttonStyle(.borderedProminent)
                     .accessibilityIdentifier("collie-voice-primary")
             }
         case .recording:
             actionRow {
-                Button("再录一次") {
+                Button(shellText("再录一次")) {
                     Task { @MainActor in
                         await voice.performPrimaryAction() // Clears the failure.
                         guard voice.phase == .ready else { return }
@@ -1029,7 +1034,7 @@ struct CollieVoiceBar: View {
     }
 
     private var dismissFailureButton: some View {
-        Button("关闭") { Task { await voice.performPrimaryAction() } }
+        Button(shellText("关闭")) { Task { await voice.performPrimaryAction() } }
             .buttonStyle(.bordered)
             .accessibilityIdentifier("collie-voice-dismiss-failure")
     }
@@ -1083,7 +1088,7 @@ struct CollieVoiceBar: View {
     }
 
     private var discardButton: some View {
-        Button("放弃") { confirmingDiscard = true }
+        Button(shellText("放弃")) { confirmingDiscard = true }
             .font(.callout.weight(.semibold))
             .frame(maxWidth: .infinity, minHeight: 44)
             .buttonStyle(.bordered)
@@ -1108,7 +1113,7 @@ struct CollieConnectionErrorView: View {
                         .foregroundStyle(.red)
                         .accessibilityHidden(true)
                 }
-                Text("无法连接工作台")
+                Text(shellText("无法连接工作台"))
                     .font(.title2.weight(.bold))
                     .multilineTextAlignment(.center)
                 Text(message)
@@ -1117,7 +1122,7 @@ struct CollieConnectionErrorView: View {
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                 Button(action: reload) {
-                    Label("重新加载", systemImage: "arrow.clockwise")
+                    Label(shellText("重新加载"), systemImage: "arrow.clockwise")
                         .font(.body.weight(.semibold))
                         .frame(maxWidth: .infinity, minHeight: 52)
                 }
@@ -1126,7 +1131,7 @@ struct CollieConnectionErrorView: View {
                 .background(BenchsideStyle.accent, in: Capsule())
                 .accessibilityIdentifier("collie-web-reload")
                 if let changeConnection {
-                    Button("更换工作台", action: changeConnection)
+                    Button(shellText("更换工作台"), action: changeConnection)
                         .frame(maxWidth: .infinity, minHeight: 44)
                         .accessibilityIdentifier("collie-web-change-workbench")
                 }

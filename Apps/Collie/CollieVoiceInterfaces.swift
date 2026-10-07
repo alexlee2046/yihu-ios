@@ -8,8 +8,8 @@ enum Qwen3ModelDownloadSource: String, CaseIterable, Identifiable, Sendable {
 
     var shortLabel: String {
         switch self {
-        case .modelScope: "国内源"
-        case .huggingFace: "海外源"
+        case .modelScope: NSLocalizedString("国内源", tableName: "Yihu", comment: "")
+        case .huggingFace: NSLocalizedString("海外源", tableName: "Yihu", comment: "")
         }
     }
 
@@ -22,8 +22,8 @@ enum Qwen3ModelDownloadSource: String, CaseIterable, Identifiable, Sendable {
 
     var detail: String {
         switch self {
-        case .modelScope: "适合中国大陆网络"
-        case .huggingFace: "适合中国大陆以外网络"
+        case .modelScope: NSLocalizedString("适合中国大陆网络", tableName: "Yihu", comment: "")
+        case .huggingFace: NSLocalizedString("适合中国大陆以外网络", tableName: "Yihu", comment: "")
         }
     }
 }

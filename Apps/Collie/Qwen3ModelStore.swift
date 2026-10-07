@@ -361,15 +361,15 @@ enum Qwen3ModelStoreError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .downloadRejected(let path):
-            return "模型下载被服务器拒绝：\(path)"
+            return String(format: NSLocalizedString("模型下载被服务器拒绝：%@", tableName: "Yihu", comment: ""), path)
         case .rangeUnsupported(let path):
-            return "模型下载服务器不支持分段：\(path)"
+            return String(format: NSLocalizedString("模型下载服务器不支持分段：%@", tableName: "Yihu", comment: ""), path)
         case .sizeMismatch(let path):
-            return "模型文件大小校验失败：\(path)"
+            return String(format: NSLocalizedString("模型文件大小校验失败：%@", tableName: "Yihu", comment: ""), path)
         case .hashMismatch(let path):
-            return "模型文件完整性校验失败：\(path)"
+            return String(format: NSLocalizedString("模型文件完整性校验失败：%@", tableName: "Yihu", comment: ""), path)
         case .couldNotAssemble(let path):
-            return "模型分段无法合并：\(path)"
+            return String(format: NSLocalizedString("模型分段无法合并：%@", tableName: "Yihu", comment: ""), path)
         }
     }
 }
