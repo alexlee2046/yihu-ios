@@ -1,0 +1,9 @@
+Yihu iOS
+Copyright 2026 Yihu contributors
+
+Original code is licensed under Apache-2.0. Vendored SpeechSwiftCoreML is
+adapted from soniqo/speech-swift at ca4daaf9be7cccf230f691e443cd80b7a0bd8d97;
+its copyright, license and NOTICE are retained under Apps/Collie/Vendor.
+Audio preprocessing and optional CAM++ model integration have additional
+attribution there. See Apps/Collie/ThirdPartyNotices.txt for model provenance.
+Model weights, Collie server source and Collie artwork are not distributed.

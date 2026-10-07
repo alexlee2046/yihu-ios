@@ -1,0 +1,313 @@
+{
+  "sourceLanguage": "zh-Hans",
+  "strings": {
+    "版本": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Version" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "版本" } }
+      }
+    },
+    "开源许可与致谢": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Licenses and acknowledgements" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "开源许可与致谢" } }
+      }
+    },
+    "一呼使用的第三方源码、模型与历史图标许可。远端工作台仍称 Collie。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Third-party source code, models, and historical icon licenses used by Yihu. Remote workbenches are still called Collie." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "一呼使用的第三方源码、模型与历史图标许可。远端工作台仍称 Collie。" } }
+      }
+    },
+    "声明文件不完整，缺少：%@。请重新安装此 App。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "License notices are incomplete. Missing: %@. Please reinstall the app." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "声明文件不完整，缺少：%@。请重新安装此 App。" } }
+      }
+    },
+    "请输入以 https:// 开头的工作台地址，例如 https://collie.example.com；只填主机名或 IP 地址（可带端口），不要带账号密码、路径、参数或 # 片段。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Enter an HTTPS workbench address, such as https://collie.example.com. Use only the host or IP address and optional port, without credentials, paths, query parameters, or fragments." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "请输入以 https:// 开头的工作台地址，例如 https://collie.example.com；只填主机名或 IP 地址（可带端口），不要带账号密码、路径、参数或 # 片段。" } }
+      }
+    },
+    "连接后即可查看工作台并使用本机语音输入。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Connect to view your workbench and use on-device voice input." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "连接后即可查看工作台并使用本机语音输入。" } }
+    } },
+    "Collie 工作台地址": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Collie workbench address" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "Collie 工作台地址" } }
+    } },
+    "工作台地址": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Workbench address" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "工作台地址" } }
+    } },
+    "可以是 Collie、OpenClaw 控制台、Hermes 管理台或其他网页工作台。地址保存在这台 iPhone 的本地设置中。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Use Collie, an OpenClaw console, a Hermes dashboard, or another web workbench. Addresses are saved in this iPhone's local settings." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "可以是 Collie、OpenClaw 控制台、Hermes 管理台或其他网页工作台。地址保存在这台 iPhone 的本地设置中。" } }
+    } },
+    "最近用过": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Recent workbenches" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "最近用过" } }
+    } },
+    "正在切换…": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Switching…" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在切换…" } }
+    } },
+    "连接": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Connect" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "连接" } }
+    } },
+    "切换工作台": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Switch workbench" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "切换工作台" } }
+    } },
+    "连接 Collie 工作台": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Connect to a Collie workbench" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "连接 Collie 工作台" } }
+    } },
+    "更换工作台": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Change workbench" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "更换工作台" } }
+    } },
+    "上一次停用未完成": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Previous deactivation incomplete" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "上一次停用未完成" } }
+    } },
+    "取消": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Cancel" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "取消" } }
+    } },
+    "仍然切换": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Switch anyway" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "仍然切换" } }
+    } },
+    "原工作台可能最多继续收到 7 天通用提醒，通知不会转移到新的工作台。可切回原地址重试停用。仍要更换工作台吗？": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "You may still receive general reminders from the previous workbench for up to 7 days. Notifications will not transfer to the new workbench. Switch back to the previous address to retry deactivation. Change workbench anyway?" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "原工作台可能最多继续收到 7 天通用提醒，通知不会转移到新的工作台。可切回原地址重试停用。仍要更换工作台吗？" } }
+    } },
+    "请等待通知操作完成后再切换工作台。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Wait for the notification operation to finish before switching workbenches." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "请等待通知操作完成后再切换工作台。" } }
+    } },
+    "正在连接…": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Connecting…" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在连接…" } }
+    } },
+    "重新加载": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Reload" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "重新加载" } }
+    } },
+    "当前工作台": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Current workbench" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "当前工作台" } }
+    } },
+    "关于与开源许可": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "About & open-source licenses" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "关于与开源许可" } }
+    } },
+    "一呼设置": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Yihu Settings" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "一呼设置" } }
+    } },
+    "完成": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Done" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "完成" } }
+    } },
+    "近场收音": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Near-field audio" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "近场收音" } }
+    } },
+    "使用 iOS 系统语音处理；开关变更从下一次录音生效。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Uses iOS voice processing. Changes apply to your next recording." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "使用 iOS 系统语音处理；开关变更从下一次录音生效。" } }
+    } },
+    "录音中也可从语音输入栏打开系统麦克风模式选择。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "While recording, open the system microphone mode picker from the voice input bar." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音中也可从语音输入栏打开系统麦克风模式选择。" } }
+    } },
+    "人声突显可减少背景声音，帮助突出附近的人声。系统麦克风模式由 iOS 控制。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Voice Isolation can reduce background noise and help emphasize nearby voices. Microphone mode is controlled by iOS." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "人声突显可减少背景声音，帮助突出附近的人声。系统麦克风模式由 iOS 控制。" } }
+    } },
+    "只认我的声音": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "My voice only" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "只认我的声音" } }
+    } },
+    "状态": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Status" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "状态" } }
+    } },
+    "常用词": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Custom vocabulary" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "常用词" } }
+    } },
+    "未使用": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Not in use" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "未使用" } }
+    } },
+    "删除语音模型": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Delete voice model" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "删除语音模型" } }
+    } },
+    "语音输入": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Voice input" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "语音输入" } }
+    } },
+    "语音只在这台 iPhone 上识别，不会上传。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Voice input is transcribed on this iPhone. Audio is not uploaded." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "语音只在这台 iPhone 上识别，不会上传。" } }
+    } },
+    "删除语音模型？": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Delete the voice model?" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "删除语音模型？" } }
+    } },
+    "删除": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Delete" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "删除" } }
+    } },
+    "可释放约 950 MB 空间。之后使用语音输入需要重新下载。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Frees about 950 MB. You'll need to download it again to use voice input." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "可释放约 950 MB 空间。之后使用语音输入需要重新下载。" } }
+    } },
+    "正在检查…": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Checking…" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在检查…" } }
+    } },
+    "未下载（约 950 MB）": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Not downloaded (about 950 MB)" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "未下载（约 950 MB）" } }
+    } },
+    "正在下载 %lld%%": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Downloading %lld%%" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在下载 %lld%%" } }
+    } },
+    "下载未完成": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Download incomplete" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "下载未完成" } }
+    } },
+    "无法加载": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Unable to load" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法加载" } }
+    } },
+    "已下载（约 950 MB）": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Downloaded (about 950 MB)" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "已下载（约 950 MB）" } }
+    } },
+    "常用词，每行一个": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Custom vocabulary, one term per line" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "常用词，每行一个" } }
+    } },
+    "每行一个": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "One term per line" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "每行一个" } }
+    } },
+    "识别时会参考这些词，适合常说的英文术语、产品名和人名。越靠前越优先；录音越长，能带上的词越少。清空即不使用。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "These terms guide recognition, especially recurring English terms, product names, and names. Earlier lines take priority. Longer recordings allow fewer terms. Clear the list to stop using it." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "识别时会参考这些词，适合常说的英文术语、产品名和人名。越靠前越优先；录音越长，能带上的词越少。清空即不使用。" } }
+    } },
+    "恢复默认词表": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Restore default vocabulary" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "恢复默认词表" } }
+    } },
+    "Hermes 任务提醒": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Hermes task notifications" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "Hermes 任务提醒" } }
+    } },
+    "正在登记…": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Registering…" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在登记…" } }
+    } },
+    "任务提醒": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Task notifications" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "任务提醒" } }
+    } },
+    "在 Hermes WebUI 里交代的任务，会在锁屏和灵动岛显示进度，完成后提醒你。只包含工具名和状态，不含对话内容。需要开启 Tailscale。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Tasks started in Hermes WebUI show progress on the Lock Screen and Dynamic Island, with a notification when complete. Includes tool names and status, not conversation content. Requires Tailscale." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "在 Hermes WebUI 里交代的任务，会在锁屏和灵动岛显示进度，完成后提醒你。只包含工具名和状态，不含对话内容。需要开启 Tailscale。" } }
+    } },
+    "录音在这台 iPhone 上转写。锁屏后会继续录音；转写在一呼打开时进行。交给工作台时分享转写文字，不包含录音文件。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Recordings are transcribed on this iPhone. Recording continues while locked; transcription runs while Yihu is open. Handing a note to your workbench shares the transcript, not the audio file." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "录音在这台 iPhone 上转写。锁屏后会继续录音；转写在一呼打开时进行。交给工作台时分享转写文字，不包含录音文件。" } }
+    } },
+    "记录": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Recordings" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "记录" } }
+    } },
+    "语音记录": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Voice notes" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "语音记录" } }
+    } },
+    "麦克风音量": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Microphone level" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "麦克风音量" } }
+    } },
+    "结束记录": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Stop recording" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "结束记录" } }
+    } },
+    "开始记录": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Start recording" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "开始记录" } }
+    } },
+    "等待转写": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Waiting to transcribe" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "等待转写" } }
+    } },
+    "正在转写": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Transcribing" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在转写" } }
+    } },
+    "转写失败": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Transcription failed" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "转写失败" } }
+    } },
+    "转写": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Transcript" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "转写" } }
+    } },
+    "正在转写…": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Transcribing…" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "正在转写…" } }
+    } },
+    "重新转写": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Transcribe again" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "重新转写" } }
+    } },
+    "整理方式": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Organize as" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "整理方式" } }
+    } },
+    "会议纪要": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Meeting minutes" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "会议纪要" } }
+    } },
+    "要点和待办": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Key points & action items" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "要点和待办" } }
+    } },
+    "整理成文字": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Clean transcript" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "整理成文字" } }
+    } },
+    "交给当前工作台": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Hand to current workbench" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "交给当前工作台" } }
+    } },
+    "复制全文": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Copy full transcript" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "复制全文" } }
+    } },
+    "会放进「收到分享」，回到工作台点一下输入框，再点「填入」。长转写以文本附件形式交给工作台。不会自动发送。": { "extractionState": "manual", "localizations": {
+      "en": { "stringUnit": { "state": "translated", "value": "Placed in Received shares. Return to your workbench, tap the text field, then Insert. Long transcripts are handed over as text attachments. Nothing is sent automatically." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "会放进「收到分享」，回到工作台点一下输入框，再点「填入」。长转写以文本附件形式交给工作台。不会自动发送。" } }
+    } }
+  },
+  "version": "1.0"
+}

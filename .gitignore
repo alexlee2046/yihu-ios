@@ -1,0 +1,17 @@
+.DS_Store
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+build/
+.build/
+.swiftpm/
+*.xcuserstate
+*.mobileprovision
+*.p12
+*.p8
+*.pem
+*.ipa
+*.xcarchive/
+.env
+.env.*
+Apps/Collie/Resources/

@@ -1,0 +1,31 @@
+Third-party notices for 一呼（Yihu） iOS Qwen3-ASR
+
+Pure Core ML inference code is derived from soniqo/speech-swift commit
+ca4daaf9be7cccf230f691e443cd80b7a0bd8d97.
+Copyright its contributors; licensed under Apache License 2.0.
+https://github.com/soniqo/speech-swift
+
+At runtime, the app can download these pinned model assets from the provider
+selected in the model download screen. ModelScope is available for mainland
+China networks:
+
+- Qwen3-ASR-0.6B base model and tokenizer, Qwen Team / Alibaba Cloud,
+  revision 4ce9cc728b473a5aedbe7b6e1ea45646316824dc.
+  https://modelscope.cn/models/Qwen/Qwen3-ASR-0.6B
+- Qwen3-ASR Core ML conversion by aufklarer,
+  revision 50c8480c626116e21c9353d788762743cd401f24.
+  https://modelscope.cn/models/aufklarer/Qwen3-ASR-CoreML
+
+Hugging Face is available as the overseas option:
+
+- Qwen3-ASR-0.6B tokenizer, revision
+  5eb144179a02acc5e5ba31e748d22b0cf3e303b0.
+  https://huggingface.co/Qwen/Qwen3-ASR-0.6B
+- Qwen3-ASR Core ML conversion by aufklarer, revision
+  8c6bc87b87856930b435550e94ce47de710ce4ed.
+  https://huggingface.co/aufklarer/Qwen3-ASR-CoreML
+
+Both model repositories declare the Apache License 2.0. The app uses the
+same SHA-256 asset manifest for either provider. The complete license text is
+included in LICENSE.txt. Model assets remain in the app's local data container
+and are not bundled into the application binary.

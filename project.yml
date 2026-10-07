@@ -1,0 +1,74 @@
+name: Yihu
+options:
+  bundleIdPrefix: org.example.yihu
+  deploymentTarget:
+    iOS: "18.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: ""
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: 1
+    YIHU_BUNDLE_ID: org.example.yihu
+    YIHU_APP_GROUP: group.org.example.yihu
+    COLLIE_APNS_ENVIRONMENT: development
+targets:
+  CollieiOS:
+    type: application
+    platform: iOS
+    sources:
+      - Apps/Collie
+      - Shared/CollieShareInbox.swift
+      - Shared/HermesTaskAttributes.swift
+    dependencies:
+      - target: CollieShare
+      - target: CollieWidgets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID)
+        INFOPLIST_FILE: Apps/Collie/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Apps/Collie/Collie.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    attributes:
+      SystemCapabilities:
+        com.apple.Push:
+          enabled: 1
+        com.apple.ApplicationGroups.iOS:
+          enabled: 1
+  CollieShare:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Extensions/CollieShare
+      - Shared/CollieShareInbox.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).share
+        INFOPLIST_FILE: Extensions/CollieShare/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Extensions/CollieShare/CollieShare.entitlements
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
+    attributes:
+      SystemCapabilities:
+        com.apple.ApplicationGroups.iOS:
+          enabled: 1
+  CollieWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Extensions/CollieWidgets
+      - Shared/HermesTaskAttributes.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).widgets
+        INFOPLIST_FILE: Extensions/CollieWidgets/Info.plist
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
+schemes:
+  CollieiOS:
+    build:
+      targets:
+        CollieiOS: all
+    run:
+      config: Debug

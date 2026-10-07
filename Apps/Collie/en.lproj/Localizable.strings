@@ -1,0 +1,4 @@
+/* Voice shortcut and App Intent labels. */
+"一呼语音输入" = "Yihu Voice Input";
+"打开一呼开始录音；录音时再次运行则结束，并把文字填入当前工作台（不会发送）。" = "Open Yihu to start recording. Run it again to stop and fill the text into the current workbench; nothing will be sent.";
+"语音输入" = "Voice Input";
