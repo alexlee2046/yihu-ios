@@ -1,5 +1,10 @@
 import Observation
+import Foundation
 import SwiftUI
+
+private func shareText(_ key: String) -> String {
+    NSLocalizedString(key, tableName: "Yihu", comment: "")
+}
 
 /// Shared items waiting to be inserted into the current workbench. Text and
 /// links go into the focused input; files go through the page's own upload
@@ -67,15 +72,15 @@ final class CollieShareTrayModel {
                     batch.items.removeAll { $0.kind == .file }
                     if batch.items.isEmpty { inbox.remove(batch) } else { try? inbox.update(batch) }
                 case .noUploadControl:
-                    notice = "当前工作台页面没有能接收这类文件的上传入口，文件先留在一呼里。"
+                    notice = shareText("当前工作台页面没有能接收这类文件的上传入口，文件先留在一呼里。")
                     refresh()
                     return
                 case .oneAtATime:
-                    notice = "这个页面一次只能上传一个文件，请逐个分享。"
+                    notice = shareText("这个页面一次只能上传一个文件，请逐个分享。")
                     refresh()
                     return
                 case .failed:
-                    notice = "文件没能交给工作台，请重试。"
+                    notice = shareText("文件没能交给工作台，请重试。")
                     refresh()
                     return
                 }
@@ -83,7 +88,7 @@ final class CollieShareTrayModel {
             let texts = batch.items.filter { $0.kind != .file }.compactMap(\.text)
             if !texts.isEmpty {
                 guard await session.insertTranscript(texts.joined(separator: "\n")) else {
-                    notice = "请先点一下工作台的输入框，再点「填入」。"
+                    notice = shareText("请先点一下工作台的输入框，再点「填入」。")
                     refresh()
                     return
                 }
@@ -102,9 +107,9 @@ struct CollieShareTray: View {
     var body: some View {
         if model.itemCount > 0 {
             VStack(alignment: .leading, spacing: 8) {
-                Label("收到分享 · \(model.itemCount) 项", systemImage: "tray.and.arrow.down.fill")
+                Label(String(format: shareText("收到分享 · %lld 项"), Int64(model.itemCount)), systemImage: "tray.and.arrow.down.fill")
                     .font(.subheadline.weight(.semibold))
-                Text(model.batches.flatMap(\.items).map(\.displayName).prefix(3).joined(separator: "、"))
+                Text(model.batches.flatMap(\.items).map(\.displayName).prefix(3).joined(separator: shareText("、")))
                     .font(.caption)
                     .foregroundStyle(BenchsideStyle.secondary)
                     .lineLimit(2)
@@ -118,13 +123,13 @@ struct CollieShareTray: View {
                     Button {
                         Task { await model.insertAll(into: session) }
                     } label: {
-                        Text(model.isInserting ? "正在填入…" : "填入当前工作台")
+                        Text(model.isInserting ? shareText("正在填入…") : shareText("填入当前工作台"))
                             .frame(maxWidth: .infinity, minHeight: 36)
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(model.isInserting || !session.isConnected)
                     .accessibilityIdentifier("collie-share-insert")
-                    Button("清除") { model.discardAll() }
+                    Button(shareText("清除")) { model.discardAll() }
                         .buttonStyle(.bordered)
                         .disabled(model.isInserting)
                         .accessibilityIdentifier("collie-share-discard")

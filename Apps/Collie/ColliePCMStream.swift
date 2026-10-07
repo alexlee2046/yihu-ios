@@ -13,15 +13,15 @@ enum ColliePCMError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .unsupportedFormat:
-            return "录音格式不受支持，请重试。"
+            return NSLocalizedString("录音格式不受支持，请重试。", tableName: "Yihu", comment: "")
         case .conversionFailed:
-            return "录音处理失败，请重试。"
+            return NSLocalizedString("录音处理失败，请重试。", tableName: "Yihu", comment: "")
         case .durationExceeded:
-            return "录音超过时长限制，请重试。"
+            return NSLocalizedString("录音超过时长限制，请重试。", tableName: "Yihu", comment: "")
         case .bufferOverflow:
-            return "录音处理跟不上输入，请重试。"
+            return NSLocalizedString("录音处理跟不上输入，请重试。", tableName: "Yihu", comment: "")
         case .cancelled:
-            return "录音已取消。"
+            return NSLocalizedString("录音已取消。", tableName: "Yihu", comment: "")
         }
     }
 }

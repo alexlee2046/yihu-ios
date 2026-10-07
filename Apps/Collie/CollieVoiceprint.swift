@@ -30,7 +30,7 @@ enum CollieVoiceprint {
         "analytics/coremldata.bin": "f22f984e4419ebc6682dbe6a2ce990c876144eb6e43e9e4843b92917bdcd5ba7"
     ]
     static let enabledKey = "collie.voiceprint.enabled"
-    static let captureModeChangedNotice = "近场收音设置已变，建议重新录制声纹"
+    static let captureModeChangedNotice = NSLocalizedString("近场收音设置已变，建议重新录制声纹", tableName: "Yihu", comment: "")
 
     struct Profile: Codable {
         let version: Int

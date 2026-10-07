@@ -72,12 +72,12 @@ final class CollieHermesPush {
         guard isRequested else { return } // turned off while the prompt was up
         guard granted else {
             isRequested = false
-            status = .failed("请在系统设置中允许一呼发送通知。")
+            status = .failed(NSLocalizedString("请在系统设置中允许一呼发送通知。", tableName: "Yihu", comment: ""))
             return
         }
         guard ActivityAuthorizationInfo().areActivitiesEnabled else {
             isRequested = false
-            status = .failed("请在系统设置中允许一呼使用「实时活动」。")
+            status = .failed(NSLocalizedString("请在系统设置中允许一呼使用「实时活动」。", tableName: "Yihu", comment: ""))
             return
         }
         defaults.set(true, forKey: Self.enabledKey)
@@ -111,7 +111,7 @@ final class CollieHermesPush {
 
     func didFailToRegister() {
         guard isEnabled else { return }
-        status = .failed("无法开启推送，请检查网络后重试。")
+        status = .failed(NSLocalizedString("无法开启推送，请检查网络后重试。", tableName: "Yihu", comment: ""))
     }
 
     /// Offer owner-only reminders only after that host is saved; retain the
@@ -198,7 +198,7 @@ final class CollieHermesPush {
         if let pushToStartToken { body["push_to_start_token"] = pushToStartToken }
         let ok = await post(path: "/v1/devices", body: body)
         guard isEnabled, !Task.isCancelled else { return }
-        status = ok ? .on : .failed("无法连接 Hermes 提醒服务，请确认已开启 Tailscale。")
+        status = ok ? .on : .failed(NSLocalizedString("无法连接 Hermes 提醒服务，请确认已开启 Tailscale。", tableName: "Yihu", comment: ""))
     }
 
     @discardableResult

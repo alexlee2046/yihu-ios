@@ -125,13 +125,13 @@ final class CollieVoiceNotesStore {
     func startRecording() async {
         guard !recorder.isRecording, !isStarting else { return }
         guard canRecord() else {
-            notice = "正在语音输入，结束后再开始记录。"
+            notice = NSLocalizedString("正在语音输入，结束后再开始记录。", tableName: "Yihu", comment: "")
             return
         }
         isStarting = true
         defer { isStarting = false }
         guard await recorder.requestPermission() else {
-            notice = "麦克风权限已关闭，请在系统设置中允许一呼使用麦克风。"
+            notice = NSLocalizedString("麦克风权限已关闭，请在系统设置中允许一呼使用麦克风。", tableName: "Yihu", comment: "")
             return
         }
         let note = CollieVoiceNote()
@@ -142,7 +142,7 @@ final class CollieVoiceNotesStore {
             notice = nil
         } catch {
             delete(note)
-            notice = "无法开始记录：麦克风暂时不可用。"
+            notice = NSLocalizedString("无法开始记录：麦克风暂时不可用。", tableName: "Yihu", comment: "")
         }
     }
 
@@ -152,7 +152,7 @@ final class CollieVoiceNotesStore {
         let frames = await recorder.stop()
         note.duration = Double(frames) / Double(CollieNoteSegmenter.sampleRate)
         note.status = frames > 0 ? .pending : .failed
-        note.failure = frames > 0 ? nil : "没有录到声音。"
+        note.failure = frames > 0 ? nil : NSLocalizedString("没有录到声音。", tableName: "Yihu", comment: "")
         save(note)
         resumeTranscription()
     }
@@ -239,7 +239,7 @@ final class CollieVoiceNotesStore {
             save(note)
         } catch {
             note.status = .failed
-            note.failure = "转写失败，请重试。"
+            note.failure = NSLocalizedString("转写失败，请重试。", tableName: "Yihu", comment: "")
             progress[note.id] = nil
             save(note)
         }
@@ -249,8 +249,8 @@ final class CollieVoiceNotesStore {
     /// long ones as an attached Markdown file plus the instruction.
     /// Returns nil on success, otherwise a message to show next to the button.
     func handOff(_ note: CollieVoiceNote, instruction: String, inbox: CollieShareInbox?) -> String? {
-        guard !note.transcript.isEmpty else { return "这条记录没有识别出文字。" }
-        guard let inbox else { return "无法访问一呼的共享收件箱。" }
+        guard !note.transcript.isEmpty else { return NSLocalizedString("这条记录没有识别出文字。", tableName: "Yihu", comment: "") }
+        guard let inbox else { return NSLocalizedString("无法访问一呼的共享收件箱。", tableName: "Yihu", comment: "") }
         let body = note.transcript
         do {
             if body.count <= 3_000 {

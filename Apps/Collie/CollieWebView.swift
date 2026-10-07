@@ -32,9 +32,9 @@ final class CollieWebSession {
     }
 
     var connectionStatusLabel: String {
-        if isLoading { return "正在连接" }
-        if errorMessage != nil { return "连接失败" }
-        return isConnected ? "已连接" : "未连接"
+        if isLoading { return NSLocalizedString("正在连接", tableName: "Yihu", comment: "") }
+        if errorMessage != nil { return NSLocalizedString("连接失败", tableName: "Yihu", comment: "") }
+        return isConnected ? NSLocalizedString("已连接", tableName: "Yihu", comment: "") : NSLocalizedString("未连接", tableName: "Yihu", comment: "")
     }
 
     fileprivate func notePageTitle(_ title: String?, url: URL?) {

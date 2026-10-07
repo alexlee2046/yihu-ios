@@ -82,7 +82,7 @@ final class CollieConnectionSettings {
     @discardableResult
     func quickSwitch(to origin: URL, from current: URL?,
                      blockedReason: (URL) -> String?, onSaved: (URL) -> Void) -> String? {
-        guard recentOrigins.contains(origin) else { return "该工作台不在最近用过的列表中。" }
+        guard recentOrigins.contains(origin) else { return NSLocalizedString("该工作台不在最近用过的列表中。", tableName: "Yihu", comment: "") }
         guard origin != current else { return nil }
         if let reason = blockedReason(origin) { return reason }
         save(origin, reorderRecent: false)
