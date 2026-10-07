@@ -1,0 +1,40 @@
+Yihu iOS — Third-party acknowledgements
+
+Yihu's original code is licensed under Apache-2.0. Third-party material
+retains its own copyright and license; see the notices below.
+
+1. SpeechSwiftCoreML
+Vendor/SpeechSwiftCoreML contains Core ML inference code derived from
+soniqo/speech-swift, commit ca4daaf9be7cccf230f691e443cd80b7a0bd8d97.
+https://github.com/soniqo/speech-swift
+Apache-2.0; see that directory's LICENSE.txt and NOTICE.txt. The local
+adaptation supports Yihu's on-device transcription and model-loading flow.
+
+2. Optional downloaded ASR models
+Qwen3-ASR and the aufklarer Core ML conversion are downloaded separately
+using pinned revisions and SHA-256 checks. They are not included in this
+repository. Provider URLs, revisions and notices are in
+Vendor/SpeechSwiftCoreML/NOTICE.txt and Qwen3ModelStore.swift.
+Review the model provider's license before downloading or redistributing.
+
+3. Optional speaker models (not included)
+The speaker-verification code expects a separately supplied
+WeSpeaker.mlmodelc compatible with its pinned hashes. Its upstream source is
+https://huggingface.co/aufklarer/WeSpeaker-ResNet34-LM-CoreML
+revision b358f33f9e268a15aaf4aae0d4e747b82a8499e6.
+Original weights: https://huggingface.co/pyannote/wespeaker-voxceleb-resnet34-LM
+The upstream conversion declares MIT; consult its license and the VoxCeleb
+attribution requirements before redistribution. No WeSpeaker weights or
+compiled model are distributed here. The adapted audio preprocessing code
+is derived from speech-swift (Apache-2.0).
+
+CAM++ attribution and Apache-2.0 terms are preserved in
+Vendor/CAMPlus/CAMPlus-ATTRIBUTION.txt and CAMPlus-LICENSE.txt.
+No CAM++ model weights or compiled artifacts are included here.
+
+4. Apple frameworks and Collie
+Apple frameworks are provided by the reader's Apple SDK, not redistributed.
+Collie is a separate project: https://github.com/AltanS/collie
+This repository does not redistribute the Collie server or its artwork.
+The app icon is the Yihu tiger design, not Collie's favicon. Names and
+trademarks are not licensed by the source-code license.

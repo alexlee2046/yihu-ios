@@ -1,0 +1,23 @@
+CAM++ Chinese speaker-embedding model (192 dimensions, 16kHz, 80-bin Kaldi fbank)
+Model: ModelScope iic/speech_campplus_sv_zh-cn_16k-common, Apache-2.0
+Pinned model repository revision: a045b2afcaa9c3049c98a9215a2bc274407ab237
+campplus_cn_common.bin SHA-256: 3388cf5fd3493c9ac9c69851d8e7a8badcfb4f3dc631020c4961371646d5ada8
+Architecture and frontend: modelscope/3D-Speaker, Apache-2.0
+Pinned source revision: 065629c313eaf1a01c65c640c46d77e61e9607b4
+Official ONNX validation reference (not shipped in App):
+https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-recongition-models/3dspeaker_speech_campplus_sv_zh-cn_16k-common.onnx
+3dspeaker_speech_campplus_sv_zh-cn_16k-common.onnx SHA-256:
+f682b514c05d947ee3fa91cd6ec6c5c7543479a128373fa29b1faedccd21fd11
+Optional CAMPlus.mlpackage/Data/com.apple.CoreML/weights/weight.bin SHA-256 (not included):
+3e5bafbc3d3faa94aff8c72afd22ffae97ce31d87ce70c000585e055cd776c18
+When supplied, the compiled model is checked before use: weights, model.mil and
+analytics/coremldata.bin against fixed raw SHA-256; coremldata.bin against
+six fixed SHA-256 values for the six possible orderings of its three metadata
+entries (Debug and Release differ); metadata.json against a fixed SHA-256 of
+Foundation JSONSerialization sorted-key encoding. These byte-order differences
+carry identical metadata values across the verified iOS and simulator builds.
+The original private build used a conversion utility not distributed here.
+Torch, torchaudio, coremltools and ONNX Runtime were conversion/validation tools
+only; no model or conversion output is included in this source release. The iOS App uses Apple's Core ML and Accelerate; no third-party inference
+runtime, sound recording, embedding or test score is transmitted by this feature.
+See CAMPlus-LICENSE.txt for the upstream license.

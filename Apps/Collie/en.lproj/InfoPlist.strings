@@ -1,0 +1,3 @@
+"CFBundleDisplayName" = "Yihu";
+"CFBundleName" = "Yihu";
+"NSMicrophoneUsageDescription" = "Yihu uses the microphone only after you tap the native microphone button. Audio is transcribed offline on this iPhone by the Qwen3 model.";
