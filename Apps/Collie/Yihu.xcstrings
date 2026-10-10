@@ -1,6 +1,15 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
+    "清空搜索": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Clear search"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"清空搜索"}}}},
+    "筛选状态": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Filter by status"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"筛选状态"}}}},
+    "所有状态": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"All statuses"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"所有状态"}}}},
+    "清空筛选": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Clear filters"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"清空筛选"}}}},
+    "快照时间在未来，请检查数据源的时间和时区。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"The snapshot is dated in the future. Check the source clock and time zone."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"快照时间在未来，请检查数据源的时间和时区。"}}}},
+    "本机快照无法读取，请刷新或重新导入。原始文件已保留。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"The local snapshot could not be read. Refresh or import it again. The original file has been preserved."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"本机快照无法读取，请刷新或重新导入。原始文件已保留。"}}}},
+    "名称或数据源无效，设置未保存。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"The name or data source is invalid. Settings were not saved."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"名称或数据源无效，设置未保存。"}}}},
+    "无法清理旧来源快照，数据源未更改。请稍后重试。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"The old source snapshot could not be cleared. The data source was not changed. Try again later."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"无法清理旧来源快照，数据源未更改。请稍后重试。"}}}},
+    "设置未保存，请稍后重试。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Settings were not saved. Try again later."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"设置未保存，请稍后重试。"}}}},
     "复制转写": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Copy transcript"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"复制转写"}}}},
     "未能安全填入草稿，文字已保留；请点选可编辑输入框后重试，或复制转写。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Could not safely insert into the draft. Your text is retained; focus an editable field and retry, or copy the transcript."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"未能安全填入草稿，文字已保留；请点选可编辑输入框后重试，或复制转写。"}}}},
     "当前网页未提供原生推送接口；原版 Collie 可正常使用，但一呼后台通知不可用。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"This page does not provide a native push interface. Stock Collie remains usable, but Yihu background notifications are unavailable."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"当前网页未提供原生推送接口；原版 Collie 可正常使用，但一呼后台通知不可用。"}}}},

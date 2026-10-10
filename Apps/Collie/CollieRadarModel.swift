@@ -34,6 +34,12 @@ struct CollieRadarSnapshot: Codable {
     func projectName(_ key: String) -> String {
         projects.first(where: { $0.path == key })?.name ?? key
     }
+    var allTaskStatuses: [String] {
+        Array(Set((projects.compactMap(\.status) + decisions.compactMap(\.status))
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty })).sorted()
+    }
+
     func taskStatuses(for key: String) -> [String] {
         let explicit = projects.filter { $0.path == key }.compactMap(\.status)
         return Array(Set(explicit + decisions.filter { $0.project == key }.compactMap(\.status)))
@@ -47,13 +53,16 @@ struct CollieRadarSnapshot: Codable {
             if newestFirst, timestamps[lhs, default: 0] != timestamps[rhs, default: 0] {
                 return timestamps[lhs, default: 0] > timestamps[rhs, default: 0]
             }
-            return (names[lhs] ?? lhs).localizedCompare(names[rhs] ?? rhs) == .orderedAscending
+            let order = (names[lhs] ?? lhs).localizedCompare(names[rhs] ?? rhs)
+            return order == .orderedSame ? lhs < rhs : order == .orderedAscending
         }
     }
     func matchingActions(display: CollieRadarDisplay) -> [Action] {
+        let names = Dictionary(projects.map { ($0.path, $0.name) }, uniquingKeysWith: { first, _ in first })
         let filtered = decisions.enumerated().filter {
             (display.project.isEmpty || $0.element.project == display.project) &&
-            matches([projectName($0.element.project), $0.element.project, $0.element.title,
+            matchesStatus($0.element.status, filter: display.status) &&
+            matches([names[$0.element.project] ?? $0.element.project, $0.element.project, $0.element.title,
                      $0.element.status ?? "", $0.element.next], query: display.searchText)
         }
         if display.newestFirst, filtered.contains(where: { $0.element.timestamp == nil }) {
@@ -71,8 +80,12 @@ struct CollieRadarSnapshot: Codable {
     }
 
     func matchingProjects(display: CollieRadarDisplay) -> [Project] {
-        projects.filter {
+        let actionProjects: Set<String> = display.status.map { filter in
+            Set(decisions.filter { matchesStatus($0.status, filter: filter) }.map(\.project))
+        } ?? []
+        return projects.filter {
             (display.project.isEmpty || $0.path == display.project) &&
+            (matchesStatus($0.status, filter: display.status) || actionProjects.contains($0.path)) &&
             matches([$0.name, $0.path, $0.message, $0.status ?? ""], query: display.searchText)
         }
     }
@@ -80,6 +93,11 @@ struct CollieRadarSnapshot: Codable {
     func matchingProjectNames(display: CollieRadarDisplay) -> [String] {
         let keys = Set(matchingActions(display: display).map(\.project) + matchingProjects(display: display).map(\.path))
         return sortedProjectNames(newestFirst: display.newestFirst).filter { keys.contains($0) }
+    }
+
+    private func matchesStatus(_ status: String?, filter: String?) -> Bool {
+        guard let filter, !filter.isEmpty else { return true }
+        return status?.trimmingCharacters(in: .whitespacesAndNewlines) == filter
     }
 
     private func matches(_ fields: [String], query: String?) -> Bool {
@@ -90,9 +108,16 @@ struct CollieRadarSnapshot: Codable {
     var generatedAt: Date? {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.calendar = Calendar(identifier: .gregorian)
         formatter.timeZone = TimeZone(secondsFromGMT: 8 * 3600)
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
-        return formatter.date(from: date_str)
+        formatter.isLenient = false
+        guard let date = formatter.date(from: date_str), formatter.string(from: date) == date_str else { return nil }
+        return date
+    }
+    var isFutureDated: Bool {
+        guard let generatedAt else { return false }
+        return generatedAt.timeIntervalSinceNow > 5 * 60
     }
     var isOutdated: Bool {
         guard let generatedAt else { return true }
@@ -103,20 +128,27 @@ struct CollieRadarSnapshot: Codable {
     static func decode(_ data: Data) throws -> Self {
         guard data.count <= maximumBytes else { throw CollieRadarError.tooLarge }
         let snapshot = try JSONDecoder().decode(Self.self, from: data)
-        guard snapshot.generatedAt != nil else { throw CollieRadarError.invalidSnapshot }
+        let validTimestamp: (Double) -> Bool = { $0.isFinite && (0...253_402_300_799).contains($0) }
+        let nonempty: (String) -> Bool = { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        guard snapshot.generatedAt != nil,
+              snapshot.projects.allSatisfy({ nonempty($0.path) && nonempty($0.name) && validTimestamp($0.timestamp) }),
+              snapshot.decisions.allSatisfy({ nonempty($0.project) && nonempty($0.title) &&
+                  ($0.timestamp.map(validTimestamp) ?? true) }) else { throw CollieRadarError.invalidSnapshot }
         return snapshot
     }
 }
 
 /// Classify only explicit task states, never code activity or snapshot age.
 enum CollieRadarTaskState {
-    case progressing, waiting, blocked, unknown
+    case progressing, waiting, blocked, completed, paused, unknown
 
     static func classify(_ status: String) -> Self {
         switch status.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
         case "进行中", "推进中", "in progress", "in_progress": return .progressing
         case "等你决策", "等你验收", "等你处理", "等人操作", "等待反馈", "待我处理", "waiting", "pending": return .waiting
         case "真实阻塞", "阻塞", "已阻塞", "blocked": return .blocked
+        case "已完成", "完成", "done", "completed": return .completed
+        case "搁置", "已搁置", "paused", "on hold": return .paused
         default: return .unknown
         }
     }
@@ -126,6 +158,8 @@ enum CollieRadarTaskState {
         case .progressing: return "arrow.right.circle"
         case .waiting: return "hand.raised"
         case .blocked: return "exclamationmark.octagon"
+        case .completed: return "checkmark.circle"
+        case .paused: return "pause.circle"
         case .unknown: return "questionmark.circle"
         }
     }
@@ -141,6 +175,7 @@ struct CollieRadarDisplay: Codable, Equatable {
     var project = ""
     // Optional so existing saved views decode without a migration or reset.
     var searchText: String? = nil
+    var status: String? = nil
     var compact = false
     var showNext = true
     var showStatus = true

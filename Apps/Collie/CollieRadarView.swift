@@ -52,6 +52,13 @@ struct CollieRadarView: View {
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                             .accessibilityIdentifier("collie-radar-search")
+                        if !(record.display.searchText ?? "").isEmpty {
+                            Button { searchBinding.wrappedValue = "" } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .frame(minWidth: 44, minHeight: 44)
+                            }
+                            .accessibilityLabel(radarText("清空搜索"))
+                        }
                     }
                     .padding(12)
                     .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 12))
@@ -107,7 +114,9 @@ struct CollieRadarView: View {
                 defer { try? handle.close() }
                 let data = try handle.read(upToCount: CollieRadarSnapshot.maximumBytes + 1) ?? Data()
                 store.importSnapshot(data, for: id)
-            } catch { store.reportImportError(for: id) }
+            } catch {
+                if (error as? CocoaError)?.code != .userCancelled { store.reportImportError(for: id) }
+            }
         }
     }
 
@@ -130,8 +139,12 @@ struct CollieRadarView: View {
     @ViewBuilder
     private func snapshotContent(_ snapshot: CollieRadarSnapshot, display: CollieRadarDisplay) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Label(snapshot.date_str, systemImage: snapshot.isOutdated ? "clock.badge.exclamationmark" : "clock")
-                .font(.caption).foregroundStyle(snapshot.isOutdated ? Color.orange : BenchsideStyle.secondary)
+            Label(snapshot.date_str, systemImage: snapshot.isOutdated || snapshot.isFutureDated ? "clock.badge.exclamationmark" : "clock")
+                .font(.caption).foregroundStyle(snapshot.isOutdated || snapshot.isFutureDated ? Color.orange : BenchsideStyle.secondary)
+            if snapshot.isFutureDated {
+                Text(radarText("快照时间在未来，请检查数据源的时间和时区。"))
+                    .font(.footnote).foregroundStyle(.orange)
+            }
             if snapshot.isOutdated {
                 Text(radarText("快照已过期，请刷新或重新导入。"))
                     .font(.footnote).foregroundStyle(.orange)
@@ -149,11 +162,39 @@ struct CollieRadarView: View {
             }
         }
         .pickerStyle(.menu)
+        Picker(radarText("筛选状态"), selection: statusBinding) {
+            Text(radarText("所有状态")).tag("")
+            ForEach(snapshot.allTaskStatuses, id: \.self) { status in
+                Text(status).tag(status)
+            }
+            if let status = display.status, !status.isEmpty, !snapshot.allTaskStatuses.contains(status) {
+                Text(status).tag(status)
+            }
+        }
+        .pickerStyle(.menu)
+        .accessibilityIdentifier("collie-radar-status-filter")
+        if !display.project.isEmpty || !(display.status ?? "").isEmpty || !(display.searchText ?? "").isEmpty {
+            Button(radarText("清空筛选")) {
+                guard var item = record else { return }
+                item.display.project = ""
+                item.display.status = nil
+                item.display.searchText = nil
+                store.update(item)
+            }
+            .frame(minHeight: 44)
+            .accessibilityIdentifier("collie-radar-clear-filters")
+        }
 
         let actions = snapshot.matchingActions(display: display)
         let keys = snapshot.matchingProjectNames(display: display)
         let projects = snapshot.matchingProjects(display: display)
-            .sorted { display.newestFirst ? $0.timestamp > $1.timestamp : $0.name.localizedCompare($1.name) == .orderedAscending }
+            .enumerated().sorted { lhs, rhs in
+                if display.newestFirst, lhs.element.timestamp != rhs.element.timestamp {
+                    return lhs.element.timestamp > rhs.element.timestamp
+                }
+                let order = lhs.element.name.localizedCompare(rhs.element.name)
+                return order == .orderedSame ? lhs.offset < rhs.offset : order == .orderedAscending
+            }.map(\.element)
 
         if display.page == .overview {
             HStack(spacing: 12) {
@@ -171,7 +212,7 @@ struct CollieRadarView: View {
             }
         }
         if display.page == .projects {
-            groupedProjects(snapshot, keys: keys, display: display)
+            groupedProjects(snapshot, keys: keys, actions: actions, display: display)
         }
         if display.page == .overview, display.showActivity {
             Text(radarText("代码动态")).font(.headline)
@@ -194,18 +235,21 @@ struct CollieRadarView: View {
     }
 
     private func groupedProjects(_ snapshot: CollieRadarSnapshot, keys: [String],
-                                 display: CollieRadarDisplay) -> some View {
-        LazyVStack(alignment: .leading, spacing: 16) {
+                                 actions: [CollieRadarSnapshot.Action], display: CollieRadarDisplay) -> some View {
+        let grouped = Dictionary(grouping: actions, by: \.project)
+        let activity = Dictionary(snapshot.projects.map { ($0.path, $0) },
+                                  uniquingKeysWith: { lhs, rhs in lhs.timestamp >= rhs.timestamp ? lhs : rhs })
+        return LazyVStack(alignment: .leading, spacing: 16) {
             if keys.isEmpty { Text(radarText("这份快照中没有匹配的项目记录。")).foregroundStyle(.secondary) }
             ForEach(keys, id: \.self) { key in
                 VStack(alignment: .leading, spacing: 12) {
                     Text(snapshot.projectName(key)).font(.title3.bold())
                     if display.showStatus { projectTaskStatuses(snapshot, key: key) }
-                    if display.showActivity, let project = snapshot.projects.first(where: { $0.path == key }) {
+                    if display.showActivity, let project = activity[key] {
                         Label(project.message, systemImage: "arrow.triangle.branch")
                             .font(.footnote).foregroundStyle(.secondary)
                     }
-                    let actions = snapshot.matchingActions(display: display).filter { $0.project == key }
+                    let actions = grouped[key] ?? []
                     if actions.isEmpty { Text(radarText("这份快照中没有匹配的待处理项。")).font(.footnote).foregroundStyle(.secondary) }
                     ForEach(Array(actions.enumerated()), id: \.offset) { _, action in
                         actionCard(action, snapshot: snapshot, display: display)
@@ -222,6 +266,14 @@ struct CollieRadarView: View {
         Binding(get: { record?.display.project ?? "" }, set: { project in
             guard var item = record else { return }
             item.display.project = project
+            store.update(item)
+        })
+    }
+
+    private var statusBinding: Binding<String> {
+        Binding(get: { record?.display.status ?? "" }, set: { status in
+            guard var item = record else { return }
+            item.display.status = status.isEmpty ? nil : status
             store.update(item)
         })
     }
@@ -277,6 +329,7 @@ private struct CollieRadarSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     let store: CollieRadarStore
     @State var item: CollieRadarWorkbench
+    @State private var saveFailed = false
 
     var body: some View {
         NavigationStack {
@@ -288,12 +341,19 @@ private struct CollieRadarSettingsView: View {
                 Section {
                     TextField("https://example.com/pm/radar.json", text: $item.source)
                         .keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled()
-                    if !item.source.isEmpty, CollieRadarFeed.validate(item.source) == nil {
+                    if !item.source.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                       CollieRadarFeed.validate(item.source) == nil {
                         Text(radarText("请输入不含账号、参数或密钥的 HTTPS JSON 地址。"))
                             .foregroundStyle(.red).font(.footnote)
                     }
                 } header: { Text(radarText("数据源")) } footer: {
                     Text(radarText("支持 pm-radar --json 格式。需要登录的数据源暂请导出快照后导入；不会复制网页 Cookie 或向其他站点转发凭据。"))
+                }
+                if saveFailed {
+                    Section {
+                        Text(store.errors[item.id] ?? radarText("设置未保存，请稍后重试。"))
+                            .foregroundStyle(.orange)
+                    }
                 }
                 Section(radarText("显示")) {
                     Toggle(radarText("紧凑布局"), isOn: $item.display.compact)
@@ -309,11 +369,12 @@ private struct CollieRadarSettingsView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(radarText("保存")) {
                         item.name = String(item.name.trimmingCharacters(in: .whitespacesAndNewlines).prefix(48))
-                        store.update(item)
-                        dismiss()
+                        if store.update(item) { dismiss() }
+                        else { saveFailed = true }
                     }
                     .disabled(item.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-                              (!item.source.isEmpty && CollieRadarFeed.validate(item.source) == nil))
+                              (!item.source.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+                               CollieRadarFeed.validate(item.source) == nil))
                 }
             }
         }
