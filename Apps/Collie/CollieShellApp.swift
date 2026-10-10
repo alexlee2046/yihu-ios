@@ -61,18 +61,25 @@ final class CollieConnectionRuntime {
     }
 
     func installConnection(_ origin: URL, voice: CollieVoiceController,
-                           notifications: CollieNativeNotificationsController) {
+                           notifications: CollieNativeNotificationsController,
+                           voiceNotes: CollieVoiceNotesStore? = nil) {
         guard webSession?.baseURL != origin else { return }
         webSession?.invalidate()
         let newSession = CollieWebSession(baseURL: origin)
         webSession = newSession
-        notifications.canNavigate = { [weak voice] in
-            guard let voice else { return false }
-            return Self.voiceBlockReason(voice) == nil
-        }
-        notifications.navigationBlockReason = { [weak voice] in
+        notifications.navigationBlockReason = { [weak voice, weak voiceNotes, weak notifications] in
             guard let voice else { return shellText("无法检查语音输入状态，请稍后重试。") }
+            if voiceNotes?.recorder.isRecording == true {
+                return shellText("请先结束语音笔记录音，再切换工作台。")
+            }
+            if notifications?.isBusy == true {
+                return shellText("正在开启或停用通知，请等待完成后再切换工作台。")
+            }
             return Self.voiceBlockReason(voice)
+        }
+        notifications.canNavigate = { [weak notifications] in
+            guard let notifications else { return false }
+            return notifications.navigationBlockReason() == nil
         }
         // activate can synchronously deliver a cold-start tap and reenter here.
         transcriptTarget = newSession
@@ -235,7 +242,7 @@ private struct CollieRootView: View {
                 notifications?.isEnabled(for: origin) == true
             }
             notifications.knownOrigins = { [weak settings] in settings?.recentOrigins ?? [] }
-            notifications.onOpenWorkbench = { selection = "web" }
+            notifications.onOpenWorkbench = { if canSelect() { selection = "web" } }
             notifications.onSwitchOrigin = { origin in
                 guard canSelect() else { return selectionNotice }
                 selection = "web"
@@ -245,7 +252,7 @@ private struct CollieRootView: View {
             }
             if webSession == nil, let origin = settings.currentOrigin {
                 let previousSelection = selection
-                connection.installConnection(origin, voice: voice, notifications: notifications)
+                connection.installConnection(origin, voice: voice, notifications: notifications, voiceNotes: voiceNotes)
                 // A notification may have switched selection during activation.
                 if selection == previousSelection, selectedRadar == nil { selection = "web" }
             }
@@ -282,7 +289,7 @@ private struct CollieRootView: View {
 
     private func installConnection(_ origin: URL) {
         selection = "web"
-        connection.installConnection(origin, voice: voice, notifications: notifications)
+        connection.installConnection(origin, voice: voice, notifications: notifications, voiceNotes: voiceNotes)
     }
 
     private func canSelect() -> Bool {

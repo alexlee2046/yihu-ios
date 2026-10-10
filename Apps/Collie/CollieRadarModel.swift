@@ -9,6 +9,7 @@ struct CollieRadarSnapshot: Codable {
         var title: String
         var next: String
         var url: String
+        var timestamp: Double? = nil
     }
 
     struct Project: Codable {
@@ -50,16 +51,25 @@ struct CollieRadarSnapshot: Codable {
         }
     }
     func matchingActions(display: CollieRadarDisplay) -> [Action] {
-        decisions.filter {
-            (display.project.isEmpty || $0.project == display.project) &&
-            matches([projectName($0.project), $0.project, $0.title, $0.status, $0.next], query: display.searchText)
-        }
+        decisions.enumerated().filter {
+            (display.project.isEmpty || $0.element.project == display.project) &&
+            matches([projectName($0.element.project), $0.element.project, $0.element.title,
+                     $0.element.status, $0.element.next], query: display.searchText)
+        }.sorted { lhs, rhs in
+            if display.newestFirst {
+                let left = lhs.element.timestamp ?? 0
+                let right = rhs.element.timestamp ?? 0
+                return left == right ? lhs.offset < rhs.offset : left > right
+            }
+            let order = lhs.element.title.localizedCompare(rhs.element.title)
+            return order == .orderedSame ? lhs.offset < rhs.offset : order == .orderedAscending
+        }.map(\.element)
     }
 
     func matchingProjects(display: CollieRadarDisplay) -> [Project] {
         projects.filter {
             (display.project.isEmpty || $0.path == display.project) &&
-            matches([$0.name, $0.path, $0.message], query: display.searchText)
+            matches([$0.name, $0.path, $0.message, $0.status ?? ""], query: display.searchText)
         }
     }
 

@@ -70,4 +70,6 @@ jobs:
           retention-days: 7
       - name: Shut down simulator
         if: always() && env.YIHU_SIMULATOR != ''
+        timeout-minutes: 1
+        continue-on-error: true
         run: xcrun simctl shutdown "$YIHU_SIMULATOR" || true

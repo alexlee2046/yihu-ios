@@ -22,6 +22,26 @@ struct CollieRadarModelChecks {
         var explicitStatus = snapshot
         explicitStatus.active[0].status = "blocked"
         precondition(explicitStatus.taskStatuses(for: "demo") == ["blocked", "等你验收"])
+        var statusSearch = CollieRadarDisplay()
+        statusSearch.searchText = "blocked"
+        precondition(explicitStatus.matchingProjects(display: statusSearch).count == 1)
+        precondition(explicitStatus.matchingProjectNames(display: statusSearch) == ["demo"])
+        var sortedActions = snapshot
+        var first = snapshot.decisions[0]
+        first.title = "Zulu"
+        first.timestamp = 10
+        var second = first
+        second.title = "Alpha"
+        second.timestamp = 20
+        sortedActions.decisions = [first, second]
+        var ordering = CollieRadarDisplay()
+        precondition(sortedActions.matchingActions(display: ordering).map(\.title) == ["Alpha", "Zulu"])
+        ordering.newestFirst = false
+        precondition(sortedActions.matchingActions(display: ordering).map(\.title) == ["Alpha", "Zulu"])
+        sortedActions.decisions[0].timestamp = nil
+        sortedActions.decisions[1].timestamp = nil
+        ordering.newestFirst = true
+        precondition(sortedActions.matchingActions(display: ordering).map(\.title) == ["Zulu", "Alpha"])
         explicitStatus.decisions = []
         explicitStatus.active[0].status = nil
         precondition(explicitStatus.taskStatuses(for: "demo").isEmpty)

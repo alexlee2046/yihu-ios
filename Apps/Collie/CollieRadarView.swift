@@ -180,6 +180,7 @@ struct CollieRadarView: View {
                 ForEach(Array(projects.enumerated()), id: \.offset) { _, project in
                     VStack(alignment: .leading, spacing: 6) {
                         Text(project.name).font(.headline)
+                        if display.showStatus { projectTaskStatuses(snapshot, key: project.path) }
                         Text(project.message).font(.subheadline).foregroundStyle(.secondary)
                         Text(Date(timeIntervalSince1970: project.timestamp), style: .date)
                             .font(.caption).foregroundStyle(.secondary)
@@ -199,16 +200,7 @@ struct CollieRadarView: View {
             ForEach(keys, id: \.self) { key in
                 VStack(alignment: .leading, spacing: 12) {
                     Text(snapshot.projectName(key)).font(.title3.bold())
-                    if display.showStatus {
-                        let statuses = snapshot.taskStatuses(for: key)
-                        if statuses.isEmpty {
-                            Text(radarText("任务状态未提供"))
-                                .font(.caption).foregroundStyle(.secondary)
-                        }
-                        ForEach(statuses, id: \.self) { status in
-                            taskStatus(status)
-                        }
-                    }
+                    if display.showStatus { projectTaskStatuses(snapshot, key: key) }
                     if display.showActivity, let project = snapshot.projects.first(where: { $0.path == key }) {
                         Label(project.message, systemImage: "arrow.triangle.branch")
                             .font(.footnote).foregroundStyle(.secondary)
@@ -243,9 +235,18 @@ struct CollieRadarView: View {
         .background(BenchsideStyle.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
     }
 
+    @ViewBuilder
+    private func projectTaskStatuses(_ snapshot: CollieRadarSnapshot, key: String) -> some View {
+        let statuses = snapshot.taskStatuses(for: key)
+        if statuses.isEmpty { taskStatus("") }
+        ForEach(statuses, id: \.self) { taskStatus($0) }
+    }
+
     private func taskStatus(_ status: String) -> some View {
         let state = CollieRadarTaskState.classify(status)
-        return Label(status, systemImage: state.icon)
+        let text = status.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            ? radarText("任务状态未提供") : status
+        return Label(text, systemImage: state.icon)
             .font(.caption)
             .foregroundStyle(state == .blocked ? Color.orange : state == .progressing ? BenchsideStyle.accent : BenchsideStyle.secondary)
     }
