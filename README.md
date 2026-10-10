@@ -36,7 +36,7 @@ swiftc -swift-version 6 Apps/Collie/CollieRadarModel.swift \
 /tmp/yihu-radar-checks
 ```
 
-The `CollieUITests` scheme test target includes a device navigation check. It requires saved web/Radar workbenches and visible shortcuts; it is not a first-run setup test. Screenshots can contain your workbench content: use synthetic data and do not commit test results. Device results from the original workspace do not establish validation of this independent checkout. Light appearance and accessibility text sizes still need acceptance.
+The `CollieUITests` scheme test target exercises both web and Radar navigation using a synthetic `.invalid` origin and creates a Radar workbench if needed. Run it only on an isolated simulator installation, not against your saved device workbenches. The `Yihu iOS acceptance` workflow runs the model checks, builds the independent app/extensions/test target, and exercises light, dark and accessibility text sizes on a standard hosted macOS runner. Its artifacts contain synthetic-data screenshots and test results, not device or signing evidence. Physical-device acceptance is separate.
 
 ## Models and limitations
 
@@ -44,7 +44,7 @@ Qwen3 ASR model files are **not** in the repository. Download them through the a
 
 WeSpeaker and CAM++ speaker-verification artifacts are deliberately omitted. Code loads these resources dynamically and reports missing models rather than bundling private/generated artifacts. Speaker enrollment/verification and any voice-insertion path requiring a verified speaker will not be available without compatible models. Do not disable verification to work around missing assets. See `Apps/Collie/ThirdPartyNotices.txt` and `Vendor/CAMPlus` for provenance. Core ML conversions must match the pinned hashes in the source; upstream weights alone are not a drop-in replacement.
 
-This extracted public candidate has only received static dependency/configuration and sanitization checks. No clean-room Xcode build, device push, voice insertion or full regression result is claimed. Some UI strings remain Chinese.
+The independent checkout has passed a Debug iOS Simulator app/extension build and standalone Radar model/persistence checks. Remote UI acceptance is recorded on the pull request; a workflow definition alone is not a passing result. No physical-device push, voice insertion or full regression result is claimed. Some UI strings remain Chinese.
 
 ## License
 

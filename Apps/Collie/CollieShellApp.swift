@@ -276,7 +276,8 @@ private struct CollieRootView: View {
     }
 
     private func connectionChangeBlockReason(_ origin: URL) -> String? {
-        connection.switchBlockReason(to: origin, voice: voice, notifications: notifications)
+        guard canSelect() else { return selectionNotice }
+        return connection.switchBlockReason(to: origin, voice: voice, notifications: notifications)
     }
 
     private func installConnection(_ origin: URL) {
@@ -568,13 +569,13 @@ struct CollieShellView: View {
               let origin = URL(string: "\(url.scheme ?? "https")://\(url.host ?? "")\(url.port.map { ":\($0)" } ?? "")"),
               let validOrigin = CollieConnectionOrigin.validate(origin.absoluteString) else { return }
         // Don't pull the page out from under dictation or an unfilled transcript.
-        guard !voice.canCancel, voice.phase != .delivering, !voice.canRetryDelivery else { return }
+        guard !voice.canCancel, voice.phase != .delivering, !voice.canRetryDelivery,
+              onWillSaveConnection?(validOrigin) == nil else { return }
         if validOrigin == webSession.baseURL {
             if !isWorkbenchActive { onSavedConnection?(validOrigin) }
             guard webSession.isConnected, let target = hermesPush.consumePendingURL() else { return }
             webSession.openNativeNotification(target)
-        } else if let connectionSettings, connectionSettings.recentOrigins.contains(validOrigin),
-                  onWillSaveConnection?(validOrigin) == nil {
+        } else if let connectionSettings, connectionSettings.recentOrigins.contains(validOrigin) {
             connectionSettings.save(validOrigin)
             onSavedConnection?(validOrigin) // the new shell opens the URL once connected
         } else {

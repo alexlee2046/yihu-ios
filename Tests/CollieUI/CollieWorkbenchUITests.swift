@@ -1,12 +1,13 @@
 import XCTest
 
 final class CollieWorkbenchUITests: XCTestCase {
-    /// Device acceptance using saved workbenches: no source edits, draft input,
-    /// microphone use or shortcut configuration mutations.
+    /// Uses only synthetic workbenches in an isolated simulator installation.
+    /// Does not access a real server, microphone or user draft.
     @MainActor
     func testIntegratedWorkbenchShortcutNavigation() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
+        app.launchArguments = ["-collie.connection.origin", "https://workbench.example.invalid"]
         app.launch()
         defer { app.terminate() }
         let all = app.buttons["collie-shortcuts-all"]
@@ -14,12 +15,25 @@ final class CollieWorkbenchUITests: XCTestCase {
         XCTAssertEqual(app.buttons.matching(identifier: "collie-shortcuts-all").count, 1)
         XCTAssertFalse(app.buttons["collie-shortcuts-customize"].exists)
         XCTAssertFalse(app.buttons["collie-workbench-picker"].exists)
+        let tabs = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "collie-shortcut-"))
+        if !tabs.allElementsBoundByIndex.contains(where: { !$0.identifier.contains("://") }) {
+            all.tap()
+            let addRadar = app.buttons.matching(NSPredicate(
+                format: "label == %@ OR label == %@", "添加 PM Radar", "Add PM Radar"
+            )).firstMatch
+            XCTAssertTrue(addRadar.waitForExistence(timeout: 5))
+            if !addRadar.isHittable { app.swipeUp() }
+            addRadar.tap()
+            XCTAssertTrue(app.textFields["collie-radar-search"].waitForExistence(timeout: 5))
+        }
         attachWorkbenchScreen(name: "integrated-workbench-initial")
 
-        let tabs = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "collie-shortcut-"))
-        let original = tabs.allElementsBoundByIndex.first(where: { $0.isSelected })?.identifier
         let identifiers = tabs.allElementsBoundByIndex.map(\.identifier)
-        for id in identifiers.prefix(4) {
+        let web = try XCTUnwrap(identifiers.first(where: { $0.contains("://") }), "Must cover a web workbench")
+        let radar = try XCTUnwrap(identifiers.first(where: { !$0.contains("://") }), "Must cover a Radar workbench")
+        // Always finish on the web before checking its settings; never let a
+        // first-four prefix silently omit Radar.
+        for id in [radar, web] {
             let button = app.buttons[id]
             if !button.isHittable {
                 // Returning preserves the selected web tab and its viewport;
@@ -80,10 +94,10 @@ final class CollieWorkbenchUITests: XCTestCase {
         // Relaunch closes the management sheet without modifying any setting.
         app.terminate()
         app.launch()
-        if let original {
-            if !app.buttons[original].isHittable { app.scrollViews.firstMatch.swipeRight() }
-            if app.buttons[original].isHittable { app.buttons[original].tap() }
-        }
+        XCTAssertTrue(app.buttons[web].waitForExistence(timeout: 5))
+        if !app.buttons[web].isHittable { app.scrollViews.firstMatch.swipeRight() }
+        XCTAssertTrue(app.buttons[web].isHittable)
+        app.buttons[web].tap()
     }
 
     @MainActor
