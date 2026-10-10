@@ -12,6 +12,19 @@ struct CollieRadarModelChecks {
         precondition(snapshot.projectNames == ["demo"])
         precondition(snapshot.projectName("demo") == "Demo project")
         precondition(snapshot.generatedAt != nil)
+        precondition(snapshot.taskStatuses(for: "demo") == ["等你验收"])
+        precondition(CollieRadarTaskState.classify("进行中") == .progressing)
+        precondition(CollieRadarTaskState.classify("等你决策") == .waiting)
+        precondition(CollieRadarTaskState.classify("blocked") == .blocked)
+        for value in ["stale", "cold", "unknown", "no recent commits"] {
+            precondition(CollieRadarTaskState.classify(value) == .unknown)
+        }
+        var explicitStatus = snapshot
+        explicitStatus.active[0].status = "blocked"
+        precondition(explicitStatus.taskStatuses(for: "demo") == ["blocked", "等你验收"])
+        explicitStatus.decisions = []
+        explicitStatus.active[0].status = nil
+        precondition(explicitStatus.taskStatuses(for: "demo").isEmpty)
         var display = CollieRadarDisplay()
         for query in [" ORIGINAL TITLE ", "original next", "等你验收", "demo project", "demo"] {
             display.searchText = query

@@ -16,6 +16,8 @@ struct CollieRadarSnapshot: Codable {
         var path: String
         var timestamp: Double
         var message: String
+        // Optional explicit task state; legacy code-activity feeds omit it.
+        var status: String? = nil
     }
 
     var date_str: String
@@ -31,6 +33,12 @@ struct CollieRadarSnapshot: Codable {
     func projectName(_ key: String) -> String {
         projects.first(where: { $0.path == key })?.name ?? key
     }
+    func taskStatuses(for key: String) -> [String] {
+        let explicit = projects.filter { $0.path == key }.compactMap(\.status)
+        return Array(Set(explicit + decisions.filter { $0.project == key }.map(\.status)))
+            .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.sorted()
+    }
+
     func sortedProjectNames(newestFirst: Bool) -> [String] {
         let timestamps = Dictionary(projects.map { ($0.path, $0.timestamp) }, uniquingKeysWith: { max($0, $1) })
         let names = Dictionary(projects.map { ($0.path, $0.name) }, uniquingKeysWith: { first, _ in first })
@@ -83,6 +91,29 @@ struct CollieRadarSnapshot: Codable {
         let snapshot = try JSONDecoder().decode(Self.self, from: data)
         guard snapshot.generatedAt != nil else { throw CollieRadarError.invalidSnapshot }
         return snapshot
+    }
+}
+
+/// Classify only explicit task states, never code activity or snapshot age.
+enum CollieRadarTaskState {
+    case progressing, waiting, blocked, unknown
+
+    static func classify(_ status: String) -> Self {
+        switch status.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+        case "进行中", "推进中", "in progress", "in_progress": return .progressing
+        case "等你决策", "等你验收", "等你处理", "等人操作", "等待反馈", "待我处理", "waiting", "pending": return .waiting
+        case "真实阻塞", "阻塞", "已阻塞", "blocked": return .blocked
+        default: return .unknown
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .progressing: return "arrow.right.circle"
+        case .waiting: return "hand.raised"
+        case .blocked: return "exclamationmark.octagon"
+        case .unknown: return "questionmark.circle"
+        }
     }
 }
 

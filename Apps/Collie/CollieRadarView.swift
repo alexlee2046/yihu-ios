@@ -199,6 +199,16 @@ struct CollieRadarView: View {
             ForEach(keys, id: \.self) { key in
                 VStack(alignment: .leading, spacing: 12) {
                     Text(snapshot.projectName(key)).font(.title3.bold())
+                    if display.showStatus {
+                        let statuses = snapshot.taskStatuses(for: key)
+                        if statuses.isEmpty {
+                            Text(radarText("任务状态未提供"))
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                        ForEach(statuses, id: \.self) { status in
+                            taskStatus(status)
+                        }
+                    }
                     if display.showActivity, let project = snapshot.projects.first(where: { $0.path == key }) {
                         Label(project.message, systemImage: "arrow.triangle.branch")
                             .font(.footnote).foregroundStyle(.secondary)
@@ -233,13 +243,20 @@ struct CollieRadarView: View {
         .background(BenchsideStyle.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
     }
 
+    private func taskStatus(_ status: String) -> some View {
+        let state = CollieRadarTaskState.classify(status)
+        return Label(status, systemImage: state.icon)
+            .font(.caption)
+            .foregroundStyle(state == .blocked ? Color.orange : state == .progressing ? BenchsideStyle.accent : BenchsideStyle.secondary)
+    }
+
     private func actionCard(_ action: CollieRadarSnapshot.Action, snapshot: CollieRadarSnapshot,
                             display: CollieRadarDisplay) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(snapshot.projectName(action.project)).font(.caption).foregroundStyle(.secondary)
                 Spacer()
-                if display.showStatus { Text(action.status).font(.caption).foregroundStyle(BenchsideStyle.accent) }
+                if display.showStatus { taskStatus(action.status) }
             }
             Text(action.title).font(.headline)
             if display.showNext, !action.next.isEmpty { Text(action.next).font(.subheadline).foregroundStyle(.secondary) }

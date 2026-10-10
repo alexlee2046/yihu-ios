@@ -25,7 +25,7 @@ Voice insertion dispatches the `collie:native-transcript` web event. The workben
 
 Web workbenches and native PM Radar share one header and shortcut bar. Use the grid to manage workbenches and customize shortcut order/visibility. Radar supports overview, projects and actions, with per-workbench search, filters, display options and local snapshots.
 
-Import a `pm-radar --json` export or configure an HTTPS JSON feed. Authenticated feeds currently require a file export: Radar does not reuse web cookies, store credentials or follow redirects. Snapshots are limited to 2 MiB; failed refreshes retain the last valid snapshot, and changing the feed clears its old cache. Data older than 24 hours is marked stale. Radar is read-only and does not update the source task tracker.
+Import a `pm-radar --json` export or configure an HTTPS JSON feed. Authenticated feeds currently require a file export: Radar does not reuse web cookies, store credentials or follow redirects. Snapshots are limited to 2 MiB; failed refreshes retain the last valid snapshot, and changing the feed clears its old cache. Data older than 24 hours is marked stale. Explicit task status values distinguish progressing, waiting and blocked work; project records may optionally supply a `status` string, while legacy feeds remain supported. Project cards show source task statuses, or “Task status not provided” when none exist. Code activity and snapshot age never imply a task is blocked or finished. Radar is read-only and does not update the source task tracker.
 
 Run the standalone model/persistence checks from this directory:
 
