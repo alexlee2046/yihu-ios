@@ -1,11 +1,10 @@
 import Foundation
 import WebKit
 
-/// Workbench-agnostic transcript insertion. Collie pages keep their explicit
-/// `collie:native-transcript` bridge (a refusal there stays a refusal); any other
-/// trusted page (OpenClaw Control UI, Hermes dashboard, …) receives the text only
-/// in the text field the user last focused, through the same editing path as
-/// typing. It never guesses a field and never submits.
+/// The thin, optional host bridge plus guarded DOM adapter for unmodified pages.
+/// An observed bridge refusal is final. Without a bridge, only the user's last
+/// focused editable receives text; known Collie composers must prove draft mode.
+/// Unknown layouts fail closed and leave the transcript in the native UI.
 @MainActor
 enum CollieTextInsertion {
     /// Tracks the last focused editable element, including inside shadow roots.
@@ -20,12 +19,38 @@ enum CollieTextInsertion {
             (el instanceof HTMLInputElement && textTypes.has(el.type)) ||
             (el instanceof HTMLElement && el.isContentEditable);
           let last = null;
+          let focusedURL = null;
           document.addEventListener('focusin', event => {
             const target = event.composedPath()[0];
-            if (editable(target)) last = new WeakRef(target);
+            last = editable(target) ? new WeakRef(target) : null;
+            focusedURL = last ? window.location.href : null;
           }, true);
-          const usable = el => !!el && el.isConnected && !el.disabled && !el.readOnly &&
-            el.getClientRects().length > 0;
+          const usable = el => !!el && el.isConnected && editable(el) &&
+            !el.matches(':disabled') && !el.readOnly &&
+            !el.closest('[inert], [aria-disabled="true"], [aria-busy="true"]') &&
+            el.getClientRects().length > 0 && getComputedStyle(el).visibility === 'visible';
+          // Stock Collie v1.19.2 exposes locking on the textarea and sending / live
+          // terminal typing on the Type control. Require the full known shape:
+          // a missing or newly ambiguous control is NOT evidence of draft mode.
+          const isSafeDraft = el => {
+            const collieFields = document.querySelectorAll('textarea[data-slot="chat-input"]');
+            const colliePage = document.querySelector('meta[name="apple-mobile-web-app-title"]')?.content === 'Collie' ||
+              document.querySelector('[data-slot="composer-box"], [data-slot="composer-controls"]') !== null;
+            if (!collieFields.length) return !colliePage;
+            if (collieFields.length !== 1 || collieFields[0] !== el ||
+                el.enterKeyHint !== 'enter') return false;
+            const box = el.closest('[data-slot="composer-box"]');
+            if (!box) return false;
+            let scope = box.parentElement;
+            while (scope && !scope.querySelector('[data-slot="composer-controls"]')) {
+              scope = scope.parentElement;
+            }
+            if (!scope || scope.querySelectorAll('textarea[data-slot="chat-input"]').length !== 1 ||
+                scope.querySelectorAll('[data-slot="composer-controls"]').length !== 1) return false;
+            const modes = scope.querySelectorAll('[data-slot="composer-controls"] button[aria-pressed]');
+            return modes.length === 1 && modes[0].getAttribute('aria-pressed') === 'false' &&
+              !modes[0].matches(':disabled') && modes[0].getAttribute('aria-disabled') !== 'true';
+          };
           // Only between two Latin letters/digits; never after CJK text or punctuation.
           const needsSpace = (before, text) =>
             /[A-Za-z0-9]$/u.test(before) && /^[A-Za-z0-9]/u.test(text);
@@ -72,25 +97,31 @@ enum CollieTextInsertion {
             target.dispatchEvent(new Event('change', { bubbles: true }));
             return 'attached';
           };
-          window.collieNativeInsertText = text => {
-            if (typeof text !== 'string' || !text) return false;
-            // A Collie composer declined on purpose (locked, sending, …): keep it declined.
-            if (document.querySelector('textarea[data-slot="chat-input"]')) return false;
+          window.collieNativeInsertText = async text => {
+            if (window.location.origin !== \(literal) || document.hidden ||
+                typeof text !== 'string' || !text || focusedURL !== window.location.href) return false;
             const el = last?.deref();
-            if (!usable(el)) return false;
+            if (!usable(el) || !isSafeDraft(el)) return false;
             el.focus({ preventScroll: true });
+            // Focus handlers can change the route, mode or editability.
+            if (last?.deref() !== el || focusedURL !== window.location.href ||
+                !usable(el) || !isSafeDraft(el)) return false;
             const isField = el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement;
-            const before = isField ? el.value.slice(0, el.selectionStart ?? el.value.length) : '';
+            const originalValue = isField ? el.value : null;
+            const start = isField ? el.selectionStart ?? el.value.length : 0;
+            const end = isField ? el.selectionEnd ?? start : 0;
+            const before = isField ? originalValue.slice(0, start) : '';
             const inserted = needsSpace(before, text) ? ' ' + text : text;
+            const expectedValue = isField ? before + inserted + originalValue.slice(end) : null;
             let ok = false;
             try { ok = document.execCommand('insertText', false, inserted); } catch (_) { ok = false; }
             if (!ok && isField) {
               // Frameworks track value through the native setter plus an input event.
               const setter = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el), 'value')?.set;
               if (!setter) return false;
-              const start = el.selectionStart ?? el.value.length;
-              const end = el.selectionEnd ?? start;
-              setter.call(el, el.value.slice(0, start) + inserted + el.value.slice(end));
+              // Do not duplicate an edit a browser performed despite reporting failure.
+              if (el.value !== originalValue) return false;
+              setter.call(el, expectedValue);
               // Some input types (e.g. email) reject selection APIs; the value is already set.
               try { el.setSelectionRange(start + inserted.length, start + inserted.length); } catch (_) {}
               el.dispatchEvent(new InputEvent('input', {
@@ -98,7 +129,10 @@ enum CollieTextInsertion {
               }));
               ok = true;
             }
-            return ok;
+            // Let controlled inputs commit/reject the normal edit before acknowledging.
+            await new Promise(resolve => setTimeout(resolve, 0));
+            return ok && el.isConnected && focusedURL === window.location.href &&
+              (!isField || el.value === expectedValue);
           };
         })();
         """
@@ -106,17 +140,28 @@ enum CollieTextInsertion {
                             forMainFrameOnly: true, in: .defaultClient)
     }
 
-    /// Collie's explicit bridge, in the page world where its listener lives.
+    /// Optional synchronous bridge. Track reads as well as acknowledgement:
+    /// the legacy listener reads `accepted` before its locked/sending checks.
+    /// This distinguishes its refusal from stock Collie's absent listener without
+    /// patching page globals, registering a fake bridge or persisting capabilities.
     static let collieBridgeScript = """
-    if (window.location.origin !== origin) return false;
-    const detail = { text, accepted: false };
-    window.dispatchEvent(new CustomEvent('collie:native-transcript', { detail }));
-    return detail.accepted === true;
+    if (window.location.origin !== origin || document.hidden) return 'refused';
+    let observed = false;
+    let accepted = false;
+    const detail = {
+      get text() { observed = true; return text; },
+      get accepted() { observed = true; return accepted; },
+      set accepted(value) { observed = true; accepted = value === true; }
+    };
+    const event = new CustomEvent('collie:native-transcript', { detail, cancelable: true });
+    window.dispatchEvent(event);
+    if (accepted) return 'accepted';
+    return observed || event.defaultPrevented ? 'refused' : 'unavailable';
     """
 
-    /// Runs only after Collie's explicit bridge did not take the text.
+    /// Runs only when no host bridge handled the event; never after a refusal.
     static let insertScript = """
     if (window.location.origin !== origin) return false;
-    return window.collieNativeInsertText?.(text) === true;
+    return (await window.collieNativeInsertText?.(text)) === true;
     """
 }

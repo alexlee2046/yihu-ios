@@ -21,10 +21,17 @@ final class CollieWebSession {
     fileprivate let websiteDataStore: WKWebsiteDataStore
     private(set) weak var webView: WKWebView?
     private(set) var isInvalidated = false
+    private var restorationState: Any?
 
-    init(baseURL: URL, websiteDataStore: WKWebsiteDataStore? = nil) {
+    init(baseURL: URL, websiteDataStore: WKWebsiteDataStore? = nil, restorationState: Any? = nil) {
         self.baseURL = baseURL
         self.websiteDataStore = websiteDataStore ?? Self.persistentDataStore(for: baseURL)
+        self.restorationState = restorationState
+    }
+
+    func captureInteractionState() -> Any? {
+        guard let webView, isTrusted(webView.url) else { return nil }
+        return webView.interactionState
     }
 
     var isConnected: Bool {
@@ -43,8 +50,15 @@ final class CollieWebSession {
     }
 
     fileprivate func attach(_ webView: WKWebView) {
-        guard !isInvalidated else { return }
+        guard !isInvalidated, self.webView !== webView else { return }
         self.webView = webView
+        if let state = restorationState {
+            restorationState = nil
+            // WebKit restores the page, back/forward list and scroll position;
+            // do not immediately replace that restoration with a root load.
+            webView.interactionState = state
+            return
+        }
         guard webView.url == nil else { return }
         webView.load(URLRequest(url: baseURL))
     }
@@ -236,9 +250,8 @@ final class CollieWebSession {
         }.value
     }
 
-    /// Sends text through Collie's explicit native bridge, then (for other
-    /// workbenches) into the field the user last focused. It never submits, and
-    /// the origin check prevents navigation from receiving speech.
+    /// Prefer an optional host bridge; stock Collie uses the guarded DOM adapter.
+    /// A refusal or an unknown response never falls through. No path submits.
     func insertTranscript(_ transcript: String) async -> Bool {
         guard let webView, isTrusted(webView.url) else { return false }
         let arguments: [String: Any] = ["text": transcript, "origin": trustedOrigin]
@@ -246,14 +259,15 @@ final class CollieWebSession {
             let result = try await webView.callAsyncJavaScript(
                 CollieTextInsertion.collieBridgeScript, arguments: arguments, in: nil, contentWorld: .page
             )
-            if (result as? Bool) == true { return true }
+            if (result as? String) == "accepted" { return true }
+            guard (result as? String) == "unavailable" else { return false }
         } catch {
             // A failed text handoff is not a navigation failure. The voice bar
             // retains the result for retry; never cover the working page here.
             return false
         }
-        // Not a Collie composer: insert into the field the user last focused
-        // (OpenClaw, Hermes or any other workbench page).
+        // No host bridge observed the event. The isolated-world adapter requires
+        // a focused editable and, for Collie, a positively identified draft mode.
         guard isTrusted(webView.url) else { return false }
         do {
             let result = try await webView.callAsyncJavaScript(
@@ -305,6 +319,7 @@ final class CollieWebSession {
 
 struct CollieWebView: UIViewRepresentable {
     let session: CollieWebSession
+    var isVisible = true
     var pageReady: @MainActor () -> Void = {}
     var openNotificationSettings: @MainActor () -> Void = {}
     var requestKeyboard: @MainActor () async -> Void = {}
@@ -333,6 +348,8 @@ struct CollieWebView: UIViewRepresentable {
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         context.coordinator.observeURL(of: webView)
+        webView.isHidden = !isVisible
+        webView.accessibilityElementsHidden = !isVisible
         webView.allowsBackForwardNavigationGestures = true
         webView.scrollView.keyboardDismissMode = .interactive
         session.attach(webView)
@@ -340,6 +357,10 @@ struct CollieWebView: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
+        // Hide WebKit at the UIKit layer too; SwiftUI opacity alone leaves its
+        // composited surface and accessibility subtree alive under native Radar.
+        webView.isHidden = !isVisible
+        webView.accessibilityElementsHidden = !isVisible
         context.coordinator.requestKeyboard = requestKeyboard
         context.coordinator.pageReady = pageReady
         context.coordinator.openNotificationSettings = openNotificationSettings

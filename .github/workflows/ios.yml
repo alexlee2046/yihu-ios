@@ -1,0 +1,79 @@
+name: Yihu iOS acceptance
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yihu-ios-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  acceptance:
+    # Standard hosted runner: public-repository use is free; no larger runners.
+    runs-on: macos-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Model and persistence checks
+        run: |
+          swiftc -swift-version 6 Apps/Collie/CollieRadarModel.swift Apps/Collie/CollieRadarStore.swift Tests/CollieRadar/ModelChecks.swift -o "$RUNNER_TEMP/radar-checks"
+          "$RUNNER_TEMP/radar-checks"
+      - name: Generate independent project
+        run: |
+          command -v xcodegen >/dev/null || brew install xcodegen
+          xcodegen generate --spec project.yml
+      - name: Select an available iPhone simulator
+        run: |
+          xcrun simctl list devices available --json > "$RUNNER_TEMP/devices.json"
+          python3 - <<'PY' >> "$GITHUB_ENV"
+          import json, os
+          with open(os.environ['RUNNER_TEMP'] + '/devices.json') as stream:
+              devices = json.load(stream)['devices']
+          phones = [d for runtime, entries in devices.items() if 'iOS' in runtime for d in entries if d['name'].startswith('iPhone')]
+          if not phones:
+              raise SystemExit('No iPhone simulator available')
+          print('YIHU_SIMULATOR=' + phones[0]['udid'])
+          PY
+      - name: Build app, extensions and UI tests
+        run: |
+          xcodebuild -quiet -project Yihu.xcodeproj -scheme CollieiOS -configuration Debug -destination "platform=iOS Simulator,id=$YIHU_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/YihuBuild" CODE_SIGN_IDENTITY=- build-for-testing
+      - name: Light, dark and accessibility-size navigation
+        run: |
+          xcrun simctl boot "$YIHU_SIMULATOR" || true
+          xcrun simctl bootstatus "$YIHU_SIMULATOR" -b
+          mkdir -p "$RUNNER_TEMP/YihuResults"
+          failed=0
+          for scenario in light dark accessibility; do
+            appearance="$scenario"
+            size=large
+            if [ "$scenario" = accessibility ]; then
+              appearance=light
+              size=accessibility-extra-extra-extra-large
+            fi
+            xcrun simctl ui "$YIHU_SIMULATOR" appearance "$appearance"
+            xcrun simctl ui "$YIHU_SIMULATOR" content_size "$size"
+            if ! xcodebuild -project Yihu.xcodeproj -scheme CollieiOS -configuration Debug -destination "platform=iOS Simulator,id=$YIHU_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/YihuBuild" -resultBundlePath "$RUNNER_TEMP/YihuResults/$scenario.xcresult" -only-testing:CollieUITests/CollieWorkbenchUITests -parallel-testing-enabled NO -test-timeouts-enabled YES -maximum-test-execution-time-allowance 360 CODE_SIGN_IDENTITY=- test-without-building; then
+              failed=1
+            fi
+          done
+          exit "$failed"
+      - name: Preserve synthetic-data test evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: yihu-ios-acceptance
+          path: ${{ runner.temp }}/YihuResults
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Shut down simulator
+        if: always() && env.YIHU_SIMULATOR != ''
+        timeout-minutes: 1
+        continue-on-error: true
+        run: xcrun simctl shutdown "$YIHU_SIMULATOR" || true

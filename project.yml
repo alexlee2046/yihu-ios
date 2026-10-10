@@ -67,6 +67,17 @@ targets:
         INFOPLIST_FILE: Extensions/CollieWidgets/Info.plist
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
+  CollieUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - Tests/CollieUI
+    dependencies:
+      - target: CollieiOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).uitests
+        GENERATE_INFOPLIST_FILE: YES
 schemes:
   CollieiOS:
     build:
@@ -74,3 +85,6 @@ schemes:
         CollieiOS: all
     run:
       config: Debug
+    test:
+      targets:
+        - CollieUITests

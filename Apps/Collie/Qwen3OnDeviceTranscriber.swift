@@ -62,6 +62,8 @@ actor Qwen3OnDeviceTranscriber: CollieTranscribing {
         samples: [Float], onPartialText: (@Sendable (String) -> Void)? = nil
     ) async throws -> String {
         try Task.checkCancellation()
+        // One snapshot per pass; UI changes never alter an in-flight decoder.
+        let preferences = CollieRecognitionPreferences.load()
         guard !samples.isEmpty,
               samples.count <= Int(16_000 * CollieAudioRecorder.maximumDuration),
               samples.allSatisfy(\.isFinite)
@@ -81,11 +83,11 @@ actor Qwen3OnDeviceTranscriber: CollieTranscribing {
             try model.transcribeWithoutMLX(
                 audio: samples,
                 sampleRate: 16_000,
-                // Keep mixed-language recognition. Script is normalized locally,
-                // never by inventing an unsupported "Simplified Chinese" hint.
-                language: nil,
-                contextTerms: recognitionTerms.withLock { $0 },
-                maxTokens: 448,
+                // Qwen accepts one language hint, not a Chinese/English list.
+                // Automatic detection remains the default for mixed speech.
+                language: preferences.language.modelHint,
+                contextTerms: preferences.usesTerms ? recognitionTerms.withLock { $0 } : [],
+                maxTokens: preferences.maxTokens,
                 onPartialText: publish
             )
         }
