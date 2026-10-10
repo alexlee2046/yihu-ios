@@ -1269,10 +1269,11 @@ struct CollieVoiceBar: View {
                 .lineLimit(dynamicTypeSize.isAccessibilitySize ? 4 : 2)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityIdentifier("collie-voice-preview")
+                .textSelection(.enabled)
             if dynamicTypeSize.isAccessibilitySize {
-                VStack(spacing: 8) { retryButton; discardButton }
+                VStack(spacing: 8) { retryButton; copyTranscriptButton; discardButton }
             } else {
-                HStack(spacing: 10) { retryButton; discardButton }
+                HStack(spacing: 10) { retryButton; copyTranscriptButton; discardButton }
             }
         }
         .padding(14)
@@ -1292,6 +1293,17 @@ struct CollieVoiceBar: View {
         }
         .buttonStyle(.borderedProminent)
         .accessibilityIdentifier("collie-retry-transcript")
+    }
+
+    private var copyTranscriptButton: some View {
+        Button(shellText("复制转写")) {
+            guard let transcript = voice.pendingTranscript else { return }
+            UIPasteboard.general.string = transcript
+        }
+        .font(.callout.weight(.semibold))
+        .frame(maxWidth: .infinity, minHeight: 44)
+        .buttonStyle(.bordered)
+        .accessibilityIdentifier("collie-copy-transcript")
     }
 
     private var discardButton: some View {

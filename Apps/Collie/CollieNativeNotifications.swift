@@ -401,6 +401,41 @@ final class CollieNativeNotificationsController {
         }
     }
 
+    /// Read-only capability discovery, repeated after page loads/settings opens.
+    /// No permission request, token registration or binding mutation. A stock
+    /// Collie without the optional APNs seam is usable with notifications off.
+    func checkAvailability(session: CollieWebSession) async {
+        guard activeSession === session, session.isConnected, !isBusy,
+              !hasPendingUnregister, let origin = activeOrigin else { return }
+        let requestGeneration = generation
+        let previousStatus = status
+        status = .checkingService
+        let service = await webRequest("status", payload: [:], session: session, timeout: .seconds(10))
+        guard isCurrent(requestGeneration, session: session) else { return }
+        guard !Task.isCancelled, session.isConnected else {
+            status = previousStatus
+            return
+        }
+        guard let configuration = apnsConfiguration, let service, service.ok,
+              service.available == true,
+              service.environment == configuration.environment.rawValue,
+              service.topic == configuration.topic else {
+            fail(.serviceUnavailable, unavailableNotice(service))
+            return
+        }
+        if isEnabled(for: origin) { status = .enabled }
+        else if previousStatus == .authorizationDenied { status = .authorizationDenied }
+        else { status = .disabled }
+        notice = nil
+    }
+
+    private func unavailableNotice(_ service: CollieNativePushResponse?) -> String {
+        if service?.reason == "native push bridge unavailable" {
+            return notifyText("当前网页未提供原生推送接口；原版 Collie 可正常使用，但一呼后台通知不可用。")
+        }
+        return notifyText("当前工作台暂时无法开启通知。")
+    }
+
     /// Explicit user action. The server is checked before iOS presents its
     /// permission sheet, and local enabled is committed only after registration.
     func enable(session: CollieWebSession) async {
@@ -427,7 +462,7 @@ final class CollieNativeNotificationsController {
               service.available == true,
               service.environment == configuration.environment.rawValue,
               service.topic == configuration.topic else {
-            fail(.serviceUnavailable, notifyText("当前工作台暂时无法开启通知。"))
+            fail(.serviceUnavailable, unavailableNotice(service))
             return
         }
 
@@ -659,14 +694,15 @@ final class CollieNativeNotificationsController {
             }
             return
         }
-        guard let service = await webRequest("status", payload: [:], session: session, timeout: .seconds(10)),
+        let service = await webRequest("status", payload: [:], session: session, timeout: .seconds(10))
+        guard let service,
               isCurrent(generation, session: session), service.ok,
               service.available == true,
               service.environment == configuration.environment.rawValue,
               service.topic == configuration.topic else {
             if isCurrent(generation, session: session) {
                 status = .serviceUnavailable
-                notice = notifyText("当前工作台暂时无法开启通知。")
+                notice = unavailableNotice(service)
             }
             return
         }
@@ -1143,7 +1179,7 @@ struct CollieNativeNotificationsSection: View {
                         .accessibilityIdentifier("collie-native-notifications-disable")
                     } else {
                         Button(notifyText("重试检查")) {
-                            Task { await controller.enable(session: session) }
+                            Task { await controller.checkAvailability(session: session) }
                         }
                         .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
                         .contentShape(Rectangle())
@@ -1162,6 +1198,9 @@ struct CollieNativeNotificationsSection: View {
             }
         } header: {
             Text(notifyText("通知"))
+        }
+        .task(id: session.isLoading) {
+            await controller.checkAvailability(session: session)
         }
     }
 

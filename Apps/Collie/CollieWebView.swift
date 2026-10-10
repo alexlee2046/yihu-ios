@@ -250,9 +250,8 @@ final class CollieWebSession {
         }.value
     }
 
-    /// Sends text through Collie's explicit native bridge, then (for other
-    /// workbenches) into the field the user last focused. It never submits, and
-    /// the origin check prevents navigation from receiving speech.
+    /// Prefer an optional host bridge; stock Collie uses the guarded DOM adapter.
+    /// A refusal or an unknown response never falls through. No path submits.
     func insertTranscript(_ transcript: String) async -> Bool {
         guard let webView, isTrusted(webView.url) else { return false }
         let arguments: [String: Any] = ["text": transcript, "origin": trustedOrigin]
@@ -260,14 +259,15 @@ final class CollieWebSession {
             let result = try await webView.callAsyncJavaScript(
                 CollieTextInsertion.collieBridgeScript, arguments: arguments, in: nil, contentWorld: .page
             )
-            if (result as? Bool) == true { return true }
+            if (result as? String) == "accepted" { return true }
+            guard (result as? String) == "unavailable" else { return false }
         } catch {
             // A failed text handoff is not a navigation failure. The voice bar
             // retains the result for retry; never cover the working page here.
             return false
         }
-        // Not a Collie composer: insert into the field the user last focused
-        // (OpenClaw, Hermes or any other workbench page).
+        // No host bridge observed the event. The isolated-world adapter requires
+        // a focused editable and, for Collie, a positively identified draft mode.
         guard isTrusted(webView.url) else { return false }
         do {
             let result = try await webView.callAsyncJavaScript(

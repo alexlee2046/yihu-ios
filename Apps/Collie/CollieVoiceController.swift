@@ -452,7 +452,11 @@ final class CollieVoiceController {
         pendingTranscript = accepted ? nil : transcript
         voiceprintBlocked = false
         phase = .ready
-        if accepted { showTransientNotice(voiceText("已填入，请确认后发送"), duration: .seconds(2)) }
+        if accepted {
+            showTransientNotice(voiceText("已填入，请确认后发送"), duration: .seconds(2))
+        } else {
+            notice = voiceText("未能安全填入草稿，文字已保留；请点选可编辑输入框后重试，或复制转写。")
+        }
     }
 
     private func showTransientNotice(_ message: String, duration: Duration = .seconds(2)) {

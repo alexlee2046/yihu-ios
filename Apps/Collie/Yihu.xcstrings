@@ -1,6 +1,9 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
+    "复制转写": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Copy transcript"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"复制转写"}}}},
+    "未能安全填入草稿，文字已保留；请点选可编辑输入框后重试，或复制转写。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Could not safely insert into the draft. Your text is retained; focus an editable field and retry, or copy the transcript."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"未能安全填入草稿，文字已保留；请点选可编辑输入框后重试，或复制转写。"}}}},
+    "当前网页未提供原生推送接口；原版 Collie 可正常使用，但一呼后台通知不可用。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"This page does not provide a native push interface. Stock Collie remains usable, but Yihu background notifications are unavailable."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"当前网页未提供原生推送接口；原版 Collie 可正常使用，但一呼后台通知不可用。"}}}},
     "识别参数": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Recognition parameters"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"识别参数"}}}},
     "识别语言": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Recognition language"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"识别语言"}}}},
     "自动识别（含中英混说）": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Automatic (including Chinese/English mixed speech)"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"自动识别（含中英混说）"}}}},
