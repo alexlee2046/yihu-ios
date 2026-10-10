@@ -10,6 +10,11 @@ struct CollieRadarSnapshot: Codable {
         var next: String
         var url: String
         var timestamp: Double? = nil
+        var id: String? = nil
+        var priority: String? = nil
+        var evidence: String? = nil
+        var session: String? = nil
+        var window_status: String? = nil
     }
 
     struct Project: Codable {
@@ -26,28 +31,33 @@ struct CollieRadarSnapshot: Codable {
     var active: [Project]
     var stale: [Project]
     var cold: [Project]
+    // New ledger exports contain all tasks; legacy snapshots remain compatible.
+    var tasks: [Action]? = nil
+    var allTasks: [Action] { tasks ?? decisions }
 
     var projects: [Project] { active + stale + cold }
     var projectNames: [String] {
-        Array(Set(decisions.map(\.project) + projects.map(\.path))).sorted()
+        Array(Set(allTasks.map(\.project) + projects.map(\.path))).sorted()
     }
     func projectName(_ key: String) -> String {
         projects.first(where: { $0.path == key })?.name ?? key
     }
     var allTaskStatuses: [String] {
-        Array(Set((projects.compactMap(\.status) + decisions.compactMap(\.status))
+        Array(Set((projects.compactMap(\.status) + allTasks.compactMap(\.status))
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty })).sorted()
     }
 
     func taskStatuses(for key: String) -> [String] {
         let explicit = projects.filter { $0.path == key }.compactMap(\.status)
-        return Array(Set(explicit + decisions.filter { $0.project == key }.compactMap(\.status)))
+        return Array(Set(explicit + allTasks.filter { $0.project == key }.compactMap(\.status)))
             .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.sorted()
     }
 
     func sortedProjectNames(newestFirst: Bool) -> [String] {
-        let timestamps = Dictionary(projects.map { ($0.path, $0.timestamp) }, uniquingKeysWith: { max($0, $1) })
+        let timestamps = Dictionary(projects.map { ($0.path, $0.timestamp) } +
+                                    allTasks.map { ($0.project, $0.timestamp ?? 0) },
+                                    uniquingKeysWith: { max($0, $1) })
         let names = Dictionary(projects.map { ($0.path, $0.name) }, uniquingKeysWith: { first, _ in first })
         return projectNames.sorted { lhs, rhs in
             if newestFirst, timestamps[lhs, default: 0] != timestamps[rhs, default: 0] {
@@ -57,13 +67,16 @@ struct CollieRadarSnapshot: Codable {
             return order == .orderedSame ? lhs < rhs : order == .orderedAscending
         }
     }
-    func matchingActions(display: CollieRadarDisplay) -> [Action] {
+    func matchingActions(display: CollieRadarDisplay, includeAllTasks: Bool = false) -> [Action] {
+        let records = includeAllTasks ? allTasks : decisions
         let names = Dictionary(projects.map { ($0.path, $0.name) }, uniquingKeysWith: { first, _ in first })
-        let filtered = decisions.enumerated().filter {
+        let filtered = records.enumerated().filter {
             (display.project.isEmpty || $0.element.project == display.project) &&
             matchesStatus($0.element.status, filter: display.status) &&
             matches([names[$0.element.project] ?? $0.element.project, $0.element.project, $0.element.title,
-                     $0.element.status ?? "", $0.element.next], query: display.searchText)
+                     $0.element.status ?? "", $0.element.next, $0.element.priority ?? "",
+                     $0.element.evidence ?? "", $0.element.session ?? "", $0.element.window_status ?? ""],
+                    query: display.searchText)
         }
         if display.newestFirst, filtered.contains(where: { $0.element.timestamp == nil }) {
             return filtered.map(\.element)
@@ -81,7 +94,7 @@ struct CollieRadarSnapshot: Codable {
 
     func matchingProjects(display: CollieRadarDisplay) -> [Project] {
         let actionProjects: Set<String> = display.status.map { filter in
-            Set(decisions.filter { matchesStatus($0.status, filter: filter) }.map(\.project))
+            Set(allTasks.filter { matchesStatus($0.status, filter: filter) }.map(\.project))
         } ?? []
         return projects.filter {
             (display.project.isEmpty || $0.path == display.project) &&
@@ -91,7 +104,7 @@ struct CollieRadarSnapshot: Codable {
     }
 
     func matchingProjectNames(display: CollieRadarDisplay) -> [String] {
-        let keys = Set(matchingActions(display: display).map(\.project) + matchingProjects(display: display).map(\.path))
+        let keys = Set(matchingActions(display: display, includeAllTasks: true).map(\.project) + matchingProjects(display: display).map(\.path))
         return sortedProjectNames(newestFirst: display.newestFirst).filter { keys.contains($0) }
     }
 
@@ -130,9 +143,11 @@ struct CollieRadarSnapshot: Codable {
         let snapshot = try JSONDecoder().decode(Self.self, from: data)
         let validTimestamp: (Double) -> Bool = { $0.isFinite && (0...253_402_300_799).contains($0) }
         let nonempty: (String) -> Bool = { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        let identities = (snapshot.tasks ?? []).compactMap(\.id)
         guard snapshot.generatedAt != nil,
+              Set(identities).count == identities.count,
               snapshot.projects.allSatisfy({ nonempty($0.path) && nonempty($0.name) && validTimestamp($0.timestamp) }),
-              snapshot.decisions.allSatisfy({ nonempty($0.project) && nonempty($0.title) &&
+              (snapshot.decisions + snapshot.allTasks).allSatisfy({ nonempty($0.project) && nonempty($0.title) &&
                   ($0.timestamp.map(validTimestamp) ?? true) }) else { throw CollieRadarError.invalidSnapshot }
         return snapshot
     }
@@ -140,10 +155,11 @@ struct CollieRadarSnapshot: Codable {
 
 /// Classify only explicit task states, never code activity or snapshot age.
 enum CollieRadarTaskState {
-    case progressing, waiting, blocked, completed, paused, unknown
+    case planned, progressing, waiting, blocked, completed, paused, unknown
 
     static func classify(_ status: String) -> Self {
         switch status.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+        case "待做", "待办", "todo", "not started", "not_started": return .planned
         case "进行中", "推进中", "in progress", "in_progress": return .progressing
         case "等你决策", "等你验收", "等你处理", "等人操作", "等待反馈", "待我处理", "waiting", "pending": return .waiting
         case "真实阻塞", "阻塞", "已阻塞", "blocked": return .blocked
@@ -155,6 +171,7 @@ enum CollieRadarTaskState {
 
     var icon: String {
         switch self {
+        case .planned: return "circle.dashed"
         case .progressing: return "arrow.right.circle"
         case .waiting: return "hand.raised"
         case .blocked: return "exclamationmark.octagon"
@@ -170,7 +187,7 @@ enum CollieRadarError: Error {
 }
 
 struct CollieRadarDisplay: Codable, Equatable {
-    enum Page: String, Codable, CaseIterable { case overview, projects, actions }
+    enum Page: String, Codable, CaseIterable { case overview, projects, actions, tasks }
     var page: Page = .overview
     var project = ""
     // Optional so existing saved views decode without a migration or reset.

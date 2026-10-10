@@ -69,6 +69,7 @@ struct CollieRadarView: View {
                             Picker(radarText("视图"), selection: pageBinding) {
                                 Text(radarText("总览")).tag(CollieRadarDisplay.Page.overview)
                                 Text(radarText("项目")).tag(CollieRadarDisplay.Page.projects)
+                                Text(radarText("全部任务")).tag(CollieRadarDisplay.Page.tasks)
                                 Text(radarText("待我处理")).tag(CollieRadarDisplay.Page.actions)
                             }
                             .pickerStyle(.segmented)
@@ -149,6 +150,13 @@ struct CollieRadarView: View {
                 Text(radarText("快照已过期，请刷新或重新导入。"))
                     .font(.footnote).foregroundStyle(.orange)
             }
+            if snapshot.tasks != nil {
+                Text(radarText("任务状态来自台账原文；刷新重新读取配置的数据源。"))
+                    .font(.caption).foregroundStyle(.secondary)
+            } else {
+                Text(radarText("此快照未提供完整台账，只包含来源提供的待处理项。"))
+                    .font(.caption).foregroundStyle(.secondary)
+            }
             Text(radarText("代码更新时间仅供参考，不代表任务停工或完成。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
@@ -185,7 +193,9 @@ struct CollieRadarView: View {
             .accessibilityIdentifier("collie-radar-clear-filters")
         }
 
-        let actions = snapshot.matchingActions(display: display)
+        let tasks = snapshot.matchingActions(display: display, includeAllTasks: true)
+        let actions = display.page == .tasks || display.page == .projects
+            ? tasks : snapshot.matchingActions(display: display)
         let keys = snapshot.matchingProjectNames(display: display)
         let projects = snapshot.matchingProjects(display: display)
             .enumerated().sorted { lhs, rhs in
@@ -199,12 +209,16 @@ struct CollieRadarView: View {
         if display.page == .overview {
             HStack(spacing: 12) {
                 metric(radarText("待我处理"), count: actions.count, icon: "hand.raised")
+                metric(radarText("全部任务"), count: tasks.count, icon: "checklist")
                 metric(radarText("项目"), count: keys.count, icon: "square.stack.3d.up")
             }
         }
         if display.page != .projects {
-            Text(radarText("待我处理")).font(.headline)
-            if actions.isEmpty { Text(radarText("这份快照中没有匹配的待处理项。" )).foregroundStyle(.secondary) }
+            Text(radarText(display.page == .tasks ? "全部任务" : "待我处理")).font(.headline)
+            if actions.isEmpty {
+                Text(radarText(display.page == .tasks ? "这份快照中没有匹配的任务。" : "这份快照中没有匹配的待处理项。"))
+                    .foregroundStyle(.secondary)
+            }
             LazyVStack(spacing: display.compact ? 8 : 12) {
                 ForEach(Array(actions.enumerated()), id: \.offset) { _, action in
                     actionCard(action, snapshot: snapshot, display: display)
@@ -214,7 +228,8 @@ struct CollieRadarView: View {
         if display.page == .projects {
             groupedProjects(snapshot, keys: keys, actions: actions, display: display)
         }
-        if display.page == .overview, display.showActivity {
+        if display.page == .overview, display.showActivity,
+           snapshot.tasks == nil || !snapshot.projects.isEmpty {
             Text(radarText("代码动态")).font(.headline)
             if projects.isEmpty { Text(radarText("这份快照中没有匹配的项目记录。")).foregroundStyle(.secondary) }
             LazyVStack(spacing: display.compact ? 8 : 12) {
@@ -250,7 +265,7 @@ struct CollieRadarView: View {
                             .font(.footnote).foregroundStyle(.secondary)
                     }
                     let actions = grouped[key] ?? []
-                    if actions.isEmpty { Text(radarText("这份快照中没有匹配的待处理项。")).font(.footnote).foregroundStyle(.secondary) }
+                    if actions.isEmpty { Text(radarText("这份快照中没有匹配的任务。")).font(.footnote).foregroundStyle(.secondary) }
                     ForEach(Array(actions.enumerated()), id: \.offset) { _, action in
                         actionCard(action, snapshot: snapshot, display: display)
                     }
@@ -313,6 +328,19 @@ struct CollieRadarView: View {
             }
             Text(action.title).font(.headline)
             if display.showNext, !action.next.isEmpty { Text(action.next).font(.subheadline).foregroundStyle(.secondary) }
+            if let priority = action.priority, !priority.isEmpty {
+                Text(priority).font(.caption).foregroundStyle(.secondary)
+            }
+            if let window = action.window_status, !window.isEmpty {
+                Label(radarText("窗口状态") + "：" + window, systemImage: "macwindow")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+            if let session = action.session, !session.isEmpty, !display.compact {
+                Text(radarText("负责会话") + "：" + session).font(.caption).foregroundStyle(.secondary)
+            }
+            if let evidence = action.evidence, !evidence.isEmpty, !display.compact {
+                Text(radarText("证据") + "：" + evidence).font(.caption).foregroundStyle(.secondary)
+            }
             if let parts = URLComponents(string: action.url), parts.scheme?.lowercased() == "https",
                parts.host?.isEmpty == false, parts.user == nil, parts.password == nil,
                let url = parts.url {
@@ -347,7 +375,7 @@ private struct CollieRadarSettingsView: View {
                             .foregroundStyle(.red).font(.footnote)
                     }
                 } header: { Text(radarText("数据源")) } footer: {
-                    Text(radarText("支持 pm-radar --json 格式。需要登录的数据源暂请导出快照后导入；不会复制网页 Cookie 或向其他站点转发凭据。"))
+                    Text(radarText("支持完整台账快照及旧 pm-radar --json 格式。可配置自己的 Tailnet HTTPS JSON 路径；需要手机登录的数据源暂请导出后导入。不会复制网页 Cookie 或转发凭据。"))
                 }
                 if saveFailed {
                     Section {

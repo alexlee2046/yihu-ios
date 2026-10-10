@@ -1,6 +1,15 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
+    "全部任务": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"All tasks"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"全部任务"}}}},
+    "需求台账": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Requirement ledger"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"需求台账"}}}},
+    "窗口状态": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Window status"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"窗口状态"}}}},
+    "负责会话": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Owner session"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"负责会话"}}}},
+    "证据": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Evidence"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"证据"}}}},
+    "这份快照中没有匹配的任务。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"No tasks in this snapshot match the filters."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"这份快照中没有匹配的任务。"}}}},
+    "此快照未提供完整台账，只包含来源提供的待处理项。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"This snapshot does not include the complete ledger, only the actions supplied by its source."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"此快照未提供完整台账，只包含来源提供的待处理项。"}}}},
+    "任务状态来自台账原文；刷新重新读取配置的数据源。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Task states come from the ledger. Refresh reads the configured data source again."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"任务状态来自台账原文；刷新重新读取配置的数据源。"}}}},
+    "支持完整台账快照及旧 pm-radar --json 格式。可配置自己的 Tailnet HTTPS JSON 路径；需要手机登录的数据源暂请导出后导入。不会复制网页 Cookie 或转发凭据。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Supports complete ledger snapshots and legacy pm-radar --json. Configure your own Tailnet HTTPS JSON path; feeds requiring phone authentication need a file export. No web cookies or credentials are forwarded."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"支持完整台账快照及旧 pm-radar --json 格式。可配置自己的 Tailnet HTTPS JSON 路径；需要手机登录的数据源暂请导出后导入。不会复制网页 Cookie 或转发凭据。"}}}},
     "清空搜索": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Clear search"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"清空搜索"}}}},
     "筛选状态": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Filter by status"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"筛选状态"}}}},
     "所有状态": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"All statuses"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"所有状态"}}}},

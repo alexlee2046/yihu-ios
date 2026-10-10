@@ -261,6 +261,18 @@ private struct CollieRootView: View {
                 // A notification may have switched selection during activation.
                 if selection == previousSelection, selectedRadar == nil { selection = "web" }
             }
+            #if DEBUG
+            // Explicit, one-time device provisioning; never embeds a private feed in the app.
+            if let raw = ProcessInfo.processInfo.environment["YIHU_RADAR_FEED"],
+               let feed = CollieRadarFeed.validate(raw), canSelect(),
+               let id = radar.workbenches.first(where: { $0.source == feed.absoluteString })?.id ?? radar.add(),
+               var item = radar.workbenches.first(where: { $0.id == id }) {
+                if item.source.isEmpty { item.name = radarText("需求台账") }
+                item.source = feed.absoluteString
+                item.display.page = .tasks
+                if radar.update(item), selectRadar(id) { await radar.refresh(id) }
+            }
+            #endif
             await voice.refreshModelState()
             if ProcessInfo.processInfo.environment["COLLIE_AUTO_DOWNLOAD_MODEL"] == "1",
                voice.phase == .needsModel {
