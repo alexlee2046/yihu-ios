@@ -7,7 +7,7 @@ final class CollieWorkbenchUITests: XCTestCase {
     func testIntegratedWorkbenchShortcutNavigation() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
-        app.launchArguments = ["-collie.connection.origin", "https://workbench.example.invalid"]
+        app.launchArguments = ["-collie.connection.origin", "https://workbench.example.invalid", "--yihu-test-hit-diagnostics"]
         app.launch()
         defer { app.terminate() }
         let all = app.buttons["collie-shortcuts-all"]
@@ -48,7 +48,9 @@ final class CollieWorkbenchUITests: XCTestCase {
             attachWorkbenchScreen(name: id.contains("://") ? "web-after-switch" : "radar-after-switch")
             XCTAssertTrue(button.isSelected)
             let ready = XCTNSPredicateExpectation(predicate: NSPredicate(format: "isHittable == true"), object: button)
-            XCTAssertEqual(XCTWaiter.wait(for: [ready], timeout: 10), .completed)
+            let readiness = XCTWaiter.wait(for: [ready], timeout: 10)
+            print("YIHU_TEST_HIT readiness=\(readiness.rawValue) existing=\(button.isHittable) fresh=\(app.buttons[id].isHittable) frame=\(app.buttons[id].frame)")
+            XCTAssertEqual(readiness, .completed)
             button.tap()
             XCTAssertFalse(app.alerts.firstMatch.exists)
             XCTAssertEqual(app.buttons.matching(identifier: "collie-shortcuts-all").count, 1)

@@ -179,8 +179,7 @@ private struct CollieRootView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // WebKit's UIKit surface must not intercept the shared native header.
-            workbenchHeader.zIndex(1)
+            workbenchHeader
             ZStack {
                 if let webSession, settings.currentOrigin != nil {
                     CollieShellView(
@@ -218,9 +217,16 @@ private struct CollieRootView: View {
                         .id(id)
                 }
             }
-            .contentShape(Rectangle())
-            .clipped()
-            .zIndex(0)
+        }
+        .onChange(of: selection) { _, _ in
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("--yihu-test-hit-diagnostics") {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(1))
+                    diagnoseHeaderHitTesting()
+                }
+            }
+            #endif
         }
         .sheet(isPresented: $workbenchesPresented, onDismiss: {
             if pendingAddWeb { pendingAddWeb = false; addingWeb = true }
@@ -277,6 +283,31 @@ private struct CollieRootView: View {
             }
         }
     }
+
+    #if DEBUG
+    private func diagnoseHeaderHitTesting() {
+        let window = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first(where: \.isKeyWindow)
+        guard let window else { return }
+        func visit(_ view: UIView) {
+            if let scroll = view as? UIScrollView {
+                let rect = scroll.convert(scroll.bounds, to: window)
+                if rect.minY < 220, rect.height < 100, rect.width > 200 {
+                    let point = CGPoint(x: rect.midX, y: rect.midY)
+                    let hit = window.hitTest(point, with: nil)
+                    print("YIHU_TEST_HIT header=\(rect) tracking=\(scroll.isTracking) dragging=\(scroll.isDragging) decelerating=\(scroll.isDecelerating) scrollEnabled=\(scroll.isScrollEnabled) inHeader=\(hit?.isDescendant(of: scroll) == true)")
+                    var ancestor = hit
+                    while let current = ancestor {
+                        print("YIHU_TEST_HIT view=\(type(of: current)) rect=\(current.convert(current.bounds, to: window)) interactive=\(current.isUserInteractionEnabled) hidden=\(current.isHidden) alpha=\(current.alpha)")
+                        ancestor = current.superview
+                    }
+                }
+            }
+            view.subviews.forEach(visit)
+        }
+        visit(window)
+    }
+    #endif
 
     private func writeValidationStatus(_ status: String) {
         guard let applicationSupport = FileManager.default.urls(
