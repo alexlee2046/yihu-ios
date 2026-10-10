@@ -50,7 +50,7 @@ final class CollieWebSession {
     }
 
     fileprivate func attach(_ webView: WKWebView) {
-        guard !isInvalidated else { return }
+        guard !isInvalidated, self.webView !== webView else { return }
         self.webView = webView
         if let state = restorationState {
             restorationState = nil

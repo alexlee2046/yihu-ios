@@ -58,7 +58,7 @@ jobs:
             fi
             xcrun simctl ui "$YIHU_SIMULATOR" appearance "$appearance"
             xcrun simctl ui "$YIHU_SIMULATOR" content_size "$size"
-            xcodebuild -quiet -project Yihu.xcodeproj -scheme CollieiOS -configuration Debug -destination "platform=iOS Simulator,id=$YIHU_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/YihuBuild" -resultBundlePath "$RUNNER_TEMP/YihuResults/$scenario.xcresult" -only-testing:CollieUITests/CollieWorkbenchUITests CODE_SIGN_IDENTITY=- test-without-building
+            xcodebuild -quiet -project Yihu.xcodeproj -scheme CollieiOS -configuration Debug -destination "platform=iOS Simulator,id=$YIHU_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/YihuBuild" -resultBundlePath "$RUNNER_TEMP/YihuResults/$scenario.xcresult" -only-testing:CollieUITests/CollieWorkbenchUITests -parallel-testing-enabled NO -test-timeouts-enabled YES -maximum-test-execution-time-allowance 180 CODE_SIGN_IDENTITY=- test-without-building
           done
       - name: Preserve synthetic-data test evidence
         if: always()
