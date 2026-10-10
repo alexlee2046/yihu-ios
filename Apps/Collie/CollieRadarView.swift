@@ -257,7 +257,7 @@ struct CollieRadarView: View {
             HStack {
                 Text(snapshot.projectName(action.project)).font(.caption).foregroundStyle(.secondary)
                 Spacer()
-                if display.showStatus { taskStatus(action.status) }
+                if display.showStatus { taskStatus(action.status ?? "") }
             }
             Text(action.title).font(.headline)
             if display.showNext, !action.next.isEmpty { Text(action.next).font(.subheadline).foregroundStyle(.secondary) }

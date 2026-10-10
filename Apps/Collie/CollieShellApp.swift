@@ -45,6 +45,8 @@ struct CollieShellApp: App {
 final class CollieConnectionRuntime {
     private(set) var webSession: CollieWebSession?
     @ObservationIgnored private(set) weak var transcriptTarget: CollieWebSession?
+    // Native WebKit snapshots stay in memory, isolated by trusted origin.
+    @ObservationIgnored private var workbenchViewStates: [URL: Any] = [:]
 
     static func voiceBlockReason(_ voice: CollieVoiceController) -> String? {
         if voice.canCancel { return shellText("录音或转写正在进行，请先完成或取消，不能在此时切换服务。") }
@@ -64,8 +66,11 @@ final class CollieConnectionRuntime {
                            notifications: CollieNativeNotificationsController,
                            voiceNotes: CollieVoiceNotesStore? = nil) {
         guard webSession?.baseURL != origin else { return }
+        if let current = webSession, let state = current.captureInteractionState() {
+            workbenchViewStates[current.baseURL] = state
+        }
         webSession?.invalidate()
-        let newSession = CollieWebSession(baseURL: origin)
+        let newSession = CollieWebSession(baseURL: origin, restorationState: workbenchViewStates[origin])
         webSession = newSession
         notifications.navigationBlockReason = { [weak voice, weak voiceNotes, weak notifications] in
             guard let voice else { return shellText("无法检查语音输入状态，请稍后重试。") }

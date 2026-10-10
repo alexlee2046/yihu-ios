@@ -494,6 +494,7 @@ final class CollieNativeNotificationsController {
         var retained = binding
         retained.unregisterPending = true
         _ = keychain.save(retained, origin: origin.absoluteString)
+        status = .unregistering
 
         let response = await webRequest(
             "unregister",
@@ -505,7 +506,10 @@ final class CollieNativeNotificationsController {
             if activeSession === oldSession { status = .unbindPending }
             return
         }
-        guard rotateUnregisteredBinding(binding, origin: origin) else { return }
+        guard rotateUnregisteredBinding(binding, origin: origin) else {
+            if activeSession === oldSession { status = .unbindPending }
+            return
+        }
         if activeSession === oldSession, !isEnabled(for: origin) {
             status = .disabled
             notice = nil

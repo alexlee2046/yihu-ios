@@ -21,10 +21,17 @@ final class CollieWebSession {
     fileprivate let websiteDataStore: WKWebsiteDataStore
     private(set) weak var webView: WKWebView?
     private(set) var isInvalidated = false
+    private var restorationState: Any?
 
-    init(baseURL: URL, websiteDataStore: WKWebsiteDataStore? = nil) {
+    init(baseURL: URL, websiteDataStore: WKWebsiteDataStore? = nil, restorationState: Any? = nil) {
         self.baseURL = baseURL
         self.websiteDataStore = websiteDataStore ?? Self.persistentDataStore(for: baseURL)
+        self.restorationState = restorationState
+    }
+
+    func captureInteractionState() -> Any? {
+        guard let webView, isTrusted(webView.url) else { return nil }
+        return webView.interactionState
     }
 
     var isConnected: Bool {
@@ -45,6 +52,13 @@ final class CollieWebSession {
     fileprivate func attach(_ webView: WKWebView) {
         guard !isInvalidated else { return }
         self.webView = webView
+        if let state = restorationState {
+            restorationState = nil
+            // WebKit restores the page, back/forward list and scroll position;
+            // do not immediately replace that restoration with a root load.
+            webView.interactionState = state
+            return
+        }
         guard webView.url == nil else { return }
         webView.load(URLRequest(url: baseURL))
     }

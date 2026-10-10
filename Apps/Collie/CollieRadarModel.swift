@@ -5,7 +5,7 @@ import Observation
 struct CollieRadarSnapshot: Codable {
     struct Action: Codable {
         var project: String
-        var status: String
+        var status: String?
         var title: String
         var next: String
         var url: String
@@ -36,7 +36,7 @@ struct CollieRadarSnapshot: Codable {
     }
     func taskStatuses(for key: String) -> [String] {
         let explicit = projects.filter { $0.path == key }.compactMap(\.status)
-        return Array(Set(explicit + decisions.filter { $0.project == key }.map(\.status)))
+        return Array(Set(explicit + decisions.filter { $0.project == key }.compactMap(\.status)))
             .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.sorted()
     }
 
@@ -51,14 +51,18 @@ struct CollieRadarSnapshot: Codable {
         }
     }
     func matchingActions(display: CollieRadarDisplay) -> [Action] {
-        decisions.enumerated().filter {
+        let filtered = decisions.enumerated().filter {
             (display.project.isEmpty || $0.element.project == display.project) &&
             matches([projectName($0.element.project), $0.element.project, $0.element.title,
-                     $0.element.status, $0.element.next], query: display.searchText)
-        }.sorted { lhs, rhs in
+                     $0.element.status ?? "", $0.element.next], query: display.searchText)
+        }
+        if display.newestFirst, filtered.contains(where: { $0.element.timestamp == nil }) {
+            return filtered.map(\.element)
+        }
+        return filtered.sorted { lhs, rhs in
             if display.newestFirst {
-                let left = lhs.element.timestamp ?? 0
-                let right = rhs.element.timestamp ?? 0
+                let left = lhs.element.timestamp!
+                let right = rhs.element.timestamp!
                 return left == right ? lhs.offset < rhs.offset : left > right
             }
             let order = lhs.element.title.localizedCompare(rhs.element.title)

@@ -12,6 +12,10 @@ struct CollieRadarModelChecks {
         precondition(snapshot.projectNames == ["demo"])
         precondition(snapshot.projectName("demo") == "Demo project")
         precondition(snapshot.generatedAt != nil)
+        let withoutStatus = fixture.replacingOccurrences(of: "\"status\":\"等你验收\",", with: "")
+        let missingStatus = try CollieRadarSnapshot.decode(Data(withoutStatus.utf8))
+        precondition(missingStatus.decisions[0].status == nil)
+        precondition(missingStatus.taskStatuses(for: "demo").isEmpty)
         precondition(snapshot.taskStatuses(for: "demo") == ["等你验收"])
         precondition(CollieRadarTaskState.classify("进行中") == .progressing)
         precondition(CollieRadarTaskState.classify("等你决策") == .waiting)
@@ -39,6 +43,8 @@ struct CollieRadarModelChecks {
         ordering.newestFirst = false
         precondition(sortedActions.matchingActions(display: ordering).map(\.title) == ["Alpha", "Zulu"])
         sortedActions.decisions[0].timestamp = nil
+        ordering.newestFirst = true
+        precondition(sortedActions.matchingActions(display: ordering).map(\.title) == ["Zulu", "Alpha"])
         sortedActions.decisions[1].timestamp = nil
         ordering.newestFirst = true
         precondition(sortedActions.matchingActions(display: ordering).map(\.title) == ["Zulu", "Alpha"])
