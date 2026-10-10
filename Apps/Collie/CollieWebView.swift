@@ -305,6 +305,7 @@ final class CollieWebSession {
 
 struct CollieWebView: UIViewRepresentable {
     let session: CollieWebSession
+    var isVisible = true
     var pageReady: @MainActor () -> Void = {}
     var openNotificationSettings: @MainActor () -> Void = {}
     var requestKeyboard: @MainActor () async -> Void = {}
@@ -333,6 +334,8 @@ struct CollieWebView: UIViewRepresentable {
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         context.coordinator.observeURL(of: webView)
+        webView.isHidden = !isVisible
+        webView.accessibilityElementsHidden = !isVisible
         webView.allowsBackForwardNavigationGestures = true
         webView.scrollView.keyboardDismissMode = .interactive
         session.attach(webView)
@@ -340,6 +343,10 @@ struct CollieWebView: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
+        // Hide WebKit at the UIKit layer too; SwiftUI opacity alone leaves its
+        // composited surface and accessibility subtree alive under native Radar.
+        webView.isHidden = !isVisible
+        webView.accessibilityElementsHidden = !isVisible
         context.coordinator.requestKeyboard = requestKeyboard
         context.coordinator.pageReady = pageReady
         context.coordinator.openNotificationSettings = openNotificationSettings

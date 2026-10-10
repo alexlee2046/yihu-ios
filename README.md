@@ -21,6 +21,23 @@ Native notifications require the web bridge `window.collieNativePush.request(ope
 
 Voice insertion dispatches the `collie:native-transcript` web event. The workbench must implement the corresponding composer integration; do not assume every upstream version does. Transcription should be reviewed before sending. The separate Hermes Live Activity integration is optional and requires a compatible relay you control; its source endpoint is deliberately `https://relay.example.invalid`. Do not enable it without configuring your relay in `CollieHermesPush.swift`.
 
+## Workbenches and PM Radar
+
+Web workbenches and native PM Radar share one header and shortcut bar. Use the grid to manage workbenches and customize shortcut order/visibility. Radar supports overview, projects and actions, with per-workbench search, filters, display options and local snapshots.
+
+Import a `pm-radar --json` export or configure an HTTPS JSON feed. Authenticated feeds currently require a file export: Radar does not reuse web cookies, store credentials or follow redirects. Snapshots are limited to 2 MiB; failed refreshes retain the last valid snapshot, and changing the feed clears its old cache. Data older than 24 hours is marked stale. Radar is read-only and does not update the source task tracker.
+
+Run the standalone model/persistence checks from this directory:
+
+```sh
+swiftc -swift-version 6 Apps/Collie/CollieRadarModel.swift \
+  Apps/Collie/CollieRadarStore.swift Tests/CollieRadar/ModelChecks.swift \
+  -o /tmp/yihu-radar-checks
+/tmp/yihu-radar-checks
+```
+
+The `CollieUITests` scheme test target includes a device navigation check. It requires saved web/Radar workbenches and visible shortcuts; it is not a first-run setup test. Screenshots can contain your workbench content: use synthetic data and do not commit test results. Device results from the original workspace do not establish validation of this independent checkout. Light appearance and accessibility text sizes still need acceptance.
+
 ## Models and limitations
 
 Qwen3 ASR model files are **not** in the repository. Download them through the app's model screen (Hugging Face or ModelScope); the app verifies pinned SHA-256 hashes. Model downloads need storage, bandwidth and a capable device.

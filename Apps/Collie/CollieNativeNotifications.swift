@@ -303,6 +303,8 @@ final class CollieNativeNotificationsController {
     var knownOrigins: @MainActor () -> [URL] = { [] }
     /// nil on success; otherwise the reason to show in the home header.
     var onSwitchOrigin: (@MainActor (URL) -> String?)?
+    /// Reveal the browser workspace after a validated notification opens there.
+    var onOpenWorkbench: (@MainActor () -> Void)?
 
     func clearNavigationNotice() {
         if notice == navigationNotice { notice = nil }
@@ -637,6 +639,7 @@ final class CollieNativeNotificationsController {
         guard let session = activeSession else { return }
         // Normal page loading still goes through Collie's existing authentication.
         guard session.openNativeNotification(route) else { return }
+        onOpenWorkbench?()
     }
 
     private func refreshExisting(session: CollieWebSession, origin: URL, generation: Int) async {

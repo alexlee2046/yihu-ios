@@ -85,48 +85,169 @@ final class CollieConnectionRuntime {
 }
 
 @MainActor
+@Observable
+final class CollieShellPresentation {
+    var settingsPresented = false
+    var notesPresented = false
+}
+
+@MainActor
 private struct CollieRootView: View {
     let settings: CollieConnectionSettings
     let voice: CollieVoiceController
     let notifications: CollieNativeNotificationsController
     let voiceNotes: CollieVoiceNotesStore
     @State private var connection = CollieConnectionRuntime()
+    @State private var radar = CollieRadarStore()
+    @State private var shortcuts = CollieWorkbenchShortcuts()
+    @State private var shellPresentation = CollieShellPresentation()
+    @State private var radarPresentation = CollieRadarPresentation()
+    @AppStorage("collie.workbench.selection.v1") private var selection = "web"
+    @State private var workbenchesPresented = false
+    @State private var addingWeb = false
+    @State private var pendingAddWeb = false
+    @State private var selectionNotice: String?
     private var webSession: CollieWebSession? { connection.webSession }
+    private var selectedRadar: UUID? {
+        guard let id = UUID(uuidString: selection), radar.workbenches.contains(where: { $0.id == id }) else { return nil }
+        return id
+    }
+
+    private var shortcutItems: [CollieWorkbenchShortcutItem] {
+        // Keep the primary web entry and native radar together on first use.
+        // An explicit user shortcut order always takes precedence in the model.
+        let web = settings.recentOrigins.map {
+            CollieWorkbenchShortcutItem(id: $0.absoluteString, name: settings.name(for: $0), icon: "globe")
+        }
+        let native = radar.workbenches.map {
+            CollieWorkbenchShortcutItem(id: $0.id.uuidString, name: $0.name, icon: "scope")
+        }
+        return Array(web.prefix(1)) + native + Array(web.dropFirst())
+    }
+
+    private var shortcutBar: CollieWorkbenchShortcutBar {
+        CollieWorkbenchShortcutBar(shortcuts: shortcuts, items: shortcutItems,
+                                  selected: selectedRadar?.uuidString ?? settings.currentOrigin?.absoluteString,
+                                  select: { id in
+            if let radarID = UUID(uuidString: id) { _ = selectRadar(radarID) }
+            else if let origin = settings.recentOrigins.first(where: { $0.absoluteString == id }) { _ = selectWeb(origin) }
+        }, openAll: { workbenchesPresented = true })
+    }
+
+    private var workbenchHeader: some View {
+        VStack(spacing: 4) {
+            HStack(spacing: 8) {
+                Text(selectedRadar.flatMap { id in radar.workbenches.first { $0.id == id }?.name } ?? radarText("一呼"))
+                    .font(.headline.weight(.bold))
+                    .lineLimit(1)
+                Spacer(minLength: 8)
+                if let id = selectedRadar, let item = radar.workbenches.first(where: { $0.id == id }) {
+                    CollieRadarActions(store: radar, item: item, presentation: radarPresentation)
+                } else if webSession != nil {
+                    Button { shellPresentation.notesPresented = true } label: {
+                        Image(systemName: "waveform").frame(width: 44, height: 44)
+                    }
+                    .accessibilityLabel(radarText("语音记录"))
+                    .accessibilityIdentifier("collie-voice-notes")
+                    Button { shellPresentation.settingsPresented = true } label: {
+                        Image(systemName: "gearshape").frame(width: 44, height: 44)
+                    }
+                    .accessibilityLabel(radarText("一呼设置"))
+                    .accessibilityIdentifier("collie-connection-settings")
+                }
+            }
+            shortcutBar
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 4)
+        .background(BenchsideStyle.surface)
+        .overlay(alignment: .bottom) { Divider().accessibilityHidden(true) }
+        .tint(BenchsideStyle.accent)
+    }
 
     var body: some View {
-        Group {
-            if let webSession, settings.currentOrigin != nil {
-                CollieShellView(
-                    webSession: webSession,
-                    voice: voice,
-                    voiceNotes: voiceNotes,
-                    connectionSettings: settings,
-                    notifications: notifications,
-                    onWillSaveConnection: connectionChangeBlockReason,
-                    onSavedConnection: installConnection
-                )
-                .id(webSession.baseURL.absoluteString)
-            } else {
-                CollieConnectionSettingsView(
-                    settings: settings,
-                    isInitialSetup: true,
-                    onWillSave: connectionChangeBlockReason,
-                    onSaved: installConnection
-                )
+        VStack(spacing: 0) {
+            workbenchHeader
+            ZStack {
+                if let webSession, settings.currentOrigin != nil {
+                    CollieShellView(
+                        webSession: webSession,
+                        voice: voice,
+                        voiceNotes: voiceNotes,
+                        connectionSettings: settings,
+                        notifications: notifications,
+                        onWillSaveConnection: connectionChangeBlockReason,
+                        onSavedConnection: installConnection,
+                        onOpenWorkbenches: { workbenchesPresented = true },
+                        showsHeader: false,
+                        presentation: shellPresentation,
+                        isWorkbenchActive: selectedRadar == nil
+                    )
+                    .id(webSession.baseURL.absoluteString)
+                    .opacity(selectedRadar == nil ? 1 : 0)
+                    .allowsHitTesting(selectedRadar == nil)
+                    .accessibilityHidden(selectedRadar != nil)
+                } else if selectedRadar == nil {
+                    VStack(spacing: 0) {
+                        CollieConnectionSettingsView(
+                            settings: settings,
+                            isInitialSetup: true,
+                            onWillSave: connectionChangeBlockReason,
+                            onSaved: installConnection
+                        )
+                    }
+                    .opacity(selectedRadar == nil ? 1 : 0)
+                    .allowsHitTesting(selectedRadar == nil)
+                    .accessibilityHidden(selectedRadar != nil)
+                }
+                if let id = selectedRadar {
+                    CollieRadarView(store: radar, id: id, presentation: radarPresentation)
+                        .id(id)
+                }
             }
         }
+        .sheet(isPresented: $workbenchesPresented, onDismiss: {
+            if pendingAddWeb { pendingAddWeb = false; addingWeb = true }
+        }) {
+            CollieWorkbenchPicker(settings: settings, radar: radar, selectedRadar: selectedRadar,
+                                  selectWeb: selectWeb, selectRadar: selectRadar,
+                                  addWeb: { pendingAddWeb = true }, notice: selectionNotice,
+                                  shortcuts: shortcuts)
+        }
+        .sheet(isPresented: $addingWeb) {
+            NavigationStack {
+                CollieConnectionSettingsView(settings: settings, onWillSave: connectionChangeBlockReason,
+                                             onSaved: { origin in addingWeb = false; installConnection(origin) })
+                    .toolbar { ToolbarItem(placement: .cancellationAction) {
+                        Button(radarText("取消")) { addingWeb = false }
+                    } }
+            }
+        }
+        .alert(radarText("暂时不能切换工作台"), isPresented: Binding(
+            get: { selectionNotice != nil && !workbenchesPresented && !addingWeb },
+            set: { if !$0 { selectionNotice = nil } }
+        )) { Button(radarText("完成"), role: .cancel) { selectionNotice = nil } }
+        message: { Text(selectionNotice ?? "") }
         .task {
+            let settings = self.settings
+            let notifications = self.notifications
             settings.isNotificationEnabled = { [weak notifications] origin in
                 notifications?.isEnabled(for: origin) == true
             }
             notifications.knownOrigins = { [weak settings] in settings?.recentOrigins ?? [] }
+            notifications.onOpenWorkbench = { selection = "web" }
             notifications.onSwitchOrigin = { origin in
-                settings.quickSwitch(to: origin, from: webSession?.baseURL,
+                guard canSelect() else { return selectionNotice }
+                selection = "web"
+                return settings.quickSwitch(to: origin, from: webSession?.baseURL,
                                      blockedReason: connectionChangeBlockReason,
                                      onSaved: installConnection)
             }
             if webSession == nil, let origin = settings.currentOrigin {
-                installConnection(origin)
+                let previousSelection = selection
+                connection.installConnection(origin, voice: voice, notifications: notifications)
+                // A notification may have switched selection during activation.
+                if selection == previousSelection, selectedRadar == nil { selection = "web" }
             }
             await voice.refreshModelState()
             if ProcessInfo.processInfo.environment["COLLIE_AUTO_DOWNLOAD_MODEL"] == "1",
@@ -159,7 +280,40 @@ private struct CollieRootView: View {
     }
 
     private func installConnection(_ origin: URL) {
+        selection = "web"
         connection.installConnection(origin, voice: voice, notifications: notifications)
+    }
+
+    private func canSelect() -> Bool {
+        if voiceNotes.recorder.isRecording {
+            selectionNotice = radarText("请先结束语音笔记录音，再切换工作台。")
+        } else if notifications.isBusy {
+            selectionNotice = radarText("正在开启或停用通知，请等待完成后再切换工作台。")
+        } else {
+            selectionNotice = CollieConnectionRuntime.voiceBlockReason(voice)
+        }
+        return selectionNotice == nil
+    }
+
+    private func selectWeb(_ origin: URL) -> Bool {
+        if selectedRadar == nil, origin == settings.currentOrigin { return true }
+        guard canSelect() else { return false }
+        if let reason = settings.quickSwitch(to: origin, from: webSession?.baseURL,
+                                             blockedReason: connectionChangeBlockReason,
+                                             onSaved: installConnection) {
+            selectionNotice = reason
+            return false
+        }
+        installConnection(origin)
+        return true
+    }
+
+    private func selectRadar(_ id: UUID) -> Bool {
+        if selectedRadar == id { return true }
+        guard canSelect(), radar.workbenches.contains(where: { $0.id == id }) else { return false }
+        webSession?.dismissKeyboard()
+        selection = id.uuidString
+        return true
     }
 }
 
@@ -173,8 +327,10 @@ struct CollieShellView: View {
     private let notifications: CollieNativeNotificationsController?
     private let onWillSaveConnection: ((URL) -> String?)?
     private let onSavedConnection: ((URL) -> Void)?
-    @State private var settingsPresented = false
-    @State private var notesPresented = false
+    private let onOpenWorkbenches: (() -> Void)?
+    private let showsHeader: Bool
+    @Bindable private var presentation: CollieShellPresentation
+    private let isWorkbenchActive: Bool
     @State private var pendingRecoveryMessage: String?
     @State private var switchNotice: String?
     @State private var renameOrigin: URL?
@@ -193,7 +349,11 @@ struct CollieShellView: View {
         connectionSettings: CollieConnectionSettings? = nil,
         notifications: CollieNativeNotificationsController? = nil,
         onWillSaveConnection: ((URL) -> String?)? = nil,
-        onSavedConnection: ((URL) -> Void)? = nil
+        onSavedConnection: ((URL) -> Void)? = nil,
+        onOpenWorkbenches: (() -> Void)? = nil,
+        showsHeader: Bool = true,
+        presentation: CollieShellPresentation = CollieShellPresentation(),
+        isWorkbenchActive: Bool = true
     ) {
         self.webSession = webSession
         self.voice = voice
@@ -202,19 +362,26 @@ struct CollieShellView: View {
         self.notifications = notifications
         self.onWillSaveConnection = onWillSaveConnection
         self.onSavedConnection = onSavedConnection
+        self.onOpenWorkbenches = onOpenWorkbenches
+        self.showsHeader = showsHeader
+        self.presentation = presentation
+        self.isWorkbenchActive = isWorkbenchActive
     }
 
-    var body: some View {
+    private var shellContent: some View {
         VStack(spacing: 0) {
-            if connectionSettings != nil {
+            // Keep the WKWebView mounted when Radar is active, but not its
+            // native navigation controls (opacity alone leaves them in AX).
+            if showsHeader, connectionSettings != nil, isWorkbenchActive {
                 shellHeader
             }
 
             ZStack {
                 CollieWebView(
                     session: webSession,
+                    isVisible: isWorkbenchActive,
                     pageReady: { notifications?.applicationDidBecomeActive(session: webSession) },
-                    openNotificationSettings: { settingsPresented = true }
+                    openNotificationSettings: { presentation.settingsPresented = true }
                 ) {
                     guard !voice.canCancel, voice.phase != .delivering else { return }
                     await webSession.setKeyboardEnabled(true)
@@ -224,7 +391,7 @@ struct CollieShellView: View {
                 CollieConnectionErrorView(
                     message: errorMessage,
                     reload: { webSession.reload() },
-                    changeConnection: { settingsPresented = true }
+                    changeConnection: { presentation.settingsPresented = true }
                 )
             } else if webSession.isLoading {
                 VStack(spacing: 12) {
@@ -281,6 +448,7 @@ struct CollieShellView: View {
             // Hardware keyboard: ⌘⇧D starts or finishes voice input.
             Button(shellText("语音输入")) { shortcuts.requestToggle() }
                 .keyboardShortcut("d", modifiers: [.command, .shift])
+                .disabled(!isWorkbenchActive)
                 .opacity(0)
                 .allowsHitTesting(false)
                 .accessibilityHidden(true)
@@ -291,7 +459,12 @@ struct CollieShellView: View {
             shareTray.refresh()
             runPendingShortcut()
         }
+    }
+
+    private var observedShell: some View {
+        shellContent
         .onChange(of: shortcuts.pendingToggle) { _, _ in runPendingShortcut() }
+        .onChange(of: isWorkbenchActive) { _, active in if active { runPendingShortcut() } }
         .onChange(of: hermesPush.pendingURL) { _, _ in openPendingHermesURL() }
         .onChange(of: webSession.isConnected) { _, _ in openPendingHermesURL() }
         .onChange(of: webSession.pageTitle) { _, title in
@@ -328,9 +501,11 @@ struct CollieShellView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+            guard isWorkbenchActive else { return }
             webSession.setKeyboardVisible(true)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
+            guard isWorkbenchActive else { return }
             webSession.setKeyboardVisible(false)
         }
         .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)) { notification in
@@ -340,7 +515,11 @@ struct CollieShellView: View {
             else { return }
             voice.cancelRecording(reason: shellText("录音被系统中断，请重试。"))
         }
-        .sheet(isPresented: $notesPresented) {
+    }
+
+    var body: some View {
+        observedShell
+        .sheet(isPresented: $presentation.notesPresented) {
             if let voiceNotes {
                 NavigationStack {
                     CollieVoiceNotesView(store: voiceNotes) { shareTray.refresh() }
@@ -359,7 +538,7 @@ struct CollieShellView: View {
         } message: {
             Text(shellText("名称保存在本机的本地设置中；清空可恢复页面标题或地址。"))
         }
-        .sheet(isPresented: $settingsPresented) {
+        .sheet(isPresented: $presentation.settingsPresented) {
             NavigationStack {
                 if let connectionSettings, let notifications {
                     CollieLinkSettingsView(
@@ -369,7 +548,7 @@ struct CollieShellView: View {
                         settings: connectionSettings,
                         onWillSave: onWillSaveConnection,
                         onSaved: { origin in
-                            settingsPresented = false
+                            presentation.settingsPresented = false
                             onSavedConnection?(origin)
                         }
                     )
@@ -391,6 +570,7 @@ struct CollieShellView: View {
         // Don't pull the page out from under dictation or an unfilled transcript.
         guard !voice.canCancel, voice.phase != .delivering, !voice.canRetryDelivery else { return }
         if validOrigin == webSession.baseURL {
+            if !isWorkbenchActive { onSavedConnection?(validOrigin) }
             guard webSession.isConnected, let target = hermesPush.consumePendingURL() else { return }
             webSession.openNativeNotification(target)
         } else if let connectionSettings, connectionSettings.recentOrigins.contains(validOrigin),
@@ -433,7 +613,7 @@ struct CollieShellView: View {
     /// Runs a shortcut request once the app is in front and voice can act on it:
     /// start when ready, finish when recording; otherwise keep it pending.
     private func runPendingShortcut() {
-        guard shortcuts.pendingToggle, scenePhase == .active,
+        guard isWorkbenchActive, shortcuts.pendingToggle, scenePhase == .active,
               voiceNotes?.recorder.isRecording != true else { return }
         if voice.isRecording {
             guard shortcuts.consumeToggle() else { return }
@@ -490,7 +670,21 @@ struct CollieShellView: View {
                     }
                 }
             }
-            if let connectionSettings { quickSwitchRow(connectionSettings) }
+            if let onOpenWorkbenches {
+                Button(action: onOpenWorkbenches) {
+                    HStack {
+                        Image(systemName: "square.grid.2x2")
+                        Text(connectionSettings?.name(for: webSession.baseURL) ?? radarText("工作台"))
+                            .lineLimit(1)
+                        Image(systemName: "chevron.down").font(.caption)
+                        Spacer()
+                    }
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("collie-workbench-picker")
+            } else if let connectionSettings { quickSwitchRow(connectionSettings) }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 4)
@@ -571,7 +765,7 @@ struct CollieShellView: View {
     @ViewBuilder
     private var notesButton: some View {
         if let voiceNotes {
-            Button { notesPresented = true } label: {
+            Button { presentation.notesPresented = true } label: {
                 Group {
                     if voiceNotes.recorder.isRecording {
                         Image(systemName: "record.circle.fill").foregroundStyle(.red)
@@ -591,7 +785,7 @@ struct CollieShellView: View {
     }
 
     private var settingsButton: some View {
-        Button { settingsPresented = true } label: {
+        Button { presentation.settingsPresented = true } label: {
             Label(shellText("一呼设置"), systemImage: "gearshape")
                 .labelStyle(.iconOnly)
                 .font(.title3)
