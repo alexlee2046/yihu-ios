@@ -179,7 +179,8 @@ private struct CollieRootView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            workbenchHeader
+            // WebKit's UIKit surface must not intercept the shared native header.
+            workbenchHeader.zIndex(1)
             ZStack {
                 if let webSession, settings.currentOrigin != nil {
                     CollieShellView(
@@ -217,6 +218,9 @@ private struct CollieRootView: View {
                         .id(id)
                 }
             }
+            .contentShape(Rectangle())
+            .clipped()
+            .zIndex(0)
         }
         .sheet(isPresented: $workbenchesPresented, onDismiss: {
             if pendingAddWeb { pendingAddWeb = false; addingWeb = true }
