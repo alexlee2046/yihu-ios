@@ -46,23 +46,25 @@ struct CollieWorkbenchShortcutBar: View {
                                         if selected == item.id {
                                             Capsule().fill(BenchsideStyle.accent).frame(height: 2)
                                                 .padding(.horizontal, 10)
+                                                .allowsHitTesting(false)
                                                 .accessibilityHidden(true)
                                         }
                                     }
                             }
                             .buttonStyle(.plain)
+                            .contentShape(Rectangle())
                             .id(item.id)
                             .accessibilityIdentifier("collie-shortcut-" + item.id)
                             .accessibilityAddTraits(selected == item.id ? .isSelected : [])
                         }
                     }
                 }
-                .onAppear { if let selected { proxy.scrollTo(selected, anchor: .center) } }
+                .onAppear { if let selected { proxy.scrollTo(selected, anchor: .leading) } }
                 .onChange(of: selected) { _, id in
-                    if let id { proxy.scrollTo(id, anchor: .center) }
+                    if let id { proxy.scrollTo(id, anchor: .leading) }
                 }
                 .onChange(of: visible.map(\.id)) { _, _ in
-                    if let selected { proxy.scrollTo(selected, anchor: .center) }
+                    if let selected { proxy.scrollTo(selected, anchor: .leading) }
                 }
             }
             Button(action: openAll) {
