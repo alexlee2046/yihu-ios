@@ -8,8 +8,9 @@ import WatchConnectivity
 final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
     static let shared = CollieWatchPhoneBridge()
     struct OpenRequest: Equatable { var workbench: String; var task: String; var sourceToken: String; var nonce = UUID() }
-    static func sourceToken(_ source: String) -> String {
-        SHA256.hash(data: Data(source.utf8)).map { String(format: "%02x", $0) }.joined()
+    static func sourceToken(_ workbench: CollieRadarWorkbench) -> String {
+        let identity = workbench.source + "\n" + (workbench.watchSourceIdentity?.uuidString ?? "")
+        return SHA256.hash(data: Data(identity.utf8)).map { String(format: "%02x", $0) }.joined()
     }
     var openRequest: OpenRequest?
     private weak var store: CollieRadarStore?
@@ -30,7 +31,7 @@ final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
             guard let snapshot = store.snapshots[workbench.id] else { continue }
             for task in snapshot.allTasks where ["等你决策", "等你验收"].contains(task.status ?? "") {
                 guard let id = task.id, !id.isEmpty else { continue }
-                rows.append(.init(workbench: workbench.id.uuidString, task: id, sourceToken: Self.sourceToken(workbench.source),
+                rows.append(.init(workbench: workbench.id.uuidString, task: id, sourceToken: Self.sourceToken(workbench),
                     title: String(task.title.prefix(160)), project: String(task.project.prefix(80)),
                     status: task.status ?? "", priority: task.priority ?? "", next: String(task.next.prefix(600)),
                     sourceDate: snapshot.generatedAt, readFailed: store.errors[workbench.id] != nil))

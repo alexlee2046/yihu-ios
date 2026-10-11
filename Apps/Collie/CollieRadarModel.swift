@@ -262,6 +262,7 @@ struct CollieRadarWorkbench: Codable, Identifiable, Equatable {
     var id = UUID()
     var name = "PM Radar"
     var source = ""
+    var watchSourceIdentity: UUID? = nil
     var favorite = false
     var display = CollieRadarDisplay()
 }

@@ -109,6 +109,7 @@ final class CollieRadarStore {
             sourceRevisions[item.id, default: 0] += 1
             snapshots[item.id] = nil
             errors[item.id] = nil
+            item.watchSourceIdentity = UUID()
             item.display.project = ""
             item.display.status = nil
             item.display.priority = nil
@@ -150,6 +151,10 @@ final class CollieRadarStore {
             try store(data, for: id)
             // Only a successful import supersedes an in-flight refresh.
             sourceRevisions[id, default: 0] += 1
+            if let index = workbenches.firstIndex(where: { $0.id == id }) {
+                workbenches[index].watchSourceIdentity = UUID()
+                persist()
+            }
         } catch { errors[id] = message(for: error); watchUpdate?() }
     }
 

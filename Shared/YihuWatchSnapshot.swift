@@ -6,7 +6,7 @@ struct YihuWatchSnapshot: Codable {
         var id: String { workbench + ":" + task }
         var workbench: String
         var task: String
-        var sourceToken: String
+        var sourceToken: String? = nil
         var title: String
         var project: String
         var status: String
@@ -39,8 +39,8 @@ struct YihuWatchSnapshot: Codable {
         guard data.count <= maximumBytes else { throw CocoaError(.fileReadTooLarge) }
         let value = try JSONDecoder().decode(Self.self, from: data)
         guard value.items.count <= 200, Set(value.items.map(\.id)).count == value.items.count,
-              value.items.allSatisfy({ UUID(uuidString: $0.workbench) != nil && !$0.task.isEmpty && $0.sourceToken.count == 64 &&
-                  $0.sourceToken.allSatisfy({ "0123456789abcdef".contains($0) }) &&
+              value.items.allSatisfy({ UUID(uuidString: $0.workbench) != nil && !$0.task.isEmpty &&
+                  ($0.sourceToken.map { token in token.count == 64 && token.allSatisfy({ "0123456789abcdef".contains($0) }) } ?? true) &&
                   ["等你决策", "等你验收"].contains($0.status) }) else { throw CocoaError(.fileReadCorruptFile) }
         return value
     }

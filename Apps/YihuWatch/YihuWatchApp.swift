@@ -43,7 +43,10 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
             notice = "请连接并解锁手机，打开一呼后重试"; return
         }
         var message: [String: String] = ["kind": "sync"]
-        if let item { message = ["kind": "open", "workbench": item.workbench, "task": item.task, "sourceToken": item.sourceToken] }
+        if let item {
+            guard let token = item.sourceToken else { notice = "手机数据版本较旧，请更新并重新同步；仅可查看"; return }
+            message = ["kind": "open", "workbench": item.workbench, "task": item.task, "sourceToken": token]
+        }
         let opening = item != nil
         WCSession.default.sendMessage(message, replyHandler: { response in
             let queued = response["queued"] as? Bool == true

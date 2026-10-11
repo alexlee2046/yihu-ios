@@ -307,7 +307,7 @@ private struct CollieRootView: View {
               let action = radar.snapshots[id]?.allTasks.first(where: { $0.id == request.task }),
               ["等你决策", "等你验收"].contains(action.status ?? ""),
               var record = radar.workbenches.first(where: { $0.id == id }),
-              CollieWatchPhoneBridge.sourceToken(record.source) == request.sourceToken else {
+              CollieWatchPhoneBridge.sourceToken(record) == request.sourceToken else {
             selectionNotice = shellText("手表事项已变化或不可见，请在手机刷新台账。")
             watchLink.openRequest = nil
             return
