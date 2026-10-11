@@ -75,7 +75,7 @@ final class CollieRadarReplySession {
     }
 
     var canSend: Bool {
-        target != nil && ["等你决策", "等你验收"].contains(target?.status ?? "") &&
+        target?.eligible == true && ["等你决策", "等你验收"].contains(target?.status ?? "") &&
         !busy && !blocked && !pending && !recorded &&
         !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && text.unicodeScalars.count <= 4000
     }
@@ -107,7 +107,7 @@ final class CollieRadarReplySession {
             if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 if FileManager.default.fileExists(atPath: file.path) { try FileManager.default.removeItem(at: file) }
             } else {
-                let draftTarget = target ?? CollieRadarReplyTarget(epoch: "", id: targetID,
+                let draftTarget = target ?? CollieRadarReplyTarget(eligible: false, epoch: "", id: targetID,
                     title: selected.title, url: selected.url, status: selected.status ?? "", next: selected.next, version: "")
                 try persist(draftTarget, submitted: false)
             }

@@ -213,6 +213,7 @@ enum CollieRadarTaskState {
 }
 
 struct CollieRadarReplyTarget: Codable {
+    var eligible: Bool
     var epoch: String
     var id: String
     var title: String

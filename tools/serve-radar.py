@@ -112,7 +112,7 @@ def read_ledger():
 
 TARGET_QUERY = """query($id:ID!) { node(id:$id) { ... on ProjectV2Item {
  id fullDatabaseId isArchived project { id public viewerCanUpdate }
- content { __typename ... on Issue { id title url state repository { isPrivate viewerPermission } }
+ content { __typename ... on Issue { id title url repository { isPrivate viewerPermission } }
  ... on DraftIssue { id title body } }
  fieldValues(first:30) { nodes {
  ... on ProjectV2ItemFieldSingleSelectValue { name field { ... on ProjectV2FieldCommon { name } } }
@@ -155,9 +155,10 @@ def target_item(ident, epoch):
         raise ReplyError("target_unavailable", 404)
     target = {"id": ident, "epoch": epoch, "title": content["title"], "url": url,
               "status": fields.get("Status") or "", "next": fields.get("下一步") or ""}
-    revision = dict(target, archived=node["isArchived"], kind=kind, state=content.get("state"), content_id=content["id"])
+    eligible = not node["isArchived"] and target["status"] in WAITING
+    target["eligible"] = eligible
+    revision = dict(target, archived=node["isArchived"], kind=kind, content_id=content["id"])
     target["version"] = hashlib.sha256(json.dumps(revision, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
-    eligible = not node["isArchived"] and content.get("state") != "CLOSED" and target["status"] in WAITING
     return target, content, eligible
 
 
