@@ -420,6 +420,21 @@ struct CollieWebView: UIViewRepresentable {
             Task { @MainActor [weak webView] in
                 try? await Task.sleep(for: .seconds(2))
                 guard let window = webView?.window else { return }
+                var seen = Set<ObjectIdentifier>()
+                func inspect(_ object: NSObject, depth: Int) {
+                    guard depth < 30, seen.count < 400, seen.insert(ObjectIdentifier(object)).inserted else { return }
+                    let id = (object as? UIAccessibilityIdentification)?.accessibilityIdentifier ?? ""
+                    if id.hasPrefix("collie-shortcut-") {
+                        NSLog("YihuSyntheticHit AX visible=%@ type=%@ frame=%@ activation=%@", String(visible), String(describing: type(of: object)), String(describing: object.accessibilityFrame), String(describing: object.accessibilityActivationPoint))
+                    }
+                    for element in object.accessibilityElements ?? [] {
+                        if let child = element as? NSObject { inspect(child, depth: depth + 1) }
+                    }
+                    if let view = object as? UIView {
+                        for child in view.subviews { inspect(child, depth: depth + 1) }
+                    }
+                }
+                inspect(window, depth: 0)
                 for y in [90.0, 136.0, 164.0, 180.0, 220.0] {
                     for x in [60.0, 120.0, 280.0] {
                         var view = window.hitTest(CGPoint(x: x, y: y), with: nil)

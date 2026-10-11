@@ -114,6 +114,9 @@ final class CollieWorkbenchUITests: XCTestCase {
         // hit-testing evidence without replacing any functional assertion.
         for button in app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "collie-shortcut-")).allElementsBoundByIndex {
             print("Synthetic shortcut: \(button.identifier) selected=\(button.isSelected) enabled=\(button.isEnabled) hittable=\(button.isHittable) frame=\(button.frame)")
+            if button.isSelected && !button.isHittable {
+                print("Synthetic hierarchy at blocked shortcut:\n\(app.debugDescription)")
+            }
         }
     }
 
