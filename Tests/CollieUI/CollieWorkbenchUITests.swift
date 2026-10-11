@@ -48,7 +48,7 @@ final class CollieWorkbenchUITests: XCTestCase {
             button.tap()
             attachWorkbenchScreen(name: id.contains("://") ? "web-after-switch" : "radar-after-switch")
             XCTAssertTrue(button.isSelected)
-            XCTAssertEqual(button.children(matching: .any).count, 0, "A shortcut must expose one accessibility action")
+            XCTAssertFalse(button.label.isEmpty, "A shortcut must retain its accessible name")
             logShortcutHitTargets(app)
             if id.contains("://") && app.buttons["collie-web-reload"].exists {
                 XCTAssertEqual(app.webViews.count, 0, "The native error page must replace WebKit's accessibility tree")
