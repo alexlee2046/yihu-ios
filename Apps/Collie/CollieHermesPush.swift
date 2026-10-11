@@ -12,13 +12,16 @@ import UserNotifications
 @Observable
 final class CollieHermesPush {
     static let shared = CollieHermesPush()
-    // Optional companion relay; replace only with a relay you control.
-    static let relay = URL(string: "https://relay.example.invalid")!
+    static let defaultRelay = URL(string: "https://relay.example.invalid")!
     private static let webUIPort = 9444
     private static let enabledKey = "hermes.push.enabled"
     private static let deviceKey = "hermes.push.device-id"
+    private static let relayURLKey = "hermes.push.relay-url"
 
     enum Status: Equatable { case off, registering, on, failed(String) }
+
+    /// Callback providing known trusted origins, decoupling Hermes session matching from Relay host.
+    var knownOrigins: (() -> [URL])?
 
     private(set) var status: Status = .off
     /// What the switch shows: flips immediately, before the permission prompt resolves.
@@ -42,6 +45,65 @@ final class CollieHermesPush {
     }
 
     var isEnabled: Bool { defaults.bool(forKey: Self.enabledKey) }
+
+    /// The user-configured relay address string, if any.
+    var configuredRelayString: String {
+        get { defaults.string(forKey: Self.relayURLKey) ?? "" }
+        set {
+            let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.isEmpty {
+                defaults.removeObject(forKey: Self.relayURLKey)
+            } else {
+                defaults.set(trimmed, forKey: Self.relayURLKey)
+            }
+        }
+    }
+
+    /// The active Relay URL: configured URL takes precedence, followed by suggested URL, then default invalid relay.
+    var relayURL: URL? {
+        let configured = configuredRelayString
+        if !configured.isEmpty, let url = Self.validateRelayURL(configured) {
+            return url
+        }
+        if let suggested = Self.suggestedRelayURL(for: knownOrigins?() ?? []) {
+            return suggested
+        }
+        return Self.defaultRelay
+    }
+
+    /// Strictly validates a custom relay URL: requires HTTPS, valid host, no query/fragment/credentials.
+    static func validateRelayURL(_ raw: String) -> URL? {
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty,
+              let url = URL(string: trimmed),
+              url.scheme?.lowercased() == "https",
+              let host = url.host, !host.isEmpty,
+              url.user == nil, url.password == nil,
+              url.query == nil, url.fragment == nil else {
+            return nil
+        }
+        return url
+    }
+
+    /// Suggests a relay endpoint based on known Hermes or port 9444 origins.
+    static func suggestedRelayURL(for origins: [URL]) -> URL? {
+        for origin in origins {
+            if origin.port == webUIPort || origin.absoluteString.localizedCaseInsensitiveContains("hermes") {
+                if let host = origin.host {
+                    return URL(string: "https://\(host):\(webUIPort)")
+                }
+            }
+        }
+        return nil
+    }
+
+    /// Updates the custom relay URL. If reminders are currently enabled, reschedules device registration.
+    func updateRelayURL(_ raw: String) {
+        configuredRelayString = raw
+        if isEnabled {
+            scheduleRegistration()
+        }
+    }
 
     var deviceID: String {
         if let id = defaults.string(forKey: Self.deviceKey) { return id }
@@ -117,27 +179,42 @@ final class CollieHermesPush {
     /// Offer owner-only reminders only after that host is saved; retain the
     /// off switch for an existing registration even if its workbench is removed.
     func shouldShowSettings(for origins: [URL]) -> Bool {
-        isRequested || isEnabled || origins.contains {
-            $0.port == Self.webUIPort && Self.isHermesSessionURL($0.absoluteString) != nil
+        isRequested || isEnabled || !configuredRelayString.isEmpty || origins.contains {
+            $0.port == Self.webUIPort || $0.absoluteString.localizedCaseInsensitiveContains("hermes")
         }
     }
 
-    /// Only a Hermes WebUI session on the relay's own host, over HTTPS.
-    static func isHermesSessionURL(_ raw: Any?) -> URL? {
+    /// Validates whether a raw URL string belongs to a trusted Hermes session over HTTPS.
+    /// Decoupled from Relay host: accepts if it matches any known workbench origin,
+    /// or if it matches the default webUIPort (9444), or if it matches the configured relay host over HTTPS.
+    static func isHermesSessionURL(_ raw: Any?, knownOrigins: [URL]? = nil) -> URL? {
         guard let raw = raw as? String, let url = URL(string: raw),
               url.scheme?.lowercased() == "https",
-              url.host?.lowercased() == relay.host?.lowercased() else { return nil }
-        return url
+              let host = url.host, !host.isEmpty else { return nil }
+        let origins = knownOrigins ?? shared.knownOrigins?() ?? []
+        if !origins.isEmpty {
+            let matches = origins.contains { known in
+                known.host?.lowercased() == host.lowercased() &&
+                (known.port ?? 443) == (url.port ?? 443)
+            }
+            if matches { return url }
+        }
+        if url.port == webUIPort { return url }
+        if let relay = shared.relayURL, relay.host != "relay.example.invalid",
+           host.lowercased() == relay.host?.lowercased() {
+            return url
+        }
+        return nil
     }
 
     /// Whether a foreground notification is a live Hermes reminder worth showing.
     func shouldPresent(userInfo: [AnyHashable: Any]) -> Bool {
-        isEnabled && Self.isHermesSessionURL(userInfo["url"]) != nil
+        isEnabled && Self.isHermesSessionURL(userInfo["url"], knownOrigins: knownOrigins?()) != nil
     }
 
     @discardableResult
     func handleTap(userInfo: [AnyHashable: Any]) -> Bool {
-        guard let url = Self.isHermesSessionURL(userInfo["url"]) else { return false }
+        guard let url = Self.isHermesSessionURL(userInfo["url"], knownOrigins: knownOrigins?()) else { return false }
         pendingURL = url
         return true
     }
@@ -192,18 +269,23 @@ final class CollieHermesPush {
 
     private func registerDevice() async {
         guard isEnabled, let apnsToken, !Task.isCancelled else { return }
+        guard let relay = relayURL, relay.host != "relay.example.invalid" else {
+            status = .failed(NSLocalizedString("请先在设置中填写有效的 HTTPS Hermes Relay 服务地址。", tableName: "Yihu", comment: ""))
+            return
+        }
         var body: [String: String] = [
             "device_id": deviceID, "apns_token": apnsToken, "environment": Self.environment,
         ]
         if let pushToStartToken { body["push_to_start_token"] = pushToStartToken }
         let ok = await post(path: "/v1/devices", body: body)
         guard isEnabled, !Task.isCancelled else { return }
-        status = ok ? .on : .failed(NSLocalizedString("无法连接 Hermes 提醒服务，请确认已开启 Tailscale。", tableName: "Yihu", comment: ""))
+        status = ok ? .on : .failed(NSLocalizedString("无法连接 Hermes 提醒服务，请确认地址正确并已开启 Tailscale。", tableName: "Yihu", comment: ""))
     }
 
     @discardableResult
     private func post(path: String, body: [String: String]) async -> Bool {
-        var request = URLRequest(url: Self.relay.appending(path: path))
+        guard let relay = relayURL, relay.host != "relay.example.invalid" else { return false }
+        var request = URLRequest(url: relay.appending(path: path))
         request.httpMethod = "POST"
         request.timeoutInterval = 15
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -212,7 +294,8 @@ final class CollieHermesPush {
     }
 
     private func delete(path: String) async {
-        var request = URLRequest(url: Self.relay.appending(path: path))
+        guard let relay = relayURL, relay.host != "relay.example.invalid" else { return }
+        var request = URLRequest(url: relay.appending(path: path))
         request.httpMethod = "DELETE"
         request.timeoutInterval = 15
         _ = await send(request)

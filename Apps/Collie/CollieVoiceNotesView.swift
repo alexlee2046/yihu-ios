@@ -10,6 +10,7 @@ private func notesText(_ key: String) -> String {
 struct CollieVoiceNotesView: View {
     let store: CollieVoiceNotesStore
     var onHandedOff: () -> Void = {}
+    var onDirectInsert: ((String) async -> Bool)? = nil
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -26,10 +27,24 @@ struct CollieVoiceNotesView: View {
                 Section(notesText("记录")) {
                     ForEach(store.notes.filter { $0.status != .recording }) { note in
                         NavigationLink {
-                            CollieVoiceNoteDetail(store: store, note: note) {
-                                dismiss()
-                                onHandedOff()
-                            }
+                            CollieVoiceNoteDetail(
+                                store: store,
+                                note: note,
+                                onHandedOff: {
+                                    dismiss()
+                                    onHandedOff()
+                                },
+                                onDirectInsert: onDirectInsert.map { directInsert in
+                                    { text in
+                                        let success = await directInsert(text)
+                                        if success {
+                                            dismiss()
+                                            onHandedOff()
+                                        }
+                                        return success
+                                    }
+                                }
+                            )
                         } label: {
                             row(note)
                         }
@@ -115,6 +130,7 @@ struct CollieVoiceNoteDetail: View {
     let store: CollieVoiceNotesStore
     let note: CollieVoiceNote
     let onHandedOff: () -> Void
+    var onDirectInsert: ((String) async -> Bool)? = nil
 
     static let instructions = [
         "请把下面的录音整理成会议纪要：结论、讨论要点、待办（负责人和时间）。",
@@ -123,8 +139,13 @@ struct CollieVoiceNoteDetail: View {
     ]
     @State private var instruction = Self.instructions[0]
     @State private var handOffError: String?
+    @State private var isInsertingDirectly = false
 
     private var current: CollieVoiceNote { store.notes.first { $0.id == note.id } ?? note }
+
+    private var formattedText: String {
+        instruction.isEmpty ? current.transcript : "\(instruction)\n\n\(current.transcript)"
+    }
 
     var body: some View {
         Form {
@@ -145,11 +166,41 @@ struct CollieVoiceNoteDetail: View {
                     Text(notesText("要点和待办")).tag(Self.instructions[1])
                     Text(notesText("整理成文字")).tag(Self.instructions[2])
                 }
-                Button(notesText("交给当前工作台")) {
+                if onDirectInsert != nil {
+                    Button {
+                        guard let onDirectInsert, !isInsertingDirectly else { return }
+                        isInsertingDirectly = true
+                        Task {
+                            let text = formattedText
+                            if await onDirectInsert(text) {
+                                isInsertingDirectly = false
+                                onHandedOff()
+                            } else {
+                                // Fallback to share tray if DOM is not ready/focused
+                                handOffError = store.handOff(current, instruction: instruction, inbox: CollieShareInbox.shared())
+                                if handOffError == nil {
+                                    handOffError = notesText("当前页面未处于可输入状态，内容已存入分享托盘，可稍后点击「填入」。")
+                                }
+                                isInsertingDirectly = false
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Text(notesText("直接填入当前输入框"))
+                            if isInsertingDirectly {
+                                Spacer()
+                                ProgressView()
+                            }
+                        }
+                    }
+                    .disabled(current.status != .done || isInsertingDirectly)
+                    .accessibilityIdentifier("collie-note-direct-insert")
+                }
+                Button(notesText("存入工作台分享托盘")) {
                     handOffError = store.handOff(current, instruction: instruction, inbox: CollieShareInbox.shared())
                     if handOffError == nil { onHandedOff() }
                 }
-                .disabled(current.status != .done)
+                .disabled(current.status != .done || isInsertingDirectly)
                 .accessibilityIdentifier("collie-note-handoff")
                 Button(notesText("复制全文")) { UIPasteboard.general.string = current.transcript }
                     .disabled(current.transcript.isEmpty)
@@ -157,7 +208,7 @@ struct CollieVoiceNoteDetail: View {
                     Text(handOffError).font(.footnote).foregroundStyle(.orange)
                 }
             } footer: {
-                Text(notesText("会放进「收到分享」，回到工作台点一下输入框，再点「填入」。长转写以文本附件形式交给工作台。不会自动发送。"))
+                Text(notesText("可直接填入当前页面输入框；或存入「收到分享」稍后填入。长转写以文本附件形式交给工作台。不会自动发送。"))
             }
         }
         .navigationTitle(current.createdAt.formatted(.dateTime.month().day().hour().minute()))

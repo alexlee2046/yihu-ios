@@ -58,7 +58,7 @@ struct CollieLinkSettingsView: View {
             )
 
             if CollieHermesPush.shared.shouldShowSettings(for: settings.recentOrigins) {
-                CollieHermesPushSection(push: .shared)
+                CollieHermesPushSection(push: .shared, settings: settings)
             }
 
             Section {
@@ -285,25 +285,120 @@ struct CollieRecognitionTermsView: View {
 /// started in the Hermes WebUI, delivered by the tailnet-only relay on your separately configured server.
 struct CollieHermesPushSection: View {
     let push: CollieHermesPush
+    var settings: CollieConnectionSettings? = nil
+
+    @State private var relayDraft = ""
+    @State private var relayNotice: String?
+
+    private var suggestedURL: URL? {
+        CollieHermesPush.suggestedRelayURL(for: settings?.recentOrigins ?? [])
+    }
 
     var body: some View {
         Section {
             Toggle(isOn: Binding(
                 get: { push.isRequested },
-                set: { on in if on { Task { await push.enable() } } else { push.disable() } }
+                set: { on in
+                    if on {
+                        if push.relayURL?.host == "relay.example.invalid" && relayDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            relayNotice = settingsText("请先填写有效的 Hermes Relay 服务地址（必须以 https:// 开头）。")
+                            return
+                        }
+                        applyRelayDraft()
+                        Task { await push.enable() }
+                    } else {
+                        push.disable()
+                    }
+                }
             )) {
                 Text(settingsText("Hermes 任务提醒")).frame(minHeight: 44, alignment: .leading)
             }
             .accessibilityIdentifier("collie-hermes-push")
+
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Text(settingsText("Relay 服务地址")).font(.subheadline)
+                    Spacer()
+                    if let suggested = suggestedURL, relayDraft != suggested.absoluteString {
+                        Button(settingsText("填入工作台地址")) {
+                            relayDraft = suggested.absoluteString
+                            applyRelayDraft()
+                        }
+                        .font(.caption)
+                        .buttonStyle(.bordered)
+                    }
+                }
+                HStack {
+                    TextField("https://relay.example.com:9444", text: $relayDraft)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .keyboardType(.URL)
+                        .font(.callout.monospaced())
+                        .frame(minHeight: 36)
+                        .onChange(of: relayDraft) { _, _ in
+                            relayNotice = nil
+                        }
+                        .onSubmit {
+                            applyRelayDraft()
+                        }
+                    if relayDraft != push.configuredRelayString {
+                        Button(settingsText("保存")) {
+                            applyRelayDraft()
+                        }
+                        .font(.caption.bold())
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
+                if let notice = relayNotice {
+                    Text(notice).font(.footnote).foregroundStyle(.orange)
+                }
+            }
+            .padding(.vertical, 4)
+
             switch push.status {
-            case .registering: Label(settingsText("正在登记…"), systemImage: "arrow.triangle.2.circlepath").font(.footnote)
-            case .failed(let message): Text(message).font(.footnote).foregroundStyle(.orange)
-            case .on, .off: EmptyView()
+            case .registering:
+                Label(settingsText("正在登记…"), systemImage: "arrow.triangle.2.circlepath").font(.footnote)
+            case .failed(let message):
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(message).font(.footnote).foregroundStyle(.orange)
+                    Button(settingsText("重试连接")) {
+                        push.retryIfNeeded()
+                    }
+                    .font(.caption)
+                    .buttonStyle(.borderless)
+                }
+            case .on:
+                Label(settingsText("实时活动与提醒已就绪"), systemImage: "checkmark.circle.fill")
+                    .font(.footnote)
+                    .foregroundStyle(.green)
+            case .off:
+                EmptyView()
             }
         } header: {
             Text(settingsText("任务提醒"))
         } footer: {
-            Text(settingsText("在 Hermes WebUI 里交代的任务，会在锁屏和灵动岛显示进度，完成后提醒你。只包含工具名和状态，不含对话内容。需要开启 Tailscale。"))
+            Text(settingsText("在 Hermes WebUI 里交代的任务，会在锁屏和灵动岛显示进度，完成后提醒你。只包含工具名和状态，不含对话内容。必须使用 HTTPS 且需要开启 Tailscale。"))
         }
+        .onAppear {
+            relayDraft = push.configuredRelayString.isEmpty
+                ? (suggestedURL?.absoluteString ?? "")
+                : push.configuredRelayString
+        }
+    }
+
+    private func applyRelayDraft() {
+        let trimmed = relayDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            push.updateRelayURL("")
+            relayNotice = nil
+            return
+        }
+        guard let url = CollieHermesPush.validateRelayURL(trimmed) else {
+            relayNotice = settingsText("地址必须是以 https:// 开头的合法 URL，不能带查询参数。")
+            return
+        }
+        relayDraft = url.absoluteString
+        push.updateRelayURL(url.absoluteString)
+        relayNotice = nil
     }
 }

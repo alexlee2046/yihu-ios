@@ -273,6 +273,7 @@ private struct CollieRootView: View {
                 notifications?.isEnabled(for: origin) == true
             }
             notifications.knownOrigins = { [weak settings] in settings?.recentOrigins ?? [] }
+            CollieHermesPush.shared.knownOrigins = { [weak settings] in settings?.recentOrigins ?? [] }
             notifications.onOpenWorkbench = { if canSelect() { selection = "web" } }
             notifications.onSwitchOrigin = { origin in
                 guard canSelect() else { return selectionNotice }
@@ -607,7 +608,14 @@ struct CollieShellView: View {
         .sheet(isPresented: $presentation.notesPresented) {
             if let voiceNotes {
                 NavigationStack {
-                    CollieVoiceNotesView(store: voiceNotes) { shareTray.refresh() }
+                    CollieVoiceNotesView(
+                        store: voiceNotes,
+                        onHandedOff: { shareTray.refresh() },
+                        onDirectInsert: { text in
+                            guard webSession.isConnected else { return false }
+                            return await webSession.insertTranscript(text)
+                        }
+                    )
                 }
                 .presentationDragIndicator(.visible)
                 .presentationBackground(BenchsideStyle.canvas)
