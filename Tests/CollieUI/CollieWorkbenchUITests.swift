@@ -8,7 +8,6 @@ final class CollieWorkbenchUITests: XCTestCase {
         continueAfterFailure = false
         let app = XCUIApplication()
         app.launchArguments = ["-collie.connection.origin", "https://workbench.example.invalid"]
-        app.launchEnvironment["YIHU_UI_HIT_DIAGNOSTICS"] = "1"
         app.launch()
         defer { app.terminate() }
         let all = app.buttons["collie-shortcuts-all"]

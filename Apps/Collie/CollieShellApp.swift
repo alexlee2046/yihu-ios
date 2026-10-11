@@ -463,7 +463,9 @@ struct CollieShellView: View {
             ZStack {
                 CollieWebView(
                     session: webSession,
-                    isVisible: isWorkbenchActive,
+                    // The native error page replaces WebKit. Its stale AX
+                    // subtree must not overlap native navigation after a switch.
+                    isVisible: isWorkbenchActive && webSession.errorMessage == nil,
                     pageReady: { notifications?.applicationDidBecomeActive(session: webSession) },
                     openNotificationSettings: { presentation.settingsPresented = true }
                 ) {
