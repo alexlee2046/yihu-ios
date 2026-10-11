@@ -248,6 +248,8 @@ private struct CollieRootView: View {
         .onChange(of: watchLink.openRequest) { _, _ in openWatchTask() }
         .onChange(of: scenePhase) { _, phase in if phase == .active { openWatchTask() } }
         .task {
+            let settings = self.settings
+            let notifications = self.notifications
             watchLink.phoneNotificationState = {
                 switch notifications.status {
                 case .enabled: "enabled"
@@ -259,8 +261,6 @@ private struct CollieRootView: View {
             }
             watchLink.canReceiveDraft = { UIApplication.shared.applicationState == .active && !watchHandoffBlocked }
             watchLink.bind(radar)
-            let settings = self.settings
-            let notifications = self.notifications
             settings.isNotificationEnabled = { [weak notifications] origin in
                 notifications?.isEnabled(for: origin) == true
             }
