@@ -27,6 +27,17 @@ struct YihuWatchDraftView: View {
     private func save() -> Bool {
         guard let draft = record() else { notice = "草稿为空、过长或版本不支持"; return false }
         do {
+            if FileManager.default.fileExists(atPath: file.path) {
+                let handle = try FileHandle(forReadingFrom: file); defer { try? handle.close() }
+                let bytes = try handle.read(upToCount: YihuWatchDraft.maximumBytes + 1) ?? Data()
+                let prior = try YihuWatchDraft.decode(bytes)
+                guard prior.requestID == draft.requestID, prior.workbench == draft.workbench,
+                      prior.task == draft.task, prior.sourceToken == draft.sourceToken,
+                      prior.taskToken == draft.taskToken,
+                      prior.transferAttempted == false || prior.text == draft.text else {
+                    blocked = true; notice = "已有另一份草稿或待核内容，原记录保留"; return false
+                }
+            }
             let directory = file.deletingLastPathComponent()
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             var excluded = directory; var values = URLResourceValues(); values.isExcludedFromBackup = true
