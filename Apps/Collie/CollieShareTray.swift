@@ -1,6 +1,10 @@
-import Observation
 import Foundation
+import Observation
 import SwiftUI
+import UIKit
+
+/// Universal Agent Share Tray alias for modular abstraction.
+typealias AgentShareTray = CollieShareTrayModel
 
 private func shareText(_ key: String) -> String {
     NSLocalizedString(key, tableName: "Yihu", comment: "")
@@ -44,6 +48,29 @@ final class CollieShareTrayModel {
         }
         // iOS delivered a private copy into Documents/Inbox; the inbox now owns its own copy.
         if url.path.contains("/Documents/Inbox/") { try? FileManager.default.removeItem(at: url) }
+        refresh()
+    }
+
+    /// Diagnostic image capture / photo selection: compress to JPEG (0.85) and place in inbox.
+    func importImage(_ image: UIImage, fileName: String? = nil) {
+        guard let inbox else { return }
+        guard let data = image.jpegData(compressionQuality: 0.85) else {
+            notice = shareText("图片处理失败")
+            return
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd-HHmmss"
+        let timestamp = formatter.string(from: Date())
+        let resolvedName = fileName ?? "diagnostic-\(timestamp).jpg"
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(resolvedName)
+        do {
+            try data.write(to: tempURL)
+            defer { try? FileManager.default.removeItem(at: tempURL) }
+            _ = try inbox.save(texts: [], urls: [], files: [tempURL])
+            notice = nil
+        } catch {
+            notice = error.localizedDescription
+        }
         refresh()
     }
 

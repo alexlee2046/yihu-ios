@@ -1,5 +1,6 @@
 import AVFoundation
 import Foundation
+import PhotosUI
 import SwiftUI
 
 private func shellText(_ key: String) -> String {
@@ -105,6 +106,8 @@ final class CollieConnectionRuntime {
 final class CollieShellPresentation {
     var settingsPresented = false
     var notesPresented = false
+    var cameraPresented = false
+    var photosPickerPresented = false
 }
 
 @MainActor
@@ -120,6 +123,7 @@ private struct CollieRootView: View {
     @State private var shortcuts = CollieWorkbenchShortcuts()
     @State private var shellPresentation = CollieShellPresentation()
     @State private var radarPresentation = CollieRadarPresentation()
+    @State private var selectedPhotoItem: PhotosPickerItem?
     @AppStorage("collie.workbench.selection.v1") private var selection = "web"
     @State private var workbenchesPresented = false
     @State private var addingWeb = false
@@ -162,6 +166,23 @@ private struct CollieRootView: View {
                 if let id = selectedRadar, let item = radar.workbenches.first(where: { $0.id == id }) {
                     CollieRadarActions(store: radar, item: item, presentation: radarPresentation)
                 } else if webSession != nil {
+                    Menu {
+                        Button {
+                            shellPresentation.cameraPresented = true
+                        } label: {
+                            Label(radarText("拍摄诊断照片"), systemImage: "camera")
+                        }
+                        Button {
+                            shellPresentation.photosPickerPresented = true
+                        } label: {
+                            Label(radarText("从相册选取"), systemImage: "photo.on.rectangle")
+                        }
+                    } label: {
+                        Image(systemName: "camera").frame(width: 44, height: 44)
+                    }
+                    .accessibilityLabel(radarText("现场拍照/图片诊断"))
+                    .accessibilityIdentifier("collie-diagnostic-photo")
+
                     Button { shellPresentation.notesPresented = true } label: {
                         Image(systemName: "waveform").frame(width: 44, height: 44)
                     }
@@ -239,6 +260,23 @@ private struct CollieRootView: View {
                     .toolbar { ToolbarItem(placement: .cancellationAction) {
                         Button(radarText("取消")) { addingWeb = false }
                     } }
+            }
+        }
+        .fullScreenCover(isPresented: $shellPresentation.cameraPresented) {
+            CollieCameraPicker(isPresented: $shellPresentation.cameraPresented) { image in
+                CollieShareTrayModel.shared.importImage(image)
+            }
+            .ignoresSafeArea()
+        }
+        .photosPicker(isPresented: $shellPresentation.photosPickerPresented, selection: $selectedPhotoItem, matching: .images)
+        .onChange(of: selectedPhotoItem) { _, newItem in
+            guard let newItem else { return }
+            Task {
+                if let data = try? await newItem.loadTransferable(type: Data.self),
+                   let image = UIImage(data: data) {
+                    CollieShareTrayModel.shared.importImage(image)
+                }
+                selectedPhotoItem = nil
             }
         }
         .alert(radarText("暂时不能切换工作台"), isPresented: Binding(

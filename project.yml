@@ -21,6 +21,7 @@ targets:
       - Apps/Collie
       - Shared/CollieShareInbox.swift
       - Shared/HermesTaskAttributes.swift
+      - Shared/AgentProtocol.swift
       - Shared/YihuWatchSnapshot.swift
       - Shared/YihuWatchDraft.swift
       - Shared/YihuWatchVoice.swift
@@ -66,6 +67,7 @@ targets:
     sources:
       - Extensions/CollieWidgets
       - Shared/HermesTaskAttributes.swift
+      - Shared/AgentProtocol.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).widgets

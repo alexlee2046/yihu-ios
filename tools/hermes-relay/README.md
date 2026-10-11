@@ -75,3 +75,33 @@ curl -X POST https://127.0.0.1:9444/v1/notify \
 
 - `phase`: 可选 `running`（进行中）、`done`（已完成）、`failed`（失败）、`interrupted`（已中断）
 - `tool_name`: 可选 `terminal`（终端命令）、`patch` / `write_file`（修改文件）、`file_read`（读取文件）、`search`（搜索）、`browser`（浏览器）
+
+---
+
+## Claude Code / Cursor / OpenHands (MCP 协议接入)
+
+配合 `yihu_mcp_server.py`，任何支持 **Model Context Protocol (MCP)** 的第三方智能体都可以原生调用一呼：
+
+### 1. 配置 MCP Server
+
+在 Claude Code (`~/.claude.json`) 或 Cursor MCP 配置中添加：
+
+```json
+{
+  "mcpServers": {
+    "yihu": {
+      "command": "python3",
+      "args": ["tools/hermes-relay/yihu_mcp_server.py"],
+      "env": {
+        "YIHU_RELAY_URL": "http://127.0.0.1:9444"
+      }
+    }
+  }
+}
+```
+
+### 2. 智能体原生工具能力
+
+MCP 暴露以下原生工具：
+- `notify_yihu_task`: 汇报当前执行步骤（如终端命令、写代码、跑测试），直接同步至手机灵动岛与锁屏实时活动；
+- `request_human_approval`: 在执行破坏性命令（如删库、跑脚本、上线部署）前，在 Apple Watch / iPhone 手腕上发起微审批请求。

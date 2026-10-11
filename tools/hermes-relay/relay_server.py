@@ -231,6 +231,7 @@ class RelayServerHandler(BaseHTTPRequestHandler):
         session_id = payload.get("session_id")
         phase = payload.get("phase", "running")
         tool_name = payload.get("tool_name")
+        agent_name = payload.get("agent_name") or payload.get("agent") or "Hermes"
         started_at = payload.get("started_at", time.time())
         url = payload.get("url")
 
@@ -261,6 +262,7 @@ class RelayServerHandler(BaseHTTPRequestHandler):
                         "content-state": {
                             "phase": phase,
                             "toolName": tool_name,
+                            "agentName": agent_name,
                             "startedAt": started_at,
                             "sessionId": session_id,
                             "updatedAt": now
@@ -292,12 +294,13 @@ class RelayServerHandler(BaseHTTPRequestHandler):
                         "content-state": {
                             "phase": phase,
                             "toolName": tool_name,
+                            "agentName": agent_name,
                             "startedAt": started_at,
                             "sessionId": session_id,
                             "updatedAt": now
                         },
                         "alert": {
-                            "title": "Hermes",
+                            "title": agent_name,
                             "body": f"正在执行：{tool_name or '思考中'}"
                         }
                     }

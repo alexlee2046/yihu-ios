@@ -5,9 +5,12 @@ import SwiftUI
 import UIKit
 import WebKit
 
+/// Universal Agent Web Session alias for modular abstraction.
+typealias AgentWebSession = CollieWebSession
+
 @MainActor
 @Observable
-final class CollieWebSession {
+final class CollieWebSession: AgentSessionProtocol {
     fileprivate(set) var isLoading = false
     fileprivate(set) var errorMessage: String?
     private(set) var pageTitle: String?
@@ -297,6 +300,11 @@ final class CollieWebSession {
         } catch {
             return false
         }
+    }
+
+    /// Generic AgentSessionProtocol conformance: hands text to the current composer.
+    func sendPrompt(_ text: String) async -> Bool {
+        await insertTranscript(text)
     }
 
     private static func persistentDataStore(for url: URL) -> WKWebsiteDataStore {
