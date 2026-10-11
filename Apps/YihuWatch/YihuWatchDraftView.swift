@@ -90,6 +90,9 @@ struct YihuWatchDraftView: View {
         }
         .navigationTitle("输入草稿")
         .task {
+            #if DEBUG
+            if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO"] == "1" { notice = "模拟数据 · 不代表真实听写或配对传输" }
+            #endif
             guard FileManager.default.fileExists(atPath: file.path) else { return }
             do {
                 let handle = try FileHandle(forReadingFrom: file); defer { try? handle.close() }

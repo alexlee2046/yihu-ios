@@ -57,6 +57,10 @@ jobs:
           sleep 3
           mkdir -p "$RUNNER_TEMP/WatchEvidence"
           xcrun simctl io "$device" screenshot "$RUNNER_TEMP/WatchEvidence/watch-demo.png"
+          xcrun simctl terminate "$device" org.example.yihu.watch
+          SIMCTL_CHILD_YIHU_WATCH_DEMO=1 SIMCTL_CHILD_YIHU_WATCH_DEMO_PAGE=draft xcrun simctl launch "$device" org.example.yihu.watch
+          sleep 3
+          xcrun simctl io "$device" screenshot "$RUNNER_TEMP/WatchEvidence/watch-draft-demo.png"
           echo 'Synthetic watch UI captured; paired-device handoff remains unverified.' >> "$GITHUB_STEP_SUMMARY"
       - name: Preserve watch interface evidence
         if: always()

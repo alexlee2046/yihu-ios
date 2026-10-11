@@ -16,6 +16,7 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
         if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO"] == "1" {
             snapshot = .init(items: [
                 .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-decision", sourceToken: String(repeating: "0", count: 64),
+                      taskToken: String(repeating: "0", count: 64), canDraft: true,
                       title: "确认下一阶段范围", project: "示例项目", status: "等你决策", priority: "P1",
                       next: "在手机查看原条目后确认", sourceDate: Date(), readFailed: false),
                 .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-acceptance", sourceToken: String(repeating: "0", count: 64),
@@ -75,6 +76,7 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
 @main
 struct YihuWatchApp: App {
     @State private var link = YihuWatchLink()
+    @State private var demoDraftPresented = false
     private var notificationTitle: String {
         switch link.snapshot?.phoneNotificationState {
         case "enabled": "手机通知已开启；手表镜像需本人设置"
@@ -143,6 +145,16 @@ struct YihuWatchApp: App {
                         }
                     }
                 }.navigationTitle("一呼")
+                .navigationDestination(isPresented: $demoDraftPresented) {
+                    if let item = link.snapshot?.items.first { YihuWatchDraftView(item: item) }
+                }
+                .task {
+                    #if DEBUG
+                    if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO_PAGE"] == "draft" {
+                        demoDraftPresented = true
+                    }
+                    #endif
+                }
             }
         }
     }
