@@ -89,6 +89,7 @@ final class CollieRadarStore {
             errors[item.id] = nil
             item.display.project = ""
             item.display.status = nil
+            item.display.priority = nil
         }
         workbenches[index] = item
         persist()

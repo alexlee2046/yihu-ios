@@ -67,9 +67,9 @@ struct CollieRadarView: View {
                     ScrollView {
                         VStack(alignment: .leading, spacing: record.display.compact ? 12 : 20) {
                             Picker(radarText("视图"), selection: pageBinding) {
-                                Text(radarText("总览")).tag(CollieRadarDisplay.Page.overview)
+                                Text(radarText("管理总览")).tag(CollieRadarDisplay.Page.overview)
                                 Text(radarText("项目")).tag(CollieRadarDisplay.Page.projects)
-                                Text(radarText("全部任务")).tag(CollieRadarDisplay.Page.tasks)
+                                Text(radarText("任务列表")).tag(CollieRadarDisplay.Page.tasks)
                                 Text(radarText("待我处理")).tag(CollieRadarDisplay.Page.actions)
                             }
                             .pickerStyle(.segmented)
@@ -181,11 +181,25 @@ struct CollieRadarView: View {
         }
         .pickerStyle(.menu)
         .accessibilityIdentifier("collie-radar-status-filter")
-        if !display.project.isEmpty || !(display.status ?? "").isEmpty || !(display.searchText ?? "").isEmpty {
+        Picker(radarText("筛选优先级"), selection: priorityBinding) {
+            Text(radarText("所有优先级")).tag("")
+            ForEach(snapshot.allPriorities, id: \.self) { Text($0).tag($0) }
+            if let priority = display.priority, !priority.isEmpty, !snapshot.allPriorities.contains(priority) {
+                Text(priority).tag(priority)
+            }
+        }
+        .pickerStyle(.menu)
+        .accessibilityIdentifier("collie-radar-priority-filter")
+        Toggle(radarText("包含已完成／搁置"), isOn: historyBinding)
+            .accessibilityIdentifier("collie-radar-history")
+        if !display.project.isEmpty || !(display.status ?? "").isEmpty || !(display.priority ?? "").isEmpty ||
+           !(display.searchText ?? "").isEmpty || display.showHistory == true {
             Button(radarText("清空筛选")) {
                 guard var item = record else { return }
                 item.display.project = ""
                 item.display.status = nil
+                item.display.priority = nil
+                item.display.showHistory = false
                 item.display.searchText = nil
                 store.update(item)
             }
@@ -207,23 +221,37 @@ struct CollieRadarView: View {
             }.map(\.element)
 
         if display.page == .overview {
-            HStack(spacing: 12) {
-                metric(radarText("待我处理"), count: actions.count, icon: "hand.raised")
-                metric(radarText("全部任务"), count: tasks.count, icon: "checklist")
-                metric(radarText("项目"), count: keys.count, icon: "square.stack.3d.up")
-            }
-        }
-        if display.page != .projects {
-            Text(radarText(display.page == .tasks ? "全部任务" : "待我处理")).font(.headline)
-            if actions.isEmpty {
-                Text(radarText(display.page == .tasks ? "这份快照中没有匹配的任务。" : "这份快照中没有匹配的待处理项。"))
-                    .foregroundStyle(.secondary)
-            }
-            LazyVStack(spacing: display.compact ? 8 : 12) {
-                ForEach(Array(actions.enumerated()), id: \.offset) { _, action in
-                    actionCard(action, snapshot: snapshot, display: display)
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                ForEach(CollieRadarSnapshot.managementStatuses, id: \.self) { status in
+                    Button {
+                        guard var item = record else { return }
+                        item.display.status = status
+                        item.display.page = .tasks
+                        store.update(item)
+                    } label: {
+                        metric(radarText(status), count: tasks.filter { $0.status == status }.count,
+                               icon: CollieRadarTaskState.classify(status).icon)
+                    }.buttonStyle(.plain)
                 }
             }
+        }
+        if display.page == .overview || display.page == .actions {
+            ForEach(CollieRadarSnapshot.managementStatuses, id: \.self) { status in
+                if display.page == .overview || ["等你决策", "等你验收"].contains(status) {
+                    taskSection(radarText(status), actions: tasks.filter { $0.status == status },
+                                snapshot: snapshot, display: display)
+                }
+            }
+            if display.page == .overview {
+                let others = tasks.filter { !CollieRadarSnapshot.managementStatuses.contains($0.status ?? "") }
+                if !others.isEmpty { taskSection(radarText("其他状态"), actions: others, snapshot: snapshot, display: display) }
+            } else {
+                let others = actions.filter { !["等你决策", "等你验收"].contains($0.status ?? "") }
+                if !others.isEmpty { taskSection(radarText("其他待处理项"), actions: others, snapshot: snapshot, display: display) }
+            }
+        }
+        if display.page == .tasks {
+            taskSection(radarText("任务列表"), actions: tasks, snapshot: snapshot, display: display)
         }
         if display.page == .projects {
             groupedProjects(snapshot, keys: keys, actions: actions, display: display)
@@ -236,7 +264,7 @@ struct CollieRadarView: View {
                 ForEach(Array(projects.enumerated()), id: \.offset) { _, project in
                     VStack(alignment: .leading, spacing: 6) {
                         Text(project.name).font(.headline)
-                        if display.showStatus { projectTaskStatuses(snapshot, key: project.path) }
+                        if display.showStatus { projectTaskStatuses(snapshot, key: project.path, display: display) }
                         Text(project.message).font(.subheadline).foregroundStyle(.secondary)
                         Text(Date(timeIntervalSince1970: project.timestamp), style: .date)
                             .font(.caption).foregroundStyle(.secondary)
@@ -259,7 +287,7 @@ struct CollieRadarView: View {
             ForEach(keys, id: \.self) { key in
                 VStack(alignment: .leading, spacing: 12) {
                     Text(snapshot.projectName(key)).font(.title3.bold())
-                    if display.showStatus { projectTaskStatuses(snapshot, key: key) }
+                    if display.showStatus { projectTaskStatuses(snapshot, key: key, display: display) }
                     if display.showActivity, let project = activity[key] {
                         Label(project.message, systemImage: "arrow.triangle.branch")
                             .font(.footnote).foregroundStyle(.secondary)
@@ -277,6 +305,17 @@ struct CollieRadarView: View {
         }
     }
 
+    private func taskSection(_ title: String, actions: [CollieRadarSnapshot.Action],
+                             snapshot: CollieRadarSnapshot, display: CollieRadarDisplay) -> some View {
+        LazyVStack(alignment: .leading, spacing: display.compact ? 8 : 12) {
+            Text(title + " · " + String(actions.count)).font(.headline)
+            if actions.isEmpty { Text(radarText("这份快照中没有匹配的任务。")).foregroundStyle(.secondary) }
+            ForEach(Array(actions.enumerated()), id: \.offset) { _, action in
+                actionCard(action, snapshot: snapshot, display: display)
+            }
+        }
+    }
+
     private var projectBinding: Binding<String> {
         Binding(get: { record?.display.project ?? "" }, set: { project in
             guard var item = record else { return }
@@ -289,6 +328,28 @@ struct CollieRadarView: View {
         Binding(get: { record?.display.status ?? "" }, set: { status in
             guard var item = record else { return }
             item.display.status = status.isEmpty ? nil : status
+            let state = CollieRadarTaskState.classify(status)
+            if state == .completed || state == .paused { item.display.showHistory = true }
+            store.update(item)
+        })
+    }
+
+    private var priorityBinding: Binding<String> {
+        Binding(get: { record?.display.priority ?? "" }, set: { priority in
+            guard var item = record else { return }
+            item.display.priority = priority.isEmpty ? nil : priority
+            store.update(item)
+        })
+    }
+
+    private var historyBinding: Binding<Bool> {
+        Binding(get: { record?.display.showHistory == true }, set: { show in
+            guard var item = record else { return }
+            item.display.showHistory = show
+            if !show {
+                let state = CollieRadarTaskState.classify(item.display.status ?? "")
+                if state == .completed || state == .paused { item.display.status = nil }
+            }
             store.update(item)
         })
     }
@@ -303,8 +364,8 @@ struct CollieRadarView: View {
     }
 
     @ViewBuilder
-    private func projectTaskStatuses(_ snapshot: CollieRadarSnapshot, key: String) -> some View {
-        let statuses = snapshot.taskStatuses(for: key)
+    private func projectTaskStatuses(_ snapshot: CollieRadarSnapshot, key: String, display: CollieRadarDisplay) -> some View {
+        let statuses = snapshot.taskStatuses(for: key, display: display)
         if statuses.isEmpty { taskStatus("") }
         ForEach(statuses, id: \.self) { taskStatus($0) }
     }
@@ -327,19 +388,25 @@ struct CollieRadarView: View {
                 if display.showStatus { taskStatus(action.status ?? "") }
             }
             Text(action.title).font(.headline)
-            if display.showNext, !action.next.isEmpty { Text(action.next).font(.subheadline).foregroundStyle(.secondary) }
-            if let priority = action.priority, !priority.isEmpty {
-                Text(priority).font(.caption).foregroundStyle(.secondary)
+            Text(action.priority.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("优先级待补"))
+                .font(.caption).foregroundStyle(.secondary)
+            if display.showNext {
+                if action.next.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    Text(radarText("下一步待补")).font(.subheadline).foregroundStyle(.orange)
+                } else { Text(action.next).font(.subheadline).foregroundStyle(.secondary) }
             }
-            if let window = action.window_status, !window.isEmpty {
-                Label(radarText("窗口状态") + "：" + window, systemImage: "macwindow")
-                    .font(.caption).foregroundStyle(.secondary)
-            }
-            if let session = action.session, !session.isEmpty, !display.compact {
-                Text(radarText("负责会话") + "：" + session).font(.caption).foregroundStyle(.secondary)
-            }
-            if let evidence = action.evidence, !evidence.isEmpty, !display.compact {
-                Text(radarText("证据") + "：" + evidence).font(.caption).foregroundStyle(.secondary)
+            DisclosureGroup(radarText("详情")) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(radarText("负责会话") + "：" + (action.session.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
+                    Text(radarText("窗口状态") + "：" + (action.window_status.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("未提供")))
+                    Text(radarText("证据") + "：" + (action.evidence.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
+                    if let timestamp = action.timestamp {
+                        Text(radarText("最近修改"))
+                        Text(Date(timeIntervalSince1970: timestamp), style: .date)
+                        Text(Date(timeIntervalSince1970: timestamp), style: .time)
+                    }
+                }.font(.caption).foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             if let parts = URLComponents(string: action.url), parts.scheme?.lowercased() == "https",
                parts.host?.isEmpty == false, parts.user == nil, parts.password == nil,
@@ -388,7 +455,9 @@ private struct CollieRadarSettingsView: View {
                     Toggle(radarText("显示状态"), isOn: $item.display.showStatus)
                     Toggle(radarText("显示下一步"), isOn: $item.display.showNext)
                     Toggle(radarText("显示代码动态"), isOn: $item.display.showActivity)
-                    Toggle(radarText("最近更新优先"), isOn: $item.display.newestFirst)
+                    Toggle(radarText("优先级优先"), isOn: Binding(
+                        get: { item.display.priorityFirst != false }, set: { item.display.priorityFirst = $0 }))
+                    Toggle(radarText("最近修改优先"), isOn: $item.display.newestFirst)
                 }
             }
             .navigationTitle(radarText("显示与数据源"))

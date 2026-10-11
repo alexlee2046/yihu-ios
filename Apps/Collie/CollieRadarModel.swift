@@ -48,9 +48,11 @@ struct CollieRadarSnapshot: Codable {
             .filter { !$0.isEmpty })).sorted()
     }
 
-    func taskStatuses(for key: String) -> [String] {
-        let explicit = projects.filter { $0.path == key }.compactMap(\.status)
-        return Array(Set(explicit + allTasks.filter { $0.project == key }.compactMap(\.status)))
+    func taskStatuses(for key: String, display: CollieRadarDisplay? = nil) -> [String] {
+        let records = display.map { matchingActions(display: $0, includeAllTasks: true) } ?? allTasks
+        let activity = display.map { matchingProjects(display: $0) } ?? projects
+        let explicit = activity.filter { $0.path == key }.compactMap(\.status)
+        return Array(Set(explicit + records.filter { $0.project == key }.compactMap(\.status)))
             .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.sorted()
     }
 
@@ -73,18 +75,25 @@ struct CollieRadarSnapshot: Codable {
         let filtered = records.enumerated().filter {
             (display.project.isEmpty || $0.element.project == display.project) &&
             matchesStatus($0.element.status, filter: display.status) &&
+            (display.showHistory == true || !isHistorical($0.element.status)) &&
+            (display.priority?.isEmpty != false || $0.element.priority == display.priority) &&
             matches([names[$0.element.project] ?? $0.element.project, $0.element.project, $0.element.title,
                      $0.element.status ?? "", $0.element.next, $0.element.priority ?? "",
                      $0.element.evidence ?? "", $0.element.session ?? "", $0.element.window_status ?? ""],
                     query: display.searchText)
         }
-        if display.newestFirst, filtered.contains(where: { $0.element.timestamp == nil }) {
-            return filtered.map(\.element)
-        }
+        let incompleteRanks = Set(filtered.filter { $0.element.timestamp == nil }.map {
+            display.priorityFirst != false ? priorityRank($0.element.priority) : 0
+        })
         return filtered.sorted { lhs, rhs in
+            if display.priorityFirst != false {
+                let left = priorityRank(lhs.element.priority), right = priorityRank(rhs.element.priority)
+                if left != right { return left < right }
+            }
             if display.newestFirst {
-                let left = lhs.element.timestamp!
-                let right = rhs.element.timestamp!
+                let rank = display.priorityFirst != false ? priorityRank(lhs.element.priority) : 0
+                guard !incompleteRanks.contains(rank) else { return lhs.offset < rhs.offset }
+                let left = lhs.element.timestamp ?? 0, right = rhs.element.timestamp ?? 0
                 return left == right ? lhs.offset < rhs.offset : left > right
             }
             let order = lhs.element.title.localizedCompare(rhs.element.title)
@@ -93,11 +102,11 @@ struct CollieRadarSnapshot: Codable {
     }
 
     func matchingProjects(display: CollieRadarDisplay) -> [Project] {
-        let actionProjects: Set<String> = display.status.map { filter in
-            Set(allTasks.filter { matchesStatus($0.status, filter: filter) }.map(\.project))
-        } ?? []
+        let actionProjects = Set(matchingActions(display: display, includeAllTasks: true).map(\.project))
         return projects.filter {
             (display.project.isEmpty || $0.path == display.project) &&
+            (display.showHistory == true || !isHistorical($0.status)) &&
+            (display.priority?.isEmpty != false || actionProjects.contains($0.path)) &&
             (matchesStatus($0.status, filter: display.status) || actionProjects.contains($0.path)) &&
             matches([$0.name, $0.path, $0.message, $0.status ?? ""], query: display.searchText)
         }
@@ -106,6 +115,26 @@ struct CollieRadarSnapshot: Codable {
     func matchingProjectNames(display: CollieRadarDisplay) -> [String] {
         let keys = Set(matchingActions(display: display, includeAllTasks: true).map(\.project) + matchingProjects(display: display).map(\.path))
         return sortedProjectNames(newestFirst: display.newestFirst).filter { keys.contains($0) }
+    }
+
+    static let managementStatuses = ["等你决策", "等你验收", "进行中", "待做"]
+
+    var allPriorities: [String] {
+        Array(Set(allTasks.compactMap(\.priority).filter { !$0.isEmpty })).sorted {
+            let lhs = priorityRank($0), rhs = priorityRank($1)
+            return lhs == rhs ? $0 < $1 : lhs < rhs
+        }
+    }
+
+    private func priorityRank(_ priority: String?) -> Int {
+        switch priority { case "P0": 0; case "P1": 1; case "P2": 2; default: 3 }
+    }
+
+    private func isHistorical(_ status: String?) -> Bool {
+        switch CollieRadarTaskState.classify(status ?? "") {
+        case .completed, .paused: true
+        default: false
+        }
     }
 
     private func matchesStatus(_ status: String?, filter: String?) -> Bool {
@@ -193,6 +222,9 @@ struct CollieRadarDisplay: Codable, Equatable {
     // Optional so existing saved views decode without a migration or reset.
     var searchText: String? = nil
     var status: String? = nil
+    var priority: String? = nil
+    var showHistory: Bool? = nil
+    var priorityFirst: Bool? = nil
     var compact = false
     var showNext = true
     var showStatus = true

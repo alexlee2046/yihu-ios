@@ -269,7 +269,7 @@ private struct CollieRootView: View {
                var item = radar.workbenches.first(where: { $0.id == id }) {
                 if item.source.isEmpty { item.name = radarText("需求台账") }
                 item.source = feed.absoluteString
-                item.display.page = .tasks
+                item.display.page = .overview
                 if radar.update(item), selectRadar(id) { await radar.refresh(id) }
             }
             #endif
