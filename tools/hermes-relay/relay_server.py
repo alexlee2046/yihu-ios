@@ -100,7 +100,13 @@ class RelayDatabase:
 
     def get_activities_for_session(self, session_id):
         with self._get_conn() as conn:
-            return conn.execute("SELECT * FROM activities WHERE session_id = ?", (session_id,)).fetchall()
+            return conn.execute("""
+                SELECT a.session_id, a.device_id, a.update_token, a.updated_at,
+                       coalesce(d.environment, 'sandbox') AS environment
+                FROM activities a
+                LEFT JOIN devices d ON a.device_id = d.device_id
+                WHERE a.session_id = ?
+            """, (session_id,)).fetchall()
 
 
 class APNsClient:
@@ -273,7 +279,7 @@ class RelayServerHandler(BaseHTTPRequestHandler):
                     update_payload["aps"]["dismissal-date"] = int(now + 14400)
                     if url:
                         update_payload["url"] = url
-                self.apns.push(act["update_token"], update_payload, "liveactivity")
+                self.apns.push(act["update_token"], update_payload, "liveactivity", act["environment"])
             self._send_json({"status": "updated", "activities": len(activities)})
             return
 

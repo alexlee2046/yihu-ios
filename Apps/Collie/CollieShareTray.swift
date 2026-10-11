@@ -54,7 +54,10 @@ final class CollieShareTrayModel {
     /// Diagnostic image capture / photo selection: compress to JPEG (0.85) and place in inbox.
     func importImage(_ image: UIImage, fileName: String? = nil) {
         guard let inbox else { return }
-        guard let data = image.jpegData(compressionQuality: 0.85) else {
+        let normalized = image.imageOrientation == .up ? image : UIGraphicsImageRenderer(size: image.size).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: image.size))
+        }
+        guard let data = normalized.jpegData(compressionQuality: 0.85) else {
             notice = shareText("图片处理失败")
             return
         }

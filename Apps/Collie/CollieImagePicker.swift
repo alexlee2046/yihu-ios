@@ -32,15 +32,15 @@ struct CollieCameraPicker: UIViewControllerRepresentable {
             self.parent = parent
         }
 
+        @MainActor
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let image = (info[.editedImage] ?? info[.originalImage]) as? UIImage {
-                Task { @MainActor in
-                    self.parent.onImageCaptured(image)
-                }
+                parent.onImageCaptured(image)
             }
             parent.isPresented = false
         }
 
+        @MainActor
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
             parent.isPresented = false
         }

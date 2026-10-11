@@ -16,7 +16,7 @@ Usage as MCP Server (in claude.json or cursor settings):
           "command": "python3",
           "args": ["/path/to/tools/hermes-relay/yihu_mcp_server.py"],
           "env": {
-            "YIHU_RELAY_URL": "http://127.0.0.1:8765"
+            "YIHU_RELAY_URL": "http://127.0.0.1:9444"
           }
         }
       }
@@ -35,7 +35,7 @@ import argparse
 import urllib.request
 import urllib.error
 
-DEFAULT_RELAY_URL = os.environ.get("YIHU_RELAY_URL", "http://127.0.0.1:8765")
+DEFAULT_RELAY_URL = os.environ.get("YIHU_RELAY_URL", "http://127.0.0.1:9444")
 
 # MCP Tool Definitions
 TOOLS = [
