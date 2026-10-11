@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""On-demand req→Radar adapter. Loopback only; no data files, cache or timer.
+"""On-demand req→Radar adapter. Loopback only; bounded memory cache, no files/timer.
 
 Replies are disabled unless --writer-user-id explicitly binds an authorized
 personal Tailscale identity. Serve must strip/inject identity headers (no Funnel).
 No task/reply text, login names or raw CLI errors are logged.
 """
 import argparse
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from datetime import datetime, timezone, timedelta
 from email.header import decode_header, make_header
 import hashlib
@@ -134,6 +135,72 @@ def read_ledger():
     if code or len(output) > MAX_BYTES * 4:
         raise RuntimeError("ledger unavailable")
     return ledger_response(json.loads(output))
+
+
+class LedgerCache:
+    """Single-flight reads; 30s fresh, at most 5min old while revalidating.
+
+    Only the serial HTTP handler mutates this state. The worker returns data, never
+    touches authorization, reply receipts or cache state. No periodic refresh.
+    """
+    def __init__(self, loader=None, clock=time.monotonic):
+        self.loader, self.clock = loader or read_ledger, clock
+        self.executor = ThreadPoolExecutor(max_workers=1)
+        self.snapshot = self.future = None
+        self.loaded_at = self.retry_after = 0
+        self.revision = self.read_revision = 0
+        self.failed = False
+
+    def _load(self):
+        snapshot = self.loader()
+        if len(json.dumps(snapshot, ensure_ascii=False, allow_nan=False).encode()) > MAX_BYTES:
+            raise ValueError("ledger too large")
+        return snapshot, self.clock()
+
+    def _finish(self):
+        if self.future is None or not self.future.done():
+            return
+        future, revision = self.future, self.read_revision
+        self.future = None
+        if revision != self.revision:
+            return  # A reply invalidated this read; never resurrect its old result.
+        try:
+            self.snapshot, self.loaded_at = future.result()
+            self.failed = False
+            self.retry_after = 0
+        except READ_ERRORS:
+            self.failed = True
+            self.retry_after = self.clock() + 30
+
+    def get(self, wait_for_refresh=False):
+        while True:
+            self._finish()
+            now = self.clock()
+            age = now - self.loaded_at
+            if (self.snapshot is None or age > 30) and self.future is None and now >= self.retry_after:
+                self.read_revision = self.revision
+                self.future = self.executor.submit(self._load)
+            if self.snapshot is not None and age <= 300 and not (wait_for_refresh and self.future is not None):
+                # Copy the envelope: per-request write authorization must not enter the cache.
+                return dict(self.snapshot, source_refreshing=self.future is not None,
+                            source_refresh_failed=self.failed)
+            if self.future is None:
+                raise RuntimeError("ledger unavailable")
+            try:
+                self.future.result(timeout=31)
+            except FutureTimeout:
+                raise RuntimeError("ledger unavailable") from None
+            except READ_ERRORS:
+                pass  # _finish records the failure; no stale-success date is synthesized.
+
+    def invalidate(self):
+        self.revision += 1
+        self.snapshot = None
+        self.failed = False
+        self.retry_after = 0
+
+    def close(self):
+        self.executor.shutdown(wait=True, cancel_futures=True)
 
 
 TARGET_QUERY = """query($id:ID!) { node(id:$id) { ... on ProjectV2Item {
@@ -386,6 +453,7 @@ def ingest_notification(body, signature, registry, event_key):
 
 def serve(port, tailnet_host, writer_user_id, notifications=None, notification_user_id=None, event_key=None):
     epoch, attempts = str(uuid.uuid4()), {}
+    ledger = LedgerCache()
     allowed_hosts = {f"127.0.0.1:{port}", f"localhost:{port}", tailnet_host, tailnet_host.removesuffix(":443")}
     allowed_origins = {"https://" + tailnet_host, "https://" + tailnet_host.removesuffix(":443")}
 
@@ -419,7 +487,7 @@ def serve(port, tailnet_host, writer_user_id, notifications=None, notification_u
                 self.send_error(403)
                 return
             try:
-                data = read_ledger()
+                data = ledger.get(wait_for_refresh=self.headers.get("Cache-Control") == "no-cache")
                 data["reply_supported"] = writer_allowed(self.headers, writer_user_id)
                 self.send_json(data, head=head)
             except READ_ERRORS:
@@ -459,7 +527,11 @@ def serve(port, tailnet_host, writer_user_id, notifications=None, notification_u
                 if notification_intent:
                     self.send_json(notification_operation(payload, notifications, str(notification_user_id)))
                 else:
-                    self.send_json(reply(payload, writer_user_id, epoch, attempts))
+                    try:
+                        self.send_json(reply(payload, writer_user_id, epoch, attempts))
+                    finally:
+                        if payload.get("operation") == "submit":
+                            ledger.invalidate()
             except ReplyError as error:
                 data = {"error": error.code}
                 if error.target:
@@ -479,11 +551,14 @@ def serve(port, tailnet_host, writer_user_id, notifications=None, notification_u
         raise KeyboardInterrupt
 
     signal.signal(signal.SIGTERM, terminate)
-    with Server(("127.0.0.1", port), Handler) as server:
-        try:
-            server.serve_forever()
-        except KeyboardInterrupt:
-            pass
+    try:
+        with Server(("127.0.0.1", port), Handler) as server:
+            try:
+                server.serve_forever()
+            except KeyboardInterrupt:
+                pass
+    finally:
+        ledger.close()
 
 
 if __name__ == "__main__":

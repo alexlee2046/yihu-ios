@@ -32,6 +32,7 @@ jobs:
           "$RUNNER_TEMP/radar-checks"
           command -v xcodegen >/dev/null || brew install xcodegen
           xcodegen generate --spec project.yml
+          PYTHONDONTWRITEBYTECODE=1 python3 Tests/CollieRadar/AdapterChecks.py
           xcodebuild -quiet -project Yihu.xcodeproj -scheme YihuWatch -destination 'generic/platform=watchOS Simulator' -derivedDataPath "$RUNNER_TEMP/YihuWatch" CODE_SIGNING_ALLOWED=NO build
           xcodebuild -quiet -project Yihu.xcodeproj -scheme CollieiOS -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/YihuPhone" CODE_SIGNING_ALLOWED=NO build
       - name: Capture synthetic watch interface if runtime is available
@@ -87,6 +88,7 @@ jobs:
         run: |
           command -v xcodegen >/dev/null || brew install xcodegen
           xcodegen generate --spec project.yml
+          PYTHONDONTWRITEBYTECODE=1 python3 Tests/CollieRadar/AdapterChecks.py
       - name: Select an available iPhone simulator
         run: |
           xcrun simctl list devices available --json > "$RUNNER_TEMP/devices.json"

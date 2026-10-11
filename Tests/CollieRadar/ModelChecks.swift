@@ -9,7 +9,9 @@ private final class RadarFixtureProtocol: URLProtocol, @unchecked Sendable {
             ? Data(count: CollieRadarSnapshot.maximumBytes + 1)
             : Data(#"{"date_str":"2026-10-08 08:00","decisions":[],"active":[],"stale":[],"cold":[]}"#.utf8)
         let headers = path == "/streamed-oversized" ? [:] : ["Content-Length": String(body.count)]
-        let response = HTTPURLResponse(url: request.url!, statusCode: path == "/unavailable" ? 503 : 200,
+        let status = path == "/unavailable" ? 503
+            : path == "/join" && request.value(forHTTPHeaderField: "Cache-Control") != "no-cache" ? 400 : 200
+        let response = HTTPURLResponse(url: request.url!, statusCode: status,
                                        httpVersion: "HTTP/1.1", headerFields: headers)!
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
         client?.urlProtocol(self, didLoad: body)
@@ -28,6 +30,7 @@ struct CollieRadarModelChecks {
         defer { session.invalidateAndCancel() }
         let (_, downloaded) = try await CollieRadarStore.download(URL(string: "https://fixture.invalid/valid")!, session: session)
         precondition(downloaded.decisions.isEmpty)
+        _ = try await CollieRadarStore.download(URL(string: "https://fixture.invalid/join")!, session: session, waitForRefresh: true)
         for path in ["oversized", "streamed-oversized"] {
             do {
                 _ = try await CollieRadarStore.download(URL(string: "https://fixture.invalid/\(path)")!, session: session)
@@ -47,6 +50,10 @@ struct CollieRadarModelChecks {
         precondition(snapshot.projectNames == ["demo"])
         precondition(snapshot.projectName("demo") == "Demo project")
         precondition(snapshot.generatedAt != nil)
+        precondition(snapshot.source_refreshing == nil && snapshot.source_refresh_failed == nil)
+        let sourceFailure = fixture.replacingOccurrences(of: "{\"date_str\"", with: "{\"source_refresh_failed\":true,\"date_str\"")
+        let failedSourceSnapshot = try CollieRadarSnapshot.decode(Data(sourceFailure.utf8))
+        precondition(failedSourceSnapshot.source_refresh_failed == true)
         let withoutStatus = fixture.replacingOccurrences(of: "\"status\":\"等你验收\",", with: "")
         let missingStatus = try CollieRadarSnapshot.decode(Data(withoutStatus.utf8))
         precondition(missingStatus.decisions[0].status == nil)
@@ -201,6 +208,12 @@ struct CollieRadarModelChecks {
         let id = store.add()!
         store.importSnapshot(Data(fixture.utf8), for: id)
         precondition(store.snapshots[id]?.decisions.first?.title == "Original title")
+        precondition(store.errors[id] == nil)
+        store.importSnapshot(Data(sourceFailure.utf8), for: id)
+        precondition(store.errors[id] != nil)
+        precondition(CollieRadarStore(defaults: defaults, directory: directory).errors[id] != nil)
+        precondition(store.snapshots[id]?.date_str == snapshot.date_str)
+        store.importSnapshot(Data(fixture.utf8), for: id)
         precondition(store.errors[id] == nil)
         store.importSnapshot(Data("invalid".utf8), for: id)
         precondition(store.snapshots[id]?.decisions.first?.title == "Original title")

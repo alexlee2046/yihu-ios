@@ -45,6 +45,9 @@ final class CollieRadarStore {
                 defer { try? handle.close() }
                 let data = try handle.read(upToCount: CollieRadarSnapshot.maximumBytes + 1) ?? Data()
                 snapshots[item.id] = try CollieRadarSnapshot.decode(data)
+                if snapshots[item.id]?.source_refresh_failed == true {
+                    errors[item.id] = NSLocalizedString("更新失败，原有快照已保留。", tableName: "Yihu", comment: "")
+                }
             } catch {
                 errors[item.id] = NSLocalizedString("本机快照无法读取，请刷新或重新导入。原始文件已保留。", tableName: "Yihu", comment: "")
             }
@@ -189,6 +192,14 @@ final class CollieRadarStore {
             try Task.checkCancellation()
             guard sourceRevisions[id, default: 0] == revision else { return }
             try store(data, for: id, snapshot: snapshot)
+            if snapshot.source_refreshing == true {
+                // The first response paints the bounded cached snapshot immediately.
+                // One follow-up joins that source read; no polling loop or timer.
+                let (freshData, freshSnapshot) = try await Self.download(url, session: session, waitForRefresh: true)
+                try Task.checkCancellation()
+                guard sourceRevisions[id, default: 0] == revision else { return }
+                try store(freshData, for: id, snapshot: freshSnapshot)
+            }
         } catch {
             guard sourceRevisions[id, default: 0] == revision,
                   workbenches.contains(where: { $0.id == id }), !(error is CancellationError) else { return }
@@ -199,9 +210,10 @@ final class CollieRadarStore {
 
     // Swift 6 nonisolated async work runs on the generic executor, not the UI actor.
     // Keep the streaming size bound: data(for:) would buffer an unbounded response.
-    nonisolated static func download(_ url: URL, session: URLSession) async throws -> (Data, CollieRadarSnapshot) {
+    nonisolated static func download(_ url: URL, session: URLSession, waitForRefresh: Bool = false) async throws -> (Data, CollieRadarSnapshot) {
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
+        if waitForRefresh { request.setValue("no-cache", forHTTPHeaderField: "Cache-Control") }
         let (bytes, response) = try await session.bytes(for: request)
         guard let response = response as? HTTPURLResponse else { throw CollieRadarError.invalidSnapshot }
         guard (200...299).contains(response.statusCode) else { throw CollieRadarError.http(response.statusCode) }
@@ -234,7 +246,8 @@ final class CollieRadarStore {
         try data.write(to: cacheURL(id), options: [.atomic])
         #endif
         snapshots[id] = snapshot
-        errors[id] = nil
+        errors[id] = snapshot.source_refresh_failed == true
+            ? NSLocalizedString("更新失败，原有快照已保留。", tableName: "Yihu", comment: "") : nil
         watchUpdate?()
     }
 

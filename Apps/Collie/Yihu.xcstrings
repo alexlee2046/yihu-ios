@@ -1,6 +1,7 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
+    "已显示上次读取结果，数据源更新完成后会自动更新。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Showing the last source read. This view will update when the source refresh finishes."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"已显示上次读取结果，数据源更新完成后会自动更新。"}}}},
     "编辑并确认手机草稿": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Edit and confirm phone draft"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"编辑并确认手机草稿"}}}},
     "回复决策": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Reply to decision"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"回复决策"}}}},
     "提交验收反馈": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Send acceptance feedback"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"提交验收反馈"}}}},

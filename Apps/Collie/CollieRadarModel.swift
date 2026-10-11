@@ -55,6 +55,8 @@ struct CollieRadarSnapshot: Codable, Sendable {
     // New ledger exports contain all tasks; legacy snapshots remain compatible.
     var tasks: [Action]? = nil
     var reply_supported: Bool? = nil
+    var source_refreshing: Bool? = nil
+    var source_refresh_failed: Bool? = nil
     var allTasks: [Action] { tasks ?? decisions }
 
     var projects: [Project] { active + stale + cold }

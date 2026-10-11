@@ -176,6 +176,10 @@ struct CollieRadarView: View {
     @ViewBuilder
     private func snapshotContent(_ snapshot: CollieRadarSnapshot, display: CollieRadarDisplay) -> some View {
         VStack(alignment: .leading, spacing: 6) {
+            if snapshot.source_refreshing == true, store.refreshing.contains(id) {
+                Text(radarText("已显示上次读取结果，数据源更新完成后会自动更新。"))
+                    .font(.footnote).foregroundStyle(.secondary)
+            }
             Label(snapshot.date_str, systemImage: snapshot.isOutdated || snapshot.isFutureDated ? "clock.badge.exclamationmark" : "clock")
                 .font(.caption).foregroundStyle(snapshot.isOutdated || snapshot.isFutureDated ? Color.orange : BenchsideStyle.secondary)
             if snapshot.isFutureDated {
