@@ -244,11 +244,12 @@ struct CollieRadarView: View {
         }
 
         let tasks = snapshot.matchingActions(display: display, includeAllTasks: true)
-        let actions = display.page == .tasks || display.page == .projects
-            ? tasks : snapshot.matchingActions(display: display)
-        let keys = snapshot.matchingProjectNames(display: display)
-        let projects = snapshot.matchingProjects(display: display)
-            .enumerated().sorted { lhs, rhs in
+        let actions = display.page == .actions ? snapshot.matchingActions(display: display) : tasks
+        let activity = snapshot.matchingProjects(display: display, matchingTasks: tasks)
+        let keys = display.page == .projects
+            ? snapshot.matchingProjectNames(display: display, matchingTasks: tasks, matchingActivity: activity) : []
+        let statuses = snapshot.taskStatusesByProject(actions: tasks, activity: activity)
+        let projects = activity.enumerated().sorted { lhs, rhs in
                 if display.newestFirst, lhs.element.timestamp != rhs.element.timestamp {
                     return lhs.element.timestamp > rhs.element.timestamp
                 }
@@ -290,7 +291,7 @@ struct CollieRadarView: View {
             taskSection(radarText("任务列表"), actions: tasks, snapshot: snapshot, display: display)
         }
         if display.page == .projects {
-            groupedProjects(snapshot, keys: keys, actions: actions, display: display)
+            groupedProjects(snapshot, keys: keys, actions: actions, statuses: statuses, display: display)
         }
         if display.page == .overview, display.showActivity,
            snapshot.tasks == nil || !snapshot.projects.isEmpty {
@@ -300,7 +301,7 @@ struct CollieRadarView: View {
                 ForEach(Array(projects.enumerated()), id: \.offset) { _, project in
                     VStack(alignment: .leading, spacing: 6) {
                         Text(project.name).font(.headline)
-                        if display.showStatus { projectTaskStatuses(snapshot, key: project.path, display: display) }
+                        if display.showStatus { projectTaskStatuses(statuses[project.path] ?? []) }
                         Text(project.message).font(.subheadline).foregroundStyle(.secondary)
                         Text(Date(timeIntervalSince1970: project.timestamp), style: .date)
                             .font(.caption).foregroundStyle(.secondary)
@@ -314,7 +315,8 @@ struct CollieRadarView: View {
     }
 
     private func groupedProjects(_ snapshot: CollieRadarSnapshot, keys: [String],
-                                 actions: [CollieRadarSnapshot.Action], display: CollieRadarDisplay) -> some View {
+                                 actions: [CollieRadarSnapshot.Action], statuses: [String: [String]],
+                                 display: CollieRadarDisplay) -> some View {
         let grouped = Dictionary(grouping: actions, by: \.project)
         let activity = Dictionary(snapshot.projects.map { ($0.path, $0) },
                                   uniquingKeysWith: { lhs, rhs in lhs.timestamp >= rhs.timestamp ? lhs : rhs })
@@ -323,7 +325,7 @@ struct CollieRadarView: View {
             ForEach(keys, id: \.self) { key in
                 VStack(alignment: .leading, spacing: 12) {
                     Text(snapshot.projectName(key)).font(.title3.bold())
-                    if display.showStatus { projectTaskStatuses(snapshot, key: key, display: display) }
+                    if display.showStatus { projectTaskStatuses(statuses[key] ?? []) }
                     if display.showActivity, let project = activity[key] {
                         Label(project.message, systemImage: "arrow.triangle.branch")
                             .font(.footnote).foregroundStyle(.secondary)
@@ -400,8 +402,7 @@ struct CollieRadarView: View {
     }
 
     @ViewBuilder
-    private func projectTaskStatuses(_ snapshot: CollieRadarSnapshot, key: String, display: CollieRadarDisplay) -> some View {
-        let statuses = snapshot.taskStatuses(for: key, display: display)
+    private func projectTaskStatuses(_ statuses: [String]) -> some View {
         if statuses.isEmpty { taskStatus("") }
         ForEach(statuses, id: \.self) { taskStatus($0) }
     }

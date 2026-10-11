@@ -185,25 +185,10 @@ final class CollieRadarStore {
                                  delegateQueue: nil)
         defer { session.invalidateAndCancel() }
         do {
-            var request = URLRequest(url: url)
-            request.setValue("application/json", forHTTPHeaderField: "Accept")
-            let (bytes, response) = try await session.bytes(for: request)
-            guard let response = response as? HTTPURLResponse else { throw CollieRadarError.invalidSnapshot }
-            guard (200...299).contains(response.statusCode) else { throw CollieRadarError.http(response.statusCode) }
-            if response.expectedContentLength > Int64(CollieRadarSnapshot.maximumBytes) {
-                throw CollieRadarError.tooLarge
-            }
-            var data = Data()
-            for try await byte in bytes {
-                try Task.checkCancellation()
-                guard data.count < CollieRadarSnapshot.maximumBytes else { throw CollieRadarError.tooLarge }
-                data.append(byte)
-                // Buffered byte iteration must not monopolize the main actor.
-                if data.count.isMultiple(of: 16_384) { await Task.yield() }
-            }
+            let (data, snapshot) = try await Self.download(url, session: session)
             try Task.checkCancellation()
             guard sourceRevisions[id, default: 0] == revision else { return }
-            try store(data, for: id)
+            try store(data, for: id, snapshot: snapshot)
         } catch {
             guard sourceRevisions[id, default: 0] == revision,
                   workbenches.contains(where: { $0.id == id }), !(error is CancellationError) else { return }
@@ -212,9 +197,31 @@ final class CollieRadarStore {
         }
     }
 
-    private func store(_ data: Data, for id: UUID) throws {
+    // Swift 6 nonisolated async work runs on the generic executor, not the UI actor.
+    // Keep the streaming size bound: data(for:) would buffer an unbounded response.
+    nonisolated static func download(_ url: URL, session: URLSession) async throws -> (Data, CollieRadarSnapshot) {
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        let (bytes, response) = try await session.bytes(for: request)
+        guard let response = response as? HTTPURLResponse else { throw CollieRadarError.invalidSnapshot }
+        guard (200...299).contains(response.statusCode) else { throw CollieRadarError.http(response.statusCode) }
+        if response.expectedContentLength > Int64(CollieRadarSnapshot.maximumBytes) {
+            throw CollieRadarError.tooLarge
+        }
+        var data = Data()
+        if response.expectedContentLength > 0 { data.reserveCapacity(Int(response.expectedContentLength)) }
+        for try await byte in bytes {
+            try Task.checkCancellation()
+            guard data.count < CollieRadarSnapshot.maximumBytes else { throw CollieRadarError.tooLarge }
+            data.append(byte)
+        }
+        try Task.checkCancellation()
+        return (data, try CollieRadarSnapshot.decode(data))
+    }
+
+    private func store(_ data: Data, for id: UUID, snapshot decoded: CollieRadarSnapshot? = nil) throws {
         guard workbenches.contains(where: { $0.id == id }) else { return }
-        let snapshot = try CollieRadarSnapshot.decode(data)
+        let snapshot = try decoded ?? CollieRadarSnapshot.decode(data)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         var excluded = directory
         var values = URLResourceValues()

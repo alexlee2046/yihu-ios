@@ -1,9 +1,44 @@
 import Foundation
 
+private final class RadarFixtureProtocol: URLProtocol, @unchecked Sendable {
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override func startLoading() {
+        let path = request.url!.path
+        let body = path == "/oversized" || path == "/streamed-oversized"
+            ? Data(count: CollieRadarSnapshot.maximumBytes + 1)
+            : Data(#"{"date_str":"2026-10-08 08:00","decisions":[],"active":[],"stale":[],"cold":[]}"#.utf8)
+        let headers = path == "/streamed-oversized" ? [:] : ["Content-Length": String(body.count)]
+        let response = HTTPURLResponse(url: request.url!, statusCode: path == "/unavailable" ? 503 : 200,
+                                       httpVersion: "HTTP/1.1", headerFields: headers)!
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: body)
+        client?.urlProtocolDidFinishLoading(self)
+    }
+    override func stopLoading() {}
+}
+
 @main
 struct CollieRadarModelChecks {
     @MainActor
-    static func main() throws {
+    static func main() async throws {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [RadarFixtureProtocol.self]
+        let session = URLSession(configuration: configuration)
+        defer { session.invalidateAndCancel() }
+        let (_, downloaded) = try await CollieRadarStore.download(URL(string: "https://fixture.invalid/valid")!, session: session)
+        precondition(downloaded.decisions.isEmpty)
+        for path in ["oversized", "streamed-oversized"] {
+            do {
+                _ = try await CollieRadarStore.download(URL(string: "https://fixture.invalid/\(path)")!, session: session)
+                preconditionFailure("Accepted oversized download")
+            } catch CollieRadarError.tooLarge { }
+        }
+        do {
+            _ = try await CollieRadarStore.download(URL(string: "https://fixture.invalid/unavailable")!, session: session)
+            preconditionFailure("Accepted failed feed")
+        } catch CollieRadarError.http(503) { }
+
         let fixture = """
         {"date_str":"2026-10-08 08:00","decisions":[{"project":"demo","status":"等你验收","title":"Original title","next":"Original next","url":"https://example.org/issues/1"}],"active":[{"name":"Demo project","path":"demo","timestamp":1780000000,"message":"A commit","age_hours":1}],"stale":[],"cold":[]}
         """
@@ -73,6 +108,47 @@ struct CollieRadarModelChecks {
         var actionOnly = snapshot
         actionOnly.active = []
         precondition(actionOnly.matchingProjectNames(display: display) == ["demo"])
+        // Shared presentation results must preserve the legacy per-card semantics.
+        var ledger = snapshot
+        ledger.tasks = (0..<2_000).map { index in
+            CollieRadarSnapshot.Action(project: "project-\(index % 40)",
+                status: ["等你验收", "进行中", "已完成", "搁置", "", " blocked "][index % 6],
+                title: "Task \(index)", next: "Next step", url: "", timestamp: Double(index),
+                id: "task-\(index)", priority: ["P0", "P1", "P2"][index % 3])
+        }
+        ledger.active = (0..<40).map { index in
+            CollieRadarSnapshot.Project(name: "Project \(index)", path: "project-\(index)",
+                timestamp: Double(index), message: "Activity", status: index.isMultiple(of: 2) ? "blocked" : nil)
+        }
+        var variations = [CollieRadarDisplay()]
+        for query in ["Task 1", "Activity", "no match"] {
+            var filter = CollieRadarDisplay(); filter.searchText = query; variations.append(filter)
+        }
+        var history = CollieRadarDisplay(); history.showHistory = true; variations.append(history)
+        var priority = CollieRadarDisplay(); priority.priority = "P0"; variations.append(priority)
+        var status = CollieRadarDisplay(); status.status = "进行中"; variations.append(status)
+        var project = CollieRadarDisplay(); project.project = "project-1"; variations.append(project)
+        for filter in variations {
+            let tasks = ledger.matchingActions(display: filter, includeAllTasks: true)
+            let activity = ledger.matchingProjects(display: filter, matchingTasks: tasks)
+            precondition(activity.map(\.path) == ledger.matchingProjects(display: filter).map(\.path))
+            let keys = ledger.matchingProjectNames(display: filter, matchingTasks: tasks, matchingActivity: activity)
+            precondition(keys == ledger.matchingProjectNames(display: filter))
+            let statuses = ledger.taskStatusesByProject(actions: tasks, activity: activity)
+            for key in keys {
+                precondition((statuses[key] ?? []) == ledger.taskStatuses(for: key, display: filter))
+            }
+        }
+        let start = Date()
+        let perCard = ledger.projectNames.map { ledger.taskStatuses(for: $0, display: CollieRadarDisplay()) }
+        let perCardTime = Date().timeIntervalSince(start)
+        let sharedStart = Date()
+        let sharedTasks = ledger.matchingActions(display: CollieRadarDisplay(), includeAllTasks: true)
+        let sharedActivity = ledger.matchingProjects(display: CollieRadarDisplay(), matchingTasks: sharedTasks)
+        let shared = ledger.taskStatusesByProject(actions: sharedTasks, activity: sharedActivity)
+        precondition(perCard == ledger.projectNames.map { shared[$0] ?? [] })
+        print(String(format: "Synthetic 2000-task/40-project status presentation: per-card %.1f ms, shared %.1f ms",
+                     perCardTime * 1000, Date().timeIntervalSince(sharedStart) * 1000))
         let legacyDisplay = try JSONDecoder().decode(CollieRadarDisplay.self, from: Data(#"{"page":"overview","project":"","compact":false,"showNext":true,"showStatus":true,"showActivity":true,"newestFirst":true}"#.utf8))
         precondition(legacyDisplay.searchText == nil)
         precondition(CollieRadarFeed.validate("https://example.org/pm/radar.json") != nil)

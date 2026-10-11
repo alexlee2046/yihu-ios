@@ -23,8 +23,8 @@ struct CollieRadarNotificationEvent: Equatable, Sendable {
 }
 
 /// The portable JSON produced by `pm-radar --json`. Task text stays verbatim.
-struct CollieRadarSnapshot: Codable {
-    struct Action: Codable, Identifiable {
+struct CollieRadarSnapshot: Codable, Sendable {
+    struct Action: Codable, Identifiable, Sendable {
         var project: String
         var status: String?
         var title: String
@@ -38,7 +38,7 @@ struct CollieRadarSnapshot: Codable {
         var window_status: String? = nil
     }
 
-    struct Project: Codable {
+    struct Project: Codable, Sendable {
         var name: String
         var path: String
         var timestamp: Double
@@ -72,10 +72,20 @@ struct CollieRadarSnapshot: Codable {
 
     func taskStatuses(for key: String, display: CollieRadarDisplay? = nil) -> [String] {
         let records = display.map { matchingActions(display: $0, includeAllTasks: true) } ?? allTasks
-        let activity = display.map { matchingProjects(display: $0) } ?? projects
+        let activity = display.map { matchingProjects(display: $0, matchingTasks: records) } ?? projects
         let explicit = activity.filter { $0.path == key }.compactMap(\.status)
         return Array(Set(explicit + records.filter { $0.project == key }.compactMap(\.status)))
             .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.sorted()
+    }
+
+    /// Build once per filtered presentation instead of filtering/sorting the ledger per card.
+    func taskStatusesByProject(actions: [Action], activity: [Project]) -> [String: [String]] {
+        var statuses: [String: Set<String>] = [:]
+        for (key, status) in actions.map({ ($0.project, $0.status) }) + activity.map({ ($0.path, $0.status) }) {
+            guard let status, !status.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { continue }
+            statuses[key, default: []].insert(status)
+        }
+        return statuses.mapValues { $0.sorted() }
     }
 
     func sortedProjectNames(newestFirst: Bool) -> [String] {
@@ -123,8 +133,8 @@ struct CollieRadarSnapshot: Codable {
         }.map(\.element)
     }
 
-    func matchingProjects(display: CollieRadarDisplay) -> [Project] {
-        let actionProjects = Set(matchingActions(display: display, includeAllTasks: true).map(\.project))
+    func matchingProjects(display: CollieRadarDisplay, matchingTasks: [Action]? = nil) -> [Project] {
+        let actionProjects = Set((matchingTasks ?? matchingActions(display: display, includeAllTasks: true)).map(\.project))
         return projects.filter {
             (display.project.isEmpty || $0.path == display.project) &&
             (display.showHistory == true || !isHistorical($0.status)) &&
@@ -134,8 +144,11 @@ struct CollieRadarSnapshot: Codable {
         }
     }
 
-    func matchingProjectNames(display: CollieRadarDisplay) -> [String] {
-        let keys = Set(matchingActions(display: display, includeAllTasks: true).map(\.project) + matchingProjects(display: display).map(\.path))
+    func matchingProjectNames(display: CollieRadarDisplay, matchingTasks: [Action]? = nil,
+                              matchingActivity: [Project]? = nil) -> [String] {
+        let tasks = matchingTasks ?? matchingActions(display: display, includeAllTasks: true)
+        let activity = matchingActivity ?? matchingProjects(display: display, matchingTasks: tasks)
+        let keys = Set(tasks.map(\.project) + activity.map(\.path))
         return sortedProjectNames(newestFirst: display.newestFirst).filter { keys.contains($0) }
     }
 
