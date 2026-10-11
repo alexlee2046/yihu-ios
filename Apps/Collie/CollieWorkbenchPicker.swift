@@ -52,6 +52,10 @@ struct CollieWorkbenchShortcutBar: View {
                             }
                             .buttonStyle(.plain)
                             .id(item.id)
+                            // A shortcut is one action, not separate text and
+                            // selection-decoration accessibility hit targets.
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(item.name)
                             .accessibilityIdentifier("collie-shortcut-" + item.id)
                             .accessibilityAddTraits(selected == item.id ? .isSelected : [])
                         }
