@@ -9,6 +9,7 @@ import argparse
 from datetime import datetime, timezone, timedelta
 from email.header import decode_header, make_header
 import hashlib
+import hmac
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import os
@@ -18,7 +19,9 @@ import shutil
 import signal
 import subprocess
 import sys
+import time
 import uuid
+from radar_notifications import NotificationError
 
 MAX_BYTES = 2 * 1024 * 1024
 WAITING = {"等你决策", "等你验收"}
@@ -134,7 +137,7 @@ def read_ledger():
 
 
 TARGET_QUERY = """query($id:ID!) { node(id:$id) { ... on ProjectV2Item {
- id fullDatabaseId isArchived project { id public viewerCanUpdate }
+ id fullDatabaseId isArchived updatedAt project { id public viewerCanUpdate }
  content { __typename ... on Issue { id title url repository { isPrivate viewerPermission } }
  ... on DraftIssue { id title body } }
  fieldValues(first:30) { nodes {
@@ -147,7 +150,7 @@ COMMENTS_QUERY = """query($id:ID!, $after:String) { node(id:$id) { ... on Issue 
 } } }"""
 
 
-def target_item(ident, epoch):
+def target_item(ident, epoch, notification=False):
     executable = shutil.which("req")
     if not executable:
         raise RuntimeError("req unavailable")
@@ -182,6 +185,9 @@ def target_item(ident, epoch):
     target["eligible"] = eligible
     revision = dict(target, archived=node["isArchived"], kind=kind, content_id=content["id"])
     target["version"] = hashlib.sha256(json.dumps(revision, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+    if notification:
+        content = dict(content, notification_revision=node.get("updatedAt"),
+                       notification_source=hashlib.sha256(node["project"]["id"].encode()).hexdigest())
     return target, content, eligible
 
 
@@ -315,7 +321,70 @@ def private_proxy(tailnet_host):
         return False
 
 
-def serve(port, tailnet_host, writer_user_id):
+def notification_scope():
+    executable = shutil.which("req")
+    if not executable:
+        raise ReplyError("notifications_unavailable", 503)
+    config_path = os.environ.get("REQ_CONFIG") or str(Path(executable).resolve().parent / "config.json")
+    config = json.loads(Path(config_path).read_text())
+    ident = config["project"]["id"]
+    node = graphql("query($id:ID!){node(id:$id){... on ProjectV2{id public}}}", {"id": ident})["node"]
+    if not node or node.get("id") != ident or node.get("public") is not False:
+        raise ReplyError("forbidden", 403)
+    return hashlib.sha256(ident.encode()).hexdigest()
+
+
+def notification_operation(payload, registry, owner):
+    if registry is None:
+        raise ReplyError("notifications_unavailable", 503)
+    operation = payload.get("operation")
+    if operation == "notification_status":
+        result = registry.status()
+        return dict(result, sourceToken=notification_scope()) if result["available"] else result
+    if operation == "notification_register":
+        if payload.get("sourceToken") != notification_scope():
+            raise ReplyError("forbidden", 403)
+        return registry.register(owner, payload.get("installationId"), payload.get("sourceToken"), payload.get("deviceToken"))
+    if operation == "notification_unregister":
+        return registry.unregister(owner, payload.get("subscriptionId"))
+    if operation == "notification_resolve":
+        result = registry.resolve(owner, payload.get("subscriptionId"), payload.get("eventKey"))
+        latest, content, eligible = target_item(result["itemId"], "notification", notification=True)
+        revision = hashlib.sha256(json.dumps([latest["id"], latest["status"], content["notification_revision"]], separators=(",", ":")).encode()).hexdigest()
+        if not eligible or content["notification_source"] != result["sourceToken"] or revision != result["itemVersion"]:
+            raise ReplyError("event_unavailable", 410)
+        # Resolution remains read-only and revalidates current private membership.
+        return dict(result, target=latest)
+    raise ReplyError("invalid_request", 400)
+
+
+def ingest_notification(body, signature, registry, event_key):
+    if registry is None or event_key is None or len(event_key) < 32:
+        raise ReplyError("notifications_unavailable", 503)
+    expected = hmac.new(event_key, body, hashlib.sha256).hexdigest()
+    if not isinstance(signature, str) or not hmac.compare_digest(expected, signature):
+        raise ReplyError("forbidden", 403)
+    payload = json.loads(body)
+    if not isinstance(payload, dict) or set(payload) != {"operation", "id", "previous_status", "status", "item_updated_at", "source", "timestamp"}:
+        raise ReplyError("invalid_request", 400)
+    stamp = payload["timestamp"]
+    if payload["operation"] != "notification_event" or type(stamp) is not int or abs(time.time() - stamp) > 120:
+        raise ReplyError("invalid_request", 400)
+    ident = payload["id"]
+    if not isinstance(ident, str) or not re.fullmatch(r"PVTI_[A-Za-z0-9_-]{1,120}", ident):
+        raise ReplyError("invalid_request", 400)
+    # Never trust a signed event as authority to leak public/foreign items.
+    latest, content, eligible = target_item(ident, "notification", notification=True)
+    scope, updated = content["notification_source"], content["notification_revision"]
+    if not eligible or not updated or latest["status"] != payload["status"] or updated != payload["item_updated_at"] or payload["source"] != scope:
+        raise ReplyError("event_unavailable", 410)
+    revision = hashlib.sha256(json.dumps([ident, payload["status"], updated], separators=(",", ":")).encode()).hexdigest()
+    event = notification_transition({"id": ident, "archived": False, "status": payload["previous_status"]},
+                                    {"id": ident, "archived": False, "status": latest["status"], "version": revision})
+    return registry.dispatch(event, scope) if event else {"outcome": "ignored"}
+
+
+def serve(port, tailnet_host, writer_user_id, notifications=None, notification_user_id=None, event_key=None):
     epoch, attempts = str(uuid.uuid4()), {}
     allowed_hosts = {f"127.0.0.1:{port}", f"localhost:{port}", tailnet_host, tailnet_host.removesuffix(":443")}
     allowed_origins = {"https://" + tailnet_host, "https://" + tailnet_host.removesuffix(":443")}
@@ -363,8 +432,14 @@ def serve(port, tailnet_host, writer_user_id):
             self.read(head=True)
 
         def do_POST(self):
-            # Native-only. Browser Origin/Fetch headers are rejected even on the Collie origin.
-            if not self.valid_route() or self.headers.get("Origin") is not None or self.headers.get("Sec-Fetch-Site") is not None or self.headers.get("X-Yihu-Reply") != "1" or not writer_allowed(self.headers, writer_user_id):
+            # Notification identity/ingress is separate from business reply authority.
+            event_signature = self.headers.get("X-Yihu-Event")
+            notification_intent = self.headers.get("X-Yihu-Notification") == "1"
+            if not self.valid_route() or self.headers.get("Origin") is not None or self.headers.get("Sec-Fetch-Site") is not None:
+                self.send_json({"error": "forbidden"}, 403)
+                return
+            if event_signature is None and not (writer_allowed(self.headers, notification_user_id) if notification_intent else
+                                               self.headers.get("X-Yihu-Reply") == "1" and writer_allowed(self.headers, writer_user_id)):
                 self.send_json({"error": "forbidden"}, 403)
                 return
             try:
@@ -372,15 +447,26 @@ def serve(port, tailnet_host, writer_user_id):
                 if self.headers.get("Transfer-Encoding") or not 0 < length <= 20_000 or self.headers.get("Content-Type", "").split(";")[0].strip().lower() != "application/json":
                     raise ReplyError("invalid_request", 400)
                 self.connection.settimeout(10)
-                payload = json.loads(self.rfile.read(length))
+                body = self.rfile.read(length)
+                if len(body) != length:
+                    raise ReplyError("invalid_request", 400)
+                if event_signature is not None:
+                    self.send_json(ingest_notification(body, event_signature, notifications, event_key))
+                    return
+                payload = json.loads(body)
                 if not isinstance(payload, dict):
                     raise ReplyError("invalid_request", 400)
-                self.send_json(reply(payload, writer_user_id, epoch, attempts))
+                if notification_intent:
+                    self.send_json(notification_operation(payload, notifications, str(notification_user_id)))
+                else:
+                    self.send_json(reply(payload, writer_user_id, epoch, attempts))
             except ReplyError as error:
                 data = {"error": error.code}
                 if error.target:
                     data["target"] = error.target
                 self.send_json(data, error.status)
+            except NotificationError as error:
+                self.send_json({"error": str(error)}, 409)
             except READ_ERRORS:
                 self.send_json({"error": "unavailable"}, 503)
 
