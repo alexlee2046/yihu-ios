@@ -22,6 +22,7 @@ targets:
       - Shared/CollieShareInbox.swift
       - Shared/HermesTaskAttributes.swift
       - Shared/YihuWatchSnapshot.swift
+      - Shared/YihuWatchDraft.swift
     dependencies:
       - target: CollieShare
       - target: CollieWidgets
@@ -77,6 +78,7 @@ targets:
     sources:
       - Apps/YihuWatch
       - Shared/YihuWatchSnapshot.swift
+      - Shared/YihuWatchDraft.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).watch

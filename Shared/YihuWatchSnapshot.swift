@@ -7,6 +7,8 @@ struct YihuWatchSnapshot: Codable {
         var workbench: String
         var task: String
         var sourceToken: String? = nil
+        var taskToken: String? = nil
+        var canDraft: Bool? = nil
         var title: String
         var project: String
         var status: String
@@ -27,6 +29,7 @@ struct YihuWatchSnapshot: Codable {
     var hasSource: Bool
     var sourceDate: Date? = nil
     var readFailed = false
+    var phoneNotificationState: String? = nil
 
     var stale: Bool {
         guard let sourceDate else { return true }
@@ -40,7 +43,7 @@ struct YihuWatchSnapshot: Codable {
         let value = try JSONDecoder().decode(Self.self, from: data)
         guard value.items.count <= 200, Set(value.items.map(\.id)).count == value.items.count,
               value.items.allSatisfy({ UUID(uuidString: $0.workbench) != nil && !$0.task.isEmpty &&
-                  ($0.sourceToken.map { token in token.count == 64 && token.allSatisfy({ "0123456789abcdef".contains($0) }) } ?? true) &&
+                  ([$0.sourceToken, $0.taskToken].allSatisfy { token in token.map { $0.count == 64 && $0.allSatisfy({ "0123456789abcdef".contains($0) }) } ?? true }) &&
                   ["等你决策", "等你验收"].contains($0.status) }) else { throw CocoaError(.fileReadCorruptFile) }
         return value
     }

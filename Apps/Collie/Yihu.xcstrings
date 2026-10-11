@@ -1,6 +1,7 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
+    "编辑并确认手机草稿": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Edit and confirm phone draft"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"编辑并确认手机草稿"}}}},
     "回复决策": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Reply to decision"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"回复决策"}}}},
     "提交验收反馈": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Send acceptance feedback"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"提交验收反馈"}}}},
     "丢弃未发送草稿": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Discard unsent draft"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"丢弃未发送草稿"}}}},

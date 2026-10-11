@@ -242,11 +242,22 @@ private struct CollieRootView: View {
             set: { if !$0 { selectionNotice = nil } }
         )) { Button(radarText("完成"), role: .cancel) { selectionNotice = nil } }
         message: { Text(selectionNotice ?? "") }
+        .onChange(of: notifications.status) { _, _ in watchLink.notificationStateChanged() }
         .onChange(of: watchHandoffBlocked) { _, blocked in if !blocked { openWatchTask() } }
         .onChange(of: radarPresentation.replyPresented) { _, shown in if !shown { openWatchTask() } }
         .onChange(of: watchLink.openRequest) { _, _ in openWatchTask() }
         .onChange(of: scenePhase) { _, phase in if phase == .active { openWatchTask() } }
         .task {
+            watchLink.phoneNotificationState = {
+                switch notifications.status {
+                case .enabled: "enabled"
+                case .authorizationDenied: "denied"
+                case .serviceUnavailable: "unsupported"
+                case .disabled: "disabled"
+                default: "unknown"
+                }
+            }
+            watchLink.canReceiveDraft = { UIApplication.shared.applicationState == .active && !watchHandoffBlocked }
             watchLink.bind(radar)
             let settings = self.settings
             let notifications = self.notifications

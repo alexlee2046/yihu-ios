@@ -48,12 +48,12 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
             message = ["kind": "open", "workbench": item.workbench, "task": item.task, "sourceToken": token]
         }
         let opening = item != nil
-        WCSession.default.sendMessage(message, replyHandler: { response in
+        WCSession.default.sendMessage(message, replyHandler: { [weak self] response in
             let queued = response["queued"] as? Bool == true
             Task { @MainActor [weak self] in
                 self?.notice = queued ? (opening ? "已请求手机接续，请解锁并打开一呼" : "已请求手机发送已有数据；刷新台账请在手机操作") : "手机未接受请求，请在手机继续"
             }
-        }, errorHandler: { _ in
+        }, errorHandler: { [weak self] _ in
             Task { @MainActor [weak self] in self?.notice = "手机暂不可达，请稍后重试" }
         })
     }
@@ -75,6 +75,15 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
 @main
 struct YihuWatchApp: App {
     @State private var link = YihuWatchLink()
+    private var notificationTitle: String {
+        switch link.snapshot?.phoneNotificationState {
+        case "enabled": "手机通知已开启；手表镜像需本人设置"
+        case "denied": "手机系统通知未授权"
+        case "unsupported": "当前手机服务不支持原生通知"
+        case "disabled": "手机通知未开启"
+        default: "手机通知能力未核实，请在手机检查"
+        }
+    }
     var body: some Scene {
         WindowGroup {
             NavigationStack {
@@ -85,6 +94,15 @@ struct YihuWatchApp: App {
                                 .foregroundStyle(link.connected ? Color.secondary : Color.orange)
                             if let notice = link.notice { Text(notice).font(.footnote) }
                             Button("同步手机已有数据") { link.request() }
+                            NavigationLink("通知状态与镜像") {
+                                List {
+                                    Text(notificationTitle)
+                                    Text("如手机已有通知可用，请在 iPhone 的 Watch App → 通知开启一呼镜像").font(.footnote)
+                                    Text("镜像需手机锁定、手表佩戴解锁及系统设置允许；是否送达以实机为准").font(.footnote)
+                                    Text("待决策／验收台账当前仅按手机刷新读取，未连接推送事件；不会用轮询伪装通知").font(.footnote)
+                                    Text("系统镜像的工作台通知仍走手机原权限与接续保护；没有手表独立推送或自动回复").font(.footnote)
+                                }.navigationTitle("通知")
+                            }
                         }
                         if let snapshot = link.snapshot {
                             if !snapshot.hasSource { Text("请先在手机配置或刷新需求台账") }
@@ -103,6 +121,9 @@ struct YihuWatchApp: App {
                                                 if let date = item.sourceDate { Text(date, style: .date); Text(date, style: .time) }
                                                 if item.stale { Label("数据过期或读取失败，请在手机刷新", systemImage: "clock.badge.exclamationmark").foregroundStyle(.orange) }
                                                 Button("转手机继续处理") { link.request(item) }
+                                                if item.canDraft == true, item.taskToken != nil {
+                                                    NavigationLink("语音／文字草稿") { YihuWatchDraftView(item: item) }
+                                                }
                                                 if let notice = link.notice { Text(notice).font(.footnote) }
                                                 Text("手表仅查看，不提交回复或改变状态").font(.footnote).foregroundStyle(.secondary)
                                             }.navigationTitle("事项详情")

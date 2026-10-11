@@ -42,6 +42,7 @@ struct CollieRadarView: View {
     let id: UUID
     @Bindable var presentation: CollieRadarPresentation
     @State private var replying: CollieRadarSnapshot.Action?
+    @State private var watchReplyAfterDismiss: CollieRadarSnapshot.Action?
 
     private var record: CollieRadarWorkbench? { store.workbenches.first { $0.id == id } }
 
@@ -106,7 +107,12 @@ struct CollieRadarView: View {
                 }
                 .sheet(isPresented: $presentation.configuring) { CollieRadarSettingsView(store: store, item: record) }
                 .onChange(of: replying?.id) { _, id in presentation.replyPresented = id != nil }
-                .sheet(item: $presentation.watchTask) { action in
+                .sheet(item: $presentation.watchTask, onDismiss: {
+                    if let action = watchReplyAfterDismiss {
+                        watchReplyAfterDismiss = nil
+                        replying = action
+                    }
+                }) { action in
                     NavigationStack {
                         Form {
                             Text(action.title).font(.headline)
@@ -114,6 +120,12 @@ struct CollieRadarView: View {
                             Text(action.next.isEmpty ? radarText("下一步待补") : action.next)
                             if let url = URL(string: action.url), url.scheme == "https" {
                                 Link(radarText("原条目"), destination: url)
+                            }
+                            if store.pendingReply(id)?.id == action.id {
+                                Button(radarText("编辑并确认手机草稿")) {
+                                    watchReplyAfterDismiss = action
+                                    presentation.watchTask = nil
+                                }
                             }
                             Button(radarText("返回台账继续处理")) { presentation.watchTask = nil }
                         }.navigationTitle(radarText("手表接续事项"))
