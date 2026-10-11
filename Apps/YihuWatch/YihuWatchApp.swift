@@ -147,15 +147,21 @@ struct YihuWatchApp: App {
                                                 Text(item.next.isEmpty ? "下一步待补" : item.next)
                                                 if let date = item.sourceDate { Text(date, style: .date); Text(date, style: .time) }
                                                 if item.stale { Label("数据过期或读取失败，请在手机刷新", systemImage: "clock.badge.exclamationmark").foregroundStyle(.orange) }
-                                                Button("转手机继续处理") { link.request(item) }
-                                                if item.canDraft == true, item.taskToken != nil {
-                                                    NavigationLink("语音／文字草稿") { YihuWatchDraftView(item: item, link: link) }
-                                                } else {
-                                                    Text("草稿传输不可用；请在手机检查数据源并刷新，再同步到手表")
-                                                        .font(.footnote).foregroundStyle(.secondary)
+                                                Section("手腕微审批") {
+                                                    YihuWatchHoldToApproveView(item: item)
+                                                }
+
+                                                Section("处理与草稿") {
+                                                    Button("转手机继续处理") { link.request(item) }
+                                                    if item.canDraft == true, item.taskToken != nil {
+                                                        NavigationLink("语音／文字草稿") { YihuWatchDraftView(item: item, link: link) }
+                                                    } else {
+                                                        Text("草稿传输不可用；请在手机检查数据源并刷新，再同步到手表")
+                                                            .font(.footnote).foregroundStyle(.secondary)
+                                                    }
                                                 }
                                                 if let notice = link.notice { Text(notice).font(.footnote) }
-                                                Text("手表不提交回复或改变状态；草稿仅传到手机").font(.footnote).foregroundStyle(.secondary)
+                                                Text("手表长按提交审批提案至手机草稿箱；最终写入需手机核对").font(.footnote).foregroundStyle(.secondary)
                                             }.navigationTitle("事项详情")
                                         } label: {
                                             VStack(alignment: .leading) {
