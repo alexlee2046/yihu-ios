@@ -9,7 +9,7 @@ settings:
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: ""
     MARKETING_VERSION: "0.1.0"
-    CURRENT_PROJECT_VERSION: 1
+    CURRENT_PROJECT_VERSION: 2
     YIHU_BUNDLE_ID: org.example.yihu
     YIHU_APP_GROUP: group.org.example.yihu
     COLLIE_APNS_ENVIRONMENT: development
