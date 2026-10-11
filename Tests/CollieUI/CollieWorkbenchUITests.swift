@@ -89,7 +89,18 @@ final class CollieWorkbenchUITests: XCTestCase {
         let settings = app.buttons["collie-connection-settings"]
         XCTAssertTrue(settings.isHittable)
         settings.tap()
-        XCTAssertTrue(app.descendants(matching: .any)["collie-native-notifications-status"].waitForExistence(timeout: 5))
+        attachWorkbenchScreen(name: "settings-after-open")
+        let notificationStatus = app.descendants(matching: .any)["collie-native-notifications-status"]
+        // List cells outside the viewport are lazy at accessibility sizes.
+        // Scroll the settings list, without relaxing the status assertion.
+        let settingsList = app.collectionViews.firstMatch
+        XCTAssertTrue(settingsList.waitForExistence(timeout: 5))
+        for _ in 0..<3 where !notificationStatus.exists {
+            settingsList.swipeUp()
+        }
+        attachWorkbenchScreen(name: "settings-notification-status")
+        if !notificationStatus.exists { print("Synthetic settings hierarchy: \(app.debugDescription)") }
+        XCTAssertTrue(notificationStatus.waitForExistence(timeout: 5))
         app.terminate()
         app.launch()
         XCTAssertTrue(all.waitForExistence(timeout: 15))
