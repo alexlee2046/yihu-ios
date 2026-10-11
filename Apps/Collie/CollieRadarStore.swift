@@ -50,6 +50,23 @@ final class CollieRadarStore {
         }
     }
 
+    func pendingReply(_ id: UUID) -> CollieRadarSnapshot.Action? {
+        let file = CollieRadarPendingReply.file(id)
+        guard FileManager.default.fileExists(atPath: file.path) else { return nil }
+        do {
+            let handle = try FileHandle(forReadingFrom: file)
+            defer { try? handle.close() }
+            let data = try handle.read(upToCount: 40_001) ?? Data()
+            guard data.count <= 40_000 else { throw CollieRadarError.tooLarge }
+            let saved = try JSONDecoder().decode(CollieRadarPendingReply.self, from: data)
+            return CollieRadarSnapshot.Action(project: "", status: saved.target.status, title: saved.target.title,
+                                             next: saved.target.next, url: saved.target.url, id: saved.target.id)
+        } catch {
+            // Still open the recovery sheet, which preserves the corrupt record and blocks writes.
+            return CollieRadarSnapshot.Action(project: "", status: nil, title: "", next: "", url: "", id: "")
+        }
+    }
+
     var ordered: [CollieRadarWorkbench] {
         workbenches.filter(\.favorite) + workbenches.filter { !$0.favorite }
     }
@@ -76,6 +93,10 @@ final class CollieRadarStore {
         }
         let previous = workbenches[index]
         if previous.source.trimmingCharacters(in: .whitespacesAndNewlines) != item.source {
+            guard !FileManager.default.fileExists(atPath: CollieRadarPendingReply.file(item.id).path) else {
+                errors[item.id] = NSLocalizedString("请先处理回复草稿或待核结果，再更换数据源。", tableName: "Yihu", comment: "")
+                return false
+            }
             // Never commit a new source while its old cache can reappear on launch.
             do {
                 let url = cacheURL(item.id)
@@ -98,6 +119,10 @@ final class CollieRadarStore {
 
     func remove(_ id: UUID) {
         guard configurationError == nil else { return }
+        guard !FileManager.default.fileExists(atPath: CollieRadarPendingReply.file(id).path) else {
+            errors[id] = NSLocalizedString("请先处理回复草稿或待核结果，再删除工作台。", tableName: "Yihu", comment: "")
+            return
+        }
         workbenches.removeAll { $0.id == id }
         snapshots[id] = nil
         errors[id] = nil

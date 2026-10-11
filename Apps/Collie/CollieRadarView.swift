@@ -39,6 +39,7 @@ struct CollieRadarView: View {
     @Bindable var store: CollieRadarStore
     let id: UUID
     @Bindable var presentation: CollieRadarPresentation
+    @State private var replying: CollieRadarSnapshot.Action?
 
     private var record: CollieRadarWorkbench? { store.workbenches.first { $0.id == id } }
 
@@ -78,6 +79,10 @@ struct CollieRadarView: View {
                                 Label(error, systemImage: "exclamationmark.triangle")
                                     .foregroundStyle(.orange).font(.footnote)
                             }
+                            if let pending = store.pendingReply(id) {
+                                Button(radarText("恢复回复草稿／核实结果")) { replying = pending }
+                                    .buttonStyle(.borderedProminent)
+                            }
                             if let snapshot = store.snapshots[id] {
                                 snapshotContent(snapshot, display: record.display)
                             } else {
@@ -98,6 +103,9 @@ struct CollieRadarView: View {
                     .refreshable { if !record.source.isEmpty { await store.refresh(id) } }
                 }
                 .sheet(isPresented: $presentation.configuring) { CollieRadarSettingsView(store: store, item: record) }
+                .sheet(item: $replying) { action in
+                    CollieRadarReplyView(store: store, workbenchID: id, source: record.source, action: action)
+                }
             }
         }
         .tint(BenchsideStyle.accent)
@@ -394,6 +402,14 @@ struct CollieRadarView: View {
                 if action.next.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     Text(radarText("下一步待补")).font(.subheadline).foregroundStyle(.orange)
                 } else { Text(action.next).font(.subheadline).foregroundStyle(.secondary) }
+            }
+            if ["等你决策", "等你验收"].contains(action.status ?? ""), action.id != nil {
+                Button(radarText(action.status == "等你决策" ? "回复决策" : "提交验收反馈")) { replying = action }
+                    .disabled(snapshot.reply_supported != true || record?.source.isEmpty != false)
+                if snapshot.reply_supported != true {
+                    Text(radarText("当前数据源或身份未开放回复权限。"))
+                        .font(.caption).foregroundStyle(.secondary)
+                }
             }
             DisclosureGroup(radarText("详情")) {
                 VStack(alignment: .leading, spacing: 8) {

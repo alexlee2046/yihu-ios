@@ -3,7 +3,7 @@ import Observation
 
 /// The portable JSON produced by `pm-radar --json`. Task text stays verbatim.
 struct CollieRadarSnapshot: Codable {
-    struct Action: Codable {
+    struct Action: Codable, Identifiable {
         var project: String
         var status: String?
         var title: String
@@ -33,6 +33,7 @@ struct CollieRadarSnapshot: Codable {
     var cold: [Project]
     // New ledger exports contain all tasks; legacy snapshots remain compatible.
     var tasks: [Action]? = nil
+    var reply_supported: Bool? = nil
     var allTasks: [Action] { tasks ?? decisions }
 
     var projects: [Project] { active + stale + cold }
@@ -208,6 +209,30 @@ enum CollieRadarTaskState {
         case .paused: return "pause.circle"
         case .unknown: return "questionmark.circle"
         }
+    }
+}
+
+struct CollieRadarReplyTarget: Codable {
+    var epoch: String
+    var id: String
+    var title: String
+    var url: String
+    var status: String
+    var next: String
+    var version: String
+}
+
+struct CollieRadarPendingReply: Codable {
+    var source: String
+    var target: CollieRadarReplyTarget
+    var text: String
+    var requestID: UUID
+    var submitted: Bool? = nil
+
+    static func file(_ id: UUID) -> URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("Radar", isDirectory: true)
+            .appendingPathComponent("pending-" + id.uuidString + ".json")
     }
 }
 
