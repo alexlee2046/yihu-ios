@@ -297,6 +297,8 @@ struct CollieRadarWorkbench: Codable, Identifiable, Equatable {
     var name = "PM Radar"
     var source = ""
     var watchSourceIdentity: UUID? = nil
+    // Local phone drafts do not grant ledger-write authority; sending revalidates separately.
+    var supportsWatchDrafts: Bool { CollieRadarFeed.validate(source) != nil }
     var favorite = false
     var display = CollieRadarDisplay()
 }

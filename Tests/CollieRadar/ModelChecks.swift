@@ -152,6 +152,12 @@ struct CollieRadarModelChecks {
         let legacyDisplay = try JSONDecoder().decode(CollieRadarDisplay.self, from: Data(#"{"page":"overview","project":"","compact":false,"showNext":true,"showStatus":true,"showActivity":true,"newestFirst":true}"#.utf8))
         precondition(legacyDisplay.searchText == nil)
         precondition(CollieRadarFeed.validate("https://example.org/pm/radar.json") != nil)
+        var draftWorkbench = CollieRadarWorkbench()
+        precondition(!draftWorkbench.supportsWatchDrafts)
+        draftWorkbench.source = "https://example.org/pm/radar.json"
+        precondition(draftWorkbench.supportsWatchDrafts, "Local drafts must not depend on ledger-write permission")
+        draftWorkbench.source = "http://example.org/pm/radar.json"
+        precondition(!draftWorkbench.supportsWatchDrafts)
         for invalid in ["http://example.org/radar.json", "https://user:secret@example.org/",
                         "https://example.org/?token=secret", "https://example.org/#secret",
                         "https://example.org:0/radar.json", "https:///radar.json"] {

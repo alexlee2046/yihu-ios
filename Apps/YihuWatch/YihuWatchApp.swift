@@ -136,9 +136,12 @@ struct YihuWatchApp: App {
                                                 Button("转手机继续处理") { link.request(item) }
                                                 if item.canDraft == true, item.taskToken != nil {
                                                     NavigationLink("语音／文字草稿") { YihuWatchDraftView(item: item) }
+                                                } else {
+                                                    Text("草稿传输不可用；请在手机检查数据源并刷新，再同步到手表")
+                                                        .font(.footnote).foregroundStyle(.secondary)
                                                 }
                                                 if let notice = link.notice { Text(notice).font(.footnote) }
-                                                Text("手表仅查看，不提交回复或改变状态").font(.footnote).foregroundStyle(.secondary)
+                                                Text("手表不提交回复或改变状态；草稿仅传到手机").font(.footnote).foregroundStyle(.secondary)
                                             }.navigationTitle("事项详情")
                                         } label: {
                                             VStack(alignment: .leading) {

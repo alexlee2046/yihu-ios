@@ -44,7 +44,7 @@ final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
             for task in snapshot.allTasks where ["等你决策", "等你验收"].contains(task.status ?? "") {
                 guard let id = task.id, !id.isEmpty else { continue }
                 rows.append(.init(workbench: workbench.id.uuidString, task: id, sourceToken: Self.sourceToken(workbench), taskToken: Self.taskToken(task),
-                    canDraft: snapshot.reply_supported == true && CollieRadarFeed.validate(workbench.source) != nil,
+                    canDraft: workbench.supportsWatchDrafts,
                     title: String(task.title.prefix(160)), project: String(task.project.prefix(80)),
                     status: task.status ?? "", priority: task.priority ?? "", next: String(task.next.prefix(600)),
                     sourceDate: snapshot.generatedAt, readFailed: store.errors[workbench.id] != nil))
@@ -68,7 +68,7 @@ final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
         guard let store, let draft = try? YihuWatchDraft.decode(data),
               let id = UUID(uuidString: draft.workbench),
               let bench = store.workbenches.first(where: { $0.id == id }),
-              CollieRadarFeed.validate(bench.source) != nil,
+              bench.supportsWatchDrafts,
               Self.sourceToken(bench) == draft.sourceToken,
               let task = store.snapshots[id]?.allTasks.first(where: { $0.id == draft.task }),
               ["等你决策", "等你验收"].contains(task.status ?? ""),
