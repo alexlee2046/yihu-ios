@@ -56,8 +56,9 @@ struct CollieWorkbenchShortcutBar: View {
                             // selection-decoration accessibility hit targets.
                             .accessibilityElement(children: .ignore)
                             .accessibilityLabel(item.name)
+                            .accessibilityAction { select(item.id) }
                             .accessibilityIdentifier("collie-shortcut-" + item.id)
-                            .accessibilityAddTraits(selected == item.id ? .isSelected : [])
+                            .accessibilityAddTraits(selected == item.id ? [.isButton, .isSelected] : .isButton)
                         }
                     }
                 }
