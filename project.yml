@@ -21,9 +21,12 @@ targets:
       - Apps/Collie
       - Shared/CollieShareInbox.swift
       - Shared/HermesTaskAttributes.swift
+      - Shared/YihuWatchSnapshot.swift
     dependencies:
       - target: CollieShare
       - target: CollieWidgets
+      - target: YihuWatch
+        embed: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID)
@@ -67,6 +70,21 @@ targets:
         INFOPLIST_FILE: Extensions/CollieWidgets/Info.plist
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
+  YihuWatch:
+    type: application
+    platform: watchOS
+    deploymentTarget: "11.0"
+    sources:
+      - Apps/YihuWatch
+      - Shared/YihuWatchSnapshot.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).watch
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_WKApplication: YES
+        INFOPLIST_KEY_WKCompanionAppBundleIdentifier: $(YIHU_BUNDLE_ID)
+        INFOPLIST_KEY_CFBundleDisplayName: 一呼
+        SKIP_INSTALL: YES
   CollieUITests:
     type: bundle.ui-testing
     platform: iOS
@@ -79,6 +97,12 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).uitests
         GENERATE_INFOPLIST_FILE: YES
 schemes:
+  YihuWatch:
+    build:
+      targets:
+        YihuWatch: all
+    run:
+      config: Debug
   CollieiOS:
     build:
       targets:

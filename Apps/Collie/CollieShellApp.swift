@@ -111,6 +111,8 @@ private struct CollieRootView: View {
     let voiceNotes: CollieVoiceNotesStore
     @State private var connection = CollieConnectionRuntime()
     @State private var radar = CollieRadarStore()
+    @State private var watchLink = CollieWatchPhoneBridge.shared
+    @Environment(\.scenePhase) private var scenePhase
     @State private var shortcuts = CollieWorkbenchShortcuts()
     @State private var shellPresentation = CollieShellPresentation()
     @State private var radarPresentation = CollieRadarPresentation()
@@ -240,7 +242,11 @@ private struct CollieRootView: View {
             set: { if !$0 { selectionNotice = nil } }
         )) { Button(radarText("完成"), role: .cancel) { selectionNotice = nil } }
         message: { Text(selectionNotice ?? "") }
+        .onChange(of: radarPresentation.replyPresented) { _, shown in if !shown { openWatchTask() } }
+        .onChange(of: watchLink.openRequest) { _, _ in openWatchTask() }
+        .onChange(of: scenePhase) { _, phase in if phase == .active { openWatchTask() } }
         .task {
+            watchLink.bind(radar)
             let settings = self.settings
             let notifications = self.notifications
             settings.isNotificationEnabled = { [weak notifications] origin in
@@ -284,6 +290,30 @@ private struct CollieRootView: View {
                 writeValidationStatus("\(runID):" + (error.map { "failed: \($0)" } ?? "ready"))
             }
         }
+    }
+
+    private func openWatchTask() {
+        guard scenePhase == .active, let request = watchLink.openRequest else { return }
+        guard let id = UUID(uuidString: request.workbench),
+              let action = radar.snapshots[id]?.allTasks.first(where: { $0.id == request.task }),
+              ["等你决策", "等你验收"].contains(action.status ?? ""),
+              var record = radar.workbenches.first(where: { $0.id == id }) else {
+            selectionNotice = shellText("手表事项已变化或不可见，请在手机刷新台账。")
+            watchLink.openRequest = nil
+            return
+        }
+        guard !workbenchesPresented, !addingWeb, !radarPresentation.importing,
+              !radarPresentation.configuring, !radarPresentation.replyPresented,
+              radarPresentation.watchTask == nil, !shellPresentation.settingsPresented,
+              !shellPresentation.notesPresented, canSelect(), selectRadar(id) else { return }
+        record.display.page = .tasks
+        record.display.project = ""
+        record.display.priority = nil
+        record.display.status = action.status
+        record.display.searchText = action.title
+        guard radar.update(record) else { return }
+        radarPresentation.watchTask = action
+        watchLink.openRequest = nil
     }
 
     private func writeValidationStatus(_ status: String) {

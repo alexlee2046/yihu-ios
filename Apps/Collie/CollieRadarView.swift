@@ -10,6 +10,8 @@ func radarText(_ key: String) -> String {
 final class CollieRadarPresentation {
     var importing = false
     var configuring = false
+    var replyPresented = false
+    var watchTask: CollieRadarSnapshot.Action?
 }
 
 struct CollieRadarActions: View {
@@ -103,6 +105,20 @@ struct CollieRadarView: View {
                     .refreshable { if !record.source.isEmpty { await store.refresh(id) } }
                 }
                 .sheet(isPresented: $presentation.configuring) { CollieRadarSettingsView(store: store, item: record) }
+                .onChange(of: replying?.id) { _, id in presentation.replyPresented = id != nil }
+                .sheet(item: $presentation.watchTask) { action in
+                    NavigationStack {
+                        Form {
+                            Text(action.title).font(.headline)
+                            Text(action.project + " · " + (action.status ?? ""))
+                            Text(action.next.isEmpty ? radarText("下一步待补") : action.next)
+                            if let url = URL(string: action.url), url.scheme == "https" {
+                                Link(radarText("原条目"), destination: url)
+                            }
+                            Button(radarText("返回台账继续处理")) { presentation.watchTask = nil }
+                        }.navigationTitle(radarText("手表接续事项"))
+                    }
+                }
                 .sheet(item: $replying) { action in
                     CollieRadarReplyView(store: store, workbenchID: id, source: record.source, action: action)
                 }

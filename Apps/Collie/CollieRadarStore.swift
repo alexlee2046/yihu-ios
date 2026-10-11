@@ -22,6 +22,7 @@ final class CollieRadarStore {
     private let directory: URL
     private let key = "collie.radar.workbenches.v1"
     private var sourceRevisions: [UUID: Int] = [:]
+    @ObservationIgnored var watchUpdate: (() -> Void)?
 
     init(defaults: UserDefaults = .standard, directory: URL? = nil) {
         self.defaults = defaults
@@ -201,6 +202,7 @@ final class CollieRadarStore {
             guard sourceRevisions[id, default: 0] == revision,
                   workbenches.contains(where: { $0.id == id }), !(error is CancellationError) else { return }
             errors[id] = message(for: error)
+            watchUpdate?()
         }
     }
 
@@ -220,10 +222,12 @@ final class CollieRadarStore {
         #endif
         snapshots[id] = snapshot
         errors[id] = nil
+        watchUpdate?()
     }
 
     private func cacheURL(_ id: UUID) -> URL { directory.appendingPathComponent(id.uuidString + ".json") }
     private func persist() {
+        watchUpdate?()
         if let data = try? JSONEncoder().encode(workbenches) { defaults.set(data, forKey: key) }
     }
     private func message(for error: Error) -> String {
