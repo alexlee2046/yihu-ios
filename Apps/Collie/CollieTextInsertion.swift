@@ -127,7 +127,12 @@ enum CollieTextInsertion {
             if (!usable(el) || !isSafeDraft(el)) return false;
             // Native keyboard suppression stays in place. Programmatic value +
             // input edits do not need focus, keyboard activation or submit keys.
-            if (!el.readOnly) el.focus({ preventScroll: true });
+            if (!el.readOnly) {
+              el.focus({ preventScroll: true });
+              // Page focus handlers may redirect to an unrelated field.
+              // Never let the document-wide edit command follow that redirect.
+              if (document.activeElement !== el) return false;
+            }
             if (url !== window.location.href || !usable(el) || !isSafeDraft(el)) return false;
             const isField = el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement;
             const originalValue = isField ? el.value : null;
@@ -145,6 +150,11 @@ enum CollieTextInsertion {
             receipts.set(id, receipt);
             let ok = false;
             if (!el.readOnly) {
+              if (document.activeElement !== el) return false;
+              if (!isField) {
+                const selection = window.getSelection();
+                if (!selection || !el.contains(selection.anchorNode) || !el.contains(selection.focusNode)) return false;
+              }
               try { ok = document.execCommand('insertText', false, inserted); } catch (_) { ok = false; }
             }
             if (!ok && isField) {

@@ -185,7 +185,9 @@ private struct CollieRootView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            workbenchHeader
+            // Keep the shared shortcuts above composited WebKit/voice layers,
+            // including when a web workbench returns from the native Radar view.
+            workbenchHeader.zIndex(1)
             ZStack {
                 if let webSession, settings.currentOrigin != nil {
                     CollieShellView(
@@ -332,10 +334,7 @@ private struct CollieRootView: View {
             watchLink.openRequest = nil
             return
         }
-        guard !workbenchesPresented, !addingWeb, !radarPresentation.importing,
-              !radarPresentation.configuring, !radarPresentation.replyPresented,
-              radarPresentation.watchTask == nil, !shellPresentation.settingsPresented,
-              !shellPresentation.notesPresented, canSelect(), selectRadar(id) else { return }
+        guard !watchHandoffBlocked, canSelect(), selectRadar(id) else { return }
         record.display.page = .tasks
         record.display.project = ""
         record.display.priority = nil

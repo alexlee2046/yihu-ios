@@ -28,6 +28,8 @@ jobs:
           persist-credentials: false
       - name: Native model checks and companion builds
         run: |
+          swiftc -swift-version 6 -parse-as-library Apps/Collie/CollieTextInsertion.swift Apps/Collie/CollieKeyboardPolicy.swift Tests/CollieRadar/InsertionChecks.swift -o "$RUNNER_TEMP/insertion-checks"
+          "$RUNNER_TEMP/insertion-checks"
           swiftc -swift-version 6 Shared/YihuWatchVoice.swift Tests/CollieRadar/WatchVoiceChecks.swift -o "$RUNNER_TEMP/watch-voice-checks"
           "$RUNNER_TEMP/watch-voice-checks"
           swiftc -swift-version 6 Apps/Collie/CollieRadarModel.swift Apps/Collie/CollieRadarStore.swift Tests/CollieRadar/ModelChecks.swift -o "$RUNNER_TEMP/radar-checks"
@@ -84,6 +86,8 @@ jobs:
           persist-credentials: false
       - name: Model and persistence checks
         run: |
+          swiftc -swift-version 6 -parse-as-library Apps/Collie/CollieTextInsertion.swift Apps/Collie/CollieKeyboardPolicy.swift Tests/CollieRadar/InsertionChecks.swift -o "$RUNNER_TEMP/insertion-checks"
+          "$RUNNER_TEMP/insertion-checks"
           swiftc -swift-version 6 Shared/YihuWatchVoice.swift Tests/CollieRadar/WatchVoiceChecks.swift -o "$RUNNER_TEMP/watch-voice-checks"
           "$RUNNER_TEMP/watch-voice-checks"
           swiftc -swift-version 6 Apps/Collie/CollieRadarModel.swift Apps/Collie/CollieRadarStore.swift Tests/CollieRadar/ModelChecks.swift -o "$RUNNER_TEMP/radar-checks"
