@@ -231,10 +231,13 @@ def reply(payload, writer_user_id, epoch, attempts):
         # This process never began a mutation for this ID. Unlike a missing comment,
         # that is sufficient evidence to offer a safe retry with the same ID.
         return {"outcome": "absent", "target": target}
-    if not eligible or payload.get("version") != target["version"]:
-        raise ReplyError("target_changed", target=target)
     if payload.get("confirmed") is not True:
         raise ReplyError("invalid_request", 400)
+    # Receipt pagination can take time. Re-read immediately before mutation,
+    # including private membership/permissions, instead of using the first read.
+    target, _, eligible = target_item(ident, epoch)
+    if not eligible or payload.get("version") != target["version"]:
+        raise ReplyError("target_changed", target=target)
     label = "决策回复" if target["status"] == "等你决策" else "验收反馈"
     note = "Alex 手机确认（" + label + "）：\n\n" + text + "\n\n<!-- yihu-reply:" + request_id + ":" + digest + " -->"
     if len(attempts) >= 5000:
@@ -253,7 +256,9 @@ def reply(payload, writer_user_id, epoch, attempts):
         fresh, current, _ = target_item(ident, epoch)
         if receipt(current, request_id, digest):
             return {"outcome": "recorded", "target": fresh}
-    except READ_ERRORS:
+    except (ReplyError,) + READ_ERRORS:
+        # Permission/membership loss after an attempted write is not proof of
+        # rejection. Never let the client discard its durable pending ID.
         raise ReplyError("result_unknown", 503) from None
     if code and ("拒绝写入台账".encode() in error or "拒绝写评论".encode() in error):
         attempts.pop(key, None)  # Known req pre-mutation guards, not provider/network errors.

@@ -210,7 +210,12 @@ final class CollieRadarStore {
         var values = URLResourceValues()
         values.isExcludedFromBackup = true
         try excluded.setResourceValues(values)
+        #if os(iOS)
         try data.write(to: cacheURL(id), options: [.atomic, .completeFileProtection])
+        #else
+        // macOS does not support iOS Data Protection write options (Cocoa 513).
+        try data.write(to: cacheURL(id), options: [.atomic])
+        #endif
         snapshots[id] = snapshot
         errors[id] = nil
     }

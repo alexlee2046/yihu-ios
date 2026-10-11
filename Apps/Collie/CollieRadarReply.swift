@@ -138,7 +138,12 @@ final class CollieRadarReplySession {
         try excluded.setResourceValues(values)
         let record = CollieRadarPendingReply(source: source, target: target, text: text,
                                             requestID: requestID, submitted: submitted)
-        try JSONEncoder().encode(record).write(to: file, options: [.atomic, .completeFileProtection])
+        let data = try JSONEncoder().encode(record)
+        #if os(iOS)
+        try data.write(to: file, options: [.atomic, .completeFileProtection])
+        #else
+        try data.write(to: file, options: [.atomic])
+        #endif
     }
 
     func submit() async {
