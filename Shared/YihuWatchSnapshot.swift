@@ -24,6 +24,14 @@ struct YihuWatchSnapshot: Codable {
     var capturedAt: Date
     var truncated: Bool
     var hasSource: Bool
+    var sourceDate: Date? = nil
+    var readFailed = false
+
+    var stale: Bool {
+        guard let sourceDate else { return true }
+        let age = Date().timeIntervalSince(sourceDate)
+        return readFailed || age > 86400 || age < -300
+    }
 
     static let maximumBytes = 50_000
     static func decode(_ data: Data) throws -> Self {

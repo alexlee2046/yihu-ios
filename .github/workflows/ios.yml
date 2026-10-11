@@ -4,6 +4,11 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      watch_only:
+        description: Build phone/watch and capture the read-only watch demo (skip accepted legacy UI cases)
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -13,7 +18,56 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  watch:
+    if: ${{ inputs.watch_only }}
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Native model checks and companion builds
+        run: |
+          swiftc -swift-version 6 Apps/Collie/CollieRadarModel.swift Apps/Collie/CollieRadarStore.swift Tests/CollieRadar/ModelChecks.swift -o "$RUNNER_TEMP/radar-checks"
+          "$RUNNER_TEMP/radar-checks"
+          command -v xcodegen >/dev/null || brew install xcodegen
+          xcodegen generate --spec project.yml
+          xcodebuild -quiet -project Yihu.xcodeproj -scheme YihuWatch -destination 'generic/platform=watchOS Simulator' -derivedDataPath "$RUNNER_TEMP/YihuWatch" CODE_SIGNING_ALLOWED=NO build
+          xcodebuild -quiet -project Yihu.xcodeproj -scheme CollieiOS -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/YihuPhone" CODE_SIGNING_ALLOWED=NO build
+      - name: Capture synthetic watch interface if runtime is available
+        run: |
+          device=$(xcrun simctl list devices available --json | python3 -c 'import json,sys;d=json.load(sys.stdin)["devices"];print(next((x["udid"] for r,a in d.items() if "watchOS" in r for x in a),""))')
+          if [ -z "$device" ]; then
+            xcodebuild -downloadPlatform watchOS
+            device=$(xcrun simctl list devices available --json | python3 -c 'import json,sys;d=json.load(sys.stdin)["devices"];print(next((x["udid"] for r,a in d.items() if "watchOS" in r for x in a),""))')
+          fi
+          created=false
+          if [ -z "$device" ]; then
+            runtime=$(xcrun simctl list runtimes --json | python3 -c 'import json,sys;print(next((x["identifier"] for x in json.load(sys.stdin)["runtimes"] if "watchOS" in x["identifier"] and x.get("isAvailable")),""))')
+            type=$(xcrun simctl list devicetypes --json | python3 -c 'import json,sys;print(next((x["identifier"] for x in json.load(sys.stdin)["devicetypes"] if "Apple Watch Series 10" in x["name"]),""))')
+            test -n "$runtime" && test -n "$type"
+            device=$(xcrun simctl create 'Yihu Watch interface evidence' "$type" "$runtime")
+            created=true
+          fi
+          trap 'xcrun simctl shutdown "$device" || true; if [ "$created" = true ]; then xcrun simctl delete "$device"; fi' EXIT
+          xcrun simctl boot "$device" || true
+          xcrun simctl bootstatus "$device" -b
+          xcrun simctl install "$device" "$RUNNER_TEMP/YihuWatch/Build/Products/Debug-watchsimulator/YihuWatch.app"
+          SIMCTL_CHILD_YIHU_WATCH_DEMO=1 xcrun simctl launch "$device" org.example.yihu.watch
+          sleep 3
+          mkdir -p "$RUNNER_TEMP/WatchEvidence"
+          xcrun simctl io "$device" screenshot "$RUNNER_TEMP/WatchEvidence/watch-demo.png"
+          echo 'Synthetic watch UI captured; paired-device handoff remains unverified.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve watch interface evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: yihu-watch-interface
+          path: ${{ runner.temp }}/WatchEvidence
+          if-no-files-found: ignore
+          retention-days: 7
   acceptance:
+    if: ${{ !inputs.watch_only }}
     # Standard hosted runner: public-repository use is free; no larger runners.
     runs-on: macos-latest
     timeout-minutes: 25

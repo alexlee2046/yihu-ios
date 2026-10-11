@@ -33,7 +33,8 @@ final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
             }
         }
         var payload = YihuWatchSnapshot(items: Array(rows.prefix(200)), capturedAt: Date(),
-                                        truncated: rows.count > 200, hasSource: !store.snapshots.isEmpty)
+                                        truncated: rows.count > 200, hasSource: !store.snapshots.isEmpty,
+            sourceDate: store.snapshots.values.compactMap(\.generatedAt).min(), readFailed: !store.errors.isEmpty)
         while let data = try? JSONEncoder().encode(payload) {
             if data.count <= YihuWatchSnapshot.maximumBytes {
                 try? WCSession.default.updateApplicationContext(["radar": data])
@@ -45,6 +46,9 @@ final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
     }
 
     nonisolated func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        Task { @MainActor [weak self] in self?.publish() }
+    }
+    nonisolated func sessionWatchStateDidChange(_ session: WCSession) {
         Task { @MainActor [weak self] in self?.publish() }
     }
     nonisolated func sessionDidBecomeInactive(_ session: WCSession) {}

@@ -21,7 +21,7 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
                 .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-acceptance",
                       title: "验收管理视图", project: "示例项目", status: "等你验收", priority: "P1",
                       next: "核对清单并在手机反馈", sourceDate: Date().addingTimeInterval(-90000), readFailed: false)
-            ], capturedAt: Date(), truncated: false, hasSource: true)
+            ], capturedAt: Date(), truncated: false, hasSource: true, sourceDate: Date())
             notice = "模拟数据 · 不代表配对验证"
             return
         }
@@ -85,6 +85,7 @@ struct YihuWatchApp: App {
                         }
                         if let snapshot = link.snapshot {
                             if !snapshot.hasSource { Text("请先在手机配置或刷新需求台账") }
+                            else if snapshot.stale { Text("数据过期或读取失败，请在手机刷新").foregroundStyle(.orange) }
                             ForEach(["等你决策", "等你验收"], id: \.self) { status in
                                 let items = snapshot.items.filter { $0.status == status }
                                 Section(status + " · " + String(items.count)) {
