@@ -128,7 +128,8 @@ def target_item(ident, epoch):
     executable = shutil.which("req")
     if not executable:
         raise RuntimeError("req unavailable")
-    config = json.loads((Path(executable).resolve().parent / "config.json").read_text())
+    config_path = os.environ.get("REQ_CONFIG") or str(Path(executable).resolve().parent / "config.json")
+    config = json.loads(Path(config_path).read_text())
     node = graphql(TARGET_QUERY, {"id": ident})["node"]
     if not node or node.get("project", {}).get("id") != config["project"]["id"]:
         raise ReplyError("target_unavailable", 404)
