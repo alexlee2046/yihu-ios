@@ -52,24 +52,20 @@ struct CollieWorkbenchShortcutBar: View {
                             }
                             .buttonStyle(.plain)
                             .id(item.id)
-                            // A shortcut is one action, not separate text and
-                            // selection-decoration accessibility hit targets.
-                            .accessibilityElement(children: .ignore)
-                            .accessibilityLabel(item.name)
-                            .accessibilityAction { select(item.id) }
                             .accessibilityIdentifier("collie-shortcut-" + item.id)
-                            .accessibilityAddTraits(selected == item.id ? [.isButton, .isSelected] : .isButton)
+                            .accessibilityAddTraits(selected == item.id ? .isSelected : [])
                         }
                     }
                 }
                 .onAppear { if let selected { proxy.scrollTo(selected, anchor: .center) } }
-                .onChange(of: selected) { _, id in
-                    if let id { proxy.scrollTo(id, anchor: .center) }
-                }
                 .onChange(of: visible.map(\.id)) { _, _ in
                     if let selected { proxy.scrollTo(selected, anchor: .center) }
                 }
             }
+            // Selection changes label metrics. Recreate only the shortcut
+            // viewport so scroll/AX geometry is based on the selected layout,
+            // rather than scrolling with the outgoing label measurements.
+            .id(selected)
             Button(action: openAll) {
                 Image(systemName: "square.grid.2x2")
                     .font(.subheadline)
