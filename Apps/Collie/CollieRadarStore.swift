@@ -170,8 +170,10 @@ final class CollieRadarStore {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.httpCookieStorage = nil
         configuration.urlCredentialStorage = nil
-        configuration.timeoutIntervalForRequest = 20
-        configuration.timeoutIntervalForResource = 30
+        // Full-ledger reads can exceed 18 seconds; include the server's 28-second
+        // read deadline plus private-proxy/identity checks and network overhead.
+        configuration.timeoutIntervalForRequest = 40
+        configuration.timeoutIntervalForResource = 45
         let session = URLSession(configuration: configuration, delegate: CollieRadarNoRedirect(),
                                  delegateQueue: nil)
         defer { session.invalidateAndCancel() }

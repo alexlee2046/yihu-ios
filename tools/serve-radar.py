@@ -104,7 +104,7 @@ def ledger_response(records):
 
 
 def read_ledger():
-    code, output, _ = command(["req", "list", "--all", "--json"])
+    code, output, _ = command(["req", "list", "--all", "--json"], timeout=28)
     if code or len(output) > MAX_BYTES * 4:
         raise RuntimeError("ledger unavailable")
     return ledger_response(json.loads(output))
