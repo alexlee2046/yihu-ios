@@ -35,7 +35,8 @@ final class CollieVoiceController {
     private(set) var recognitionTerms: [String]
 
     /// Only the final pass (or an explicit retry) may use the web bridge.
-    var deliverTranscript: ((String) async -> Bool)?
+    var prepareTranscriptDelivery: ((UUID) async -> Void)?
+    var deliverTranscript: ((String, UUID) async -> Bool)?
 
     private let recorder: any CollieAudioCapturing
     private let voiceprintChecker: any CollieVoiceprintChecking
@@ -183,6 +184,8 @@ final class CollieVoiceController {
             previewText = ""
             previewUnavailable = false
             permissionGranted = false
+            await prepareTranscriptDelivery?(id)
+            guard sessionID == id, phase == .preparing, isForeground() else { return }
             isRequestingPermission = true
             let allowed = await recorder.requestPermission()
             guard sessionID == id, phase == .preparing else { return }
@@ -447,7 +450,7 @@ final class CollieVoiceController {
             return
         }
         phase = .delivering
-        let accepted = await deliverTranscript?(transcript) ?? false
+        let accepted = await deliverTranscript?(transcript, id) ?? false
         guard sessionID == id else { return }
         pendingTranscript = accepted ? nil : transcript
         voiceprintBlocked = false

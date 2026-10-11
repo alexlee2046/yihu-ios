@@ -88,9 +88,13 @@ final class CollieConnectionRuntime {
         }
         // activate can synchronously deliver a cold-start tap and reenter here.
         transcriptTarget = newSession
-        voice.deliverTranscript = { [weak newSession, weak self] transcript in
+        voice.prepareTranscriptDelivery = { [weak newSession, weak self] id in
+            guard let newSession, self?.webSession === newSession else { return }
+            await newSession.prepareTranscriptInsertion(id)
+        }
+        voice.deliverTranscript = { [weak newSession, weak self] transcript, id in
             guard let newSession, self?.webSession === newSession else { return false }
-            return await newSession.insertTranscript(transcript)
+            return await newSession.insertTranscript(transcript, requestID: id)
         }
         notifications.activate(session: newSession)
     }
