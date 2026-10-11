@@ -76,7 +76,15 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
 @main
 struct YihuWatchApp: App {
     @State private var link = YihuWatchLink()
-    @State private var demoDraftPresented = false
+    private var demoDraftItem: YihuWatchSnapshot.Item? {
+        #if DEBUG
+        if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO_PAGE"] == "draft" ||
+           ProcessInfo.processInfo.arguments.contains("--watch-draft-demo") {
+            return link.snapshot?.items.first
+        }
+        #endif
+        return nil
+    }
     private var notificationTitle: String {
         switch link.snapshot?.phoneNotificationState {
         case "enabled": "手机通知已开启；手表镜像需本人设置"
@@ -89,6 +97,9 @@ struct YihuWatchApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
+                if let item = demoDraftItem {
+                    YihuWatchDraftView(item: item)
+                } else {
                 TimelineView(.periodic(from: .now, by: 60)) { _ in
                     List {
                         Section {
@@ -145,15 +156,6 @@ struct YihuWatchApp: App {
                         }
                     }
                 }.navigationTitle("一呼")
-                .navigationDestination(isPresented: $demoDraftPresented) {
-                    if let item = link.snapshot?.items.first { YihuWatchDraftView(item: item) }
-                }
-                .task {
-                    #if DEBUG
-                    if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO_PAGE"] == "draft" {
-                        demoDraftPresented = true
-                    }
-                    #endif
                 }
             }
         }
