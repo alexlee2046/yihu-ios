@@ -385,6 +385,9 @@ struct CollieWebView: UIViewRepresentable {
         context.coordinator.pageReady = pageReady
         context.coordinator.openNotificationSettings = openNotificationSettings
         session.attach(webView)
+        #if DEBUG
+        context.coordinator.recordSyntheticHitPaths(webView, visible: isVisible)
+        #endif
     }
 
     static func dismantleUIView(_ webView: WKWebView, coordinator: Coordinator) {
@@ -405,6 +408,32 @@ struct CollieWebView: UIViewRepresentable {
         var openNotificationSettings: @MainActor () -> Void
         private var urlObservation: NSKeyValueObservation?
         private var titleObservation: NSKeyValueObservation?
+
+        #if DEBUG
+        private var diagnosticVisibility: Bool?
+
+        func recordSyntheticHitPaths(_ webView: WKWebView, visible: Bool) {
+            guard ProcessInfo.processInfo.environment["YIHU_UI_HIT_DIAGNOSTICS"] == "1",
+                  session.baseURL.host == "workbench.example.invalid",
+                  diagnosticVisibility != visible else { return }
+            diagnosticVisibility = visible
+            Task { @MainActor [weak webView] in
+                try? await Task.sleep(for: .seconds(2))
+                guard let window = webView?.window else { return }
+                for y in [90.0, 136.0, 164.0, 180.0, 220.0] {
+                    for x in [60.0, 120.0, 280.0] {
+                        var view = window.hitTest(CGPoint(x: x, y: y), with: nil)
+                        var path: [String] = []
+                        while let current = view {
+                            path.append("\(type(of: current))@\(current.convert(current.bounds, to: window))")
+                            view = current.superview
+                        }
+                        NSLog("YihuSyntheticHit visible=%@ point=(%.0f,%.0f) path=%@", String(visible), x, y, path.joined(separator: " > "))
+                    }
+                }
+            }
+        }
+        #endif
 
         func observeURL(of webView: WKWebView) {
             // URL KVO also sees same-document pushState/popstate navigation.

@@ -41,17 +41,14 @@ struct CollieWorkbenchShortcutBar: View {
                                     .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? 240 : 200)
                                     .padding(.horizontal, 10)
                                     .frame(minHeight: 44)
+                                    .contentShape(Rectangle())
                                     .overlay(alignment: .bottom) {
                                         if selected == item.id {
                                             Capsule().fill(BenchsideStyle.accent).frame(height: 2)
                                                 .padding(.horizontal, 10)
                                                 .accessibilityHidden(true)
-                                                .allowsHitTesting(false)
                                         }
                                     }
-                                    // Include the full label, not its decoration,
-                                    // in the shortcut's touch target.
-                                    .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
                             .id(item.id)
