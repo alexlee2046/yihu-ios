@@ -23,6 +23,7 @@ targets:
       - Shared/HermesTaskAttributes.swift
       - Shared/YihuWatchSnapshot.swift
       - Shared/YihuWatchDraft.swift
+      - Shared/YihuWatchVoice.swift
     dependencies:
       - target: CollieShare
       - target: CollieWidgets
@@ -79,6 +80,7 @@ targets:
       - Apps/YihuWatch
       - Shared/YihuWatchSnapshot.swift
       - Shared/YihuWatchDraft.swift
+      - Shared/YihuWatchVoice.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).watch
@@ -86,6 +88,7 @@ targets:
         INFOPLIST_KEY_WKApplication: YES
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: $(YIHU_BUNDLE_ID)
         INFOPLIST_KEY_CFBundleDisplayName: 一呼
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: 用于手表录音，经配对手机端侧识别，音频不上传云端。
         SKIP_INSTALL: YES
   CollieUITests:
     type: bundle.ui-testing

@@ -41,6 +41,8 @@ protocol CollieAudioCapturing: AnyObject {
     func cancel()
 }
 
+enum CollieWatchVoiceError: Error { case busy, voiceprintBlocked }
+
 protocol CollieTranscribing: Sendable {
     func isModelDownloaded() async -> Bool
     func downloadModel(progress: @escaping @Sendable (Double) -> Void) async throws

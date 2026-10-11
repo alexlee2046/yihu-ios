@@ -264,6 +264,10 @@ private struct CollieRootView: View {
                 }
             }
             watchLink.canReceiveDraft = { UIApplication.shared.applicationState == .active && !watchHandoffBlocked }
+            watchLink.transcribeVoice = { [weak voice] samples in
+                guard let voice else { throw CollieWatchVoiceError.busy }
+                return try await voice.transcribeWatchAudio(samples)
+            }
             watchLink.bind(radar)
             settings.isNotificationEnabled = { [weak notifications] origin in
                 notifications?.isEnabled(for: origin) == true
@@ -313,7 +317,8 @@ private struct CollieRootView: View {
         radarPresentation.replyPresented || radarPresentation.watchTask != nil ||
         shellPresentation.settingsPresented || shellPresentation.notesPresented ||
         voiceNotes.recorder.isRecording || notifications.isBusy || voice.canCancel ||
-        voice.phase == .delivering || voice.canRetryDelivery
+        voice.phase == .delivering || voice.canRetryDelivery || voice.voiceprintTestMicActive ||
+        webSession?.keyboardVisible == true
     }
 
     private func openWatchTask() {

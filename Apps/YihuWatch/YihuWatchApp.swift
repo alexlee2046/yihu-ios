@@ -3,12 +3,15 @@ import Observation
 import SwiftUI
 import WatchConnectivity
 
+private struct YihuWatchVoiceCallback: @unchecked Sendable { var send: ([String: Any]) -> Void }
+
 @MainActor
 @Observable
 final class YihuWatchLink: NSObject, WCSessionDelegate {
     var snapshot: YihuWatchSnapshot?
     var connected = false
     var notice: String?
+    let voice = YihuWatchVoiceCapture()
 
     override init() {
         super.init()
@@ -67,6 +70,17 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
         let reachable = session.isReachable
         Task { @MainActor [weak self] in self?.connected = reachable }
     }
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
+        guard message["kind"] as? String == "voiceResult", let data = message["result"] as? Data else {
+            replyHandler(["stored": false]); return
+        }
+        let callback = YihuWatchVoiceCallback(send: replyHandler)
+        Task { @MainActor [weak self] in callback.send(["stored": self?.voice.receive(data) ?? false]) }
+    }
+    nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
+        guard userInfo["kind"] as? String == "voiceResult", let data = userInfo["result"] as? Data else { return }
+        Task { @MainActor [weak self] in _ = self?.voice.receive(data) }
+    }
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         let data = applicationContext["radar"] as? Data
         Task { @MainActor [weak self] in self?.receive(data) }
@@ -98,7 +112,7 @@ struct YihuWatchApp: App {
         WindowGroup {
             NavigationStack {
                 if let item = demoDraftItem {
-                    YihuWatchDraftView(item: item)
+                    YihuWatchDraftView(item: item, link: link)
                 } else {
                 TimelineView(.periodic(from: .now, by: 60)) { _ in
                     List {
@@ -135,7 +149,7 @@ struct YihuWatchApp: App {
                                                 if item.stale { Label("数据过期或读取失败，请在手机刷新", systemImage: "clock.badge.exclamationmark").foregroundStyle(.orange) }
                                                 Button("转手机继续处理") { link.request(item) }
                                                 if item.canDraft == true, item.taskToken != nil {
-                                                    NavigationLink("语音／文字草稿") { YihuWatchDraftView(item: item) }
+                                                    NavigationLink("语音／文字草稿") { YihuWatchDraftView(item: item, link: link) }
                                                 } else {
                                                     Text("草稿传输不可用；请在手机检查数据源并刷新，再同步到手表")
                                                         .font(.footnote).foregroundStyle(.secondary)

@@ -4,6 +4,10 @@ import WatchConnectivity
 
 struct YihuWatchDraftView: View {
     let item: YihuWatchSnapshot.Item
+    let link: YihuWatchLink
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var discardingAudio = false
+    private var voice: YihuWatchVoiceCapture { link.voice }
     @State private var text = ""
     @State private var requestID = UUID()
     @State private var busy = false
@@ -73,27 +77,57 @@ struct YihuWatchDraftView: View {
         })
     }
 
+    private func applyVoiceResult() {
+        guard let result = voice.result, result.outcome == .ready, voice.matches(item),
+              result.request.requestID == requestID, !busy, !frozen, !blocked else { return }
+        guard text.isEmpty || text == result.text else {
+            notice = "已有文字，识别结果保留；不会自动覆盖草稿"; return
+        }
+        let previous = text
+        text = result.text
+        if save() { voice.consumed(); notice = "手机端侧识别已填入手表草稿；尚未提交台账" }
+        else { text = previous }
+    }
+
     var body: some View {
         List {
             Text(item.title).font(.headline)
             Text(item.status)
-            TextField("语音或文字草稿", text: $text).disabled(busy || frozen || blocked)
-            Text("系统输入可使用听写；最多4000字符，不自动发送意见").font(.footnote)
+            TextField("语音或文字草稿", text: $text).disabled(busy || frozen || blocked || voice.recording || voice.hasAudio || voice.sending)
+            if voice.recording {
+                Button("停止并交手机本地识别") { voice.stop(send: true) }
+            } else if voice.hasAudio {
+                if voice.matches(item), !voice.blocked {
+                    Button("核实／重试手机本地识别") { voice.retry() }.disabled(voice.sending || voice.result != nil)
+                } else { Text("已有其他事项或旧来源录音，副本已保留").font(.footnote) }
+                if voice.pending != nil, !voice.blocked {
+                    Button("丢弃录音副本", role: .destructive) { discardingAudio = true }.disabled(voice.sending)
+                }
+            } else {
+                Button("录音，由手机端侧识别") { Task { await voice.start(item, requestID: requestID) } }
+                    .disabled(busy || frozen || blocked || voice.sending || !text.isEmpty)
+            }
+            if let message = voice.notice { Text(message).font(.footnote).foregroundStyle(.orange) }
+            Text("端侧识别最多10秒，需手机一呼前台且模型就绪；音频不上传云端。文字最多4000字符，不自动发送意见").font(.footnote)
             if let notice { Text(notice).font(.footnote).foregroundStyle(.orange) }
             Button(frozen ? "核实／重试传到手机" : "确认转为手机草稿") { confirming = true }
                 .disabled(busy || blocked || record() == nil)
             if !frozen {
                 Button("保存草稿") { _ = save() }.disabled(busy || blocked)
             }
-            Button("清除手表草稿副本", role: .destructive) { discarding = true }.disabled(busy)
+            Button("清除手表草稿副本", role: .destructive) { discarding = true }
+                .disabled(busy || voice.recording || voice.hasAudio || voice.sending)
             Text("断连时先保存草稿；传输过的输入锁定，避免同编号不同内容").font(.footnote).foregroundStyle(.secondary)
         }
         .navigationTitle("输入草稿")
         .task {
+            voice.foreground = scenePhase == .active
+            voice.attach(item)
+            if let pending = voice.pending, voice.matches(item) { requestID = pending.requestID }
             #if DEBUG
             if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO"] == "1" { notice = "模拟数据 · 不代表真实听写或配对传输" }
             #endif
-            guard FileManager.default.fileExists(atPath: file.path) else { return }
+            guard FileManager.default.fileExists(atPath: file.path) else { applyVoiceResult(); return }
             do {
                 let handle = try FileHandle(forReadingFrom: file); defer { try? handle.close() }
                 let data = try handle.read(upToCount: YihuWatchDraft.maximumBytes + 1) ?? Data()
@@ -106,8 +140,21 @@ struct YihuWatchDraftView: View {
                 frozen = saved.transferAttempted != false
                 notice = "已恢复草稿，可用原编号核实／重试传输"
             } catch { blocked = true; notice = "原草稿无法读取，记录已保留" }
+            applyVoiceResult()
         }
-        .onDisappear { if !blocked && !busy && record() != nil { _ = save() } }
+        .onChange(of: voice.result) { _, _ in applyVoiceResult() }
+        .onChange(of: scenePhase) { _, phase in
+            voice.foreground = phase == .active
+            if phase != .active { voice.stop(send: false) }
+        }
+        .onDisappear {
+            voice.foreground = false; voice.stop(send: false)
+            if !blocked && !busy && record() != nil { _ = save() }
+        }
+        .alert("丢弃这段录音？", isPresented: $discardingAudio) {
+            Button("取消", role: .cancel) {}
+            Button("丢弃录音", role: .destructive) { voice.discard() }
+        } message: { Text("核对手机后丢弃录音副本；不会撤回已保存的文字或台账内容。") }
         .alert("清除手表副本？", isPresented: $discarding) {
             Button("取消", role: .cancel) {}
             Button("清除副本", role: .destructive) {
