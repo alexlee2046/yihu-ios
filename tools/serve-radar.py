@@ -103,6 +103,29 @@ def ledger_response(records):
             "active": [], "stale": [], "cold": []}
 
 
+def notification_transition(previous, current):
+    """Event contract only: confirmed private-ledger status entry, never polling.
+
+    Caller supplies before/after records from an authorized write/readback.
+    This function does not send APNs or grant subscription/write authority.
+    """
+    if not isinstance(previous, dict) or not isinstance(current, dict):
+        raise ValueError("invalid transition")
+    ident = current.get("id")
+    if not isinstance(ident, str) or not re.fullmatch(r"PVTI_[A-Za-z0-9_-]{1,120}", ident) or previous.get("id") != ident:
+        raise ValueError("invalid transition identity")
+    if current.get("archived") is not False or previous.get("archived") is not False:
+        return None
+    if current.get("status") not in WAITING or previous.get("status") == current.get("status"):
+        return None
+    version = current.get("version")
+    if not isinstance(version, str) or not re.fullmatch(r"[0-9a-f]{64}", version):
+        raise ValueError("missing confirmed version")
+    # Repeated delivery of the same confirmed item revision has one event key.
+    key = hashlib.sha256(json.dumps([ident, version], separators=(",", ":")).encode()).hexdigest()
+    return {"version": 1, "event_key": key, "item_id": ident, "item_version": version}
+
+
 def read_ledger():
     code, output, _ = command(["req", "list", "--all", "--json"], timeout=28)
     if code or len(output) > MAX_BYTES * 4:

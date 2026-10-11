@@ -1,5 +1,26 @@
+import CoreFoundation
 import Foundation
 import Observation
+
+/// Opaque APNs intent, not a URL or write command. Resolution requires a locally
+/// registered subscription and a fresh private-source read before navigation.
+struct CollieRadarNotificationEvent: Equatable, Sendable {
+    let subscriptionID: UUID
+    let eventKey: String
+
+    init?(userInfo: [AnyHashable: Any]) {
+        guard let value = userInfo["yihuRadar"] as? [String: Any],
+              Set(value.keys) == ["version", "subscriptionId", "eventKey"],
+              let version = value["version"] as? Int, version == 1,
+              let number = value["version"] as? NSNumber,
+              CFGetTypeID(number) != CFBooleanGetTypeID(),
+              let subscription = value["subscriptionId"] as? String,
+              let id = UUID(uuidString: subscription),
+              let key = value["eventKey"] as? String, key.count == 64,
+              key.allSatisfy({ "0123456789abcdef".contains($0) }) else { return nil }
+        subscriptionID = id; eventKey = key
+    }
+}
 
 /// The portable JSON produced by `pm-radar --json`. Task text stays verbatim.
 struct CollieRadarSnapshot: Codable {
