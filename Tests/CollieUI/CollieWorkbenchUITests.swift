@@ -49,6 +49,9 @@ final class CollieWorkbenchUITests: XCTestCase {
             attachWorkbenchScreen(name: id.contains("://") ? "web-after-switch" : "radar-after-switch")
             XCTAssertTrue(button.isSelected)
             logShortcutHitTargets(app)
+            if id.contains("://") && app.buttons["collie-web-reload"].exists {
+                XCTAssertEqual(app.webViews.count, 0, "The native error page must replace WebKit's accessibility tree")
+            }
             // Evaluate the actual XCUIElement getter rather than the KVC
             // attribute dictionary; keep the same hittability requirement.
             let ready = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in button.isHittable }, object: button)

@@ -349,7 +349,28 @@ struct CollieWebView: UIViewRepresentable {
                     pageReady: pageReady, openNotificationSettings: openNotificationSettings)
     }
 
-    func makeUIView(context: Context) -> WKWebView {
+    // SwiftUI owns visibility/accessibility on the representable's root view.
+    // Keep the WebKit child separate so updates cannot re-expose a hidden page.
+    final class Container: UIView {
+        let webView: WKWebView
+
+        init(webView: WKWebView) {
+            self.webView = webView
+            super.init(frame: .zero)
+            webView.translatesAutoresizingMaskIntoConstraints = false
+            addSubview(webView)
+            NSLayoutConstraint.activate([
+                webView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                webView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                webView.topAnchor.constraint(equalTo: topAnchor),
+                webView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ])
+        }
+
+        required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    }
+
+    func makeUIView(context: Context) -> Container {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = session.websiteDataStore
         configuration.applicationNameForUserAgent = "CollieNative/1.0"
@@ -373,10 +394,11 @@ struct CollieWebView: UIViewRepresentable {
         webView.allowsBackForwardNavigationGestures = true
         webView.scrollView.keyboardDismissMode = .interactive
         session.attach(webView)
-        return webView
+        return Container(webView: webView)
     }
 
-    func updateUIView(_ webView: WKWebView, context: Context) {
+    func updateUIView(_ container: Container, context: Context) {
+        let webView = container.webView
         // Hide WebKit at the UIKit layer too; SwiftUI opacity alone leaves its
         // composited surface and accessibility subtree alive under native Radar.
         webView.isHidden = !isVisible
@@ -387,7 +409,8 @@ struct CollieWebView: UIViewRepresentable {
         session.attach(webView)
     }
 
-    static func dismantleUIView(_ webView: WKWebView, coordinator: Coordinator) {
+    static func dismantleUIView(_ container: Container, coordinator: Coordinator) {
+        let webView = container.webView
         webView.stopLoading()
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
