@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import Observation
 import WatchConnectivity
@@ -6,7 +7,10 @@ import WatchConnectivity
 @Observable
 final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
     static let shared = CollieWatchPhoneBridge()
-    struct OpenRequest: Equatable { var workbench: String; var task: String; var nonce = UUID() }
+    struct OpenRequest: Equatable { var workbench: String; var task: String; var sourceToken: String; var nonce = UUID() }
+    static func sourceToken(_ source: String) -> String {
+        SHA256.hash(data: Data(source.utf8)).map { String(format: "%02x", $0) }.joined()
+    }
     var openRequest: OpenRequest?
     private weak var store: CollieRadarStore?
 
@@ -26,7 +30,7 @@ final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
             guard let snapshot = store.snapshots[workbench.id] else { continue }
             for task in snapshot.allTasks where ["等你决策", "等你验收"].contains(task.status ?? "") {
                 guard let id = task.id, !id.isEmpty else { continue }
-                rows.append(.init(workbench: workbench.id.uuidString, task: id,
+                rows.append(.init(workbench: workbench.id.uuidString, task: id, sourceToken: Self.sourceToken(workbench.source),
                     title: String(task.title.prefix(160)), project: String(task.project.prefix(80)),
                     status: task.status ?? "", priority: task.priority ?? "", next: String(task.next.prefix(600)),
                     sourceDate: snapshot.generatedAt, readFailed: store.errors[workbench.id] != nil))
@@ -57,14 +61,15 @@ final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
         let kind = message["kind"] as? String
         let workbench = message["workbench"] as? String
         let task = message["task"] as? String
-        guard kind == "sync" || (kind == "open" && workbench != nil && task != nil) else {
+        let sourceToken = message["sourceToken"] as? String
+        guard kind == "sync" || (kind == "open" && workbench != nil && task != nil && sourceToken != nil) else {
             replyHandler(["queued": false]); return
         }
         replyHandler(["queued": true]) // Queued, not a promise that phone UI has opened.
         Task { @MainActor [weak self] in
             guard let self else { return }
             if kind == "sync" { self.publish() }
-            else if let workbench, let task { self.openRequest = .init(workbench: workbench, task: task) }
+            else if let workbench, let task, let sourceToken { self.openRequest = .init(workbench: workbench, task: task, sourceToken: sourceToken) }
         }
     }
 }

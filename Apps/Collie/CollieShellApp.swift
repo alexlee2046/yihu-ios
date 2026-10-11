@@ -242,6 +242,7 @@ private struct CollieRootView: View {
             set: { if !$0 { selectionNotice = nil } }
         )) { Button(radarText("完成"), role: .cancel) { selectionNotice = nil } }
         message: { Text(selectionNotice ?? "") }
+        .onChange(of: watchHandoffBlocked) { _, blocked in if !blocked { openWatchTask() } }
         .onChange(of: radarPresentation.replyPresented) { _, shown in if !shown { openWatchTask() } }
         .onChange(of: watchLink.openRequest) { _, _ in openWatchTask() }
         .onChange(of: scenePhase) { _, phase in if phase == .active { openWatchTask() } }
@@ -292,12 +293,21 @@ private struct CollieRootView: View {
         }
     }
 
+    private var watchHandoffBlocked: Bool {
+        workbenchesPresented || addingWeb || radarPresentation.importing || radarPresentation.configuring ||
+        radarPresentation.replyPresented || radarPresentation.watchTask != nil ||
+        shellPresentation.settingsPresented || shellPresentation.notesPresented ||
+        voiceNotes.recorder.isRecording || notifications.isBusy || voice.canCancel ||
+        voice.phase == .delivering || voice.canRetryDelivery
+    }
+
     private func openWatchTask() {
         guard scenePhase == .active, let request = watchLink.openRequest else { return }
         guard let id = UUID(uuidString: request.workbench),
               let action = radar.snapshots[id]?.allTasks.first(where: { $0.id == request.task }),
               ["等你决策", "等你验收"].contains(action.status ?? ""),
-              var record = radar.workbenches.first(where: { $0.id == id }) else {
+              var record = radar.workbenches.first(where: { $0.id == id }),
+              CollieWatchPhoneBridge.sourceToken(record.source) == request.sourceToken else {
             selectionNotice = shellText("手表事项已变化或不可见，请在手机刷新台账。")
             watchLink.openRequest = nil
             return

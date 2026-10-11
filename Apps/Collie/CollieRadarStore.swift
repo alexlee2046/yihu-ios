@@ -150,12 +150,13 @@ final class CollieRadarStore {
             try store(data, for: id)
             // Only a successful import supersedes an in-flight refresh.
             sourceRevisions[id, default: 0] += 1
-        } catch { errors[id] = message(for: error) }
+        } catch { errors[id] = message(for: error); watchUpdate?() }
     }
 
     func reportImportError(for id: UUID) {
         guard workbenches.contains(where: { $0.id == id }) else { return }
         errors[id] = NSLocalizedString("无法读取所选快照。", tableName: "Yihu", comment: "")
+        watchUpdate?()
     }
 
     func refresh(_ id: UUID) async {

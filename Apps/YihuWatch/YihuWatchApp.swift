@@ -15,10 +15,10 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
         #if DEBUG
         if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO"] == "1" {
             snapshot = .init(items: [
-                .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-decision",
+                .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-decision", sourceToken: String(repeating: "0", count: 64),
                       title: "确认下一阶段范围", project: "示例项目", status: "等你决策", priority: "P1",
                       next: "在手机查看原条目后确认", sourceDate: Date(), readFailed: false),
-                .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-acceptance",
+                .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-acceptance", sourceToken: String(repeating: "0", count: 64),
                       title: "验收管理视图", project: "示例项目", status: "等你验收", priority: "P1",
                       next: "核对清单并在手机反馈", sourceDate: Date().addingTimeInterval(-90000), readFailed: false)
             ], capturedAt: Date(), truncated: false, hasSource: true, sourceDate: Date())
@@ -43,7 +43,7 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
             notice = "请连接并解锁手机，打开一呼后重试"; return
         }
         var message: [String: String] = ["kind": "sync"]
-        if let item { message = ["kind": "open", "workbench": item.workbench, "task": item.task] }
+        if let item { message = ["kind": "open", "workbench": item.workbench, "task": item.task, "sourceToken": item.sourceToken] }
         let opening = item != nil
         WCSession.default.sendMessage(message, replyHandler: { response in
             let queued = response["queued"] as? Bool == true
