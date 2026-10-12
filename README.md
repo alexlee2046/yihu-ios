@@ -14,27 +14,29 @@ An independent native iOS companion for your own [Collie](https://github.com/Alt
 
 ### Available in `main` / 已合入主分支
 
-| Capability | Scope and requirements |
+| Capability / 功能 | Scope and requirements / 范围与要求 |
 | --- | --- |
-| Web workbench / 网页工作台 | WebKit shell connected to your own HTTPS Collie origin; server authentication still applies. |
-| On-device speech / 端侧语音 | Qwen3 ASR with separately downloaded, hash-verified models; review transcripts before sending. Composer insertion needs a compatible host integration. |
-| Voice notes / 录音笔记 | Record longer audio, transcribe in segments on the phone and retain local audio/transcripts. Requires microphone permission and compatible models. |
-| Share inbox / 分享收件箱 | Import text, links and files through the iOS share extension; content is staged in the App Group, not automatically sent. |
-| Live Activities / 实时活动 | Widget extension and optional Hermes relay integration; requires a compatible relay you control. The placeholder endpoint is intentionally unusable. |
-| Speaker verification / 声纹验证 | Enrollment/settings code is included, but compatible WeSpeaker/CAM++ model artifacts are not; verification-dependent paths remain unavailable without them. |
-| Localization / 本地化 | English and Simplified Chinese resources; some UI strings remain Chinese. |
+| Web workbench / 网页工作台 | WebKit shell connected to your own HTTPS Collie origin; server authentication still applies. 连接自有 HTTPS Collie 服务，仍需服务端认证。 |
+| On-device speech / 端侧语音 | Qwen3 ASR with separately downloaded, hash-verified models; review transcripts before sending. Composer insertion needs a compatible host integration. 模型需单独下载并校验哈希；发送前检查转写，自动填入需要兼容的宿主接口。 |
+| Voice notes / 录音笔记 | Record longer audio, transcribe in segments on the phone and retain local audio/transcripts. Requires microphone permission and compatible models. 支持长录音、手机分段转写及本地保存；需麦克风权限和兼容模型。 |
+| Share inbox / 分享收件箱 | Import text, links and files through the iOS share extension; content is staged in the App Group, not automatically sent. 分享的文字、链接和文件仅暂存 App Group，不自动发送。 |
+| Live Activities / 实时活动 | Widget extension and optional Hermes relay integration; requires a compatible relay you control. The placeholder endpoint is intentionally unusable. 需自有兼容中继；占位地址不可用，不代表通知链已开通。 |
+| Speaker verification / 声纹验证 | Enrollment/settings code is included, but compatible WeSpeaker/CAM++ model artifacts are not; verification-dependent paths remain unavailable without them. 包含登记与设置代码，不含模型；缺模型时相关路径不可用。声纹仅是可能误判的便利过滤，不是身份认证。 |
+| Localization / 本地化 | English and Simplified Chinese resources; some UI strings remain Chinese. 提供英文和简体中文资源，部分界面仍仅中文。 |
 
 ### On GitHub, pending acceptance / 已推送、待验收
 
 These changes are **not part of `main`**. Follow the PRs for source, test evidence and the current review state; a PR description is not proof of device acceptance.
+以下改动尚未合入主分支；源码、测试和审查状态以对应 PR 为准，PR 描述不等于真机验收通过。
 
-| Change | Review entry |
+| Change / 改动 | Review entry / 审查入口 |
 | --- | --- |
-| Multiple workbenches, native PM Radar, filtering/offline snapshots, optional confirmed replies, Apple Watch summaries/proposal handoff and guarded composer insertion | [PR #3](https://github.com/alexlee2046/yihu-ios/pull/3) · [Detailed branch documentation](https://github.com/alexlee2046/yihu-ios/blob/feat/workbench-radar/README.md) |
-| Configurable relay, voice-note insertion, agent abstractions, watch approval UI, relay/MCP tooling and photo diagnostics | [PR #4](https://github.com/alexlee2046/yihu-ios/pull/4) |
-| Opt-in physical-device read-only smoke checks | [PR #5](https://github.com/alexlee2046/yihu-ios/pull/5) |
+| Multiple workbenches, native PM Radar, filtering/offline snapshots, optional confirmed replies, Apple Watch summaries/proposal handoff and guarded composer insertion / 多工作台、原生台账、筛选与离线快照、受限确认回复、Watch 摘要与草稿接续、受保护填入 | [PR #3](https://github.com/alexlee2046/yihu-ios/pull/3) · [Detailed branch documentation / 分支详情](https://github.com/alexlee2046/yihu-ios/blob/feat/workbench-radar/README.md) · Partial device acceptance; remaining items tracked separately / 部分真机通过，其余缺口独立保留 |
+| Configurable relay, voice-note insertion, agent abstractions, watch approval UI, relay/MCP tooling and photo diagnostics / 可配置中继、录音笔记填入、代理抽象、手表审批界面、中继/MCP 工具及图片诊断 | [PR #4](https://github.com/alexlee2046/yihu-ios/pull/4) · Blocked by [security/functional findings / 安全与功能阻断](https://github.com/alexlee2046/yihu-ios/pull/4#pullrequestreview-5484553270) |
+| Opt-in, non-destructive physical-device checks / 显式授权的非破坏性真机检查 | [PR #5](https://github.com/alexlee2046/yihu-ios/pull/5) · Five checks passed; not full acceptance / 五项通过，不代表全部验收完成 |
 
 Watch direct replies, relay deployment and physical-device delivery are not implied by this list. Review and authorization boundaries remain separate from repository publication.
+本表不代表手表直写已授权、中继已部署或真机功能全部交付；源码发布与审查、授权、验收分别处理。
 
 ## Build locally
 

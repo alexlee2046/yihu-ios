@@ -6,7 +6,7 @@ This is a source-only client for a server you control, not a hosted service. No 
 
 If GitHub offers **Security → Report a vulnerability** for this repository, use that private channel. Otherwise open an issue containing only a minimal, non-sensitive description and ask the maintainer to arrange private follow-up. Do not publish exploit details, tokens, recordings, task text or private server addresses in issues or PRs.
 
-请勿公开密钥、录音、工作台正文或可直接利用的漏洞细节；先通过仓库可用的私密报告入口联系维护者。
+优先通过仓库可用的私密漏洞报告入口联系维护者；若该入口不可用，仅提交最简、不含敏感信息的 Issue，请维护者安排私下跟进。请勿在 Issue 或 PR 中公开漏洞利用细节、密钥、录音、工作台正文或私有服务器地址。
 
 ## Security boundaries
 

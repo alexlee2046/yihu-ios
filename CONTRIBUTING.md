@@ -5,7 +5,7 @@
 - Search existing [issues](https://github.com/alexlee2046/yihu-ios/issues) and [pull requests](https://github.com/alexlee2046/yihu-ios/pulls). Larger changes should first explain the problem and acceptance criteria in an issue.
 - Keep PRs focused. State the base branch and dependencies; features in open PRs are not automatically available in `main`.
 - Follow the [README](README.md#build-locally) to generate the Xcode project. Keep personal signing changes local; never commit credentials, provisioning profiles, model binaries, recordings or private workbench data.
-- Preserve explicit confirmation for writes. Do not bypass speaker verification or turn optional notification/relay support into automatic execution.
+- Preserve explicit confirmation and server authorization for writes. The voiceprint check is a convenience filter that can produce false positives, not authentication; do not bypass it or treat it as write authorization. Optional notification/relay support must not become automatic execution.
 
 ## Validation and review
 
