@@ -67,6 +67,8 @@ The `CollieUITests` scheme test target exercises both web and Radar navigation u
 
 This check activates the existing app without demo arguments or a reinstall, refuses an active interaction, checks visible Web/Radar shortcuts and repeated taps, reads notification capability status, opens/dismisses the workbench list, and restores the original selection. It never creates workbenches, edits preferences, enters text, records audio or sends replies. A missing prerequisite is a skip, and runner initialization/authorization failure is **not** a successful app test. Model accuracy, real replies, Watch pairing, notifications, restart recovery and system appearance changes remain separate acceptance items.
 
+`CollieDeviceAcceptanceTests` adds existing-source menu/pull refresh, foreground recovery, and reversible search isolation across two existing Radar workbenches. It requires separate `YIHU_DEVICE_ACCEPTANCE=1` opt-in and privately supplied existing workbench IDs/names. Refresh requires the displayed source-read time to advance and an external check of the device cache; minute-precision timestamps can require a later retry. Search checks require initially empty queries and remove only their own synthetic markers. These checks do not replace cold-restart, full filter/count, real-reply, microphone or Watch acceptance.
+
 ## Models and limitations
 
 Qwen3 ASR model files are **not** in the repository. Download them through the app's model screen (Hugging Face or ModelScope); the app verifies pinned SHA-256 hashes. Model downloads need storage, bandwidth and a capable device.
