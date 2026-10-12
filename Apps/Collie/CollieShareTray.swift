@@ -1,10 +1,6 @@
-import Foundation
 import Observation
+import Foundation
 import SwiftUI
-import UIKit
-
-/// Universal Agent Share Tray alias for modular abstraction.
-typealias AgentShareTray = CollieShareTrayModel
 
 private func shareText(_ key: String) -> String {
     NSLocalizedString(key, tableName: "Yihu", comment: "")
@@ -22,6 +18,9 @@ final class CollieShareTrayModel {
     private(set) var notice: String?
     private(set) var isInserting = false
     private let inbox: CollieShareInbox?
+    private(set) var isImportingImage = false
+    var imageError: String?
+    @ObservationIgnored private var imageImportTask: Task<Void, Never>?
 
     init(inbox: CollieShareInbox? = CollieShareInbox.shared()) {
         self.inbox = inbox
@@ -51,31 +50,31 @@ final class CollieShareTrayModel {
         refresh()
     }
 
-    /// Diagnostic image capture / photo selection: compress to JPEG (0.85) and place in inbox.
-    func importImage(_ image: UIImage, fileName: String? = nil) {
-        guard let inbox else { return }
-        let normalized = image.imageOrientation == .up ? image : UIGraphicsImageRenderer(size: image.size).image { _ in
-            image.draw(in: CGRect(origin: .zero, size: image.size))
+    /// Only one explicit image operation at a time. Cancellation or failure never
+    /// removes/replaces existing batches; no web attachment or send happens here.
+    func importImage(_ load: @escaping @MainActor () async throws -> CollieDiagnosticImage.Input?) {
+        guard imageImportTask == nil else { return }
+        isImportingImage = true
+        imageError = nil
+        imageImportTask = Task { [weak self] in
+            guard let self else { return }
+            defer { self.isImportingImage = false; self.imageImportTask = nil }
+            do {
+                guard let input = try await load() else { throw CollieDiagnosticImage.Failure.invalid }
+                guard let inbox = self.inbox else { throw CollieShareInboxError.unavailable }
+                _ = try await CollieDiagnosticImage.stage(input, inbox: inbox)
+                self.refresh()
+            } catch is CancellationError {
+                // The original inbox is unchanged.
+            } catch {
+                if !Task.isCancelled {
+                    self.imageError = shareText("图片未暂存：文件过大、格式不支持或处理失败。原有分享已保留。")
+                }
+            }
         }
-        guard let data = normalized.jpegData(compressionQuality: 0.85) else {
-            notice = shareText("图片处理失败")
-            return
-        }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd-HHmmss"
-        let timestamp = formatter.string(from: Date())
-        let resolvedName = fileName ?? "diagnostic-\(timestamp).jpg"
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(resolvedName)
-        do {
-            try data.write(to: tempURL)
-            defer { try? FileManager.default.removeItem(at: tempURL) }
-            _ = try inbox.save(texts: [], urls: [], files: [tempURL])
-            notice = nil
-        } catch {
-            notice = error.localizedDescription
-        }
-        refresh()
     }
+
+    func cancelImageImport() { imageImportTask?.cancel() }
 
     func discardAll() {
         batches.forEach { inbox?.remove($0) }
@@ -135,44 +134,59 @@ struct CollieShareTray: View {
     let session: CollieWebSession
 
     var body: some View {
-        if model.itemCount > 0 {
-            VStack(alignment: .leading, spacing: 8) {
-                Label(String(format: shareText("收到分享 · %lld 项"), Int64(model.itemCount)), systemImage: "tray.and.arrow.down.fill")
-                    .font(.subheadline.weight(.semibold))
-                Text(model.batches.flatMap(\.items).map(\.displayName).prefix(3).joined(separator: shareText("、")))
-                    .font(.caption)
-                    .foregroundStyle(BenchsideStyle.secondary)
-                    .lineLimit(2)
-                if let notice = model.notice {
-                    Text(notice)
-                        .font(.caption)
-                        .foregroundStyle(.orange)
+        VStack(spacing: 8) {
+            if let error = model.imageError {
+                HStack(alignment: .top) {
+                    Text(error).font(.caption).foregroundStyle(.orange)
                         .fixedSize(horizontal: false, vertical: true)
+                    Spacer(minLength: 8)
+                    Button(shareText("完成")) { model.imageError = nil }
+                        .frame(minWidth: 44, minHeight: 44)
                 }
-                HStack(spacing: 10) {
-                    Button {
-                        Task { await model.insertAll(into: session) }
-                    } label: {
-                        Text(model.isInserting ? shareText("正在填入…") : shareText("填入当前工作台"))
-                            .frame(maxWidth: .infinity, minHeight: 36)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(model.isInserting || !session.isConnected)
-                    .accessibilityIdentifier("collie-share-insert")
-                    Button(shareText("清除")) { model.discardAll() }
-                        .buttonStyle(.bordered)
-                        .disabled(model.isInserting)
-                        .accessibilityIdentifier("collie-share-discard")
-                }
-                .controlSize(.large)
+                .padding(14)
+                .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 18))
+                .padding(.horizontal, 16)
+                .accessibilityIdentifier("collie-image-error")
             }
-            .padding(14)
-            .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .overlay { RoundedRectangle(cornerRadius: 18, style: .continuous).stroke(BenchsideStyle.border, lineWidth: 1) }
-            .shadow(color: .black.opacity(0.12), radius: 14, y: 5)
-            .padding(.horizontal, 16)
-            .padding(.top, 10)
-            .tint(BenchsideStyle.accent)
+            if model.itemCount > 0 {
+                VStack(alignment: .leading, spacing: 8) {
+                    Label(String(format: shareText("收到分享 · %lld 项"), Int64(model.itemCount)), systemImage: "tray.and.arrow.down.fill")
+                        .font(.subheadline.weight(.semibold))
+                    Text(model.batches.flatMap(\.items).map(\.displayName).prefix(3).joined(separator: shareText("、")))
+                        .font(.caption)
+                        .foregroundStyle(BenchsideStyle.secondary)
+                        .lineLimit(2)
+                    if let notice = model.notice {
+                        Text(notice)
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    HStack(spacing: 10) {
+                        Button {
+                            Task { await model.insertAll(into: session) }
+                        } label: {
+                            Text(model.isInserting ? shareText("正在填入…") : shareText("填入当前工作台"))
+                                .frame(maxWidth: .infinity, minHeight: 36)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(model.isInserting || !session.isConnected)
+                        .accessibilityIdentifier("collie-share-insert")
+                        Button(shareText("清除")) { model.discardAll() }
+                            .buttonStyle(.bordered)
+                            .disabled(model.isInserting)
+                            .accessibilityIdentifier("collie-share-discard")
+                    }
+                    .controlSize(.large)
+                }
+                .padding(14)
+                .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .overlay { RoundedRectangle(cornerRadius: 18, style: .continuous).stroke(BenchsideStyle.border, lineWidth: 1) }
+                .shadow(color: .black.opacity(0.12), radius: 14, y: 5)
+                .padding(.horizontal, 16)
+                .padding(.top, 10)
+                .tint(BenchsideStyle.accent)
+            }
         }
     }
 }

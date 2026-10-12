@@ -58,13 +58,14 @@ struct CollieWorkbenchShortcutBar: View {
                     }
                 }
                 .onAppear { if let selected { proxy.scrollTo(selected, anchor: .center) } }
-                .onChange(of: selected) { _, id in
-                    if let id { proxy.scrollTo(id, anchor: .center) }
-                }
                 .onChange(of: visible.map(\.id)) { _, _ in
                     if let selected { proxy.scrollTo(selected, anchor: .center) }
                 }
             }
+            // Selection changes label metrics. Recreate only the shortcut
+            // viewport so scroll/AX geometry is based on the selected layout,
+            // rather than scrolling with the outgoing label measurements.
+            .id(selected)
             Button(action: openAll) {
                 Image(systemName: "square.grid.2x2")
                     .font(.subheadline)

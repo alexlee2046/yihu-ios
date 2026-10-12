@@ -22,10 +22,10 @@
     <string>$(MARKETING_VERSION)</string>
     <key>CFBundleVersion</key>
     <string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>NSCameraUsageDescription</key>
+    <string>仅在您选择拍照后使用相机，图片暂存本机分享托盘，不自动上传或发送。</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>仅在您点击原生麦克风按钮后录音，并由 iPhone 上的 Qwen3 模型离线转成文字。</string>
-    <key>NSCameraUsageDescription</key>
-    <string>用于拍摄设备报错、屏幕截图或现场草图，就地轻量压缩并自动挂载至 Agent 任务附件。</string>
     <key>CFBundleDocumentTypes</key>
     <array>
         <dict>

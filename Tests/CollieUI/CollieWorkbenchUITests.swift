@@ -27,6 +27,7 @@ final class CollieWorkbenchUITests: XCTestCase {
             XCTAssertTrue(app.textFields["collie-radar-search"].waitForExistence(timeout: 5))
         }
         attachWorkbenchScreen(name: "integrated-workbench-initial")
+        logShortcutHitTargets(app)
 
         let identifiers = tabs.allElementsBoundByIndex.map(\.identifier)
         let web = try XCTUnwrap(identifiers.first(where: { $0.contains("://") }), "Must cover a web workbench")
@@ -47,7 +48,14 @@ final class CollieWorkbenchUITests: XCTestCase {
             button.tap()
             attachWorkbenchScreen(name: id.contains("://") ? "web-after-switch" : "radar-after-switch")
             XCTAssertTrue(button.isSelected)
-            let ready = XCTNSPredicateExpectation(predicate: NSPredicate(format: "isHittable == true"), object: button)
+            XCTAssertFalse(button.label.isEmpty, "A shortcut must retain its accessible name")
+            logShortcutHitTargets(app)
+            if id.contains("://") && app.buttons["collie-web-reload"].exists {
+                XCTAssertEqual(app.webViews.count, 0, "The native error page must replace WebKit's accessibility tree")
+            }
+            // Evaluate the actual XCUIElement getter rather than the KVC
+            // attribute dictionary; keep the same hittability requirement.
+            let ready = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in button.isHittable }, object: button)
             XCTAssertEqual(XCTWaiter.wait(for: [ready], timeout: 10), .completed)
             button.tap()
             XCTAssertFalse(app.alerts.firstMatch.exists)
@@ -81,7 +89,18 @@ final class CollieWorkbenchUITests: XCTestCase {
         let settings = app.buttons["collie-connection-settings"]
         XCTAssertTrue(settings.isHittable)
         settings.tap()
-        XCTAssertTrue(app.descendants(matching: .any)["collie-native-notifications-status"].waitForExistence(timeout: 5))
+        attachWorkbenchScreen(name: "settings-after-open")
+        let notificationStatus = app.descendants(matching: .any)["collie-native-notifications-status"]
+        // List cells outside the viewport are lazy at accessibility sizes.
+        // Scroll the settings list, without relaxing the status assertion.
+        let settingsList = app.collectionViews.firstMatch
+        XCTAssertTrue(settingsList.waitForExistence(timeout: 5))
+        for _ in 0..<3 where !notificationStatus.exists {
+            settingsList.swipeUp()
+        }
+        attachWorkbenchScreen(name: "settings-notification-status")
+        if !notificationStatus.exists { print("Synthetic settings hierarchy: \(app.debugDescription)") }
+        XCTAssertTrue(notificationStatus.waitForExistence(timeout: 5))
         app.terminate()
         app.launch()
         XCTAssertTrue(all.waitForExistence(timeout: 15))
@@ -101,6 +120,18 @@ final class CollieWorkbenchUITests: XCTestCase {
         if !app.buttons[web].isHittable { app.scrollViews.firstMatch.swipeRight() }
         XCTAssertTrue(app.buttons[web].isHittable)
         app.buttons[web].tap()
+    }
+
+    @MainActor
+    private func logShortcutHitTargets(_ app: XCUIApplication) {
+        // Only this isolated synthetic installation: retain AX geometry and
+        // hit-testing evidence without replacing any functional assertion.
+        for button in app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "collie-shortcut-")).allElementsBoundByIndex {
+            print("Synthetic shortcut: \(button.identifier) selected=\(button.isSelected) enabled=\(button.isEnabled) hittable=\(button.isHittable) frame=\(button.frame)")
+            if button.isSelected && !button.isHittable {
+                print("Synthetic hierarchy at blocked shortcut:\n\(app.debugDescription)")
+            }
+        }
     }
 
     @MainActor

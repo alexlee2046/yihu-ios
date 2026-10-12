@@ -1,6 +1,58 @@
-# Yihu for iOS
+# 一呼 · Yihu for iOS
 
-An independent native iOS companion for your own [Collie](https://github.com/AltanS/collie) workbench. Includes a WebKit shell, native voice transcription, a share extension and Live Activity UI. This is a source release, not an App Store binary or an official Collie client.
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Platform: iOS 18+](https://img.shields.io/badge/iOS-18%2B-blue.svg)](project.yml)
+[![Swift: 6](https://img.shields.io/badge/Swift-6-orange.svg)](project.yml)
+
+Yihu is an independent native iOS browser shell optimized for Agent workbenches, including your own [Collie](https://github.com/AltanS/collie), OpenClaw or Hermes web UI. It adds on-device speech, voice notes and iOS sharing around WebKit; compatible integrations can enable native notifications and Live Activities. It is **not a general-purpose Agent platform**: it does not host Agents, supply a backend or make arbitrary workbenches natively compatible. This is a source release, not an App Store binary or an official client of those services.
+
+一呼是**针对 Agent 场景优化的原生 iOS 浏览器壳**，用于访问自有 Collie、OpenClaw、Hermes 等网页工作台，并提供端侧语音、录音笔记与系统分享。基础 HTTPS 浏览不等于原生增强已适配；通知、实时活动等需兼容接口与服务。它不是通用 Agent 平台，不托管 Agent、不提供后端，也不承诺任意工作台原生兼容。需要自备服务、模型和签名配置；仓库不提供预配置服务器或可安装的 App Store 成品，也不是上述服务的官方客户端。
+
+[Build / 构建](#build-locally) · [Connection / 连接](#connect-to-your-own-workbench) · [Limitations / 限制](#models-and-limitations) · [Contributing / 贡献](CONTRIBUTING.md) · [Security / 安全](SECURITY.md)
+
+## Feature overview / 功能概览
+
+### Available in `main` / 已合入主分支
+
+Product source in `main` now includes [PR #3, c76dbd3](https://github.com/alexlee2046/yihu-ios/pull/3). “Available” means source is merged, not that every device/service combination has passed acceptance.
+主分支已合入 PR #3；“已合入”不等于所有设备与服务组合都已验收。
+
+| Capability / 功能 | Scope and requirements / 范围与要求 |
+| --- | --- |
+| Web workbenches / 网页工作台 | WebKit browsing of reachable, trusted HTTPS origins, with per-workbench shortcuts and in-memory navigation state. Login and page compatibility remain the server's responsibility. 支持自有 HTTPS 网页、快捷入口与工作台切换；登录与网页兼容仍取决于服务端，网页导航状态仅在内存保留。 |
+| On-device speech / 端侧语音 | Qwen3 ASR with separately downloaded, hash-verified models. Guarded insertion respects explicit host refusal and compatible draft editors; it never presses Send. 模型需单独下载并校验；填入遵守宿主拒绝与草稿编辑器边界，发送前由用户检查，不自动发送。 |
+| Voice notes / 录音笔记 | Record longer audio, transcribe in segments on the phone and retain local audio/transcripts. Requires microphone permission and compatible models. 支持长录音、手机分段转写及本地保存；需麦克风权限和兼容模型。 |
+| PM Radar / 原生台账 | Per-workbench filters, management counts and bounded offline snapshots; source-read timestamps distinguish cache from fresh reads. 工作台独立筛选、管理计数与有界离线快照，读取时间区分旧缓存与最新来源；需自备 JSON 数据源。 |
+| Confirmed replies / 确认后回复 | Eligible decision/acceptance items require separately authorized server writes, explicit confirmation and receipt readback. 决策与验收反馈需服务端独立授权、用户确认及回执核验；不自动改状态或执行任务。 |
+| Apple Watch companion / 手表伴侣 | Paired-phone summaries, protected draft handoff and phone-assisted local speech recognition. 配对手机提供摘要、受保护草稿接续及手机端侧识别；手表直写未授权，真机余项仍待验证。 |
+| Share inbox / 分享收件箱 | Import text, links and files through the iOS share extension; content is staged in the App Group, not automatically sent. 分享的文字、链接和文件仅暂存 App Group，不自动发送。 |
+| Live Activities / 实时活动 | Widget extension and optional Hermes relay integration; requires a compatible relay you control. The placeholder endpoint is intentionally unusable. 需自有兼容中继；占位地址不可用，不代表通知链已开通。 |
+| Speaker verification / 声纹验证 | Enrollment/settings code is included, but compatible WeSpeaker/CAM++ model artifacts are not; verification-dependent paths remain unavailable without them. 包含登记与设置代码，不含模型；缺模型时相关路径不可用。声纹仅是可能误判的便利过滤，不是身份认证。 |
+| Localization / 本地化 | English and Simplified Chinese resources; some UI strings remain Chinese. 提供英文和简体中文资源，部分界面仍仅中文。 |
+
+### Verification scope / 验证范围
+
+The fixed PR #3 candidate passed [native/build and light/dark/maximum-text simulator CI](https://github.com/alexlee2046/yihu-ios/actions/runs/38183231918). Five physical-device checks passed on the installed c76 candidate: navigation, menu refresh, pull refresh, foreground recovery and reversible cross-workbench search isolation. Existing automatic transcript insertion was separately accepted.
+PR #3 固定候选已有原生/构建及三种模拟器场景通过证据；已安装 c76 真机通过导航、菜单刷新、下拉刷新、前后台恢复、双工作台搜索隔离五项，配置回读确认已还原。自动填入沿用此前独立验收。
+
+Maximum text size on a physical phone, full filtering/counts and two live sources, cold-start shortcuts, real replies, remaining Watch/recording and push delivery remain device/service acceptance items. Alex will test and provide feedback separately. Merging source does not certify these paths; no additional acceptance tooling is being added.
+真机最大字号、完整筛选计数与双实时来源、冷启动快捷配置、真实回复、Watch/录音余项及推送交付由 Alex 后测反馈；代码合入不等于这些路径已通过，不继续扩展验收工具。
+
+[PR #5](https://github.com/alexlee2046/yihu-ios/pull/5) supplies opt-in, non-destructive checks, not new product capabilities. [CI for its fixed 61e158c source](https://github.com/alexlee2046/yihu-ios/actions/runs/38244125098) is separate from the earlier 991292c run.
+PR #5 提供显式授权的非破坏性检查，不是新增产品功能；测试结果绑定具体提交，旧 991292c CI 不替代 61e158c 的回证。
+
+### Bounded client enhancements / 有界客户端增量
+
+[PR #4](https://github.com/alexlee2046/yihu-ios/pull/4) is limited to the [PM-approved reduced scope](https://github.com/alexlee2046/yihu-ios/pull/4#issuecomment-6124724831). Its review/CI evidence is separate from the c76 device evidence above.
+
+- **Voice notes:** explicit insertion uses the workbench/page captured when opening notes and the existing refusal/draft guards; it never sends. Each note reserves one handoff in its existing local metadata before insertion or share-tray staging. Uncertain/failed handoffs retain the original note and are not automatically retried or converted into another staged copy; check the destination and use Copy if needed. Direct insertion is limited to 3,000 transcript characters; longer notes use the existing attachment path.
+- **Images:** explicit camera/photo selection only stages a JPEG in the existing inbox. Files are capped at 32 MiB and 32 million source pixels before decoding; camera-provided bitmaps are capped at 32 million pixels/128 MiB before further processing. Background downsampling/normalization produces at most 2,048 pixels per side with scale 1 and strips source metadata. Cancelled or failed processing preserves existing shares. Upload/attachment still requires the existing separate user action.
+- **Live Activities:** optional `agentName` changes display text only; missing/blank names retain Hermes. It adds no notification permission, provider or delivery claim.
+
+PR #4 按 PM 减法范围仅保留录音笔记显式填入、图片暂存及活动可选名称。笔记绑定打开记录时的工作台/页面，每条在原元数据中先保留一次交接标记；失败或结果不确定保留原文、不自动重试或转存，核对目标后可手动复制。3000字以上沿用附件暂存。图片文件先限32 MiB/3200万像素；系统相机已提供的位图先限3200万像素/128 MiB，再后台缩至单边最多2048、scale 1，规范方向并移除来源元数据。取消/失败保留原分享，不自动上传或发送。名称仅显示、缺省仍为Hermes；这些新增路径的真机余项由Alex后测，不能引用旧c76真机证据代替。
+
+Relay server/containers/MCP, configurable or inferred relay registration, general Agent abstractions and standalone Watch approval are excluded. Existing main-line Watch draft → phone confirmation remains unchanged; production notifications and Watch direct-write authorization retain their separate gates.
+本轮撤出中继服务/容器/MCP、可配置或推断式中继注册、通用Agent抽象、独立手表审批及对应实现声明；既有手表草稿→手机确认保持不变，通知生产接入与手表直写仍走原独立授权门。
 
 ## Build locally
 
@@ -8,18 +60,22 @@ Requires macOS, Xcode with the iOS 18 SDK or newer and Swift 6, and [XcodeGen](h
 
 1. In `project.yml`, replace `YIHU_BUNDLE_ID` and `YIHU_APP_GROUP` with unique identifiers registered to **your own** Apple developer team. Set `DEVELOPMENT_TEAM` to your own team ID. The main app and share extension must use the same App Group.
 2. Run `xcodegen generate --spec project.yml` in this directory.
-3. Open `Yihu.xcodeproj`, select the `CollieiOS` scheme and your device, and configure signing for all three targets with your own team. Enable App Groups and Push Notifications using your own provisioning. Push capability may require a paid Apple Developer membership.
+3. Open `Yihu.xcodeproj`, select the `CollieiOS` scheme and your device, and configure signing for the app, extensions and Watch companion with your own team. Enable App Groups and Push Notifications using your own provisioning. Push capability may require a paid Apple Developer membership.
 4. Build and run in Xcode. No signing identities, profiles, APNs keys, server credentials or prebuilt app are included. Do not commit your signing configuration.
 
 All Swift imports are Apple SDK modules. The required third-party Swift inference source is vendored with its license; there is no dependency on the original private workspace or a local Swift package.
 
 ## Connect to your own workbench
 
-On first launch, enter your own HTTPS Collie origin, such as `https://collie.example.com`. No workbench is preconfigured. The validator accepts only an origin: no user/password, path, query or fragment. The iPhone must be able to reach your server and trust its TLS certificate. Authenticate/pair with your server as required; the app does not bypass Collie's permissions.
+On first launch, enter your own HTTPS workbench origin, such as `https://collie.example.com`. No workbench is preconfigured. Collie, OpenClaw and Hermes are examples of web UIs, not a certified native-integration compatibility list. The validator accepts only an origin: no user/password, path, query or fragment. The iPhone must be able to reach your server and trust its TLS certificate. Authenticate/pair with your server as required; the app does not bypass server permissions.
+
+首次连接只填自有 HTTPS 工作台源地址，不带账号密码、路径、参数或片段；手机需能访问服务并信任其 TLS 证书。上述产品仅是网页工作台示例，不是原生功能适配认证清单。
 
 Native notifications require the web bridge `window.collieNativePush.request(operation, payload)` for `status`, `register` and `unregister`, matching native-push server endpoints, and an APNs provider configured for **your app's bundle ID and signing environment**. APNs private keys belong on your server, never in this app repository. Stock Collie v1.19.2 does not expose this APNs extension or a public native-notification delivery adapter. Settings checks the optional capability without asking for notification permission or registering a device; a missing bridge is shown as unavailable. Existing bindings are retained so they can be explicitly disabled or reused with a compatible origin. No relay, provider credentials or server patches are created automatically. Web access and native notification support are different capabilities.
 
 Voice insertion does not require a Collie fork. The optional `collie:native-transcript` host event is tried first; an observed refusal never falls through. Without a handler, a native-injected adapter edits only the field the user last focused on the same page. The stock Collie v1.19.2 DOM adapter requires an editable composer and an unambiguous, unlocked draft-mode control; sending, direct terminal typing and unknown layouts are refused. An incompatible page retains the transcript in the native panel for explicit copy or retry. No insertion path presses Send; transcription should be reviewed before sending. The separate Hermes Live Activity integration is optional and requires a compatible relay you control; its source endpoint is deliberately `https://relay.example.invalid`. Do not enable it without configuring your relay in `CollieHermesPush.swift`.
+
+语音填入不自动发送；宿主明确拒绝后不降级绕过，未知编辑器保留原生转写供用户处理。通知需网页桥、服务端接口及匹配签名环境的 APNs 配置；实时活动还需自有兼容中继，占位地址不可用。
 
 ## Workbenches and PM Radar
 
@@ -63,13 +119,23 @@ swiftc -swift-version 6 Apps/Collie/CollieRadarModel.swift \
 
 The `CollieUITests` scheme test target exercises both web and Radar navigation using a synthetic `.invalid` origin and creates a Radar workbench if needed. Run it only on an isolated simulator installation, not against your saved device workbenches. The `Yihu iOS acceptance` workflow runs the model checks, builds the independent app/extensions/test target, and exercises light, dark and accessibility text sizes on a standard hosted macOS runner. Its artifacts contain synthetic-data screenshots and test results, not device or signing evidence. Physical-device acceptance is separate.
 
+`CollieDeviceSmokeTests` is an opt-in, presentation-only check of an **already installed** app. Build a separate UI-test runner containing only that test file, using an existing device-authorized development profile. Its `xctestrun` must use `UseDestinationArtifacts`, the installed runner's `TestHostBundleIdentifier` and `TestBundleDestinationRelativePath`, and the existing app's `UITargetAppBundleIdentifier`; omit install paths and dependent products. Set runner environment variables `YIHU_DEVICE_SMOKE=1` and `YIHU_EXISTING_APP_BUNDLE_ID` explicitly. Keep `SystemAttachmentLifetime` and `UserAttachmentLifetime` at `keepNever`, disable parallel execution, and keep all physical-device diagnostics private/local. The owner must approve any XCTest automation/passcode prompt on the phone. Do not disable the device passcode or reset pairing to bypass it.
+
+This check activates the existing app without demo arguments or a reinstall, refuses an active interaction, checks visible Web/Radar shortcuts and repeated taps, reads notification capability status, opens/dismisses the workbench list, and restores the original selection. It never creates workbenches, edits preferences, enters text, records audio or sends replies. A missing prerequisite is a skip, and runner initialization/authorization failure is **not** a successful app test. Model accuracy, real replies, Watch pairing, notifications, restart recovery and system appearance changes remain separate acceptance items.
+
+`CollieDeviceAcceptanceTests` adds existing-source menu/pull refresh, foreground recovery, and reversible search isolation across two existing Radar workbenches. It requires separate `YIHU_DEVICE_ACCEPTANCE=1` opt-in and privately supplied existing workbench IDs/names. Refresh requires the displayed source-read time to advance and an external check of the device cache; minute-precision timestamps can require a later retry. Search checks require initially empty queries and remove only their own synthetic markers. These checks do not replace cold-restart, full filter/count, real-reply, microphone or Watch acceptance.
+
 ## Models and limitations
 
 Qwen3 ASR model files are **not** in the repository. Download them through the app's model screen (Hugging Face or ModelScope); the app verifies pinned SHA-256 hashes. Model downloads need storage, bandwidth and a capable device.
 
-WeSpeaker and CAM++ speaker-verification artifacts are deliberately omitted. Code loads these resources dynamically and reports missing models rather than bundling private/generated artifacts. Speaker enrollment/verification and any voice-insertion path requiring a verified speaker will not be available without compatible models. Do not disable verification to work around missing assets. See `Apps/Collie/ThirdPartyNotices.txt` and `Vendor/CAMPlus` for provenance. Core ML conversions must match the pinned hashes in the source; upstream weights alone are not a drop-in replacement.
+WeSpeaker and CAM++ speaker-verification artifacts are deliberately omitted. Code loads these resources dynamically and reports missing models rather than bundling private/generated artifacts. Speaker enrollment/verification and any voice-insertion path requiring a verified speaker will not be available without compatible models. Do not disable verification to work around missing assets. See [ThirdPartyNotices.txt](Apps/Collie/ThirdPartyNotices.txt) and [CAMPlus provenance](Apps/Collie/Vendor/CAMPlus) for provenance. Core ML conversions must match the pinned hashes in the source; upstream weights alone are not a drop-in replacement.
 
-The independent checkout has passed a Debug iOS Simulator app/extension build and standalone Radar model/persistence checks. Remote UI acceptance is recorded on the pull request; a workflow definition alone is not a passing result. No physical-device push, voice insertion or full regression result is claimed. Some UI strings remain Chinese.
+Build, simulator and partial physical-device evidence is linked above. It is not certification of every device, notification path or end-to-end service integration. Some UI strings remain Chinese.
+
+On-device transcription does not mean all data stays on the phone: web browsing, user sends/uploads and optional notification/relay integrations involve their respective services. Use synthetic data in public screenshots, logs and issues; redact service origins, account/device identifiers, local paths, task text and recordings. Never publish credentials, signing materials or model artifacts.
+
+模型不随仓库提供，下载需要存储、带宽与适用设备；缺声纹模型时相关能力不可用，声纹不能替代身份认证或写入授权。端侧转写不代表所有数据留在本机：网页访问、用户发送/上传与可选通知/中继会涉及相应服务。公开截图、日志和 Issue 仅用合成数据，脱敏服务地址、账号/设备标识、本地路径、任务正文与录音，不上传凭据、签名材料或模型文件。已合入源码或局部证据均不作为完整真机验收结论。
 
 ## License
 
