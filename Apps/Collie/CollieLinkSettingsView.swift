@@ -47,6 +47,10 @@ struct CollieLinkSettingsView: View {
 
             CollieVoiceModelSection(voice: voice)
 
+            CollieRecognitionParametersSection(
+                isBusy: voice.isRecording || voice.canCancel || voice.phase == .delivering
+            )
+
             CollieNearFieldCaptureSection(
                 isEnabled: $nearFieldCaptureEnabled,
                 isRecording: voice.isRecording,
@@ -116,6 +120,66 @@ struct CollieNearFieldCaptureSection: View {
         } footer: {
             Text(settingsText("人声突显可减少背景声音，帮助突出附近的人声。系统麦克风模式由 iOS 控制。"))
         }
+    }
+}
+
+/// Keep supported ASR controls beside the existing vocabulary and capture settings.
+struct CollieRecognitionParametersSection: View {
+    @AppStorage(CollieRecognitionPreferences.languageKey) private var language = "automatic"
+    @AppStorage(CollieRecognitionPreferences.maxTokensKey) private var maxTokens = CollieRecognitionPreferences.defaultMaxTokens
+    @AppStorage(CollieRecognitionPreferences.usesTermsKey) private var usesTerms = true
+    let isBusy: Bool
+
+    private var selectedLanguage: Binding<CollieRecognitionPreferences.Language> {
+        Binding(
+            get: { CollieRecognitionPreferences.Language(rawValue: language) ?? .automatic },
+            set: { language = $0.rawValue }
+        )
+    }
+
+    private var boundedTokens: Binding<Int> {
+        Binding(
+            get: { CollieRecognitionPreferences.clampTokens(maxTokens) },
+            set: { maxTokens = CollieRecognitionPreferences.clampTokens($0) }
+        )
+    }
+
+    var body: some View {
+        Section {
+            Picker(settingsText("识别语言"), selection: selectedLanguage) {
+                ForEach(CollieRecognitionPreferences.Language.allCases) { option in
+                    Text(option.label).tag(option)
+                }
+            }
+            .accessibilityIdentifier("collie-recognition-language")
+            Text(settingsText("中英混说请选择自动识别。指定中文或英文只提供单一语言提示，不保证准确率提高。"))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            Toggle(settingsText("使用常用词提示"), isOn: $usesTerms)
+                .accessibilityIdentifier("collie-recognition-use-terms")
+            Text(settingsText("关闭后保留词表，但识别时不参考。可在上方“常用词”编辑提示词及优先顺序。"))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            Stepper(value: boundedTokens, in: CollieRecognitionPreferences.tokenRange, step: 64) {
+                LabeledContent(settingsText("最大输出 token 数"), value: boundedTokens.wrappedValue.formatted())
+            }
+            .accessibilityIdentifier("collie-recognition-max-tokens")
+            Text(settingsText("默认 448，可调 64–1024。不是字数；设得太低可能截断转写，调高只增加输出上限，仍受模型缓存限制，不会直接提高准确率。"))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            Button(settingsText("恢复默认识别参数")) {
+                language = CollieRecognitionPreferences.Language.automatic.rawValue
+                maxTokens = CollieRecognitionPreferences.defaultMaxTokens
+                usesTerms = true
+            }
+            .frame(minHeight: 44)
+            .accessibilityIdentifier("collie-recognition-reset")
+        } header: {
+            Text(settingsText("识别参数"))
+        } footer: {
+            Text(settingsText("自动保存在本机，从下一次识别生效，语音输入和语音笔记共用。恢复默认不改变常用词表或收音设置。当前模型固定使用 16 kHz 单声道及贪心解码，不支持温度、top-p、beam size 调节。"))
+        }
+        .disabled(isBusy)
     }
 }
 

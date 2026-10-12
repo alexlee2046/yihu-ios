@@ -10,7 +10,7 @@ enum CollieConnectionOrigin {
     static let recentKey = "collie.connection.recent"
     static let customNamesKey = "collie.connection.custom-names"
     static let pageNamesKey = "collie.connection.page-names"
-    static let maxRecent = 6
+    static let favoritesKey = "collie.connection.favorites"
 
     static func validate(_ rawValue: String) -> URL? {
         let input = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -47,6 +47,7 @@ final class CollieConnectionSettings {
     @ObservationIgnored var isNotificationEnabled: @MainActor (URL) -> Bool = { _ in false }
     private(set) var customNames: [String: String] = [:]
     private(set) var pageNames: [String: String] = [:]
+    private(set) var favorites: Set<URL> = []
     var draft = ""
     private(set) var validationMessage: String?
 
@@ -64,6 +65,22 @@ final class CollieConnectionSettings {
         if recentOrigins.isEmpty, let currentOrigin { recentOrigins = [currentOrigin] }
         customNames = defaults.dictionary(forKey: CollieConnectionOrigin.customNamesKey) as? [String: String] ?? [:]
         pageNames = defaults.dictionary(forKey: CollieConnectionOrigin.pageNamesKey) as? [String: String] ?? [:]
+        favorites = Set((defaults.stringArray(forKey: CollieConnectionOrigin.favoritesKey) ?? [])
+            .compactMap(CollieConnectionOrigin.validate))
+    }
+
+    func toggleFavorite(_ origin: URL) {
+        guard recentOrigins.contains(origin) else { return }
+        if favorites.contains(origin) { favorites.remove(origin) } else { favorites.insert(origin) }
+        defaults.set(favorites.map(\.absoluteString).sorted(), forKey: CollieConnectionOrigin.favoritesKey)
+    }
+
+    func moveOrigins(from offsets: IndexSet, to destination: Int) {
+        let moving = offsets.sorted().map { recentOrigins[$0] }
+        let adjusted = destination - offsets.filter { $0 < destination }.count
+        for index in offsets.sorted(by: >) { recentOrigins.remove(at: index) }
+        recentOrigins.insert(contentsOf: moving, at: adjusted)
+        defaults.set(recentOrigins.map(\.absoluteString), forKey: CollieConnectionOrigin.recentKey)
     }
 
     var hasSavedOrigin: Bool { currentOrigin != nil }
@@ -129,14 +146,8 @@ final class CollieConnectionSettings {
         var ordered = recentOrigins.filter { $0 != normalized }
         if reorderRecent || !recentOrigins.contains(normalized) { ordered.insert(normalized, at: 0) }
         else if let index = recentOrigins.firstIndex(of: normalized) { ordered.insert(normalized, at: index) }
-        // Six is a soft cap: never discard an origin with an enabled push binding.
-        for candidate in ordered.reversed() where ordered.count > CollieConnectionOrigin.maxRecent {
-            if candidate != normalized && !isNotificationEnabled(candidate) {
-                ordered.removeAll { $0 == candidate }
-                customNames.removeValue(forKey: candidate.absoluteString)
-                pageNames.removeValue(forKey: candidate.absoluteString)
-            }
-        }
+        // Saved workbenches are user-managed: adding one must not silently erase
+        // another workbench, its name, favorite or notification binding.
         recentOrigins = ordered
         defaults.set(ordered.map(\.absoluteString), forKey: CollieConnectionOrigin.recentKey)
         defaults.set(customNames, forKey: CollieConnectionOrigin.customNamesKey)

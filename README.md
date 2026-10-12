@@ -14,32 +14,44 @@ Yihu is an independent native iOS browser shell optimized for Agent workbenches,
 
 ### Available in `main` / 已合入主分支
 
-Source checked against [`main` at 27ed419](https://github.com/alexlee2046/yihu-ios/tree/27ed41923664704eef26be0df887358cf133a151). “Available” means source is merged, not that every device/service combination has passed acceptance.
-以下按主分支源码核实；“已合入”不等于所有设备与服务组合都已验收。
+Product source in `main` now includes [PR #3, c76dbd3](https://github.com/alexlee2046/yihu-ios/pull/3). “Available” means source is merged, not that every device/service combination has passed acceptance.
+主分支已合入 PR #3；“已合入”不等于所有设备与服务组合都已验收。
 
 | Capability / 功能 | Scope and requirements / 范围与要求 |
 | --- | --- |
-| Web workbench / 网页工作台 | WebKit browsing of a reachable, trusted HTTPS workbench origin, not limited to Collie; login and page compatibility remain the server's responsibility. 可连接可达且证书受信的 HTTPS 网页工作台，不限 Collie；登录与页面兼容仍取决于服务端。 |
-| On-device speech / 端侧语音 | Qwen3 ASR with separately downloaded, hash-verified models; review transcripts before sending. Insertion tries the Collie event bridge, then the last-focused editable field on the trusted page; custom editors may not work. 模型需单独下载并校验哈希；发送前检查转写；填入先尝试 Collie 事件桥，再尝试同源页面最近聚焦的可编辑输入框，自定义编辑器不保证兼容。 |
+| Web workbenches / 网页工作台 | WebKit browsing of reachable, trusted HTTPS origins, with per-workbench shortcuts and in-memory navigation state. Login and page compatibility remain the server's responsibility. 支持自有 HTTPS 网页、快捷入口与工作台切换；登录与网页兼容仍取决于服务端，网页导航状态仅在内存保留。 |
+| On-device speech / 端侧语音 | Qwen3 ASR with separately downloaded, hash-verified models. Guarded insertion respects explicit host refusal and compatible draft editors; it never presses Send. 模型需单独下载并校验；填入遵守宿主拒绝与草稿编辑器边界，发送前由用户检查，不自动发送。 |
 | Voice notes / 录音笔记 | Record longer audio, transcribe in segments on the phone and retain local audio/transcripts. Requires microphone permission and compatible models. 支持长录音、手机分段转写及本地保存；需麦克风权限和兼容模型。 |
+| PM Radar / 原生台账 | Per-workbench filters, management counts and bounded offline snapshots; source-read timestamps distinguish cache from fresh reads. 工作台独立筛选、管理计数与有界离线快照，读取时间区分旧缓存与最新来源；需自备 JSON 数据源。 |
+| Confirmed replies / 确认后回复 | Eligible decision/acceptance items require separately authorized server writes, explicit confirmation and receipt readback. 决策与验收反馈需服务端独立授权、用户确认及回执核验；不自动改状态或执行任务。 |
+| Apple Watch companion / 手表伴侣 | Paired-phone summaries, protected draft handoff and phone-assisted local speech recognition. 配对手机提供摘要、受保护草稿接续及手机端侧识别；手表直写未授权，真机余项仍待验证。 |
 | Share inbox / 分享收件箱 | Import text, links and files through the iOS share extension; content is staged in the App Group, not automatically sent. 分享的文字、链接和文件仅暂存 App Group，不自动发送。 |
 | Live Activities / 实时活动 | Widget extension and optional Hermes relay integration; requires a compatible relay you control. The placeholder endpoint is intentionally unusable. 需自有兼容中继；占位地址不可用，不代表通知链已开通。 |
 | Speaker verification / 声纹验证 | Enrollment/settings code is included, but compatible WeSpeaker/CAM++ model artifacts are not; verification-dependent paths remain unavailable without them. 包含登记与设置代码，不含模型；缺模型时相关路径不可用。声纹仅是可能误判的便利过滤，不是身份认证。 |
 | Localization / 本地化 | English and Simplified Chinese resources; some UI strings remain Chinese. 提供英文和简体中文资源，部分界面仍仅中文。 |
 
-### On GitHub, pending acceptance / 已推送、待验收
+### Verification scope / 验证范围
 
-These draft PRs are **not part of `main`** and do not redefine the released product as a universal Agent platform. Follow the PRs for source, test evidence and the current review state; a PR description is not proof of device acceptance.
-以下 PR 均为草稿、尚未合入；代理抽象或 MCP 工具的候选代码不改变产品定位。源码、测试和审查状态以对应 PR 为准，PR 描述不等于真机验收通过。
+The fixed PR #3 candidate passed [native/build and light/dark/maximum-text simulator CI](https://github.com/alexlee2046/yihu-ios/actions/runs/38183231918). Five physical-device checks passed on the installed c76 candidate: navigation, menu refresh, pull refresh, foreground recovery and reversible cross-workbench search isolation. Existing automatic transcript insertion was separately accepted.
+PR #3 固定候选已有原生/构建及三种模拟器场景通过证据；已安装 c76 真机通过导航、菜单刷新、下拉刷新、前后台恢复、双工作台搜索隔离五项，配置回读确认已还原。自动填入沿用此前独立验收。
+
+Maximum text size on a physical phone, full filtering/counts and two live sources, cold-start shortcuts, real replies, remaining Watch/recording and push delivery remain device/service acceptance items. Alex will test and provide feedback separately. Merging source does not certify these paths; no additional acceptance tooling is being added.
+真机最大字号、完整筛选计数与双实时来源、冷启动快捷配置、真实回复、Watch/录音余项及推送交付由 Alex 后测反馈；代码合入不等于这些路径已通过，不继续扩展验收工具。
+
+[PR #5](https://github.com/alexlee2046/yihu-ios/pull/5) supplies opt-in, non-destructive checks, not new product capabilities. [CI for its fixed 61e158c source](https://github.com/alexlee2046/yihu-ios/actions/runs/38244125098) is separate from the earlier 991292c run.
+PR #5 提供显式授权的非破坏性检查，不是新增产品功能；测试结果绑定具体提交，旧 991292c CI 不替代 61e158c 的回证。
+
+### Not merged / 尚未合入
+
+These proposals do not redefine the product as a universal Agent platform. Source publication is separate from authorization and delivery.
+候选代码不改变产品定位；源码发布、写入授权与实际交付分别处理。
 
 | Change / 改动 | Review entry / 审查入口 |
 | --- | --- |
-| Multiple workbenches, native PM Radar, filtering/offline snapshots, optional confirmed replies, Apple Watch summaries/proposal handoff and guarded composer insertion / 多工作台、原生台账、筛选与离线快照、受限确认回复、Watch 摘要与草稿接续、受保护填入 | [PR #3](https://github.com/alexlee2046/yihu-ios/pull/3) · [Detailed branch documentation / 分支详情](https://github.com/alexlee2046/yihu-ios/blob/c76dbd3bfbf04a7f5f4fc247757e105708551597/README.md) · `c76dbd3` · Partial device acceptance; maximum text size, full filtering/counts, cold-start shortcuts, real replies, Watch, recording and push remain pending / 部分真机通过；最大字号、完整筛选计数、冷启动快捷配置、真实回复、Watch、录音及推送仍待验收 |
 | Configurable relay, voice-note insertion, agent abstractions, watch approval UI, relay/MCP tooling and photo diagnostics / 可配置中继、录音笔记填入、代理抽象、手表审批界面、中继/MCP 工具及图片诊断 | [PR #4](https://github.com/alexlee2046/yihu-ios/pull/4) · `c94bd68` · Blocked by six [security/functional findings / 安全与功能阻断](https://github.com/alexlee2046/yihu-ios/pull/4#pullrequestreview-5484553270) |
-| Opt-in, non-destructive physical-device checks / 显式授权的非破坏性真机检查 | [PR #5](https://github.com/alexlee2046/yihu-ios/pull/5) · `61e158c` · Five checks passed on the installed PR #3 candidate; this branch adds tests, not product capabilities. Earlier CI at `991292c` is not full CI evidence for this head / 五项检查基于已安装的 PR #3 候选；本分支是测试，不是新增功能，旧 CI 不代表当前提交完整通过 |
 
-Watch direct replies, relay deployment and physical-device delivery are not implied by this list. Review and authorization boundaries remain separate from repository publication.
-本表不代表手表直写已授权、中继已部署或真机功能全部交付；源码发布与审查、授权、验收分别处理。
+Watch direct replies, relay deployment and physical-device delivery are not implied by this list.
+本表不代表手表直写已授权、中继已部署或真机功能全部交付。
 
 ## Build locally
 
@@ -47,7 +59,7 @@ Requires macOS, Xcode with the iOS 18 SDK or newer and Swift 6, and [XcodeGen](h
 
 1. In `project.yml`, replace `YIHU_BUNDLE_ID` and `YIHU_APP_GROUP` with unique identifiers registered to **your own** Apple developer team. Set `DEVELOPMENT_TEAM` to your own team ID. The main app and share extension must use the same App Group.
 2. Run `xcodegen generate --spec project.yml` in this directory.
-3. Open `Yihu.xcodeproj`, select the `CollieiOS` scheme and your device, and configure signing for all three targets with your own team. Enable App Groups and Push Notifications using your own provisioning. Push capability may require a paid Apple Developer membership.
+3. Open `Yihu.xcodeproj`, select the `CollieiOS` scheme and your device, and configure signing for the app, extensions and Watch companion with your own team. Enable App Groups and Push Notifications using your own provisioning. Push capability may require a paid Apple Developer membership.
 4. Build and run in Xcode. No signing identities, profiles, APNs keys, server credentials or prebuilt app are included. Do not commit your signing configuration.
 
 All Swift imports are Apple SDK modules. The required third-party Swift inference source is vendored with its license; there is no dependency on the original private workspace or a local Swift package.
@@ -58,11 +70,53 @@ On first launch, enter your own HTTPS workbench origin, such as `https://collie.
 
 首次连接只填自有 HTTPS 工作台源地址，不带账号密码、路径、参数或片段；手机需能访问服务并信任其 TLS 证书。上述产品仅是网页工作台示例，不是原生功能适配认证清单。
 
-Native notifications require the web bridge `window.collieNativePush.request(operation, payload)` for `status`, `register` and `unregister`, matching native-push server endpoints, and an APNs provider configured for **your app's bundle ID and signing environment**. APNs private keys belong on your server, never in this app repository. A stock Collie release may not implement this extension. Web access and native notification support are different capabilities.
+Native notifications require the web bridge `window.collieNativePush.request(operation, payload)` for `status`, `register` and `unregister`, matching native-push server endpoints, and an APNs provider configured for **your app's bundle ID and signing environment**. APNs private keys belong on your server, never in this app repository. Stock Collie v1.19.2 does not expose this APNs extension or a public native-notification delivery adapter. Settings checks the optional capability without asking for notification permission or registering a device; a missing bridge is shown as unavailable. Existing bindings are retained so they can be explicitly disabled or reused with a compatible origin. No relay, provider credentials or server patches are created automatically. Web access and native notification support are different capabilities.
 
-Voice insertion first dispatches the optional `collie:native-transcript` web event; if it does not accept the text, `main` tries the last-focused editable field on the same trusted origin. This fallback does not require a server fork, but cannot guarantee compatibility with every page/editor. No insertion path presses Send; review transcripts before sending. PR #3's stronger draft-mode/refusal guards are pending, not a guarantee of `main`. The separate Hermes Live Activity integration is optional and requires a compatible relay you control; its source endpoint is deliberately `https://relay.example.invalid`. Do not enable it without configuring your relay in `CollieHermesPush.swift`.
+Voice insertion does not require a Collie fork. The optional `collie:native-transcript` host event is tried first; an observed refusal never falls through. Without a handler, a native-injected adapter edits only the field the user last focused on the same page. The stock Collie v1.19.2 DOM adapter requires an editable composer and an unambiguous, unlocked draft-mode control; sending, direct terminal typing and unknown layouts are refused. An incompatible page retains the transcript in the native panel for explicit copy or retry. No insertion path presses Send; transcription should be reviewed before sending. The separate Hermes Live Activity integration is optional and requires a compatible relay you control; its source endpoint is deliberately `https://relay.example.invalid`. Do not enable it without configuring your relay in `CollieHermesPush.swift`.
 
-语音填入可尝试同源页面的最近输入框，不意味着任意网页都兼容，也不自动点击发送。原生通知需网页桥、服务端接口及匹配签名环境的 APNs 配置；Hermes 实时活动还需自有兼容中继，占位地址不可用。PR #3 的更严格草稿模式/拒绝保护仍待验收。
+语音填入不自动发送；宿主明确拒绝后不降级绕过，未知编辑器保留原生转写供用户处理。通知需网页桥、服务端接口及匹配签名环境的 APNs 配置；实时活动还需自有兼容中继，占位地址不可用。
+
+## Workbenches and PM Radar
+
+Web workbenches and native PM Radar share one header and shortcut bar. Use the grid to manage workbenches and customize shortcut order/visibility. Radar opens with management categories for decisions, acceptance, in-progress and to-do work. Completed/on-hold tasks are hidden by default and available through the history toggle; choosing a historical status enables history. Project, source-status, priority and search filters intersect and persist independently per workbench. Default task ordering is P0 → P1 → P2 → missing/other priorities, then latest source modification within each priority; a bucket with missing timestamps retains source order. Display settings can disable priority-first ordering. Clear filters restores the unfinished scope. Cards emphasize the title, project, status, priority and next step; owner session, window state, evidence and source modification time are expandable details. Missing fields are marked rather than inferred. Overview counts reflect the current filters and open the matching task list. Switching web origins captures native WebKit interaction state per trusted origin in memory, so returning restores the page/history/scroll instead of opening the root again; it does not copy browser state across origins or persist it to disk.
+
+Import a `pm-radar --json` export or configure an HTTPS JSON feed. `tools/serve-radar.py --port PORT --tailnet-host HOST:HTTPS_PORT` is an optional loopback-only, read-only adapter behind your existing access-controlled HTTPS/Tailnet path. The adapter keeps one bounded in-memory snapshot: fresh for 30 seconds, and served for at most five minutes while a single background `req list --all --json` read runs. Reads are request-triggered; there are no server data files, polling or scheduler. Cold starts and expired snapshots wait for the source; unavailable reads without a usable snapshot return HTTP 503. It never prints task text or raw CLI errors. Host/Origin guards and denied write methods restrict the adapter; HTTPS and network access control belong to your proxy. Do not expose private ledger data publicly. The app retains only its existing local offline cache.
+
+Responses supply optional `tasks` (all non-archived ledger items) alongside `decisions` (only waiting-for-decision/acceptance items). The All tasks and Projects views use `tasks`; Overview and My actions show `decisions`. Task records may include `id`, `priority`, `evidence`, `session` and `window_status` as separate source fields, and an optional Unix task-update `timestamp`. No Git activity is synthesized from task update times. Legacy exports lacking `tasks` remain readable with an incomplete-ledger notice. `date_str` records the last successful source read, never a failed phone fetch or cache hit. Optional `source_refreshing` / `source_refresh_failed` flags distinguish revalidation and failed reads from fresh source data. The phone paints the cached response first and makes one `Cache-Control: no-cache` follow-up to await that same source read; no polling loop is started. Host/proxy and per-request write authorization checks still run on cache hits. Reply preparation/readback bypass this cache; even uncertain submissions invalidate it.
+
+In Debug builds only, explicitly launching with `YIHU_RADAR_FEED` set to a valid HTTPS feed provisions/selects a matching Radar workbench and refreshes it without replacing unrelated workbenches. This delivery convenience is not enabled automatically and does not embed a feed address.
+
+Authenticated feeds currently require a file export: Radar does not reuse web cookies, store credentials or follow redirects. Snapshots are limited to 2 MiB; failed refreshes retain the last valid snapshot, and changing the feed clears its old cache. Cache reads are bounded to 2 MiB and corrupt files are retained with a recovery message. Duplicate workspace IDs refuse configuration loading without overwriting its original data. Changing a feed is refused if its old cache cannot be cleared, preventing source mix-ups after relaunch. Snapshot dates and record identities/timestamp ranges are validated; future-dated snapshots show a clock warning, and data older than 24 hours is marked stale. Explicit task status values distinguish progressing, waiting, blocked, completed and paused work; project records may optionally supply a `status` string, while legacy feeds remain supported. Project cards show source task statuses, or “Task status not provided” when none exist. Action records may optionally provide a Unix `timestamp` for newest-first sorting; if any matching action lacks a timestamp, newest-first preserves the complete source order. Turning newest-first off sorts action titles alphabetically. Code activity and snapshot age never imply a task is blocked or finished. Radar reads the source task tracker without changing task status. Optional decision/acceptance replies require separately enabled write authorization, as described below.
+
+### Apple Watch companion (#31)
+
+`YihuWatch` is a watchOS 11+ companion using the phone's existing WatchConnectivity pairing. It receives only pending decision/acceptance summaries, without feed URLs, credentials or reply drafts. Lists/details show source read times, stale/failed reads and phone reachability; oversized payloads are trimmed with an explicit more-on-phone notice. Sync requests transfer the phone's existing snapshot, not pretend to refresh the ledger. A selected item queues a phone handoff; the phone resolves the original workbench/task and respects its existing busy and reply-sheet guards. It opens read-only details, never sends replies or changes status from the watch.
+
+Build the `YihuWatch` scheme with a generic watchOS Simulator destination and `CODE_SIGNING_ALLOWED=NO`. The existing `ios.yml` workflow has a `watch_only=true` dispatch for native checks, watch/phone builds and a synthetic watch screenshot; it skips the previously accepted legacy UI scenarios. `YIHU_WATCH_DEMO=1` is Debug-only synthetic UI evidence, not proof of pairing. No watch signing/profile changes or physical install are performed without separate approval.
+
+Watch proposal input (#32) uses the system TextField keyboard/dictation UI and a protected local draft. Transfer shows the whole proposal and retains its UUID after uncertain transport; the phone checks source/task fingerprints and refuses busy UI or another existing draft. It acknowledges only a safely persisted phone proposal. The phone's existing reply form fetches fresh metadata and requires another explicit confirmation to write. Missing/older capabilities remain view-only. This is not direct watch reply authorization.
+
+Direct watch replies (#33) require separate confirmation of the paired-device write authorization and must retain #30's target/readback/idempotency boundaries; this entry remains closed pending that decision. The watch notification page (#34) reports phone notification state and system mirroring prerequisites, without requesting permissions. A live-ledger GET feed is not a push event source: PM task reminders remain unavailable until an authorized upstream supports them. Existing workbench notification mirroring is conditional on phone/service/system support, not evidence of delivery. No independent watch APNs, new notification backend, polling relay or automatic execution is enabled.
+
+### Optional decision and acceptance replies
+
+The adapter remains read-only unless explicitly started with `--writer-user-id USER_ID`. Bind only an authorized personal Tailscale identity. The loopback listener trusts Serve's injected `Tailscale-User-Login` header; Serve strips spoofed values. Tagged or unrecognized identities cannot write. Funnel must remain disabled; the adapter checks the current private Serve configuration. POST requests with browser Origin/Fetch headers are refused even from the Collie origin, and require native JSON intent. No GitHub credential is copied to the phone.
+
+For eligible decision/acceptance items, the phone reads fresh target metadata, shows the original title/link/status/next step and complete reply in a second confirmation form, then posts only on explicit Send. The server restricts targets to the configured private Project and writable private Issues or DraftIssues. It uses the existing `req note` CLI and its private-project/repository/sensitive-text guards; reply text is piped in, not put in process arguments or logs. It never changes status, creates a requirement, merges or deploys.
+
+A reply UUID and body digest are recorded on the original comment/draft. Receipt lookup paginates all comments before deciding whether a reply exists. The phone preserves unsent drafts and persists pending requests before submission with file protection and backup exclusion. Uncertain results freeze input and require readback rather than blind retries. A bounded in-memory set remembers attempted UUIDs/digests (not ledger data or reply bodies); if an attempt is unresolved, a missing comment is not treated as proof of no write. After a server restart, unresolved requests remain unknown unless a durable receipt is found. Source/task changes require a new confirmation. Resolve local drafts/pending results before changing the source or deleting the workbench.
+
+Run the standalone adapter and model/persistence checks from this directory:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 Tests/CollieRadar/AdapterChecks.py
+swiftc -swift-version 6 Apps/Collie/CollieRadarModel.swift \
+  Apps/Collie/CollieRadarStore.swift Tests/CollieRadar/ModelChecks.swift \
+  -o /tmp/yihu-radar-checks
+/tmp/yihu-radar-checks
+```
+
+The `CollieUITests` scheme test target exercises both web and Radar navigation using a synthetic `.invalid` origin and creates a Radar workbench if needed. Run it only on an isolated simulator installation, not against your saved device workbenches. The `Yihu iOS acceptance` workflow runs the model checks, builds the independent app/extensions/test target, and exercises light, dark and accessibility text sizes on a standard hosted macOS runner. Its artifacts contain synthetic-data screenshots and test results, not device or signing evidence. Physical-device acceptance is separate.
 
 ## Models and limitations
 
@@ -70,11 +124,11 @@ Qwen3 ASR model files are **not** in the repository. Download them through the a
 
 WeSpeaker and CAM++ speaker-verification artifacts are deliberately omitted. Code loads these resources dynamically and reports missing models rather than bundling private/generated artifacts. Speaker enrollment/verification and any voice-insertion path requiring a verified speaker will not be available without compatible models. Do not disable verification to work around missing assets. See [ThirdPartyNotices.txt](Apps/Collie/ThirdPartyNotices.txt) and [CAMPlus provenance](Apps/Collie/Vendor/CAMPlus) for provenance. Core ML conversions must match the pinned hashes in the source; upstream weights alone are not a drop-in replacement.
 
-The extracted `main` source has only received static dependency/configuration and sanitization checks; the pending PRs' partial build/device evidence must not be treated as a clean-room build or full regression result for `main`. Device push and end-to-end service compatibility are not certified. Some UI strings remain Chinese.
+Build, simulator and partial physical-device evidence is linked above. It is not certification of every device, notification path or end-to-end service integration. Some UI strings remain Chinese.
 
 On-device transcription does not mean all data stays on the phone: web browsing, user sends/uploads and optional notification/relay integrations involve their respective services. Use synthetic data in public screenshots, logs and issues; redact service origins, account/device identifiers, local paths, task text and recordings. Never publish credentials, signing materials or model artifacts.
 
-模型不随仓库提供，下载需要存储、带宽与适用设备；缺声纹模型时相关能力不可用，声纹不能替代身份认证或写入授权。端侧转写不代表所有数据留在本机：网页访问、用户发送/上传与可选通知/中继会涉及相应服务。公开截图、日志和 Issue 仅用合成数据，脱敏服务地址、账号/设备标识、本地路径、任务正文与录音，不上传凭据、签名材料或模型文件。待验收 PR 的局部证据不作为主分支完整验收结论。
+模型不随仓库提供，下载需要存储、带宽与适用设备；缺声纹模型时相关能力不可用，声纹不能替代身份认证或写入授权。端侧转写不代表所有数据留在本机：网页访问、用户发送/上传与可选通知/中继会涉及相应服务。公开截图、日志和 Issue 仅用合成数据，脱敏服务地址、账号/设备标识、本地路径、任务正文与录音，不上传凭据、签名材料或模型文件。已合入源码或局部证据均不作为完整真机验收结论。
 
 ## License
 

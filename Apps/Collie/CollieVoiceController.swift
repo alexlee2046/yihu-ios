@@ -35,7 +35,8 @@ final class CollieVoiceController {
     private(set) var recognitionTerms: [String]
 
     /// Only the final pass (or an explicit retry) may use the web bridge.
-    var deliverTranscript: ((String) async -> Bool)?
+    var prepareTranscriptDelivery: ((UUID) async -> Void)?
+    var deliverTranscript: ((String, UUID) async -> Bool)?
 
     private let recorder: any CollieAudioCapturing
     private let voiceprintChecker: any CollieVoiceprintChecking
@@ -50,6 +51,7 @@ final class CollieVoiceController {
     private var permissionGranted = false
     private var previewTask: Task<Void, Never>?
     private var recognitionTask: Task<Void, Never>?
+    private var watchRecognitionTask: Task<String, Error>?
     private var prewarmTask: Task<Void, Never>?
     private var prewarmID = UUID()
     private var hasAttemptedPrewarm = false
@@ -183,6 +185,8 @@ final class CollieVoiceController {
             previewText = ""
             previewUnavailable = false
             permissionGranted = false
+            await prepareTranscriptDelivery?(id)
+            guard sessionID == id, phase == .preparing, isForeground() else { return }
             isRequestingPermission = true
             let allowed = await recorder.requestPermission()
             guard sessionID == id, phase == .preparing else { return }
@@ -200,6 +204,40 @@ final class CollieVoiceController {
         case .failed: await refreshModelState()
         default: break
         }
+    }
+
+    /// Uses the same local model, but never touches the web-composer delivery callbacks.
+    func transcribeWatchAudio(_ samples: [Float]) async throws -> String {
+        guard isForeground(), pendingTranscript == nil, !voiceprintTestMicActive else { throw CollieWatchVoiceError.busy }
+        guard phase == .ready else {
+            if phase == .needsModel || phase == .checkingModel { throw Qwen3TranscriberError.modelMissing }
+            throw CollieWatchVoiceError.busy
+        }
+        cancelPrewarm()
+        sessionID = UUID()
+        let id = sessionID
+        phase = .transcribing
+        transcriber.setRecognitionTerms(recognitionTerms)
+        let job = Task { [transcriber] in try await transcriber.transcribe(samples: samples) }
+        watchRecognitionTask = job
+        defer {
+            if sessionID == id { watchRecognitionTask = nil; phase = .ready }
+        }
+        let text = try await withTaskCancellationHandler {
+            try await job.value
+        } onCancel: { job.cancel() }
+        guard sessionID == id, isForeground(), !Task.isCancelled else { throw CancellationError() }
+        if voiceprintChecker.isEnabled {
+            let segment = CollieVoiceprint.voicedRange(samples)
+            guard segment.count >= CollieVoiceprint.minimumVoicedSamples else { throw CollieWatchVoiceError.voiceprintBlocked }
+            let decision = await voiceprintChecker.decision(for: samples, segment: segment)
+            guard sessionID == id, isForeground(), !Task.isCancelled else { throw CancellationError() }
+            switch decision {
+            case .match, .bypass: break
+            case .mismatch, .unavailable: throw CollieWatchVoiceError.voiceprintBlocked
+            }
+        }
+        return text
     }
 
     func applicationDidBecomeActive() {
@@ -222,6 +260,8 @@ final class CollieVoiceController {
         isRequestingPermission = false
         previewTask?.cancel()
         recognitionTask?.cancel()
+        watchRecognitionTask?.cancel()
+        watchRecognitionTask = nil
         previewTask = nil
         recognitionTask = nil
         recorder.cancel()
@@ -447,12 +487,16 @@ final class CollieVoiceController {
             return
         }
         phase = .delivering
-        let accepted = await deliverTranscript?(transcript) ?? false
+        let accepted = await deliverTranscript?(transcript, id) ?? false
         guard sessionID == id else { return }
         pendingTranscript = accepted ? nil : transcript
         voiceprintBlocked = false
         phase = .ready
-        if accepted { showTransientNotice(voiceText("已填入，请确认后发送"), duration: .seconds(2)) }
+        if accepted {
+            showTransientNotice(voiceText("已填入，请确认后发送"), duration: .seconds(2))
+        } else {
+            notice = voiceText("未能安全填入草稿，文字已保留；请点选可编辑输入框后重试，或复制转写。")
+        }
     }
 
     private func showTransientNotice(_ message: String, duration: Duration = .seconds(2)) {

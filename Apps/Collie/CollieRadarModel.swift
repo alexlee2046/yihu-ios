@@ -1,0 +1,354 @@
+import CoreFoundation
+import Foundation
+import Observation
+
+/// Opaque APNs intent, not a URL or write command. Resolution requires a locally
+/// registered subscription and a fresh private-source read before navigation.
+struct CollieRadarNotificationEvent: Equatable, Sendable {
+    let subscriptionID: UUID
+    let eventKey: String
+
+    init?(userInfo: [AnyHashable: Any]) {
+        guard let value = userInfo["yihuRadar"] as? [String: Any],
+              Set(value.keys) == ["version", "subscriptionId", "eventKey"],
+              let version = value["version"] as? Int, version == 1,
+              let number = value["version"] as? NSNumber,
+              CFGetTypeID(number) != CFBooleanGetTypeID(),
+              let subscription = value["subscriptionId"] as? String,
+              let id = UUID(uuidString: subscription),
+              let key = value["eventKey"] as? String, key.count == 64,
+              key.allSatisfy({ "0123456789abcdef".contains($0) }) else { return nil }
+        subscriptionID = id; eventKey = key
+    }
+}
+
+/// The portable JSON produced by `pm-radar --json`. Task text stays verbatim.
+struct CollieRadarSnapshot: Codable, Sendable {
+    struct Action: Codable, Identifiable, Sendable {
+        var project: String
+        var status: String?
+        var title: String
+        var next: String
+        var url: String
+        var timestamp: Double? = nil
+        var id: String? = nil
+        var priority: String? = nil
+        var evidence: String? = nil
+        var session: String? = nil
+        var window_status: String? = nil
+    }
+
+    struct Project: Codable, Sendable {
+        var name: String
+        var path: String
+        var timestamp: Double
+        var message: String
+        // Optional explicit task state; legacy code-activity feeds omit it.
+        var status: String? = nil
+    }
+
+    var date_str: String
+    var decisions: [Action]
+    var active: [Project]
+    var stale: [Project]
+    var cold: [Project]
+    // New ledger exports contain all tasks; legacy snapshots remain compatible.
+    var tasks: [Action]? = nil
+    var reply_supported: Bool? = nil
+    var source_refreshing: Bool? = nil
+    var source_refresh_failed: Bool? = nil
+    var allTasks: [Action] { tasks ?? decisions }
+
+    var projects: [Project] { active + stale + cold }
+    var projectNames: [String] {
+        Array(Set(allTasks.map(\.project) + projects.map(\.path))).sorted()
+    }
+    func projectName(_ key: String) -> String {
+        projects.first(where: { $0.path == key })?.name ?? key
+    }
+    var allTaskStatuses: [String] {
+        Array(Set((projects.compactMap(\.status) + allTasks.compactMap(\.status))
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty })).sorted()
+    }
+
+    func taskStatuses(for key: String, display: CollieRadarDisplay? = nil) -> [String] {
+        let records = display.map { matchingActions(display: $0, includeAllTasks: true) } ?? allTasks
+        let activity = display.map { matchingProjects(display: $0, matchingTasks: records) } ?? projects
+        let explicit = activity.filter { $0.path == key }.compactMap(\.status)
+        return Array(Set(explicit + records.filter { $0.project == key }.compactMap(\.status)))
+            .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.sorted()
+    }
+
+    /// Build once per filtered presentation instead of filtering/sorting the ledger per card.
+    func taskStatusesByProject(actions: [Action], activity: [Project]) -> [String: [String]] {
+        var statuses: [String: Set<String>] = [:]
+        for (key, status) in actions.map({ ($0.project, $0.status) }) + activity.map({ ($0.path, $0.status) }) {
+            guard let status, !status.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { continue }
+            statuses[key, default: []].insert(status)
+        }
+        return statuses.mapValues { $0.sorted() }
+    }
+
+    func sortedProjectNames(newestFirst: Bool) -> [String] {
+        let timestamps = Dictionary(projects.map { ($0.path, $0.timestamp) } +
+                                    allTasks.map { ($0.project, $0.timestamp ?? 0) },
+                                    uniquingKeysWith: { max($0, $1) })
+        let names = Dictionary(projects.map { ($0.path, $0.name) }, uniquingKeysWith: { first, _ in first })
+        return projectNames.sorted { lhs, rhs in
+            if newestFirst, timestamps[lhs, default: 0] != timestamps[rhs, default: 0] {
+                return timestamps[lhs, default: 0] > timestamps[rhs, default: 0]
+            }
+            let order = (names[lhs] ?? lhs).localizedCompare(names[rhs] ?? rhs)
+            return order == .orderedSame ? lhs < rhs : order == .orderedAscending
+        }
+    }
+    func matchingActions(display: CollieRadarDisplay, includeAllTasks: Bool = false) -> [Action] {
+        let records = includeAllTasks ? allTasks : decisions
+        let names = Dictionary(projects.map { ($0.path, $0.name) }, uniquingKeysWith: { first, _ in first })
+        let filtered = records.enumerated().filter {
+            (display.project.isEmpty || $0.element.project == display.project) &&
+            matchesStatus($0.element.status, filter: display.status) &&
+            (display.showHistory == true || !isHistorical($0.element.status)) &&
+            (display.priority?.isEmpty != false || $0.element.priority == display.priority) &&
+            matches([names[$0.element.project] ?? $0.element.project, $0.element.project, $0.element.title,
+                     $0.element.status ?? "", $0.element.next, $0.element.priority ?? "",
+                     $0.element.evidence ?? "", $0.element.session ?? "", $0.element.window_status ?? ""],
+                    query: display.searchText)
+        }
+        let incompleteRanks = Set(filtered.filter { $0.element.timestamp == nil }.map {
+            display.priorityFirst != false ? priorityRank($0.element.priority) : 0
+        })
+        return filtered.sorted { lhs, rhs in
+            if display.priorityFirst != false {
+                let left = priorityRank(lhs.element.priority), right = priorityRank(rhs.element.priority)
+                if left != right { return left < right }
+            }
+            if display.newestFirst {
+                let rank = display.priorityFirst != false ? priorityRank(lhs.element.priority) : 0
+                guard !incompleteRanks.contains(rank) else { return lhs.offset < rhs.offset }
+                let left = lhs.element.timestamp ?? 0, right = rhs.element.timestamp ?? 0
+                return left == right ? lhs.offset < rhs.offset : left > right
+            }
+            let order = lhs.element.title.localizedCompare(rhs.element.title)
+            return order == .orderedSame ? lhs.offset < rhs.offset : order == .orderedAscending
+        }.map(\.element)
+    }
+
+    func matchingProjects(display: CollieRadarDisplay, matchingTasks: [Action]? = nil) -> [Project] {
+        let actionProjects = Set((matchingTasks ?? matchingActions(display: display, includeAllTasks: true)).map(\.project))
+        return projects.filter {
+            (display.project.isEmpty || $0.path == display.project) &&
+            (display.showHistory == true || !isHistorical($0.status)) &&
+            (display.priority?.isEmpty != false || actionProjects.contains($0.path)) &&
+            (matchesStatus($0.status, filter: display.status) || actionProjects.contains($0.path)) &&
+            matches([$0.name, $0.path, $0.message, $0.status ?? ""], query: display.searchText)
+        }
+    }
+
+    func matchingProjectNames(display: CollieRadarDisplay, matchingTasks: [Action]? = nil,
+                              matchingActivity: [Project]? = nil) -> [String] {
+        let tasks = matchingTasks ?? matchingActions(display: display, includeAllTasks: true)
+        let activity = matchingActivity ?? matchingProjects(display: display, matchingTasks: tasks)
+        let keys = Set(tasks.map(\.project) + activity.map(\.path))
+        return sortedProjectNames(newestFirst: display.newestFirst).filter { keys.contains($0) }
+    }
+
+    static let managementStatuses = ["等你决策", "等你验收", "进行中", "待做"]
+
+    var allPriorities: [String] {
+        Array(Set(allTasks.compactMap(\.priority).filter { !$0.isEmpty })).sorted {
+            let lhs = priorityRank($0), rhs = priorityRank($1)
+            return lhs == rhs ? $0 < $1 : lhs < rhs
+        }
+    }
+
+    private func priorityRank(_ priority: String?) -> Int {
+        switch priority { case "P0": 0; case "P1": 1; case "P2": 2; default: 3 }
+    }
+
+    private func isHistorical(_ status: String?) -> Bool {
+        switch CollieRadarTaskState.classify(status ?? "") {
+        case .completed, .paused: true
+        default: false
+        }
+    }
+
+    private func matchesStatus(_ status: String?, filter: String?) -> Bool {
+        guard let filter, !filter.isEmpty else { return true }
+        return status?.trimmingCharacters(in: .whitespacesAndNewlines) == filter
+    }
+
+    private func matches(_ fields: [String], query: String?) -> Bool {
+        let query = (query ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        return query.isEmpty || fields.contains { $0.localizedStandardContains(query) }
+    }
+
+    var generatedAt: Date? {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.timeZone = TimeZone(secondsFromGMT: 8 * 3600)
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        formatter.isLenient = false
+        guard let date = formatter.date(from: date_str), formatter.string(from: date) == date_str else { return nil }
+        return date
+    }
+    var isFutureDated: Bool {
+        guard let generatedAt else { return false }
+        return generatedAt.timeIntervalSinceNow > 5 * 60
+    }
+    var isOutdated: Bool {
+        guard let generatedAt else { return true }
+        return Date().timeIntervalSince(generatedAt) > 24 * 3600
+    }
+
+    static let maximumBytes = 2 * 1024 * 1024
+    static func decode(_ data: Data) throws -> Self {
+        guard data.count <= maximumBytes else { throw CollieRadarError.tooLarge }
+        let snapshot = try JSONDecoder().decode(Self.self, from: data)
+        let validTimestamp: (Double) -> Bool = { $0.isFinite && (0...253_402_300_799).contains($0) }
+        let nonempty: (String) -> Bool = { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        let identities = (snapshot.tasks ?? []).compactMap(\.id)
+        guard snapshot.generatedAt != nil,
+              Set(identities).count == identities.count,
+              snapshot.projects.allSatisfy({ nonempty($0.path) && nonempty($0.name) && validTimestamp($0.timestamp) }),
+              (snapshot.decisions + snapshot.allTasks).allSatisfy({ nonempty($0.project) && nonempty($0.title) &&
+                  ($0.timestamp.map(validTimestamp) ?? true) }) else { throw CollieRadarError.invalidSnapshot }
+        return snapshot
+    }
+}
+
+/// Classify only explicit task states, never code activity or snapshot age.
+enum CollieRadarTaskState {
+    case planned, progressing, waiting, blocked, completed, paused, unknown
+
+    static func classify(_ status: String) -> Self {
+        switch status.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+        case "待做", "待办", "todo", "not started", "not_started": return .planned
+        case "进行中", "推进中", "in progress", "in_progress": return .progressing
+        case "等你决策", "等你验收", "等你处理", "等人操作", "等待反馈", "待我处理", "waiting", "pending": return .waiting
+        case "真实阻塞", "阻塞", "已阻塞", "blocked": return .blocked
+        case "已完成", "完成", "done", "completed": return .completed
+        case "搁置", "已搁置", "paused", "on hold": return .paused
+        default: return .unknown
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .planned: return "circle.dashed"
+        case .progressing: return "arrow.right.circle"
+        case .waiting: return "hand.raised"
+        case .blocked: return "exclamationmark.octagon"
+        case .completed: return "checkmark.circle"
+        case .paused: return "pause.circle"
+        case .unknown: return "questionmark.circle"
+        }
+    }
+}
+
+struct CollieRadarReplyTarget: Codable {
+    var eligible: Bool
+    var epoch: String
+    var id: String
+    var title: String
+    var url: String
+    var status: String
+    var next: String
+    var version: String
+}
+
+struct CollieRadarPendingReply: Codable {
+    var source: String
+    var target: CollieRadarReplyTarget
+    var text: String
+    var requestID: UUID
+    var submitted: Bool? = nil
+
+    static func file(_ id: UUID) -> URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("Radar", isDirectory: true)
+            .appendingPathComponent("pending-" + id.uuidString + ".json")
+    }
+}
+
+enum CollieRadarError: Error {
+    case tooLarge, invalidSnapshot, invalidURL, http(Int)
+}
+
+struct CollieRadarDisplay: Codable, Equatable {
+    enum Page: String, Codable, CaseIterable { case overview, projects, actions, tasks }
+    var page: Page = .overview
+    var project = ""
+    // Optional so existing saved views decode without a migration or reset.
+    var searchText: String? = nil
+    var status: String? = nil
+    var priority: String? = nil
+    var showHistory: Bool? = nil
+    var priorityFirst: Bool? = nil
+    var compact = false
+    var showNext = true
+    var showStatus = true
+    var showActivity = true
+    var newestFirst = true
+}
+
+struct CollieRadarWorkbench: Codable, Identifiable, Equatable {
+    var id = UUID()
+    var name = "PM Radar"
+    var source = ""
+    var watchSourceIdentity: UUID? = nil
+    // Local phone drafts do not grant ledger-write authority; sending revalidates separately.
+    var supportsWatchDrafts: Bool { CollieRadarFeed.validate(source) != nil }
+    var favorite = false
+    var display = CollieRadarDisplay()
+}
+
+/// Shared ordering across web and native workbenches. Nil means show all on
+/// first use; an explicitly empty list means the user hid every shortcut.
+@MainActor
+@Observable
+final class CollieWorkbenchShortcuts {
+    private(set) var saved: [String]?
+    private let defaults: UserDefaults
+    private let key = "collie.workbench.shortcuts.v1"
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+        saved = defaults.stringArray(forKey: key)
+    }
+
+    func visible(available: [String]) -> [String] {
+        var seen = Set<String>()
+        return (saved ?? available).filter { available.contains($0) && seen.insert($0).inserted }
+    }
+
+    func set(_ ids: [String]) {
+        var seen = Set<String>()
+        saved = ids.filter { seen.insert($0).inserted }
+        defaults.set(saved, forKey: key)
+    }
+
+    func move(from offsets: IndexSet, to destination: Int, available: [String]) {
+        var ids = visible(available: available)
+        guard offsets.allSatisfy({ ids.indices.contains($0) }), (0...ids.count).contains(destination) else { return }
+        let moving = offsets.sorted().map { ids[$0] }
+        let adjusted = destination - offsets.filter { $0 < destination }.count
+        for index in offsets.sorted(by: >) { ids.remove(at: index) }
+        ids.insert(contentsOf: moving, at: adjusted)
+        set(ids)
+    }
+}
+
+/// A feed can have a path, unlike a trusted browser origin; credentials and
+/// query strings must not be smuggled into URLs or silently forwarded.
+enum CollieRadarFeed {
+    static func validate(_ raw: String) -> URL? {
+        guard let parts = URLComponents(string: raw.trimmingCharacters(in: .whitespacesAndNewlines)),
+              parts.scheme?.lowercased() == "https", let host = parts.host, !host.isEmpty,
+              parts.user == nil, parts.password == nil, parts.query == nil, parts.fragment == nil,
+              parts.port.map({ (1...65535).contains($0) }) ?? true else { return nil }
+        return parts.url
+    }
+}
