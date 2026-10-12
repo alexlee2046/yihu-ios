@@ -49,10 +49,14 @@ final class CollieEnhancementTests: XCTestCase {
                 bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue))
             context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
         }
-        return [(width / 4, height / 4), (3 * width / 4, height / 4),
-                (width / 4, 3 * height / 4), (3 * width / 4, 3 * height / 4)].flatMap { x, y in
-            Array(pixels[((y * width + x) * 4)..<((y * width + x) * 4 + 3)])
+        let points: [(Int, Int)] = [(width / 4, height / 4), (3 * width / 4, height / 4),
+                                    (width / 4, 3 * height / 4), (3 * width / 4, 3 * height / 4)]
+        var colors: [UInt8] = []
+        for (x, y) in points {
+            let offset = (y * width + x) * 4
+            colors.append(contentsOf: pixels[offset..<(offset + 3)])
         }
+        return colors
     }
 
     func testNoteHandoffIsDurableAndPreservesOriginal() throws {
