@@ -1,0 +1,39 @@
+name: Bug report / 问题反馈
+description: Report a reproducible problem using synthetic data.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "Do not attach secrets, recordings, private server URLs or task content. For vulnerabilities, follow SECURITY.md."
+  - type: input
+    id: revision
+    attributes:
+      label: Branch and commit / 分支与提交
+      placeholder: "main at <commit>, or PR number"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment / 环境
+      description: iOS/watchOS, device or simulator, Xcode version; omit device/account identifiers.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction / 复现步骤
+      description: Minimal steps with synthetic data.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual result / 预期与实际
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted evidence / 脱敏证据
+      description: CI link or synthetic screenshots; describe unavailable checks.

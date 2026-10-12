@@ -1,0 +1,25 @@
+name: Feature request / 功能建议
+description: Describe a problem, intended behavior and acceptance criteria.
+title: "[Feature] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / 要解决的问题
+      description: Check existing issues and PRs first; do not include private workbench content.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior / 期望行为
+      description: Explain required server, model or device capabilities and any write/permission implications.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria / 验收标准
+      description: How can the change be verified using synthetic data?
+    validations:
+      required: true
