@@ -705,7 +705,7 @@ struct CollieShellView: View {
                     CollieVoiceNotesView(store: voiceNotes, onHandedOff: { shareTray.refresh() },
                                         onDirectInsert: { [target = presentation.noteSession, page = presentation.notePageURL] text, id in
                         guard let target, let page, let requestID = presentation.noteInsertionID else { return false }
-                        func allowed() -> Bool {
+                        let allowed: @MainActor @Sendable () -> Bool = { [presentation, voice, notifications, connectionSettings] in
                             presentation.notesPresented && presentation.notePrepared &&
                             presentation.noteInsertionID == requestID && presentation.noteSession === target &&
                             target.isConnected && target.webView?.url == page &&
