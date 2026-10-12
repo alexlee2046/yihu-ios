@@ -23,11 +23,8 @@ struct CollieVoiceNote: Codable, Equatable, Identifiable, Sendable {
         var reserved = self
         reserved.handOffAttempted = true
         let data = try JSONEncoder().encode(reserved)
-        #if os(iOS)
-        try data.write(to: url, options: [.atomic, .completeFileProtection])
-        #else
+        // Preserve the existing note store's file-protection/read lifecycle.
         try data.write(to: url, options: .atomic)
-        #endif
         self = reserved
     }
 }
