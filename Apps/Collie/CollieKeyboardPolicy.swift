@@ -59,6 +59,12 @@ enum CollieKeyboardPolicy {
           window.addEventListener('pageshow', disable);
           window.addEventListener('popstate', disable);
           window.collieNativeKeyboard = {
+            // Only our keyboard suppression may be bypassed for a draft edit.
+            // The host's original readonly flag and disabled state still win.
+            canInsert(field) {
+              return field?.matches(selector) && !field.disabled &&
+                originals.has(field) && originals.get(field) === false;
+            },
             setEnabled(next) {
               if (typeof next !== 'boolean') return false;
               const target = fields().find(field => !field.disabled &&

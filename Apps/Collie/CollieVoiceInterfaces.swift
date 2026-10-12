@@ -41,6 +41,8 @@ protocol CollieAudioCapturing: AnyObject {
     func cancel()
 }
 
+enum CollieWatchVoiceError: Error { case busy, voiceprintBlocked }
+
 protocol CollieTranscribing: Sendable {
     func isModelDownloaded() async -> Bool
     func downloadModel(progress: @escaping @Sendable (Double) -> Void) async throws
@@ -59,6 +61,54 @@ protocol CollieTranscribing: Sendable {
 extension CollieTranscribing {
     func transcribe(samples: [Float]) async throws -> String {
         try await transcribe(samples: samples, onPartialText: nil)
+    }
+}
+
+/// User-facing options supported by the current on-device decoder.
+enum CollieRecognitionPreferences {
+    static let languageKey = "collie.recognition.language"
+    static let maxTokensKey = "collie.recognition.max-tokens"
+    static let usesTermsKey = "collie.recognition.uses-terms"
+    static let defaultMaxTokens = 448
+    static let tokenRange = 64...1_024
+
+    enum Language: String, CaseIterable, Identifiable, Sendable {
+        case automatic, chinese, english
+        var id: String { rawValue }
+        var modelHint: String? {
+            switch self {
+            case .automatic: nil
+            case .chinese: "Chinese"
+            case .english: "English"
+            }
+        }
+        var label: String {
+            let key: String
+            switch self {
+            case .automatic: key = "自动识别（含中英混说）"
+            case .chinese: key = "中文"
+            case .english: key = "英文"
+            }
+            return NSLocalizedString(key, tableName: "Yihu", comment: "")
+        }
+    }
+
+    struct Snapshot: Sendable {
+        let language: Language
+        let maxTokens: Int
+        let usesTerms: Bool
+    }
+
+    static func clampTokens(_ value: Int) -> Int {
+        min(tokenRange.upperBound, max(tokenRange.lowerBound, value))
+    }
+
+    static func load(from defaults: UserDefaults = .standard) -> Snapshot {
+        Snapshot(
+            language: Language(rawValue: defaults.string(forKey: languageKey) ?? "") ?? .automatic,
+            maxTokens: clampTokens((defaults.object(forKey: maxTokensKey) as? Int) ?? defaultMaxTokens),
+            usesTerms: defaults.object(forKey: usesTermsKey) as? Bool ?? true
+        )
     }
 }
 

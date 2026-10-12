@@ -1,0 +1,147 @@
+name: Yihu iOS acceptance
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      watch_only:
+        description: Build phone/watch and capture the read-only watch demo (skip accepted legacy UI cases)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yihu-ios-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  watch:
+    if: ${{ inputs.watch_only }}
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Native model checks and companion builds
+        run: |
+          swiftc -swift-version 6 -parse-as-library Apps/Collie/CollieTextInsertion.swift Apps/Collie/CollieKeyboardPolicy.swift Tests/CollieRadar/InsertionChecks.swift -o "$RUNNER_TEMP/insertion-checks"
+          "$RUNNER_TEMP/insertion-checks"
+          swiftc -swift-version 6 Shared/YihuWatchVoice.swift Tests/CollieRadar/WatchVoiceChecks.swift -o "$RUNNER_TEMP/watch-voice-checks"
+          "$RUNNER_TEMP/watch-voice-checks"
+          swiftc -swift-version 6 Apps/Collie/CollieRadarModel.swift Apps/Collie/CollieRadarStore.swift Tests/CollieRadar/ModelChecks.swift -o "$RUNNER_TEMP/radar-checks"
+          "$RUNNER_TEMP/radar-checks"
+          PYTHONDONTWRITEBYTECODE=1 python3 Tests/CollieRadar/AdapterChecks.py
+          command -v xcodegen >/dev/null || brew install xcodegen
+          xcodegen generate --spec project.yml
+          xcodebuild -quiet -project Yihu.xcodeproj -scheme YihuWatch -destination 'generic/platform=watchOS Simulator' -derivedDataPath "$RUNNER_TEMP/YihuWatch" CODE_SIGNING_ALLOWED=NO build
+          xcodebuild -quiet -project Yihu.xcodeproj -scheme CollieiOS -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/YihuPhone" CODE_SIGNING_ALLOWED=NO build
+      - name: Capture synthetic watch interface if runtime is available
+        run: |
+          device=$(xcrun simctl list devices available --json | python3 -c 'import json,sys;d=json.load(sys.stdin)["devices"];print(next((x["udid"] for r,a in d.items() if "watchOS" in r for x in a),""))')
+          if [ -z "$device" ]; then
+            xcodebuild -downloadPlatform watchOS
+            device=$(xcrun simctl list devices available --json | python3 -c 'import json,sys;d=json.load(sys.stdin)["devices"];print(next((x["udid"] for r,a in d.items() if "watchOS" in r for x in a),""))')
+          fi
+          created=false
+          if [ -z "$device" ]; then
+            runtime=$(xcrun simctl list runtimes --json | python3 -c 'import json,sys;print(next((x["identifier"] for x in json.load(sys.stdin)["runtimes"] if "watchOS" in x["identifier"] and x.get("isAvailable")),""))')
+            type=$(xcrun simctl list devicetypes --json | python3 -c 'import json,sys;print(next((x["identifier"] for x in json.load(sys.stdin)["devicetypes"] if "Apple Watch Series 10" in x["name"]),""))')
+            test -n "$runtime" && test -n "$type"
+            device=$(xcrun simctl create 'Yihu Watch interface evidence' "$type" "$runtime")
+            created=true
+          fi
+          trap 'xcrun simctl shutdown "$device" || true; if [ "$created" = true ]; then xcrun simctl delete "$device"; fi' EXIT
+          xcrun simctl boot "$device" || true
+          xcrun simctl bootstatus "$device" -b
+          xcrun simctl install "$device" "$RUNNER_TEMP/YihuWatch/Build/Products/Debug-watchsimulator/YihuWatch.app"
+          SIMCTL_CHILD_YIHU_WATCH_DEMO=1 xcrun simctl launch "$device" org.example.yihu.watch
+          sleep 3
+          mkdir -p "$RUNNER_TEMP/WatchEvidence"
+          xcrun simctl io "$device" screenshot "$RUNNER_TEMP/WatchEvidence/watch-demo.png"
+          xcrun simctl terminate "$device" org.example.yihu.watch
+          SIMCTL_CHILD_YIHU_WATCH_DEMO=1 SIMCTL_CHILD_YIHU_WATCH_DEMO_PAGE=draft xcrun simctl launch "$device" org.example.yihu.watch --watch-draft-demo
+          sleep 20
+          xcrun simctl io "$device" screenshot "$RUNNER_TEMP/WatchEvidence/watch-draft-demo.png"
+          echo 'Synthetic watch UI captured; paired-device handoff remains unverified.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve watch interface evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: yihu-watch-interface
+          path: ${{ runner.temp }}/WatchEvidence
+          if-no-files-found: ignore
+          retention-days: 7
+  acceptance:
+    if: ${{ !inputs.watch_only }}
+    # Standard hosted runner: public-repository use is free; no larger runners.
+    runs-on: macos-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Model and persistence checks
+        run: |
+          swiftc -swift-version 6 -parse-as-library Apps/Collie/CollieTextInsertion.swift Apps/Collie/CollieKeyboardPolicy.swift Tests/CollieRadar/InsertionChecks.swift -o "$RUNNER_TEMP/insertion-checks"
+          "$RUNNER_TEMP/insertion-checks"
+          swiftc -swift-version 6 Shared/YihuWatchVoice.swift Tests/CollieRadar/WatchVoiceChecks.swift -o "$RUNNER_TEMP/watch-voice-checks"
+          "$RUNNER_TEMP/watch-voice-checks"
+          swiftc -swift-version 6 Apps/Collie/CollieRadarModel.swift Apps/Collie/CollieRadarStore.swift Tests/CollieRadar/ModelChecks.swift -o "$RUNNER_TEMP/radar-checks"
+          "$RUNNER_TEMP/radar-checks"
+          PYTHONDONTWRITEBYTECODE=1 python3 Tests/CollieRadar/AdapterChecks.py
+      - name: Generate independent project
+        run: |
+          command -v xcodegen >/dev/null || brew install xcodegen
+          xcodegen generate --spec project.yml
+      - name: Select an available iPhone simulator
+        run: |
+          xcrun simctl list devices available --json > "$RUNNER_TEMP/devices.json"
+          python3 - <<'PY' >> "$GITHUB_ENV"
+          import json, os
+          with open(os.environ['RUNNER_TEMP'] + '/devices.json') as stream:
+              devices = json.load(stream)['devices']
+          phones = [d for runtime, entries in devices.items() if 'iOS' in runtime for d in entries if d['name'].startswith('iPhone')]
+          if not phones:
+              raise SystemExit('No iPhone simulator available')
+          print('YIHU_SIMULATOR=' + phones[0]['udid'])
+          PY
+      - name: Build app, extensions and UI tests
+        run: |
+          xcodebuild -quiet -project Yihu.xcodeproj -scheme CollieiOS -configuration Debug -destination "platform=iOS Simulator,id=$YIHU_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/YihuBuild" CODE_SIGN_IDENTITY=- build-for-testing
+      - name: Light, dark and accessibility-size navigation
+        run: |
+          xcrun simctl boot "$YIHU_SIMULATOR" || true
+          xcrun simctl bootstatus "$YIHU_SIMULATOR" -b
+          mkdir -p "$RUNNER_TEMP/YihuResults"
+          failed=0
+          for scenario in light dark accessibility; do
+            appearance="$scenario"
+            size=large
+            if [ "$scenario" = accessibility ]; then
+              appearance=light
+              size=accessibility-extra-extra-extra-large
+            fi
+            xcrun simctl ui "$YIHU_SIMULATOR" appearance "$appearance"
+            xcrun simctl ui "$YIHU_SIMULATOR" content_size "$size"
+            if ! xcodebuild -project Yihu.xcodeproj -scheme CollieiOS -configuration Debug -destination "platform=iOS Simulator,id=$YIHU_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/YihuBuild" -resultBundlePath "$RUNNER_TEMP/YihuResults/$scenario.xcresult" -only-testing:CollieUITests/CollieWorkbenchUITests -parallel-testing-enabled NO -test-timeouts-enabled YES -maximum-test-execution-time-allowance 360 CODE_SIGN_IDENTITY=- test-without-building; then
+              failed=1
+            fi
+          done
+          exit "$failed"
+      - name: Preserve synthetic-data test evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: yihu-ios-acceptance
+          path: ${{ runner.temp }}/YihuResults
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Shut down simulator
+        if: always() && env.YIHU_SIMULATOR != ''
+        timeout-minutes: 1
+        continue-on-error: true
+        run: xcrun simctl shutdown "$YIHU_SIMULATOR" || true

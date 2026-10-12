@@ -21,10 +21,17 @@ final class CollieWebSession {
     fileprivate let websiteDataStore: WKWebsiteDataStore
     private(set) weak var webView: WKWebView?
     private(set) var isInvalidated = false
+    private var restorationState: Any?
 
-    init(baseURL: URL, websiteDataStore: WKWebsiteDataStore? = nil) {
+    init(baseURL: URL, websiteDataStore: WKWebsiteDataStore? = nil, restorationState: Any? = nil) {
         self.baseURL = baseURL
         self.websiteDataStore = websiteDataStore ?? Self.persistentDataStore(for: baseURL)
+        self.restorationState = restorationState
+    }
+
+    func captureInteractionState() -> Any? {
+        guard let webView, isTrusted(webView.url) else { return nil }
+        return webView.interactionState
     }
 
     var isConnected: Bool {
@@ -43,8 +50,15 @@ final class CollieWebSession {
     }
 
     fileprivate func attach(_ webView: WKWebView) {
-        guard !isInvalidated else { return }
+        guard !isInvalidated, self.webView !== webView else { return }
         self.webView = webView
+        if let state = restorationState {
+            restorationState = nil
+            // WebKit restores the page, back/forward list and scroll position;
+            // do not immediately replace that restoration with a root load.
+            webView.interactionState = state
+            return
+        }
         guard webView.url == nil else { return }
         webView.load(URLRequest(url: baseURL))
     }
@@ -236,24 +250,44 @@ final class CollieWebSession {
         }.value
     }
 
-    /// Sends text through Collie's explicit native bridge, then (for other
-    /// workbenches) into the field the user last focused. It never submits, and
-    /// the origin check prevents navigation from receiving speech.
-    func insertTranscript(_ transcript: String) async -> Bool {
+    private var transcriptRequestID: UUID?
+    private var transcriptRequestURL: URL?
+
+    func prepareTranscriptInsertion(_ id: UUID) async {
+        transcriptRequestID = id
+        transcriptRequestURL = webView?.url
+        guard let webView, isTrusted(webView.url) else { return }
+        _ = try? await webView.callAsyncJavaScript(
+            "return window.collieNativePrepareInsert?.(requestID) === true;",
+            arguments: ["requestID": id.uuidString], in: nil, contentWorld: .defaultClient)
+    }
+
+    /// Prefer an optional host bridge; stock Collie uses the guarded DOM adapter.
+    /// A refusal or an unknown response never falls through. No path submits.
+    func insertTranscript(_ transcript: String, requestID: UUID = UUID()) async -> Bool {
         guard let webView, isTrusted(webView.url) else { return false }
-        let arguments: [String: Any] = ["text": transcript, "origin": trustedOrigin]
+        if transcriptRequestID == requestID, webView.url != transcriptRequestURL { return false }
+        let arguments: [String: Any] = ["text": transcript, "origin": trustedOrigin,
+                                      "requestID": requestID.uuidString, "pageURL": webView.url?.absoluteString ?? ""]
+        do {
+            let receipt = try await webView.callAsyncJavaScript(
+                "return window.collieNativeInsertReceipt?.(text, requestID) ?? null;",
+                arguments: arguments, in: nil, contentWorld: .defaultClient)
+            if let accepted = receipt as? Bool { return accepted }
+        } catch { return false }
         do {
             let result = try await webView.callAsyncJavaScript(
                 CollieTextInsertion.collieBridgeScript, arguments: arguments, in: nil, contentWorld: .page
             )
-            if (result as? Bool) == true { return true }
+            if (result as? String) == "accepted" { return true }
+            guard (result as? String) == "unavailable" else { return false }
         } catch {
             // A failed text handoff is not a navigation failure. The voice bar
             // retains the result for retry; never cover the working page here.
             return false
         }
-        // Not a Collie composer: insert into the field the user last focused
-        // (OpenClaw, Hermes or any other workbench page).
+        // No host bridge observed the event. The isolated-world adapter requires
+        // a focused editable and, for Collie, a positively identified draft mode.
         guard isTrusted(webView.url) else { return false }
         do {
             let result = try await webView.callAsyncJavaScript(
@@ -305,6 +339,7 @@ final class CollieWebSession {
 
 struct CollieWebView: UIViewRepresentable {
     let session: CollieWebSession
+    var isVisible = true
     var pageReady: @MainActor () -> Void = {}
     var openNotificationSettings: @MainActor () -> Void = {}
     var requestKeyboard: @MainActor () async -> Void = {}
@@ -314,7 +349,28 @@ struct CollieWebView: UIViewRepresentable {
                     pageReady: pageReady, openNotificationSettings: openNotificationSettings)
     }
 
-    func makeUIView(context: Context) -> WKWebView {
+    // SwiftUI owns visibility/accessibility on the representable's root view.
+    // Keep the WebKit child separate so updates cannot re-expose a hidden page.
+    final class Container: UIView {
+        let webView: WKWebView
+
+        init(webView: WKWebView) {
+            self.webView = webView
+            super.init(frame: .zero)
+            webView.translatesAutoresizingMaskIntoConstraints = false
+            addSubview(webView)
+            NSLayoutConstraint.activate([
+                webView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                webView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                webView.topAnchor.constraint(equalTo: topAnchor),
+                webView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ])
+        }
+
+        required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    }
+
+    func makeUIView(context: Context) -> Container {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = session.websiteDataStore
         configuration.applicationNameForUserAgent = "CollieNative/1.0"
@@ -333,20 +389,28 @@ struct CollieWebView: UIViewRepresentable {
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         context.coordinator.observeURL(of: webView)
+        webView.isHidden = !isVisible
+        webView.accessibilityElementsHidden = !isVisible
         webView.allowsBackForwardNavigationGestures = true
         webView.scrollView.keyboardDismissMode = .interactive
         session.attach(webView)
-        return webView
+        return Container(webView: webView)
     }
 
-    func updateUIView(_ webView: WKWebView, context: Context) {
+    func updateUIView(_ container: Container, context: Context) {
+        let webView = container.webView
+        // Hide WebKit at the UIKit layer too; SwiftUI opacity alone leaves its
+        // composited surface and accessibility subtree alive under native Radar.
+        webView.isHidden = !isVisible
+        webView.accessibilityElementsHidden = !isVisible
         context.coordinator.requestKeyboard = requestKeyboard
         context.coordinator.pageReady = pageReady
         context.coordinator.openNotificationSettings = openNotificationSettings
         session.attach(webView)
     }
 
-    static func dismantleUIView(_ webView: WKWebView, coordinator: Coordinator) {
+    static func dismantleUIView(_ container: Container, coordinator: Coordinator) {
+        let webView = container.webView
         webView.stopLoading()
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
