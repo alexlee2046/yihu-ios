@@ -22,6 +22,8 @@
     <string>$(MARKETING_VERSION)</string>
     <key>CFBundleVersion</key>
     <string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>NSCameraUsageDescription</key>
+    <string>仅在您选择拍照后使用相机，图片暂存本机分享托盘，不自动上传或发送。</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>仅在您点击原生麦克风按钮后录音，并由 iPhone 上的 Qwen3 模型离线转成文字。</string>
     <key>CFBundleDocumentTypes</key>

@@ -18,7 +18,7 @@ struct HermesTaskLiveActivity: Widget {
             HStack(spacing: 12) {
                 icon(context.state).font(.title2)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Hermes").font(.headline)
+                    Text(context.state.displayTitle).font(.headline)
                     Text(context.state.phaseText).font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
                 }
                 Spacer()
@@ -30,7 +30,7 @@ struct HermesTaskLiveActivity: Widget {
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    Label("Hermes", systemImage: "sparkles").font(.headline).foregroundStyle(Self.accent)
+                    Label(context.state.displayTitle, systemImage: "sparkles").font(.headline).foregroundStyle(Self.accent)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
                     elapsed(context.state).font(.headline.monospacedDigit())

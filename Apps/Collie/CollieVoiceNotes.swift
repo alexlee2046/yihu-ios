@@ -2,19 +2,6 @@
 import Foundation
 import Observation
 
-struct CollieVoiceNote: Codable, Equatable, Identifiable, Sendable {
-    enum Status: String, Codable, Sendable { case recording, pending, transcribing, done, failed }
-
-    var id = UUID()
-    var createdAt = Date()
-    var duration: TimeInterval = 0
-    var status: Status = .recording
-    var transcript = ""
-    /// 16 kHz frames already transcribed, so an interrupted pass resumes.
-    var transcribedFrames: Int64 = 0
-    var failure: String?
-}
-
 /// Splits long audio into recognizer-sized pieces at the quietest moment near
 /// the end of each window, so words are rarely cut in half.
 enum CollieNoteSegmenter {
@@ -245,12 +232,27 @@ final class CollieVoiceNotesStore {
         }
     }
 
+    /// A single durable reservation covers both direct insertion and staging.
+    /// On uncertainty the original note remains readable/copyable, not resendable.
+    func reserveHandOff(_ id: UUID) -> Bool {
+        guard let index = notes.firstIndex(where: { $0.id == id }) else { return false }
+        var note = notes[index]
+        do {
+            try note.reserveHandOff(at: metaURL(for: id))
+            notes[index] = note
+            return true
+        } catch { return false }
+    }
+
     /// Instruction + transcript for the share tray: short notes go in as text,
     /// long ones as an attached Markdown file plus the instruction.
     /// Returns nil on success, otherwise a message to show next to the button.
     func handOff(_ note: CollieVoiceNote, instruction: String, inbox: CollieShareInbox?) -> String? {
         guard !note.transcript.isEmpty else { return NSLocalizedString("这条记录没有识别出文字。", tableName: "Yihu", comment: "") }
         guard let inbox else { return NSLocalizedString("无法访问一呼的共享收件箱。", tableName: "Yihu", comment: "") }
+        guard reserveHandOff(note.id) else {
+            return NSLocalizedString("这条记录已尝试交接或无法保存回执，请先核对目标内容；原文仍可复制。", tableName: "Yihu", comment: "")
+        }
         let body = note.transcript
         do {
             if body.count <= 3_000 {

@@ -13,6 +13,13 @@ struct HermesTaskAttributes: ActivityAttributes {
         var sessionId: String
         var status: String?
         var updatedAt: Double?
+        /// Optional display-only label; old payloads still default to Hermes.
+        var agentName: String? = nil
+
+        var displayTitle: String {
+            let name = agentName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            return name.isEmpty ? "Hermes" : String(name.prefix(80))
+        }
 
         var isFinished: Bool { phase != "running" }
 

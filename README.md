@@ -41,17 +41,18 @@ Maximum text size on a physical phone, full filtering/counts and two live source
 [PR #5](https://github.com/alexlee2046/yihu-ios/pull/5) supplies opt-in, non-destructive checks, not new product capabilities. [CI for its fixed 61e158c source](https://github.com/alexlee2046/yihu-ios/actions/runs/38244125098) is separate from the earlier 991292c run.
 PR #5 提供显式授权的非破坏性检查，不是新增产品功能；测试结果绑定具体提交，旧 991292c CI 不替代 61e158c 的回证。
 
-### Not merged / 尚未合入
+### Bounded client enhancements / 有界客户端增量
 
-These proposals do not redefine the product as a universal Agent platform. Source publication is separate from authorization and delivery.
-候选代码不改变产品定位；源码发布、写入授权与实际交付分别处理。
+[PR #4](https://github.com/alexlee2046/yihu-ios/pull/4) is limited to the [PM-approved reduced scope](https://github.com/alexlee2046/yihu-ios/pull/4#issuecomment-6124724831). Its review/CI evidence is separate from the c76 device evidence above.
 
-| Change / 改动 | Review entry / 审查入口 |
-| --- | --- |
-| Configurable relay, voice-note insertion, agent abstractions, watch approval UI, relay/MCP tooling and photo diagnostics / 可配置中继、录音笔记填入、代理抽象、手表审批界面、中继/MCP 工具及图片诊断 | [PR #4](https://github.com/alexlee2046/yihu-ios/pull/4) · `c94bd68` · Blocked by six [security/functional findings / 安全与功能阻断](https://github.com/alexlee2046/yihu-ios/pull/4#pullrequestreview-5484553270) |
+- **Voice notes:** explicit insertion uses the workbench/page captured when opening notes and the existing refusal/draft guards; it never sends. Each note reserves one handoff in its existing local metadata before insertion or share-tray staging. Uncertain/failed handoffs retain the original note and are not automatically retried or converted into another staged copy; check the destination and use Copy if needed. Direct insertion is limited to 3,000 transcript characters; longer notes use the existing attachment path.
+- **Images:** explicit camera/photo selection only stages a JPEG in the existing inbox. Files are capped at 32 MiB and 32 million source pixels before decoding; camera-provided bitmaps are capped at 32 million pixels/128 MiB before further processing. Background downsampling/normalization produces at most 2,048 pixels per side with scale 1 and strips source metadata. Cancelled or failed processing preserves existing shares. Upload/attachment still requires the existing separate user action.
+- **Live Activities:** optional `agentName` changes display text only; missing/blank names retain Hermes. It adds no notification permission, provider or delivery claim.
 
-Watch direct replies, relay deployment and physical-device delivery are not implied by this list.
-本表不代表手表直写已授权、中继已部署或真机功能全部交付。
+PR #4 按 PM 减法范围仅保留录音笔记显式填入、图片暂存及活动可选名称。笔记绑定打开记录时的工作台/页面，每条在原元数据中先保留一次交接标记；失败或结果不确定保留原文、不自动重试或转存，核对目标后可手动复制。3000字以上沿用附件暂存。图片文件先限32 MiB/3200万像素；系统相机已提供的位图先限3200万像素/128 MiB，再后台缩至单边最多2048、scale 1，规范方向并移除来源元数据。取消/失败保留原分享，不自动上传或发送。名称仅显示、缺省仍为Hermes；这些新增路径的真机余项由Alex后测，不能引用旧c76真机证据代替。
+
+Relay server/containers/MCP, configurable or inferred relay registration, general Agent abstractions and standalone Watch approval are excluded. Existing main-line Watch draft → phone confirmation remains unchanged; production notifications and Watch direct-write authorization retain their separate gates.
+本轮撤出中继服务/容器/MCP、可配置或推断式中继注册、通用Agent抽象、独立手表审批及对应实现声明；既有手表草稿→手机确认保持不变，通知生产接入与手表直写仍走原独立授权门。
 
 ## Build locally
 

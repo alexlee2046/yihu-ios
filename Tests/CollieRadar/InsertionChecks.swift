@@ -47,6 +47,8 @@ final class Checks: NSObject, WKNavigationDelegate {
         if (!(await window.collieNativeInsertText('synthetic draft', 'one')) || inputs !== 1) throw Error('duplicate retry');
         field.value = ''; // A manually cleared/sent acknowledged draft is not reinserted.
         if (!(await window.collieNativeInsertText('synthetic draft', 'one')) || field.value !== '') throw Error('repeat after clear');
+        if (await window.collieNativeInsertText('changed retry', 'one')) throw Error('changed payload reused receipt');
+        if (field.value !== '' || inputs !== 1) throw Error('changed retry edited input');
         primary.setAttribute('aria-pressed', 'true');
         if (window.collieNativePrepareInsert('two')) throw Error('live typing accepted');
         if (await window.collieNativeInsertText('blocked', 'two')) throw Error('live typing mutation');
@@ -80,13 +82,22 @@ final class Checks: NSObject, WKNavigationDelegate {
         Object.defineProperty(document, 'hidden', { configurable: true, get: () => true });
         if (await window.collieNativeInsertText('blocked', 'hidden')) throw Error('background edit');
         Object.defineProperty(document, 'hidden', { configurable: true, get: () => false });
+        if (!window.collieNativePrepareInsert('route-change')) throw Error('route target capture failed');
+        history.replaceState({}, '', '#other-task');
+        if (await window.collieNativeInsertText('wrong route', 'route-change')) throw Error('route change accepted');
+        if (other.value !== '') throw Error('route change mutated target');
+        history.replaceState({}, '', 'about:blank');
         window.addEventListener('collie:native-transcript', event => { void event.detail.text; });
         return true;
         """)
         guard result as? Bool == true else { throw NSError(domain: "Checks", code: 1) }
         let refusal = try await web.callAsyncJavaScript(CollieTextInsertion.collieBridgeScript, arguments: ["origin": "null", "pageURL": "about:blank", "text": "synthetic"], in: nil, contentWorld: .defaultClient)
         guard refusal as? String == "refused" else { throw NSError(domain: "BridgeRefusal", code: 1) }
-        print("Synthetic WKWebView insertion checks passed: focus redirection zero edits; native readonly, receipts, detached/background/refusal, disabled and host readonly guards; zero submit")
+        let wrongPage = try await web.callAsyncJavaScript(CollieTextInsertion.collieBridgeScript,
+            arguments: ["origin": "null", "pageURL": "about:blank#different", "text": "synthetic"],
+            in: nil, contentWorld: .defaultClient)
+        guard wrongPage as? String == "refused" else { throw NSError(domain: "PageBinding", code: 1) }
+        print("Synthetic WKWebView insertion checks passed: route binding and changed retry; focus redirection zero edits; native readonly, receipts, detached/background/refusal, disabled and host readonly guards; zero submit")
     }
     func js(_ source: String) async throws -> Any {
         try await web.callAsyncJavaScript(source, arguments: [:], in: nil, contentWorld: .defaultClient) ?? NSNull()

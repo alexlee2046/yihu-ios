@@ -95,6 +95,10 @@ targets:
     platform: iOS
     sources:
       - Tests/CollieUI
+      - Apps/Collie/CollieVoiceNote.swift
+      - Apps/Collie/CollieDiagnosticImage.swift
+      - Shared/CollieShareInbox.swift
+      - Shared/HermesTaskAttributes.swift
     dependencies:
       - target: CollieiOS
     settings:

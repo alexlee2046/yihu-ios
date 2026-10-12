@@ -253,28 +253,38 @@ final class CollieWebSession {
     private var transcriptRequestID: UUID?
     private var transcriptRequestURL: URL?
 
-    func prepareTranscriptInsertion(_ id: UUID) async {
+    @discardableResult
+    func prepareTranscriptInsertion(_ id: UUID) async -> Bool {
         transcriptRequestID = id
         transcriptRequestURL = webView?.url
-        guard let webView, isTrusted(webView.url) else { return }
-        _ = try? await webView.callAsyncJavaScript(
+        guard let webView, isTrusted(webView.url) else { return false }
+        let result = try? await webView.callAsyncJavaScript(
             "return window.collieNativePrepareInsert?.(requestID) === true;",
             arguments: ["requestID": id.uuidString], in: nil, contentWorld: .defaultClient)
+        return result as? Bool == true
     }
 
     /// Prefer an optional host bridge; stock Collie uses the guarded DOM adapter.
     /// A refusal or an unknown response never falls through. No path submits.
-    func insertTranscript(_ transcript: String, requestID: UUID = UUID()) async -> Bool {
-        guard let webView, isTrusted(webView.url) else { return false }
+    func insertTranscript(_ transcript: String, requestID: UUID = UUID(),
+                          expectedPageURL: URL? = nil,
+                          canInsert: @MainActor () -> Bool = { true }) async -> Bool {
+        guard let webView else { return false }
+        func allowed() -> Bool {
+            !Task.isCancelled && canInsert() && isTrusted(webView.url) &&
+                (expectedPageURL == nil || (webView.url == expectedPageURL && transcriptRequestID == requestID))
+        }
+        guard allowed() else { return false }
         if transcriptRequestID == requestID, webView.url != transcriptRequestURL { return false }
         let arguments: [String: Any] = ["text": transcript, "origin": trustedOrigin,
-                                      "requestID": requestID.uuidString, "pageURL": webView.url?.absoluteString ?? ""]
+                                      "requestID": requestID.uuidString, "pageURL": (expectedPageURL ?? webView.url)?.absoluteString ?? ""]
         do {
             let receipt = try await webView.callAsyncJavaScript(
                 "return window.collieNativeInsertReceipt?.(text, requestID) ?? null;",
                 arguments: arguments, in: nil, contentWorld: .defaultClient)
             if let accepted = receipt as? Bool { return accepted }
         } catch { return false }
+        guard allowed() else { return false }
         do {
             let result = try await webView.callAsyncJavaScript(
                 CollieTextInsertion.collieBridgeScript, arguments: arguments, in: nil, contentWorld: .page
@@ -288,7 +298,7 @@ final class CollieWebSession {
         }
         // No host bridge observed the event. The isolated-world adapter requires
         // a focused editable and, for Collie, a positively identified draft mode.
-        guard isTrusted(webView.url) else { return false }
+        guard allowed() else { return false }
         do {
             let result = try await webView.callAsyncJavaScript(
                 CollieTextInsertion.insertScript, arguments: arguments, in: nil, contentWorld: .defaultClient

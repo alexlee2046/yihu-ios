@@ -1,5 +1,6 @@
 import AVFoundation
 import Foundation
+import PhotosUI
 import SwiftUI
 
 private func shellText(_ key: String) -> String {
@@ -104,7 +105,31 @@ final class CollieConnectionRuntime {
 @Observable
 final class CollieShellPresentation {
     var settingsPresented = false
+    var cameraPresented = false
+    var photosPickerPresented = false
     var notesPresented = false
+    var noteSession: CollieWebSession?
+    var notePageURL: URL?
+    var noteInsertionID: UUID?
+    var notePrepared = false
+
+    func openNotes(in session: CollieWebSession, voice: CollieVoiceController) {
+        noteSession = session
+        notePageURL = session.webView?.url
+        let id = UUID()
+        noteInsertionID = id
+        notePrepared = false
+        notesPresented = true
+        // Capture the original composer before the note picker can outlive it.
+        // Never replace an active/pending dictation's insertion capture.
+        guard CollieConnectionRuntime.voiceBlockReason(voice) == nil, !voice.voiceprintTestMicActive else { return }
+        Task {
+            guard notesPresented, noteInsertionID == id,
+                  CollieConnectionRuntime.voiceBlockReason(voice) == nil else { return }
+            let prepared = await session.prepareTranscriptInsertion(id)
+            if notesPresented, noteInsertionID == id { notePrepared = prepared }
+        }
+    }
 }
 
 @MainActor
@@ -119,6 +144,9 @@ private struct CollieRootView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var shortcuts = CollieWorkbenchShortcuts()
     @State private var shellPresentation = CollieShellPresentation()
+    @State private var shareTray = CollieShareTrayModel.shared
+    @State private var selectedPhotoItem: PhotosPickerItem?
+    @State private var requestingCamera = false
     @State private var radarPresentation = CollieRadarPresentation()
     @AppStorage("collie.workbench.selection.v1") private var selection = "web"
     @State private var workbenchesPresented = false
@@ -152,6 +180,43 @@ private struct CollieRootView: View {
         }, openAll: { workbenchesPresented = true })
     }
 
+    private var diagnosticPhotoMenu: some View {
+        Menu {
+            if shareTray.isImportingImage {
+                Button(radarText("取消图片处理"), role: .cancel) { shareTray.cancelImageImport() }
+            } else {
+                Button(radarText("拍摄诊断照片"), systemImage: "camera") { openCamera() }
+                Button(radarText("从相册选取"), systemImage: "photo.on.rectangle") {
+                    shellPresentation.photosPickerPresented = true
+                }
+            }
+        } label: {
+            Image(systemName: shareTray.isImportingImage ? "hourglass" : "camera").frame(width: 44, height: 44)
+        }
+        .accessibilityLabel(radarText("图片暂存"))
+        .accessibilityIdentifier("collie-diagnostic-photo")
+        .disabled(requestingCamera || voice.canCancel || voice.phase == .delivering ||
+                  voice.voiceprintTestMicActive || voiceNotes.recorder.isRecording)
+    }
+
+    private func openCamera() {
+        guard !requestingCamera, !shareTray.isImportingImage else { return }
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            shareTray.imageError = radarText("此设备无法使用相机，请从相册选取。")
+            return
+        }
+        requestingCamera = true
+        Task {
+            defer { requestingCamera = false }
+            guard await AVCaptureDevice.requestAccess(for: .video) else {
+                shareTray.imageError = radarText("未获得相机权限，请在系统设置中确认。")
+                return
+            }
+            guard scenePhase == .active else { return }
+            shellPresentation.cameraPresented = true
+        }
+    }
+
     private var workbenchHeader: some View {
         VStack(spacing: 4) {
             HStack(spacing: 8) {
@@ -162,7 +227,8 @@ private struct CollieRootView: View {
                 if let id = selectedRadar, let item = radar.workbenches.first(where: { $0.id == id }) {
                     CollieRadarActions(store: radar, item: item, presentation: radarPresentation)
                 } else if webSession != nil {
-                    Button { shellPresentation.notesPresented = true } label: {
+                    diagnosticPhotoMenu
+                    Button { if let webSession { shellPresentation.openNotes(in: webSession, voice: voice) } } label: {
                         Image(systemName: "waveform").frame(width: 44, height: 44)
                     }
                     .accessibilityLabel(radarText("语音记录"))
@@ -243,6 +309,24 @@ private struct CollieRootView: View {
                     } }
             }
         }
+        .fullScreenCover(isPresented: $shellPresentation.cameraPresented) {
+            CollieCameraPicker(isPresented: $shellPresentation.cameraPresented, onImageCaptured: { input in
+                shareTray.importImage { input }
+            }, onFailure: {
+                shareTray.imageError = radarText("图片未暂存：文件过大、格式不支持或处理失败。原有分享已保留。")
+            })
+            .ignoresSafeArea()
+        }
+        .photosPicker(isPresented: $shellPresentation.photosPickerPresented,
+                      selection: $selectedPhotoItem, matching: .images)
+        .onChange(of: selectedPhotoItem) { _, item in
+            guard let item else { return }
+            shareTray.importImage {
+                guard let photo = try await item.loadTransferable(type: ColliePhotoInput.self) else { return nil }
+                return .encoded(photo.data)
+            }
+            selectedPhotoItem = nil
+        }
         .alert(radarText("暂时不能切换工作台"), isPresented: Binding(
             get: { selectionNotice != nil && !workbenchesPresented && !addingWeb },
             set: { if !$0 { selectionNotice = nil } }
@@ -318,6 +402,8 @@ private struct CollieRootView: View {
         workbenchesPresented || addingWeb || radarPresentation.importing || radarPresentation.configuring ||
         radarPresentation.replyPresented || radarPresentation.watchTask != nil ||
         shellPresentation.settingsPresented || shellPresentation.notesPresented ||
+        shellPresentation.cameraPresented || shellPresentation.photosPickerPresented ||
+        requestingCamera || shareTray.isImportingImage || shareTray.imageError != nil ||
         voiceNotes.recorder.isRecording || notifications.isBusy || voice.canCancel ||
         voice.phase == .delivering || voice.canRetryDelivery || voice.voiceprintTestMicActive ||
         webSession?.keyboardVisible == true
@@ -369,7 +455,9 @@ private struct CollieRootView: View {
     }
 
     private func canSelect() -> Bool {
-        if voiceNotes.recorder.isRecording {
+        if shellPresentation.notesPresented {
+            selectionNotice = radarText("请先关闭语音记录，再切换工作台。")
+        } else if voiceNotes.recorder.isRecording {
             selectionNotice = radarText("请先结束语音笔记录音，再切换工作台。")
         } else if notifications.isBusy {
             selectionNotice = radarText("正在开启或停用通知，请等待完成后再切换工作台。")
@@ -605,10 +693,31 @@ struct CollieShellView: View {
 
     var body: some View {
         observedShell
-        .sheet(isPresented: $presentation.notesPresented) {
+        .sheet(isPresented: $presentation.notesPresented, onDismiss: {
+            presentation.noteSession = nil
+            presentation.notePageURL = nil
+            presentation.noteInsertionID = nil
+            presentation.notePrepared = false
+            runPendingShortcut()
+        }) {
             if let voiceNotes {
                 NavigationStack {
-                    CollieVoiceNotesView(store: voiceNotes) { shareTray.refresh() }
+                    CollieVoiceNotesView(store: voiceNotes, onHandedOff: { shareTray.refresh() },
+                                        onDirectInsert: { [target = presentation.noteSession, page = presentation.notePageURL] text, id in
+                        guard let target, let page, let requestID = presentation.noteInsertionID else { return false }
+                        let allowed: @MainActor @Sendable () -> Bool = { [presentation, voice, notifications, connectionSettings] in
+                            presentation.notesPresented && presentation.notePrepared &&
+                            presentation.noteInsertionID == requestID && presentation.noteSession === target &&
+                            target.isConnected && target.webView?.url == page &&
+                            (connectionSettings == nil || connectionSettings?.currentOrigin == target.baseURL) &&
+                            !voice.canCancel && voice.phase != .delivering && !voice.canRetryDelivery &&
+                            !voice.voiceprintTestMicActive && !voiceNotes.recorder.isRecording &&
+                            notifications?.isBusy != true && UIApplication.shared.applicationState == .active
+                        }
+                        guard allowed(), voiceNotes.reserveHandOff(id) else { return false }
+                        return await target.insertTranscript(text, requestID: requestID,
+                                                             expectedPageURL: page, canInsert: allowed)
+                    })
                 }
                 .presentationDragIndicator(.visible)
                 .presentationBackground(BenchsideStyle.canvas)
@@ -650,7 +759,7 @@ struct CollieShellView: View {
     /// A Hermes reminder was tapped: open its session once voice is idle. It only
     /// switches to a workbench the user already added (never a new server).
     private func openPendingHermesURL() {
-        guard let url = hermesPush.pendingURL,
+        guard !presentation.notesPresented, let url = hermesPush.pendingURL,
               let origin = URL(string: "\(url.scheme ?? "https")://\(url.host ?? "")\(url.port.map { ":\($0)" } ?? "")"),
               let validOrigin = CollieConnectionOrigin.validate(origin.absoluteString) else { return }
         // Don't pull the page out from under dictation or an unfilled transcript.
@@ -700,6 +809,7 @@ struct CollieShellView: View {
     /// start when ready, finish when recording; otherwise keep it pending.
     private func runPendingShortcut() {
         guard isWorkbenchActive, shortcuts.pendingToggle, scenePhase == .active,
+              !presentation.notesPresented,
               voiceNotes?.recorder.isRecording != true else { return }
         if voice.isRecording {
             guard shortcuts.consumeToggle() else { return }
@@ -851,7 +961,7 @@ struct CollieShellView: View {
     @ViewBuilder
     private var notesButton: some View {
         if let voiceNotes {
-            Button { presentation.notesPresented = true } label: {
+            Button { presentation.openNotes(in: webSession, voice: voice) } label: {
                 Group {
                     if voiceNotes.recorder.isRecording {
                         Image(systemName: "record.circle.fill").foregroundStyle(.red)

@@ -127,7 +127,7 @@ jobs:
             fi
             xcrun simctl ui "$YIHU_SIMULATOR" appearance "$appearance"
             xcrun simctl ui "$YIHU_SIMULATOR" content_size "$size"
-            if ! xcodebuild -project Yihu.xcodeproj -scheme CollieiOS -configuration Debug -destination "platform=iOS Simulator,id=$YIHU_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/YihuBuild" -resultBundlePath "$RUNNER_TEMP/YihuResults/$scenario.xcresult" -only-testing:CollieUITests/CollieWorkbenchUITests -parallel-testing-enabled NO -test-timeouts-enabled YES -maximum-test-execution-time-allowance 360 CODE_SIGN_IDENTITY=- test-without-building; then
+            if ! xcodebuild -project Yihu.xcodeproj -scheme CollieiOS -configuration Debug -destination "platform=iOS Simulator,id=$YIHU_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/YihuBuild" -resultBundlePath "$RUNNER_TEMP/YihuResults/$scenario.xcresult" -only-testing:CollieUITests/CollieWorkbenchUITests -only-testing:CollieUITests/CollieEnhancementTests -parallel-testing-enabled NO -test-timeouts-enabled YES -maximum-test-execution-time-allowance 360 CODE_SIGN_IDENTITY=- test-without-building; then
               failed=1
             fi
           done
