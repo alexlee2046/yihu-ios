@@ -230,4 +230,19 @@ extension CollieEnhancementTests {
         XCTAssertTrue(failing.historyNotice?.contains("读取失败") == true)
         XCTAssertEqual(failing.text, "Still editing")
     }
+
+    func testQuickReplyInsertionPreservesDraftAndNeverAutoSubmits() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let subject = replyFixture()
+        XCTAssertFalse(subject.quickReplies.isEmpty)
+        let firstPhrase = subject.quickReplies[0]
+        let secondPhrase = subject.quickReplies[1]
+        subject.appendQuickReply(firstPhrase)
+        XCTAssertEqual(subject.text, firstPhrase)
+        subject.appendQuickReply(firstPhrase)
+        XCTAssertEqual(subject.text, firstPhrase)
+        subject.appendQuickReply(secondPhrase)
+        XCTAssertEqual(subject.text, firstPhrase + "\n" + secondPhrase)
+        XCTAssertTrue(ReplyFixtureProtocol.capture.data.isEmpty)
+    }
 }

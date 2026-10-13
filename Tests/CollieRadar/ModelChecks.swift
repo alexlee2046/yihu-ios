@@ -157,7 +157,24 @@ struct CollieRadarModelChecks {
         print(String(format: "Synthetic 2000-task/40-project status presentation: per-card %.1f ms, shared %.1f ms",
                      perCardTime * 1000, Date().timeIntervalSince(sharedStart) * 1000))
         let legacyDisplay = try JSONDecoder().decode(CollieRadarDisplay.self, from: Data(#"{"page":"overview","project":"","compact":false,"showNext":true,"showStatus":true,"showActivity":true,"newestFirst":true}"#.utf8))
-        precondition(legacyDisplay.searchText == nil)
+        precondition(legacyDisplay.searchText == nil && legacyDisplay.onlyMentioningMe == nil)
+        let parsedEvidence = CollieRadarSnapshot.Action.parseSafeEvidenceURLs(
+            "https://github.com/example/repo/issues/40#issuecomment-1 ; https://github.com/example/repo/pull/47 , https://github.com/example/repo/pull/47 http://insecure.example.org/1 https://user:secret@example.org/2 https://example.org:0/3"
+        )
+        precondition(parsedEvidence.map(\.absoluteString) == [
+            "https://github.com/example/repo/issues/40#issuecomment-1",
+            "https://github.com/example/repo/pull/47"
+        ])
+        var attentionSnapshot = snapshot
+        attentionSnapshot.tasks = [
+            CollieRadarSnapshot.Action(project: "demo", status: "等你决策", title: "Decision item", next: "Confirm plan", url: "https://example.org/1", id: "t1"),
+            CollieRadarSnapshot.Action(project: "demo", status: "进行中", title: "Hidden blocker", next: "等alex接数据线解锁手机", url: "https://example.org/2", id: "t2"),
+            CollieRadarSnapshot.Action(project: "other", status: "进行中", title: "Routine work", next: "Lead running CI", url: "https://example.org/3", id: "t3")
+        ]
+        var mentionFilter = CollieRadarDisplay()
+        mentionFilter.onlyMentioningMe = true
+        precondition(attentionSnapshot.matchingActions(display: mentionFilter).map(\.title) == ["Decision item", "Hidden blocker"])
+        precondition(attentionSnapshot.matchingProjectNames(display: mentionFilter) == ["demo"])
         precondition(CollieRadarFeed.validate("https://example.org/pm/radar.json") != nil)
         var draftWorkbench = CollieRadarWorkbench()
         precondition(!draftWorkbench.supportsWatchDrafts)

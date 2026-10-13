@@ -128,7 +128,11 @@ struct CollieRadarView: View {
                     }
                 }
                 .sheet(item: $replying) { action in
-                    CollieRadarReplyView(store: store, workbenchID: id, source: record.source, action: action)
+                    let nextItem = store.snapshots[id].flatMap { snapshot in
+                        nextPendingAction(after: action, in: snapshot, display: record.display)
+                    }
+                    CollieRadarReplyView(store: store, workbenchID: id, source: record.source, action: action,
+                                         nextAction: nextItem, onSelectNext: { next in replying = next })
                 }
             }
         }
@@ -228,14 +232,17 @@ struct CollieRadarView: View {
         .accessibilityIdentifier("collie-radar-priority-filter")
         Toggle(radarText("包含已完成／搁置"), isOn: historyBinding)
             .accessibilityIdentifier("collie-radar-history")
+        Toggle(radarText("仅看需我处理（含提及 Alex）"), isOn: mentioningMeBinding)
+            .accessibilityIdentifier("collie-radar-mentioning-me")
         if !display.project.isEmpty || !(display.status ?? "").isEmpty || !(display.priority ?? "").isEmpty ||
-           !(display.searchText ?? "").isEmpty || display.showHistory == true {
+           !(display.searchText ?? "").isEmpty || display.showHistory == true || display.onlyMentioningMe == true {
             Button(radarText("清空筛选")) {
                 guard var item = record else { return }
                 item.display.project = ""
                 item.display.status = nil
                 item.display.priority = nil
                 item.display.showHistory = false
+                item.display.onlyMentioningMe = false
                 item.display.searchText = nil
                 store.update(item)
             }
@@ -392,6 +399,28 @@ struct CollieRadarView: View {
         })
     }
 
+    private var mentioningMeBinding: Binding<Bool> {
+        Binding(get: { record?.display.onlyMentioningMe == true }, set: { only in
+            guard var item = record else { return }
+            item.display.onlyMentioningMe = only ? true : nil
+            store.update(item)
+        })
+    }
+
+    private func nextPendingAction(after current: CollieRadarSnapshot.Action,
+                                   in snapshot: CollieRadarSnapshot,
+                                   display: CollieRadarDisplay) -> CollieRadarSnapshot.Action? {
+        let candidates = snapshot.matchingActions(display: display, includeAllTasks: true).filter {
+            ["等你决策", "等你验收"].contains($0.status ?? "") && ($0.id ?? "").isEmpty == false
+        }
+        guard !candidates.isEmpty else { return nil }
+        if let index = candidates.firstIndex(where: { $0.id == current.id }) {
+            let nextIndex = index + 1
+            if candidates.indices.contains(nextIndex) { return candidates[nextIndex] }
+        }
+        return candidates.first { $0.id != current.id }
+    }
+
     private func metric(_ title: String, count: Int, icon: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Label(title, systemImage: icon).font(.caption).foregroundStyle(.secondary)
@@ -443,6 +472,10 @@ struct CollieRadarView: View {
             if let id = action.id, !id.isEmpty {
                 Button(radarText("历史记录与反馈")) { replying = action }
                     .disabled(record?.source.isEmpty != false)
+            }
+            ForEach(Array(action.safeEvidenceURLs.enumerated()), id: \.offset) { index, url in
+                Link(radarText("查看证据") + (action.safeEvidenceURLs.count > 1 ? " #\(index + 1)" : ""), destination: url)
+                    .font(.subheadline)
             }
             DisclosureGroup(radarText("详情")) {
                 VStack(alignment: .leading, spacing: 8) {
