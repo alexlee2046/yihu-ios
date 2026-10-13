@@ -1,10 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-func radarText(_ key: String) -> String {
-    NSLocalizedString(key, tableName: "Yihu", comment: "")
-}
-
 @MainActor
 @Observable
 final class CollieRadarPresentation {
@@ -443,6 +439,10 @@ struct CollieRadarView: View {
                     Text(radarText("当前数据源或身份未开放回复权限。"))
                         .font(.caption).foregroundStyle(.secondary)
                 }
+            }
+            if let id = action.id, !id.isEmpty {
+                Button(radarText("历史记录与反馈")) { replying = action }
+                    .disabled(record?.source.isEmpty != false)
             }
             DisclosureGroup(radarText("详情")) {
                 VStack(alignment: .leading, spacing: 8) {

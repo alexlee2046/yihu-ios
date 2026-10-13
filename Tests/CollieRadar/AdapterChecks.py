@@ -1,5 +1,7 @@
 """Synthetic adapter/cache checks. No network, private ledger or credentials."""
 import importlib.util
+import copy
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -182,6 +184,188 @@ class HandlerChecks(unittest.TestCase):
             handler.do_GET()
         loader, _ = self.run_handler_checks(check)
         self.assertEqual(loader.call_count, 2)
+
+
+class HistoryChecks(unittest.TestCase):
+    def setUp(self):
+        self.ident, self.owner = "PVTI_synthetic", 7
+        self.request_id = "11111111-2222-4333-8444-555555555555"
+        self.url = "https://fixture.invalid/demo/repo/issues/1"
+        self.comments = []
+        self.node = {"id": self.ident, "fullDatabaseId": 1, "isArchived": False,
+                     "project": {"id": "PVT_fixture", "public": False, "viewerCanUpdate": True},
+                     "content": {"__typename": "Issue", "id": "I_fixture", "title": "Synthetic item",
+                                 "url": self.url, "repository": {"isPrivate": True, "viewerPermission": "WRITE"}},
+                     "fieldValues": {"nodes": [{"field": {"name": "Status"}, "name": "等你决策"}],
+                                     "pageInfo": {"hasNextPage": False}}}
+        self.config = {"project": {"id": "PVT_fixture", "url": "https://fixture.invalid/projects/1"}}
+        self.patches = [patch.object(radar.shutil, "which", return_value="/fixture/req"),
+                        patch.object(radar.Path, "read_text", return_value=json.dumps(self.config)),
+                        patch.object(radar, "graphql", side_effect=self.query),
+                        patch.object(radar, "command")]
+        self.mocks = [p.start() for p in self.patches]
+        for p in self.patches:
+            self.addCleanup(p.stop)
+
+    def query(self, query, variables):
+        if query == radar.TARGET_QUERY:
+            return {"node": copy.deepcopy(self.node)}
+        if query == radar.HISTORY_QUERY:
+            self.assertEqual(variables["id"], self.node["content"]["id"])
+            end = int(variables["before"].removeprefix("cursor-")) if variables["before"] else len(self.comments)
+            start = max(0, end - 5)
+            return {"node": {"id": variables["id"], "comments": {
+                "totalCount": len(self.comments), "nodes": copy.deepcopy(self.comments[start:end]),
+                "pageInfo": {"hasPreviousPage": start > 0, "startCursor": "cursor-" + str(start)}}}}
+        if query == radar.COMMENTS_QUERY:
+            return {"node": {"comments": {"totalCount": len(self.comments), "nodes": copy.deepcopy(self.comments),
+                                          "pageInfo": {"hasNextPage": False, "endCursor": None}}}}
+        self.fail("Unexpected query")
+
+    def note(self, text="Synthetic decision", owner=None, ident=None):
+        digest = hashlib.sha256(json.dumps([self.owner if owner is None else owner,
+                                            ident or self.ident, text], ensure_ascii=False).encode()).hexdigest()
+        return "Alex 手机确认（决策回复）：\n\n" + text + "\n\n<!-- yihu-reply:" + self.request_id + ":" + digest + " -->"
+
+    def append(self, body):
+        index = len(self.comments) + 1
+        self.comments.append({"id": "IC_" + str(index), "body": body,
+                              "url": self.url + "#issuecomment-" + str(index),
+                              "createdAt": "2026-10-01T00:00:00Z", "updatedAt": "2026-10-01T00:00:00Z"})
+
+    def history(self, **kwargs):
+        return radar.reply(dict(operation="history", id=self.ident, **kwargs), self.owner, "epoch", {})
+
+    def test_readback_preserves_original_and_receipt_without_write(self):
+        original = "  Synthetic decision\nwith unicode 示例  "
+        self.append(self.note(original) + "\n\n<sub>Synthetic footer</sub>")
+        result = self.history(text="Unconfirmed draft must be ignored", confirmed=True)
+        entry = result["entries"][0]
+        self.assertEqual((entry["text"], entry["request_id"], entry["kind"]), (original, self.request_id, "reply"))
+        self.assertEqual(entry["url"], self.comments[0]["url"])
+        self.assertEqual(entry["created_at"], radar.history_timestamp(self.comments[0]["createdAt"]))
+        self.assertEqual((result["start"], result["end"], result["total"], result["before"]), (1, 1, 1, None))
+        self.mocks[-1].assert_not_called()
+
+    def test_read_is_separate_from_write_and_completion(self):
+        self.append(self.note())
+        self.node["fieldValues"]["nodes"][0]["name"] = "已完成"
+        self.node["project"]["viewerCanUpdate"] = False
+        self.node["content"]["repository"]["viewerPermission"] = "READ"
+        self.assertFalse(self.history()["target"]["eligible"])
+        with self.assertRaises(radar.ReplyError) as caught:
+            radar.reply({"operation": "prepare", "id": self.ident}, self.owner, "epoch", {})
+        self.assertEqual(caught.exception.code, "forbidden")
+        self.node["project"]["viewerCanUpdate"] = True
+        self.node["content"]["repository"]["viewerPermission"] = "WRITE"
+        with self.assertRaises(radar.ReplyError) as caught:
+            radar.reply({"operation": "prepare", "id": self.ident}, self.owner, "epoch", {})
+        self.assertEqual(caught.exception.code, "target_changed")
+        self.mocks[-1].assert_not_called()
+
+    def test_foreign_public_or_invisible_targets_fail_closed(self):
+        for location, key, value in [(self.node["project"], "id", "PVT_foreign"),
+                                     (self.node["project"], "public", True),
+                                     (self.node["content"]["repository"], "isPrivate", False),
+                                     (self.node["content"]["repository"], "viewerPermission", None)]:
+            old = location[key]
+            location[key] = value
+            with self.assertRaises(radar.ReplyError):
+                self.history()
+            location[key] = old
+        self.mocks[-1].assert_not_called()
+
+    def test_permission_is_rechecked_after_page_read(self):
+        self.append(self.note())
+        def lose_access(query, variables):
+            result = self.query(query, variables)
+            if query == radar.HISTORY_QUERY:
+                self.node["content"]["repository"]["isPrivate"] = False
+            return result
+        self.mocks[2].side_effect = lose_access
+        with self.assertRaises(radar.ReplyError) as caught:
+            self.history()
+        self.assertEqual(caught.exception.code, "forbidden")
+
+    def test_pages_are_bounded_scoped_and_include_older_replies(self):
+        self.append(self.note())
+        for _ in range(7):
+            self.append("Synthetic update")
+        first = self.history()
+        self.assertEqual((len(first["entries"]), first["start"], first["end"], first["total"]), (5, 1, 5, 8))
+        second = self.history(before=first["before"])
+        self.assertEqual((len(second["entries"]), second["start"], second["end"], second["before"]), (3, 6, 8, None))
+        self.assertEqual(second["entries"][-1]["request_id"], self.request_id)
+        self.assertEqual([e["position"] for e in first["entries"] + second["entries"]], list(range(8, 0, -1)))
+        self.ident = "PVTI_another"
+        with self.assertRaises(radar.ReplyError):
+            self.history(before=first["before"])
+        self.mocks[-1].assert_not_called()
+
+    def test_changed_count_or_target_requires_fresh_first_page(self):
+        for _ in range(6):
+            self.append("Synthetic update")
+        first = self.history()
+        self.append("New update")
+        with self.assertRaises(radar.ReplyError) as caught:
+            self.history(before=first["before"])
+        self.assertEqual(caught.exception.code, "history_changed")
+        first = self.history()
+        self.node["fieldValues"]["nodes"][0]["name"] = "已完成"
+        with self.assertRaises(radar.ReplyError) as caught:
+            self.history(before=first["before"])
+        self.assertEqual(caught.exception.code, "history_changed")
+        self.assertEqual(self.history()["total"], 7)
+
+    def test_digest_binds_owner_target_and_exact_text(self):
+        for body in [self.note(owner=8), self.note(ident="PVTI_other"), self.note().replace("Synthetic decision", "Edited")]:
+            self.append(body)
+        self.assertTrue(all(e["kind"] == "update" and e["request_id"] is None for e in self.history()["entries"]))
+
+    def test_draft_notes_have_no_fabricated_comment_time_or_link(self):
+        self.node["content"] = {"__typename": "DraftIssue", "id": "D_fixture", "title": "Synthetic draft",
+                                "body": "Synthetic description\n\n---\n**备注 2026-10-01 08:00 +0800**（req note）\n\n" + self.note() + "\n"}
+        result = self.history()
+        self.assertTrue(result["draft"])
+        entry = result["entries"][0]
+        self.assertEqual(entry["kind"], "reply")
+        self.assertIsNone(entry["created_at"])
+        self.assertIsNone(entry["updated_at"])
+        self.assertEqual(entry["url"], result["target"]["url"])
+        self.mocks[-1].assert_not_called()
+
+    def test_oversize_notes_are_explicit_and_provider_links_validated(self):
+        self.append("x" * (radar.HISTORY_TEXT_BYTES + 1))
+        entry = self.history()["entries"][0]
+        self.assertTrue(entry["text_omitted"])
+        self.assertEqual(entry["text"], "")
+        self.comments[0]["url"] = "https://foreign.invalid/issues/1#issuecomment-1"
+        with self.assertRaises(RuntimeError):
+            self.history()
+
+    def test_incomplete_pages_and_duplicate_entries_are_not_empty_success(self):
+        for _ in range(6):
+            self.append("Synthetic update")
+        def partial(query, variables):
+            data = self.query(query, variables)
+            if query == radar.HISTORY_QUERY:
+                data["node"]["comments"]["nodes"].pop()
+            return data
+        self.mocks[2].side_effect = partial
+        with self.assertRaises(RuntimeError):
+            self.history()
+        self.mocks[2].side_effect = self.query
+        self.comments[-1]["id"] = self.comments[-2]["id"]
+        with self.assertRaises(RuntimeError):
+            self.history()
+
+    def test_existing_request_receipt_survives_restart_and_no_second_write(self):
+        self.append(self.note())
+        payload = {"operation": "submit", "id": self.ident, "text": "Synthetic decision",
+                   "request_id": self.request_id, "confirmed": True, "epoch": "old epoch"}
+        for epoch in ["epoch", "restarted"]:
+            self.assertEqual(radar.reply(payload, self.owner, epoch, {})["outcome"], "recorded")
+        self.mocks[-1].assert_not_called()
 
 
 if __name__ == "__main__":

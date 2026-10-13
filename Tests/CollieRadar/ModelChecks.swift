@@ -242,6 +242,54 @@ struct CollieRadarModelChecks {
         precondition(corrupt.configurationError != nil)
         precondition(corrupt.add() == nil)
         precondition(defaults.data(forKey: "collie.radar.workbenches.v1") == original)
+
+        // Source-scoped history, including read-only completed items.
+        let target: [String: Any] = ["eligible": false, "epoch": "fixture", "id": "PVTI_fixture",
+                                    "title": "Synthetic", "url": "https://fixture.invalid/issues/1",
+                                    "status": "已完成", "next": "", "version": "fixture"]
+        let entry: [String: Any] = ["id": "IC_fixture", "position": 1, "kind": "reply", "text": "Original",
+                                   "request_id": "11111111-2222-4333-8444-555555555555",
+                                   "url": "https://fixture.invalid/issues/1#issuecomment-1",
+                                   "created_at": 100.0, "updated_at": 100.0, "text_omitted": false]
+        let historyFixture: [String: Any] = ["history_version": 1, "target": target, "entries": [entry],
+                                            "total": 1, "start": 1, "end": 1, "read_at": 200.0, "draft": false]
+        func decodeHistory(_ value: [String: Any]) throws -> CollieRadarReplyHistory {
+            try JSONDecoder().decode(CollieRadarReplyHistory.self, from: JSONSerialization.data(withJSONObject: value))
+        }
+        let replyHistory = try decodeHistory(historyFixture)
+        try replyHistory.validate(id: "PVTI_fixture", after: 0)
+        precondition(!replyHistory.target.eligible && replyHistory.entries[0].text == "Original")
+        for foreignID in ["PVTI_other", ""] {
+            do {
+                try replyHistory.validate(id: foreignID, after: 0)
+                preconditionFailure("Cross-target history accepted")
+            } catch CollieRadarError.invalidSnapshot { }
+        }
+        for (key, value): (String, Any) in [("total", 2), ("before", "loop"), ("start", 0), ("history_version", 99)] {
+            var invalid = historyFixture
+            invalid[key] = value
+            do {
+                try decodeHistory(invalid).validate(id: "PVTI_fixture", after: 0)
+                preconditionFailure("Incomplete or unsupported history accepted")
+            } catch CollieRadarError.invalidSnapshot { }
+        }
+        for badURL in ["https://foreign.invalid/issues/1#issuecomment-1",
+                       "https://fixture.invalid:444/issues/1#issuecomment-1",
+                       "https://fixture.invalid/issues/2#issuecomment-1"] {
+            var invalid = historyFixture
+            var badEntry = entry
+            badEntry["url"] = badURL
+            invalid["entries"] = [badEntry]
+            do {
+                try decodeHistory(invalid).validate(id: "PVTI_fixture", after: 0)
+                preconditionFailure("Foreign history link accepted")
+            } catch CollieRadarError.invalidSnapshot { }
+        }
+        do {
+            try replyHistory.validate(id: "PVTI_fixture", after: 0, existingIDs: ["IC_fixture"])
+            preconditionFailure("Duplicate history page accepted")
+        } catch CollieRadarError.invalidSnapshot { }
+        print("History model checks passed: identity, completed read-only item, pagination range, version, URLs and duplicate pages")
         print("Radar checks passed: shortcut defaults, mixed ordering, hiding, persistence, deleted/duplicate identities, search/filter intersections, action-only projects, legacy decoding, per-workspace search persistence, schema, project identity, URL boundaries, size/date validation, display/cache persistence, ordering, failed-import retention, source isolation, deletion and corrupt-config preservation")
     }
 }

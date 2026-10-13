@@ -6,6 +6,7 @@ private struct CollieRadarReplyResponse: Decodable {
     var outcome: String?
     var error: String?
     var target: CollieRadarReplyTarget?
+    var history: CollieRadarReplyHistory? = nil
 }
 
 private struct CollieRadarReplyRequest: Encodable {
@@ -16,6 +17,7 @@ private struct CollieRadarReplyRequest: Encodable {
     var version: String?
     var confirmed: Bool
     var epoch: String?
+    var before: String? = nil
 }
 
 private struct CollieRadarReplyFailure: Error {
@@ -44,8 +46,20 @@ final class CollieRadarReplySession {
     private let source: String
     private let selected: CollieRadarSnapshot.Action
     private var targetID: String
+    private let currentSource: @MainActor () -> Bool
+    private let configuration: URLSessionConfiguration
+    private(set) var history: CollieRadarReplyHistory?
+    private(set) var historyBusy = false
+    private(set) var historyNotice: String?
+    private var historyGeneration = 0
+    private var historyActive = true
+    private var historyCursors: Set<String> = []
 
-    init(workbenchID: UUID, source: String, selected: CollieRadarSnapshot.Action) {
+    init(workbenchID: UUID, source: String, selected: CollieRadarSnapshot.Action,
+         configuration: URLSessionConfiguration = .ephemeral,
+         currentSource: @escaping @MainActor () -> Bool = { true }) {
+        self.configuration = configuration
+        self.currentSource = currentSource
         self.workbenchID = workbenchID
         self.source = source
         self.selected = selected
@@ -75,13 +89,14 @@ final class CollieRadarReplySession {
     }
 
     var canSend: Bool {
-        target?.eligible == true && ["等你决策", "等你验收"].contains(target?.status ?? "") &&
+        currentSource() && target?.eligible == true && ["等你决策", "等你验收"].contains(target?.status ?? "") &&
+        (history.map { $0.target.version == target?.version } ?? true) &&
         !busy && !blocked && !pending && !recorded &&
         !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && text.unicodeScalars.count <= 4000
     }
 
     func prepare() async {
-        guard !busy, !blocked, !pending, !recorded else { return }
+        guard currentSource(), !busy, !blocked, !pending, !recorded else { return }
         busy = true
         defer { busy = false }
         do {
@@ -214,13 +229,12 @@ final class CollieRadarReplySession {
         if clearPending() { notice = radarText("已记录，待 PM／负责人处理。") }
     }
 
-    private func request(_ operation: String, id: String, version: String? = nil) async throws -> CollieRadarReplyResponse {
-        guard let url = CollieRadarFeed.validate(source) else { throw CollieRadarError.invalidURL }
-        let configuration = URLSessionConfiguration.ephemeral
+    private func request(_ operation: String, id: String, version: String? = nil, before: String? = nil) async throws -> CollieRadarReplyResponse {
+        guard currentSource(), let url = CollieRadarFeed.validate(source) else { throw CollieRadarError.invalidURL }
         configuration.httpCookieStorage = nil
         configuration.urlCredentialStorage = nil
-        configuration.timeoutIntervalForRequest = 25
-        configuration.timeoutIntervalForResource = 45
+        configuration.timeoutIntervalForRequest = operation == "history" ? 45 : 25
+        configuration.timeoutIntervalForResource = operation == "history" ? 60 : 45
         let session = URLSession(configuration: configuration, delegate: CollieRadarReplyNoRedirect(), delegateQueue: nil)
         defer { session.invalidateAndCancel() }
         var request = URLRequest(url: url)
@@ -230,24 +244,96 @@ final class CollieRadarReplySession {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("1", forHTTPHeaderField: "X-Yihu-Reply")
         request.httpBody = try JSONEncoder().encode(CollieRadarReplyRequest(
-            operation: operation, id: id, text: operation == "prepare" ? "" : text, request_id: requestID.uuidString,
-            version: version, confirmed: operation == "submit", epoch: target?.epoch))
+            operation: operation, id: id, text: ["prepare", "history"].contains(operation) ? "" : text, request_id: requestID.uuidString,
+            version: version, confirmed: operation == "submit", epoch: target?.epoch, before: before))
         guard let body = request.httpBody, body.count <= 20_000 else {
             throw CollieRadarReplyFailure(code: "invalid_request")
         }
         let (bytes, response) = try await session.bytes(for: request)
         guard let http = response as? HTTPURLResponse else { throw CollieRadarError.invalidSnapshot }
-        guard http.expectedContentLength <= 40_000 else { throw CollieRadarError.tooLarge }
+        let maximum = operation == "history" ? 128 * 1024 : 40_000
+        guard http.expectedContentLength <= maximum else { throw CollieRadarError.tooLarge }
+        if operation == "history" {
+            if [401, 403].contains(http.statusCode) { throw CollieRadarReplyFailure(code: "forbidden") }
+            if [404, 405, 501].contains(http.statusCode) { throw CollieRadarReplyFailure(code: "history_unsupported") }
+        }
         var data = Data()
         for try await byte in bytes {
-            guard data.count < 40_000 else { throw CollieRadarError.tooLarge }
+            guard data.count < maximum else { throw CollieRadarError.tooLarge }
             data.append(byte)
         }
-        let result = try JSONDecoder().decode(CollieRadarReplyResponse.self, from: data)
+        guard currentSource() else { throw CollieRadarError.invalidURL }
+        var result = try JSONDecoder().decode(CollieRadarReplyResponse.self, from: data)
+        if operation == "history", result.error == "invalid_request", before == nil {
+            throw CollieRadarReplyFailure(code: "history_unsupported")
+        }
         if !(200...299).contains(http.statusCode) || result.error != nil {
             throw CollieRadarReplyFailure(code: result.error ?? "unavailable", target: result.target)
         }
+        if operation == "history" {
+            guard result.outcome == "history" else { throw CollieRadarReplyFailure(code: "history_unsupported") }
+            result.history = try JSONDecoder().decode(CollieRadarReplyHistory.self, from: data)
+        }
         return result
+    }
+
+    var originalURL: URL? {
+        guard let parts = URLComponents(string: history?.target.url ?? target?.url ?? selected.url),
+              parts.scheme == "https", parts.host != nil, parts.user == nil, parts.password == nil else { return nil }
+        return parts.url
+    }
+    var isCurrent: Bool { currentSource() }
+    var initiallyWritable: Bool { target?.eligible == true || ["等你决策", "等你验收"].contains(selected.status ?? "") }
+    var showsComposer: Bool { initiallyWritable || history?.target.eligible == true || !text.isEmpty || pending || recorded || blocked }
+
+    func activateHistory() { historyActive = true }
+    func cancelHistory() {
+        historyActive = false
+        historyGeneration += 1
+        historyBusy = false
+    }
+
+    func loadHistory(more: Bool = false) async {
+        guard historyActive, currentSource(), !historyBusy else { return }
+        let loaded = more ? history?.entries.count ?? 0 : 0
+        let cursor = more ? history?.before : nil
+        guard !more || (cursor != nil && loaded < 100) else { return }
+        historyGeneration += 1
+        let generation = historyGeneration
+        historyBusy = true
+        historyNotice = nil
+        defer { if generation == historyGeneration { historyBusy = false } }
+        do {
+            let response = try await request("history", id: targetID, before: cursor)
+            guard historyActive, currentSource(), generation == historyGeneration, !Task.isCancelled else { return }
+            guard var page = response.history else { throw CollieRadarError.invalidSnapshot }
+            try page.validate(id: targetID, after: loaded,
+                              existingIDs: more ? Set(history?.entries.map(\.id) ?? []) : [])
+            if let next = page.before, (more && historyCursors.contains(next)) || next == cursor {
+                throw CollieRadarError.invalidSnapshot
+            }
+            if more, let previous = history {
+                guard previous.total == page.total, previous.target.version == page.target.version,
+                      previous.draft == page.draft else { throw CollieRadarError.invalidSnapshot }
+                page.entries = previous.entries + page.entries
+                page.start = previous.start
+                page.read_at = min(previous.read_at, page.read_at)
+            } else { historyCursors = [] }
+            if let next = page.before { historyCursors.insert(next) }
+            history = page
+        } catch {
+            guard historyActive, currentSource(), generation == historyGeneration, !Task.isCancelled else { return }
+            switch (error as? CollieRadarReplyFailure)?.code {
+            case "history_unsupported": historyNotice = radarText("当前服务不支持历史回显，请查看原条目。")
+            case "forbidden": historyNotice = radarText("当前身份无权读取此历史，请核对原数据源权限。")
+            case "target_unavailable": historyNotice = radarText("条目已不在当前台账或不可见，历史暂不可用。")
+            case "history_changed", "invalid_request": historyNotice = radarText("来源或分页范围已变化，请重新读取历史。")
+            default:
+                if let network = error as? URLError, [.notConnectedToInternet, .networkConnectionLost].contains(network.code) {
+                    historyNotice = radarText("当前离线，历史暂不可用；这不表示回复没有发送。")
+                } else { historyNotice = radarText("历史读取失败，已显示的记录和输入保留；请重试或查看原条目。") }
+            }
+        }
     }
 
     private func message(_ error: Error) -> String {
@@ -277,21 +363,68 @@ struct CollieRadarReplyView: View {
     init(store: CollieRadarStore, workbenchID: UUID, source: String, action: CollieRadarSnapshot.Action) {
         self.store = store
         self.workbenchID = workbenchID
-        _session = State(initialValue: CollieRadarReplySession(workbenchID: workbenchID, source: source, selected: action))
+        _session = State(initialValue: CollieRadarReplySession(workbenchID: workbenchID, source: source, selected: action,
+            currentSource: { store.workbenches.first(where: { $0.id == workbenchID })?.source == source }))
+    }
+
+    private var historySection: some View {
+        Section(radarText("已发送记录与条目备注")) {
+            if let history = session.history {
+                Text(radarText("已读取记录数") + "：\(history.entries.count) / \(history.total)")
+                    .font(.caption).foregroundStyle(.secondary)
+                Text(radarText("本轮读取始于") + "：" + Date(timeIntervalSince1970: history.read_at).formatted())
+                    .font(.caption).foregroundStyle(.secondary)
+                if history.draft { Text(radarText("草稿备注没有独立评论时间或评论链接，入口指向原草稿。")) }
+                if history.entries.isEmpty { Text(radarText("来源当前没有可显示的记录。")) }
+                ForEach(history.entries) { entry in
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(radarText(entry.kind == "reply" ? "手机已发送（回执已核实）" : "条目备注"))
+                            .font(.subheadline.bold())
+                        if let stamp = entry.created_at {
+                            Text(Date(timeIntervalSince1970: stamp), format: .dateTime).font(.caption)
+                        }
+                        Text(entry.text_omitted ? radarText("原文较长，请在原条目查看完整内容。") : entry.text)
+                            .textSelection(.enabled)
+                        if let request = entry.request_id {
+                            Text("request_id: " + request).font(.caption2).textSelection(.enabled)
+                        }
+                        if let url = URL(string: entry.url) { Link(radarText("查看来源原文"), destination: url) }
+                    }
+                }
+                if history.before != nil {
+                    if history.entries.count < 100 {
+                        Button(radarText("加载更早记录")) { Task { await session.loadHistory(more: true) } }
+                            .disabled(session.historyBusy)
+                    } else { Text(radarText("已达本次显示上限，请在原条目查看更早记录。")) }
+                }
+            }
+            if let notice = session.historyNotice {
+                Text(notice).foregroundStyle(.orange)
+                if session.history != nil { Text(radarText("以上为此前读取的记录，不代表当前最新结果。")) }
+            }
+            if session.historyBusy { ProgressView(radarText("正在读取历史")) }
+            Button(radarText("重新读取历史")) { Task { await session.loadHistory() } }.disabled(session.historyBusy)
+            if let url = session.originalURL { Link(radarText("查看原条目"), destination: url) }
+        }
     }
 
     var body: some View {
         NavigationStack {
             Form {
-                if let target = session.target {
-                    Section(radarText("确认回复目标")) {
+                if !session.isCurrent {
+                    Section { Text(radarText("来源已变化，请关闭后重新打开；原输入仍保留。")) }
+                } else {
+                if let target = session.history?.target ?? session.target {
+                    Section(radarText("原条目")) {
                         Text(target.title).font(.headline)
                         Text(target.url).font(.caption).textSelection(.enabled)
                         Text(target.status)
                         Text(target.next.isEmpty ? radarText("下一步待补") : target.next)
                     }
                 }
-                Section(radarText("回复原文")) {
+                historySection
+                if session.showsComposer {
+                Section(radarText(session.recorded ? "本次已记录原文" : "写新回复")) {
                     TextEditor(text: $session.text).frame(minHeight: 160)
                         .disabled(session.busy || session.pending || session.recorded || session.blocked)
                     Text(radarText("最多 4000 字符；仅记录回复，不自动改状态或执行操作。"))
@@ -303,15 +436,20 @@ struct CollieRadarReplyView: View {
                 Section {
                     if session.busy { ProgressView() }
                     if session.pending {
-                        Button(radarText("查回回复结果")) { Task { await session.check() } }.disabled(session.busy)
+                        Button(radarText("查回回复结果")) { Task {
+                            await session.check()
+                            if session.recorded { await session.loadHistory() }
+                        } }.disabled(session.busy)
                     } else if !session.recorded && !session.blocked {
                         Button(radarText("重新读取条目")) { Task { await session.prepare() } }.disabled(session.busy)
                         Button(radarText("确认并发送回复")) { confirming = true }.disabled(!session.canSend)
                         Button(radarText("丢弃未发送草稿"), role: .destructive) { discarding = true }.disabled(session.busy)
                     }
                 }
+                }
+                }
             }
-            .navigationTitle(radarText("回复决策／验收反馈"))
+            .navigationTitle(radarText("回复记录与反馈"))
             .toolbar { ToolbarItem(placement: .cancellationAction) {
                 Button(radarText(session.recorded ? "完成" : "关闭")) {
                     if session.preserveDraft() { dismiss() }
@@ -324,7 +462,12 @@ struct CollieRadarReplyView: View {
                     if session.discardDraft() { dismiss() }
                 }
             }
-            .task { await session.prepare() }
+            .task {
+                session.activateHistory()
+                if session.initiallyWritable { await session.prepare() }
+                if !Task.isCancelled { await session.loadHistory() }
+            }
+            .onDisappear { session.cancelHistory() }
             .sheet(isPresented: $confirming) {
                 NavigationStack {
                     Form {
@@ -341,7 +484,10 @@ struct CollieRadarReplyView: View {
                             confirming = false
                             Task {
                                 await session.submit()
-                                if session.recorded { await store.refresh(workbenchID) }
+                                if session.recorded {
+                                    await session.loadHistory()
+                                    await store.refresh(workbenchID)
+                                }
                             }
                         }.disabled(!session.canSend)
                     }
