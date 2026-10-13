@@ -30,7 +30,8 @@ private final class ReplyFixtureProtocol: URLProtocol, @unchecked Sendable {
             }
         }
         Self.capture.append(body)
-        if request.url?.path == "/delayed" {
+        let operation = ((try? JSONSerialization.jsonObject(with: body)) as? [String: Any])?["operation"] as? String
+        if request.url?.path == "/delayed", operation == "history" {
             let payload = body
             DispatchQueue.global().asyncAfter(deadline: .now() + 0.15) { self.deliver(payload) }
         } else { deliver(body) }
@@ -184,6 +185,29 @@ extension CollieEnhancementTests {
         XCTAssertEqual(submissions.count, 1)
         XCTAssertEqual(checks.count, 1)
         XCTAssertEqual(submissions.first?["request_id"] as? String, checks.first?["request_id"] as? String)
+    }
+
+    func testReplyHistoryConfirmedReceiptInvalidatesInflightRead() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let subject = replyFixture("/delayed")
+        await subject.prepare()
+        subject.text = "Confirmed synthetic reply"
+        await subject.submit()
+        XCTAssertTrue(subject.pending)
+        let oldRead = Task { await subject.loadHistory() }
+        for _ in 0..<100 {
+            if replyRequests.count >= 3 { break }
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        XCTAssertTrue(subject.historyBusy)
+        await subject.check()
+        XCTAssertTrue(subject.recorded)
+        XCTAssertFalse(subject.historyBusy)
+        await oldRead.value
+        XCTAssertNil(subject.history)
+        await subject.loadHistory()
+        XCTAssertEqual(subject.history?.entries.count, 1)
+        XCTAssertEqual(replyRequests.filter { ($0["operation"] as? String) == "submit" }.count, 1)
     }
 
     func testReplyHistoryPaginationAndRefreshFailurePreserveRecords() async throws {

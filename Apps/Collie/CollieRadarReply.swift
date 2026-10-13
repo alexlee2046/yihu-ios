@@ -225,6 +225,9 @@ final class CollieRadarReplySession {
     }
 
     private func complete() {
+        // A pre-submit history read must not win over the confirmed receipt.
+        historyGeneration += 1
+        historyBusy = false
         recorded = true
         if clearPending() { notice = radarText("已记录，待 PM／负责人处理。") }
     }
@@ -389,12 +392,7 @@ struct CollieRadarReplyView: View {
                 if history.draft { Text(radarText("草稿备注没有独立评论时间或评论链接，入口指向原草稿。")) }
                 if history.entries.isEmpty { Text(radarText("来源当前没有可显示的记录。")) }
                 ForEach(history.entries) { entry in
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(radarText(entry.kind == "reply" ? "手机已发送（回执已核实）" : "条目备注"))
-                            .font(.subheadline.bold())
-                        if let stamp = entry.created_at {
-                            Text(Date(timeIntervalSince1970: stamp), format: .dateTime).font(.caption)
-                        }
+                    DisclosureGroup {
                         Text(entry.text_omitted ? radarText("原文较长，请在原条目查看完整内容。") : entry.text)
                             .textSelection(.enabled)
                         if let request = entry.request_id {
@@ -417,6 +415,14 @@ struct CollieRadarReplyView: View {
                                         if let url = URL(string: note.url) { Link(radarText("查看来源原文"), destination: url) }
                                     }
                                 }
+                            }
+                        }
+                    } label: {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(radarText(entry.kind == "reply" ? "手机已发送（回执已核实）" : "条目备注"))
+                                .font(.subheadline.bold())
+                            if let stamp = entry.created_at {
+                                Text(Date(timeIntervalSince1970: stamp), format: .dateTime).font(.caption)
                             }
                         }
                     }
@@ -444,43 +450,43 @@ struct CollieRadarReplyView: View {
                 if !session.isCurrent {
                     Section { Text(radarText("来源已变化，请关闭后重新打开；原输入仍保留。")) }
                 } else {
-                if let target = session.history?.target ?? session.target {
-                    Section(radarText("原条目")) {
-                        Text(target.title).font(.headline)
-                        Text(target.url).font(.caption).textSelection(.enabled)
-                        Text(target.status)
-                        Text(target.next.isEmpty ? radarText("下一步待补") : target.next)
-                        Text(radarText("负责会话") + "：" + (target.owner_session.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
-                            .font(.caption)
-                        Text(radarText("条目当前状态不代表某次回复已读或已处理。"))
-                            .font(.caption).foregroundStyle(.secondary)
+                    if let target = session.history?.target ?? session.target {
+                        Section(radarText("原条目")) {
+                            Text(target.title).font(.headline)
+                            Text(target.url).font(.caption).textSelection(.enabled)
+                            Text(target.status)
+                            Text(target.next.isEmpty ? radarText("下一步待补") : target.next)
+                            Text(radarText("负责会话") + "：" + (target.owner_session.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
+                                .font(.caption)
+                            Text(radarText("条目当前状态不代表某次回复已读或已处理。"))
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
                     }
-                }
-                historySection
-                if session.showsComposer {
-                Section(radarText(session.recorded ? "本次已记录原文" : "写新回复")) {
-                    TextEditor(text: $session.text).frame(minHeight: 160)
-                        .disabled(session.busy || session.pending || session.recorded || session.blocked)
-                    Text(radarText("最多 4000 字符；仅记录回复，不自动改状态或执行操作。"))
-                        .font(.footnote).foregroundStyle(.secondary)
-                }
-                if let notice = session.notice {
-                    Section { Text(notice).foregroundStyle(session.recorded ? Color.secondary : Color.orange) }
-                }
-                Section {
-                    if session.busy { ProgressView() }
-                    if session.pending {
-                        Button(radarText("查回回复结果")) { Task {
-                            await session.check()
-                            if session.recorded { await session.loadHistory() }
-                        } }.disabled(session.busy)
-                    } else if !session.recorded && !session.blocked {
-                        Button(radarText("重新读取条目")) { Task { await session.prepare() } }.disabled(session.busy)
-                        Button(radarText("确认并发送回复")) { confirming = true }.disabled(!session.canSend)
-                        Button(radarText("丢弃未发送草稿"), role: .destructive) { discarding = true }.disabled(session.busy)
+                    historySection
+                    if session.showsComposer {
+                        Section(radarText(session.recorded ? "本次已记录原文" : "写新回复")) {
+                            TextEditor(text: $session.text).frame(minHeight: 160)
+                                .disabled(session.busy || session.pending || session.recorded || session.blocked)
+                            Text(radarText("最多 4000 字符；仅记录回复，不自动改状态或执行操作。"))
+                                .font(.footnote).foregroundStyle(.secondary)
+                        }
+                        if let notice = session.notice {
+                            Section { Text(notice).foregroundStyle(session.recorded ? Color.secondary : Color.orange) }
+                        }
+                        Section {
+                            if session.busy { ProgressView() }
+                            if session.pending {
+                                Button(radarText("查回回复结果")) { Task {
+                                    await session.check()
+                                    if session.recorded { await session.loadHistory() }
+                                } }.disabled(session.busy)
+                            } else if !session.recorded && !session.blocked {
+                                Button(radarText("重新读取条目")) { Task { await session.prepare() } }.disabled(session.busy)
+                                Button(radarText("确认并发送回复")) { confirming = true }.disabled(!session.canSend)
+                                Button(radarText("丢弃未发送草稿"), role: .destructive) { discarding = true }.disabled(session.busy)
+                            }
+                        }
                     }
-                }
-                }
                 }
             }
             .navigationTitle(radarText("回复记录与反馈"))
