@@ -1,5 +1,9 @@
 import CoreFoundation
 import Foundation
+
+func radarText(_ key: String) -> String {
+    NSLocalizedString(key, tableName: "Yihu", comment: "")
+}
 import Observation
 
 /// Opaque APNs intent, not a URL or write command. Resolution requires a locally
@@ -257,6 +261,83 @@ struct CollieRadarReplyTarget: Codable {
     var status: String
     var next: String
     var version: String
+    var owner_session: String? = nil
+}
+
+/// Read-only source history. No local history database or synthesized delivery state.
+struct CollieRadarReplyHistory: Decodable {
+    struct Entry: Decodable, Identifiable {
+        var id: String
+        var position: Int
+        var kind: String
+        var text: String
+        var request_id: String?
+        var url: String
+        var created_at: Double?
+        var updated_at: Double?
+        var text_omitted: Bool
+        var references: [String]
+    }
+    var history_version: Int
+    var target: CollieRadarReplyTarget
+    var entries: [Entry]
+    var total: Int
+    var start: Int
+    var end: Int
+    var before: String?
+    var read_at: Double
+    var draft: Bool
+
+    /// Only explicit references from later source notes; never infer read/handled.
+    func feedback(for reply: Entry) -> [Entry] {
+        guard reply.kind == "reply", let requestID = reply.request_id else { return [] }
+        return entries.filter {
+            $0.kind == "update" && $0.position > reply.position &&
+            ($0.references.contains(requestID.lowercased()) || (!draft && $0.references.contains(reply.url)))
+        }
+    }
+
+    func validate(id: String, after loaded: Int, existingIDs: Set<String> = [], now: Date = Date()) throws {
+        guard history_version == 1, target.id == id, total >= 0, total <= 100_000,
+              loaded >= 0, loaded <= total, entries.count == min(5, total - loaded),
+              start == (entries.isEmpty ? 0 : loaded + 1), end == loaded + entries.count,
+              (before != nil) == (end < total), before.map({ !$0.isEmpty && $0.utf8.count <= 2048 }) ?? true,
+              read_at.isFinite, read_at >= 0, read_at <= now.timeIntervalSince1970 + 300,
+              let targetURL = URLComponents(string: target.url), targetURL.scheme == "https",
+              targetURL.host != nil, targetURL.user == nil, targetURL.password == nil else {
+            throw CollieRadarError.invalidSnapshot
+        }
+        var ids = existingIDs
+        for (index, entry) in entries.enumerated() {
+            guard entry.position == total - loaded - index, !entry.id.isEmpty, entry.id.utf8.count <= 200, ids.insert(entry.id).inserted,
+                  ["reply", "update"].contains(entry.kind), entry.text.utf8.count <= 20_000,
+                  !entry.text_omitted || entry.text.isEmpty,
+                  (entry.kind == "reply") == (entry.request_id != nil),
+                  entry.request_id.map({ UUID(uuidString: $0) != nil }) ?? true,
+                  let url = URLComponents(string: entry.url), url.scheme == "https",
+                  url.host == targetURL.host, url.port == targetURL.port, url.user == nil, url.password == nil,
+                  url.path == targetURL.path, url.query == targetURL.query else { throw CollieRadarError.invalidSnapshot }
+            guard entry.references.count <= 20, Set(entry.references).count == entry.references.count else {
+                throw CollieRadarError.invalidSnapshot
+            }
+            for reference in entry.references {
+                let request = UUID(uuidString: reference)?.uuidString.lowercased() == reference
+                let comment = !draft && reference.range(of: "^" + NSRegularExpression.escapedPattern(for: target.url) +
+                    "#issuecomment-[0-9]+$", options: .regularExpression) != nil
+                guard reference.utf8.count <= 2048, request || comment else { throw CollieRadarError.invalidSnapshot }
+            }
+            if draft {
+                guard entry.url == target.url, entry.created_at == nil, entry.updated_at == nil else {
+                    throw CollieRadarError.invalidSnapshot
+                }
+            } else {
+                guard url.fragment?.range(of: "^issuecomment-[0-9]+$", options: .regularExpression) != nil,
+                      let created = entry.created_at, let updated = entry.updated_at,
+                      created.isFinite, updated.isFinite, created >= 0, updated >= created,
+                      updated <= now.timeIntervalSince1970 + 300 else { throw CollieRadarError.invalidSnapshot }
+            }
+        }
+    }
 }
 
 struct CollieRadarPendingReply: Codable {

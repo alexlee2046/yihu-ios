@@ -6,6 +6,7 @@ personal Tailscale identity. Serve must strip/inject identity headers (no Funnel
 No task/reply text, login names or raw CLI errors are logged.
 """
 import argparse
+import base64
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from datetime import datetime, timezone, timedelta
 from email.header import decode_header, make_header
@@ -217,23 +218,26 @@ COMMENTS_QUERY = """query($id:ID!, $after:String) { node(id:$id) { ... on Issue 
 } } }"""
 
 
-def target_item(ident, epoch, notification=False):
+def target_item(ident, epoch, notification=False, history=False):
     executable = shutil.which("req")
     if not executable:
         raise RuntimeError("req unavailable")
     config_path = os.environ.get("REQ_CONFIG") or str(Path(executable).resolve().parent / "config.json")
     config = json.loads(Path(config_path).read_text())
     node = graphql(TARGET_QUERY, {"id": ident})["node"]
-    if not node or node.get("project", {}).get("id") != config["project"]["id"]:
+    if not node or node.get("id") != ident or node.get("project", {}).get("id") != config["project"]["id"]:
         raise ReplyError("target_unavailable", 404)
-    if node["project"].get("public") is not False or node["project"].get("viewerCanUpdate") is not True:
+    if node["project"].get("public") is not False or (not history and node["project"].get("viewerCanUpdate") is not True):
         raise ReplyError("forbidden", 403)
     content = node.get("content") or {}
     kind = content.get("__typename")
     if kind not in {"Issue", "DraftIssue"} or not content.get("id"):
         raise ReplyError("forbidden", 403)
+    permissions = {"ADMIN", "MAINTAIN", "WRITE"}
+    if history:
+        permissions |= {"READ", "TRIAGE"}
     if kind == "Issue" and (content.get("repository", {}).get("isPrivate") is not True or
-                            content.get("repository", {}).get("viewerPermission") not in {"ADMIN", "MAINTAIN", "WRITE"}):
+                            content.get("repository", {}).get("viewerPermission") not in permissions):
         raise ReplyError("forbidden", 403)
     values = node["fieldValues"]
     if values.get("pageInfo", {}).get("hasNextPage") is not False:
@@ -248,10 +252,14 @@ def target_item(ident, epoch, notification=False):
         raise ReplyError("target_unavailable", 404)
     target = {"id": ident, "epoch": epoch, "title": content["title"], "url": url,
               "status": fields.get("Status") or "", "next": fields.get("下一步") or ""}
-    eligible = not node["isArchived"] and target["status"] in WAITING
+    writable = node["project"].get("viewerCanUpdate") is True and (
+        kind == "DraftIssue" or content["repository"].get("viewerPermission") in {"ADMIN", "MAINTAIN", "WRITE"})
+    eligible = writable and not node["isArchived"] and target["status"] in WAITING
     target["eligible"] = eligible
     revision = dict(target, archived=node["isArchived"], kind=kind, content_id=content["id"])
     target["version"] = hashlib.sha256(json.dumps(revision, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+    if history:
+        target["owner_session"] = fields.get("负责会话") or ""
     if notification:
         content = dict(content, notification_revision=node.get("updatedAt"),
                        notification_source=hashlib.sha256(node["project"]["id"].encode()).hexdigest())
@@ -296,10 +304,158 @@ def receipt(content, request_id, digest):
     raise RuntimeError("receipt lookup limit reached")
 
 
+HISTORY_QUERY = """query($id:ID!, $before:String) { node(id:$id) { ... on Issue {
+ id comments(last:5,before:$before) { totalCount nodes { id body url createdAt updatedAt }
+ pageInfo { hasPreviousPage startCursor } }
+} } }"""
+HISTORY_BYTES = 128 * 1024
+HISTORY_TEXT_BYTES = 20000
+PHONE_NOTE = re.compile(r"Alex 手机确认（(?:决策回复|验收反馈)）：\n\n(.*?)\n\n<!-- yihu-reply:([0-9a-f-]{36}):([0-9a-f]{64}) -->", re.S)
+
+
+def phone_note(body, owner, ident):
+    match = PHONE_NOTE.match(body)
+    if not match:
+        return None
+    text, request_id, digest = match.groups()
+    try:
+        if str(uuid.UUID(request_id)) != request_id or not text.strip() or len(text) > 4000:
+            return None
+    except ValueError:
+        return None
+    expected = hashlib.sha256(json.dumps([owner, ident, text], ensure_ascii=False).encode()).hexdigest()
+    return (text, request_id) if hmac.compare_digest(expected, digest) else None
+
+
+def history_references(body, target_url, draft):
+    # A reference is not a read receipt, role assertion or execution result.
+    # Require an explicit request_id label or the exact original comment URL.
+    references = set()
+    for match in re.finditer(r"(?<![\w-])request_id\s*[:=]\s*[`\"']?([0-9a-f-]{36})(?![\w-])", body, re.I):
+        try:
+            references.add(str(uuid.UUID(match.group(1))))
+        except ValueError:
+            pass
+    if not draft:
+        for value in re.findall(r'https://[^\s<>"）)\]]+', body):
+            value = value.rstrip(".,;:!?，。；：！？")
+            if re.fullmatch(re.escape(target_url) + r"#issuecomment-[0-9]+", value):
+                references.add(value)
+    # Extremely long/ambiguous notes remain source notes, not partial association.
+    return sorted(references) if len(references) <= 20 else []
+
+
+def history_timestamp(value):
+    if not isinstance(value, str):
+        raise RuntimeError("invalid history time")
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if parsed.tzinfo is None or not 0 <= parsed.timestamp() <= time.time() + 300:
+        raise RuntimeError("invalid history time")
+    return parsed.timestamp()
+
+
+def reply_history(payload, owner, epoch):
+    """Read only, current private membership; completion does not revoke history.
+
+    Five source records per page, no history cache/database. Cursor scope and
+    page range are rechecked; a changed source requires an explicit first-page read.
+    """
+    ident = payload["id"]
+    target, content, _ = target_item(ident, epoch, history=True)
+    cursor = payload.get("before")
+    previous = None
+    if cursor is not None:
+        try:
+            if not isinstance(cursor, str) or not 0 < len(cursor) <= 2048:
+                raise ValueError()
+            previous = json.loads(base64.b64decode(cursor, altchars=b"-_", validate=True))
+            if not isinstance(previous, dict) or set(previous) != {"item", "content", "version", "total", "loaded", "before", "revision"}:
+                raise ValueError()
+            if previous["item"] != ident or previous["content"] != content["id"] or previous["version"] != target["version"]:
+                raise ReplyError("history_changed", 409)
+            if type(previous["loaded"]) is not int or type(previous["total"]) is not int or not 0 < previous["loaded"] < previous["total"] <= 100000:
+                raise ValueError()
+        except (ValueError, TypeError, KeyError):
+            raise ReplyError("invalid_request", 400) from None
+    loaded = previous["loaded"] if previous else 0
+    draft = content["__typename"] == "DraftIssue"
+    if draft:
+        body = content.get("body")
+        if not isinstance(body, str) or len(body.encode()) > MAX_BYTES:
+            raise RuntimeError("draft history unavailable")
+        revision = hashlib.sha256(body.encode()).hexdigest()
+        # Draft notes have no independent provider comment ID/time. Preserve that
+        # distinction instead of treating the whole draft's update time as send time.
+        blocks = re.split(r"(?:\A|\n)---\n\*\*备注 [^\n]+\*\*（req note）\n\n", body)
+        blocks = [b for b in blocks if b.strip()]
+        total = len(blocks)
+        if previous and (previous["revision"] != revision or previous["before"] is not None):
+            raise ReplyError("history_changed", 409)
+        nodes = [{"id": "draft-" + revision + "-" + str(i), "body": blocks[i], "url": target["url"],
+                  "createdAt": None, "updatedAt": None} for i in range(total - loaded - 1, max(-1, total - loaded - 6), -1)]
+        more, before = loaded + len(nodes) < total, None
+    else:
+        before = previous["before"] if previous else None
+        if previous and (previous["revision"] is not None or not isinstance(before, str) or not 0 < len(before) <= 1024):
+            raise ReplyError("invalid_request", 400)
+        node = graphql(HISTORY_QUERY, {"id": content["id"], "before": before})["node"]
+        if not node or node.get("id") != content["id"]:
+            raise RuntimeError("history target mismatch")
+        page = node["comments"]
+        total, nodes = page["totalCount"], page["nodes"]
+        more, next_before = page["pageInfo"]["hasPreviousPage"], page["pageInfo"]["startCursor"]
+        if not isinstance(nodes, list) or type(more) is not bool:
+            raise RuntimeError("incomplete history page")
+        if more and (not isinstance(next_before, str) or not 0 < len(next_before) <= 1024 or next_before == before):
+            raise RuntimeError("invalid history cursor")
+        nodes, before, revision = list(reversed(nodes)), next_before, None
+    if type(total) is not int or not 0 <= total <= 100000 or (previous and previous["total"] != total):
+        raise ReplyError("history_changed", 409)
+    if len(nodes) != min(5, total - loaded) or more != (loaded + len(nodes) < total):
+        raise RuntimeError("incomplete history range")
+    entries, seen = [], set()
+    for index, row in enumerate(nodes):
+        body, key, url = row.get("body"), row.get("id"), row.get("url")
+        if not isinstance(body, str) or not isinstance(key, str) or not key or key in seen or len(key) > 200:
+            raise RuntimeError("invalid history entry")
+        if not isinstance(url, str) or (url != target["url"] if draft else
+                not re.fullmatch(re.escape(target["url"]) + r"#issuecomment-[0-9]+", url)):
+            raise RuntimeError("history link mismatch")
+        seen.add(key)
+        verified = phone_note(body, owner, ident)
+        text, request_id = verified if verified else (body, None)
+        omitted = len(text.encode()) > HISTORY_TEXT_BYTES
+        created = None if draft else history_timestamp(row["createdAt"])
+        updated = None if draft else history_timestamp(row["updatedAt"])
+        if created is not None and updated < created:
+            raise RuntimeError("invalid history time order")
+        entries.append({"id": key, "position": total - loaded - index, "kind": "reply" if verified else "update", "text": "" if omitted else text,
+                        "request_id": request_id, "url": url, "created_at": created, "updated_at": updated,
+                        "text_omitted": omitted,
+                        "references": [] if verified else history_references(body, target["url"], draft)})
+    # Recheck after pagination too: permission/membership loss is not stale success.
+    fresh, current, _ = target_item(ident, epoch, history=True)
+    if fresh["version"] != target["version"] or current["id"] != content["id"] or (draft and current.get("body") != content["body"]):
+        raise ReplyError("history_changed", 409)
+    next_cursor = None
+    if more:
+        scope = {"item": ident, "content": content["id"], "version": fresh["version"], "total": total,
+                 "loaded": loaded + len(nodes), "before": before, "revision": revision}
+        next_cursor = base64.urlsafe_b64encode(json.dumps(scope, separators=(",", ":")).encode()).decode()
+    result = {"outcome": "history", "history_version": 1, "target": fresh, "entries": entries,
+              "total": total, "start": loaded + 1 if nodes else 0, "end": loaded + len(nodes),
+              "before": next_cursor, "read_at": time.time(), "draft": draft}
+    if len(json.dumps(result, ensure_ascii=False).encode()) > HISTORY_BYTES:
+        raise ReplyError("history_too_large", 413)
+    return result
+
+
 def reply(payload, writer_user_id, epoch, attempts):
     operation, ident = payload.get("operation"), payload.get("id")
-    if operation not in {"prepare", "submit", "check"} or not isinstance(ident, str) or not re.fullmatch(r"PVTI_[A-Za-z0-9_-]{1,120}", ident):
+    if operation not in {"prepare", "submit", "check", "history"} or not isinstance(ident, str) or not re.fullmatch(r"PVTI_[A-Za-z0-9_-]{1,120}", ident):
         raise ReplyError("invalid_request", 400)
+    if operation == "history":
+        return reply_history(payload, writer_user_id, epoch)
     target, content, eligible = target_item(ident, epoch)
     if operation == "prepare":
         if not eligible:

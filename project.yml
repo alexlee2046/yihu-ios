@@ -97,6 +97,9 @@ targets:
       - Tests/CollieUI
       - Apps/Collie/CollieVoiceNote.swift
       - Apps/Collie/CollieDiagnosticImage.swift
+      - Apps/Collie/CollieRadarModel.swift
+      - Apps/Collie/CollieRadarStore.swift
+      - Apps/Collie/CollieRadarReply.swift
       - Shared/CollieShareInbox.swift
       - Shared/HermesTaskAttributes.swift
     dependencies:
