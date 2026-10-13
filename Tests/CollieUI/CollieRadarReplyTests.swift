@@ -51,6 +51,8 @@ private final class ReplyFixtureProtocol: URLProtocol, @unchecked Sendable {
         var status = 200
         var response: [String: Any]
         if path == "/old" { status = 400; response = ["error": "invalid_request"] }
+        else if path == "/old-route" { status = 404; response = ["message": "Not found"] }
+        else if path == "/missing" { status = 404; response = ["error": "target_unavailable"] }
         else if path == "/denied" || (path == "/revoked" && operation == "history" && Self.capture.data.count > 1) {
             status = 403; response = ["error": "forbidden"]
         }
@@ -125,7 +127,8 @@ extension CollieEnhancementTests {
         await empty.loadHistory()
         XCTAssertEqual(empty.history?.total, 0)
         XCTAssertNil(empty.historyNotice)
-        for (path, notice) in [("/old", "不支持"), ("/denied", "无权"), ("/offline", "离线"), ("/bad-id", "读取失败")] {
+        for (path, notice) in [("/old", "不支持"), ("/old-route", "不支持"), ("/missing", "不在当前台账"),
+                               ("/denied", "无权"), ("/offline", "离线"), ("/bad-id", "读取失败")] {
             let subject = replyFixture(path)
             subject.text = "Preserved fixture"
             await subject.loadHistory()

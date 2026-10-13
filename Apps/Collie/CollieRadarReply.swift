@@ -258,7 +258,7 @@ final class CollieRadarReplySession {
         guard http.expectedContentLength <= maximum else { throw CollieRadarError.tooLarge }
         if operation == "history" {
             if [401, 403].contains(http.statusCode) { throw CollieRadarReplyFailure(code: "forbidden") }
-            if [404, 405, 501].contains(http.statusCode) { throw CollieRadarReplyFailure(code: "history_unsupported") }
+            if [405, 501].contains(http.statusCode) { throw CollieRadarReplyFailure(code: "history_unsupported") }
         }
         var data = Data()
         for try await byte in bytes {
@@ -266,7 +266,15 @@ final class CollieRadarReplySession {
             data.append(byte)
         }
         guard currentSource() else { throw CollieRadarError.invalidURL }
-        var result = try JSONDecoder().decode(CollieRadarReplyResponse.self, from: data)
+        var result: CollieRadarReplyResponse
+        do { result = try JSONDecoder().decode(CollieRadarReplyResponse.self, from: data) }
+        catch {
+            if operation == "history", http.statusCode == 404 { throw CollieRadarReplyFailure(code: "history_unsupported") }
+            throw error
+        }
+        if operation == "history", http.statusCode == 404, result.error != "target_unavailable" {
+            throw CollieRadarReplyFailure(code: "history_unsupported")
+        }
         if operation == "history", result.error == "invalid_request", before == nil {
             throw CollieRadarReplyFailure(code: "history_unsupported")
         }
