@@ -359,6 +359,39 @@ class HistoryChecks(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             self.history()
 
+    def test_feedback_requires_explicit_same_item_reference(self):
+        self.append(self.note())
+        self.append("Ordinary update, " + self.request_id)
+        self.append("Explicit request_id: " + self.request_id)
+        self.append("See [source](" + self.url + "#issuecomment-1).")
+        result = self.history()
+        by_id = {entry["id"]: entry for entry in result["entries"]}
+        self.assertEqual(by_id["IC_2"]["references"], [])
+        self.assertEqual(by_id["IC_3"]["references"], [self.request_id])
+        self.assertEqual(by_id["IC_4"]["references"], [self.url + "#issuecomment-1"])
+        self.assertEqual(by_id["IC_1"]["references"], [])
+        self.assertEqual(result["target"]["status"], "等你决策")
+        self.mocks[-1].assert_not_called()
+
+    def test_reference_parser_does_not_bind_foreign_or_nested_links(self):
+        original = self.url + "#issuecomment-1"
+        for body in [self.request_id, "not_request_id: " + self.request_id,
+                     "request_id: " + self.request_id + "-extra",
+                     original.replace("/issues/1", "/issues/2"),
+                     "https://foreign.invalid/?return=" + original]:
+            self.assertEqual(radar.history_references(body, self.url, False), [])
+        self.assertEqual(radar.history_references("request_id: `" + self.request_id + "`", self.url, True), [self.request_id])
+        self.assertEqual(radar.history_references(original, self.url, True), [])
+        self.assertEqual(radar.history_references("Source: " + original + "。", self.url, False), [original])
+
+    def test_owner_projection_does_not_change_send_version(self):
+        self.node["fieldValues"]["nodes"].append({"field": {"name": "负责会话"}, "text": "fixture-session"})
+        history = self.history()
+        prepared = radar.reply({"operation": "prepare", "id": self.ident}, self.owner, "epoch", {})
+        self.assertEqual(history["target"]["owner_session"], "fixture-session")
+        self.assertEqual(history["target"]["version"], prepared["target"]["version"])
+        self.assertNotIn("owner_session", prepared["target"])
+
     def test_existing_request_receipt_survives_restart_and_no_second_write(self):
         self.append(self.note())
         payload = {"operation": "submit", "id": self.ident, "text": "Synthetic decision",

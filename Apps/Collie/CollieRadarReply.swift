@@ -325,9 +325,19 @@ final class CollieRadarReplySession {
             guard historyActive, currentSource(), generation == historyGeneration, !Task.isCancelled else { return }
             switch (error as? CollieRadarReplyFailure)?.code {
             case "history_unsupported": historyNotice = radarText("当前服务不支持历史回显，请查看原条目。")
-            case "forbidden": historyNotice = radarText("当前身份无权读取此历史，请核对原数据源权限。")
-            case "target_unavailable": historyNotice = radarText("条目已不在当前台账或不可见，历史暂不可用。")
-            case "history_changed", "invalid_request": historyNotice = radarText("来源或分页范围已变化，请重新读取历史。")
+            case "forbidden":
+                if !pending { target = nil }
+                history = nil
+                historyCursors = []
+                historyNotice = radarText("当前身份无权读取此历史，请核对原数据源权限。")
+            case "target_unavailable":
+                if !pending { target = nil }
+                history = nil
+                historyCursors = []
+                historyNotice = radarText("条目已不在当前台账或不可见，历史暂不可用。")
+            case "history_changed", "invalid_request":
+                if !pending { target = nil }
+                historyNotice = radarText("来源或分页范围已变化，请重新读取历史。")
             default:
                 if let network = error as? URLError, [.notConnectedToInternet, .networkConnectionLost].contains(network.code) {
                     historyNotice = radarText("当前离线，历史暂不可用；这不表示回复没有发送。")
@@ -369,6 +379,8 @@ struct CollieRadarReplyView: View {
 
     private var historySection: some View {
         Section(radarText("已发送记录与条目备注")) {
+            Text(radarText("仅按明确引用关联后续备注，不表示已读、已处理或已执行。"))
+                .font(.caption).foregroundStyle(.secondary)
             if let history = session.history {
                 Text(radarText("已读取记录数") + "：\(history.entries.count) / \(history.total)")
                     .font(.caption).foregroundStyle(.secondary)
@@ -389,6 +401,24 @@ struct CollieRadarReplyView: View {
                             Text("request_id: " + request).font(.caption2).textSelection(.enabled)
                         }
                         if let url = URL(string: entry.url) { Link(radarText("查看来源原文"), destination: url) }
+                        if entry.kind == "reply" {
+                            let feedback = history.feedback(for: entry)
+                            if feedback.isEmpty {
+                                Text(radarText("已读取范围内暂无对应处理反馈。"))
+                                    .font(.caption).foregroundStyle(.secondary)
+                            } else {
+                                DisclosureGroup(radarText("明确引用此回复的后续备注")) {
+                                    ForEach(feedback) { note in
+                                        Text(note.text_omitted ? radarText("原文较长，请在原条目查看完整内容。") : note.text)
+                                            .textSelection(.enabled)
+                                        if let stamp = note.created_at {
+                                            Text(Date(timeIntervalSince1970: stamp), format: .dateTime).font(.caption)
+                                        }
+                                        if let url = URL(string: note.url) { Link(radarText("查看来源原文"), destination: url) }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 if history.before != nil {
@@ -420,6 +450,10 @@ struct CollieRadarReplyView: View {
                         Text(target.url).font(.caption).textSelection(.enabled)
                         Text(target.status)
                         Text(target.next.isEmpty ? radarText("下一步待补") : target.next)
+                        Text(radarText("负责会话") + "：" + (target.owner_session.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
+                            .font(.caption)
+                        Text(radarText("条目当前状态不代表某次回复已读或已处理。"))
+                            .font(.caption).foregroundStyle(.secondary)
                     }
                 }
                 historySection

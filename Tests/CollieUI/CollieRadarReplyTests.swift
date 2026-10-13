@@ -50,7 +50,9 @@ private final class ReplyFixtureProtocol: URLProtocol, @unchecked Sendable {
         var status = 200
         var response: [String: Any]
         if path == "/old" { status = 400; response = ["error": "invalid_request"] }
-        else if path == "/denied" { status = 403; response = ["error": "forbidden"] }
+        else if path == "/denied" || (path == "/revoked" && operation == "history" && Self.capture.data.count > 1) {
+            status = 403; response = ["error": "forbidden"]
+        }
         else if path == "/fails-refresh" && Self.capture.data.count > 1 { status = 503; response = ["error": "unavailable"] }
         else if operation == "submit" { status = 503; response = ["error": "result_unknown"] }
         else if operation == "check" { response = ["outcome": "recorded", "target": target] }
@@ -66,7 +68,7 @@ private final class ReplyFixtureProtocol: URLProtocol, @unchecked Sendable {
                     entries.append(["id": "IC_\(position)", "position": position, "kind": "reply", "text": "Sent fixture \(position)",
                                     "request_id": String(format: "11111111-2222-4333-8444-%012d", position),
                                     "url": "https://fixture.invalid/issues/1#issuecomment-\(position)",
-                                    "created_at": 100.0, "updated_at": 100.0, "text_omitted": false])
+                                    "created_at": 100.0, "updated_at": 100.0, "text_omitted": false, "references": []])
                 }
             }
             response = ["outcome": "history", "history_version": 1, "target": target, "entries": entries,
@@ -130,6 +132,16 @@ extension CollieEnhancementTests {
             XCTAssertTrue(subject.historyNotice?.contains(notice) == true)
             XCTAssertEqual(subject.text, "Preserved fixture")
         }
+        ReplyFixtureProtocol.capture.reset()
+        let revoked = replyFixture("/revoked")
+        await revoked.loadHistory()
+        await revoked.prepare()
+        revoked.text = "Preserved fixture"
+        XCTAssertTrue(revoked.canSend)
+        await revoked.loadHistory()
+        XCTAssertNil(revoked.history)
+        XCTAssertFalse(revoked.canSend)
+        XCTAssertEqual(revoked.text, "Preserved fixture")
     }
 
     func testReplyHistoryLateSourceAndDismissResponsesDoNotCommit() async throws {

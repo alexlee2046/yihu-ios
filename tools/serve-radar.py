@@ -225,7 +225,7 @@ def target_item(ident, epoch, notification=False, history=False):
     config_path = os.environ.get("REQ_CONFIG") or str(Path(executable).resolve().parent / "config.json")
     config = json.loads(Path(config_path).read_text())
     node = graphql(TARGET_QUERY, {"id": ident})["node"]
-    if not node or node.get("project", {}).get("id") != config["project"]["id"]:
+    if not node or node.get("id") != ident or node.get("project", {}).get("id") != config["project"]["id"]:
         raise ReplyError("target_unavailable", 404)
     if node["project"].get("public") is not False or (not history and node["project"].get("viewerCanUpdate") is not True):
         raise ReplyError("forbidden", 403)
@@ -258,6 +258,8 @@ def target_item(ident, epoch, notification=False, history=False):
     target["eligible"] = eligible
     revision = dict(target, archived=node["isArchived"], kind=kind, content_id=content["id"])
     target["version"] = hashlib.sha256(json.dumps(revision, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+    if history:
+        target["owner_session"] = fields.get("负责会话") or ""
     if notification:
         content = dict(content, notification_revision=node.get("updatedAt"),
                        notification_source=hashlib.sha256(node["project"]["id"].encode()).hexdigest())
@@ -323,6 +325,24 @@ def phone_note(body, owner, ident):
         return None
     expected = hashlib.sha256(json.dumps([owner, ident, text], ensure_ascii=False).encode()).hexdigest()
     return (text, request_id) if hmac.compare_digest(expected, digest) else None
+
+
+def history_references(body, target_url, draft):
+    # A reference is not a read receipt, role assertion or execution result.
+    # Require an explicit request_id label or the exact original comment URL.
+    references = set()
+    for match in re.finditer(r"(?<![\w-])request_id\s*[:=]\s*[`\"']?([0-9a-f-]{36})(?![\w-])", body, re.I):
+        try:
+            references.add(str(uuid.UUID(match.group(1))))
+        except ValueError:
+            pass
+    if not draft:
+        for value in re.findall(r'https://[^\s<>"）)\]]+', body):
+            value = value.rstrip(".,;:!?，。；：！？")
+            if re.fullmatch(re.escape(target_url) + r"#issuecomment-[0-9]+", value):
+                references.add(value)
+    # Extremely long/ambiguous notes remain source notes, not partial association.
+    return sorted(references) if len(references) <= 20 else []
 
 
 def history_timestamp(value):
@@ -411,7 +431,8 @@ def reply_history(payload, owner, epoch):
             raise RuntimeError("invalid history time order")
         entries.append({"id": key, "position": total - loaded - index, "kind": "reply" if verified else "update", "text": "" if omitted else text,
                         "request_id": request_id, "url": url, "created_at": created, "updated_at": updated,
-                        "text_omitted": omitted})
+                        "text_omitted": omitted,
+                        "references": [] if verified else history_references(body, target["url"], draft)})
     # Recheck after pagination too: permission/membership loss is not stale success.
     fresh, current, _ = target_item(ident, epoch, history=True)
     if fresh["version"] != target["version"] or current["id"] != content["id"] or (draft and current.get("body") != content["body"]):

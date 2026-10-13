@@ -250,7 +250,7 @@ struct CollieRadarModelChecks {
         let entry: [String: Any] = ["id": "IC_fixture", "position": 1, "kind": "reply", "text": "Original",
                                    "request_id": "11111111-2222-4333-8444-555555555555",
                                    "url": "https://fixture.invalid/issues/1#issuecomment-1",
-                                   "created_at": 100.0, "updated_at": 100.0, "text_omitted": false]
+                                   "created_at": 100.0, "updated_at": 100.0, "text_omitted": false, "references": []]
         let historyFixture: [String: Any] = ["history_version": 1, "target": target, "entries": [entry],
                                             "total": 1, "start": 1, "end": 1, "read_at": 200.0, "draft": false]
         func decodeHistory(_ value: [String: Any]) throws -> CollieRadarReplyHistory {
@@ -289,6 +289,39 @@ struct CollieRadarModelChecks {
             try replyHistory.validate(id: "PVTI_fixture", after: 0, existingIDs: ["IC_fixture"])
             preconditionFailure("Duplicate history page accepted")
         } catch CollieRadarError.invalidSnapshot { }
+        var ordinary = entry
+        ordinary["id"] = "IC_ordinary"; ordinary["position"] = 2; ordinary["kind"] = "update"
+        ordinary.removeValue(forKey: "request_id")
+        ordinary["url"] = "https://fixture.invalid/issues/1#issuecomment-2"
+        var linked = ordinary
+        linked["id"] = "IC_linked"; linked["position"] = 3
+        linked["url"] = "https://fixture.invalid/issues/1#issuecomment-3"
+        var feedbackFixture = historyFixture
+        feedbackFixture["total"] = 3; feedbackFixture["end"] = 3
+        for reference in ["11111111-2222-4333-8444-555555555555", "https://fixture.invalid/issues/1#issuecomment-1"] {
+            linked["references"] = [reference]
+            feedbackFixture["entries"] = [linked, ordinary, entry]
+            let feedbackHistory = try decodeHistory(feedbackFixture)
+            try feedbackHistory.validate(id: "PVTI_fixture", after: 0)
+            precondition(feedbackHistory.feedback(for: feedbackHistory.entries.last!).map(\.id) == ["IC_linked"])
+            var completed = feedbackHistory
+            completed.target.status = "已完成"
+            completed.entries[0].references = []
+            precondition(completed.feedback(for: completed.entries.last!).isEmpty, "Status changes must not synthesize feedback")
+            completed.entries[0].references = [reference]
+            completed.entries[0].position = 0
+            precondition(completed.feedback(for: completed.entries.last!).isEmpty, "Earlier notes cannot be subsequent feedback")
+            completed.entries[0].position = 3
+            completed.entries[0].kind = "reply"
+            precondition(completed.feedback(for: completed.entries.last!).isEmpty, "Another phone reply is not an owner response")
+        }
+        linked["references"] = ["https://foreign.invalid/issues/1#issuecomment-1"]
+        feedbackFixture["entries"] = [linked, ordinary, entry]
+        do {
+            try decodeHistory(feedbackFixture).validate(id: "PVTI_fixture", after: 0)
+            preconditionFailure("Foreign feedback reference accepted")
+        } catch CollieRadarError.invalidSnapshot { }
+        print("Feedback checks passed: exact request/comment references, ordinary notes and status changes never imply handled")
         print("History model checks passed: identity, completed read-only item, pagination range, version, URLs and duplicate pages")
         print("Radar checks passed: shortcut defaults, mixed ordering, hiding, persistence, deleted/duplicate identities, search/filter intersections, action-only projects, legacy decoding, per-workspace search persistence, schema, project identity, URL boundaries, size/date validation, display/cache persistence, ordering, failed-import retention, source isolation, deletion and corrupt-config preservation")
     }

@@ -1,6 +1,10 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
+    "仅按明确引用关联后续备注，不表示已读、已处理或已执行。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Later notes are linked only by explicit references. This does not mean read, handled or executed."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"仅按明确引用关联后续备注，不表示已读、已处理或已执行。"}}}},
+    "已读取范围内暂无对应处理反馈。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"No corresponding handling feedback in the records loaded so far."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"已读取范围内暂无对应处理反馈。"}}}},
+    "明确引用此回复的后续备注": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"Later notes explicitly referencing this reply"}},"zh-Hans":{"stringUnit":{"state":"translated","value":"明确引用此回复的后续备注"}}}},
+    "条目当前状态不代表某次回复已读或已处理。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"The item's current status does not mean a particular reply was read or handled."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"条目当前状态不代表某次回复已读或已处理。"}}}},
     "当前服务不支持历史回显，请查看原条目。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"This service does not support history yet. Open the original item."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"当前服务不支持历史回显，请查看原条目。"}}}},
     "当前身份无权读取此历史，请核对原数据源权限。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"This identity cannot read this history. Check permissions on the original source."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"当前身份无权读取此历史，请核对原数据源权限。"}}}},
     "条目已不在当前台账或不可见，历史暂不可用。": {"extractionState":"manual","localizations":{"en":{"stringUnit":{"state":"translated","value":"The item is outside this ledger or no longer visible. History is unavailable."}},"zh-Hans":{"stringUnit":{"state":"translated","value":"条目已不在当前台账或不可见，历史暂不可用。"}}}},

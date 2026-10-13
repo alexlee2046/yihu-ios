@@ -261,6 +261,7 @@ struct CollieRadarReplyTarget: Codable {
     var status: String
     var next: String
     var version: String
+    var owner_session: String? = nil
 }
 
 /// Read-only source history. No local history database or synthesized delivery state.
@@ -275,6 +276,7 @@ struct CollieRadarReplyHistory: Decodable {
         var created_at: Double?
         var updated_at: Double?
         var text_omitted: Bool
+        var references: [String]
     }
     var history_version: Int
     var target: CollieRadarReplyTarget
@@ -285,6 +287,15 @@ struct CollieRadarReplyHistory: Decodable {
     var before: String?
     var read_at: Double
     var draft: Bool
+
+    /// Only explicit references from later source notes; never infer read/handled.
+    func feedback(for reply: Entry) -> [Entry] {
+        guard reply.kind == "reply", let requestID = reply.request_id else { return [] }
+        return entries.filter {
+            $0.kind == "update" && $0.position > reply.position &&
+            ($0.references.contains(requestID.lowercased()) || (!draft && $0.references.contains(reply.url)))
+        }
+    }
 
     func validate(id: String, after loaded: Int, existingIDs: Set<String> = [], now: Date = Date()) throws {
         guard history_version == 1, target.id == id, total >= 0, total <= 100_000,
@@ -306,6 +317,15 @@ struct CollieRadarReplyHistory: Decodable {
                   let url = URLComponents(string: entry.url), url.scheme == "https",
                   url.host == targetURL.host, url.port == targetURL.port, url.user == nil, url.password == nil,
                   url.path == targetURL.path, url.query == targetURL.query else { throw CollieRadarError.invalidSnapshot }
+            guard entry.references.count <= 20, Set(entry.references).count == entry.references.count else {
+                throw CollieRadarError.invalidSnapshot
+            }
+            for reference in entry.references {
+                let request = UUID(uuidString: reference)?.uuidString.lowercased() == reference
+                let comment = !draft && reference.range(of: "^" + NSRegularExpression.escapedPattern(for: target.url) +
+                    "#issuecomment-[0-9]+$", options: .regularExpression) != nil
+                guard reference.utf8.count <= 2048, request || comment else { throw CollieRadarError.invalidSnapshot }
+            }
             if draft {
                 guard entry.url == target.url, entry.created_at == nil, entry.updated_at == nil else {
                     throw CollieRadarError.invalidSnapshot
