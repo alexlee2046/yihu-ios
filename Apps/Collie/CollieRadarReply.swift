@@ -293,11 +293,16 @@ final class CollieRadarReplySession {
               parts.scheme == "https", parts.host != nil, parts.user == nil, parts.password == nil else { return nil }
         return parts.url
     }
+    private var selectedMatchesTarget: Bool {
+        selected.id == targetID && selected.url == (history?.target.url ?? target?.url ?? selected.url)
+    }
     var evidenceURLs: [URL] {
-        guard selected.id == targetID else { return [] }
+        guard selectedMatchesTarget else { return [] }
         return selected.safeEvidenceURLs
     }
-    var canSelectNext: Bool { recorded && !pending && !blocked && !busy && isCurrent }
+    var canSelectNext: Bool {
+        selectedMatchesTarget && recorded && !pending && !blocked && !busy && isCurrent
+    }
     var isCurrent: Bool { currentSource() }
     var initiallyWritable: Bool { target?.eligible == true || ["等你决策", "等你验收"].contains(selected.status ?? "") }
     var showsComposer: Bool { initiallyWritable || history?.target.eligible == true || !text.isEmpty || pending || recorded || blocked }
@@ -329,13 +334,9 @@ final class CollieRadarReplySession {
         guard !busy, !pending, !recorded, !blocked else { return }
         let cleaned = phrase.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !cleaned.isEmpty else { return }
-        let existing = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        if existing.isEmpty {
-            text = cleaned
-        } else if !existing.contains(cleaned) {
-            let candidate = existing + "\n" + cleaned
-            if candidate.unicodeScalars.count <= 4000 { text = candidate }
-        }
+        guard !text.contains(cleaned) else { return }
+        let candidate = text + (text.isEmpty ? "" : "\n") + cleaned
+        if candidate.unicodeScalars.count <= 4000 { text = candidate }
     }
 
     func activateHistory() { historyActive = true }
