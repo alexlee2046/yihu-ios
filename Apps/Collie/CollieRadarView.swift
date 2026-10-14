@@ -37,6 +37,7 @@ struct CollieRadarView: View {
     @Bindable var store: CollieRadarStore
     let id: UUID
     @Bindable var presentation: CollieRadarPresentation
+    var openWebWorkbench: (() -> Void)? = nil
     @State private var replying: CollieRadarSnapshot.Action?
     @State private var watchReplyAfterDismiss: CollieRadarSnapshot.Action?
 
@@ -481,6 +482,11 @@ struct CollieRadarView: View {
             DisclosureGroup(radarText("详情")) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(radarText("负责会话") + "：" + (action.session.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
+                    if let openWebWorkbench, !(action.session ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        Button(radarText("切到网页工作台")) { openWebWorkbench() }
+                            .font(.subheadline)
+                            .accessibilityIdentifier("collie-radar-open-web")
+                    }
                     Text(radarText("窗口状态") + "：" + (action.window_status.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("未提供")))
                     Text(radarText("证据") + "：" + (action.evidence.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
                     if let timestamp = action.timestamp {

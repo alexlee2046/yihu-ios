@@ -287,8 +287,15 @@ private struct CollieRootView: View {
                     .accessibilityHidden(selectedRadar != nil)
                 }
                 if let id = selectedRadar {
-                    CollieRadarView(store: radar, id: id, presentation: radarPresentation)
-                        .id(id)
+                    CollieRadarView(
+                        store: radar,
+                        id: id,
+                        presentation: radarPresentation,
+                        openWebWorkbench: (settings.currentOrigin ?? settings.recentOrigins.first).map { origin in
+                            { _ = selectWeb(origin) }
+                        }
+                    )
+                    .id(id)
                 }
             }
         }
@@ -333,11 +340,13 @@ private struct CollieRootView: View {
         )) { Button(radarText("完成"), role: .cancel) { selectionNotice = nil } }
         message: { Text(selectionNotice ?? "") }
         .onChange(of: notifications.status) { _, _ in watchLink.notificationStateChanged() }
-        .onChange(of: watchHandoffBlocked) { _, blocked in if !blocked { openWatchTask() } }
+        .onChange(of: watchHandoffBlocked) { _, blocked in if !blocked { openWatchTask(); openRadarShortcutIfNeeded() } }
         .onChange(of: radarPresentation.replyPresented) { _, shown in if !shown { openWatchTask() } }
         .onChange(of: watchLink.openRequest) { _, _ in openWatchTask() }
-        .onChange(of: scenePhase) { _, phase in if phase == .active { openWatchTask() } }
+        .onChange(of: CollieVoiceShortcutCenter.shared.pendingOpenRadarActions) { _, _ in openRadarShortcutIfNeeded() }
+        .onChange(of: scenePhase) { _, phase in if phase == .active { openWatchTask(); openRadarShortcutIfNeeded() } }
         .task {
+            openRadarShortcutIfNeeded()
             let settings = self.settings
             let notifications = self.notifications
             watchLink.phoneNotificationState = {
@@ -429,6 +438,17 @@ private struct CollieRootView: View {
         guard radar.update(record) else { return }
         radarPresentation.watchTask = action
         watchLink.openRequest = nil
+    }
+
+    private func openRadarShortcutIfNeeded() {
+        guard scenePhase == .active, !watchHandoffBlocked,
+              CollieVoiceShortcutCenter.shared.pendingOpenRadarActions else { return }
+        guard let targetID = selectedRadar ?? radar.ordered.first?.id,
+              canSelect(), selectRadar(targetID),
+              var record = radar.workbenches.first(where: { $0.id == targetID }),
+              CollieVoiceShortcutCenter.shared.consumeOpenRadarActions() else { return }
+        record.display.page = .actions
+        _ = radar.update(record)
     }
 
     private func writeValidationStatus(_ status: String) {
