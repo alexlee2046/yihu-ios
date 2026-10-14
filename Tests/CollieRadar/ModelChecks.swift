@@ -248,6 +248,18 @@ struct CollieRadarModelChecks {
         precondition(loaded.workbenches.first { $0.id == secondID }?.display.searchText == nil)
         precondition(loaded.snapshots[id]?.decisions.first?.title == "Original title")
         var changed = loaded.workbenches.first { $0.id == id }!
+        changed.source = "https://example.org/feed.json"
+        loaded.update(changed)
+        loaded.importSnapshot(try JSONEncoder().encode(attentionSnapshot), for: id)
+        let candidates = loaded.writableDraftCandidates
+        precondition(candidates.count == 1 && candidates.first?.action.id == "t1")
+        let draftFile = CollieRadarPendingReply.file(id)
+        defer { try? FileManager.default.removeItem(at: draftFile) }
+        precondition(loaded.saveUnsubmittedDraft(text: "Voice note draft", for: candidates[0]))
+        precondition(loaded.writableDraftCandidates.isEmpty, "Workbench with existing draft must not accept another overwrite")
+        precondition(!loaded.saveUnsubmittedDraft(text: "Second overwrite", for: candidates[0]))
+        precondition(loaded.pendingReply(id)?.id == "t1")
+        try? FileManager.default.removeItem(at: draftFile)
         changed.source = "https://example.org/new-source.json"
         loaded.update(changed)
         precondition(loaded.snapshots[id] == nil)

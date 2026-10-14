@@ -37,6 +37,7 @@ struct CollieRadarView: View {
     @Bindable var store: CollieRadarStore
     let id: UUID
     @Bindable var presentation: CollieRadarPresentation
+    var voice: CollieVoiceController? = nil
     var openWebWorkbench: (() -> Void)? = nil
     @State private var replying: CollieRadarSnapshot.Action?
     @State private var watchReplyAfterDismiss: CollieRadarSnapshot.Action?
@@ -132,8 +133,25 @@ struct CollieRadarView: View {
                     let nextItem = store.snapshots[id].flatMap { snapshot in
                         nextPendingAction(after: action, in: snapshot, display: record.display)
                     }
+                    let voiceAdapter = voice.map { controller in
+                        CollieRadarReplyVoiceAdapter(
+                            isRecording: { controller.isRecording },
+                            canCancel: { controller.canCancel },
+                            isDelivering: { controller.phase == .delivering },
+                            canRetryDelivery: { controller.canRetryDelivery },
+                            primaryActionEnabled: { controller.primaryActionEnabled },
+                            previewText: { controller.previewText },
+                            performAction: {
+                                if controller.canRetryDelivery { await controller.retryDelivery() }
+                                else { await controller.performPrimaryAction() }
+                            },
+                            cancelRecording: { controller.cancelRecording() },
+                            bindHandler: { handler in controller.customTranscriptHandler = handler },
+                            unbindHandler: { controller.customTranscriptHandler = nil }
+                        )
+                    }
                     CollieRadarReplyView(store: store, workbenchID: id, source: record.source, action: action,
-                                         nextAction: nextItem, onSelectNext: { next in replying = next })
+                                         voice: voiceAdapter, nextAction: nextItem, onSelectNext: { next in replying = next })
                         .id(action.id)
                 }
             }

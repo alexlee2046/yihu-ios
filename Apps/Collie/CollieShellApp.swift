@@ -260,6 +260,7 @@ private struct CollieRootView: View {
                         webSession: webSession,
                         voice: voice,
                         voiceNotes: voiceNotes,
+                        radarStore: radar,
                         connectionSettings: settings,
                         notifications: notifications,
                         onWillSaveConnection: connectionChangeBlockReason,
@@ -291,6 +292,7 @@ private struct CollieRootView: View {
                         store: radar,
                         id: id,
                         presentation: radarPresentation,
+                        voice: voice,
                         openWebWorkbench: (settings.currentOrigin ?? settings.recentOrigins.first).map { origin in
                             { _ = selectWeb(origin) }
                         }
@@ -515,6 +517,7 @@ struct CollieShellView: View {
     let webSession: CollieWebSession
     let voice: CollieVoiceController
     private let voiceNotes: CollieVoiceNotesStore?
+    private let radarStore: CollieRadarStore?
     private let connectionSettings: CollieConnectionSettings?
     private let notifications: CollieNativeNotificationsController?
     private let onWillSaveConnection: ((URL) -> String?)?
@@ -538,6 +541,7 @@ struct CollieShellView: View {
         webSession: CollieWebSession,
         voice: CollieVoiceController,
         voiceNotes: CollieVoiceNotesStore? = nil,
+        radarStore: CollieRadarStore? = nil,
         connectionSettings: CollieConnectionSettings? = nil,
         notifications: CollieNativeNotificationsController? = nil,
         onWillSaveConnection: ((URL) -> String?)? = nil,
@@ -550,6 +554,7 @@ struct CollieShellView: View {
         self.webSession = webSession
         self.voice = voice
         self.voiceNotes = voiceNotes
+        self.radarStore = radarStore
         self.connectionSettings = connectionSettings
         self.notifications = notifications
         self.onWillSaveConnection = onWillSaveConnection
@@ -737,6 +742,10 @@ struct CollieShellView: View {
                         guard allowed(), voiceNotes.reserveHandOff(id) else { return false }
                         return await target.insertTranscript(text, requestID: requestID,
                                                              expectedPageURL: page, canInsert: allowed)
+                    }, radarCandidates: radarStore?.writableDraftCandidates ?? [],
+                       onSaveRadarDraft: { text, id, candidate in
+                        guard let radarStore, voiceNotes.reserveHandOff(id) else { return false }
+                        return radarStore.saveUnsubmittedDraft(text: text, for: candidate)
                     })
                 }
                 .presentationDragIndicator(.visible)

@@ -71,6 +71,74 @@ final class CollieRadarStore {
         }
     }
 
+    struct DraftTargetCandidate: Identifiable {
+        var workbenchID: UUID
+        var workbenchName: String
+        var action: CollieRadarSnapshot.Action
+        var id: String { "\(workbenchID.uuidString):\(action.id ?? action.url)" }
+    }
+
+    var writableDraftCandidates: [DraftTargetCandidate] {
+        var result: [DraftTargetCandidate] = []
+        for bench in ordered {
+            guard CollieRadarFeed.validate(bench.source) != nil,
+                  !FileManager.default.fileExists(atPath: CollieRadarPendingReply.file(bench.id).path),
+                  let snapshot = snapshots[bench.id] else { continue }
+            for task in snapshot.allTasks where ["等你决策", "等你验收"].contains(task.status ?? "") {
+                guard let taskID = task.id, !taskID.isEmpty else { continue }
+                result.append(DraftTargetCandidate(workbenchID: bench.id, workbenchName: bench.name, action: task))
+            }
+        }
+        return result
+    }
+
+    @discardableResult
+    func saveUnsubmittedDraft(text: String, for candidate: DraftTargetCandidate) -> Bool {
+        let cleaned = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !cleaned.isEmpty, cleaned.unicodeScalars.count <= 4000,
+              let bench = workbenches.first(where: { $0.id == candidate.workbenchID }),
+              CollieRadarFeed.validate(bench.source) != nil,
+              let taskID = candidate.action.id, !taskID.isEmpty,
+              let task = snapshots[bench.id]?.allTasks.first(where: { $0.id == taskID }),
+              ["等你决策", "等你验收"].contains(task.status ?? "") else { return false }
+        let file = CollieRadarPendingReply.file(bench.id)
+        guard !FileManager.default.fileExists(atPath: file.path) else { return false }
+        do {
+            let folder = file.deletingLastPathComponent()
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            var excluded = folder
+            var values = URLResourceValues()
+            values.isExcludedFromBackup = true
+            try excluded.setResourceValues(values)
+            let target = CollieRadarReplyTarget(
+                eligible: false,
+                epoch: "",
+                id: taskID,
+                title: task.title,
+                url: task.url,
+                status: task.status ?? "",
+                next: task.next,
+                version: ""
+            )
+            let record = CollieRadarPendingReply(
+                source: bench.source,
+                target: target,
+                text: cleaned,
+                requestID: UUID(),
+                submitted: false
+            )
+            let data = try JSONEncoder().encode(record)
+            #if os(iOS)
+            try data.write(to: file, options: [.atomic, .completeFileProtection])
+            #else
+            try data.write(to: file, options: [.atomic])
+            #endif
+            return true
+        } catch {
+            return false
+        }
+    }
+
     var ordered: [CollieRadarWorkbench] {
         workbenches.filter(\.favorite) + workbenches.filter { !$0.favorite }
     }

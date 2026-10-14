@@ -316,4 +316,18 @@ extension CollieEnhancementTests {
         XCTAssertEqual(subject.text, fullDraft)
         XCTAssertTrue(ReplyFixtureProtocol.capture.data.isEmpty)
     }
+
+    func testVoiceTranscriptAppendsAndPersistsDraftWithoutSubmitting() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let id = UUID()
+        let subject = replyFixture(id: id)
+        XCTAssertTrue(subject.appendVoiceTranscript("  同意按方案 A 推进  "))
+        XCTAssertEqual(subject.text, "同意按方案 A 推进")
+        XCTAssertTrue(subject.appendVoiceTranscript("补充：先合入主干"))
+        XCTAssertEqual(subject.text, "同意按方案 A 推进\n补充：先合入主干")
+        let reopened = replyFixture(id: id)
+        XCTAssertEqual(reopened.text, "同意按方案 A 推进\n补充：先合入主干")
+        XCTAssertFalse(reopened.pending)
+        XCTAssertTrue(ReplyFixtureProtocol.capture.data.isEmpty)
+    }
 }
