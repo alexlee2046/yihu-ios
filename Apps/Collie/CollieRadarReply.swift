@@ -293,7 +293,11 @@ final class CollieRadarReplySession {
               parts.scheme == "https", parts.host != nil, parts.user == nil, parts.password == nil else { return nil }
         return parts.url
     }
-    var evidenceURLs: [URL] { selected.safeEvidenceURLs }
+    var evidenceURLs: [URL] {
+        guard selected.id == targetID else { return [] }
+        return selected.safeEvidenceURLs
+    }
+    var canSelectNext: Bool { recorded && !pending && !blocked && !busy && isCurrent }
     var isCurrent: Bool { currentSource() }
     var initiallyWritable: Bool { target?.eligible == true || ["等你决策", "等你验收"].contains(selected.status ?? "") }
     var showsComposer: Bool { initiallyWritable || history?.target.eligible == true || !text.isEmpty || pending || recorded || blocked }
@@ -543,7 +547,7 @@ struct CollieRadarReplyView: View {
                         }
                         Section {
                             if session.busy { ProgressView() }
-                            if session.recorded, let nextAction, let onSelectNext {
+                            if session.canSelectNext, let nextAction, let onSelectNext {
                                 Button(radarText("处理下一条待办") + "：" + nextAction.title) {
                                     onSelectNext(nextAction)
                                 }

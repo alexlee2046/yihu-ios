@@ -183,6 +183,7 @@ extension CollieEnhancementTests {
         await reopened.check()
         XCTAssertTrue(reopened.recorded)
         XCTAssertFalse(reopened.pending)
+        XCTAssertTrue(reopened.canSelectNext)
         let submissions = replyRequests.filter { ($0["operation"] as? String) == "submit" }
         let checks = replyRequests.filter { ($0["operation"] as? String) == "check" }
         XCTAssertEqual(submissions.count, 1)
@@ -229,6 +230,39 @@ extension CollieEnhancementTests {
         XCTAssertEqual(failing.history?.entries.count, 1)
         XCTAssertTrue(failing.historyNotice?.contains("读取失败") == true)
         XCTAssertEqual(failing.text, "Still editing")
+    }
+
+    func testRestoredDraftDoesNotShowAnotherItemsEvidence() async throws {
+        let id = UUID()
+        let original = replyFixture(id: id)
+        original.text = "Synthetic saved draft"
+        XCTAssertTrue(original.preserveDraft())
+        var action = CollieRadarSnapshot.Action(project: "fixture", status: "等你验收", title: "Other item",
+            next: "Synthetic next", url: "https://fixture.invalid/issues/2", id: "PVTI_other",
+            evidence: "https://fixture.invalid/evidence/2")
+        let other = CollieRadarReplySession(workbenchID: id, source: "https://fixture.invalid/history", selected: action)
+        XCTAssertEqual(other.target?.id, "PVTI_fixture")
+        XCTAssertTrue(other.evidenceURLs.isEmpty)
+        action.id = "PVTI_fixture"
+        let same = CollieRadarReplySession(workbenchID: id, source: "https://fixture.invalid/history", selected: action)
+        XCTAssertEqual(same.evidenceURLs.map(\.absoluteString), ["https://fixture.invalid/evidence/2"])
+    }
+
+    func testNextActionRequiresClearedPendingRecord() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let id = UUID()
+        let subject = replyFixture(id: id)
+        await subject.prepare()
+        subject.text = "Confirmed synthetic reply"
+        await subject.submit()
+        XCTAssertTrue(subject.pending)
+        // A missing file makes clearPending fail without changing permissions or real data.
+        try FileManager.default.removeItem(at: CollieRadarPendingReply.file(id))
+        await subject.check()
+        XCTAssertTrue(subject.recorded)
+        XCTAssertTrue(subject.pending)
+        XCTAssertFalse(subject.canSelectNext)
+        XCTAssertTrue(subject.preserveDraft())
     }
 
     func testQuickReplyInsertionPreservesDraftAndNeverAutoSubmits() async throws {

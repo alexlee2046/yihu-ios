@@ -133,6 +133,7 @@ struct CollieRadarView: View {
                     }
                     CollieRadarReplyView(store: store, workbenchID: id, source: record.source, action: action,
                                          nextAction: nextItem, onSelectNext: { next in replying = next })
+                        .id(action.id)
                 }
             }
         }
