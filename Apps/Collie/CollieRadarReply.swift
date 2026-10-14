@@ -293,9 +293,51 @@ final class CollieRadarReplySession {
               parts.scheme == "https", parts.host != nil, parts.user == nil, parts.password == nil else { return nil }
         return parts.url
     }
+    private var selectedMatchesTarget: Bool {
+        selected.id == targetID && selected.url == (history?.target.url ?? target?.url ?? selected.url)
+    }
+    var evidenceURLs: [URL] {
+        guard selectedMatchesTarget else { return [] }
+        return selected.safeEvidenceURLs
+    }
+    var canSelectNext: Bool {
+        selectedMatchesTarget && recorded && !pending && !blocked && !busy && isCurrent
+    }
     var isCurrent: Bool { currentSource() }
     var initiallyWritable: Bool { target?.eligible == true || ["等你决策", "等你验收"].contains(selected.status ?? "") }
     var showsComposer: Bool { initiallyWritable || history?.target.eligible == true || !text.isEmpty || pending || recorded || blocked }
+
+    var quickReplies: [String] {
+        Self.quickReplies(for: target?.status ?? selected.status)
+    }
+
+    static func quickReplies(for status: String?) -> [String] {
+        switch status?.trimmingCharacters(in: .whitespacesAndNewlines) {
+        case "等你决策":
+            return [
+                radarText("同意按当前方案推进。"),
+                radarText("暂缓此子项，先推进其余已确认部分。"),
+                radarText("请补充备选方案对比后再决策。")
+            ]
+        case "等你验收":
+            return [
+                radarText("验收通过，可按现有门禁合入。"),
+                radarText("工程阶段通过，生产发布暂缓。"),
+                radarText("请补充实机或预览证据后再验。")
+            ]
+        default:
+            return []
+        }
+    }
+
+    func appendQuickReply(_ phrase: String) {
+        guard !busy, !pending, !recorded, !blocked else { return }
+        let cleaned = phrase.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !cleaned.isEmpty else { return }
+        guard !text.contains(cleaned) else { return }
+        let candidate = text + (text.isEmpty ? "" : "\n") + cleaned
+        if candidate.unicodeScalars.count <= 4000 { text = candidate }
+    }
 
     func activateHistory() { historyActive = true }
     func cancelHistory() {
@@ -380,10 +422,16 @@ struct CollieRadarReplyView: View {
     @State private var discarding = false
     let store: CollieRadarStore
     let workbenchID: UUID
+    var nextAction: CollieRadarSnapshot.Action? = nil
+    var onSelectNext: ((CollieRadarSnapshot.Action) -> Void)? = nil
 
-    init(store: CollieRadarStore, workbenchID: UUID, source: String, action: CollieRadarSnapshot.Action) {
+    init(store: CollieRadarStore, workbenchID: UUID, source: String, action: CollieRadarSnapshot.Action,
+         nextAction: CollieRadarSnapshot.Action? = nil,
+         onSelectNext: ((CollieRadarSnapshot.Action) -> Void)? = nil) {
         self.store = store
         self.workbenchID = workbenchID
+        self.nextAction = nextAction
+        self.onSelectNext = onSelectNext
         _session = State(initialValue: CollieRadarReplySession(workbenchID: workbenchID, source: source, selected: action,
             currentSource: { store.workbenches.first(where: { $0.id == workbenchID })?.source == source }))
     }
@@ -466,6 +514,10 @@ struct CollieRadarReplyView: View {
                             Text(target.next.isEmpty ? radarText("下一步待补") : target.next)
                             Text(radarText("负责会话") + "：" + (target.owner_session.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
                                 .font(.caption)
+                            ForEach(Array(session.evidenceURLs.enumerated()), id: \.offset) { index, url in
+                                Link(radarText("查看证据") + (session.evidenceURLs.count > 1 ? " #\(index + 1)" : ""), destination: url)
+                                    .font(.caption)
+                            }
                             Text(radarText("条目当前状态不代表某次回复已读或已处理。"))
                                 .font(.caption).foregroundStyle(.secondary)
                         }
@@ -473,6 +525,19 @@ struct CollieRadarReplyView: View {
                     historySection
                     if session.showsComposer {
                         Section(radarText(session.recorded ? "本次已记录原文" : "写新回复")) {
+                            if !session.recorded, !session.pending, !session.blocked, !session.quickReplies.isEmpty {
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 8) {
+                                        ForEach(session.quickReplies, id: \.self) { phrase in
+                                            Button(phrase) { session.appendQuickReply(phrase) }
+                                                .buttonStyle(.bordered)
+                                                .controlSize(.small)
+                                                .disabled(session.busy)
+                                        }
+                                    }
+                                    .padding(.vertical, 2)
+                                }
+                            }
                             TextEditor(text: $session.text).frame(minHeight: 160)
                                 .disabled(session.busy || session.pending || session.recorded || session.blocked)
                             Text(radarText("最多 4000 字符；仅记录回复，不自动改状态或执行操作。"))
@@ -483,6 +548,13 @@ struct CollieRadarReplyView: View {
                         }
                         Section {
                             if session.busy { ProgressView() }
+                            if session.canSelectNext, let nextAction, let onSelectNext {
+                                Button(radarText("处理下一条待办") + "：" + nextAction.title) {
+                                    onSelectNext(nextAction)
+                                }
+                                .disabled(session.busy)
+                                .accessibilityIdentifier("collie-radar-reply-next")
+                            }
                             if session.pending {
                                 Button(radarText("查回回复结果")) { Task {
                                     await session.check()

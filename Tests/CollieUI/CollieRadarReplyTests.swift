@@ -183,6 +183,7 @@ extension CollieEnhancementTests {
         await reopened.check()
         XCTAssertTrue(reopened.recorded)
         XCTAssertFalse(reopened.pending)
+        XCTAssertTrue(reopened.canSelectNext)
         let submissions = replyRequests.filter { ($0["operation"] as? String) == "submit" }
         let checks = replyRequests.filter { ($0["operation"] as? String) == "check" }
         XCTAssertEqual(submissions.count, 1)
@@ -229,5 +230,90 @@ extension CollieEnhancementTests {
         XCTAssertEqual(failing.history?.entries.count, 1)
         XCTAssertTrue(failing.historyNotice?.contains("读取失败") == true)
         XCTAssertEqual(failing.text, "Still editing")
+    }
+
+    func testRestoredDraftDoesNotShowAnotherItemsEvidence() async throws {
+        let id = UUID()
+        let original = replyFixture(id: id)
+        original.text = "Synthetic saved draft"
+        XCTAssertTrue(original.preserveDraft())
+        var action = CollieRadarSnapshot.Action(project: "fixture", status: "等你验收", title: "Other item",
+            next: "Synthetic next", url: "https://fixture.invalid/issues/2", id: "PVTI_other",
+            evidence: "https://fixture.invalid/evidence/2")
+        let other = CollieRadarReplySession(workbenchID: id, source: "https://fixture.invalid/history", selected: action)
+        XCTAssertEqual(other.target?.id, "PVTI_fixture")
+        XCTAssertTrue(other.evidenceURLs.isEmpty)
+        action.id = "PVTI_fixture"
+        let sameID = CollieRadarReplySession(workbenchID: id, source: "https://fixture.invalid/history", selected: action)
+        XCTAssertTrue(sameID.evidenceURLs.isEmpty)
+        action.url = "https://fixture.invalid/issues/1"
+        let same = CollieRadarReplySession(workbenchID: id, source: "https://fixture.invalid/history", selected: action)
+        XCTAssertEqual(same.evidenceURLs.map(\.absoluteString), ["https://fixture.invalid/evidence/2"])
+    }
+
+    func testRestoredDifferentTargetHidesNextEvenAfterReceipt() async throws {
+        for sameID in [false, true] {
+            ReplyFixtureProtocol.capture.reset()
+            let id = UUID()
+            let original = replyFixture(id: id)
+            await original.prepare()
+            original.text = "Synthetic pending reply"
+            await original.submit()
+            XCTAssertTrue(original.pending)
+            let configuration = URLSessionConfiguration.ephemeral
+            configuration.protocolClasses = [ReplyFixtureProtocol.self]
+            let action = CollieRadarSnapshot.Action(project: "fixture", status: "等你决策", title: "Other item",
+                next: "Synthetic next", url: "https://fixture.invalid/issues/2",
+                id: sameID ? "PVTI_fixture" : "PVTI_other")
+            let restored = CollieRadarReplySession(workbenchID: id, source: "https://fixture.invalid/history",
+                selected: action, configuration: configuration)
+            await restored.check()
+            XCTAssertTrue(restored.recorded)
+            XCTAssertFalse(restored.pending)
+            XCTAssertFalse(restored.canSelectNext)
+        }
+    }
+
+    func testNextActionRequiresClearedPendingRecord() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let id = UUID()
+        let subject = replyFixture(id: id)
+        await subject.prepare()
+        subject.text = "Confirmed synthetic reply"
+        await subject.submit()
+        XCTAssertTrue(subject.pending)
+        // A missing file makes clearPending fail without changing permissions or real data.
+        try FileManager.default.removeItem(at: CollieRadarPendingReply.file(id))
+        await subject.check()
+        XCTAssertTrue(subject.recorded)
+        XCTAssertTrue(subject.pending)
+        XCTAssertFalse(subject.canSelectNext)
+        XCTAssertTrue(subject.preserveDraft())
+    }
+
+    func testQuickReplyInsertionPreservesDraftAndNeverAutoSubmits() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let subject = replyFixture()
+        XCTAssertFalse(subject.quickReplies.isEmpty)
+        let firstPhrase = subject.quickReplies[0]
+        let secondPhrase = subject.quickReplies[1]
+        subject.appendQuickReply(firstPhrase)
+        XCTAssertEqual(subject.text, firstPhrase)
+        subject.appendQuickReply(firstPhrase)
+        XCTAssertEqual(subject.text, firstPhrase)
+        subject.appendQuickReply(secondPhrase)
+        XCTAssertEqual(subject.text, firstPhrase + "\n" + secondPhrase)
+        for draft in ["  Existing draft\t \n\n", " \t\n"] {
+            subject.text = draft
+            subject.appendQuickReply(firstPhrase)
+            XCTAssertEqual(subject.text, draft + "\n" + firstPhrase)
+            subject.appendQuickReply(firstPhrase)
+            XCTAssertEqual(subject.text, draft + "\n" + firstPhrase)
+        }
+        let fullDraft = String(repeating: " ", count: 4000)
+        subject.text = fullDraft
+        subject.appendQuickReply(firstPhrase)
+        XCTAssertEqual(subject.text, fullDraft)
+        XCTAssertTrue(ReplyFixtureProtocol.capture.data.isEmpty)
     }
 }

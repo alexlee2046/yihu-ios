@@ -40,6 +40,35 @@ struct CollieRadarSnapshot: Codable, Sendable {
         var evidence: String? = nil
         var session: String? = nil
         var window_status: String? = nil
+
+        var requiresMyAttention: Bool {
+            let trimmed = status?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            return ["等你决策", "等你验收"].contains(trimmed) || next.localizedStandardContains("Alex")
+        }
+
+        var safeEvidenceURLs: [URL] {
+            Self.parseSafeEvidenceURLs(evidence)
+        }
+
+        static func parseSafeEvidenceURLs(_ raw: String?) -> [URL] {
+            guard let raw, !raw.isEmpty else { return [] }
+            let separators = CharacterSet.whitespacesAndNewlines.union(CharacterSet(charactersIn: ";,，；|"))
+            var seen = Set<String>()
+            var urls: [URL] = []
+            for token in raw.components(separatedBy: separators) {
+                let candidate = token.trimmingCharacters(in: CharacterSet(charactersIn: "()[]<>\"'"))
+                guard !candidate.isEmpty,
+                      let parts = URLComponents(string: candidate),
+                      parts.scheme?.lowercased() == "https",
+                      let host = parts.host, !host.isEmpty,
+                      parts.user == nil, parts.password == nil,
+                      parts.port.map({ (1...65535).contains($0) }) ?? true,
+                      let url = parts.url,
+                      seen.insert(url.absoluteString).inserted else { continue }
+                urls.append(url)
+            }
+            return urls
+        }
     }
 
     struct Project: Codable, Sendable {
@@ -108,12 +137,13 @@ struct CollieRadarSnapshot: Codable, Sendable {
         }
     }
     func matchingActions(display: CollieRadarDisplay, includeAllTasks: Bool = false) -> [Action] {
-        let records = includeAllTasks ? allTasks : decisions
+        let records = (includeAllTasks || display.onlyMentioningMe == true) ? allTasks : decisions
         let names = Dictionary(projects.map { ($0.path, $0.name) }, uniquingKeysWith: { first, _ in first })
         let filtered = records.enumerated().filter {
             (display.project.isEmpty || $0.element.project == display.project) &&
             matchesStatus($0.element.status, filter: display.status) &&
             (display.showHistory == true || !isHistorical($0.element.status)) &&
+            (display.onlyMentioningMe != true || $0.element.requiresMyAttention) &&
             (display.priority?.isEmpty != false || $0.element.priority == display.priority) &&
             matches([names[$0.element.project] ?? $0.element.project, $0.element.project, $0.element.title,
                      $0.element.status ?? "", $0.element.next, $0.element.priority ?? "",
@@ -144,6 +174,7 @@ struct CollieRadarSnapshot: Codable, Sendable {
         return projects.filter {
             (display.project.isEmpty || $0.path == display.project) &&
             (display.showHistory == true || !isHistorical($0.status)) &&
+            (display.onlyMentioningMe != true || actionProjects.contains($0.path)) &&
             (display.priority?.isEmpty != false || actionProjects.contains($0.path)) &&
             (matchesStatus($0.status, filter: display.status) || actionProjects.contains($0.path)) &&
             matches([$0.name, $0.path, $0.message, $0.status ?? ""], query: display.searchText)
@@ -367,6 +398,7 @@ struct CollieRadarDisplay: Codable, Equatable {
     var status: String? = nil
     var priority: String? = nil
     var showHistory: Bool? = nil
+    var onlyMentioningMe: Bool? = nil
     var priorityFirst: Bool? = nil
     var compact = false
     var showNext = true
