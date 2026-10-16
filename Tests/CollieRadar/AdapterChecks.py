@@ -432,6 +432,31 @@ class HistoryChecks(unittest.TestCase):
         self.assertEqual(self.mocks[-1].call_args.args[0][1], "-c")
         self.assertIn("'note'", self.mocks[-1].call_args.args[0][2])
 
+    def test_malformed_current_authorization_does_not_block_existing_receipt(self):
+        self.authorization()
+        payload = self.approval_payload()
+        self.mocks[-1].side_effect = self.record_command
+        self.assertEqual(radar.reply(payload, self.owner, "epoch", {})["outcome"], "recorded")
+        self.node["content"]["body"] = "```yihu-authorization\n{}\n```"
+        for operation in ["check", "submit"]:
+            payload["operation"] = operation
+            self.assertEqual(radar.reply(payload, self.owner, "restarted", {})["outcome"], "recorded")
+        self.mocks[-1].assert_called_once()
+        self.node["content"]["repository"]["viewerPermission"] = "READ"
+        with self.assertRaises(radar.ReplyError) as forbidden:
+            radar.reply(payload, self.owner, "restarted", {})
+        self.assertEqual(forbidden.exception.code, "forbidden")
+
+    def test_malformed_current_authorization_still_blocks_new_writes(self):
+        self.authorization()
+        payload = self.approval_payload()
+        self.node["content"]["body"] = "```yihu-authorization\n{}\n```"
+        for request in [payload, {"operation": "prepare", "id": self.ident}]:
+            with self.assertRaises(radar.ReplyError) as invalid:
+                radar.reply(request, self.owner, "epoch", {})
+            self.assertEqual(invalid.exception.code, "invalid_authorization")
+        self.mocks[-1].assert_not_called()
+
     def test_integral_float_budgets_survive_phone_json_round_trip(self):
         integer_request = self.authorization()
         float_request = self.authorization(budget={"session_cu": 5.0, "total_cu": 100.0, "minutes": 15.0})

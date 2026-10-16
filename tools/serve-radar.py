@@ -219,7 +219,7 @@ COMMENTS_QUERY = """query($id:ID!, $after:String) { node(id:$id) { ... on Issue 
 } } }"""
 
 
-def target_item(ident, epoch, notification=False, history=False):
+def target_item(ident, epoch, notification=False, history=False, receipt_lookup=False):
     executable = shutil.which("req")
     if not executable:
         raise RuntimeError("req unavailable")
@@ -260,7 +260,11 @@ def target_item(ident, epoch, notification=False, history=False):
     try:
         authorization = parse_request(content.get("body", ""))
     except (ValueError, TypeError, KeyError):
-        raise ReplyError("invalid_authorization", 409) from None
+        if not receipt_lookup:
+            raise ReplyError("invalid_authorization", 409) from None
+        # A broken current declaration cannot revoke an already written receipt.
+        # This mode is read-only; the pre-mutation read always validates strictly.
+        authorization = None
     if authorization is not None:
         target["authorization"] = authorization
     revision = dict(target, archived=node["isArchived"], kind=kind, content_id=content["id"])
@@ -475,7 +479,7 @@ def reply(payload, writer_user_id, epoch, attempts):
         raise ReplyError("invalid_request", 400)
     if operation == "history":
         return reply_history(payload, writer_user_id, epoch)
-    target, content, eligible = target_item(ident, epoch)
+    target, content, eligible = target_item(ident, epoch, receipt_lookup=operation in {"submit", "check"})
     if operation == "prepare":
         if not eligible:
             raise ReplyError("target_changed", target=target)
@@ -545,7 +549,7 @@ def reply(payload, writer_user_id, epoch, attempts):
         raise ReplyError("result_unknown", 503) from None
     # A nonzero transport/mutation result may still have written. Always read back.
     try:
-        fresh, current, _ = target_item(ident, epoch)
+        fresh, current, _ = target_item(ident, epoch, receipt_lookup=True)
         if receipt(current, request_id, digest):
             return {"outcome": "recorded", "target": fresh}
     except (ReplyError,) + READ_ERRORS:
