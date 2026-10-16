@@ -22,6 +22,74 @@ def snapshot(title="Synthetic task"):
             "decisions": [], "active": [], "stale": [], "cold": []}
 
 
+class ColabChecks(unittest.TestCase):
+    def fixture(self):
+        return {"version": 1, "observed_at": 1000,
+                "usage": {"status": "not_requested", "balance": None, "rate": None,
+                          "assignments": None, "observed_at": None},
+                "budget": {"measured_cu": 0, "unmeasured_runs": 1},
+                "experiments": [{"fingerprint": "a" * 64, "status": "cleanup_unconfirmed",
+                                 "completed_queries": None, "total_queries": 80,
+                                 "completed_batches": 0, "total_batches": None, "measured_cu": None,
+                                 "release_confirmed": None, "baseline": None, "candidate": None}],
+                "executions": [{"request_id": "11111111-2222-4333-8444-555555555555",
+                                "item_id": "PVTI_synthetic", "operation": "colab.run",
+                                "fingerprint": "a" * 64, "status": "uncertain"}]}
+
+    def test_read_only_projection_and_unknowns(self):
+        command = Mock(return_value=(0, json.dumps(self.fixture()).encode(), b""))
+        result = radar.read_projection(command, "/existing/workbench.py", "/ledger", "/devops")
+        self.assertFalse(result["colab_unavailable"])
+        self.assertIsNone(result["colab"]["usage"]["balance"])
+        self.assertIsNone(result["colab"]["experiments"][0]["release_confirmed"])
+        command.assert_called_once_with(["python3", "/existing/workbench.py", "snapshot", "--output", "/ledger"], timeout=40, cwd="/devops", max_bytes=radar.MAX_BYTES)
+
+    def test_live_usage_is_explicit_read_only(self):
+        command = Mock(return_value=(0, json.dumps(self.fixture()).encode(), b""))
+        radar.read_projection(command, "/workbench.py", "/ledger", "/devops", "/wrapper")
+        self.assertEqual(command.call_args.args[0][-3:], ["--live-usage", "--colab-wrap", "/wrapper"])
+
+    def test_projection_failure_never_leaks_provider_errors_or_old_balance(self):
+        for returned in [(1, b"", b"private provider details"), (0, b"{}", b""),
+                         (0, b"x" * (radar.MAX_BYTES + 1), b"")]:
+            result = radar.read_projection(Mock(return_value=returned), "/w", "/l", "/d")
+            self.assertEqual(result, {"colab_unavailable": True})
+        result = radar.read_projection(Mock(side_effect=RuntimeError("private")), "/w", "/l", "/d")
+        self.assertEqual(result, {"colab_unavailable": True})
+
+    def test_projection_rejects_unknown_fields_false_zero_and_bad_progress(self):
+        from radar_colab import validate_snapshot
+        for field, value in [("credential", "hidden"), ("version", True), ("observed_at", time.time() + 600)]:
+            data = self.fixture(); data[field] = value
+            with self.assertRaises(ValueError): validate_snapshot(data)
+        for field, value in [("completed_queries", 81), ("release_confirmed", 1), ("status", "accepted"), ("measured_cu", True)]:
+            data = self.fixture(); data["experiments"][0][field] = value
+            with self.assertRaises(ValueError): validate_snapshot(data)
+        data = self.fixture(); data["usage"]["balance"] = 0
+        with self.assertRaises(ValueError): validate_snapshot(data)
+        data = self.fixture(); data["executions"] *= 2
+        with self.assertRaises(ValueError): validate_snapshot(data)
+
+    def test_projection_command_enforces_stream_limit_and_deadline(self):
+        code, output, error = radar.command([sys.executable, "-c", "print('ok')"], timeout=2, max_bytes=32)
+        self.assertEqual((code, output, error), (0, b"ok\n", b""))
+        with self.assertRaises(RuntimeError):
+            radar.command([sys.executable, "-c", "print('x' * 100000)"], timeout=2, max_bytes=32)
+        with self.assertRaises(RuntimeError):
+            radar.command([sys.executable, "-c", "import time; time.sleep(2)"], timeout=0.1, max_bytes=32)
+
+    def test_four_cross_repository_authorization_groups(self):
+        fixture = json.loads((Path(__file__).parent / "fixtures/yihu_authorization.json").read_text())
+        groups = set()
+        for case in fixture["cases"]:
+            parsed = radar.parse_request(radar.request_body(case["request"]))
+            self.assertEqual(parsed["digest"], case["digest"], case["name"])
+            from radar_authorization import canonical
+            self.assertEqual(canonical({k: v for k, v in parsed.items() if k != "digest"}), case["canonical"])
+            groups.add((parsed["operation"], "fractional" if "fractional" in case["name"] else "integral"))
+        self.assertEqual(len(groups), 4)
+
+
 class CacheChecks(unittest.TestCase):
     def setUp(self):
         self.now = 1000

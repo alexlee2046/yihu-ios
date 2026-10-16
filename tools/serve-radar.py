@@ -17,6 +17,7 @@ import json
 import os
 from pathlib import Path
 import re
+import selectors
 import shutil
 import signal
 import subprocess
@@ -25,6 +26,7 @@ import time
 import uuid
 from radar_notifications import NotificationError
 from radar_authorization import parse_request, confirmation_text, request_body
+from radar_colab import read_projection
 
 MAX_BYTES = 2 * 1024 * 1024
 WAITING = {"等你决策", "等你验收"}
@@ -36,10 +38,30 @@ class ReplyError(Exception):
         self.code, self.status, self.target = code, status, target
 
 
-def command(args, timeout=18, input_data=None):
+def command(args, timeout=18, input_data=None, cwd=None, max_bytes=None):
     process = subprocess.Popen(args, stdin=subprocess.PIPE if input_data is not None else subprocess.DEVNULL,
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
+                               stdout=subprocess.PIPE, stderr=subprocess.DEVNULL if max_bytes else subprocess.PIPE,
+                               start_new_session=True, cwd=cwd)
     try:
+        if max_bytes:
+            # The optional snapshot producer cannot grow the adapter's memory or
+            # flood stderr. Drain only bounded stdout with one wall-clock deadline.
+            deadline, output = time.monotonic() + timeout, bytearray()
+            with selectors.DefaultSelector() as selector:
+                selector.register(process.stdout, selectors.EVENT_READ)
+                while True:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0 or not selector.select(remaining):
+                        raise subprocess.TimeoutExpired(args, timeout)
+                    chunk = os.read(process.stdout.fileno(), min(65536, max_bytes + 1 - len(output)))
+                    if not chunk:
+                        break
+                    output.extend(chunk)
+                    if len(output) > max_bytes:
+                        raise RuntimeError("command output too large")
+            process.wait(timeout=max(0.001, deadline - time.monotonic()))
+            process.stdout.close()
+            return process.returncode, bytes(output), b""
         output, error = process.communicate(input_data, timeout=timeout)
     except BaseException as exception:
         if process.poll() is None:
@@ -145,8 +167,9 @@ class LedgerCache:
     Only the serial HTTP handler mutates this state. The worker returns data, never
     touches authorization, reply receipts or cache state. No periodic refresh.
     """
-    def __init__(self, loader=None, clock=time.monotonic):
+    def __init__(self, loader=None, clock=time.monotonic, wait_timeout=31):
         self.loader, self.clock = loader or read_ledger, clock
+        self.wait_timeout = wait_timeout
         self.executor = ThreadPoolExecutor(max_workers=1)
         self.snapshot = self.future = None
         self.loaded_at = self.retry_after = 0
@@ -189,7 +212,7 @@ class LedgerCache:
             if self.future is None:
                 raise RuntimeError("ledger unavailable")
             try:
-                self.future.result(timeout=31)
+                self.future.result(timeout=self.wait_timeout)
             except FutureTimeout:
                 raise RuntimeError("ledger unavailable") from None
             except READ_ERRORS:
@@ -651,9 +674,22 @@ def ingest_notification(body, signature, registry, event_key):
     return registry.dispatch(event, scope) if event else {"outcome": "ignored"}
 
 
-def serve(port, tailnet_host, writer_user_id, notifications=None, notification_user_id=None, event_key=None):
+def serve(port, tailnet_host, writer_user_id, notifications=None, notification_user_id=None, event_key=None,
+          colab=None):
     epoch, attempts = str(uuid.uuid4()), {}
-    ledger = LedgerCache()
+
+    def load():
+        if not colab:
+            return read_ledger()
+        # Parallel bounded reads fit the existing phone's 45-second resource
+        # timeout; a slow usage sample cannot serially add 40s to the ledger read.
+        with ThreadPoolExecutor(max_workers=1) as projection:
+            future = projection.submit(read_projection, command, **colab)
+            data = read_ledger()
+            data.update(future.result())
+            return data
+
+    ledger = LedgerCache(load, wait_timeout=42 if colab else 31)
     allowed_hosts = {f"127.0.0.1:{port}", f"localhost:{port}", tailnet_host, tailnet_host.removesuffix(":443")}
     allowed_origins = {"https://" + tailnet_host, "https://" + tailnet_host.removesuffix(":443")}
 
@@ -766,8 +802,19 @@ if __name__ == "__main__":
     parser.add_argument("--port", required=True, type=int, choices=range(1, 65536), metavar="PORT")
     parser.add_argument("--tailnet-host", required=True)
     parser.add_argument("--writer-user-id", type=int, help="Explicitly authorized personal Tailscale user ID; absent means read-only")
+    parser.add_argument("--colab-workbench", help="Existing workbench.py path; read-only projection is opt-in")
+    parser.add_argument("--colab-output", help="Existing Colab ledger root")
+    parser.add_argument("--colab-cwd", help="Existing devops working directory")
+    parser.add_argument("--colab-wrap", help="Existing wrapper; opt in to live read-only usage sampling")
     args = parser.parse_args()
+    colab = None
+    if any((args.colab_workbench, args.colab_output, args.colab_cwd, args.colab_wrap)):
+        if not all((args.colab_workbench, args.colab_output, args.colab_cwd)):
+            parser.error("Colab projection requires workbench, output and cwd")
+        if not all(Path(p).is_absolute() for p in (args.colab_workbench, args.colab_output, args.colab_cwd) + ((args.colab_wrap,) if args.colab_wrap else ())):
+            parser.error("Colab paths must be absolute")
+        colab = dict(script=args.colab_workbench, output=args.colab_output, cwd=args.colab_cwd, wrapper=args.colab_wrap)
     try:
-        serve(args.port, args.tailnet_host, args.writer_user_id)
+        serve(args.port, args.tailnet_host, args.writer_user_id, colab=colab)
     except READ_ERRORS:
         raise SystemExit("Radar adapter could not start (private details omitted)") from None
