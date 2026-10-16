@@ -538,7 +538,8 @@ class HistoryChecks(unittest.TestCase):
         for changes in [{"operation": "shell"}, {"operation": []}, {"fingerprint": "a" * 40},
                         {"expires_at": True}, {"extra": "unknown"}, {"budget": None},
                         {"budget": {"session_cu": float("inf"), "total_cu": 100, "minutes": 15}},
-                        {"budget": {"session_cu": True, "total_cu": 100, "minutes": 15}}]:
+                        {"budget": {"session_cu": True, "total_cu": 100, "minutes": 15}},
+                        {"budget": {"session_cu": 10 ** 400, "total_cu": 10 ** 401, "minutes": 15}}]:
             with self.assertRaises((ValueError, TypeError)):
                 self.authorization(**changes)
         body = radar.request_body(valid)

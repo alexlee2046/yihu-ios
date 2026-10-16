@@ -57,7 +57,12 @@ def parse_request(body):
     if request["operation"] in {"colab.run", "colab.resume"}:
         if not isinstance(budget, dict) or set(budget) != {"session_cu", "total_cu", "minutes"}:
             raise ValueError("missing authorization budget")
-        if any(type(v) not in (int, float) or not math.isfinite(v) or v <= 0 for v in budget.values()):
+        try:
+            valid_budget = all(type(v) in (int, float) and math.isfinite(v) and v > 0
+                               for v in budget.values())
+        except OverflowError:
+            valid_budget = False
+        if not valid_budget:
             raise ValueError("invalid authorization budget")
         if budget["session_cu"] > budget["total_cu"]:
             raise ValueError("invalid authorization budget")
