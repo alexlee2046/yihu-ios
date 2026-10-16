@@ -26,7 +26,7 @@ def parse_request(body):
         return None
     if body.count("```yihu-authorization") != 1:
         raise ValueError("invalid authorization declaration")
-    match = re.search(r"(?:\A|\n)```yihu-authorization\n([^`]{1,12000})\n```(?:\n|\Z)", body)
+    match = re.search(r"(?:\A|\n)```yihu-authorization\n([\s\S]{1,12000}?)\n```(?:\n|\Z)", body)
     if not match:
         raise ValueError("invalid authorization declaration")
 

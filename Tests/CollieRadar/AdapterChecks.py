@@ -487,6 +487,14 @@ class HistoryChecks(unittest.TestCase):
         self.assertEqual(radar.reply(payload, self.owner, "epoch", {})["outcome"], "recorded")
         self.mocks[-1].assert_called_once()
 
+    def test_authorization_descriptions_allow_inline_code_and_backticks(self):
+        request = self.authorization(subject="Synthetic `batch`", scope="Only `public-images/`; no delivery")
+        self.assertEqual(radar.parse_request(radar.request_body(request)), request)
+        payload = self.approval_payload()
+        self.mocks[-1].side_effect = self.record_command
+        self.assertEqual(radar.reply(payload, self.owner, "epoch", {})["outcome"], "recorded")
+        self.assertEqual(self.history()["entries"][0]["kind"], "reply")
+
     def test_authorization_changes_and_expiry_refuse_before_any_write(self):
         self.authorization()
         payload = self.approval_payload()
