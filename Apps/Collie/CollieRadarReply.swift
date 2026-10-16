@@ -191,7 +191,7 @@ final class CollieRadarReplySession {
             guard result.outcome == "recorded" else { throw CollieRadarError.invalidSnapshot }
             complete()
         } catch let error as CollieRadarReplyFailure {
-            if ["forbidden", "invalid_request", "target_changed", "target_unavailable", "write_rejected", "authorization_expired"].contains(error.code) {
+            if ["forbidden", "invalid_request", "target_changed", "target_unavailable", "write_rejected", "invalid_authorization", "authorization_expired"].contains(error.code) {
                 if let latest = error.target { self.target = latest }
                 else if ["forbidden", "target_unavailable"].contains(error.code) { self.target = nil }
                 if clearPending() { requestID = UUID() }

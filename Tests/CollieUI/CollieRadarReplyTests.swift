@@ -63,6 +63,9 @@ private final class ReplyFixtureProtocol: URLProtocol, @unchecked Sendable {
             status = 403; response = ["error": "forbidden"]
         }
         else if path == "/fails-refresh" && Self.capture.data.count > 1 { status = 503; response = ["error": "unavailable"] }
+        else if path == "/invalid-authorization" && operation == "submit" {
+            status = 409; response = ["error": "invalid_authorization"]
+        }
         else if operation == "submit" { status = 503; response = ["error": "result_unknown"] }
         else if operation == "check" { response = ["outcome": "recorded", "target": target] }
         else if operation == "prepare" { response = ["outcome": "prepared", "target": target] }
@@ -346,6 +349,22 @@ extension CollieEnhancementTests {
         XCTAssertEqual(readback["request_id"] as? String, payload["request_id"] as? String)
         XCTAssertEqual(readback["authorization_digest"] as? String, payload["authorization_digest"] as? String)
         XCTAssertTrue(restored.recorded)
+    }
+
+    func testInvalidAuthorizationRejectsWithoutLeavingAnUncertainReply() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let id = UUID()
+        let subject = replyFixture("/invalid-authorization", id: id)
+        subject.text = "Synthetic note retained after rejection"
+        await subject.prepare()
+        await subject.submit()
+        XCTAssertFalse(subject.pending)
+        XCTAssertFalse(subject.recorded)
+        XCTAssertEqual(subject.text, "Synthetic note retained after rejection")
+        XCTAssertTrue(subject.notice?.contains("授权申请格式无效") == true)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: CollieRadarPendingReply.file(id).path))
+        let reopened = replyFixture("/invalid-authorization", id: id)
+        XCTAssertFalse(reopened.pending)
     }
 
     func testOrdinaryReplyOnAuthorizationItemDoesNotAuthorize() async throws {
