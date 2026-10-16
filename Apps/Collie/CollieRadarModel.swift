@@ -307,14 +307,15 @@ struct CollieColabSnapshot: Codable, Sendable {
     var executions: [Execution]
 
     var outdated: Bool { Date().timeIntervalSince1970 - observed_at > 300 }
-    var valid: Bool {
+    var valid: Bool { valid(at: Date()) }
+    func valid(at now: Date) -> Bool {
         func nonnegative(_ n: Double?) -> Bool { n.map { $0.isFinite && $0 >= 0 } ?? true }
         func fingerprint(_ s: String) -> Bool { s.range(of: "^[0-9a-f]{64}$", options: .regularExpression) != nil }
         func progress(_ done: Int?, _ total: Int?) -> Bool {
             (done.map { $0 >= 0 } ?? true) && (total.map { $0 >= 0 } ?? true) &&
                 (done == nil || total == nil || done! <= total!)
         }
-        guard version == 1, observed_at.isFinite, observed_at >= 0, observed_at <= Date().timeIntervalSince1970 + 300,
+        guard version == 1, observed_at.isFinite, observed_at >= 0, observed_at <= now.timeIntervalSince1970 + 300,
               ["sampled", "unavailable", "not_requested"].contains(usage.status),
               [usage.balance, usage.rate, usage.observed_at].allSatisfy(nonnegative),
               usage.observed_at.map({ $0 <= observed_at + 300 }) ?? true,
@@ -324,21 +325,22 @@ struct CollieColabSnapshot: Codable, Sendable {
               experiments.count <= 100, executions.count <= 100,
               Set(experiments.map(\.id)).count == experiments.count,
               Set(executions.map(\.id)).count == executions.count else { return false }
-        let validExperiments = experiments.allSatisfy { item in
-                fingerprint(item.fingerprint) &&
-                ["allocating", "running", "complete", "interrupted", "cleanup_unconfirmed", "recovered_cost_includes_interruption_interval", "unknown"].contains(item.status) &&
-                progress(item.completed_queries, item.total_queries) && progress(item.completed_batches, item.total_batches) &&
-                nonnegative(item.measured_cu) && [item.baseline, item.candidate].allSatisfy { arm in
-                    guard let arm else { return true }
-                    return [arm.top1, arm.top5, arm.top10, arm.false_same_rate, arm.negative_rejection_rate].allSatisfy(nonnegative) &&
-                        (arm.acceptance_status.map { !$0.isEmpty && $0.count <= 120 } ?? true)
-                }
+        for item in experiments {
+            guard fingerprint(item.fingerprint),
+                  ["allocating", "running", "complete", "interrupted", "cleanup_unconfirmed", "recovered_cost_includes_interruption_interval", "unknown"].contains(item.status),
+                  progress(item.completed_queries, item.total_queries),
+                  progress(item.completed_batches, item.total_batches), nonnegative(item.measured_cu) else { return false }
+            for arm in [item.baseline, item.candidate].compactMap({ $0 }) {
+                guard [arm.top1, arm.top5, arm.top10, arm.false_same_rate, arm.negative_rejection_rate].allSatisfy(nonnegative),
+                      arm.acceptance_status.map({ !$0.isEmpty && $0.count <= 120 }) ?? true else { return false }
             }
-        return validExperiments && executions.allSatisfy {
-                UUID(uuidString: $0.request_id) != nil && !$0.item_id.isEmpty && $0.item_id.count <= 120 &&
-                ["colab.run", "colab.resume", "colab.recover", "colab.calibrate"].contains($0.operation) &&
-                fingerprint($0.fingerprint) && ["running", "complete", "failed", "uncertain"].contains($0.status)
-            }
+        }
+        for item in executions {
+            guard UUID(uuidString: item.request_id) != nil, !item.item_id.isEmpty, item.item_id.count <= 120,
+                  ["colab.run", "colab.resume", "colab.recover", "colab.calibrate"].contains(item.operation),
+                  fingerprint(item.fingerprint), ["running", "complete", "failed", "uncertain"].contains(item.status) else { return false }
+        }
+        return true
     }
 }
 

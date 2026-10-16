@@ -311,6 +311,14 @@ struct CollieRadarModelChecks {
         let authorizationData = try JSONEncoder().encode(authorization)
         precondition(!String(data: authorizationData, encoding: .utf8)!.contains("token"))
 
+        let sharedFixture = try JSONSerialization.jsonObject(with: Data(contentsOf:
+            URL(fileURLWithPath: "Tests/CollieRadar/fixtures/colab_snapshot.json"))) as! [String: Any]
+        let sharedTelemetry = try JSONDecoder().decode(CollieColabSnapshot.self,
+            from: JSONSerialization.data(withJSONObject: sharedFixture["snapshot"]!))
+        precondition(sharedTelemetry.valid(at: Date(timeIntervalSince1970: sharedTelemetry.observed_at)))
+        precondition(sharedTelemetry.executions[0].status == "uncertain")
+        precondition(sharedTelemetry.experiments[0].candidate?.top1 == 0.5)
+
         var telemetry = CollieColabSnapshot(version: 1, observed_at: 1000,
             usage: .init(status: "not_requested", balance: nil, rate: nil, assignments: nil, observed_at: nil),
             budget: .init(measured_cu: 0, unmeasured_runs: 1),

@@ -78,6 +78,15 @@ class ColabChecks(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             radar.command([sys.executable, "-c", "import time; time.sleep(2)"], timeout=0.1, max_bytes=32)
 
+    def test_shared_colab_snapshot_contract(self):
+        from radar_colab import validate_snapshot
+        fixture = json.loads((Path(__file__).parent / "fixtures/colab_snapshot.json").read_text())
+        with patch("radar_colab.time.time", return_value=fixture["snapshot"]["observed_at"]):
+            result = validate_snapshot(fixture["snapshot"])
+        self.assertEqual(result["executions"][0]["status"], "uncertain")
+        self.assertEqual(result["experiments"][0]["candidate"]["top1"], 0.5)
+        self.assertIsNone(result["usage"]["balance"])
+
     def test_four_cross_repository_authorization_groups(self):
         fixture = json.loads((Path(__file__).parent / "fixtures/yihu_authorization.json").read_text())
         groups = set()
