@@ -283,6 +283,52 @@ enum CollieRadarTaskState {
     }
 }
 
+/// A human confirmation record, never a provider credential or execution token.
+struct CollieRadarAuthorization: Codable {
+    struct Budget: Codable {
+        var session_cu: Double
+        var total_cu: Double
+        var minutes: Double
+    }
+    var version: Int
+    var operation: String
+    var fingerprint: String
+    var subject: String
+    var scope: String
+    var expires_at: Double
+    var budget: Budget?
+    var digest: String
+
+    var operationLabel: String {
+        switch operation {
+        case "colab.run": return "运行实验"
+        case "colab.resume": return "续跑实验"
+        case "colab.recover": return "核对并释放实验资源"
+        case "colab.calibrate": return "校准晋级"
+        case "release.promote": return "申请发布固定版本"
+        default: return "未知操作"
+        }
+    }
+
+    var valid: Bool {
+        let operations = ["colab.run", "colab.resume", "colab.recover", "colab.calibrate", "release.promote"]
+        let length = operation == "release.promote" ? 40 : 64
+        guard version == 1, operations.contains(operation),
+              fingerprint.range(of: "^[0-9a-f]{\(length)}$", options: .regularExpression) != nil,
+              digest.range(of: "^[0-9a-f]{64}$", options: .regularExpression) != nil,
+              !subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, subject.count <= 200,
+              !scope.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, scope.count <= 2000,
+              expires_at.isFinite, expires_at > 0, expires_at < 253402300800 else { return false }
+        if ["colab.run", "colab.resume"].contains(operation) {
+            guard let budget else { return false }
+            return [budget.session_cu, budget.total_cu, budget.minutes].allSatisfy { $0.isFinite && $0 > 0 }
+                && budget.session_cu <= budget.total_cu
+        }
+        return budget == nil
+    }
+    func current(at now: Date = Date()) -> Bool { valid && expires_at > now.timeIntervalSince1970 }
+}
+
 struct CollieRadarReplyTarget: Codable {
     var eligible: Bool
     var epoch: String
@@ -293,6 +339,7 @@ struct CollieRadarReplyTarget: Codable {
     var next: String
     var version: String
     var owner_session: String? = nil
+    var authorization: CollieRadarAuthorization? = nil
 }
 
 /// Read-only source history. No local history database or synthesized delivery state.
@@ -377,6 +424,7 @@ struct CollieRadarPendingReply: Codable {
     var text: String
     var requestID: UUID
     var submitted: Bool? = nil
+    var authorizationConfirmed: Bool? = nil
 
     static func file(_ id: UUID) -> URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]

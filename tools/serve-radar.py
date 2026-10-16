@@ -24,6 +24,7 @@ import sys
 import time
 import uuid
 from radar_notifications import NotificationError
+from radar_authorization import parse_request, confirmation_text, request_body
 
 MAX_BYTES = 2 * 1024 * 1024
 WAITING = {"等你决策", "等你验收"}
@@ -206,7 +207,7 @@ class LedgerCache:
 
 TARGET_QUERY = """query($id:ID!) { node(id:$id) { ... on ProjectV2Item {
  id fullDatabaseId isArchived updatedAt project { id public viewerCanUpdate }
- content { __typename ... on Issue { id title url repository { isPrivate viewerPermission } }
+ content { __typename ... on Issue { id title url body repository { isPrivate viewerPermission } }
  ... on DraftIssue { id title body } }
  fieldValues(first:30) { nodes {
  ... on ProjectV2ItemFieldSingleSelectValue { name field { ... on ProjectV2FieldCommon { name } } }
@@ -256,6 +257,12 @@ def target_item(ident, epoch, notification=False, history=False):
         kind == "DraftIssue" or content["repository"].get("viewerPermission") in {"ADMIN", "MAINTAIN", "WRITE"})
     eligible = writable and not node["isArchived"] and target["status"] in WAITING
     target["eligible"] = eligible
+    try:
+        authorization = parse_request(content.get("body", ""))
+    except (ValueError, TypeError, KeyError):
+        raise ReplyError("invalid_authorization", 409) from None
+    if authorization is not None:
+        target["authorization"] = authorization
     revision = dict(target, archived=node["isArchived"], kind=kind, content_id=content["id"])
     target["version"] = hashlib.sha256(json.dumps(revision, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
     if history:
@@ -316,10 +323,22 @@ PHONE_NOTE = re.compile(r"Alex 手机确认（(?:决策回复|验收反馈)）�
 def phone_note(body, owner, ident):
     match = PHONE_NOTE.match(body)
     if not match:
-        return None
-    text, request_id, digest = match.groups()
+        # Confirmations retain the exact typed request in source history. They are
+        # records only: neither this marker nor the user note is an execution token.
+        approved = re.match(r"Alex 手机确认（操作授权记录）：\n\n(.*?)\n\n<!-- yihu-reply:([0-9a-f-]{36}):([0-9a-f]{64}) -->", body, re.S)
+        if not approved:
+            return None
+        text, request_id, digest = approved.groups()
+        try:
+            if parse_request(text) is None:
+                return None
+        except (ValueError, TypeError, KeyError):
+            return None
+        text = "Alex 手机确认（操作授权记录）：\n\n" + text
+    else:
+        text, request_id, digest = match.groups()
     try:
-        if str(uuid.UUID(request_id)) != request_id or not text.strip() or len(text) > 4000:
+        if str(uuid.UUID(request_id)) != request_id or not text.strip() or len(text) > (4000 if match else 12000):
             return None
     except ValueError:
         return None
@@ -468,6 +487,22 @@ def reply(payload, writer_user_id, epoch, attempts):
         request_id = str(uuid.UUID(request_id))
     except ValueError:
         raise ReplyError("invalid_request", 400) from None
+    approving = payload.get("authorization_confirmed") is True
+    authorization_digest = payload.get("authorization_digest")
+    if approving:
+        try:
+            original = parse_request(request_body(payload["authorization"]))
+        except (ValueError, TypeError, KeyError, AttributeError):
+            raise ReplyError("invalid_request", 400) from None
+        if not original or authorization_digest != original["digest"]:
+            raise ReplyError("invalid_request", 400)
+        # Readback uses the originally confirmed request even if the current
+        # declaration changed/expired after an ambiguous write. Never erase an
+        # uncertain pending request merely because its source has since changed.
+        text = confirmation_text(original, text)
+    elif (authorization_digest is not None or payload.get("authorization") is not None
+          or payload.get("authorization_confirmed") is not None and type(payload["authorization_confirmed"]) is not bool):
+        raise ReplyError("invalid_request", 400)
     digest = hashlib.sha256(json.dumps([writer_user_id, ident, text], ensure_ascii=False).encode()).hexdigest()
     if receipt(content, request_id, digest):
         return {"outcome": "recorded", "target": target}
@@ -490,8 +525,13 @@ def reply(payload, writer_user_id, epoch, attempts):
     target, _, eligible = target_item(ident, epoch)
     if not eligible or payload.get("version") != target["version"]:
         raise ReplyError("target_changed", target=target)
+    if approving:
+        fresh_authorization = target.get("authorization")
+        if (not fresh_authorization or fresh_authorization["digest"] != authorization_digest
+                or fresh_authorization["expires_at"] <= time.time()):
+            raise ReplyError("authorization_expired", target=target)
     label = "决策回复" if target["status"] == "等你决策" else "验收反馈"
-    note = "Alex 手机确认（" + label + "）：\n\n" + text + "\n\n<!-- yihu-reply:" + request_id + ":" + digest + " -->"
+    note = (text if approving else "Alex 手机确认（" + label + "）：\n\n" + text) + "\n\n<!-- yihu-reply:" + request_id + ":" + digest + " -->"
     if len(attempts) >= 5000:
         raise ReplyError("write_rejected", 403)
     attempts[key] = digest  # IDs/digests only; never a ledger cache or stored reply body.

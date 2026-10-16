@@ -392,6 +392,99 @@ class HistoryChecks(unittest.TestCase):
         self.assertEqual(history["target"]["version"], prepared["target"]["version"])
         self.assertNotIn("owner_session", prepared["target"])
 
+    def authorization(self, **changes):
+        value = {"version": 1, "operation": "colab.run", "subject": "Synthetic experiment",
+                 "fingerprint": "a" * 64, "scope": "Public synthetic images only; no delivery",
+                 "expires_at": int(time.time()) + 3600,
+                 "budget": {"session_cu": 5, "total_cu": 100, "minutes": 15}}
+        value.update(changes)
+        self.node["content"]["body"] = radar.request_body(value)
+        return radar.parse_request(self.node["content"]["body"])
+
+    def approval_payload(self):
+        prepared = radar.reply({"operation": "prepare", "id": self.ident}, self.owner, "epoch", {})["target"]
+        return {"operation": "submit", "id": self.ident, "text": "Synthetic approval note",
+                "request_id": self.request_id, "epoch": "epoch", "confirmed": True,
+                "version": prepared["version"], "authorization_confirmed": True,
+                "authorization": prepared["authorization"],
+                "authorization_digest": prepared["authorization"]["digest"]}
+
+    def record_command(self, *args, input_data, **kwargs):
+        payload = json.loads(input_data)
+        self.append(payload["note"])
+        return 0, b"", b""
+
+    def test_typed_authorization_readback_and_restart_never_execute_or_repeat(self):
+        request = self.authorization()
+        payload = self.approval_payload()
+        self.mocks[-1].side_effect = self.record_command
+        self.assertEqual(radar.reply(payload, self.owner, "epoch", {})["outcome"], "recorded")
+        self.mocks[-1].assert_called_once()
+        note = self.comments[0]["body"]
+        self.assertIn("操作授权记录", note)
+        self.assertEqual(radar.parse_request(note)["digest"], request["digest"])
+        self.assertEqual(self.history()["entries"][0]["kind"], "reply")
+        self.authorization(scope="Changed after recording")
+        payload["operation"] = "check"
+        self.assertEqual(radar.reply(payload, self.owner, "restarted", {})["outcome"], "recorded")
+        self.mocks[-1].assert_called_once()
+        # The sole subprocess is the existing req note runner, never Colab/promote.
+        self.assertEqual(self.mocks[-1].call_args.args[0][1], "-c")
+        self.assertIn("'note'", self.mocks[-1].call_args.args[0][2])
+
+    def test_authorization_changes_and_expiry_refuse_before_any_write(self):
+        self.authorization()
+        payload = self.approval_payload()
+        self.authorization(scope="A different batch or destination")
+        with self.assertRaises(radar.ReplyError) as changed:
+            radar.reply(payload, self.owner, "epoch", {})
+        self.assertEqual(changed.exception.code, "target_changed")
+        self.authorization(expires_at=int(time.time()) - 1)
+        payload = self.approval_payload()
+        with self.assertRaises(radar.ReplyError) as expired:
+            radar.reply(payload, self.owner, "epoch", {})
+        self.assertEqual(expired.exception.code, "authorization_expired")
+        self.mocks[-1].assert_not_called()
+
+    def test_ordinary_agreement_is_not_typed_authorization(self):
+        self.authorization()
+        payload = self.approval_payload()
+        for field in ["authorization", "authorization_digest", "authorization_confirmed"]:
+            payload.pop(field)
+        payload["text"] = "同意"
+        self.mocks[-1].side_effect = self.record_command
+        radar.reply(payload, self.owner, "epoch", {})
+        self.assertNotIn("操作授权记录", self.comments[0]["body"])
+        self.assertIn("决策回复", self.comments[0]["body"])
+
+    def test_uncertain_authorization_keeps_the_same_receipt_identity(self):
+        self.authorization()
+        payload = self.approval_payload()
+        self.mocks[-1].return_value = (1, b"", b"")
+        attempts = {}
+        for _ in range(2):
+            with self.assertRaises(radar.ReplyError) as uncertain:
+                radar.reply(payload, self.owner, "epoch", attempts)
+            self.assertEqual(uncertain.exception.code, "result_unknown")
+        self.mocks[-1].assert_called_once()
+
+    def test_authorization_schema_is_strict_and_digest_binds_budget_and_operation(self):
+        valid = self.authorization()
+        self.assertNotEqual(self.authorization(budget={"session_cu": 6, "total_cu": 100, "minutes": 15})["digest"], valid["digest"])
+        self.assertNotEqual(self.authorization(operation="colab.resume")["digest"], valid["digest"])
+        for changes in [{"operation": "shell"}, {"operation": []}, {"fingerprint": "a" * 40},
+                        {"expires_at": True}, {"extra": "unknown"}, {"budget": None},
+                        {"budget": {"session_cu": float("inf"), "total_cu": 100, "minutes": 15}},
+                        {"budget": {"session_cu": True, "total_cu": 100, "minutes": 15}}]:
+            with self.assertRaises((ValueError, TypeError)):
+                self.authorization(**changes)
+        body = radar.request_body(valid)
+        with self.assertRaises(ValueError):
+            radar.parse_request(body + "\n" + body)
+        with self.assertRaises(ValueError):
+            radar.parse_request(body.replace('"version":1', '"version":1,"version":1'))
+        self.assertEqual(radar.parse_request(body + "\n---\n**备注 synthetic**（req note）\n\n" + body)["digest"], valid["digest"])
+
     def test_existing_request_receipt_survives_restart_and_no_second_write(self):
         self.append(self.note())
         payload = {"operation": "submit", "id": self.ident, "text": "Synthetic decision",

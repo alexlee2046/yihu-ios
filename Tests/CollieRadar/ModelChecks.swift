@@ -280,6 +280,28 @@ struct CollieRadarModelChecks {
         precondition(corrupt.add() == nil)
         precondition(defaults.data(forKey: "collie.radar.workbenches.v1") == original)
 
+        let authorization = CollieRadarAuthorization(version: 1, operation: "colab.run",
+            fingerprint: String(repeating: "a", count: 64), subject: "Synthetic batch", scope: "Public images only",
+            expires_at: 2000, budget: .init(session_cu: 5, total_cu: 100, minutes: 15),
+            digest: String(repeating: "b", count: 64))
+        precondition(authorization.valid)
+        precondition(authorization.current(at: Date(timeIntervalSince1970: 1999)))
+        precondition(!authorization.current(at: Date(timeIntervalSince1970: 2000)))
+        var invalidAuthorization = authorization
+        invalidAuthorization.operation = "shell"
+        precondition(!invalidAuthorization.valid)
+        invalidAuthorization = authorization
+        invalidAuthorization.budget!.session_cu = 101
+        precondition(!invalidAuthorization.valid)
+        invalidAuthorization = authorization
+        invalidAuthorization.fingerprint = String(repeating: "a", count: 40)
+        precondition(!invalidAuthorization.valid)
+        invalidAuthorization.operation = "release.promote"
+        invalidAuthorization.budget = nil
+        precondition(invalidAuthorization.valid)
+        let authorizationData = try JSONEncoder().encode(authorization)
+        precondition(!String(data: authorizationData, encoding: .utf8)!.contains("token"))
+
         // Source-scoped history, including read-only completed items.
         let target: [String: Any] = ["eligible": false, "epoch": "fixture", "id": "PVTI_fixture",
                                     "title": "Synthetic", "url": "https://fixture.invalid/issues/1",
