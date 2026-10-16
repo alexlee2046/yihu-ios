@@ -74,6 +74,7 @@ final class CollieRadarStore {
     struct DraftTargetCandidate: Identifiable {
         var workbenchID: UUID
         var workbenchName: String
+        var source: String
         var action: CollieRadarSnapshot.Action
         var id: String { "\(workbenchID.uuidString):\(action.id ?? action.url)" }
     }
@@ -86,7 +87,7 @@ final class CollieRadarStore {
                   let snapshot = snapshots[bench.id] else { continue }
             for task in snapshot.allTasks where ["等你决策", "等你验收"].contains(task.status ?? "") {
                 guard let taskID = task.id, !taskID.isEmpty else { continue }
-                result.append(DraftTargetCandidate(workbenchID: bench.id, workbenchName: bench.name, action: task))
+                result.append(DraftTargetCandidate(workbenchID: bench.id, workbenchName: bench.name, source: bench.source, action: task))
             }
         }
         return result
@@ -97,9 +98,10 @@ final class CollieRadarStore {
         let cleaned = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !cleaned.isEmpty, cleaned.unicodeScalars.count <= 4000,
               let bench = workbenches.first(where: { $0.id == candidate.workbenchID }),
-              CollieRadarFeed.validate(bench.source) != nil,
+              bench.source == candidate.source, CollieRadarFeed.validate(bench.source) != nil,
               let taskID = candidate.action.id, !taskID.isEmpty,
               let task = snapshots[bench.id]?.allTasks.first(where: { $0.id == taskID }),
+              task.url == candidate.action.url,
               ["等你决策", "等你验收"].contains(task.status ?? "") else { return false }
         let file = CollieRadarPendingReply.file(bench.id)
         guard !FileManager.default.fileExists(atPath: file.path) else { return false }

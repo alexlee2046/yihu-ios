@@ -343,7 +343,7 @@ private struct CollieRootView: View {
         message: { Text(selectionNotice ?? "") }
         .onChange(of: notifications.status) { _, _ in watchLink.notificationStateChanged() }
         .onChange(of: watchHandoffBlocked) { _, blocked in if !blocked { openWatchTask(); openRadarShortcutIfNeeded() } }
-        .onChange(of: radarPresentation.replyPresented) { _, shown in if !shown { openWatchTask() } }
+        .onChange(of: radarPresentation.replyPresented) { _, shown in if !shown { openWatchTask(); openRadarShortcutIfNeeded() } }
         .onChange(of: watchLink.openRequest) { _, _ in openWatchTask() }
         .onChange(of: CollieVoiceShortcutCenter.shared.pendingOpenRadarActions) { _, _ in openRadarShortcutIfNeeded() }
         .onChange(of: scenePhase) { _, phase in if phase == .active { openWatchTask(); openRadarShortcutIfNeeded() } }
@@ -446,9 +446,10 @@ private struct CollieRootView: View {
         guard scenePhase == .active, !watchHandoffBlocked,
               CollieVoiceShortcutCenter.shared.pendingOpenRadarActions else { return }
         guard let targetID = selectedRadar ?? radar.ordered.first?.id,
-              canSelect(), selectRadar(targetID),
+              canSelect(),
               var record = radar.workbenches.first(where: { $0.id == targetID }),
-              CollieVoiceShortcutCenter.shared.consumeOpenRadarActions() else { return }
+              CollieVoiceShortcutCenter.shared.consumeOpenRadarActions(),
+              selectRadar(targetID) else { return }
         record.display.page = .actions
         _ = radar.update(record)
     }

@@ -317,6 +317,31 @@ extension CollieEnhancementTests {
         XCTAssertTrue(ReplyFixtureProtocol.capture.data.isEmpty)
     }
 
+    func testLateVoiceTranscriptCannotWriteAfterDismissalOrSourceChange() {
+        let dismissed = replyFixture()
+        dismissed.cancelHistory()
+        XCTAssertFalse(dismissed.appendVoiceTranscript("Late recording"))
+        XCTAssertEqual(dismissed.text, "")
+        let stale = replyFixture(currentSource: { false })
+        XCTAssertFalse(stale.appendVoiceTranscript("Old source recording"))
+        XCTAssertEqual(stale.text, "")
+    }
+
+    func testVoiceTranscriptSaveFailureCanRetryWithoutDuplicatingText() async throws {
+        let id = UUID()
+        let subject = replyFixture(id: id)
+        subject.text = "Existing draft"
+        let file = CollieRadarPendingReply.file(id)
+        // A directory at the file path makes the atomic draft write fail.
+        try FileManager.default.createDirectory(at: file, withIntermediateDirectories: true)
+        XCTAssertFalse(subject.appendVoiceTranscript("Voice addition"))
+        XCTAssertEqual(subject.text, "Existing draft")
+        try FileManager.default.removeItem(at: file)
+        XCTAssertTrue(subject.appendVoiceTranscript("Voice addition"))
+        XCTAssertEqual(subject.text, "Existing draft\nVoice addition")
+        XCTAssertEqual(replyFixture(id: id).text, subject.text)
+    }
+
     func testVoiceTranscriptAppendsAndPersistsDraftWithoutSubmitting() async throws {
         ReplyFixtureProtocol.capture.reset()
         let id = UUID()

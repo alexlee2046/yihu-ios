@@ -255,6 +255,11 @@ struct CollieRadarModelChecks {
         precondition(candidates.count == 1 && candidates.first?.action.id == "t1")
         let draftFile = CollieRadarPendingReply.file(id)
         defer { try? FileManager.default.removeItem(at: draftFile) }
+        var wrongURL = candidates[0]
+        wrongURL.action.url = "https://example.org/other-item"
+        precondition(!loaded.saveUnsubmittedDraft(text: "Wrong target", for: wrongURL))
+        precondition(!loaded.saveUnsubmittedDraft(text: "   ", for: candidates[0]))
+        precondition(!loaded.saveUnsubmittedDraft(text: String(repeating: "x", count: 4001), for: candidates[0]))
         precondition(loaded.saveUnsubmittedDraft(text: "Voice note draft", for: candidates[0]))
         precondition(loaded.writableDraftCandidates.isEmpty, "Workbench with existing draft must not accept another overwrite")
         precondition(!loaded.saveUnsubmittedDraft(text: "Second overwrite", for: candidates[0]))
@@ -263,6 +268,9 @@ struct CollieRadarModelChecks {
         changed.source = "https://example.org/new-source.json"
         loaded.update(changed)
         precondition(loaded.snapshots[id] == nil)
+        loaded.importSnapshot(try JSONEncoder().encode(attentionSnapshot), for: id)
+        precondition(!loaded.saveUnsubmittedDraft(text: "Old source", for: candidates[0]))
+        precondition(!FileManager.default.fileExists(atPath: draftFile.path))
         loaded.remove(secondID)
         precondition(!loaded.workbenches.contains { $0.id == secondID })
         let original = Data("unreadable original preferences".utf8)

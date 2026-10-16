@@ -341,13 +341,18 @@ final class CollieRadarReplySession {
 
     @discardableResult
     func appendVoiceTranscript(_ transcript: String) -> Bool {
-        guard !busy, !pending, !recorded, !blocked else { return false }
+        guard historyActive, currentSource(), !busy, !pending, !recorded, !blocked else { return false }
         let cleaned = transcript.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !cleaned.isEmpty else { return false }
         let candidate = text + (text.isEmpty ? "" : "\n") + cleaned
         guard candidate.unicodeScalars.count <= 4000 else { return false }
+        let previousText = text
         text = candidate
-        return preserveDraft()
+        guard preserveDraft() else {
+            text = previousText
+            return false
+        }
+        return true
     }
 
     func activateHistory() { historyActive = true }
@@ -436,8 +441,8 @@ struct CollieRadarReplyVoiceAdapter {
     var previewText: () -> String
     var performAction: () async -> Void
     var cancelRecording: () -> Void
-    var bindHandler: (@escaping (String) -> Bool) -> Void
-    var unbindHandler: () -> Void
+    var bindHandler: (UUID, @escaping (String) -> Bool) -> Void
+    var unbindHandler: (UUID) -> Void
 }
 
 struct CollieRadarReplyView: View {
@@ -445,11 +450,13 @@ struct CollieRadarReplyView: View {
     @State private var session: CollieRadarReplySession
     @State private var confirming = false
     @State private var discarding = false
+    @State private var voiceBinding = UUID()
     let store: CollieRadarStore
     let workbenchID: UUID
     var voice: CollieRadarReplyVoiceAdapter? = nil
     var nextAction: CollieRadarSnapshot.Action? = nil
     var onSelectNext: ((CollieRadarSnapshot.Action) -> Void)? = nil
+    private var voiceBusy: Bool { voice?.canCancel() == true || voice?.isDelivering() == true }
 
     init(store: CollieRadarStore, workbenchID: UUID, source: String, action: CollieRadarSnapshot.Action,
          voice: CollieRadarReplyVoiceAdapter? = nil,
@@ -625,8 +632,8 @@ struct CollieRadarReplyView: View {
                                 } }.disabled(session.busy)
                             } else if !session.recorded && !session.blocked {
                                 Button(radarText("重新读取条目")) { Task { await session.prepare() } }.disabled(session.busy)
-                                Button(radarText("确认并发送回复")) { confirming = true }.disabled(!session.canSend)
-                                Button(radarText("丢弃未发送草稿"), role: .destructive) { discarding = true }.disabled(session.busy)
+                                Button(radarText("确认并发送回复")) { confirming = true }.disabled(!session.canSend || voiceBusy)
+                                Button(radarText("丢弃未发送草稿"), role: .destructive) { discarding = true }.disabled(session.busy || voiceBusy)
                             }
                         }
                     }
@@ -646,7 +653,7 @@ struct CollieRadarReplyView: View {
                 }
             }
             .task {
-                voice?.bindHandler { [session] transcript in
+                voice?.bindHandler(voiceBinding) { [session] transcript in
                     session.appendVoiceTranscript(transcript)
                 }
                 session.activateHistory()
@@ -655,7 +662,7 @@ struct CollieRadarReplyView: View {
             }
             .onDisappear {
                 if voice?.canCancel() == true { voice?.cancelRecording() }
-                voice?.unbindHandler()
+                voice?.unbindHandler(voiceBinding)
                 session.cancelHistory()
             }
             .sheet(isPresented: $confirming) {
@@ -679,7 +686,7 @@ struct CollieRadarReplyView: View {
                                     await store.refresh(workbenchID)
                                 }
                             }
-                        }.disabled(!session.canSend)
+                        }.disabled(!session.canSend || voiceBusy)
                     }
                     .navigationTitle(radarText("确认发送到原条目？"))
                     .toolbar { ToolbarItem(placement: .cancellationAction) {

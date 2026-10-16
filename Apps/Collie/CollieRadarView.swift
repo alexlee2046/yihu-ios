@@ -146,8 +146,8 @@ struct CollieRadarView: View {
                                 else { await controller.performPrimaryAction() }
                             },
                             cancelRecording: { controller.cancelRecording() },
-                            bindHandler: { handler in controller.customTranscriptHandler = handler },
-                            unbindHandler: { controller.customTranscriptHandler = nil }
+                            bindHandler: { owner, handler in controller.bindTranscriptHandler(owner: owner, handler: handler) },
+                            unbindHandler: { owner in controller.unbindTranscriptHandler(owner: owner) }
                         )
                     }
                     CollieRadarReplyView(store: store, workbenchID: id, source: record.source, action: action,

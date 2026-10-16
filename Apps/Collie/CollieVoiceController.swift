@@ -37,7 +37,20 @@ final class CollieVoiceController {
     /// Only the final pass (or an explicit retry) may use the web bridge.
     var prepareTranscriptDelivery: ((UUID) async -> Void)?
     var deliverTranscript: ((String, UUID) async -> Bool)?
-    var customTranscriptHandler: ((String) -> Bool)?
+    private var customTranscriptHandler: ((String) -> Bool)?
+    private var customTranscriptOwner: UUID?
+    private var recordingTranscriptOwner: UUID?
+
+    func bindTranscriptHandler(owner: UUID, handler: @escaping (String) -> Bool) {
+        customTranscriptOwner = owner
+        customTranscriptHandler = handler
+    }
+
+    func unbindTranscriptHandler(owner: UUID) {
+        guard customTranscriptOwner == owner else { return }
+        customTranscriptOwner = nil
+        customTranscriptHandler = nil
+    }
 
     private let recorder: any CollieAudioCapturing
     private let voiceprintChecker: any CollieVoiceprintChecking
@@ -186,6 +199,7 @@ final class CollieVoiceController {
             previewText = ""
             previewUnavailable = false
             permissionGranted = false
+            recordingTranscriptOwner = customTranscriptOwner
             if customTranscriptHandler == nil {
                 await prepareTranscriptDelivery?(id)
             }
@@ -491,7 +505,10 @@ final class CollieVoiceController {
         }
         phase = .delivering
         let accepted: Bool
-        if let customTranscriptHandler {
+        if recordingTranscriptOwner != customTranscriptOwner {
+            // A retained recording never changes destination on retry or sheet dismissal.
+            accepted = false
+        } else if let customTranscriptHandler {
             accepted = customTranscriptHandler(transcript)
         } else {
             accepted = await deliverTranscript?(transcript, id) ?? false
