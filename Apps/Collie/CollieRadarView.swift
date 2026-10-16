@@ -140,12 +140,13 @@ struct CollieRadarView: View {
                             isDelivering: { controller.phase == .delivering },
                             canRetryDelivery: { controller.canRetryDelivery },
                             primaryActionEnabled: { controller.primaryActionEnabled },
-                            previewText: { controller.previewText },
+                            previewText: { controller.pendingTranscript ?? controller.previewText },
                             performAction: {
                                 if controller.canRetryDelivery { await controller.retryDelivery() }
                                 else { await controller.performPrimaryAction() }
                             },
                             cancelRecording: { controller.cancelRecording() },
+                            discardPendingTranscript: { controller.discardPendingTranscript() },
                             bindHandler: { owner, handler in controller.bindTranscriptHandler(owner: owner, handler: handler) },
                             unbindHandler: { owner in controller.unbindTranscriptHandler(owner: owner) }
                         )

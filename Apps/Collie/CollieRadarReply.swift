@@ -441,8 +441,10 @@ struct CollieRadarReplyVoiceAdapter {
     var previewText: () -> String
     var performAction: () async -> Void
     var cancelRecording: () -> Void
+    var discardPendingTranscript: () -> Void
     var bindHandler: (UUID, @escaping (String) -> Bool) -> Void
     var unbindHandler: (UUID) -> Void
+    var blocksDraftActions: Bool { canCancel() || isDelivering() || canRetryDelivery() }
 }
 
 struct CollieRadarReplyView: View {
@@ -450,13 +452,16 @@ struct CollieRadarReplyView: View {
     @State private var session: CollieRadarReplySession
     @State private var confirming = false
     @State private var discarding = false
+    @State private var discardingVoice = false
     @State private var voiceBinding = UUID()
     let store: CollieRadarStore
     let workbenchID: UUID
     var voice: CollieRadarReplyVoiceAdapter? = nil
     var nextAction: CollieRadarSnapshot.Action? = nil
     var onSelectNext: ((CollieRadarSnapshot.Action) -> Void)? = nil
-    private var voiceBusy: Bool { voice?.canCancel() == true || voice?.isDelivering() == true }
+    private var voiceBusy: Bool {
+        voice?.blocksDraftActions == true
+    }
 
     init(store: CollieRadarStore, workbenchID: UUID, source: String, action: CollieRadarSnapshot.Action,
          voice: CollieRadarReplyVoiceAdapter? = nil,
@@ -593,6 +598,12 @@ struct CollieRadarReplyView: View {
                                     if voice.canCancel() && !voice.isRecording() {
                                         ProgressView().controlSize(.small)
                                     }
+                                    if voice.canRetryDelivery() {
+                                        Button(radarText("放弃保留的转写"), role: .destructive) {
+                                            discardingVoice = true
+                                        }
+                                        .buttonStyle(.borderless)
+                                    }
                                     if voice.isRecording() {
                                         Button(radarText("取消录音"), role: .cancel) {
                                             voice.cancelRecording()
@@ -604,6 +615,7 @@ struct CollieRadarReplyView: View {
                                 let preview = voice.previewText()
                                 if !preview.isEmpty {
                                     Text(preview)
+                                        .textSelection(.enabled)
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -643,9 +655,13 @@ struct CollieRadarReplyView: View {
             .toolbar { ToolbarItem(placement: .cancellationAction) {
                 Button(radarText(session.recorded ? "完成" : "关闭")) {
                     if session.preserveDraft() { dismiss() }
-                }.disabled(session.busy || voice?.canCancel() == true || voice?.isDelivering() == true)
+                }.disabled(session.busy || voiceBusy)
             } }
-            .interactiveDismissDisabled(session.busy || voice?.canCancel() == true || voice?.isDelivering() == true || (!session.recorded && !session.pending && !session.text.isEmpty))
+            .interactiveDismissDisabled(session.busy || voiceBusy || (!session.recorded && !session.pending && !session.text.isEmpty))
+            .confirmationDialog(radarText("放弃这段文字？"), isPresented: $discardingVoice, titleVisibility: .visible) {
+                Button(radarText("放弃文字"), role: .destructive) { voice?.discardPendingTranscript() }
+                Button(radarText("保留"), role: .cancel) {}
+            }
             .alert(radarText("丢弃未发送草稿？"), isPresented: $discarding) {
                 Button(radarText("取消"), role: .cancel) {}
                 Button(radarText("丢弃未发送草稿"), role: .destructive) {

@@ -317,6 +317,20 @@ extension CollieEnhancementTests {
         XCTAssertTrue(ReplyFixtureProtocol.capture.data.isEmpty)
     }
 
+    func testRetainedVoiceBlocksDraftActionsUntilExplicitDiscard() {
+        var retained = true
+        let voice = CollieRadarReplyVoiceAdapter(
+            isRecording: { false }, canCancel: { false }, isDelivering: { false },
+            canRetryDelivery: { retained }, primaryActionEnabled: { !retained },
+            previewText: { retained ? "Retained synthetic transcript" : "" },
+            performAction: {}, cancelRecording: {}, discardPendingTranscript: { retained = false },
+            bindHandler: { _, _ in }, unbindHandler: { _ in })
+        XCTAssertTrue(voice.blocksDraftActions)
+        XCTAssertFalse(voice.previewText().isEmpty)
+        voice.discardPendingTranscript()
+        XCTAssertFalse(voice.blocksDraftActions)
+    }
+
     func testLateVoiceTranscriptCannotWriteAfterDismissalOrSourceChange() {
         let dismissed = replyFixture()
         dismissed.cancelHistory()
