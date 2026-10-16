@@ -90,6 +90,8 @@ struct CollieRadarSnapshot: Codable, Sendable {
     var reply_supported: Bool? = nil
     var source_refreshing: Bool? = nil
     var source_refresh_failed: Bool? = nil
+    var colab: CollieColabSnapshot? = nil
+    var colab_unavailable: Bool? = nil
     var allTasks: [Action] { tasks ?? decisions }
 
     var projects: [Project] { active + stale + cold }
@@ -250,7 +252,95 @@ struct CollieRadarSnapshot: Codable, Sendable {
               snapshot.projects.allSatisfy({ nonempty($0.path) && nonempty($0.name) && validTimestamp($0.timestamp) }),
               (snapshot.decisions + snapshot.allTasks).allSatisfy({ nonempty($0.project) && nonempty($0.title) &&
                   ($0.timestamp.map(validTimestamp) ?? true) }) else { throw CollieRadarError.invalidSnapshot }
+        guard snapshot.colab?.valid ?? true else { throw CollieRadarError.invalidSnapshot }
         return snapshot
+    }
+}
+
+/// Read-only producer telemetry, never permission to execute or proof of acceptance.
+struct CollieColabSnapshot: Codable, Sendable {
+    struct Usage: Codable, Sendable {
+        var status: String
+        var balance: Double?
+        var rate: Double?
+        var assignments: Int?
+        var observed_at: Double?
+    }
+    struct Budget: Codable, Sendable {
+        var measured_cu: Double
+        var unmeasured_runs: Int
+    }
+    struct Evaluation: Codable, Sendable {
+        var top1: Double?
+        var top5: Double?
+        var top10: Double?
+        var false_same_rate: Double?
+        var negative_rejection_rate: Double?
+        var acceptance_status: String?
+    }
+    struct Experiment: Codable, Sendable, Identifiable {
+        var id: String { fingerprint }
+        var fingerprint: String
+        var status: String
+        var completed_queries: Int?
+        var total_queries: Int?
+        var completed_batches: Int?
+        var total_batches: Int?
+        var measured_cu: Double?
+        var release_confirmed: Bool?
+        var baseline: Evaluation?
+        var candidate: Evaluation?
+    }
+    struct Execution: Codable, Sendable, Identifiable {
+        var id: String { request_id }
+        var request_id: String
+        var item_id: String
+        var operation: String
+        var fingerprint: String
+        var status: String
+    }
+    var version: Int
+    var observed_at: Double
+    var usage: Usage
+    var budget: Budget
+    var experiments: [Experiment]
+    var executions: [Execution]
+
+    var outdated: Bool { Date().timeIntervalSince1970 - observed_at > 300 }
+    var valid: Bool { valid(at: Date()) }
+    func valid(at now: Date) -> Bool {
+        func nonnegative(_ n: Double?) -> Bool { n.map { $0.isFinite && $0 >= 0 } ?? true }
+        func fingerprint(_ s: String) -> Bool { s.range(of: "^[0-9a-f]{64}$", options: .regularExpression) != nil }
+        func progress(_ done: Int?, _ total: Int?) -> Bool {
+            (done.map { $0 >= 0 } ?? true) && (total.map { $0 >= 0 } ?? true) &&
+                (done == nil || total == nil || done! <= total!)
+        }
+        guard version == 1, observed_at.isFinite, observed_at >= 0, observed_at <= now.timeIntervalSince1970 + 300,
+              ["sampled", "unavailable", "not_requested"].contains(usage.status),
+              [usage.balance, usage.rate, usage.observed_at].allSatisfy(nonnegative),
+              usage.observed_at.map({ $0 <= observed_at + 300 }) ?? true,
+              usage.assignments.map({ $0 >= 0 }) ?? true,
+              usage.status == "sampled" || (usage.balance == nil && usage.rate == nil && usage.assignments == nil && usage.observed_at == nil),
+              nonnegative(budget.measured_cu), budget.unmeasured_runs >= 0,
+              experiments.count <= 100, executions.count <= 100,
+              Set(experiments.map(\.id)).count == experiments.count,
+              Set(executions.map(\.id)).count == executions.count else { return false }
+        for item in experiments {
+            guard fingerprint(item.fingerprint),
+                  ["allocating", "running", "complete", "interrupted", "cleanup_unconfirmed", "recovered_cost_includes_interruption_interval", "unknown"].contains(item.status),
+                  progress(item.completed_queries, item.total_queries),
+                  progress(item.completed_batches, item.total_batches), nonnegative(item.measured_cu) else { return false }
+            for arm in [item.baseline, item.candidate].compactMap({ $0 }) {
+                guard [arm.top1, arm.top5, arm.top10, arm.false_same_rate, arm.negative_rejection_rate].allSatisfy(nonnegative),
+                      arm.acceptance_status.map({ !$0.isEmpty && $0.count <= 120 }) ?? true else { return false }
+            }
+        }
+        for item in executions {
+            guard UUID(uuidString: item.request_id) != nil, !item.item_id.isEmpty, item.item_id.count <= 120,
+                  ["colab.run", "colab.resume", "colab.recover", "colab.calibrate"].contains(item.operation),
+                  fingerprint(item.fingerprint), ["running", "complete", "failed", "uncertain"].contains(item.status) else { return false }
+        }
+        return true
     }
 }
 
@@ -283,6 +373,69 @@ enum CollieRadarTaskState {
     }
 }
 
+/// A human confirmation record, never a provider credential or execution token.
+struct CollieRadarAuthorization: Codable {
+    struct Budget: Codable {
+        var session_cu: Double
+        var total_cu: Double
+        var minutes: Double
+    }
+    var version: Int
+    var operation: String
+    var fingerprint: String
+    var subject: String
+    var scope: String
+    var expires_at: Double
+    var budget: Budget?
+    var digest: String
+
+    private enum CodingKeys: String, CodingKey {
+        case version, operation, fingerprint, subject, scope, expires_at, budget, digest
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(version, forKey: .version)
+        try container.encode(operation, forKey: .operation)
+        try container.encode(fingerprint, forKey: .fingerprint)
+        try container.encode(subject, forKey: .subject)
+        try container.encode(scope, forKey: .scope)
+        try container.encode(expires_at, forKey: .expires_at)
+        // The wire schema requires an explicit null for operations without budgets.
+        try container.encode(budget, forKey: .budget)
+        try container.encode(digest, forKey: .digest)
+    }
+
+    var operationLabel: String {
+        switch operation {
+        case "colab.run": return "运行实验"
+        case "colab.resume": return "续跑实验"
+        case "colab.recover": return "核对并释放实验资源"
+        case "colab.calibrate": return "校准晋级"
+        case "release.promote": return "申请发布固定版本"
+        default: return "未知操作"
+        }
+    }
+
+    var valid: Bool {
+        let operations = ["colab.run", "colab.resume", "colab.recover", "colab.calibrate", "release.promote"]
+        let length = operation == "release.promote" ? 40 : 64
+        guard version == 1, operations.contains(operation),
+              fingerprint.range(of: "^[0-9a-f]{\(length)}$", options: .regularExpression) != nil,
+              digest.range(of: "^[0-9a-f]{64}$", options: .regularExpression) != nil,
+              !subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, subject.count <= 200,
+              !scope.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, scope.count <= 2000,
+              expires_at.isFinite, expires_at > 0, expires_at < 253402300800 else { return false }
+        if ["colab.run", "colab.resume"].contains(operation) {
+            guard let budget else { return false }
+            return [budget.session_cu, budget.total_cu, budget.minutes].allSatisfy { $0.isFinite && $0 > 0 }
+                && budget.session_cu <= budget.total_cu
+        }
+        return budget == nil
+    }
+    func current(at now: Date = Date()) -> Bool { valid && expires_at > now.timeIntervalSince1970 }
+}
+
 struct CollieRadarReplyTarget: Codable {
     var eligible: Bool
     var epoch: String
@@ -293,6 +446,7 @@ struct CollieRadarReplyTarget: Codable {
     var next: String
     var version: String
     var owner_session: String? = nil
+    var authorization: CollieRadarAuthorization? = nil
 }
 
 /// Read-only source history. No local history database or synthesized delivery state.
@@ -377,6 +531,7 @@ struct CollieRadarPendingReply: Codable {
     var text: String
     var requestID: UUID
     var submitted: Bool? = nil
+    var authorizationConfirmed: Bool? = nil
 
     static func file(_ id: UUID) -> URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]

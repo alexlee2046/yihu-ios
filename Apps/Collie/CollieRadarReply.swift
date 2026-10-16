@@ -18,6 +18,9 @@ private struct CollieRadarReplyRequest: Encodable {
     var confirmed: Bool
     var epoch: String?
     var before: String? = nil
+    var authorization_confirmed: Bool? = nil
+    var authorization_digest: String? = nil
+    var authorization: CollieRadarAuthorization? = nil
 }
 
 private struct CollieRadarReplyFailure: Error {
@@ -42,6 +45,7 @@ final class CollieRadarReplySession {
     private(set) var notice: String?
     private(set) var blocked = false
     private var requestID = UUID()
+    private(set) var authorizationConfirmed = false
     private let workbenchID: UUID
     private let source: String
     private let selected: CollieRadarSnapshot.Action
@@ -80,6 +84,7 @@ final class CollieRadarReplySession {
                 text = saved.text
                 requestID = saved.requestID
                 pending = saved.submitted != false
+                authorizationConfirmed = saved.authorizationConfirmed == true
                 if pending { notice = radarText("有待核实的回复，先查回结果再重试。") }
             } catch {
                 blocked = true
@@ -93,6 +98,10 @@ final class CollieRadarReplySession {
         (history.map { $0.target.version == target?.version } ?? true) &&
         !busy && !blocked && !pending && !recorded &&
         !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && text.unicodeScalars.count <= 4000
+    }
+
+    var canAuthorize: Bool {
+        canSend && selectedMatchesTarget && target?.authorization?.current() == true
     }
 
     func prepare() async {
@@ -152,7 +161,8 @@ final class CollieRadarReplySession {
         values.isExcludedFromBackup = true
         try excluded.setResourceValues(values)
         let record = CollieRadarPendingReply(source: source, target: target, text: text,
-                                            requestID: requestID, submitted: submitted)
+                                            requestID: requestID, submitted: submitted,
+                                            authorizationConfirmed: authorizationConfirmed)
         let data = try JSONEncoder().encode(record)
         #if os(iOS)
         try data.write(to: file, options: [.atomic, .completeFileProtection])
@@ -161,8 +171,9 @@ final class CollieRadarReplySession {
         #endif
     }
 
-    func submit() async {
-        guard canSend, let target else { return }
+    func submit(authorizing: Bool = false) async {
+        guard canSend, !authorizing || canAuthorize, let target else { return }
+        authorizationConfirmed = authorizing
         busy = true
         defer { busy = false }
         do {
@@ -170,6 +181,7 @@ final class CollieRadarReplySession {
             // not turn an uncertain write into a new comment.
             try persist(target, submitted: true)
         } catch {
+            authorizationConfirmed = false
             notice = radarText("无法安全保存待核回复，尚未发送。")
             return
         }
@@ -179,7 +191,7 @@ final class CollieRadarReplySession {
             guard result.outcome == "recorded" else { throw CollieRadarError.invalidSnapshot }
             complete()
         } catch let error as CollieRadarReplyFailure {
-            if ["forbidden", "invalid_request", "target_changed", "target_unavailable", "write_rejected"].contains(error.code) {
+            if ["forbidden", "invalid_request", "target_changed", "target_unavailable", "write_rejected", "invalid_authorization", "authorization_expired"].contains(error.code) {
                 if let latest = error.target { self.target = latest }
                 else if ["forbidden", "target_unavailable"].contains(error.code) { self.target = nil }
                 if clearPending() { requestID = UUID() }
@@ -229,7 +241,9 @@ final class CollieRadarReplySession {
         historyGeneration += 1
         historyBusy = false
         recorded = true
-        if clearPending() { notice = radarText("已记录，待 PM／负责人处理。") }
+        if clearPending() {
+            notice = radarText(authorizationConfirmed ? "授权确认已记录；尚未执行，仍须原执行入口核验。" : "已记录，待 PM／负责人处理。")
+        }
     }
 
     private func request(_ operation: String, id: String, version: String? = nil, before: String? = nil) async throws -> CollieRadarReplyResponse {
@@ -248,7 +262,10 @@ final class CollieRadarReplySession {
         request.setValue("1", forHTTPHeaderField: "X-Yihu-Reply")
         request.httpBody = try JSONEncoder().encode(CollieRadarReplyRequest(
             operation: operation, id: id, text: ["prepare", "history"].contains(operation) ? "" : text, request_id: requestID.uuidString,
-            version: version, confirmed: operation == "submit", epoch: target?.epoch, before: before))
+            version: version, confirmed: operation == "submit", epoch: target?.epoch, before: before,
+            authorization_confirmed: authorizationConfirmed ? true : nil,
+            authorization_digest: authorizationConfirmed ? target?.authorization?.digest : nil,
+            authorization: authorizationConfirmed ? target?.authorization : nil))
         guard let body = request.httpBody, body.count <= 20_000 else {
             throw CollieRadarReplyFailure(code: "invalid_request")
         }
@@ -425,6 +442,8 @@ final class CollieRadarReplySession {
         case "target_changed": return radarText("条目状态或下一步已变化，请重新核对；当前不一定仍可回复。")
         case "request_reused": return radarText("这次请求已用于另一份回复，请核实原条目。")
         case "invalid_request": return radarText("回复无效或过长，请修改后重新确认。")
+        case "invalid_authorization": return radarText("授权申请格式无效，请负责人修正原条目；未授权、未执行。")
+        case "authorization_expired": return radarText("授权申请已过期或范围已变化，请重新读取并核对；未授权、未执行。")
         case "write_rejected": return radarText("回复被安全规则拒绝，或写入口暂不可用；请修改或稍后重试。")
         default: return radarText("无法核实条目或回复结果，请稍后重试。")
         }
@@ -451,6 +470,7 @@ struct CollieRadarReplyView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var session: CollieRadarReplySession
     @State private var confirming = false
+    @State private var authorizing = false
     @State private var discarding = false
     @State private var discardingVoice = false
     @State private var voiceBinding = UUID()
@@ -628,6 +648,9 @@ struct CollieRadarReplyView: View {
                         if let notice = session.notice {
                             Section { Text(notice).foregroundStyle(session.recorded ? Color.secondary : Color.orange) }
                         }
+                        if let authorization = session.target?.authorization {
+                            authorizationSection(authorization)
+                        }
                         Section {
                             if session.busy { ProgressView() }
                             if session.canSelectNext, let nextAction, let onSelectNext {
@@ -644,7 +667,20 @@ struct CollieRadarReplyView: View {
                                 } }.disabled(session.busy)
                             } else if !session.recorded && !session.blocked {
                                 Button(radarText("重新读取条目")) { Task { await session.prepare() } }.disabled(session.busy)
-                                Button(radarText("确认并发送回复")) { confirming = true }.disabled(!session.canSend || voiceBusy)
+                                Button(radarText("确认并发送回复")) {
+                                    authorizing = false
+                                    confirming = true
+                                }.disabled(!session.canSend || voiceBusy)
+                                if session.target?.authorization != nil {
+                                    Button(radarText("核对并记录本次授权")) {
+                                        authorizing = true
+                                        confirming = true
+                                    }
+                                    .disabled(!session.canAuthorize || voiceBusy)
+                                    .accessibilityIdentifier("collie-radar-authorize")
+                                    Text(radarText("授权须填写备注并再次确认；普通回复不构成操作授权。"))
+                                        .font(.caption).foregroundStyle(.secondary)
+                                }
                                 Button(radarText("丢弃未发送草稿"), role: .destructive) { discarding = true }.disabled(session.busy || voiceBusy)
                             }
                         }
@@ -692,24 +728,50 @@ struct CollieRadarReplyView: View {
                                 Text(target.next.isEmpty ? radarText("下一步待补") : target.next)
                             }
                         }
+                        if authorizing, let authorization = session.target?.authorization {
+                            authorizationSection(authorization)
+                        }
                         Section(radarText("回复原文")) { Text(session.text).textSelection(.enabled) }
-                        Button(radarText("发送回复")) {
+                        Button(radarText(authorizing ? "仅确认上述范围并记录授权" : "发送回复")) {
                             confirming = false
                             Task {
-                                await session.submit()
+                                await session.submit(authorizing: authorizing)
                                 if session.recorded {
                                     await session.loadHistory()
                                     await store.refresh(workbenchID)
                                 }
                             }
-                        }.disabled(!session.canSend || voiceBusy)
+                        }.disabled((authorizing ? !session.canAuthorize : !session.canSend) || voiceBusy)
                     }
-                    .navigationTitle(radarText("确认发送到原条目？"))
+                    .navigationTitle(radarText(authorizing ? "确认本次操作授权？" : "确认发送到原条目？"))
                     .toolbar { ToolbarItem(placement: .cancellationAction) {
                         Button(radarText("取消")) { confirming = false }
                     } }
                 }
             }
+        }
+    }
+
+    private func authorizationSection(_ request: CollieRadarAuthorization) -> some View {
+        Section(radarText("本次授权范围")) {
+            Text(radarText(request.operationLabel)).font(.headline)
+            Text(request.subject)
+            Text(request.scope).textSelection(.enabled)
+            LabeledContent(radarText("固定指纹")) {
+                Text(request.fingerprint).font(.caption.monospaced()).textSelection(.enabled)
+            }
+            if let budget = request.budget {
+                Text("\(radarText("单次 CU 上限"))：\(budget.session_cu.formatted())")
+                Text("\(radarText("累计 CU 上限"))：\(budget.total_cu.formatted())")
+                Text("\(radarText("分钟上限"))：\(budget.minutes.formatted())")
+                Text(radarText("预算是停止目标，不是云平台硬限额；不允许自动扩额或购买。"))
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+            LabeledContent(radarText("授权申请到期")) {
+                Text(Date(timeIntervalSince1970: request.expires_at), format: .dateTime)
+            }
+            Text(radarText("只记录这一次、上述范围的确认；不会自动执行。原工具须核验精确指纹和预算，生产发布仍需独立签名授权。"))
+                .font(.caption).foregroundStyle(.secondary)
         }
     }
 }

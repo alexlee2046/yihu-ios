@@ -1,0 +1,114 @@
+{
+  "source": "https://github.com/alexlee2046/yihu-ios/blob/cf14dcfc386401ec9c7c0b27002b1721ab155776/tools/radar_authorization.py",
+  "source_sha256": "d633b74d4b6e65e1688d76eb260f9b503e4676a9b2e0b8ee00538025bc256ed3",
+  "cases": [
+    {
+      "name": "colab.run-integers",
+      "request": {
+        "version": 1,
+        "operation": "colab.run",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "合成实验",
+        "scope": "仅公开/合成图片发送至 Colab；不发布",
+        "expires_at": 2000000000,
+        "budget": {
+          "session_cu": 5,
+          "total_cu": 100,
+          "minutes": 15
+        }
+      },
+      "canonical": "{\"budget\":{\"minutes\":15,\"session_cu\":5,\"total_cu\":100},\"expires_at\":2000000000,\"fingerprint\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"operation\":\"colab.run\",\"scope\":\"仅公开/合成图片发送至 Colab；不发布\",\"subject\":\"合成实验\",\"version\":1}",
+      "digest": "3e2b1ee2c587d5fdbea2f4b87143652879466b76d67b37622a0430bb3b290327"
+    },
+    {
+      "name": "colab.run-floats",
+      "request": {
+        "version": 1,
+        "operation": "colab.run",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "合成实验",
+        "scope": "仅公开/合成图片发送至 Colab；不发布",
+        "expires_at": 2000000000,
+        "budget": {
+          "session_cu": 5.0,
+          "total_cu": 100.0,
+          "minutes": 15.0
+        }
+      },
+      "canonical": "{\"budget\":{\"minutes\":15,\"session_cu\":5,\"total_cu\":100},\"expires_at\":2000000000,\"fingerprint\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"operation\":\"colab.run\",\"scope\":\"仅公开/合成图片发送至 Colab；不发布\",\"subject\":\"合成实验\",\"version\":1}",
+      "digest": "3e2b1ee2c587d5fdbea2f4b87143652879466b76d67b37622a0430bb3b290327"
+    },
+    {
+      "name": "colab.run-fractional",
+      "request": {
+        "version": 1,
+        "operation": "colab.run",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "合成实验",
+        "scope": "仅公开/合成图片发送至 Colab；不发布",
+        "expires_at": 2000000000,
+        "budget": {
+          "session_cu": 1.25,
+          "total_cu": 20.5,
+          "minutes": 2.5
+        }
+      },
+      "canonical": "{\"budget\":{\"minutes\":2.5,\"session_cu\":1.25,\"total_cu\":20.5},\"expires_at\":2000000000,\"fingerprint\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"operation\":\"colab.run\",\"scope\":\"仅公开/合成图片发送至 Colab；不发布\",\"subject\":\"合成实验\",\"version\":1}",
+      "digest": "1e80e50c27fe19086ccf19bf44f719153d9c6dc8074719090fce7fff72e96eb7"
+    },
+    {
+      "name": "colab.resume-integers",
+      "request": {
+        "version": 1,
+        "operation": "colab.resume",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "合成实验",
+        "scope": "仅公开/合成图片发送至 Colab；不发布",
+        "expires_at": 2000000000,
+        "budget": {
+          "session_cu": 5,
+          "total_cu": 100,
+          "minutes": 15
+        }
+      },
+      "canonical": "{\"budget\":{\"minutes\":15,\"session_cu\":5,\"total_cu\":100},\"expires_at\":2000000000,\"fingerprint\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"operation\":\"colab.resume\",\"scope\":\"仅公开/合成图片发送至 Colab；不发布\",\"subject\":\"合成实验\",\"version\":1}",
+      "digest": "0d5d58d27b3d0357268d98b55c5cfc9eabd365886deaf8f28bca7c59e40bcf4a"
+    },
+    {
+      "name": "colab.resume-floats",
+      "request": {
+        "version": 1,
+        "operation": "colab.resume",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "合成实验",
+        "scope": "仅公开/合成图片发送至 Colab；不发布",
+        "expires_at": 2000000000,
+        "budget": {
+          "session_cu": 5.0,
+          "total_cu": 100.0,
+          "minutes": 15.0
+        }
+      },
+      "canonical": "{\"budget\":{\"minutes\":15,\"session_cu\":5,\"total_cu\":100},\"expires_at\":2000000000,\"fingerprint\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"operation\":\"colab.resume\",\"scope\":\"仅公开/合成图片发送至 Colab；不发布\",\"subject\":\"合成实验\",\"version\":1}",
+      "digest": "0d5d58d27b3d0357268d98b55c5cfc9eabd365886deaf8f28bca7c59e40bcf4a"
+    },
+    {
+      "name": "colab.resume-fractional",
+      "request": {
+        "version": 1,
+        "operation": "colab.resume",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "合成实验",
+        "scope": "仅公开/合成图片发送至 Colab；不发布",
+        "expires_at": 2000000000,
+        "budget": {
+          "session_cu": 1.25,
+          "total_cu": 20.5,
+          "minutes": 2.5
+        }
+      },
+      "canonical": "{\"budget\":{\"minutes\":2.5,\"session_cu\":1.25,\"total_cu\":20.5},\"expires_at\":2000000000,\"fingerprint\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"operation\":\"colab.resume\",\"scope\":\"仅公开/合成图片发送至 Colab；不发布\",\"subject\":\"合成实验\",\"version\":1}",
+      "digest": "e29ff20129d1441bc59863ccab02a8b23afffdc4cd8c4f0b60352462cbd280f2"
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "description": "Synthetic offline contract; not model-quality or execution evidence.",
+  "source": {
+    "ledger": {
+      "runs": [
+        {
+          "id": "cwb-000000000001",
+          "experiment": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "status": "complete",
+          "released": true,
+          "measured_cu": 0.25,
+          "completed_queries": 4,
+          "total_queries": 4,
+          "completed_batches": 2,
+          "total_batches": 2
+        }
+      ],
+      "executions": {
+        "00000000-0000-4000-8000-000000000001": {
+          "item_id": "PVTI_synthetic",
+          "operation": "colab.run",
+          "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "status": "running"
+        }
+      }
+    },
+    "summaries": {
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+        "experiment": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "completed": 4,
+        "queries": 4,
+        "baseline": {
+          "top1": 0.5,
+          "top5": 1.0,
+          "top10": 1.0,
+          "false_same_rate": 0.0,
+          "negative_rejection_rate": 1.0,
+          "acceptance_status": "evaluated"
+        },
+        "candidate": {
+          "top1": 0.5,
+          "top5": 1.0,
+          "top10": 1.0,
+          "false_same_rate": 0.0,
+          "negative_rejection_rate": 1.0,
+          "acceptance_status": "evaluated"
+        }
+      }
+    }
+  },
+  "snapshot": {
+    "version": 1,
+    "observed_at": 1792195200.0,
+    "usage": {
+      "status": "not_requested",
+      "balance": null,
+      "rate": null,
+      "assignments": null,
+      "observed_at": null
+    },
+    "budget": {
+      "measured_cu": 0.25,
+      "unmeasured_runs": 0
+    },
+    "experiments": [
+      {
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "status": "complete",
+        "completed_queries": 4,
+        "total_queries": 4,
+        "completed_batches": 2,
+        "total_batches": 2,
+        "measured_cu": 0.25,
+        "release_confirmed": true,
+        "baseline": {
+          "top1": 0.5,
+          "top5": 1.0,
+          "top10": 1.0,
+          "false_same_rate": 0.0,
+          "negative_rejection_rate": 1.0,
+          "acceptance_status": "evaluated"
+        },
+        "candidate": {
+          "top1": 0.5,
+          "top5": 1.0,
+          "top10": 1.0,
+          "false_same_rate": 0.0,
+          "negative_rejection_rate": 1.0,
+          "acceptance_status": "evaluated"
+        }
+      }
+    ],
+    "executions": [
+      {
+        "item_id": "PVTI_synthetic",
+        "operation": "colab.run",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "status": "uncertain",
+        "request_id": "00000000-0000-4000-8000-000000000001"
+      }
+    ]
+  }
+}

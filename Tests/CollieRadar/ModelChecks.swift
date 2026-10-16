@@ -280,6 +280,73 @@ struct CollieRadarModelChecks {
         precondition(corrupt.add() == nil)
         precondition(defaults.data(forKey: "collie.radar.workbenches.v1") == original)
 
+        let authorization = CollieRadarAuthorization(version: 1, operation: "colab.run",
+            fingerprint: String(repeating: "a", count: 64), subject: "Synthetic batch", scope: "Public images only",
+            expires_at: 2000, budget: .init(session_cu: 5, total_cu: 100, minutes: 15),
+            digest: String(repeating: "b", count: 64))
+        precondition(authorization.valid)
+        precondition(authorization.current(at: Date(timeIntervalSince1970: 1999)))
+        precondition(!authorization.current(at: Date(timeIntervalSince1970: 2000)))
+        var invalidAuthorization = authorization
+        invalidAuthorization.operation = "shell"
+        precondition(!invalidAuthorization.valid)
+        invalidAuthorization = authorization
+        invalidAuthorization.budget!.session_cu = 101
+        precondition(!invalidAuthorization.valid)
+        invalidAuthorization = authorization
+        invalidAuthorization.fingerprint = String(repeating: "a", count: 40)
+        precondition(!invalidAuthorization.valid)
+        invalidAuthorization.operation = "release.promote"
+        invalidAuthorization.budget = nil
+        precondition(invalidAuthorization.valid)
+        for operation in ["release.promote", "colab.recover", "colab.calibrate"] {
+            invalidAuthorization.operation = operation
+            invalidAuthorization.fingerprint = String(repeating: "a", count: operation == "release.promote" ? 40 : 64)
+            let data = try JSONEncoder().encode(invalidAuthorization)
+            let object = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+            precondition(object["budget"] is NSNull)
+            let decoded = try JSONDecoder().decode(CollieRadarAuthorization.self, from: data)
+            precondition(decoded.valid)
+        }
+        let authorizationData = try JSONEncoder().encode(authorization)
+        precondition(!String(data: authorizationData, encoding: .utf8)!.contains("token"))
+
+        let sharedFixture = try JSONSerialization.jsonObject(with: Data(contentsOf:
+            URL(fileURLWithPath: "Tests/CollieRadar/fixtures/colab_snapshot.json"))) as! [String: Any]
+        let sharedTelemetry = try JSONDecoder().decode(CollieColabSnapshot.self,
+            from: JSONSerialization.data(withJSONObject: sharedFixture["snapshot"]!))
+        precondition(sharedTelemetry.valid(at: Date(timeIntervalSince1970: sharedTelemetry.observed_at)))
+        precondition(sharedTelemetry.executions[0].status == "uncertain")
+        precondition(sharedTelemetry.experiments[0].candidate?.top1 == 0.5)
+
+        var telemetry = CollieColabSnapshot(version: 1, observed_at: 1000,
+            usage: .init(status: "not_requested", balance: nil, rate: nil, assignments: nil, observed_at: nil),
+            budget: .init(measured_cu: 0, unmeasured_runs: 1),
+            experiments: [.init(fingerprint: String(repeating: "a", count: 64), status: "cleanup_unconfirmed",
+                completed_queries: nil, total_queries: 80, completed_batches: 0, total_batches: nil,
+                measured_cu: nil, release_confirmed: nil, baseline: nil, candidate: nil)],
+            executions: [.init(request_id: "11111111-2222-4333-8444-555555555555", item_id: "PVTI_synthetic",
+                operation: "colab.run", fingerprint: String(repeating: "a", count: 64), status: "uncertain")])
+        precondition(telemetry.valid && telemetry.outdated)
+        var telemetryEnvelope = downloaded
+        telemetryEnvelope.colab = telemetry
+        let decodedTelemetry = try CollieRadarSnapshot.decode(JSONEncoder().encode(telemetryEnvelope))
+        precondition(decodedTelemetry.colab?.usage.balance == nil)
+        precondition(decodedTelemetry.colab?.experiments[0].release_confirmed == nil)
+        telemetry.usage.balance = 0
+        precondition(!telemetry.valid) // unavailable usage must not become a false zero
+        telemetry.usage.balance = nil
+        telemetry.experiments[0].completed_queries = 81
+        precondition(!telemetry.valid)
+        telemetry.experiments[0].completed_queries = nil
+        telemetry.executions[0].status = "accepted"
+        precondition(!telemetry.valid)
+        telemetryEnvelope.colab = telemetry
+        do {
+            _ = try CollieRadarSnapshot.decode(JSONEncoder().encode(telemetryEnvelope))
+            preconditionFailure("Invalid telemetry accepted")
+        } catch CollieRadarError.invalidSnapshot { }
+
         // Source-scoped history, including read-only completed items.
         let target: [String: Any] = ["eligible": false, "epoch": "fixture", "id": "PVTI_fixture",
                                     "title": "Synthetic", "url": "https://fixture.invalid/issues/1",

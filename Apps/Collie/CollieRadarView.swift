@@ -178,6 +178,81 @@ struct CollieRadarView: View {
         }
     }
 
+    private func metric(_ value: Double?) -> String {
+        value.map { $0.formatted(.number.precision(.fractionLength(0...3))) } ?? "未知"
+    }
+
+    private func count(_ value: Int?) -> String { value.map(String.init) ?? "未知" }
+
+    @ViewBuilder
+    private func evaluation(_ title: String, _ arm: CollieColabSnapshot.Evaluation?) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title).font(.subheadline.bold())
+            Text("Top1 / Top5 / Top10：\(metric(arm?.top1)) / \(metric(arm?.top5)) / \(metric(arm?.top10))")
+            Text("误同率：\(metric(arm?.false_same_rate)) · 负样本拒绝率：\(metric(arm?.negative_rejection_rate))")
+            Text("评测状态：\(arm?.acceptance_status ?? "未知")")
+        }.font(.caption)
+    }
+
+    @ViewBuilder
+    private func colabContent(_ data: CollieColabSnapshot) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Colab 受控工作台 · 只读", systemImage: "chart.bar")
+                .font(.headline)
+            Text("读取时间：\(Date(timeIntervalSince1970: data.observed_at).formatted())")
+                .font(.caption).foregroundStyle(.secondary)
+            if data.outdated {
+                Label("实验快照已过期，请刷新；不代表当前资源状态。", systemImage: "clock.badge.exclamationmark")
+                    .font(.footnote).foregroundStyle(.orange)
+            }
+            Text("余额 CU：\(metric(data.usage.balance)) · 速率：\(metric(data.usage.rate)) · 分配数：\(count(data.usage.assignments))")
+                .font(.subheadline)
+            if let sampledAt = data.usage.observed_at {
+                Text("用量采样：\(Date(timeIntervalSince1970: sampledAt).formatted())")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+            if data.usage.status != "sampled" {
+                Text(data.usage.status == "not_requested" ? "未请求实时用量；未知不等于零。" : "实时用量不可用；未知不等于零。")
+                    .font(.footnote).foregroundStyle(.orange)
+            }
+            Text("已测 CU：\(metric(data.budget.measured_cu)) · 未测运行：\(data.budget.unmeasured_runs)")
+                .font(.subheadline)
+            Text("只读账本不扩额；操作授权仍在原条目二次确认，执行须通过原入口。")
+                .font(.caption).foregroundStyle(.secondary)
+            ForEach(data.experiments) { item in
+                Divider()
+                Text(item.fingerprint).font(.caption.monospaced()).textSelection(.enabled)
+                Text("状态：\(item.status) · 已测 CU：\(metric(item.measured_cu))").font(.subheadline)
+                Text("查询 \(count(item.completed_queries)) / \(count(item.total_queries)) · 批次 \(count(item.completed_batches)) / \(count(item.total_batches))")
+                    .font(.caption)
+                if item.release_confirmed != true {
+                    Label(item.release_confirmed == false ? "资源释放未确认" : "资源释放状态未知", systemImage: "exclamationmark.triangle")
+                        .font(.footnote).foregroundStyle(.orange)
+                } else {
+                    Label("台账记录已确认释放", systemImage: "checkmark.circle").font(.caption)
+                }
+                evaluation("Baseline", item.baseline)
+                evaluation("Candidate", item.candidate)
+            }
+            ForEach(data.executions) { execution in
+                Divider()
+                Text("\(execution.operation) · \(execution.status)").font(.subheadline)
+                Text("request_id：\(execution.request_id)").font(.caption.monospaced()).textSelection(.enabled)
+                Text("条目：\(execution.item_id)").font(.caption)
+                if execution.status == "uncertain" {
+                    Text("执行结果待核；请沿原 request_id 查回，不新建请求重跑。")
+                        .font(.footnote).foregroundStyle(.orange)
+                }
+            }
+            Text("执行或评测完成不等于产品验收、发布授权或实际真机通过。")
+                .font(.caption).foregroundStyle(.secondary)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 16))
+        .accessibilityIdentifier("collie-colab-workbench")
+    }
+
     private var searchBinding: Binding<String> {
         Binding(get: { record?.display.searchText ?? "" }, set: { query in
             guard var item = record else { return }
@@ -220,6 +295,14 @@ struct CollieRadarView: View {
             }
             Text(radarText("代码更新时间仅供参考，不代表任务停工或完成。"))
                 .font(.caption).foregroundStyle(.secondary)
+        }
+        if display.page == .overview {
+            if snapshot.colab_unavailable == true {
+                Label("Colab 数据读取失败；台账仍可查看，请刷新重试。", systemImage: "exclamationmark.triangle")
+                    .font(.footnote).foregroundStyle(.orange)
+            } else if let colab = snapshot.colab {
+                colabContent(colab)
+            }
         }
         Picker(radarText("筛选项目"), selection: projectBinding) {
             Text(radarText("所有项目")).tag("")
