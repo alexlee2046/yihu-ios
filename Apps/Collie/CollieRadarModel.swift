@@ -299,6 +299,23 @@ struct CollieRadarAuthorization: Codable {
     var budget: Budget?
     var digest: String
 
+    private enum CodingKeys: String, CodingKey {
+        case version, operation, fingerprint, subject, scope, expires_at, budget, digest
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(version, forKey: .version)
+        try container.encode(operation, forKey: .operation)
+        try container.encode(fingerprint, forKey: .fingerprint)
+        try container.encode(subject, forKey: .subject)
+        try container.encode(scope, forKey: .scope)
+        try container.encode(expires_at, forKey: .expires_at)
+        // The wire schema requires an explicit null for operations without budgets.
+        try container.encode(budget, forKey: .budget)
+        try container.encode(digest, forKey: .digest)
+    }
+
     var operationLabel: String {
         switch operation {
         case "colab.run": return "运行实验"

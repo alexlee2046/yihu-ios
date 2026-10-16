@@ -432,6 +432,17 @@ class HistoryChecks(unittest.TestCase):
         self.assertEqual(self.mocks[-1].call_args.args[0][1], "-c")
         self.assertIn("'note'", self.mocks[-1].call_args.args[0][2])
 
+    def test_integral_float_budgets_survive_phone_json_round_trip(self):
+        integer_request = self.authorization()
+        float_request = self.authorization(budget={"session_cu": 5.0, "total_cu": 100.0, "minutes": 15.0})
+        self.assertEqual(float_request["digest"], integer_request["digest"])
+        payload = self.approval_payload()
+        # Swift JSONEncoder emits integral Double values without a decimal point.
+        payload["authorization"]["budget"] = {"session_cu": 5, "total_cu": 100, "minutes": 15}
+        self.mocks[-1].side_effect = self.record_command
+        self.assertEqual(radar.reply(payload, self.owner, "epoch", {})["outcome"], "recorded")
+        self.mocks[-1].assert_called_once()
+
     def test_authorization_changes_and_expiry_refuse_before_any_write(self):
         self.authorization()
         payload = self.approval_payload()

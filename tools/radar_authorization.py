@@ -61,6 +61,10 @@ def parse_request(body):
             raise ValueError("invalid authorization budget")
         if budget["session_cu"] > budget["total_cu"]:
             raise ValueError("invalid authorization budget")
+        # JSONEncoder emits integral Swift Doubles as integers. Bind the value,
+        # not the producer's choice of 5 versus 5.0, across phone round trips.
+        request["budget"] = {k: int(v) if isinstance(v, float) and v.is_integer() else v
+                             for k, v in budget.items()}
     elif budget is not None:
         raise ValueError("unexpected authorization budget")
     result = dict(request)

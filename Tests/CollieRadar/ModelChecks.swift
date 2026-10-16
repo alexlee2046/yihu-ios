@@ -299,6 +299,15 @@ struct CollieRadarModelChecks {
         invalidAuthorization.operation = "release.promote"
         invalidAuthorization.budget = nil
         precondition(invalidAuthorization.valid)
+        for operation in ["release.promote", "colab.recover", "colab.calibrate"] {
+            invalidAuthorization.operation = operation
+            invalidAuthorization.fingerprint = String(repeating: "a", count: operation == "release.promote" ? 40 : 64)
+            let data = try JSONEncoder().encode(invalidAuthorization)
+            let object = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+            precondition(object["budget"] is NSNull)
+            let decoded = try JSONDecoder().decode(CollieRadarAuthorization.self, from: data)
+            precondition(decoded.valid)
+        }
         let authorizationData = try JSONEncoder().encode(authorization)
         precondition(!String(data: authorizationData, encoding: .utf8)!.contains("token"))
 
