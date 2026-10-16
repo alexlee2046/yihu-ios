@@ -339,6 +339,22 @@ final class CollieRadarReplySession {
         if candidate.unicodeScalars.count <= 4000 { text = candidate }
     }
 
+    @discardableResult
+    func appendVoiceTranscript(_ transcript: String) -> Bool {
+        guard historyActive, currentSource(), !busy, !pending, !recorded, !blocked else { return false }
+        let cleaned = transcript.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !cleaned.isEmpty else { return false }
+        let candidate = text + (text.isEmpty ? "" : "\n") + cleaned
+        guard candidate.unicodeScalars.count <= 4000 else { return false }
+        let previousText = text
+        text = candidate
+        guard preserveDraft() else {
+            text = previousText
+            return false
+        }
+        return true
+    }
+
     func activateHistory() { historyActive = true }
     func cancelHistory() {
         historyActive = false
@@ -415,21 +431,45 @@ final class CollieRadarReplySession {
     }
 }
 
+@MainActor
+struct CollieRadarReplyVoiceAdapter {
+    var isRecording: () -> Bool
+    var canCancel: () -> Bool
+    var isDelivering: () -> Bool
+    var canRetryDelivery: () -> Bool
+    var primaryActionEnabled: () -> Bool
+    var previewText: () -> String
+    var performAction: () async -> Void
+    var cancelRecording: () -> Void
+    var discardPendingTranscript: () -> Void
+    var bindHandler: (UUID, @escaping (String) -> Bool) -> Void
+    var unbindHandler: (UUID) -> Void
+    var blocksDraftActions: Bool { canCancel() || isDelivering() || canRetryDelivery() }
+}
+
 struct CollieRadarReplyView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var session: CollieRadarReplySession
     @State private var confirming = false
     @State private var discarding = false
+    @State private var discardingVoice = false
+    @State private var voiceBinding = UUID()
     let store: CollieRadarStore
     let workbenchID: UUID
+    var voice: CollieRadarReplyVoiceAdapter? = nil
     var nextAction: CollieRadarSnapshot.Action? = nil
     var onSelectNext: ((CollieRadarSnapshot.Action) -> Void)? = nil
+    private var voiceBusy: Bool {
+        voice?.blocksDraftActions == true
+    }
 
     init(store: CollieRadarStore, workbenchID: UUID, source: String, action: CollieRadarSnapshot.Action,
+         voice: CollieRadarReplyVoiceAdapter? = nil,
          nextAction: CollieRadarSnapshot.Action? = nil,
          onSelectNext: ((CollieRadarSnapshot.Action) -> Void)? = nil) {
         self.store = store
         self.workbenchID = workbenchID
+        self.voice = voice
         self.nextAction = nextAction
         self.onSelectNext = onSelectNext
         _session = State(initialValue: CollieRadarReplySession(workbenchID: workbenchID, source: source, selected: action,
@@ -538,6 +578,48 @@ struct CollieRadarReplyView: View {
                                     .padding(.vertical, 2)
                                 }
                             }
+                            if let voice, !session.recorded, !session.pending, !session.blocked {
+                                HStack(spacing: 8) {
+                                    Button {
+                                        Task { await voice.performAction() }
+                                    } label: {
+                                        Label(
+                                            voice.isRecording() ? radarText("结束语音输入") :
+                                            (voice.canRetryDelivery() ? radarText("填入保留的语音转写") : radarText("语音输入回复")),
+                                            systemImage: voice.isRecording() ? "stop.fill" :
+                                            (voice.canRetryDelivery() ? "arrow.down.doc" : "mic.fill")
+                                        )
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .controlSize(.small)
+                                    .tint(voice.isRecording() ? .red : .accentColor)
+                                    .disabled(session.busy || (!voice.primaryActionEnabled() && !voice.canRetryDelivery()))
+                                    .accessibilityIdentifier("collie-radar-reply-voice")
+                                    if voice.canCancel() && !voice.isRecording() {
+                                        ProgressView().controlSize(.small)
+                                    }
+                                    if voice.canRetryDelivery() {
+                                        Button(radarText("放弃保留的转写"), role: .destructive) {
+                                            discardingVoice = true
+                                        }
+                                        .buttonStyle(.borderless)
+                                    }
+                                    if voice.isRecording() {
+                                        Button(radarText("取消录音"), role: .cancel) {
+                                            voice.cancelRecording()
+                                        }
+                                        .buttonStyle(.borderless)
+                                        .controlSize(.small)
+                                    }
+                                }
+                                let preview = voice.previewText()
+                                if !preview.isEmpty {
+                                    Text(preview)
+                                        .textSelection(.enabled)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
                             TextEditor(text: $session.text).frame(minHeight: 160)
                                 .disabled(session.busy || session.pending || session.recorded || session.blocked)
                             Text(radarText("最多 4000 字符；仅记录回复，不自动改状态或执行操作。"))
@@ -562,8 +644,8 @@ struct CollieRadarReplyView: View {
                                 } }.disabled(session.busy)
                             } else if !session.recorded && !session.blocked {
                                 Button(radarText("重新读取条目")) { Task { await session.prepare() } }.disabled(session.busy)
-                                Button(radarText("确认并发送回复")) { confirming = true }.disabled(!session.canSend)
-                                Button(radarText("丢弃未发送草稿"), role: .destructive) { discarding = true }.disabled(session.busy)
+                                Button(radarText("确认并发送回复")) { confirming = true }.disabled(!session.canSend || voiceBusy)
+                                Button(radarText("丢弃未发送草稿"), role: .destructive) { discarding = true }.disabled(session.busy || voiceBusy)
                             }
                         }
                     }
@@ -573,9 +655,13 @@ struct CollieRadarReplyView: View {
             .toolbar { ToolbarItem(placement: .cancellationAction) {
                 Button(radarText(session.recorded ? "完成" : "关闭")) {
                     if session.preserveDraft() { dismiss() }
-                }.disabled(session.busy)
+                }.disabled(session.busy || voiceBusy)
             } }
-            .interactiveDismissDisabled(session.busy || (!session.recorded && !session.pending && !session.text.isEmpty))
+            .interactiveDismissDisabled(session.busy || voiceBusy || (!session.recorded && !session.pending && !session.text.isEmpty))
+            .confirmationDialog(radarText("放弃这段文字？"), isPresented: $discardingVoice, titleVisibility: .visible) {
+                Button(radarText("放弃文字"), role: .destructive) { voice?.discardPendingTranscript() }
+                Button(radarText("保留"), role: .cancel) {}
+            }
             .alert(radarText("丢弃未发送草稿？"), isPresented: $discarding) {
                 Button(radarText("取消"), role: .cancel) {}
                 Button(radarText("丢弃未发送草稿"), role: .destructive) {
@@ -583,11 +669,18 @@ struct CollieRadarReplyView: View {
                 }
             }
             .task {
+                voice?.bindHandler(voiceBinding) { [session] transcript in
+                    session.appendVoiceTranscript(transcript)
+                }
                 session.activateHistory()
                 if session.initiallyWritable { await session.prepare() }
                 if !Task.isCancelled { await session.loadHistory() }
             }
-            .onDisappear { session.cancelHistory() }
+            .onDisappear {
+                if voice?.canCancel() == true { voice?.cancelRecording() }
+                voice?.unbindHandler(voiceBinding)
+                session.cancelHistory()
+            }
             .sheet(isPresented: $confirming) {
                 NavigationStack {
                     Form {
@@ -609,7 +702,7 @@ struct CollieRadarReplyView: View {
                                     await store.refresh(workbenchID)
                                 }
                             }
-                        }.disabled(!session.canSend)
+                        }.disabled(!session.canSend || voiceBusy)
                     }
                     .navigationTitle(radarText("确认发送到原条目？"))
                     .toolbar { ToolbarItem(placement: .cancellationAction) {

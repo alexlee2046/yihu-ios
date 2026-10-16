@@ -10,6 +10,8 @@ final class CollieVoiceShortcutCenter {
     static let shared = CollieVoiceShortcutCenter()
     private(set) var pendingToggle = false
     private var requestedAt: ContinuousClock.Instant?
+    private(set) var pendingOpenRadarActions = false
+    private var radarRequestedAt: ContinuousClock.Instant?
     /// A request that cannot run soon (busy, not set up) is dropped rather than
     /// starting the microphone much later without a fresh user action.
     /// Long enough for a cold launch to connect and load the model.
@@ -28,6 +30,19 @@ final class CollieVoiceShortcutCenter {
         guard let requestedAt else { return false }
         return requestedAt.duration(to: now) <= Self.lifetime
     }
+
+    func requestOpenRadarActions(now: ContinuousClock.Instant = .now) {
+        pendingOpenRadarActions = true
+        radarRequestedAt = now
+    }
+
+    func consumeOpenRadarActions(now: ContinuousClock.Instant = .now) -> Bool {
+        guard pendingOpenRadarActions else { return false }
+        pendingOpenRadarActions = false
+        defer { radarRequestedAt = nil }
+        guard let radarRequestedAt else { return false }
+        return radarRequestedAt.duration(to: now) <= Self.lifetime
+    }
 }
 
 struct ToggleVoiceInputIntent: AppIntent {
@@ -42,6 +57,18 @@ struct ToggleVoiceInputIntent: AppIntent {
     }
 }
 
+struct OpenRadarActionsIntent: AppIntent {
+    static let title: LocalizedStringResource = "打开一呼待我处理"
+    static let description = IntentDescription("打开一呼并切换到 PM Radar 的「待我处理」视图。")
+    static let openAppWhenRun = true
+
+    @MainActor
+    func perform() async throws -> some IntentResult {
+        CollieVoiceShortcutCenter.shared.requestOpenRadarActions()
+        return .result()
+    }
+}
+
 struct CollieAppShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
@@ -49,6 +76,12 @@ struct CollieAppShortcuts: AppShortcutsProvider {
             phrases: ["\(.applicationName) 语音输入", "用\(.applicationName)语音输入"],
             shortTitle: "语音输入",
             systemImageName: "mic.fill"
+        )
+        AppShortcut(
+            intent: OpenRadarActionsIntent(),
+            phrases: ["打开\(.applicationName)待我处理", "查看\(.applicationName)待办决策"],
+            shortTitle: "待我处理",
+            systemImageName: "scope"
         )
     }
 }

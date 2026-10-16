@@ -260,6 +260,7 @@ private struct CollieRootView: View {
                         webSession: webSession,
                         voice: voice,
                         voiceNotes: voiceNotes,
+                        radarStore: radar,
                         connectionSettings: settings,
                         notifications: notifications,
                         onWillSaveConnection: connectionChangeBlockReason,
@@ -287,8 +288,16 @@ private struct CollieRootView: View {
                     .accessibilityHidden(selectedRadar != nil)
                 }
                 if let id = selectedRadar {
-                    CollieRadarView(store: radar, id: id, presentation: radarPresentation)
-                        .id(id)
+                    CollieRadarView(
+                        store: radar,
+                        id: id,
+                        presentation: radarPresentation,
+                        voice: voice,
+                        openWebWorkbench: (settings.currentOrigin ?? settings.recentOrigins.first).map { origin in
+                            { _ = selectWeb(origin) }
+                        }
+                    )
+                    .id(id)
                 }
             }
         }
@@ -333,11 +342,13 @@ private struct CollieRootView: View {
         )) { Button(radarText("完成"), role: .cancel) { selectionNotice = nil } }
         message: { Text(selectionNotice ?? "") }
         .onChange(of: notifications.status) { _, _ in watchLink.notificationStateChanged() }
-        .onChange(of: watchHandoffBlocked) { _, blocked in if !blocked { openWatchTask() } }
-        .onChange(of: radarPresentation.replyPresented) { _, shown in if !shown { openWatchTask() } }
+        .onChange(of: watchHandoffBlocked) { _, blocked in if !blocked { openWatchTask(); openRadarShortcutIfNeeded() } }
+        .onChange(of: radarPresentation.replyPresented) { _, shown in if !shown { openWatchTask(); openRadarShortcutIfNeeded() } }
         .onChange(of: watchLink.openRequest) { _, _ in openWatchTask() }
-        .onChange(of: scenePhase) { _, phase in if phase == .active { openWatchTask() } }
+        .onChange(of: CollieVoiceShortcutCenter.shared.pendingOpenRadarActions) { _, _ in openRadarShortcutIfNeeded() }
+        .onChange(of: scenePhase) { _, phase in if phase == .active { openWatchTask(); openRadarShortcutIfNeeded() } }
         .task {
+            openRadarShortcutIfNeeded()
             let settings = self.settings
             let notifications = self.notifications
             watchLink.phoneNotificationState = {
@@ -431,6 +442,18 @@ private struct CollieRootView: View {
         watchLink.openRequest = nil
     }
 
+    private func openRadarShortcutIfNeeded() {
+        guard scenePhase == .active, !watchHandoffBlocked,
+              CollieVoiceShortcutCenter.shared.pendingOpenRadarActions else { return }
+        guard let targetID = selectedRadar ?? radar.ordered.first?.id,
+              canSelect(),
+              var record = radar.workbenches.first(where: { $0.id == targetID }),
+              CollieVoiceShortcutCenter.shared.consumeOpenRadarActions(),
+              selectRadar(targetID) else { return }
+        record.display.page = .actions
+        _ = radar.update(record)
+    }
+
     private func writeValidationStatus(_ status: String) {
         guard let applicationSupport = FileManager.default.urls(
             for: .applicationSupportDirectory,
@@ -495,6 +518,7 @@ struct CollieShellView: View {
     let webSession: CollieWebSession
     let voice: CollieVoiceController
     private let voiceNotes: CollieVoiceNotesStore?
+    private let radarStore: CollieRadarStore?
     private let connectionSettings: CollieConnectionSettings?
     private let notifications: CollieNativeNotificationsController?
     private let onWillSaveConnection: ((URL) -> String?)?
@@ -518,6 +542,7 @@ struct CollieShellView: View {
         webSession: CollieWebSession,
         voice: CollieVoiceController,
         voiceNotes: CollieVoiceNotesStore? = nil,
+        radarStore: CollieRadarStore? = nil,
         connectionSettings: CollieConnectionSettings? = nil,
         notifications: CollieNativeNotificationsController? = nil,
         onWillSaveConnection: ((URL) -> String?)? = nil,
@@ -530,6 +555,7 @@ struct CollieShellView: View {
         self.webSession = webSession
         self.voice = voice
         self.voiceNotes = voiceNotes
+        self.radarStore = radarStore
         self.connectionSettings = connectionSettings
         self.notifications = notifications
         self.onWillSaveConnection = onWillSaveConnection
@@ -717,6 +743,10 @@ struct CollieShellView: View {
                         guard allowed(), voiceNotes.reserveHandOff(id) else { return false }
                         return await target.insertTranscript(text, requestID: requestID,
                                                              expectedPageURL: page, canInsert: allowed)
+                    }, radarCandidates: radarStore?.writableDraftCandidates ?? [],
+                       onSaveRadarDraft: { text, id, candidate in
+                        guard let radarStore, voiceNotes.reserveHandOff(id) else { return false }
+                        return radarStore.saveUnsubmittedDraft(text: text, for: candidate)
                     })
                 }
                 .presentationDragIndicator(.visible)

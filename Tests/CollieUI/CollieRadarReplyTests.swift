@@ -316,4 +316,57 @@ extension CollieEnhancementTests {
         XCTAssertEqual(subject.text, fullDraft)
         XCTAssertTrue(ReplyFixtureProtocol.capture.data.isEmpty)
     }
+
+    func testRetainedVoiceBlocksDraftActionsUntilExplicitDiscard() {
+        var retained = true
+        let voice = CollieRadarReplyVoiceAdapter(
+            isRecording: { false }, canCancel: { false }, isDelivering: { false },
+            canRetryDelivery: { retained }, primaryActionEnabled: { !retained },
+            previewText: { retained ? "Retained synthetic transcript" : "" },
+            performAction: {}, cancelRecording: {}, discardPendingTranscript: { retained = false },
+            bindHandler: { _, _ in }, unbindHandler: { _ in })
+        XCTAssertTrue(voice.blocksDraftActions)
+        XCTAssertFalse(voice.previewText().isEmpty)
+        voice.discardPendingTranscript()
+        XCTAssertFalse(voice.blocksDraftActions)
+    }
+
+    func testLateVoiceTranscriptCannotWriteAfterDismissalOrSourceChange() {
+        let dismissed = replyFixture()
+        dismissed.cancelHistory()
+        XCTAssertFalse(dismissed.appendVoiceTranscript("Late recording"))
+        XCTAssertEqual(dismissed.text, "")
+        let stale = replyFixture(currentSource: { false })
+        XCTAssertFalse(stale.appendVoiceTranscript("Old source recording"))
+        XCTAssertEqual(stale.text, "")
+    }
+
+    func testVoiceTranscriptSaveFailureCanRetryWithoutDuplicatingText() async throws {
+        let id = UUID()
+        let subject = replyFixture(id: id)
+        subject.text = "Existing draft"
+        let file = CollieRadarPendingReply.file(id)
+        // A directory at the file path makes the atomic draft write fail.
+        try FileManager.default.createDirectory(at: file, withIntermediateDirectories: true)
+        XCTAssertFalse(subject.appendVoiceTranscript("Voice addition"))
+        XCTAssertEqual(subject.text, "Existing draft")
+        try FileManager.default.removeItem(at: file)
+        XCTAssertTrue(subject.appendVoiceTranscript("Voice addition"))
+        XCTAssertEqual(subject.text, "Existing draft\nVoice addition")
+        XCTAssertEqual(replyFixture(id: id).text, subject.text)
+    }
+
+    func testVoiceTranscriptAppendsAndPersistsDraftWithoutSubmitting() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let id = UUID()
+        let subject = replyFixture(id: id)
+        XCTAssertTrue(subject.appendVoiceTranscript("  同意按方案 A 推进  "))
+        XCTAssertEqual(subject.text, "同意按方案 A 推进")
+        XCTAssertTrue(subject.appendVoiceTranscript("补充：先合入主干"))
+        XCTAssertEqual(subject.text, "同意按方案 A 推进\n补充：先合入主干")
+        let reopened = replyFixture(id: id)
+        XCTAssertEqual(reopened.text, "同意按方案 A 推进\n补充：先合入主干")
+        XCTAssertFalse(reopened.pending)
+        XCTAssertTrue(ReplyFixtureProtocol.capture.data.isEmpty)
+    }
 }

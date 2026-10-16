@@ -37,6 +37,8 @@ struct CollieRadarView: View {
     @Bindable var store: CollieRadarStore
     let id: UUID
     @Bindable var presentation: CollieRadarPresentation
+    var voice: CollieVoiceController? = nil
+    var openWebWorkbench: (() -> Void)? = nil
     @State private var replying: CollieRadarSnapshot.Action?
     @State private var watchReplyAfterDismiss: CollieRadarSnapshot.Action?
 
@@ -131,8 +133,26 @@ struct CollieRadarView: View {
                     let nextItem = store.snapshots[id].flatMap { snapshot in
                         nextPendingAction(after: action, in: snapshot, display: record.display)
                     }
+                    let voiceAdapter = voice.map { controller in
+                        CollieRadarReplyVoiceAdapter(
+                            isRecording: { controller.isRecording },
+                            canCancel: { controller.canCancel },
+                            isDelivering: { controller.phase == .delivering },
+                            canRetryDelivery: { controller.canRetryDelivery },
+                            primaryActionEnabled: { controller.primaryActionEnabled },
+                            previewText: { controller.pendingTranscript ?? controller.previewText },
+                            performAction: {
+                                if controller.canRetryDelivery { await controller.retryDelivery() }
+                                else { await controller.performPrimaryAction() }
+                            },
+                            cancelRecording: { controller.cancelRecording() },
+                            discardPendingTranscript: { controller.discardPendingTranscript() },
+                            bindHandler: { owner, handler in controller.bindTranscriptHandler(owner: owner, handler: handler) },
+                            unbindHandler: { owner in controller.unbindTranscriptHandler(owner: owner) }
+                        )
+                    }
                     CollieRadarReplyView(store: store, workbenchID: id, source: record.source, action: action,
-                                         nextAction: nextItem, onSelectNext: { next in replying = next })
+                                         voice: voiceAdapter, nextAction: nextItem, onSelectNext: { next in replying = next })
                         .id(action.id)
                 }
             }
@@ -481,6 +501,11 @@ struct CollieRadarView: View {
             DisclosureGroup(radarText("详情")) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(radarText("负责会话") + "：" + (action.session.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
+                    if let openWebWorkbench, !(action.session ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        Button(radarText("切到网页工作台")) { openWebWorkbench() }
+                            .font(.subheadline)
+                            .accessibilityIdentifier("collie-radar-open-web")
+                    }
                     Text(radarText("窗口状态") + "：" + (action.window_status.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("未提供")))
                     Text(radarText("证据") + "：" + (action.evidence.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
                     if let timestamp = action.timestamp {

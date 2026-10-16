@@ -11,6 +11,8 @@ struct CollieVoiceNotesView: View {
     let store: CollieVoiceNotesStore
     var onHandedOff: () -> Void = {}
     var onDirectInsert: ((String, UUID) async -> Bool)? = nil
+    var radarCandidates: [CollieRadarStore.DraftTargetCandidate] = []
+    var onSaveRadarDraft: ((String, UUID, CollieRadarStore.DraftTargetCandidate) -> Bool)? = nil
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -30,7 +32,8 @@ struct CollieVoiceNotesView: View {
                             CollieVoiceNoteDetail(store: store, note: note, onHandedOff: {
                                 dismiss()
                                 onHandedOff()
-                            }, onDirectInsert: onDirectInsert)
+                            }, onDirectInsert: onDirectInsert, radarCandidates: radarCandidates,
+                               onSaveRadarDraft: onSaveRadarDraft)
                         } label: {
                             row(note)
                         }
@@ -117,6 +120,8 @@ struct CollieVoiceNoteDetail: View {
     let note: CollieVoiceNote
     let onHandedOff: () -> Void
     var onDirectInsert: ((String, UUID) async -> Bool)? = nil
+    var radarCandidates: [CollieRadarStore.DraftTargetCandidate] = []
+    var onSaveRadarDraft: ((String, UUID, CollieRadarStore.DraftTargetCandidate) -> Bool)? = nil
 
     static let instructions = [
         "请把下面的录音整理成会议纪要：结论、讨论要点、待办（负责人和时间）。",
@@ -166,6 +171,25 @@ struct CollieVoiceNoteDetail: View {
                     .disabled(current.status != .done || current.transcript.count > 3_000 ||
                               current.handOffAttempted == true || isHandingOff)
                     .accessibilityIdentifier("collie-note-direct-insert")
+                }
+                if let onSaveRadarDraft, !radarCandidates.isEmpty {
+                    Menu(notesText("存为雷达事项草稿")) {
+                        ForEach(radarCandidates) { candidate in
+                            Button("\(candidate.workbenchName) · \(candidate.action.title)") {
+                                guard !isHandingOff, current.handOffAttempted != true else { return }
+                                isHandingOff = true
+                                defer { isHandingOff = false }
+                                if onSaveRadarDraft(current.transcript, current.id, candidate) {
+                                    onHandedOff()
+                                } else {
+                                    handOffError = notesText("无法存为雷达事项草稿，请确认目标事项仍在待处理且无未决回复。")
+                                }
+                            }
+                        }
+                    }
+                    .disabled(current.status != .done || current.transcript.unicodeScalars.count > 4_000 ||
+                              current.handOffAttempted == true || isHandingOff)
+                    .accessibilityIdentifier("collie-note-radar-draft")
                 }
                 Button(notesText("存入工作台分享托盘")) {
                     guard !isHandingOff, current.handOffAttempted != true else { return }
