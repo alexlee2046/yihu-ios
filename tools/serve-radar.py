@@ -260,10 +260,10 @@ def target_item(ident, epoch, notification=False, history=False, receipt_lookup=
     try:
         authorization = parse_request(content.get("body", ""))
     except (ValueError, TypeError, KeyError):
-        if not receipt_lookup:
+        if not (receipt_lookup or history):
             raise ReplyError("invalid_authorization", 409) from None
-        # A broken current declaration cannot revoke an already written receipt.
-        # This mode is read-only; the pre-mutation read always validates strictly.
+        # A broken current declaration cannot revoke existing receipts or history.
+        # These modes are read-only; the pre-mutation read validates strictly.
         authorization = None
     if authorization is not None:
         target["authorization"] = authorization

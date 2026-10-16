@@ -447,6 +447,25 @@ class HistoryChecks(unittest.TestCase):
             radar.reply(payload, self.owner, "restarted", {})
         self.assertEqual(forbidden.exception.code, "forbidden")
 
+    def test_malformed_current_authorization_preserves_read_only_history(self):
+        self.authorization()
+        payload = self.approval_payload()
+        self.mocks[-1].side_effect = self.record_command
+        radar.reply(payload, self.owner, "epoch", {})
+        self.node["content"]["body"] = "```yihu-authorization\n{}\n```"
+        self.node["project"]["viewerCanUpdate"] = False
+        self.node["content"]["repository"]["viewerPermission"] = "READ"
+        history = self.history()
+        self.assertEqual(history["entries"][0]["kind"], "reply")
+        self.assertEqual(history["entries"][0]["request_id"], self.request_id)
+        self.assertFalse(history["target"]["eligible"])
+        self.assertNotIn("authorization", history["target"])
+        self.mocks[-1].assert_called_once()
+        self.node["content"]["repository"]["isPrivate"] = False
+        with self.assertRaises(radar.ReplyError) as forbidden:
+            self.history()
+        self.assertEqual(forbidden.exception.code, "forbidden")
+
     def test_malformed_current_authorization_still_blocks_new_writes(self):
         self.authorization()
         payload = self.approval_payload()
