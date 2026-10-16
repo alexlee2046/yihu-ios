@@ -73,6 +73,14 @@ def validate_snapshot(data):
     return data
 
 
+def attach_projection(ledger, projection):
+    result = dict(ledger, **projection)
+    if len(json.dumps(result, ensure_ascii=False, allow_nan=False).encode()) > MAX_BYTES:
+        # Telemetry cannot consume the ledger's existing response budget.
+        return dict(ledger, colab_unavailable=True)
+    return result
+
+
 def read_projection(command, script, output, cwd, wrapper=None):
     args = ["python3", script, "snapshot", "--output", output]
     if wrapper:

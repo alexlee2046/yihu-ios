@@ -26,7 +26,7 @@ import time
 import uuid
 from radar_notifications import NotificationError
 from radar_authorization import parse_request, confirmation_text, request_body
-from radar_colab import read_projection
+from radar_colab import read_projection, attach_projection
 
 MAX_BYTES = 2 * 1024 * 1024
 WAITING = {"等你决策", "等你验收"}
@@ -686,8 +686,7 @@ def serve(port, tailnet_host, writer_user_id, notifications=None, notification_u
         with ThreadPoolExecutor(max_workers=1) as projection:
             future = projection.submit(read_projection, command, **colab)
             data = read_ledger()
-            data.update(future.result())
-            return data
+            return attach_projection(data, future.result())
 
     ledger = LedgerCache(load, wait_timeout=42 if colab else 31)
     allowed_hosts = {f"127.0.0.1:{port}", f"localhost:{port}", tailnet_host, tailnet_host.removesuffix(":443")}

@@ -78,6 +78,14 @@ class ColabChecks(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             radar.command([sys.executable, "-c", "import time; time.sleep(2)"], timeout=0.1, max_bytes=32)
 
+    def test_combined_projection_cannot_evict_the_ledger(self):
+        from radar_colab import attach_projection
+        ledger = snapshot("x" * (radar.MAX_BYTES - 200))
+        result = attach_projection(ledger, {"colab": self.fixture(), "colab_unavailable": False})
+        self.assertEqual(result["tasks"], ledger["tasks"])
+        self.assertTrue(result["colab_unavailable"])
+        self.assertNotIn("colab", result)
+
     def test_shared_colab_snapshot_contract(self):
         from radar_colab import validate_snapshot
         fixture = json.loads((Path(__file__).parent / "fixtures/colab_snapshot.json").read_text())
