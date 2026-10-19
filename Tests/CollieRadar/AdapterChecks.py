@@ -22,6 +22,91 @@ def snapshot(title="Synthetic task"):
             "decisions": [], "active": [], "stale": [], "cold": []}
 
 
+class ColabChecks(unittest.TestCase):
+    def fixture(self):
+        return {"version": 1, "observed_at": 1000,
+                "usage": {"status": "not_requested", "balance": None, "rate": None,
+                          "assignments": None, "observed_at": None},
+                "budget": {"measured_cu": 0, "unmeasured_runs": 1},
+                "experiments": [{"fingerprint": "a" * 64, "status": "cleanup_unconfirmed",
+                                 "completed_queries": None, "total_queries": 80,
+                                 "completed_batches": 0, "total_batches": None, "measured_cu": None,
+                                 "release_confirmed": None, "baseline": None, "candidate": None}],
+                "executions": [{"request_id": "11111111-2222-4333-8444-555555555555",
+                                "item_id": "PVTI_synthetic", "operation": "colab.run",
+                                "fingerprint": "a" * 64, "status": "uncertain"}]}
+
+    def test_read_only_projection_and_unknowns(self):
+        command = Mock(return_value=(0, json.dumps(self.fixture()).encode(), b""))
+        result = radar.read_projection(command, "/existing/workbench.py", "/ledger", "/devops")
+        self.assertFalse(result["colab_unavailable"])
+        self.assertIsNone(result["colab"]["usage"]["balance"])
+        self.assertIsNone(result["colab"]["experiments"][0]["release_confirmed"])
+        command.assert_called_once_with(["python3", "/existing/workbench.py", "snapshot", "--output", "/ledger"], timeout=40, cwd="/devops", max_bytes=radar.MAX_BYTES)
+
+    def test_live_usage_is_explicit_read_only(self):
+        command = Mock(return_value=(0, json.dumps(self.fixture()).encode(), b""))
+        radar.read_projection(command, "/workbench.py", "/ledger", "/devops", "/wrapper")
+        self.assertEqual(command.call_args.args[0][-3:], ["--live-usage", "--colab-wrap", "/wrapper"])
+
+    def test_projection_failure_never_leaks_provider_errors_or_old_balance(self):
+        for returned in [(1, b"", b"private provider details"), (0, b"{}", b""),
+                         (0, b"x" * (radar.MAX_BYTES + 1), b"")]:
+            result = radar.read_projection(Mock(return_value=returned), "/w", "/l", "/d")
+            self.assertEqual(result, {"colab_unavailable": True})
+        result = radar.read_projection(Mock(side_effect=RuntimeError("private")), "/w", "/l", "/d")
+        self.assertEqual(result, {"colab_unavailable": True})
+
+    def test_projection_rejects_unknown_fields_false_zero_and_bad_progress(self):
+        from radar_colab import validate_snapshot
+        for field, value in [("credential", "hidden"), ("version", True), ("observed_at", time.time() + 600)]:
+            data = self.fixture(); data[field] = value
+            with self.assertRaises(ValueError): validate_snapshot(data)
+        for field, value in [("completed_queries", 81), ("release_confirmed", 1), ("status", "accepted"), ("measured_cu", True)]:
+            data = self.fixture(); data["experiments"][0][field] = value
+            with self.assertRaises(ValueError): validate_snapshot(data)
+        data = self.fixture(); data["usage"]["balance"] = 0
+        with self.assertRaises(ValueError): validate_snapshot(data)
+        data = self.fixture(); data["executions"] *= 2
+        with self.assertRaises(ValueError): validate_snapshot(data)
+
+    def test_projection_command_enforces_stream_limit_and_deadline(self):
+        code, output, error = radar.command([sys.executable, "-c", "print('ok')"], timeout=2, max_bytes=32)
+        self.assertEqual((code, output, error), (0, b"ok\n", b""))
+        with self.assertRaises(RuntimeError):
+            radar.command([sys.executable, "-c", "print('x' * 100000)"], timeout=2, max_bytes=32)
+        with self.assertRaises(RuntimeError):
+            radar.command([sys.executable, "-c", "import time; time.sleep(2)"], timeout=0.1, max_bytes=32)
+
+    def test_combined_projection_cannot_evict_the_ledger(self):
+        from radar_colab import attach_projection
+        ledger = snapshot("x" * (radar.MAX_BYTES - 200))
+        result = attach_projection(ledger, {"colab": self.fixture(), "colab_unavailable": False})
+        self.assertEqual(result["tasks"], ledger["tasks"])
+        self.assertTrue(result["colab_unavailable"])
+        self.assertNotIn("colab", result)
+
+    def test_shared_colab_snapshot_contract(self):
+        from radar_colab import validate_snapshot
+        fixture = json.loads((Path(__file__).parent / "fixtures/colab_snapshot.json").read_text())
+        with patch("radar_colab.time.time", return_value=fixture["snapshot"]["observed_at"]):
+            result = validate_snapshot(fixture["snapshot"])
+        self.assertEqual(result["executions"][0]["status"], "uncertain")
+        self.assertEqual(result["experiments"][0]["candidate"]["top1"], 0.5)
+        self.assertIsNone(result["usage"]["balance"])
+
+    def test_four_cross_repository_authorization_groups(self):
+        fixture = json.loads((Path(__file__).parent / "fixtures/yihu_authorization.json").read_text())
+        groups = set()
+        for case in fixture["cases"]:
+            parsed = radar.parse_request(radar.request_body(case["request"]))
+            self.assertEqual(parsed["digest"], case["digest"], case["name"])
+            from radar_authorization import canonical
+            self.assertEqual(canonical({k: v for k, v in parsed.items() if k != "digest"}), case["canonical"])
+            groups.add((parsed["operation"], "fractional" if "fractional" in case["name"] else "integral"))
+        self.assertEqual(len(groups), 4)
+
+
 class CacheChecks(unittest.TestCase):
     def setUp(self):
         self.now = 1000
@@ -391,6 +476,163 @@ class HistoryChecks(unittest.TestCase):
         self.assertEqual(history["target"]["owner_session"], "fixture-session")
         self.assertEqual(history["target"]["version"], prepared["target"]["version"])
         self.assertNotIn("owner_session", prepared["target"])
+
+    def authorization(self, **changes):
+        value = {"version": 1, "operation": "colab.run", "subject": "Synthetic experiment",
+                 "fingerprint": "a" * 64, "scope": "Public synthetic images only; no delivery",
+                 "expires_at": int(time.time()) + 3600,
+                 "budget": {"session_cu": 5, "total_cu": 100, "minutes": 15}}
+        value.update(changes)
+        self.node["content"]["body"] = radar.request_body(value)
+        return radar.parse_request(self.node["content"]["body"])
+
+    def approval_payload(self):
+        prepared = radar.reply({"operation": "prepare", "id": self.ident}, self.owner, "epoch", {})["target"]
+        return {"operation": "submit", "id": self.ident, "text": "Synthetic approval note",
+                "request_id": self.request_id, "epoch": "epoch", "confirmed": True,
+                "version": prepared["version"], "authorization_confirmed": True,
+                "authorization": prepared["authorization"],
+                "authorization_digest": prepared["authorization"]["digest"]}
+
+    def record_command(self, *args, input_data, **kwargs):
+        payload = json.loads(input_data)
+        self.append(payload["note"])
+        return 0, b"", b""
+
+    def test_typed_authorization_readback_and_restart_never_execute_or_repeat(self):
+        request = self.authorization()
+        payload = self.approval_payload()
+        self.mocks[-1].side_effect = self.record_command
+        self.assertEqual(radar.reply(payload, self.owner, "epoch", {})["outcome"], "recorded")
+        self.mocks[-1].assert_called_once()
+        note = self.comments[0]["body"]
+        self.assertIn("操作授权记录", note)
+        self.assertEqual(radar.parse_request(note)["digest"], request["digest"])
+        self.assertEqual(self.history()["entries"][0]["kind"], "reply")
+        self.authorization(scope="Changed after recording")
+        payload["operation"] = "check"
+        self.assertEqual(radar.reply(payload, self.owner, "restarted", {})["outcome"], "recorded")
+        self.mocks[-1].assert_called_once()
+        # The sole subprocess is the existing req note runner, never Colab/promote.
+        self.assertEqual(self.mocks[-1].call_args.args[0][1], "-c")
+        self.assertIn("'note'", self.mocks[-1].call_args.args[0][2])
+
+    def test_malformed_current_authorization_does_not_block_existing_receipt(self):
+        self.authorization()
+        payload = self.approval_payload()
+        self.mocks[-1].side_effect = self.record_command
+        self.assertEqual(radar.reply(payload, self.owner, "epoch", {})["outcome"], "recorded")
+        self.node["content"]["body"] = "```yihu-authorization\n{}\n```"
+        for operation in ["check", "submit"]:
+            payload["operation"] = operation
+            self.assertEqual(radar.reply(payload, self.owner, "restarted", {})["outcome"], "recorded")
+        self.mocks[-1].assert_called_once()
+        self.node["content"]["repository"]["viewerPermission"] = "READ"
+        with self.assertRaises(radar.ReplyError) as forbidden:
+            radar.reply(payload, self.owner, "restarted", {})
+        self.assertEqual(forbidden.exception.code, "forbidden")
+
+    def test_malformed_current_authorization_preserves_read_only_history(self):
+        self.authorization()
+        payload = self.approval_payload()
+        self.mocks[-1].side_effect = self.record_command
+        radar.reply(payload, self.owner, "epoch", {})
+        self.node["content"]["body"] = "```yihu-authorization\n{}\n```"
+        self.node["project"]["viewerCanUpdate"] = False
+        self.node["content"]["repository"]["viewerPermission"] = "READ"
+        history = self.history()
+        self.assertEqual(history["entries"][0]["kind"], "reply")
+        self.assertEqual(history["entries"][0]["request_id"], self.request_id)
+        self.assertFalse(history["target"]["eligible"])
+        self.assertNotIn("authorization", history["target"])
+        self.mocks[-1].assert_called_once()
+        self.node["content"]["repository"]["isPrivate"] = False
+        with self.assertRaises(radar.ReplyError) as forbidden:
+            self.history()
+        self.assertEqual(forbidden.exception.code, "forbidden")
+
+    def test_malformed_current_authorization_still_blocks_new_writes(self):
+        self.authorization()
+        payload = self.approval_payload()
+        self.node["content"]["body"] = "```yihu-authorization\n{}\n```"
+        for request in [payload, {"operation": "prepare", "id": self.ident}]:
+            with self.assertRaises(radar.ReplyError) as invalid:
+                radar.reply(request, self.owner, "epoch", {})
+            self.assertEqual(invalid.exception.code, "invalid_authorization")
+        self.mocks[-1].assert_not_called()
+
+    def test_integral_float_budgets_survive_phone_json_round_trip(self):
+        integer_request = self.authorization()
+        float_request = self.authorization(budget={"session_cu": 5.0, "total_cu": 100.0, "minutes": 15.0})
+        self.assertEqual(float_request["digest"], integer_request["digest"])
+        payload = self.approval_payload()
+        # Swift JSONEncoder emits integral Double values without a decimal point.
+        payload["authorization"]["budget"] = {"session_cu": 5, "total_cu": 100, "minutes": 15}
+        self.mocks[-1].side_effect = self.record_command
+        self.assertEqual(radar.reply(payload, self.owner, "epoch", {})["outcome"], "recorded")
+        self.mocks[-1].assert_called_once()
+
+    def test_authorization_descriptions_allow_inline_code_and_backticks(self):
+        request = self.authorization(subject="Synthetic `batch`", scope="Only `public-images/`; no delivery")
+        self.assertEqual(radar.parse_request(radar.request_body(request)), request)
+        payload = self.approval_payload()
+        self.mocks[-1].side_effect = self.record_command
+        self.assertEqual(radar.reply(payload, self.owner, "epoch", {})["outcome"], "recorded")
+        self.assertEqual(self.history()["entries"][0]["kind"], "reply")
+
+    def test_authorization_changes_and_expiry_refuse_before_any_write(self):
+        self.authorization()
+        payload = self.approval_payload()
+        self.authorization(scope="A different batch or destination")
+        with self.assertRaises(radar.ReplyError) as changed:
+            radar.reply(payload, self.owner, "epoch", {})
+        self.assertEqual(changed.exception.code, "target_changed")
+        self.authorization(expires_at=int(time.time()) - 1)
+        payload = self.approval_payload()
+        with self.assertRaises(radar.ReplyError) as expired:
+            radar.reply(payload, self.owner, "epoch", {})
+        self.assertEqual(expired.exception.code, "authorization_expired")
+        self.mocks[-1].assert_not_called()
+
+    def test_ordinary_agreement_is_not_typed_authorization(self):
+        self.authorization()
+        payload = self.approval_payload()
+        for field in ["authorization", "authorization_digest", "authorization_confirmed"]:
+            payload.pop(field)
+        payload["text"] = "同意"
+        self.mocks[-1].side_effect = self.record_command
+        radar.reply(payload, self.owner, "epoch", {})
+        self.assertNotIn("操作授权记录", self.comments[0]["body"])
+        self.assertIn("决策回复", self.comments[0]["body"])
+
+    def test_uncertain_authorization_keeps_the_same_receipt_identity(self):
+        self.authorization()
+        payload = self.approval_payload()
+        self.mocks[-1].return_value = (1, b"", b"")
+        attempts = {}
+        for _ in range(2):
+            with self.assertRaises(radar.ReplyError) as uncertain:
+                radar.reply(payload, self.owner, "epoch", attempts)
+            self.assertEqual(uncertain.exception.code, "result_unknown")
+        self.mocks[-1].assert_called_once()
+
+    def test_authorization_schema_is_strict_and_digest_binds_budget_and_operation(self):
+        valid = self.authorization()
+        self.assertNotEqual(self.authorization(budget={"session_cu": 6, "total_cu": 100, "minutes": 15})["digest"], valid["digest"])
+        self.assertNotEqual(self.authorization(operation="colab.resume")["digest"], valid["digest"])
+        for changes in [{"operation": "shell"}, {"operation": []}, {"fingerprint": "a" * 40},
+                        {"expires_at": True}, {"extra": "unknown"}, {"budget": None},
+                        {"budget": {"session_cu": float("inf"), "total_cu": 100, "minutes": 15}},
+                        {"budget": {"session_cu": True, "total_cu": 100, "minutes": 15}},
+                        {"budget": {"session_cu": 10 ** 400, "total_cu": 10 ** 401, "minutes": 15}}]:
+            with self.assertRaises((ValueError, TypeError)):
+                self.authorization(**changes)
+        body = radar.request_body(valid)
+        with self.assertRaises(ValueError):
+            radar.parse_request(body + "\n" + body)
+        with self.assertRaises(ValueError):
+            radar.parse_request(body.replace('"version":1', '"version":1,"version":1'))
+        self.assertEqual(radar.parse_request(body + "\n---\n**备注 synthetic**（req note）\n\n" + body)["digest"], valid["digest"])
 
     def test_existing_request_receipt_survives_restart_and_no_second_write(self):
         self.append(self.note())

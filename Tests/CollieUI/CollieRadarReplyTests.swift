@@ -46,8 +46,14 @@ private final class ReplyFixtureProtocol: URLProtocol, @unchecked Sendable {
             return
         }
         let ident = path == "/bad-id" ? "PVTI_other" : (payload["id"] as? String ?? "invalid")
-        let target: [String: Any] = ["id": ident, "title": "Synthetic item", "url": "https://fixture.invalid/issues/1",
+        var target: [String: Any] = ["id": ident, "title": "Synthetic item", "url": "https://fixture.invalid/issues/1",
                                      "eligible": true, "status": "等你决策", "next": "Synthetic next", "epoch": "fixture", "version": "fixture"]
+        if path == "/authorization" {
+            target["authorization"] = ["version": 1, "operation": "colab.run", "subject": "Synthetic experiment",
+                "scope": "Synthetic images only", "fingerprint": String(repeating: "a", count: 64),
+                "expires_at": 4102444800.0, "digest": String(repeating: "b", count: 64),
+                "budget": ["session_cu": 5.0, "total_cu": 100.0, "minutes": 15.0]]
+        }
         var status = 200
         var response: [String: Any]
         if path == "/old" { status = 400; response = ["error": "invalid_request"] }
@@ -57,6 +63,9 @@ private final class ReplyFixtureProtocol: URLProtocol, @unchecked Sendable {
             status = 403; response = ["error": "forbidden"]
         }
         else if path == "/fails-refresh" && Self.capture.data.count > 1 { status = 503; response = ["error": "unavailable"] }
+        else if path == "/invalid-authorization" && operation == "submit" {
+            status = 409; response = ["error": "invalid_authorization"]
+        }
         else if operation == "submit" { status = 503; response = ["error": "result_unknown"] }
         else if operation == "check" { response = ["outcome": "recorded", "target": target] }
         else if operation == "prepare" { response = ["outcome": "prepared", "target": target] }
@@ -315,6 +324,59 @@ extension CollieEnhancementTests {
         subject.appendQuickReply(firstPhrase)
         XCTAssertEqual(subject.text, fullDraft)
         XCTAssertTrue(ReplyFixtureProtocol.capture.data.isEmpty)
+    }
+
+    func testAuthorizationRequiresExplicitIntentAndRecoversTheSamePendingRequest() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let id = UUID()
+        let subject = replyFixture("/authorization", id: id)
+        subject.text = "Approve only the synthetic batch"
+        await subject.prepare()
+        XCTAssertTrue(subject.canAuthorize)
+        await subject.submit(authorizing: true)
+        XCTAssertTrue(subject.pending)
+        let first = try XCTUnwrap(ReplyFixtureProtocol.capture.data.last)
+        let payload = try XCTUnwrap(JSONSerialization.jsonObject(with: first) as? [String: Any])
+        XCTAssertEqual(payload["authorization_confirmed"] as? Bool, true)
+        XCTAssertEqual(payload["authorization_digest"] as? String, String(repeating: "b", count: 64))
+        let authorization = try XCTUnwrap(payload["authorization"] as? [String: Any])
+        XCTAssertEqual(authorization["scope"] as? String, "Synthetic images only")
+        let restored = replyFixture("/authorization", id: id)
+        XCTAssertTrue(restored.pending)
+        XCTAssertTrue(restored.authorizationConfirmed)
+        await restored.check()
+        let readback = try XCTUnwrap(JSONSerialization.jsonObject(with: ReplyFixtureProtocol.capture.data.last!) as? [String: Any])
+        XCTAssertEqual(readback["request_id"] as? String, payload["request_id"] as? String)
+        XCTAssertEqual(readback["authorization_digest"] as? String, payload["authorization_digest"] as? String)
+        XCTAssertTrue(restored.recorded)
+    }
+
+    func testInvalidAuthorizationRejectsWithoutLeavingAnUncertainReply() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let id = UUID()
+        let subject = replyFixture("/invalid-authorization", id: id)
+        subject.text = "Synthetic note retained after rejection"
+        await subject.prepare()
+        await subject.submit()
+        XCTAssertFalse(subject.pending)
+        XCTAssertFalse(subject.recorded)
+        XCTAssertEqual(subject.text, "Synthetic note retained after rejection")
+        XCTAssertTrue(subject.notice?.contains("授权申请格式无效") == true)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: CollieRadarPendingReply.file(id).path))
+        let reopened = replyFixture("/invalid-authorization", id: id)
+        XCTAssertFalse(reopened.pending)
+    }
+
+    func testOrdinaryReplyOnAuthorizationItemDoesNotAuthorize() async throws {
+        ReplyFixtureProtocol.capture.reset()
+        let subject = replyFixture("/authorization")
+        subject.text = "同意"
+        await subject.prepare()
+        await subject.submit()
+        let payload = try XCTUnwrap(JSONSerialization.jsonObject(with: ReplyFixtureProtocol.capture.data.last!) as? [String: Any])
+        XCTAssertNil(payload["authorization_confirmed"])
+        XCTAssertNil(payload["authorization_digest"])
+        XCTAssertNil(payload["authorization"])
     }
 
     func testRetainedVoiceBlocksDraftActionsUntilExplicitDiscard() {
