@@ -16,13 +16,14 @@ const wave10Slugs = ['cross-device-field-presentation', 'audio-route-recovery-ma
 const wave11Slugs = ['follow-up-context-preflight', 'radar-summary-claim-provenance', 'vehicle-exhibition-microphone-preflight'];
 const wave12Slugs = ['multilingual-terms-preflight', 'timezone-timestamp-review', 'carrier-redaction-archive-matrix'];
 const wave13Slugs = ['export-encoding-delimiter-preflight', 'microphone-permission-sample-contract', 'batch-change-record-retention'];
+const wave14Slugs = ['empty-field-display-defaults', 'foreground-audio-rebind-preflight', 'multi-role-approval-receipt-checklist'];
 const bots = ['OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'Applebot-Extended'];
 const urls = Array.from(read('public/sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g), x => x[1]);
 const page = url => 'dist/' + url.replace('https://getyihu.com/', '') + 'index.html';
 
-test('72 canonical URLs include all staged bilingual guides without fake routes', () => {
-  assert.equal(urls.length, 72); assert.equal(new Set(urls).size, 72);
-  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs, ...wave13Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
+test('78 canonical URLs include all staged bilingual guides without fake routes', () => {
+  assert.equal(urls.length, 78); assert.equal(new Set(urls).size, 78);
+  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs, ...wave13Slugs, ...wave14Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
 });
 test('seven explicit bot groups and general allow retain sitemap and LLM reference', () => {
   const robots = read('public/robots.txt');
@@ -65,7 +66,7 @@ test('built homepage graph keeps existing software/FAQ plus organization and web
     for (const slug of slugs) assert.ok(html.includes(`href="/${prefix}guides/${slug}/"`));
   }
 });
-test('all 72 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
+test('all 78 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
   for (const url of urls) {
     const html = read(page(url));
     assert.ok(html.includes(`<link rel="canonical" href="${url}"`), url);
