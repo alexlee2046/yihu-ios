@@ -15,13 +15,14 @@ const wave9Slugs = ['brief-format-change-compatibility', 'degraded-handoff-go-no
 const wave10Slugs = ['cross-device-field-presentation', 'audio-route-recovery-matrix', 'followup-evidence-minimization'];
 const wave11Slugs = ['follow-up-context-preflight', 'radar-summary-claim-provenance', 'vehicle-exhibition-microphone-preflight'];
 const wave12Slugs = ['multilingual-terms-preflight', 'timezone-timestamp-review', 'carrier-redaction-archive-matrix'];
+const wave13Slugs = ['export-encoding-delimiter-preflight', 'microphone-permission-sample-contract', 'batch-change-record-retention'];
 const bots = ['OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'Applebot-Extended'];
 const urls = Array.from(read('public/sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g), x => x[1]);
 const page = url => 'dist/' + url.replace('https://getyihu.com/', '') + 'index.html';
 
-test('66 canonical URLs include all staged bilingual guides without fake routes', () => {
-  assert.equal(urls.length, 66); assert.equal(new Set(urls).size, 66);
-  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
+test('72 canonical URLs include all staged bilingual guides without fake routes', () => {
+  assert.equal(urls.length, 72); assert.equal(new Set(urls).size, 72);
+  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs, ...wave13Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
 });
 test('seven explicit bot groups and general allow retain sitemap and LLM reference', () => {
   const robots = read('public/robots.txt');
@@ -64,7 +65,7 @@ test('built homepage graph keeps existing software/FAQ plus organization and web
     for (const slug of slugs) assert.ok(html.includes(`href="/${prefix}guides/${slug}/"`));
   }
 });
-test('all 66 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
+test('all 72 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
   for (const url of urls) {
     const html = read(page(url));
     assert.ok(html.includes(`<link rel="canonical" href="${url}"`), url);
