@@ -5,7 +5,7 @@ const en = lang === 'en';
 ---
 <section id="analytics-consent" role="region" aria-labelledby="analytics-title" hidden>
   <h2 id="analytics-title">{en ? 'Optional website analytics' : '可选的网站访问统计'}</h2>
-  <p>{en ? 'Allow Google Analytics to measure this page with cookies? Nothing is loaded until you agree. Permission applies to this page only; reloading or navigating asks again. Declining does not affect the website. Withdraw anytime from Analytics preferences in the footer.' : '是否允许 Google Analytics 使用 Cookie 统计当前页面？同意前不会加载。允许仅在当前页面生效，刷新或换页需重新选择。拒绝不影响网站功能，可随时通过页脚「统计偏好」撤回。'} <a href={en ? '/en/privacy/' : '/privacy/'}>{en ? 'Privacy details' : '查看隐私说明'}</a></p>
+  <p>{en ? 'Google Analytics loads by default. Analytics cookies default off in the EEA, UK, Switzerland, Brazil and Japan, and on elsewhere. Regional denial may still send cookieless pings. This browser remembers your allow or decline choice; change it anytime in Analytics preferences. Ads consent is always denied.' : 'Google Analytics 默认加载；EEA、英国、瑞士、巴西、日本默认拒绝统计 Cookie，其他地区默认允许。区域拒绝仍可能发送无 Cookie ping。此浏览器会记住允许或拒绝，可随时通过「统计偏好」更改；广告同意始终拒绝。'} <a href={en ? '/en/privacy/' : '/privacy/'}>{en ? 'Privacy details' : '查看隐私说明'}</a></p>
   <p id="analytics-status" role="status"></p>
   <div class="consent-actions">
     <button type="button" id="analytics-deny">{en ? 'Decline analytics' : '不允许统计'}</button>
@@ -32,22 +32,37 @@ const en = lang === 'en';
     const measurement = 'G-CWT1FWEHCL';
     const disabled = 'ga-disable-' + measurement;
     const isProduction = ['https://getyihu.com', 'https://www.getyihu.com'].includes(location.origin);
+    // Klackjoy consent-region.ts at 4b8d7f61: 30 EEA countries + GB, CH, BR, JP.
+    // Use ISO codes, not aggregate "EEA" or "UK" tokens. No subdivisions in that source.
+    const deniedRegions = [
+      'AT', 'BE', 'BG', 'BR', 'CH', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI',
+      'FR', 'GB', 'GR', 'HR', 'HU', 'IE', 'IS', 'IT', 'JP', 'LI', 'LT', 'LU',
+      'LV', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK',
+    ];
     const panel = document.getElementById('analytics-consent');
     const settings = document.getElementById('analytics-settings');
     const deny = document.getElementById('analytics-deny');
     const allow = document.getElementById('analytics-allow');
     const status = document.getElementById('analytics-status');
     const en = document.documentElement.lang === 'en';
-    let loaded = false;
     let openedFromSettings = false;
+    let storageError = false;
+    // Respect an opt-out flag installed before this bootstrap (e.g. a browser opt-out).
+    const priorOptOut = window[disabled] === true;
     let choice = readChoice();
 
     function readChoice() {
+      if (priorOptOut) return 'denied';
       try {
-        // Remember refusals only. A stale grant can never authorize a later document,
-        // even if withdrawal writes fail and storage becomes writable again later.
-        return localStorage.getItem(key) === 'denied' ? 'denied' : null;
-      } catch { return null; }
+        const value = localStorage.getItem(key);
+        return value === null ? null : value === 'granted' ? 'granted' : 'denied';
+      } catch { return 'denied'; } // Unreadable/malformed preferences never imply a grant.
+    }
+    function consent(analytics) {
+      return {
+        analytics_storage: analytics,
+        ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+      };
     }
     function clearAnalyticsCookies() {
       const domains = new Set(['', location.hostname, '.getyihu.com', 'getyihu.com']);
@@ -59,28 +74,31 @@ const en = lang === 'en';
         }
       }
     }
-    function enableAnalytics() {
-      if (!isProduction || choice !== 'granted' || loaded) return;
+    function initializeAnalytics() {
+      if (!isProduction) return;
       const canonical = document.querySelector('link[rel="canonical"]');
       if (!canonical) return;
       const page = new URL(canonical.href);
       if (page.origin !== 'https://getyihu.com') return;
       page.search = '';
       page.hash = '';
-      loaded = true;
-      window[disabled] = false;
       window.dataLayer = window.dataLayer || [];
       window.gtag = function () { window.dataLayer.push(arguments); };
+      // No temporary granted default for an existing refusal; restore before config/events/tag.
+      window.gtag('consent', 'default', consent(choice === 'denied' ? 'denied' : 'granted'));
       window.gtag('consent', 'default', {
-        analytics_storage: 'granted', ad_storage: 'denied',
-        ad_user_data: 'denied', ad_personalization: 'denied',
+        ...consent('denied'), region: deniedRegions, wait_for_update: 500,
       });
+      if (choice !== null) window.gtag('consent', 'update', consent(choice));
+      window.gtag('set', 'ads_data_redaction', true);
+      window.gtag('set', 'url_passthrough', false);
       window.gtag('js', new Date());
       window.gtag('config', measurement, {
         page_location: page.href,
         page_referrer: '',
         allow_google_signals: false, allow_ad_personalization_signals: false,
       });
+      // Advanced mode: regional denied may send cookieless pings, NOT zero network.
       const script = document.createElement('script');
       script.id = 'yihu-google-tag';
       script.async = true;
@@ -95,37 +113,37 @@ const en = lang === 'en';
       status.textContent = !isProduction
         ? (en ? 'Preview: website analytics is disabled.' : '预览环境：网站统计已禁用。')
         : choice === 'granted'
-        ? (en ? 'Current preference: allowed. Withdrawing reloads this page to stop the loaded tag.' : '当前偏好：已允许。撤回后将刷新本页，以停止已加载的统计脚本。')
-        : (en ? 'Current preference: analytics off.' : '当前偏好：统计未开启。');
+        ? (en ? 'Preference: analytics allowed; ads denied.' : '当前偏好：统计允许，广告拒绝。')
+        : choice === 'denied'
+        ? (en ? 'Preference: analytics declined. Future collection is disabled in this browser.' : '当前偏好：统计拒绝，此浏览器禁用后续采集。')
+        : (en ? 'Regional analytics defaults apply until you choose. Ads consent is denied everywhere.' : '选择前适用区域统计默认值；所有地区均拒绝广告同意。');
+      if (storageError) status.textContent += en
+        ? ' Saving failed: this page honors your choice, but a later page may restore the previous saved preference.'
+        : ' 保存失败：本页仍尊重选择，但后续页面可能恢复原保存偏好。';
       settings.setAttribute('aria-expanded', String(!panel.hidden));
     }
-    function choose(value) {
-      if (value === 'granted' && !isProduction) return;
-      choice = value;
-      // Disable collection before touching storage or reloading the page.
-      if (value !== 'granted') window[disabled] = true;
-      try {
-        if (value === 'denied') localStorage.setItem(key, 'denied');
-        else localStorage.removeItem(key);
-      } catch { /* Grants remain memory-only; stale stored grants are never honored. */ }
-      if (value === 'granted') enableAnalytics();
-      else {
-        if (loaded && window.gtag) window.gtag('consent', 'update', {
-          analytics_storage: 'denied', ad_storage: 'denied',
-          ad_user_data: 'denied', ad_personalization: 'denied',
-        });
-        clearAnalyticsCookies();
-        if (loaded) { location.reload(); return; }
+    function applyChoice() {
+      window[disabled] = !isProduction || choice === 'denied';
+      if (choice === 'denied' || !isProduction) clearAnalyticsCookies();
+      if (isProduction && choice !== null && window.gtag) {
+        window.gtag('consent', 'update', consent(choice));
       }
-      panel.hidden = true;
+    }
+    function choose(value) {
+      if (value === 'granted' && (!isProduction || priorOptOut)) return;
+      choice = value;
+      applyChoice(); // Disable/update BEFORE storage writes; failure cannot undo a refusal.
+      try { localStorage.setItem(key, value); storageError = false; } catch { storageError = true; }
+      panel.hidden = !storageError;
       render();
       const target = openedFromSettings ? settings : document.getElementById('main');
       if (target) { if (!openedFromSettings) target.setAttribute('tabindex', '-1'); target.focus({ preventScroll:true }); }
     }
-    window[disabled] = true;
-    clearAnalyticsCookies();
+    window[disabled] = !isProduction || choice === 'denied';
+    if (choice === 'denied' || !isProduction) clearAnalyticsCookies();
+    initializeAnalytics();
     settings.hidden = false;
-    allow.disabled = !isProduction;
+    allow.disabled = !isProduction || priorOptOut;
     panel.hidden = choice !== null;
     render();
     settings.addEventListener('click', () => {
@@ -137,20 +155,15 @@ const en = lang === 'en';
     deny.addEventListener('click', () => choose('denied'));
     allow.addEventListener('click', () => choose('granted'));
     function syncChoice() {
-      choice = readChoice();
-      if (choice !== 'granted') {
-        window[disabled] = true;
-        clearAnalyticsCookies();
-        if (loaded) { location.reload(); return; }
-      }
-      // Storage changes cannot grant consent in this document.
+      // A removed preference cannot grant consent to an already loaded document.
+      choice = readChoice() ?? 'denied';
+      applyChoice();
       panel.hidden = choice !== null;
       render();
     }
     window.addEventListener('storage', event => {
       if (event.key === key || event.key === null) syncChoice();
     });
-    // History restoration must also respect a withdrawal made in another tab.
     window.addEventListener('pageshow', event => { if (event.persisted) syncChoice(); });
   })();
 </script>
