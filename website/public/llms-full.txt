@@ -9,7 +9,7 @@ Privacy: https://getyihu.com/privacy/ | https://getyihu.com/en/privacy/
 
 ## Reading contract / 阅读边界
 
-This reference covers seven existing bilingual page families (home, start, privacy, voice drafts, mobile decisions, recording notes, multi-project Radar/Watch) plus twenty-three bilingual selection, preflight, troubleshooting, editorial-review, data-contract, evaluation, compatibility, cross-device, context and evidence-check guides. Every listed URL has its own canonical and language counterpart. Text is a content reference, not device, latency, radio range, delivery, indexing, AI citation or legal certification. 一共三十类双语页面；源码实现、构建与机器可读文件不等于真机、写入、推送或收录验收。
+This reference covers seven existing bilingual page families (home, start, privacy, voice drafts, mobile decisions, recording notes, multi-project Radar/Watch) plus twenty-six bilingual selection, preflight, troubleshooting, editorial-review, data-contract, evaluation, compatibility, cross-device, context, terminology, time and evidence-check guides. Every listed URL has its own canonical and language counterpart. Text is a content reference, not device, latency, radio range, delivery, indexing, AI citation or legal certification. 一共三十三类双语页面；源码实现、构建与机器可读文件不等于真机、写入、推送或收录验收。
 
 ## Topic routing / 意图与真实能力
 
@@ -27,7 +27,7 @@ This reference covers seven existing bilingual page families (home, start, priva
 
 Canonical: https://getyihu.com/
 
-工作台， 随身带走。 离开桌面，也能用语音接续你的 Agent 工作。 体验一呼 获取源码 场景与界面示意 iPhone 如何接续自有 Agent 工作台？ 一呼（Yihu）是针对 Agent 工作台优化的原生 iOS 浏览器壳：访问自有 HTTPS 网页，在手机上转写语音草稿、保留录音笔记、筛选 PM Radar 事项，并通过系统分享暂存内容。Apple Watch 可接收配对手机摘要。它不提供 Agent 后端；语音需另下载模型，原生增强取决于服务兼容性，源码合入不等于所有真机路径验收通过。 熟悉的工作台，多一层原生体验。 端侧语音 / 录音笔记 / 系统分享 从一句话， 到一份草稿。 亲手试一次：播放一段示例，校对文字，再把它填入工作台草稿。 交互演示 示例内容 · 无需麦克风 0 1 听见 0 2 校对 0 3 填入 把想法，说出来。 校对并编辑转写文字 播放示例 我的工作台 示例 草稿 校对后的文字，会出现在这里。 发送之前，由你确认。 启用 JavaScript 即可体验。实际 App 会将语音转写为草稿，由你检查后决定发送。 让想法，离工作更近一点。 端侧语音 想法刚出现，就说下来。 在 iPhone 上将语音转成可编辑的文字，检查后再交给工作台。语音模型需单独下载。 录音笔记 长一点的想法，也装得下。 先记录，再由手机分段转写。音频和文字留在本地，随时回来整理。 系统分享 看到的，也能带回来。 把文字、链接和文件暂存进分享收件箱，再选择交给工作台的内容。不会自动发送。 系统听写、备忘录还是原生工作台草稿？对照使用边界。 查看手机待决策、来源时效与确认回执边界。 工作台是你的， 节奏也是。 连接你自己信任的 HTTPS 工作台。一呼在它周围，补上 iPhone 的原生能力。 Collie、OpenClaw、Hermes 等网页工作台均可作为访问对象；网页能打开，与原生增强已适配，是两件事。 通知与实时活动需要兼容服务。一呼不托管 Agent，也不提供后端。 了解使用条件 能力与前提核对表 左右滑动表格，查看完整使用前提。键盘用户可聚焦表格后使用方向键。 能力 可以做什么 前提与边界 端侧语音草稿 在手机上转写，再显式填入兼容草稿；不替你发送。 兼容模型另下载，需麦克风权限；宿主拒绝或未知编辑器可能无法填入。 长录音分段转写 保存本地音频和转写文字，供后续整理。 需兼容模型与麦克风权限；录音余项待真机验证，不承诺准确率。 PM Radar 待办筛选 按工作台筛选事项，区分来源读取时间与离线缓存。 自备 JSON 导出或兼容 HTTPS JSON 源；不复用网页 Cookie；回复需独立授权、手机确认与回执。 Apple Watch 摘要 接收配对手机的待决策/待验收摘要，并接续到手机。 需 watchOS 11+ 与配对手机；不是独立审批或手表直写，真机余项待验。 系统分享收件箱 文字、链接和文件先暂存，用户选择后再交接。 不自动上传或发送；目标服务的数据处理规则仍适用。 常见问题 如何在 iPhone 上访问自己的 Agent 网页工作台？ 一呼是围绕 WebKit 的原生 iOS 浏览器壳，可访问手机可达、TLS 证书受信任的自有 HTTPS 工作台。Collie、OpenClaw、Hermes 是网页访问示例，并非原生兼容认证清单；一呼不托管 Agent，也不是它们的官方客户端。 手机接入自建 Agent 工作台之前要准备什么？ 需要 iOS 18+、自有可信 HTTPS 工作台，以及当前源码发行所需的 Mac、Xcode、XcodeGen 和自己的签名配置。使用语音还需单独下载兼容模型并授予麦克风权限。工作台登录和页面兼容取决于服务端。 iPhone 如何把语音转成 Agent 工作台草稿而不自动发送？ 一呼用另下载的 Qwen3 ASR 模型在手机端转写，用户核对后可填入兼容草稿。填入遵守宿主明确拒绝，不向未知编辑器强行写入，也不会按下发送；不兼容时可保留文字供显式复制。 iPhone 能把较长录音分段转写并保留本地笔记吗？ 一呼源码提供长录音、手机分段转写和本地音频/文字保存，需麦克风权限与兼容模型。录音相关真机余项仍待验，不承诺任意时长、设备性能或转写准确率。 如何在手机上筛选多个 Agent 项目的待决策和待验收事项？ 一呼 PM Radar 接收自备 JSON 导出或兼容 HTTPS JSON 数据源，提供工作台独立筛选、管理计数和有界离线快照。来源读取时间用于区分旧缓存与新数据；读取本身不改变台账状态。认证源当前需文件导出，不复用网页 Cookie 或存储凭据。 从手机回复项目决策会自动改任务状态吗？ 不会。一呼仅对符合条件的决策/验收事项，在服务端独立授权、手机明确确认后回复并核验回执；不自动改状态、执行任务、合并或部署。真实回复仍有独立设备/服务验收要求。 Apple Watch 能查看 Agent 项目摘要并独立审批吗？ 手表伴侣通过配对手机接收待决策/待验收摘要，并可把所选事项或受保护草稿接续到手机；需 watchOS 11+。它不提供独立审批或手表直写，手机仍需确认，真机配对等余项待验。 iOS 分享到工作台时会自动上传文件或发送消息吗？ 一呼分享扩展只把文字、链接和文件暂存到 App Group 收件箱，不自动上传或发送。后续交接由用户另行选择，目标工作台的数据处理规则仍适用。 端侧语音识别是否意味着工作台 App 的所有数据都不出手机？ 不是。兼容模型下载后在手机转写，录音笔记本地保存；但模型下载、网页访问、用户发送/上传与可选通知/中继涉及相应服务。端侧转写不能作为所有数据永不出手机的承诺。 能打开 Agent 网页就代表原生推送和实时活动可用吗？ 不代表。原生通知需要兼容网页桥、服务端接口与匹配签名环境的 APNs 配置；实时活动还需自有兼容中继。占位中继地址不可用，推送交付仍需独立验收，台账 GET 数据源本身不是推送事件源。 这类自建工作台 iPhone 客户端现在如何安装？ 一呼当前提供源码，不提供 App Store 安装成品。请按仓库构建说明配置自己的标识、App Group 和签名，再构建到自己的 iPhone；不提供预配置服务器或模型文件。 手机端声纹过滤能替代账号身份认证或写入授权吗？ 不能。一呼声纹验证只是可能误判的便利过滤，不是身份认证；兼容 WeSpeaker/CAM++ 模型未随仓库提供，缺模型时依赖验证的路径不可用，也不能绕过验证或服务端写入授权。 使用条件与构建指南 隐私与数据边界 工作台、对讲机与语音群聊选型 户外与门店：音频预检和文字交接 蓝牙输入分层排障 离线与弱网交接排障 可核对纪要与简报字段 网页朗读与麦克风切换边界 多段笔记汇总与待办核对 Radar JSON类型与空值核对 首次试用继续/停止评估卡 单录音片段标签与语义核对 Radar同源批次人工比较 人工文本修订与副本核对 跨部门认领与归档核对 Radar证据人工二次核实 简报格式改版兼容评审 改变交接方式前许可核对 团队交接证据人工审计 跨端字段呈现核对 音频切换恢复源码矩阵 客户跟进证据最小化 追问指代与目标上下文核对 人工摘要逐句引用溯源 停车与展会外设拾音前检 把工作台，带在身边。 开源，为 iPhone 而做，连接你自己的服务。 开始使用 目前提供源码，需 iOS 18+、自有工作台、语音模型和签名配置。
+工作台， 随身带走。 离开桌面，也能用语音接续你的 Agent 工作。 体验一呼 获取源码 场景与界面示意 iPhone 如何接续自有 Agent 工作台？ 一呼（Yihu）是针对 Agent 工作台优化的原生 iOS 浏览器壳：访问自有 HTTPS 网页，在手机上转写语音草稿、保留录音笔记、筛选 PM Radar 事项，并通过系统分享暂存内容。Apple Watch 可接收配对手机摘要。它不提供 Agent 后端；语音需另下载模型，原生增强取决于服务兼容性，源码合入不等于所有真机路径验收通过。 熟悉的工作台，多一层原生体验。 端侧语音 / 录音笔记 / 系统分享 从一句话， 到一份草稿。 亲手试一次：播放一段示例，校对文字，再把它填入工作台草稿。 交互演示 示例内容 · 无需麦克风 0 1 听见 0 2 校对 0 3 填入 把想法，说出来。 校对并编辑转写文字 播放示例 我的工作台 示例 草稿 校对后的文字，会出现在这里。 发送之前，由你确认。 启用 JavaScript 即可体验。实际 App 会将语音转写为草稿，由你检查后决定发送。 让想法，离工作更近一点。 端侧语音 想法刚出现，就说下来。 在 iPhone 上将语音转成可编辑的文字，检查后再交给工作台。语音模型需单独下载。 录音笔记 长一点的想法，也装得下。 先记录，再由手机分段转写。音频和文字留在本地，随时回来整理。 系统分享 看到的，也能带回来。 把文字、链接和文件暂存进分享收件箱，再选择交给工作台的内容。不会自动发送。 系统听写、备忘录还是原生工作台草稿？对照使用边界。 查看手机待决策、来源时效与确认回执边界。 工作台是你的， 节奏也是。 连接你自己信任的 HTTPS 工作台。一呼在它周围，补上 iPhone 的原生能力。 Collie、OpenClaw、Hermes 等网页工作台均可作为访问对象；网页能打开，与原生增强已适配，是两件事。 通知与实时活动需要兼容服务。一呼不托管 Agent，也不提供后端。 了解使用条件 能力与前提核对表 左右滑动表格，查看完整使用前提。键盘用户可聚焦表格后使用方向键。 能力 可以做什么 前提与边界 端侧语音草稿 在手机上转写，再显式填入兼容草稿；不替你发送。 兼容模型另下载，需麦克风权限；宿主拒绝或未知编辑器可能无法填入。 长录音分段转写 保存本地音频和转写文字，供后续整理。 需兼容模型与麦克风权限；录音余项待真机验证，不承诺准确率。 PM Radar 待办筛选 按工作台筛选事项，区分来源读取时间与离线缓存。 自备 JSON 导出或兼容 HTTPS JSON 源；不复用网页 Cookie；回复需独立授权、手机确认与回执。 Apple Watch 摘要 接收配对手机的待决策/待验收摘要，并接续到手机。 需 watchOS 11+ 与配对手机；不是独立审批或手表直写，真机余项待验。 系统分享收件箱 文字、链接和文件先暂存，用户选择后再交接。 不自动上传或发送；目标服务的数据处理规则仍适用。 常见问题 如何在 iPhone 上访问自己的 Agent 网页工作台？ 一呼是围绕 WebKit 的原生 iOS 浏览器壳，可访问手机可达、TLS 证书受信任的自有 HTTPS 工作台。Collie、OpenClaw、Hermes 是网页访问示例，并非原生兼容认证清单；一呼不托管 Agent，也不是它们的官方客户端。 手机接入自建 Agent 工作台之前要准备什么？ 需要 iOS 18+、自有可信 HTTPS 工作台，以及当前源码发行所需的 Mac、Xcode、XcodeGen 和自己的签名配置。使用语音还需单独下载兼容模型并授予麦克风权限。工作台登录和页面兼容取决于服务端。 iPhone 如何把语音转成 Agent 工作台草稿而不自动发送？ 一呼用另下载的 Qwen3 ASR 模型在手机端转写，用户核对后可填入兼容草稿。填入遵守宿主明确拒绝，不向未知编辑器强行写入，也不会按下发送；不兼容时可保留文字供显式复制。 iPhone 能把较长录音分段转写并保留本地笔记吗？ 一呼源码提供长录音、手机分段转写和本地音频/文字保存，需麦克风权限与兼容模型。录音相关真机余项仍待验，不承诺任意时长、设备性能或转写准确率。 如何在手机上筛选多个 Agent 项目的待决策和待验收事项？ 一呼 PM Radar 接收自备 JSON 导出或兼容 HTTPS JSON 数据源，提供工作台独立筛选、管理计数和有界离线快照。来源读取时间用于区分旧缓存与新数据；读取本身不改变台账状态。认证源当前需文件导出，不复用网页 Cookie 或存储凭据。 从手机回复项目决策会自动改任务状态吗？ 不会。一呼仅对符合条件的决策/验收事项，在服务端独立授权、手机明确确认后回复并核验回执；不自动改状态、执行任务、合并或部署。真实回复仍有独立设备/服务验收要求。 Apple Watch 能查看 Agent 项目摘要并独立审批吗？ 手表伴侣通过配对手机接收待决策/待验收摘要，并可把所选事项或受保护草稿接续到手机；需 watchOS 11+。它不提供独立审批或手表直写，手机仍需确认，真机配对等余项待验。 iOS 分享到工作台时会自动上传文件或发送消息吗？ 一呼分享扩展只把文字、链接和文件暂存到 App Group 收件箱，不自动上传或发送。后续交接由用户另行选择，目标工作台的数据处理规则仍适用。 端侧语音识别是否意味着工作台 App 的所有数据都不出手机？ 不是。兼容模型下载后在手机转写，录音笔记本地保存；但模型下载、网页访问、用户发送/上传与可选通知/中继涉及相应服务。端侧转写不能作为所有数据永不出手机的承诺。 能打开 Agent 网页就代表原生推送和实时活动可用吗？ 不代表。原生通知需要兼容网页桥、服务端接口与匹配签名环境的 APNs 配置；实时活动还需自有兼容中继。占位中继地址不可用，推送交付仍需独立验收，台账 GET 数据源本身不是推送事件源。 这类自建工作台 iPhone 客户端现在如何安装？ 一呼当前提供源码，不提供 App Store 安装成品。请按仓库构建说明配置自己的标识、App Group 和签名，再构建到自己的 iPhone；不提供预配置服务器或模型文件。 手机端声纹过滤能替代账号身份认证或写入授权吗？ 不能。一呼声纹验证只是可能误判的便利过滤，不是身份认证；兼容 WeSpeaker/CAM++ 模型未随仓库提供，缺模型时依赖验证的路径不可用，也不能绕过验证或服务端写入授权。 使用条件与构建指南 隐私与数据边界 工作台、对讲机与语音群聊选型 户外与门店：音频预检和文字交接 蓝牙输入分层排障 离线与弱网交接排障 可核对纪要与简报字段 网页朗读与麦克风切换边界 多段笔记汇总与待办核对 Radar JSON类型与空值核对 首次试用继续/停止评估卡 单录音片段标签与语义核对 Radar同源批次人工比较 人工文本修订与副本核对 跨部门认领与归档核对 Radar证据人工二次核实 简报格式改版兼容评审 改变交接方式前许可核对 团队交接证据人工审计 跨端字段呈现核对 音频切换恢复源码矩阵 客户跟进证据最小化 追问指代与目标上下文核对 人工摘要逐句引用溯源 停车与展会外设拾音前检 多语术语保留前检 跨时区日期时间核对 载体脱敏归档范围矩阵 把工作台，带在身边。 开源，为 iPhone 而做，连接你自己的服务。 开始使用 目前提供源码，需 iOS 18+、自有工作台、语音模型和签名配置。
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
@@ -37,7 +37,7 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/
 
-Your workbench. Within reach. Step away from your desk. Keep your Agent work moving with your voice. Try Yihu Get the source Illustrative scene and interface How can an iPhone connect to your own Agent workbench? Yihu is a native iOS browser shell optimized for Agent workbenches: open your own HTTPS web UI, transcribe speech drafts on the phone, retain voice notes, filter PM Radar items and stage content through system sharing. Apple Watch can receive paired-phone summaries. Yihu supplies no Agent backend; speech needs separately downloaded models and native enhancements depend on service compatibility. Merged source does not certify every device path. Your familiar workbench. A native touch. On-device speech / Voice notes / Sharing A thought. Then a draft. Try the handoff. Play a short sample, edit the words, then place them in a workbench draft. INTERACTIVE DEMO Sample content · no microphone access 0 1 Listen 0 2 Review 0 3 Insert A thought, out loud. Review and edit the transcript Play sample My workbench Demo Draft Your reviewed words will appear here. You decide what to send, and when. Enable JavaScript to try the demo. Yihu transcribes speech into a draft for you to review before sending. Less distance between you and your work. On-device speech Say it while it’s fresh. Turn spoken ideas into an editable draft on your iPhone. Review your words before sending. Speech models are downloaded separately. Voice notes Give a longer thought room. Record now, transcribe in segments on your phone, and return to your audio and text later. System sharing Keep what you find. Bring text, links and files into the share inbox. Choose what to hand off to your workbench. Nothing is sent automatically. Dictation, Notes or native workbench drafts? Compare the boundaries. Read mobile decisions, source freshness and phone confirmation boundaries. Your workbench. Still yours. Connect your own trusted HTTPS workbench. Yihu adds native iPhone capabilities around it. Collie, OpenClaw and Hermes are examples of web workbenches you can open. Page access and native integration are separate capabilities. Notifications and Live Activities require a compatible service. Yihu does not host Agents or provide a backend. See what you need Capabilities and prerequisites Swipe the table to compare prerequisites. With a keyboard, focus the table and use the arrow keys. Capability What it does Prerequisites and boundaries On-device speech drafts Transcribe on the phone and explicitly insert into a compatible draft; never presses Send. Download compatible models and grant microphone access; host refusal or unknown editors can prevent insertion. Segmented voice notes Retain local audio and transcripts for later review. Requires compatible models and microphone access; remaining recording paths need device acceptance, with no accuracy guarantee. PM Radar task filters Filter tasks per workbench and distinguish source-read time from offline cache. Supply a JSON export or compatible HTTPS JSON feed; web cookies are not reused. Replies need separate authorization, phone confirmation and receipt readback. Apple Watch summaries Receive pending decision/acceptance summaries from the paired phone and hand off to it. Requires watchOS 11+ and a paired phone; no standalone approval or direct Watch writes. Remaining device checks are pending. System share inbox Stage text, links and files before a user-selected handoff. No automatic upload or send; the destination service's data practices still apply. Frequently asked questions How can I access my own Agent web workbench on an iPhone? Yihu is a native iOS browser shell around WebKit for your own reachable, trusted HTTPS workbench. Collie, OpenClaw and Hermes are web-access examples, not a certified native compatibility list. Yihu does not host Agents and is not their official client. What do I need before connecting a phone to a self-hosted Agent workbench? You need iOS 18+, your own trusted HTTPS workbench and, for the current source release, a Mac, Xcode, XcodeGen and your own signing setup. Speech also requires separately downloaded compatible models and microphone permission. Login and page compatibility depend on the server. How can an iPhone turn speech into an Agent workbench draft without sending it? Yihu transcribes on the phone with separately downloaded Qwen3 ASR models. After review, text can be inserted into a compatible draft. Insertion respects explicit host refusal, does not force text into unknown editors and never presses Send. Incompatible pages retain text for explicit copying. Can an iPhone transcribe longer recordings in segments and keep local notes? Yihu source includes longer recordings, segmented phone transcription and local audio/text retention, requiring microphone permission and compatible models. Remaining recording-related device checks are pending; no arbitrary duration, device performance or transcription accuracy is guaranteed. How can I filter pending decisions and acceptance items across Agent projects on a phone? Yihu PM Radar accepts your own JSON export or compatible HTTPS JSON feed, with per-workbench filters, management counts and bounded offline snapshots. Source-read times distinguish cached from fresh data; reads do not change ledger status. Authenticated feeds currently require a file export; Radar does not reuse web cookies or store credentials. Does replying to a project decision from a phone automatically change task status? No. For eligible decision/acceptance items, Yihu requires separately authorized server writes and explicit phone confirmation, followed by receipt readback. It does not automatically change status, execute tasks, merge or deploy. Real replies still require separate device/service acceptance. Can an Apple Watch show Agent project summaries and approve them independently? The watchOS 11+ companion receives pending decision/acceptance summaries through the paired phone and can hand off selected items or protected drafts to it. It does not provide standalone approval or direct Watch writes; the phone still requires confirmation and remaining pairing/device checks are pending. Does sharing to a workbench on iOS automatically upload files or send messages? Yihu's share extension stages text, links and files in an App Group inbox. It does not automatically upload or send them. Handoff requires a separate user action, and the destination workbench's data practices still apply. Does on-device speech recognition mean all workbench app data stays on the phone? No. Compatible downloaded models transcribe on the phone and voice notes are stored locally, but model downloads, web access, user sends/uploads and optional notification/relay integrations involve their respective services. On-device transcription is not a promise that all data stays on the phone. Does opening an Agent web page mean native push and Live Activities will work? No. Native notifications need a compatible web bridge, server endpoints and APNs configuration matching the signing environment. Live Activities also need a compatible relay you control. The placeholder relay is unusable, delivery needs separate acceptance and a ledger GET feed is not itself a push event source. How can I currently install this type of self-hosted workbench iPhone client? Yihu currently provides source code, not an App Store binary. Follow the repository build guide to configure your own identifiers, App Group and signing, then build for your iPhone. No preconfigured server or model files are supplied. Can phone speaker verification replace account authentication or write authorization? No. Yihu speaker verification is a convenience filter that can misidentify speakers, not authentication. Compatible WeSpeaker/CAM++ artifacts are not included; verification-dependent paths are unavailable without them. Verification and server write authorization must not be bypassed. Requirements and build guide Privacy and data boundaries Voice workbench, radio or group chat? Outdoor/store audio checks and text handoff Bluetooth input troubleshooting Offline and weak-network handoff Reviewable minutes and brief fields Web read-aloud and microphone transitions Multiple-note review and candidate to-dos Radar JSON types and null checks Pre-trial go/no-go decision card Review labels within one recording Compare authorized Radar batches Manual text correction and retained copies Department ownership and archive checks Second-check Radar evidence Brief format-change compatibility review Permission before changing handoff paths Manual handoff evidence review Cross-device field presentation Audio-route recovery source matrix Follow-up evidence minimization Follow-up context and target checks Sentence-to-field summary provenance Parked-vehicle and exhibition input preflight Take your workbench with you. Open source. Built for iPhone. Connect your own services. Get started Currently a source release. Requires iOS 18+, your own workbench, speech models and signing setup.
+Your workbench. Within reach. Step away from your desk. Keep your Agent work moving with your voice. Try Yihu Get the source Illustrative scene and interface How can an iPhone connect to your own Agent workbench? Yihu is a native iOS browser shell optimized for Agent workbenches: open your own HTTPS web UI, transcribe speech drafts on the phone, retain voice notes, filter PM Radar items and stage content through system sharing. Apple Watch can receive paired-phone summaries. Yihu supplies no Agent backend; speech needs separately downloaded models and native enhancements depend on service compatibility. Merged source does not certify every device path. Your familiar workbench. A native touch. On-device speech / Voice notes / Sharing A thought. Then a draft. Try the handoff. Play a short sample, edit the words, then place them in a workbench draft. INTERACTIVE DEMO Sample content · no microphone access 0 1 Listen 0 2 Review 0 3 Insert A thought, out loud. Review and edit the transcript Play sample My workbench Demo Draft Your reviewed words will appear here. You decide what to send, and when. Enable JavaScript to try the demo. Yihu transcribes speech into a draft for you to review before sending. Less distance between you and your work. On-device speech Say it while it’s fresh. Turn spoken ideas into an editable draft on your iPhone. Review your words before sending. Speech models are downloaded separately. Voice notes Give a longer thought room. Record now, transcribe in segments on your phone, and return to your audio and text later. System sharing Keep what you find. Bring text, links and files into the share inbox. Choose what to hand off to your workbench. Nothing is sent automatically. Dictation, Notes or native workbench drafts? Compare the boundaries. Read mobile decisions, source freshness and phone confirmation boundaries. Your workbench. Still yours. Connect your own trusted HTTPS workbench. Yihu adds native iPhone capabilities around it. Collie, OpenClaw and Hermes are examples of web workbenches you can open. Page access and native integration are separate capabilities. Notifications and Live Activities require a compatible service. Yihu does not host Agents or provide a backend. See what you need Capabilities and prerequisites Swipe the table to compare prerequisites. With a keyboard, focus the table and use the arrow keys. Capability What it does Prerequisites and boundaries On-device speech drafts Transcribe on the phone and explicitly insert into a compatible draft; never presses Send. Download compatible models and grant microphone access; host refusal or unknown editors can prevent insertion. Segmented voice notes Retain local audio and transcripts for later review. Requires compatible models and microphone access; remaining recording paths need device acceptance, with no accuracy guarantee. PM Radar task filters Filter tasks per workbench and distinguish source-read time from offline cache. Supply a JSON export or compatible HTTPS JSON feed; web cookies are not reused. Replies need separate authorization, phone confirmation and receipt readback. Apple Watch summaries Receive pending decision/acceptance summaries from the paired phone and hand off to it. Requires watchOS 11+ and a paired phone; no standalone approval or direct Watch writes. Remaining device checks are pending. System share inbox Stage text, links and files before a user-selected handoff. No automatic upload or send; the destination service's data practices still apply. Frequently asked questions How can I access my own Agent web workbench on an iPhone? Yihu is a native iOS browser shell around WebKit for your own reachable, trusted HTTPS workbench. Collie, OpenClaw and Hermes are web-access examples, not a certified native compatibility list. Yihu does not host Agents and is not their official client. What do I need before connecting a phone to a self-hosted Agent workbench? You need iOS 18+, your own trusted HTTPS workbench and, for the current source release, a Mac, Xcode, XcodeGen and your own signing setup. Speech also requires separately downloaded compatible models and microphone permission. Login and page compatibility depend on the server. How can an iPhone turn speech into an Agent workbench draft without sending it? Yihu transcribes on the phone with separately downloaded Qwen3 ASR models. After review, text can be inserted into a compatible draft. Insertion respects explicit host refusal, does not force text into unknown editors and never presses Send. Incompatible pages retain text for explicit copying. Can an iPhone transcribe longer recordings in segments and keep local notes? Yihu source includes longer recordings, segmented phone transcription and local audio/text retention, requiring microphone permission and compatible models. Remaining recording-related device checks are pending; no arbitrary duration, device performance or transcription accuracy is guaranteed. How can I filter pending decisions and acceptance items across Agent projects on a phone? Yihu PM Radar accepts your own JSON export or compatible HTTPS JSON feed, with per-workbench filters, management counts and bounded offline snapshots. Source-read times distinguish cached from fresh data; reads do not change ledger status. Authenticated feeds currently require a file export; Radar does not reuse web cookies or store credentials. Does replying to a project decision from a phone automatically change task status? No. For eligible decision/acceptance items, Yihu requires separately authorized server writes and explicit phone confirmation, followed by receipt readback. It does not automatically change status, execute tasks, merge or deploy. Real replies still require separate device/service acceptance. Can an Apple Watch show Agent project summaries and approve them independently? The watchOS 11+ companion receives pending decision/acceptance summaries through the paired phone and can hand off selected items or protected drafts to it. It does not provide standalone approval or direct Watch writes; the phone still requires confirmation and remaining pairing/device checks are pending. Does sharing to a workbench on iOS automatically upload files or send messages? Yihu's share extension stages text, links and files in an App Group inbox. It does not automatically upload or send them. Handoff requires a separate user action, and the destination workbench's data practices still apply. Does on-device speech recognition mean all workbench app data stays on the phone? No. Compatible downloaded models transcribe on the phone and voice notes are stored locally, but model downloads, web access, user sends/uploads and optional notification/relay integrations involve their respective services. On-device transcription is not a promise that all data stays on the phone. Does opening an Agent web page mean native push and Live Activities will work? No. Native notifications need a compatible web bridge, server endpoints and APNs configuration matching the signing environment. Live Activities also need a compatible relay you control. The placeholder relay is unusable, delivery needs separate acceptance and a ledger GET feed is not itself a push event source. How can I currently install this type of self-hosted workbench iPhone client? Yihu currently provides source code, not an App Store binary. Follow the repository build guide to configure your own identifiers, App Group and signing, then build for your iPhone. No preconfigured server or model files are supplied. Can phone speaker verification replace account authentication or write authorization? No. Yihu speaker verification is a convenience filter that can misidentify speakers, not authentication. Compatible WeSpeaker/CAM++ artifacts are not included; verification-dependent paths are unavailable without them. Verification and server write authorization must not be bypassed. Requirements and build guide Privacy and data boundaries Voice workbench, radio or group chat? Outdoor/store audio checks and text handoff Bluetooth input troubleshooting Offline and weak-network handoff Reviewable minutes and brief fields Web read-aloud and microphone transitions Multiple-note review and candidate to-dos Radar JSON types and null checks Pre-trial go/no-go decision card Review labels within one recording Compare authorized Radar batches Manual text correction and retained copies Department ownership and archive checks Second-check Radar evidence Brief format-change compatibility review Permission before changing handoff paths Manual handoff evidence review Cross-device field presentation Audio-route recovery source matrix Follow-up evidence minimization Follow-up context and target checks Sentence-to-field summary provenance Parked-vehicle and exhibition input preflight Mixed-language term preflight Timezone and timestamp review Carrier-specific redaction/archive scope Take your workbench with you. Open source. Built for iPhone. Connect your own services. Get started Currently a source release. Requires iOS 18+, your own workbench, speech models and signing setup.
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
@@ -3633,6 +3633,420 @@ Parameter/comparison tables (HTML) / 参数对照表：
 <td>Verified available model, authorized non-executing blank draft</td>
 <td>Actual version and target readiness</td>
 <td>Accessories do not replace models, services, permission or confirmation</td>
+</tr>
+</tbody>
+</table>
+
+### 中英混说与术语保留前检：语言提示、常用词顺序和原文核对
+
+Canonical: https://getyihu.com/guides/multilingual-terms-preflight/
+
+中英混说与术语保留前检：语言提示、常用词顺序和原文核对 词表是识别背景提示，不是保证保留原词或自动翻译的字典 一呼现有语言选项为自动、中文、英文，自动选项界面含中英混说说明；常用词作为识别背景上下文使用。语言提示、解析后的词表和最终识别文字仍是不同层级。输入了术语不等于每个词都被模型纳入或正确保留，本页不提供翻译服务、多语言准确率或专名识别保证。 与人工纠错、纪要核对的区别 人工修订处理已经得到的文字；这里在采集前检查 实际语言提示、词表如何解析和哪些原词必须人工回查 。它不重写音频排障，也不把词表内容当作Agent指令、账号身份或审批授权。 多语言术语前检表 检查项 当前源码/界面边界 合成检查例子 不能推断 语言选项 automatic/chinese/english，自动提示不强制固定语言 是否按实际版本选项核对 自动支持所有语言或自动翻译 术语开关 是否识别时参考与保存词表分开 关闭参考不等于删除已存词 有保存就必定参与这次识别 分隔符 换行、英文/中文逗号、顿号和分号等按源码拆项 Sample-A与Sample-B各占一项 逗号属于术语原文时仍被完整保留 空白/重复 去首尾空白、丢空项，大小写去重保留首项顺序 Sample与sample只保留先出现者 有Unicode全面归一化或自动术语合并 数量 最多80个通过解析的术语 超出时不把剩余项算已采用 80项都会完整送进每次模型上下文 长度 单项最多40个Swift Character，过长项丢弃而非截断 长术语先核实际字符数 40字符等于40个UTF-8字节 优先顺序 前面的有效项更优先，实际保留受预算影响 把真正需要的合成词放前面 越长录音仍能带上全部术语 最终文字 仍需核拼写、缩写、数字与否定 保留原词引用，不把建议写成批准 词表可代替原文/真机准确率验收 解析器不以普通空格拆成多个术语，但这不等于模型把整句当成一个不可变词。不要把长提示或操作指令塞进词表来要求执行；它是识别上下文，不是业务命令通道。 合成术语清单的核对 输入示意： Sample-A sample-a 样例代号B，API 人工预期：首个Sample-A保留，后面大小写重复项不另计；样例代号B与API分别成项。 仍未知：具体识别会采用多少上下文，以及输出是否保留拼写。 这个例子不修改App设置，也不执行实际识别。公开例子不用客户姓名、内部产品编码、工作台令牌或真实任务正文。若需要维护团队词汇，应在已有获准范围核对，不为本页新建共享词库或外部授权。 原词与后续简报的边界 语音识别、人工翻译与摘要写作是不同处理。若下游简报把某个英文缩写展开、改成中文或合并别名，应保留修改依据和未知项，不能把编辑决定说成模型原词输出。多人/多端使用同一标签也不证明App会跨设备同步词表。 正式采用前仍需实际版本、兼容模型、权限与安全场景。本文不提供自动术语对齐、跨语言实体消歧或“所有专名必对”的能力，也不通过调整参数绕过模型校验和目标守卫。 FAQ 自动选项能保证任何语言和口音都正确吗？ 不能。当前选项与提示范围不等于任意语言/口音准确率；需实际模型与设备证据，本文未运行识别测试。 超过40字符的术语会被截成前40个吗？ 不是。当前解析直接丢弃不符合长度条件的项，不应把截短后的字串当作源码自动采用结果。 解析出80项是否说明识别时全用上？ 不说明。顺序和识别上下文预算影响采用范围；数量上限不是每次全部纳入保证。 关闭术语参考会删掉词表吗？ 按现有界面说明，两者分开，关闭参考保留词表；实际是否参考需核当前设置与版本，不从存储存在推断启用。 常用词会自动翻译成另一种语言吗？ 本文不提供翻译保证。术语作为识别背景，输出、人工改写和翻译要分别核对并保留来源。 术语包含“发送/执行”是否给Agent授权？ 不会。词表文字不是服务端权限、用户确认或业务命令许可，原交接守卫与回执边界不变。 相关指南与源码 人工文本修订 · 单录音原词核对 · 摘要逐句溯源 · 跨时区时间检查 · 开始 · 隐私 依据： 语言选项与术语解析 、 设置界面说明 、 识别上下文前缀 。
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>当前源码/界面边界</th>
+<th>合成检查例子</th>
+<th>不能推断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>语言选项</td>
+<td>automatic/chinese/english，自动提示不强制固定语言</td>
+<td>是否按实际版本选项核对</td>
+<td>自动支持所有语言或自动翻译</td>
+</tr>
+<tr>
+<td>术语开关</td>
+<td>是否识别时参考与保存词表分开</td>
+<td>关闭参考不等于删除已存词</td>
+<td>有保存就必定参与这次识别</td>
+</tr>
+<tr>
+<td>分隔符</td>
+<td>换行、英文/中文逗号、顿号和分号等按源码拆项</td>
+<td>Sample-A与Sample-B各占一项</td>
+<td>逗号属于术语原文时仍被完整保留</td>
+</tr>
+<tr>
+<td>空白/重复</td>
+<td>去首尾空白、丢空项，大小写去重保留首项顺序</td>
+<td>Sample与sample只保留先出现者</td>
+<td>有Unicode全面归一化或自动术语合并</td>
+</tr>
+<tr>
+<td>数量</td>
+<td>最多80个通过解析的术语</td>
+<td>超出时不把剩余项算已采用</td>
+<td>80项都会完整送进每次模型上下文</td>
+</tr>
+<tr>
+<td>长度</td>
+<td>单项最多40个Swift Character，过长项丢弃而非截断</td>
+<td>长术语先核实际字符数</td>
+<td>40字符等于40个UTF-8字节</td>
+</tr>
+<tr>
+<td>优先顺序</td>
+<td>前面的有效项更优先，实际保留受预算影响</td>
+<td>把真正需要的合成词放前面</td>
+<td>越长录音仍能带上全部术语</td>
+</tr>
+<tr>
+<td>最终文字</td>
+<td>仍需核拼写、缩写、数字与否定</td>
+<td>保留原词引用，不把建议写成批准</td>
+<td>词表可代替原文/真机准确率验收</td>
+</tr>
+</tbody>
+</table>
+
+### Before mixed-language dictation: language hints, term order and original wording
+
+Canonical: https://getyihu.com/en/guides/multilingual-terms-preflight/
+
+Before mixed-language dictation: language hints, term order and original wording A term list is recognition context, not a guaranteed preserve-or-translate dictionary Existing language choices are automatic, Chinese and English; the automatic label mentions mixed Chinese/English. Terms provide recognition background. A language hint, parsed list and final text are different layers. Entering a term does not prove every item reached the model or was preserved correctly. No translation service, universal multilingual accuracy or proper-name guarantee is supplied. Different from correction and minutes review Correction deals with already recognized text. Here before capture, inspect the actual hint, list parsing and original terms requiring later review . This is not another audio diagnosis. Vocabulary is neither an Agent instruction channel, identity nor approval. Language and vocabulary preflight Check Existing boundary Synthetic inspection Not established Language choice automatic/chinese/english; automatic supplies no fixed language hint Actual version/selection Every language supported or automatic translation Term toggle Referencing terms and retaining them are separate Disabling use does not delete stored terms Stored implies used in this recognition Separators Newlines and listed Latin/Chinese commas, enumeration marks/semicolons split terms Sample-A and Sample-B as separate items A comma inside a name remains unsplit Whitespace/duplicates Trim ends, drop blanks, case-insensitive deduplication, first-item order Sample/sample keeps the first Universal Unicode normalization or entity merging Count Up to 80 accepted terms Overflow is not counted as adopted All 80 always reach recognition context Length Up to 40 Swift Characters per item; overlong items are dropped, not truncated Inspect actual character count 40 characters means 40 UTF-8 bytes Order Earlier valid terms have priority, within context budget Put necessary synthetic terms first Longer audio preserves every term Output Check spelling, abbreviations, quantities and negations Retain original references Vocabulary replaces source/device accuracy checks Ordinary spaces do not split terms in this parser, but that does not make an entire phrase immutable to the recognizer. Do not put long operational prompts into the vocabulary to request execution; it is recognition context, not business authority. One synthetic list Input illustration: Sample-A sample-a 样例代号B，API Editorial expectation: First Sample-A retained; its case duplicate is not another term. The Chinese sample label and API are separate items. Still unknown: How much context reaches recognition and whether spelling survives in output. This neither changes app settings nor runs recognition. Use no customer names, private product codes, service tokens or real tasks publicly. Team vocabulary belongs in existing authorized processes, without provisioning a shared service or third-party authorization here. Original words versus later briefs Recognition, editorial translation and summarization are different processing steps. Expanding an acronym, translating a phrase or merging aliases needs a reason and retained unknowns, not a claim the model produced that wording. Shared labels do not prove cross-device vocabulary synchronization. Actual version, compatible models, permission and a safe environment remain prerequisites. No automatic terminology alignment, cross-language entity resolution or every-name-correct feature is provided, and no parameter bypasses model/target guards. FAQ Does automatic guarantee every language and accent? No. Choices/labels are not arbitrary-language accuracy evidence. Check actual models/devices; this page runs no recognition benchmark. Are over-40-character terms truncated to 40? No. Current parsing drops items failing the length condition. Do not present a shortened string as an automatically adopted result. Does parsing 80 entries mean recognition uses them all? No. Order and context budgets affect the adopted scope. An upper bound is not an all-items guarantee. Does disabling term use delete the list? Existing UI distinguishes the two and retains terms. Check actual setting/version rather than inferring enablement from storage. Does vocabulary automatically translate into another language? No translation guarantee follows. Terms are background; output, editing and translation need separate source review. Does send/execute in vocabulary authorize an Agent? No. Term text is not server permission, user confirmation or operation authority. Handoff/receipt guards remain. Reading and source Manual correction · Original-word passage review · Summary provenance · Timezone/time checks · Start · Privacy Evidence: language choices/term parser , settings explanation , recognition context prefixes .
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Existing boundary</th>
+<th>Synthetic inspection</th>
+<th>Not established</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Language choice</td>
+<td>automatic/chinese/english; automatic supplies no fixed language hint</td>
+<td>Actual version/selection</td>
+<td>Every language supported or automatic translation</td>
+</tr>
+<tr>
+<td>Term toggle</td>
+<td>Referencing terms and retaining them are separate</td>
+<td>Disabling use does not delete stored terms</td>
+<td>Stored implies used in this recognition</td>
+</tr>
+<tr>
+<td>Separators</td>
+<td>Newlines and listed Latin/Chinese commas, enumeration marks/semicolons split terms</td>
+<td>Sample-A and Sample-B as separate items</td>
+<td>A comma inside a name remains unsplit</td>
+</tr>
+<tr>
+<td>Whitespace/duplicates</td>
+<td>Trim ends, drop blanks, case-insensitive deduplication, first-item order</td>
+<td>Sample/sample keeps the first</td>
+<td>Universal Unicode normalization or entity merging</td>
+</tr>
+<tr>
+<td>Count</td>
+<td>Up to 80 accepted terms</td>
+<td>Overflow is not counted as adopted</td>
+<td>All 80 always reach recognition context</td>
+</tr>
+<tr>
+<td>Length</td>
+<td>Up to 40 Swift Characters per item; overlong items are dropped, not truncated</td>
+<td>Inspect actual character count</td>
+<td>40 characters means 40 UTF-8 bytes</td>
+</tr>
+<tr>
+<td>Order</td>
+<td>Earlier valid terms have priority, within context budget</td>
+<td>Put necessary synthetic terms first</td>
+<td>Longer audio preserves every term</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Check spelling, abbreviations, quantities and negations</td>
+<td>Retain original references</td>
+<td>Vocabulary replaces source/device accuracy checks</td>
+</tr>
+</tbody>
+</table>
+
+### 跨时区简报时间怎样核对？来源日期、Unix任务时间与载体时间分账
+
+Canonical: https://getyihu.com/guides/timezone-timestamp-review/
+
+跨时区简报时间怎样核对？来源日期、Unix任务时间与载体时间分账 先问这个时间描述哪件事，再比较时区、单位与先后 一呼当前Radar把 date_str 按固定 yyyy-MM-dd HH:mm 、UTC+08:00解析，来源最后成功读取时间不能用手机请求、缓存命中或文件修改时间替换。任务 timestamp 是另外的可选Unix时间字段；Watch的 sourceDate 与 capturedAt 又有各自含义。跨时区核对应先分事件与契约，不把所有“时间”都当同一种数字。 与缓存排障、批次比较的分工 缓存指南定位旧数据和读取失败，批次比较核两份数据是否可比；这里专门检查 不同口径的日期时间如何被错误比较 。本页不实现自动时区转换、时钟修正、预约调度或跨时区同步，也不写回真实来源时间。 时间字段口径表 时间/位置 当前含义或契约 应核对什么 不能替代什么 date_str 来源最后成功读取；固定UTC+08格式 完整字符串、来源与实际读取状态 手机点刷新或导出文件保存时间 任务timestamp 可选Double，Unix任务更新时间 来源提供的单位、缺失/null与排序范围 整份源读取时间、批准/处理时间 手机请求时间 发起读取的本地事件 是否成功拿到新源，而非仅缓存 来源已更新或任务已变更 Watch sourceDate 手机摘要对应来源时间 来源范围、失败与裁剪信息 手表封包或独立刷新时间 Watch capturedAt 摘要封包时间 与sourceDate分别看待 最新业务状态或最新源读取 文件/编辑时间 保存、复制、整理文档的事件 是否只是副本或人工编辑 原业务事件或来源身份 Unix秒与毫秒 不同数值单位，不可混用 按生产者/消费者契约核单位 仅凭位数猜测后自动改值 其他时区呈现 对同一时刻的人工显示 明确偏移、跨日与适用规则 把本地时区直接写回date_str Watch日期是该载体的Date编码契约，不能把随手看到的底层序列化数字直接与任务Unix字段相减。必须先核双方格式/单位；本页不提供通用时间字段识别器。 两个固定历史示例 示例A：2026-10-18 09:00（按当前date_str契约为UTC+08） 同一时刻的UTC显示：2026-10-18 01:00 UTC 示例B：2026-10-18 00:30（UTC+08） 同一时刻的UTC显示：2026-10-17 16:30 UTC，日期跨到前一天 这是明确偏移下的人工示意，不是真实来源或当前新鲜数据。不要因为文中给出UTC显示，就把 Z 、偏移或ISO分隔符直接加回 date_str ；当前严格格式与回读校验不等于任意ISO8601接受器。 检查顺序 先给每个时间标明事件：源读取、任务更新、请求、封包还是文件编辑。再确认来源身份与范围，随后核格式、时区/偏移和单位。如果出现排序矛盾，先看缺失值、优先级与来源顺序规则，不把它自动解释成时钟错误或任务状态改变。 当前源码把超过24小时的来源标旧，超前超过5分钟提示时钟问题；它们是来源时效判断，不是响应时间、刷新频率、服务SLA或业务逾期判定。未知日期应保持未知/失败，不能填“现在”让警告消失。任何修正应回原来源维护流程，不绕过解析或写授权。 FAQ 手机在另一个时区，date_str会改按手机时区解析吗？ 当前模型使用固定UTC+08解析，不应按手机所在地反推。实际显示与来源语义仍须分开核对。 给date_str加Z或+08:00会更标准吗？ 不能因此假定当前消费者接受。它有固定格式与严格回读检查，改源格式属于兼容性变更，需另核目标版本。 13位数字可以自动除1000当Unix秒吗？ 不应靠位数自动修源。先核生产者契约与实际字段，错误单位可能无效或表示完全不同时间；本页不提供自动强转。 刚刷新或刚封包为什么还显示旧来源？ 请求/封包与源成功读取不同，缓存可继续显示旧值；不能把新请求时间冒充来源更新。 24小时和5分钟是刷新SLA吗？ 不是。它们是当前来源旧值/未来时钟判断阈值，不承诺服务按某周期更新或任务必须何时处理。 时间缺失时填当前时间能帮助比较吗？ 会伪造含义，不应这样做。保留未知及缺口，回来源确认；否则会把旧数据或编辑副本误当新事实。 相关指南与源码 JSON类型与空值 · 批次比较 · 跨端呈现 · 改版兼容 · 开始 · 隐私 依据： 来源日期解析、时效与排序 、 Watch日期模型 。
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>时间/位置</th>
+<th>当前含义或契约</th>
+<th>应核对什么</th>
+<th>不能替代什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>date_str</td>
+<td>来源最后成功读取；固定UTC+08格式</td>
+<td>完整字符串、来源与实际读取状态</td>
+<td>手机点刷新或导出文件保存时间</td>
+</tr>
+<tr>
+<td>任务timestamp</td>
+<td>可选Double，Unix任务更新时间</td>
+<td>来源提供的单位、缺失/null与排序范围</td>
+<td>整份源读取时间、批准/处理时间</td>
+</tr>
+<tr>
+<td>手机请求时间</td>
+<td>发起读取的本地事件</td>
+<td>是否成功拿到新源，而非仅缓存</td>
+<td>来源已更新或任务已变更</td>
+</tr>
+<tr>
+<td>Watch sourceDate</td>
+<td>手机摘要对应来源时间</td>
+<td>来源范围、失败与裁剪信息</td>
+<td>手表封包或独立刷新时间</td>
+</tr>
+<tr>
+<td>Watch capturedAt</td>
+<td>摘要封包时间</td>
+<td>与sourceDate分别看待</td>
+<td>最新业务状态或最新源读取</td>
+</tr>
+<tr>
+<td>文件/编辑时间</td>
+<td>保存、复制、整理文档的事件</td>
+<td>是否只是副本或人工编辑</td>
+<td>原业务事件或来源身份</td>
+</tr>
+<tr>
+<td>Unix秒与毫秒</td>
+<td>不同数值单位，不可混用</td>
+<td>按生产者/消费者契约核单位</td>
+<td>仅凭位数猜测后自动改值</td>
+</tr>
+<tr>
+<td>其他时区呈现</td>
+<td>对同一时刻的人工显示</td>
+<td>明确偏移、跨日与适用规则</td>
+<td>把本地时区直接写回date_str</td>
+</tr>
+</tbody>
+</table>
+
+### Review brief timestamps across timezones: source, task and carrier clocks
+
+Canonical: https://getyihu.com/en/guides/timezone-timestamp-review/
+
+Review brief timestamps across timezones: source, task and carrier clocks Identify the event before comparing timezone, units and ordering Current Radar parses date_str using fixed yyyy-MM-dd HH:mm in UTC+08:00. Last successful source read cannot be replaced with a phone request, cache hit or file modification. Optional task timestamp is a separate Unix-time field; Watch sourceDate and capturedAt also differ. Establish event/contract first instead of treating all times as equivalent numbers. Different from cache diagnosis and batch comparison Cache review locates old data/read failures; batch review establishes comparable exports. Here different time meanings can be compared incorrectly . No automatic timezone converter, clock repair, scheduling or cross-zone sync is added, and no live source time is rewritten. Time meanings and units Time/location Current meaning/contract Check Does not replace date_str Last successful source read, fixed UTC+08 format Exact string, source and successful read state Refresh tap or exported-file save time Task timestamp Optional Double, Unix task-update time Producer units, absence/null and ordering scope Whole-source read, approval or handling time Phone request Local event starting a read New successful source response versus cache Source update or task modification Watch sourceDate Source represented by the phone summary Scope, failures and truncation Watch packaging or independent refresh Watch capturedAt Summary packaging time Inspect separately from sourceDate New business state or successful source read File/editorial time Save/copy/edit event Whether only a copy/document changed Original business event or source identity Unix seconds/milliseconds Different units, not interchangeable Producer/consumer contract Automatic conversion based on digit count Other-zone presentation Another display of one instant Explicit offset, date boundary and applicable rules Writing local-zone text back as date_str Watch dates use that carrier’s Date encoding contract. Do not subtract arbitrary serialized values directly from task Unix fields without verifying format/units. This page supplies no universal timestamp detector. Two fixed historical illustrations A: 2026-10-18 09:00 under date_str's UTC+08 contract Same instant in UTC: 2026-10-18 01:00 UTC B: 2026-10-18 00:30 at UTC+08 Same instant in UTC: 2026-10-17 16:30 UTC, on the preceding date These are explicit-offset illustrations, not real/current source data. A UTC display does not authorize appending Z , offsets or ISO separators to date_str . Its strict round-trip format is not arbitrary ISO8601 acceptance. Review sequence Label the event first: source read, task update, request, packaging or editing. Confirm identity/scope, then format, timezone/offset and unit. If ordering conflicts, inspect absent timestamps, priorities and source-order rules before assuming clock failure or changed task state. Current source marks source age over 24 hours stale and flags time more than five minutes ahead. These are freshness signals, not response latency, refresh frequency, service SLA or a business deadline. Keep unknown/failed times rather than filling now to hide a warning. Corrections belong to the original maintenance process without bypassing parsing/write authority. FAQ Does another phone timezone change date_str parsing? The current model fixes UTC+08 rather than inferring from device location. Keep displayed time and source meaning separate. Is adding Z or +08:00 automatically more compatible? No. The consumer has an exact format/round-trip check. A source-format change needs actual-version compatibility review. Can a 13-digit value automatically be divided by 1000? Do not repair by digit count. Confirm producer contract/field first. Wrong units can be invalid or mean another instant; no automatic coercion is offered. Why is source time old after refresh or packaging? Request/packaging events differ from successful source reads. Cache can retain an old source time; do not substitute now. Are 24 hours and five minutes refresh SLAs? No. They are current stale/future-source thresholds, not promised update schedules or task-handling deadlines. Can missing time be filled with now to help comparison? That fabricates meaning. Keep the gap and confirm at the source instead of presenting old data/edited copies as new facts. Reading and source JSON types/nulls · Batch comparison · Cross-device presentation · Format compatibility · Start · Privacy Evidence: source-date parsing/freshness/sorting , Watch date model .
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Time/location</th>
+<th>Current meaning/contract</th>
+<th>Check</th>
+<th>Does not replace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>date_str</td>
+<td>Last successful source read, fixed UTC+08 format</td>
+<td>Exact string, source and successful read state</td>
+<td>Refresh tap or exported-file save time</td>
+</tr>
+<tr>
+<td>Task timestamp</td>
+<td>Optional Double, Unix task-update time</td>
+<td>Producer units, absence/null and ordering scope</td>
+<td>Whole-source read, approval or handling time</td>
+</tr>
+<tr>
+<td>Phone request</td>
+<td>Local event starting a read</td>
+<td>New successful source response versus cache</td>
+<td>Source update or task modification</td>
+</tr>
+<tr>
+<td>Watch sourceDate</td>
+<td>Source represented by the phone summary</td>
+<td>Scope, failures and truncation</td>
+<td>Watch packaging or independent refresh</td>
+</tr>
+<tr>
+<td>Watch capturedAt</td>
+<td>Summary packaging time</td>
+<td>Inspect separately from sourceDate</td>
+<td>New business state or successful source read</td>
+</tr>
+<tr>
+<td>File/editorial time</td>
+<td>Save/copy/edit event</td>
+<td>Whether only a copy/document changed</td>
+<td>Original business event or source identity</td>
+</tr>
+<tr>
+<td>Unix seconds/milliseconds</td>
+<td>Different units, not interchangeable</td>
+<td>Producer/consumer contract</td>
+<td>Automatic conversion based on digit count</td>
+</tr>
+<tr>
+<td>Other-zone presentation</td>
+<td>Another display of one instant</td>
+<td>Explicit offset, date boundary and applicable rules</td>
+<td>Writing local-zone text back as date_str</td>
+</tr>
+</tbody>
+</table>
+
+### 文本、截图与附件怎样核脱敏范围？载体差异和归档矩阵
+
+Canonical: https://getyihu.com/guides/carrier-redaction-archive-matrix/
+
+文本、截图与附件怎样核脱敏范围？载体差异和归档矩阵 先确认载体与处理路径：去元数据不是去画面里的敏感文字 归档或分享前，文本、截图、照片和其他文件须分别核查。一呼明确相机/照片图片暂存路径有有界JPEG处理并不复制源元数据，但这不是自动遮挡像素内容、OCR脱敏、所有附件清洗或归档服务。上一轮最小披露指南决定保留哪些材料；这里进一步判断 所选载体的哪一层仍可能保有敏感信息 。 按载体区分的检查矩阵 载体/层 已核实现或人工边界 仍要核的内容 不应声称 纯文本/转写 原文与人工修订分别处理 名称、账号、编号、正文和上下文组合 App自动识别或遮挡敏感词 JSON/链接文字 Radar按源字段读取，链接筛选仅部分形态 路径、查询、片段和任务/来源标识 HTTPS或JSON有效就已经脱敏 截图像素 截图里的文字/头像/二维码仍属于画面 可见客户内容、账号、令牌或可识别细节 去文件元数据就去掉画面文字 明确图片暂存路径 对选定相机/照片输入作JPEG处理，不复制源GPS等元数据 最终图像像素、方向、实际内容与目的地 所有分享文件走同一处理或输出已匿名 图片文件准入 编码输入最多32 MiB、3200万像素 实际输入类型和拒绝状态 尺寸门槛代表隐私/安全认证 相机位图/输出 相机位图另有128 MiB边界；输出边长最多2048 本轮处理是否成功与最终可见内容 降采样是可靠遮挡、性能或保密保证 其他附件 按实际类型和既有工具规则核对 文档正文、批注、修订、隐藏内容或元数据 图片处理器会清理任意PDF/文档/音频 副本/归档位置 原件、修订件、托盘、工作台和同步账户可能不同 已有权限、必要副本与实际保留规则 删本地文件就撤回远端或备份 这些是源码准入/处理边界，不是所有设备已验收的隐私结果。 CollieDiagnosticImage 只说明其明确输入和输出路径，不能扩展成对整个系统分享收件箱里所有文件的统一保证。 合成材料的三层核查 样例载体：一张写有“样例账号A”的合成截图。 层1：检查文件元数据是否属于已核图片处理路径。 层2：检查输出像素里“样例账号A”是否仍可读；降采样不证明它消失。 层3：检查旧截图、附件和目的地是否已有其他版本，归档范围是否获准。 结论：没有足够证据前，不标为已匿名或已撤回所有副本。 这里不提供图片或真实账号，也不执行相机、OCR或脱敏处理。若需要手工遮挡，应在已有获准工具里处理并再次检查最终输出；不从编辑步骤的存在推断遮挡成功，更不把旧版副本忘记计入范围。 归档前先核路径，再核内容 先问文件来自哪种输入：明确照片/相机暂存、系统分享的其他文件，还是文字附件。再确认处理是否成功，保存后的实际内容是什么。只有经过对应路径的输出才可引用该路径的源码属性，不能用文件后缀相同替代证明。 之后核原件与处理稿的权限、目的地和必要副本。图片暂存不自动上传或发送；后续工作台交接可能先上传附件，未发送消息不代表没有远端副本。已尝试交接仍遵守原守卫，不用脱敏稿换名来规避一次标记或不确定状态。 本文不给统一保留期限、法律认证、不可恢复删除或匿名化保证。未知或不合格材料应停在原获准范围，由已有维护/信息处理流程确认，不为了演示公开私有数据。 FAQ 去GPS和源元数据是否把截图正文一起去掉？ 不会由此成立。像素里的文字、头像、二维码或表格仍可能可读，必须单独核最终画面。 所有分享到一呼的文件都会自动清元数据吗？ 不能这样说。这里引用的是明确图片暂存处理路径，不适用于任意文档、PDF、音频或其他文件输入。 2048边长输出能保证细节无法识别吗？ 不能。尺寸上限是有界处理，不是隐私遮挡或匿名化算法；文字与其他识别细节可能仍存在。 文件小于32 MiB就能称为已安全脱敏吗？ 不能。大小/像素准入与内容、权限、隐私是不同维度，还须核输入类型与实际处理结果。 换成修订附件会自动删除服务上的旧附件吗？ 本文不提供此功能。托盘、上传件、草稿和账户同步副本分别核，按实际服务规则处理，不承诺远端撤回。 人工矩阵全勾选就能宣称合法匿名和归档完成吗？ 不能。检查表不是法律或匿名化认证，仍需实际权限、内容和保留依据，且只能说明真正核过的范围。 相关指南与源码 跟进证据最小化 · 认领与归档规则 · 修订与副本 · 交接证据审计 · 开始 · 隐私 依据： 明确图片输入、限额、编码与暂存 、 README图片与分享边界 。
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>载体/层</th>
+<th>已核实现或人工边界</th>
+<th>仍要核的内容</th>
+<th>不应声称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>纯文本/转写</td>
+<td>原文与人工修订分别处理</td>
+<td>名称、账号、编号、正文和上下文组合</td>
+<td>App自动识别或遮挡敏感词</td>
+</tr>
+<tr>
+<td>JSON/链接文字</td>
+<td>Radar按源字段读取，链接筛选仅部分形态</td>
+<td>路径、查询、片段和任务/来源标识</td>
+<td>HTTPS或JSON有效就已经脱敏</td>
+</tr>
+<tr>
+<td>截图像素</td>
+<td>截图里的文字/头像/二维码仍属于画面</td>
+<td>可见客户内容、账号、令牌或可识别细节</td>
+<td>去文件元数据就去掉画面文字</td>
+</tr>
+<tr>
+<td>明确图片暂存路径</td>
+<td>对选定相机/照片输入作JPEG处理，不复制源GPS等元数据</td>
+<td>最终图像像素、方向、实际内容与目的地</td>
+<td>所有分享文件走同一处理或输出已匿名</td>
+</tr>
+<tr>
+<td>图片文件准入</td>
+<td>编码输入最多32 MiB、3200万像素</td>
+<td>实际输入类型和拒绝状态</td>
+<td>尺寸门槛代表隐私/安全认证</td>
+</tr>
+<tr>
+<td>相机位图/输出</td>
+<td>相机位图另有128 MiB边界；输出边长最多2048</td>
+<td>本轮处理是否成功与最终可见内容</td>
+<td>降采样是可靠遮挡、性能或保密保证</td>
+</tr>
+<tr>
+<td>其他附件</td>
+<td>按实际类型和既有工具规则核对</td>
+<td>文档正文、批注、修订、隐藏内容或元数据</td>
+<td>图片处理器会清理任意PDF/文档/音频</td>
+</tr>
+<tr>
+<td>副本/归档位置</td>
+<td>原件、修订件、托盘、工作台和同步账户可能不同</td>
+<td>已有权限、必要副本与实际保留规则</td>
+<td>删本地文件就撤回远端或备份</td>
+</tr>
+</tbody>
+</table>
+
+### Text, screenshots and attachments: carrier-specific redaction/archive checks
+
+Canonical: https://getyihu.com/en/guides/carrier-redaction-archive-matrix/
+
+Text, screenshots and attachments: carrier-specific redaction/archive checks Identify carrier and processing path: metadata removal is not pixel-text redaction Review text, screenshots, photos and other files separately before retention/sharing. Yihu’s explicit camera/photo staging path performs bounded JPEG processing without copying source metadata. This is not automatic pixel masking, OCR redaction, universal attachment cleaning or an archive service. Minimization decides what to retain; here which layer in a selected carrier may still disclose information needs review. Carrier-specific scope matrix Carrier/layer Existing implementation/manual boundary Still inspect Do not claim Text/transcript Originals and manual corrections differ Names, accounts, references, body and combinations Automatic sensitive-word detection/masking JSON/link text Source fields retained; link filtering checks shape only Paths, query, fragments and source/item identities Valid JSON/HTTPS establishes redaction Screenshot pixels Visible text/avatars/QR codes remain image content Customer material, accounts, tokens or identifying details Metadata removal deletes visible text Explicit image staging JPEG processing of selected camera/photo input without source GPS/metadata copying Final pixels, orientation, actual content and destination Every shared file uses this path or output is anonymous Encoded-image admission Up to 32 MiB and 32 million pixels Actual input type and refusal state Size limits certify privacy/security Camera bitmap/output Separate 128 MiB bitmap bound; output side up to 2048 Successful processing and final visible content Resizing is reliable masking or confidentiality/performance evidence Other attachments Actual type/tool policy applies Body, comments, revisions, hidden content and metadata The image helper cleans arbitrary PDFs/documents/audio Copies/archive Original, edited file, tray, workbench and sync may differ Existing permission, necessary copies and retention policy Local deletion recalls remote/backed-up copies These are source admission/processing limits, not device-certified privacy outcomes. CollieDiagnosticImage describes its explicit input/output path, not every file in the system share inbox. Three layers in a synthetic review Carrier: A synthetic screenshot displaying sample account A. Layer 1: Is the file in the reviewed image-processing path? Layer 2: Is sample account A still readable in output pixels? Resizing does not prove removal. Layer 3: Are old versions already in attachments/destinations, and is retention authorized? Conclusion: Do not claim anonymity or recall of every copy without evidence. No image, real account, camera, OCR or redaction operation is supplied. If masking is necessary, use an existing authorized tool and inspect the saved result. An editing step is not proof of successful masking, and older copies remain in scope. Path before content, then retention Identify explicit photo/camera staging versus other system-shared files or text attachments. Check success and actual saved content. Only output from the relevant path supports that path’s source properties; an identical filename suffix is insufficient. Then inspect permissions/destination/necessary copies of originals and edits. Staging does not upload/send automatically. Later workbench handoff can upload before sending, so unsent messages do not establish no remote copy. Prior attempts retain guards; a renamed redacted draft cannot bypass one-handoff/uncertainty. No universal retention period, legal certification, irreversible deletion or anonymity guarantee is provided. Keep unknown/unsuitable material within original permissions for the existing information-handling process, not public demos. FAQ Does removing GPS/source metadata remove screenshot text? No. Text, avatars, QR codes and tables can remain readable in pixels. Review the final image separately. Is every file shared to Yihu automatically stripped? No blanket claim follows. The cited path is explicit image staging, not arbitrary document/PDF/audio or other file input. Does a 2048-side output guarantee unidentifiable details? No. It is bounded processing, not a masking/anonymization algorithm. Text and other identifying detail can remain. Does under 32 MiB mean safely redacted? No. Admission size/pixels differ from content, permission and privacy. Check input type and actual result. Does a replacement attachment delete the older remote one? No such feature is supplied. Inspect tray/uploads/drafts/sync separately under actual service rules, without a recall guarantee. Does checking every box certify lawful anonymity or complete archiving? No. This is neither legal nor anonymization certification. Actual permissions, content and retention evidence remain necessary, limited to reviewed scope. Reading and source Evidence minimization · Ownership/archive rules · Corrections/copies · Handoff evidence review · Start · Privacy Evidence: explicit image inputs/limits/encoding/staging , README image/sharing limits .
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Carrier/layer</th>
+<th>Existing implementation/manual boundary</th>
+<th>Still inspect</th>
+<th>Do not claim</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Text/transcript</td>
+<td>Originals and manual corrections differ</td>
+<td>Names, accounts, references, body and combinations</td>
+<td>Automatic sensitive-word detection/masking</td>
+</tr>
+<tr>
+<td>JSON/link text</td>
+<td>Source fields retained; link filtering checks shape only</td>
+<td>Paths, query, fragments and source/item identities</td>
+<td>Valid JSON/HTTPS establishes redaction</td>
+</tr>
+<tr>
+<td>Screenshot pixels</td>
+<td>Visible text/avatars/QR codes remain image content</td>
+<td>Customer material, accounts, tokens or identifying details</td>
+<td>Metadata removal deletes visible text</td>
+</tr>
+<tr>
+<td>Explicit image staging</td>
+<td>JPEG processing of selected camera/photo input without source GPS/metadata copying</td>
+<td>Final pixels, orientation, actual content and destination</td>
+<td>Every shared file uses this path or output is anonymous</td>
+</tr>
+<tr>
+<td>Encoded-image admission</td>
+<td>Up to 32 MiB and 32 million pixels</td>
+<td>Actual input type and refusal state</td>
+<td>Size limits certify privacy/security</td>
+</tr>
+<tr>
+<td>Camera bitmap/output</td>
+<td>Separate 128 MiB bitmap bound; output side up to 2048</td>
+<td>Successful processing and final visible content</td>
+<td>Resizing is reliable masking or confidentiality/performance evidence</td>
+</tr>
+<tr>
+<td>Other attachments</td>
+<td>Actual type/tool policy applies</td>
+<td>Body, comments, revisions, hidden content and metadata</td>
+<td>The image helper cleans arbitrary PDFs/documents/audio</td>
+</tr>
+<tr>
+<td>Copies/archive</td>
+<td>Original, edited file, tray, workbench and sync may differ</td>
+<td>Existing permission, necessary copies and retention policy</td>
+<td>Local deletion recalls remote/backed-up copies</td>
 </tr>
 </tbody>
 </table>
