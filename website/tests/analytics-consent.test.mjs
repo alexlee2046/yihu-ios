@@ -157,10 +157,10 @@ test('bilingual privacy describes advanced-mode traffic and persistent overrides
   assert.ok(!guide.includes('官网仅在你明确允许后加载'));
   assert.ok(!guide.includes('only after you explicitly allow it'));
 });
-test('built output: 168 routes, unchanged IndexNow, both privacy disclosures', { skip: !existsSync(new URL('../dist/', import.meta.url)) }, () => {
+test('built output: 174 routes, unchanged IndexNow, both privacy disclosures', { skip: !existsSync(new URL('../dist/', import.meta.url)) }, () => {
   const dist = new URL('../dist/', import.meta.url);
   function pages(path) { return readdirSync(path, { withFileTypes: true }).flatMap(x => x.isDirectory() ? pages(new URL(x.name+'/', path)) : x.name === 'index.html' ? [new URL(x.name,path)] : []); }
-  assert.equal(pages(dist).length, 168);
+  assert.equal(pages(dist).length, 174);
   for (const page of pages(dist)) {
     const html = readFileSync(page, 'utf8');
     assert.ok(html.includes('consent\', \'default'));
