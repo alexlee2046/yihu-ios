@@ -33,13 +33,14 @@ const wave27Slugs = ["file-chunk-bridge-not-upload-receipt","recognition-pass-pa
 const wave28Slugs = ["focused-editable-admission-review","recognition-error-layer-review","list-preview-not-transcript-archive"];
 const wave29Slugs = ["navigation-cancel-process-reload-boundaries","watch-voice-queued-ready-boundaries","app-group-inbox-access-evidence"];
 const wave30Slugs = ["watch-open-request-ui-boundaries","shortcut-toggle-request-lifetime","note-organization-prompt-not-minutes"];
+const wave31Slugs = ["reminder-link-pending-origin-routing","voiceprint-enrollment-profile-version-review","notification-disable-unregister-pending"];
 const bots = ['OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'Applebot-Extended'];
 const urls = Array.from(read('public/sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g), x => x[1]);
 const page = url => 'dist/' + url.replace('https://getyihu.com/', '') + 'index.html';
 
-test('174 canonical URLs include all staged bilingual guides without fake routes', () => {
-  assert.equal(urls.length, 174); assert.equal(new Set(urls).size, 174);
-  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs, ...wave13Slugs, ...wave14Slugs, ...wave15Slugs, ...wave16Slugs, ...wave17Slugs, ...wave18Slugs, ...wave19Slugs, ...wave20Slugs, ...wave21Slugs, ...wave22Slugs, ...wave23Slugs, ...wave24Slugs, ...wave25Slugs, ...wave26Slugs, ...wave27Slugs, ...wave28Slugs, ...wave29Slugs, ...wave30Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
+test('180 canonical URLs include all staged bilingual guides without fake routes', () => {
+  assert.equal(urls.length, 180); assert.equal(new Set(urls).size, 180);
+  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs, ...wave13Slugs, ...wave14Slugs, ...wave15Slugs, ...wave16Slugs, ...wave17Slugs, ...wave18Slugs, ...wave19Slugs, ...wave20Slugs, ...wave21Slugs, ...wave22Slugs, ...wave23Slugs, ...wave24Slugs, ...wave25Slugs, ...wave26Slugs, ...wave27Slugs, ...wave28Slugs, ...wave29Slugs, ...wave30Slugs, ...wave31Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
 });
 test('seven explicit bot groups and general allow retain sitemap and LLM reference', () => {
   const robots = read('public/robots.txt');
@@ -82,7 +83,7 @@ test('built homepage graph keeps existing software/FAQ plus organization and web
     for (const slug of slugs) assert.ok(html.includes(`href="/${prefix}guides/${slug}/"`));
   }
 });
-test('all 174 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
+test('all 180 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
   for (const url of urls) {
     const html = read(page(url));
     assert.ok(html.includes(`<link rel="canonical" href="${url}"`), url);
