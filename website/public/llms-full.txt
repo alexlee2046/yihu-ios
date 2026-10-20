@@ -9,7 +9,7 @@ Privacy: https://getyihu.com/privacy/ | https://getyihu.com/en/privacy/
 
 ## Reading contract / 阅读边界
 
-This reference covers seven existing bilingual page families (home, start, privacy, voice drafts, mobile decisions, recording notes, multi-project Radar/Watch) plus forty-one bilingual selection, preflight, troubleshooting, editorial-review, data-contract, evaluation, compatibility, cross-device, context, terminology, time, encoding, lifecycle and evidence-check guides. Every listed URL has its own canonical and language counterpart. Text is a content reference, not device, latency, radio range, delivery, indexing, AI citation or legal certification. 一共四十八类双语页面；源码实现、构建与机器可读文件不等于真机、写入、推送或收录验收。
+This reference covers seven existing bilingual page families (home, start, privacy, voice drafts, mobile decisions, recording notes, multi-project Radar/Watch) plus forty-four bilingual selection, preflight, troubleshooting, editorial-review, data-contract, evaluation, compatibility, cross-device, context, terminology, time, encoding, lifecycle and evidence-check guides. Every listed URL has its own canonical and language counterpart. Text is a content reference, not device, latency, radio range, delivery, indexing, AI citation or legal certification. 一共五十一类双语页面；源码实现、构建与机器可读文件不等于真机、写入、推送或收录验收。
 
 ## Topic routing / 意图与真实能力
 
@@ -27,7 +27,7 @@ This reference covers seven existing bilingual page families (home, start, priva
 
 Canonical: https://getyihu.com/
 
-工作台， 随身带走。 离开桌面，也能用语音接续你的 Agent 工作。 体验一呼 获取源码 场景与界面示意 iPhone 如何接续自有 Agent 工作台？ 一呼（Yihu）是针对 Agent 工作台优化的原生 iOS 浏览器壳：访问自有 HTTPS 网页，在手机上转写语音草稿、保留录音笔记、筛选 PM Radar 事项，并通过系统分享暂存内容。Apple Watch 可接收配对手机摘要。它不提供 Agent 后端；语音需另下载模型，原生增强取决于服务兼容性，源码合入不等于所有真机路径验收通过。 熟悉的工作台，多一层原生体验。 端侧语音 / 录音笔记 / 系统分享 从一句话， 到一份草稿。 亲手试一次：播放一段示例，校对文字，再把它填入工作台草稿。 交互演示 示例内容 · 无需麦克风 0 1 听见 0 2 校对 0 3 填入 把想法，说出来。 校对并编辑转写文字 播放示例 我的工作台 示例 草稿 校对后的文字，会出现在这里。 发送之前，由你确认。 启用 JavaScript 即可体验。实际 App 会将语音转写为草稿，由你检查后决定发送。 让想法，离工作更近一点。 端侧语音 想法刚出现，就说下来。 在 iPhone 上将语音转成可编辑的文字，检查后再交给工作台。语音模型需单独下载。 录音笔记 长一点的想法，也装得下。 先记录，再由手机分段转写。音频和文字留在本地，随时回来整理。 系统分享 看到的，也能带回来。 把文字、链接和文件暂存进分享收件箱，再选择交给工作台的内容。不会自动发送。 系统听写、备忘录还是原生工作台草稿？对照使用边界。 查看手机待决策、来源时效与确认回执边界。 工作台是你的， 节奏也是。 连接你自己信任的 HTTPS 工作台。一呼在它周围，补上 iPhone 的原生能力。 Collie、OpenClaw、Hermes 等网页工作台均可作为访问对象；网页能打开，与原生增强已适配，是两件事。 通知与实时活动需要兼容服务。一呼不托管 Agent，也不提供后端。 了解使用条件 能力与前提核对表 左右滑动表格，查看完整使用前提。键盘用户可聚焦表格后使用方向键。 能力 可以做什么 前提与边界 端侧语音草稿 在手机上转写，再显式填入兼容草稿；不替你发送。 兼容模型另下载，需麦克风权限；宿主拒绝或未知编辑器可能无法填入。 长录音分段转写 保存本地音频和转写文字，供后续整理。 需兼容模型与麦克风权限；录音余项待真机验证，不承诺准确率。 PM Radar 待办筛选 按工作台筛选事项，区分来源读取时间与离线缓存。 自备 JSON 导出或兼容 HTTPS JSON 源；不复用网页 Cookie；回复需独立授权、手机确认与回执。 Apple Watch 摘要 接收配对手机的待决策/待验收摘要，并接续到手机。 需 watchOS 11+ 与配对手机；不是独立审批或手表直写，真机余项待验。 系统分享收件箱 文字、链接和文件先暂存，用户选择后再交接。 不自动上传或发送；目标服务的数据处理规则仍适用。 常见问题 如何在 iPhone 上访问自己的 Agent 网页工作台？ 一呼是围绕 WebKit 的原生 iOS 浏览器壳，可访问手机可达、TLS 证书受信任的自有 HTTPS 工作台。Collie、OpenClaw、Hermes 是网页访问示例，并非原生兼容认证清单；一呼不托管 Agent，也不是它们的官方客户端。 手机接入自建 Agent 工作台之前要准备什么？ 需要 iOS 18+、自有可信 HTTPS 工作台，以及当前源码发行所需的 Mac、Xcode、XcodeGen 和自己的签名配置。使用语音还需单独下载兼容模型并授予麦克风权限。工作台登录和页面兼容取决于服务端。 iPhone 如何把语音转成 Agent 工作台草稿而不自动发送？ 一呼用另下载的 Qwen3 ASR 模型在手机端转写，用户核对后可填入兼容草稿。填入遵守宿主明确拒绝，不向未知编辑器强行写入，也不会按下发送；不兼容时可保留文字供显式复制。 iPhone 能把较长录音分段转写并保留本地笔记吗？ 一呼源码提供长录音、手机分段转写和本地音频/文字保存，需麦克风权限与兼容模型。录音相关真机余项仍待验，不承诺任意时长、设备性能或转写准确率。 如何在手机上筛选多个 Agent 项目的待决策和待验收事项？ 一呼 PM Radar 接收自备 JSON 导出或兼容 HTTPS JSON 数据源，提供工作台独立筛选、管理计数和有界离线快照。来源读取时间用于区分旧缓存与新数据；读取本身不改变台账状态。认证源当前需文件导出，不复用网页 Cookie 或存储凭据。 从手机回复项目决策会自动改任务状态吗？ 不会。一呼仅对符合条件的决策/验收事项，在服务端独立授权、手机明确确认后回复并核验回执；不自动改状态、执行任务、合并或部署。真实回复仍有独立设备/服务验收要求。 Apple Watch 能查看 Agent 项目摘要并独立审批吗？ 手表伴侣通过配对手机接收待决策/待验收摘要，并可把所选事项或受保护草稿接续到手机；需 watchOS 11+。它不提供独立审批或手表直写，手机仍需确认，真机配对等余项待验。 iOS 分享到工作台时会自动上传文件或发送消息吗？ 一呼分享扩展只把文字、链接和文件暂存到 App Group 收件箱，不自动上传或发送。后续交接由用户另行选择，目标工作台的数据处理规则仍适用。 端侧语音识别是否意味着工作台 App 的所有数据都不出手机？ 不是。兼容模型下载后在手机转写，录音笔记本地保存；但模型下载、网页访问、用户发送/上传与可选通知/中继涉及相应服务。端侧转写不能作为所有数据永不出手机的承诺。 能打开 Agent 网页就代表原生推送和实时活动可用吗？ 不代表。原生通知需要兼容网页桥、服务端接口与匹配签名环境的 APNs 配置；实时活动还需自有兼容中继。占位中继地址不可用，推送交付仍需独立验收，台账 GET 数据源本身不是推送事件源。 这类自建工作台 iPhone 客户端现在如何安装？ 一呼当前提供源码，不提供 App Store 安装成品。请按仓库构建说明配置自己的标识、App Group 和签名，再构建到自己的 iPhone；不提供预配置服务器或模型文件。 手机端声纹过滤能替代账号身份认证或写入授权吗？ 不能。一呼声纹验证只是可能误判的便利过滤，不是身份认证；兼容 WeSpeaker/CAM++ 模型未随仓库提供，缺模型时依赖验证的路径不可用，也不能绕过验证或服务端写入授权。 使用条件与构建指南 隐私与数据边界 工作台、对讲机与语音群聊选型 户外与门店：音频预检和文字交接 蓝牙输入分层排障 离线与弱网交接排障 可核对纪要与简报字段 网页朗读与麦克风切换边界 多段笔记汇总与待办核对 Radar JSON类型与空值核对 首次试用继续/停止评估卡 单录音片段标签与语义核对 Radar同源批次人工比较 人工文本修订与副本核对 跨部门认领与归档核对 Radar证据人工二次核实 简报格式改版兼容评审 改变交接方式前许可核对 团队交接证据人工审计 跨端字段呈现核对 音频切换恢复源码矩阵 客户跟进证据最小化 追问指代与目标上下文核对 人工摘要逐句引用溯源 停车与展会外设拾音前检 多语术语保留前检 跨时区日期时间核对 载体脱敏归档范围矩阵 导出编码与分隔符前检 麦克风权限与采样契约 批次改版材料归档链 空字段与显示默认值 返回前台音频状态前检 多角色审批与签收边界 批次逐项前检 中断后重录前检 历史检索比对范围 通知负载模型前检 PCM格式准入 回复请求与回执对应 证据链接准入 录音队列压力核对 音文材料归档对应 把工作台，带在身边。 开源，为 iPhone 而做，连接你自己的服务。 开始使用 目前提供源码，需 iOS 18+、自有工作台、语音模型和签名配置。
+工作台， 随身带走。 离开桌面，也能用语音接续你的 Agent 工作。 体验一呼 获取源码 场景与界面示意 iPhone 如何接续自有 Agent 工作台？ 一呼（Yihu）是针对 Agent 工作台优化的原生 iOS 浏览器壳：访问自有 HTTPS 网页，在手机上转写语音草稿、保留录音笔记、筛选 PM Radar 事项，并通过系统分享暂存内容。Apple Watch 可接收配对手机摘要。它不提供 Agent 后端；语音需另下载模型，原生增强取决于服务兼容性，源码合入不等于所有真机路径验收通过。 熟悉的工作台，多一层原生体验。 端侧语音 / 录音笔记 / 系统分享 从一句话， 到一份草稿。 亲手试一次：播放一段示例，校对文字，再把它填入工作台草稿。 交互演示 示例内容 · 无需麦克风 0 1 听见 0 2 校对 0 3 填入 把想法，说出来。 校对并编辑转写文字 播放示例 我的工作台 示例 草稿 校对后的文字，会出现在这里。 发送之前，由你确认。 启用 JavaScript 即可体验。实际 App 会将语音转写为草稿，由你检查后决定发送。 让想法，离工作更近一点。 端侧语音 想法刚出现，就说下来。 在 iPhone 上将语音转成可编辑的文字，检查后再交给工作台。语音模型需单独下载。 录音笔记 长一点的想法，也装得下。 先记录，再由手机分段转写。音频和文字留在本地，随时回来整理。 系统分享 看到的，也能带回来。 把文字、链接和文件暂存进分享收件箱，再选择交给工作台的内容。不会自动发送。 系统听写、备忘录还是原生工作台草稿？对照使用边界。 查看手机待决策、来源时效与确认回执边界。 工作台是你的， 节奏也是。 连接你自己信任的 HTTPS 工作台。一呼在它周围，补上 iPhone 的原生能力。 Collie、OpenClaw、Hermes 等网页工作台均可作为访问对象；网页能打开，与原生增强已适配，是两件事。 通知与实时活动需要兼容服务。一呼不托管 Agent，也不提供后端。 了解使用条件 能力与前提核对表 左右滑动表格，查看完整使用前提。键盘用户可聚焦表格后使用方向键。 能力 可以做什么 前提与边界 端侧语音草稿 在手机上转写，再显式填入兼容草稿；不替你发送。 兼容模型另下载，需麦克风权限；宿主拒绝或未知编辑器可能无法填入。 长录音分段转写 保存本地音频和转写文字，供后续整理。 需兼容模型与麦克风权限；录音余项待真机验证，不承诺准确率。 PM Radar 待办筛选 按工作台筛选事项，区分来源读取时间与离线缓存。 自备 JSON 导出或兼容 HTTPS JSON 源；不复用网页 Cookie；回复需独立授权、手机确认与回执。 Apple Watch 摘要 接收配对手机的待决策/待验收摘要，并接续到手机。 需 watchOS 11+ 与配对手机；不是独立审批或手表直写，真机余项待验。 系统分享收件箱 文字、链接和文件先暂存，用户选择后再交接。 不自动上传或发送；目标服务的数据处理规则仍适用。 常见问题 如何在 iPhone 上访问自己的 Agent 网页工作台？ 一呼是围绕 WebKit 的原生 iOS 浏览器壳，可访问手机可达、TLS 证书受信任的自有 HTTPS 工作台。Collie、OpenClaw、Hermes 是网页访问示例，并非原生兼容认证清单；一呼不托管 Agent，也不是它们的官方客户端。 手机接入自建 Agent 工作台之前要准备什么？ 需要 iOS 18+、自有可信 HTTPS 工作台，以及当前源码发行所需的 Mac、Xcode、XcodeGen 和自己的签名配置。使用语音还需单独下载兼容模型并授予麦克风权限。工作台登录和页面兼容取决于服务端。 iPhone 如何把语音转成 Agent 工作台草稿而不自动发送？ 一呼用另下载的 Qwen3 ASR 模型在手机端转写，用户核对后可填入兼容草稿。填入遵守宿主明确拒绝，不向未知编辑器强行写入，也不会按下发送；不兼容时可保留文字供显式复制。 iPhone 能把较长录音分段转写并保留本地笔记吗？ 一呼源码提供长录音、手机分段转写和本地音频/文字保存，需麦克风权限与兼容模型。录音相关真机余项仍待验，不承诺任意时长、设备性能或转写准确率。 如何在手机上筛选多个 Agent 项目的待决策和待验收事项？ 一呼 PM Radar 接收自备 JSON 导出或兼容 HTTPS JSON 数据源，提供工作台独立筛选、管理计数和有界离线快照。来源读取时间用于区分旧缓存与新数据；读取本身不改变台账状态。认证源当前需文件导出，不复用网页 Cookie 或存储凭据。 从手机回复项目决策会自动改任务状态吗？ 不会。一呼仅对符合条件的决策/验收事项，在服务端独立授权、手机明确确认后回复并核验回执；不自动改状态、执行任务、合并或部署。真实回复仍有独立设备/服务验收要求。 Apple Watch 能查看 Agent 项目摘要并独立审批吗？ 手表伴侣通过配对手机接收待决策/待验收摘要，并可把所选事项或受保护草稿接续到手机；需 watchOS 11+。它不提供独立审批或手表直写，手机仍需确认，真机配对等余项待验。 iOS 分享到工作台时会自动上传文件或发送消息吗？ 一呼分享扩展只把文字、链接和文件暂存到 App Group 收件箱，不自动上传或发送。后续交接由用户另行选择，目标工作台的数据处理规则仍适用。 端侧语音识别是否意味着工作台 App 的所有数据都不出手机？ 不是。兼容模型下载后在手机转写，录音笔记本地保存；但模型下载、网页访问、用户发送/上传与可选通知/中继涉及相应服务。端侧转写不能作为所有数据永不出手机的承诺。 能打开 Agent 网页就代表原生推送和实时活动可用吗？ 不代表。原生通知需要兼容网页桥、服务端接口与匹配签名环境的 APNs 配置；实时活动还需自有兼容中继。占位中继地址不可用，推送交付仍需独立验收，台账 GET 数据源本身不是推送事件源。 这类自建工作台 iPhone 客户端现在如何安装？ 一呼当前提供源码，不提供 App Store 安装成品。请按仓库构建说明配置自己的标识、App Group 和签名，再构建到自己的 iPhone；不提供预配置服务器或模型文件。 手机端声纹过滤能替代账号身份认证或写入授权吗？ 不能。一呼声纹验证只是可能误判的便利过滤，不是身份认证；兼容 WeSpeaker/CAM++ 模型未随仓库提供，缺模型时依赖验证的路径不可用，也不能绕过验证或服务端写入授权。 使用条件与构建指南 隐私与数据边界 工作台、对讲机与语音群聊选型 户外与门店：音频预检和文字交接 蓝牙输入分层排障 离线与弱网交接排障 可核对纪要与简报字段 网页朗读与麦克风切换边界 多段笔记汇总与待办核对 Radar JSON类型与空值核对 首次试用继续/停止评估卡 单录音片段标签与语义核对 Radar同源批次人工比较 人工文本修订与副本核对 跨部门认领与归档核对 Radar证据人工二次核实 简报格式改版兼容评审 改变交接方式前许可核对 团队交接证据人工审计 跨端字段呈现核对 音频切换恢复源码矩阵 客户跟进证据最小化 追问指代与目标上下文核对 人工摘要逐句引用溯源 停车与展会外设拾音前检 多语术语保留前检 跨时区日期时间核对 载体脱敏归档范围矩阵 导出编码与分隔符前检 麦克风权限与采样契约 批次改版材料归档链 空字段与显示默认值 返回前台音频状态前检 多角色审批与签收边界 批次逐项前检 中断后重录前检 历史检索比对范围 通知负载模型前检 PCM格式准入 回复请求与回执对应 证据链接准入 录音队列压力核对 音文材料归档对应 Radar源URL边界 近讲策略与实际路由 分段拼接处理范围 把工作台，带在身边。 开源，为 iPhone 而做，连接你自己的服务。 开始使用 目前提供源码，需 iOS 18+、自有工作台、语音模型和签名配置。
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
@@ -37,7 +37,7 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/
 
-Your workbench. Within reach. Step away from your desk. Keep your Agent work moving with your voice. Try Yihu Get the source Illustrative scene and interface How can an iPhone connect to your own Agent workbench? Yihu is a native iOS browser shell optimized for Agent workbenches: open your own HTTPS web UI, transcribe speech drafts on the phone, retain voice notes, filter PM Radar items and stage content through system sharing. Apple Watch can receive paired-phone summaries. Yihu supplies no Agent backend; speech needs separately downloaded models and native enhancements depend on service compatibility. Merged source does not certify every device path. Your familiar workbench. A native touch. On-device speech / Voice notes / Sharing A thought. Then a draft. Try the handoff. Play a short sample, edit the words, then place them in a workbench draft. INTERACTIVE DEMO Sample content · no microphone access 0 1 Listen 0 2 Review 0 3 Insert A thought, out loud. Review and edit the transcript Play sample My workbench Demo Draft Your reviewed words will appear here. You decide what to send, and when. Enable JavaScript to try the demo. Yihu transcribes speech into a draft for you to review before sending. Less distance between you and your work. On-device speech Say it while it’s fresh. Turn spoken ideas into an editable draft on your iPhone. Review your words before sending. Speech models are downloaded separately. Voice notes Give a longer thought room. Record now, transcribe in segments on your phone, and return to your audio and text later. System sharing Keep what you find. Bring text, links and files into the share inbox. Choose what to hand off to your workbench. Nothing is sent automatically. Dictation, Notes or native workbench drafts? Compare the boundaries. Read mobile decisions, source freshness and phone confirmation boundaries. Your workbench. Still yours. Connect your own trusted HTTPS workbench. Yihu adds native iPhone capabilities around it. Collie, OpenClaw and Hermes are examples of web workbenches you can open. Page access and native integration are separate capabilities. Notifications and Live Activities require a compatible service. Yihu does not host Agents or provide a backend. See what you need Capabilities and prerequisites Swipe the table to compare prerequisites. With a keyboard, focus the table and use the arrow keys. Capability What it does Prerequisites and boundaries On-device speech drafts Transcribe on the phone and explicitly insert into a compatible draft; never presses Send. Download compatible models and grant microphone access; host refusal or unknown editors can prevent insertion. Segmented voice notes Retain local audio and transcripts for later review. Requires compatible models and microphone access; remaining recording paths need device acceptance, with no accuracy guarantee. PM Radar task filters Filter tasks per workbench and distinguish source-read time from offline cache. Supply a JSON export or compatible HTTPS JSON feed; web cookies are not reused. Replies need separate authorization, phone confirmation and receipt readback. Apple Watch summaries Receive pending decision/acceptance summaries from the paired phone and hand off to it. Requires watchOS 11+ and a paired phone; no standalone approval or direct Watch writes. Remaining device checks are pending. System share inbox Stage text, links and files before a user-selected handoff. No automatic upload or send; the destination service's data practices still apply. Frequently asked questions How can I access my own Agent web workbench on an iPhone? Yihu is a native iOS browser shell around WebKit for your own reachable, trusted HTTPS workbench. Collie, OpenClaw and Hermes are web-access examples, not a certified native compatibility list. Yihu does not host Agents and is not their official client. What do I need before connecting a phone to a self-hosted Agent workbench? You need iOS 18+, your own trusted HTTPS workbench and, for the current source release, a Mac, Xcode, XcodeGen and your own signing setup. Speech also requires separately downloaded compatible models and microphone permission. Login and page compatibility depend on the server. How can an iPhone turn speech into an Agent workbench draft without sending it? Yihu transcribes on the phone with separately downloaded Qwen3 ASR models. After review, text can be inserted into a compatible draft. Insertion respects explicit host refusal, does not force text into unknown editors and never presses Send. Incompatible pages retain text for explicit copying. Can an iPhone transcribe longer recordings in segments and keep local notes? Yihu source includes longer recordings, segmented phone transcription and local audio/text retention, requiring microphone permission and compatible models. Remaining recording-related device checks are pending; no arbitrary duration, device performance or transcription accuracy is guaranteed. How can I filter pending decisions and acceptance items across Agent projects on a phone? Yihu PM Radar accepts your own JSON export or compatible HTTPS JSON feed, with per-workbench filters, management counts and bounded offline snapshots. Source-read times distinguish cached from fresh data; reads do not change ledger status. Authenticated feeds currently require a file export; Radar does not reuse web cookies or store credentials. Does replying to a project decision from a phone automatically change task status? No. For eligible decision/acceptance items, Yihu requires separately authorized server writes and explicit phone confirmation, followed by receipt readback. It does not automatically change status, execute tasks, merge or deploy. Real replies still require separate device/service acceptance. Can an Apple Watch show Agent project summaries and approve them independently? The watchOS 11+ companion receives pending decision/acceptance summaries through the paired phone and can hand off selected items or protected drafts to it. It does not provide standalone approval or direct Watch writes; the phone still requires confirmation and remaining pairing/device checks are pending. Does sharing to a workbench on iOS automatically upload files or send messages? Yihu's share extension stages text, links and files in an App Group inbox. It does not automatically upload or send them. Handoff requires a separate user action, and the destination workbench's data practices still apply. Does on-device speech recognition mean all workbench app data stays on the phone? No. Compatible downloaded models transcribe on the phone and voice notes are stored locally, but model downloads, web access, user sends/uploads and optional notification/relay integrations involve their respective services. On-device transcription is not a promise that all data stays on the phone. Does opening an Agent web page mean native push and Live Activities will work? No. Native notifications need a compatible web bridge, server endpoints and APNs configuration matching the signing environment. Live Activities also need a compatible relay you control. The placeholder relay is unusable, delivery needs separate acceptance and a ledger GET feed is not itself a push event source. How can I currently install this type of self-hosted workbench iPhone client? Yihu currently provides source code, not an App Store binary. Follow the repository build guide to configure your own identifiers, App Group and signing, then build for your iPhone. No preconfigured server or model files are supplied. Can phone speaker verification replace account authentication or write authorization? No. Yihu speaker verification is a convenience filter that can misidentify speakers, not authentication. Compatible WeSpeaker/CAM++ artifacts are not included; verification-dependent paths are unavailable without them. Verification and server write authorization must not be bypassed. Requirements and build guide Privacy and data boundaries Voice workbench, radio or group chat? Outdoor/store audio checks and text handoff Bluetooth input troubleshooting Offline and weak-network handoff Reviewable minutes and brief fields Web read-aloud and microphone transitions Multiple-note review and candidate to-dos Radar JSON types and null checks Pre-trial go/no-go decision card Review labels within one recording Compare authorized Radar batches Manual text correction and retained copies Department ownership and archive checks Second-check Radar evidence Brief format-change compatibility review Permission before changing handoff paths Manual handoff evidence review Cross-device field presentation Audio-route recovery source matrix Follow-up evidence minimization Follow-up context and target checks Sentence-to-field summary provenance Parked-vehicle and exhibition input preflight Mixed-language term preflight Timezone and timestamp review Carrier-specific redaction/archive scope Export encoding and delimiter checks Microphone permission and sample contract Batch-change material retention mapping Empty fields and display defaults Foreground audio/state preflight Multi-role approval and receipt boundaries Batch item preflight Before recapture History retrieval scope Notification model preflight PCM format admission Reply request/receipt mapping Evidence link admission Capture queue pressure Audio/text evidence mapping Take your workbench with you. Open source. Built for iPhone. Connect your own services. Get started Currently a source release. Requires iOS 18+, your own workbench, speech models and signing setup.
+Your workbench. Within reach. Step away from your desk. Keep your Agent work moving with your voice. Try Yihu Get the source Illustrative scene and interface How can an iPhone connect to your own Agent workbench? Yihu is a native iOS browser shell optimized for Agent workbenches: open your own HTTPS web UI, transcribe speech drafts on the phone, retain voice notes, filter PM Radar items and stage content through system sharing. Apple Watch can receive paired-phone summaries. Yihu supplies no Agent backend; speech needs separately downloaded models and native enhancements depend on service compatibility. Merged source does not certify every device path. Your familiar workbench. A native touch. On-device speech / Voice notes / Sharing A thought. Then a draft. Try the handoff. Play a short sample, edit the words, then place them in a workbench draft. INTERACTIVE DEMO Sample content · no microphone access 0 1 Listen 0 2 Review 0 3 Insert A thought, out loud. Review and edit the transcript Play sample My workbench Demo Draft Your reviewed words will appear here. You decide what to send, and when. Enable JavaScript to try the demo. Yihu transcribes speech into a draft for you to review before sending. Less distance between you and your work. On-device speech Say it while it’s fresh. Turn spoken ideas into an editable draft on your iPhone. Review your words before sending. Speech models are downloaded separately. Voice notes Give a longer thought room. Record now, transcribe in segments on your phone, and return to your audio and text later. System sharing Keep what you find. Bring text, links and files into the share inbox. Choose what to hand off to your workbench. Nothing is sent automatically. Dictation, Notes or native workbench drafts? Compare the boundaries. Read mobile decisions, source freshness and phone confirmation boundaries. Your workbench. Still yours. Connect your own trusted HTTPS workbench. Yihu adds native iPhone capabilities around it. Collie, OpenClaw and Hermes are examples of web workbenches you can open. Page access and native integration are separate capabilities. Notifications and Live Activities require a compatible service. Yihu does not host Agents or provide a backend. See what you need Capabilities and prerequisites Swipe the table to compare prerequisites. With a keyboard, focus the table and use the arrow keys. Capability What it does Prerequisites and boundaries On-device speech drafts Transcribe on the phone and explicitly insert into a compatible draft; never presses Send. Download compatible models and grant microphone access; host refusal or unknown editors can prevent insertion. Segmented voice notes Retain local audio and transcripts for later review. Requires compatible models and microphone access; remaining recording paths need device acceptance, with no accuracy guarantee. PM Radar task filters Filter tasks per workbench and distinguish source-read time from offline cache. Supply a JSON export or compatible HTTPS JSON feed; web cookies are not reused. Replies need separate authorization, phone confirmation and receipt readback. Apple Watch summaries Receive pending decision/acceptance summaries from the paired phone and hand off to it. Requires watchOS 11+ and a paired phone; no standalone approval or direct Watch writes. Remaining device checks are pending. System share inbox Stage text, links and files before a user-selected handoff. No automatic upload or send; the destination service's data practices still apply. Frequently asked questions How can I access my own Agent web workbench on an iPhone? Yihu is a native iOS browser shell around WebKit for your own reachable, trusted HTTPS workbench. Collie, OpenClaw and Hermes are web-access examples, not a certified native compatibility list. Yihu does not host Agents and is not their official client. What do I need before connecting a phone to a self-hosted Agent workbench? You need iOS 18+, your own trusted HTTPS workbench and, for the current source release, a Mac, Xcode, XcodeGen and your own signing setup. Speech also requires separately downloaded compatible models and microphone permission. Login and page compatibility depend on the server. How can an iPhone turn speech into an Agent workbench draft without sending it? Yihu transcribes on the phone with separately downloaded Qwen3 ASR models. After review, text can be inserted into a compatible draft. Insertion respects explicit host refusal, does not force text into unknown editors and never presses Send. Incompatible pages retain text for explicit copying. Can an iPhone transcribe longer recordings in segments and keep local notes? Yihu source includes longer recordings, segmented phone transcription and local audio/text retention, requiring microphone permission and compatible models. Remaining recording-related device checks are pending; no arbitrary duration, device performance or transcription accuracy is guaranteed. How can I filter pending decisions and acceptance items across Agent projects on a phone? Yihu PM Radar accepts your own JSON export or compatible HTTPS JSON feed, with per-workbench filters, management counts and bounded offline snapshots. Source-read times distinguish cached from fresh data; reads do not change ledger status. Authenticated feeds currently require a file export; Radar does not reuse web cookies or store credentials. Does replying to a project decision from a phone automatically change task status? No. For eligible decision/acceptance items, Yihu requires separately authorized server writes and explicit phone confirmation, followed by receipt readback. It does not automatically change status, execute tasks, merge or deploy. Real replies still require separate device/service acceptance. Can an Apple Watch show Agent project summaries and approve them independently? The watchOS 11+ companion receives pending decision/acceptance summaries through the paired phone and can hand off selected items or protected drafts to it. It does not provide standalone approval or direct Watch writes; the phone still requires confirmation and remaining pairing/device checks are pending. Does sharing to a workbench on iOS automatically upload files or send messages? Yihu's share extension stages text, links and files in an App Group inbox. It does not automatically upload or send them. Handoff requires a separate user action, and the destination workbench's data practices still apply. Does on-device speech recognition mean all workbench app data stays on the phone? No. Compatible downloaded models transcribe on the phone and voice notes are stored locally, but model downloads, web access, user sends/uploads and optional notification/relay integrations involve their respective services. On-device transcription is not a promise that all data stays on the phone. Does opening an Agent web page mean native push and Live Activities will work? No. Native notifications need a compatible web bridge, server endpoints and APNs configuration matching the signing environment. Live Activities also need a compatible relay you control. The placeholder relay is unusable, delivery needs separate acceptance and a ledger GET feed is not itself a push event source. How can I currently install this type of self-hosted workbench iPhone client? Yihu currently provides source code, not an App Store binary. Follow the repository build guide to configure your own identifiers, App Group and signing, then build for your iPhone. No preconfigured server or model files are supplied. Can phone speaker verification replace account authentication or write authorization? No. Yihu speaker verification is a convenience filter that can misidentify speakers, not authentication. Compatible WeSpeaker/CAM++ artifacts are not included; verification-dependent paths are unavailable without them. Verification and server write authorization must not be bypassed. Requirements and build guide Privacy and data boundaries Voice workbench, radio or group chat? Outdoor/store audio checks and text handoff Bluetooth input troubleshooting Offline and weak-network handoff Reviewable minutes and brief fields Web read-aloud and microphone transitions Multiple-note review and candidate to-dos Radar JSON types and null checks Pre-trial go/no-go decision card Review labels within one recording Compare authorized Radar batches Manual text correction and retained copies Department ownership and archive checks Second-check Radar evidence Brief format-change compatibility review Permission before changing handoff paths Manual handoff evidence review Cross-device field presentation Audio-route recovery source matrix Follow-up evidence minimization Follow-up context and target checks Sentence-to-field summary provenance Parked-vehicle and exhibition input preflight Mixed-language term preflight Timezone and timestamp review Carrier-specific redaction/archive scope Export encoding and delimiter checks Microphone permission and sample contract Batch-change material retention mapping Empty fields and display defaults Foreground audio/state preflight Multi-role approval and receipt boundaries Batch item preflight Before recapture History retrieval scope Notification model preflight PCM format admission Reply request/receipt mapping Evidence link admission Capture queue pressure Audio/text evidence mapping Feed URL boundaries Near-field policy versus route Segment joining provenance Take your workbench with you. Open source. Built for iPhone. Connect your own services. Get started Currently a source release. Requires iOS 18+, your own workbench, speech models and signing setup.
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
@@ -6117,6 +6117,420 @@ Parameter/comparison tables (HTML) / 参数对照表：
 <td>Source attempts backup exclusion</td>
 <td>Permissions/policy/other copies</td>
 <td>Permanent backup, disaster recovery or original archive button</td>
+</tr>
+</tbody>
+</table>
+
+### Radar源URL为什么被拒？路径、查询和证据链接的不同边界
+
+Canonical: https://getyihu.com/guides/radar-feed-url-boundary-preflight/
+
+Radar源URL为什么被拒？路径、查询和证据链接的不同边界 证据链接能点，不代表同一地址能作为Radar源 CollieRadarFeed.validate允许源URL带路径，但要求HTTPS、非空host、无内嵌用户名密码、无query和fragment；端口可省略，若显式指定则须在1至65535。证据URL另用parseSafeEvidenceURLs，规则不能互换。通过源形态校验仍不证明认证、可达、成功读取或快照有效，本页不新增源服务或凭据配置。 与证据URL准入和离线排障的分工 证据指南核可点候选，离线指南核失败状态；这里先核 配置为数据源的地址本身是否符合消费者边界 。不发网络请求、不输入真实凭据、不把有效URL当私有来源身份认证。 检查项 已核范围 人工复核 不应推断 首尾空白 先去首尾空白再解析 原配置与实际返回URL 清洗所有内部字符 协议与host HTTPS且host非空 实际来源身份另核 可信域白名单或TLS实测 path 源可有路径 路径是否实际提供源 浏览器可信origin规则直接代用 内嵌凭据 user/password必须空 沿既有获准认证流程 把密码塞URL就能使用 query/fragment 必须都不存在 即使只是view=demo也不同 证据链接允许就源也允许 端口 可省略；显式指定时为1…65535 服务可达性与访问权限 所有端口和来源已测试 返回内容 形态校验不是JSON解码 真实模型/日期/大小/身份 任意网页地址都是快照源 失败处理 保持原守卫 错误类别和原来源配置 自动改HTTP/换服务/公开私有源 合成地址比较 https://example.com/radar.json只是带path的形态示意；加?view=demo或#part会触及当前源校验的query/fragment限制。示例未访问，不代表实际源存在。 不要为了通过校验删掉真实认证条件或改用未批准公开服务。形态、认证、读取和内容验收是四类证据；其中一项通过不补齐其余，也不产生回复写权。 FAQ HTTPS链接可点就能当源吗？ 不能。证据候选和源URL有不同消费者规则，尤其query/fragment。 源必须只有域名不能有path吗？ 不是。该校验允许path，但路径是否实际有效仍需获准读取证据。 无敏感内容的query也允许吗？ 当前校验要求query不存在，不能按内容无害自行放宽。 通过validate是否证明认证成功？ 不证明。没有发出请求，身份、权限与真实响应另核。 地址失败能改HTTP绕过吗？ 不应。按原错误和获准配置处理，不绕HTTPS边界。 本页是否创建或访问了示例源？ 没有，未注册服务、输入凭据或发网络请求。 相关指南与源码 证据链接准入 · 离线与来源失败 · JSON消费者条件 · 开始 · 隐私 CollieRadarFeed与证据URL校验 · 来源与工作台边界
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>已核范围</th>
+<th>人工复核</th>
+<th>不应推断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>首尾空白</td>
+<td>先去首尾空白再解析</td>
+<td>原配置与实际返回URL</td>
+<td>清洗所有内部字符</td>
+</tr>
+<tr>
+<td>协议与host</td>
+<td>HTTPS且host非空</td>
+<td>实际来源身份另核</td>
+<td>可信域白名单或TLS实测</td>
+</tr>
+<tr>
+<td>path</td>
+<td>源可有路径</td>
+<td>路径是否实际提供源</td>
+<td>浏览器可信origin规则直接代用</td>
+</tr>
+<tr>
+<td>内嵌凭据</td>
+<td>user/password必须空</td>
+<td>沿既有获准认证流程</td>
+<td>把密码塞URL就能使用</td>
+</tr>
+<tr>
+<td>query/fragment</td>
+<td>必须都不存在</td>
+<td>即使只是view=demo也不同</td>
+<td>证据链接允许就源也允许</td>
+</tr>
+<tr>
+<td>端口</td>
+<td>可省略；显式指定时为1…65535</td>
+<td>服务可达性与访问权限</td>
+<td>所有端口和来源已测试</td>
+</tr>
+<tr>
+<td>返回内容</td>
+<td>形态校验不是JSON解码</td>
+<td>真实模型/日期/大小/身份</td>
+<td>任意网页地址都是快照源</td>
+</tr>
+<tr>
+<td>失败处理</td>
+<td>保持原守卫</td>
+<td>错误类别和原来源配置</td>
+<td>自动改HTTP/换服务/公开私有源</td>
+</tr>
+</tbody>
+</table>
+
+### Why a Radar feed URL is rejected: paths, queries and evidence-link differences
+
+Canonical: https://getyihu.com/en/guides/radar-feed-url-boundary-preflight/
+
+Why a Radar feed URL is rejected: paths, queries and evidence-link differences A clickable evidence URL is not automatically a valid Radar feed CollieRadarFeed.validate permits a path but requires HTTPS, nonempty host, no embedded user/password, no query/fragment. The port may be omitted; if explicitly specified, it must be within 1–65535. Evidence uses separate parseSafeEvidenceURLs rules. Passing feed shape proves neither authentication, reachability, a successful read nor valid snapshot. No source service or credential setup is added. Different from evidence admission and offline diagnosis Evidence admission checks clickable candidates; offline review checks failures. Here whether a configured source address meets consumer boundaries comes first. No network request or real credentials are used, and shape is not private-source identity verification. Check Verified scope Manual review Not established Edge whitespace Trim before parsing Original configuration/returned URL Every internal character cleansed Scheme/host HTTPS/nonempty host Actual source identity Trusted-domain allowlist or TLS test Path Allowed on feeds Actual source endpoint Browser-origin rules interchangeable Credentials No user/password Existing authorized auth process Passwords in URLs are supported Query/fragment Both absent Even view=demo differs Evidence allowance transfers to feeds Port Optional; if specified, 1…65535 Access/reachability Every port/source tested Response URL validation is not JSON decoding Model/date/size/identity Any web page is a snapshot Failure Original guards remain Category/original configuration Automatic HTTP/other service/private disclosure Synthetic address comparison https://example.com/radar.json illustrates a path only. Adding ?view=demo or #part meets current query/fragment rejection conditions. Nothing is fetched and no real source is established. Do not remove real authentication conditions or use an unapproved public service to pass a check. Shape, authentication, reading and content acceptance are separate; none silently supplies the others or write access. FAQ Can every clickable HTTPS link be a source? No. Consumers differ, especially query/fragment rules. Must a feed be a bare domain without path? No. A path is allowed; actual endpoint validity still needs authorized evidence. Is a harmless query allowed? The current validator requires no query, irrespective of assumed harmlessness. Does validate prove authentication? No request occurs there. Identity, permissions and response remain separate. Can failure be bypassed with HTTP? Do not bypass HTTPS; inspect actual errors/authorized configuration. Was the example source created or fetched? No service registration, credentials or network request occurred. Reading and source Evidence URL admission · Offline/source failures · JSON consumer conditions · Start · Privacy Feed/evidence URL validators · Source/workbench boundaries
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Verified scope</th>
+<th>Manual review</th>
+<th>Not established</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Edge whitespace</td>
+<td>Trim before parsing</td>
+<td>Original configuration/returned URL</td>
+<td>Every internal character cleansed</td>
+</tr>
+<tr>
+<td>Scheme/host</td>
+<td>HTTPS/nonempty host</td>
+<td>Actual source identity</td>
+<td>Trusted-domain allowlist or TLS test</td>
+</tr>
+<tr>
+<td>Path</td>
+<td>Allowed on feeds</td>
+<td>Actual source endpoint</td>
+<td>Browser-origin rules interchangeable</td>
+</tr>
+<tr>
+<td>Credentials</td>
+<td>No user/password</td>
+<td>Existing authorized auth process</td>
+<td>Passwords in URLs are supported</td>
+</tr>
+<tr>
+<td>Query/fragment</td>
+<td>Both absent</td>
+<td>Even view=demo differs</td>
+<td>Evidence allowance transfers to feeds</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>Optional; if specified, 1…65535</td>
+<td>Access/reachability</td>
+<td>Every port/source tested</td>
+</tr>
+<tr>
+<td>Response</td>
+<td>URL validation is not JSON decoding</td>
+<td>Model/date/size/identity</td>
+<td>Any web page is a snapshot</td>
+</tr>
+<tr>
+<td>Failure</td>
+<td>Original guards remain</td>
+<td>Category/original configuration</td>
+<td>Automatic HTTP/other service/private disclosure</td>
+</tr>
+</tbody>
+</table>
+
+### 近讲偏好不等于路由实测：HFP允许、会话模式与当前输入核对
+
+Canonical: https://getyihu.com/guides/near-field-policy-route-review/
+
+近讲偏好不等于路由实测：HFP允许、会话模式与当前输入核对 allowBluetoothHFP是允许条件，不是外设已被选中或更准确的证明 现有短语音在start读取近讲偏好。启用策略采用playAndRecord、voiceChat及mixWithOthers/allowBluetoothHFP；关闭策略为record/default。输入图策略也随该偏好分支。它们是实现选择，不是当前硬件已成功启用、强制选择某支麦克风或实测准确率；本页不新增降噪/选麦服务。 与外设适用性和恢复矩阵的区别 外设前检核场景条件，恢复矩阵核录中事件；这里核 保存的偏好、启动配置、输入图和实际系统路由的证据层级 。不切换系统设置或录音，长笔记另有自己的采集路径。 检查项 已核范围 人工复核 不应推断 保存偏好 缺值时源码默认true 实际版本与入口 默认值等于系统已授权 启用会话 playAndRecord/voiceChat setCategory/setActive结果 所有设备都成功或无回声 HFP allowBluetoothHFP为允许 实际输入路由 强制选中已配对耳机麦克风 混音选项 mixWithOthers策略 实际输出/页面播放状态 网页TTS与采集无限同时可用 输入图 近讲策略启用voice processing等 实际图配置是否成功 固定高噪成绩或说话人识别 关闭策略 record/default原路径 对应入口与当前状态 所有外设自动兼容 启动快照 本次start读取偏好 本次会话和后续设置区别 改偏好就证明旧录音已重绑 其他采集 长笔记路径单独实现 实际入口与权限/格式 一套策略覆盖所有录音/网页 合成策略核查 已知：偏好启用；未知：实际HFP输入与图配置结果。结论：只能说启动策略允许，不报外设选择或高噪性能。若准备/启动失败，沿原错误处理，不强行复用不一致管线。 voiceChat或voice processing名称不是风噪、距离、延迟或准确率SLA。先核实际路由和安全环境，不让策略标签替代设备/系统验收，也不扩张服务和目标权限。 FAQ 偏好为true说明麦克风已授权吗？ 不说明。保存偏好与系统授权、启动结果是不同条件。 HFP允许是否强制选耳机麦克风？ 不是。必须核实际系统输入路由，不能只看配对或配置选项。 voiceChat是否保证骑行风噪可用？ 没有这种实测或SLA，本页也不建议驾驶/骑行中操作。 mixWithOthers是否保证所有网页朗读和采集同时工作？ 不能保证。实际页面/系统/输入输出边界仍需核。 长笔记也完全沿这套近讲策略吗？ 不能推广。引用的是短语音入口，长笔记采集单独核。 改设置等于旧会话已经重绑吗？ 不能由保存值推断。核本次启动、实际相位/路由与原守卫。 相关指南与源码 外设前检 · 路由恢复 · 权限与格式 · 开始 · 隐私 近讲会话/图策略与启动 · 既有设置入口 · 长笔记独立路径
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>已核范围</th>
+<th>人工复核</th>
+<th>不应推断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>保存偏好</td>
+<td>缺值时源码默认true</td>
+<td>实际版本与入口</td>
+<td>默认值等于系统已授权</td>
+</tr>
+<tr>
+<td>启用会话</td>
+<td>playAndRecord/voiceChat</td>
+<td>setCategory/setActive结果</td>
+<td>所有设备都成功或无回声</td>
+</tr>
+<tr>
+<td>HFP</td>
+<td>allowBluetoothHFP为允许</td>
+<td>实际输入路由</td>
+<td>强制选中已配对耳机麦克风</td>
+</tr>
+<tr>
+<td>混音选项</td>
+<td>mixWithOthers策略</td>
+<td>实际输出/页面播放状态</td>
+<td>网页TTS与采集无限同时可用</td>
+</tr>
+<tr>
+<td>输入图</td>
+<td>近讲策略启用voice processing等</td>
+<td>实际图配置是否成功</td>
+<td>固定高噪成绩或说话人识别</td>
+</tr>
+<tr>
+<td>关闭策略</td>
+<td>record/default原路径</td>
+<td>对应入口与当前状态</td>
+<td>所有外设自动兼容</td>
+</tr>
+<tr>
+<td>启动快照</td>
+<td>本次start读取偏好</td>
+<td>本次会话和后续设置区别</td>
+<td>改偏好就证明旧录音已重绑</td>
+</tr>
+<tr>
+<td>其他采集</td>
+<td>长笔记路径单独实现</td>
+<td>实际入口与权限/格式</td>
+<td>一套策略覆盖所有录音/网页</td>
+</tr>
+</tbody>
+</table>
+
+### Near-field preference versus actual route: HFP allowance and capture policy
+
+Canonical: https://getyihu.com/en/guides/near-field-policy-route-review/
+
+Near-field preference versus actual route: HFP allowance and capture policy allowBluetoothHFP is permission to use a route, not proof it was selected or more accurate Short-speech start reads the near-field preference. Enabled policy uses playAndRecord/voiceChat with mixWithOthers/allowBluetoothHFP; disabled policy uses record/default. Input graph policy branches too. These are implementation choices, not successful hardware activation, forced mic selection or measured accuracy. No noise-removal/mic-selection service is added. Different from accessory suitability and recovery Suitability checks environment; recovery checks capture events. Here stored preference, startup configuration, graph and actual route have separate evidence scopes . No setting or recording changes occur; long notes use another capture path. Check Verified scope Manual review Not established Preference Default true when absent Actual version/entry Default means system authorization Enabled session playAndRecord/voiceChat Category/activation results Universal success or no echo HFP allowBluetoothHFP permits Actual input route Paired headset mic forced Mixing mixWithOthers policy Actual playback/output Unlimited web TTS/capture coexistence Input graph Voice-processing policy etc. Actual configuration success Noise benchmark or speaker identification Disabled record/default path Actual entry/state All accessories compatible Startup snapshot Preference read at start This capture versus later settings Saved changes prove old capture rebound Other capture Long notes separately implemented Actual entry/permission/format Every recording/page uses one policy Synthetic policy review Known: preference enabled. Unknown: selected HFP input and graph result. Report allowance only, not route selection or noise performance. Startup failures retain original handling rather than forcing mismatched pipelines. voiceChat/voice processing names are not wind, distance, latency or accuracy SLAs. Actual route/safe environment need review without replacing device/OS acceptance or expanding service/target authority. FAQ Does true mean microphone permission granted? No. Preference, system authorization and successful start differ. Does HFP allowance force headset input? No. Inspect the actual route, not pairing or options alone. Does voiceChat guarantee cycling wind performance? No benchmark/SLA is supplied; do not operate while driving/cycling. Does mixWithOthers guarantee all page playback/capture coexistence? No. Actual page/system/input/output boundaries still matter. Do long notes use this exact policy? Do not generalize short-speech configuration to the separate long-note path. Does editing preferences prove old capture rebound? No. Inspect startup, phase/route and original guards. Reading and source Accessory preflight · Route recovery · Permission/format · Start · Privacy Policy/graph/start · Existing settings · Separate long-note path
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Verified scope</th>
+<th>Manual review</th>
+<th>Not established</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Preference</td>
+<td>Default true when absent</td>
+<td>Actual version/entry</td>
+<td>Default means system authorization</td>
+</tr>
+<tr>
+<td>Enabled session</td>
+<td>playAndRecord/voiceChat</td>
+<td>Category/activation results</td>
+<td>Universal success or no echo</td>
+</tr>
+<tr>
+<td>HFP</td>
+<td>allowBluetoothHFP permits</td>
+<td>Actual input route</td>
+<td>Paired headset mic forced</td>
+</tr>
+<tr>
+<td>Mixing</td>
+<td>mixWithOthers policy</td>
+<td>Actual playback/output</td>
+<td>Unlimited web TTS/capture coexistence</td>
+</tr>
+<tr>
+<td>Input graph</td>
+<td>Voice-processing policy etc.</td>
+<td>Actual configuration success</td>
+<td>Noise benchmark or speaker identification</td>
+</tr>
+<tr>
+<td>Disabled</td>
+<td>record/default path</td>
+<td>Actual entry/state</td>
+<td>All accessories compatible</td>
+</tr>
+<tr>
+<td>Startup snapshot</td>
+<td>Preference read at start</td>
+<td>This capture versus later settings</td>
+<td>Saved changes prove old capture rebound</td>
+</tr>
+<tr>
+<td>Other capture</td>
+<td>Long notes separately implemented</td>
+<td>Actual entry/permission/format</td>
+<td>Every recording/page uses one policy</td>
+</tr>
+</tbody>
+</table>
+
+### 分段转写怎样拼接？低能量切点、ASCII空格与原词证据核对
+
+Canonical: https://getyihu.com/guides/note-segment-join-provenance/
+
+分段转写怎样拼接？低能量切点、ASCII空格与原词证据核对 拼接规则能改变边界空格，但不证明句子、标点和语义已校正 CollieNoteSegmenter用16k采样、28秒窗口，在末8秒按1600帧步长寻找低能量位置，末尾/较短最终窗口另处理。join只在两侧都是ASCII字母或数字时加一个空格；其他边界直接拼接。它不是语义断句、自动补标点、说话人识别或字级对齐，本页不新增结构化纪要引擎。 与听核原话和导出编码的分工 听核检查识别内容，导出指南核序列化；这里核 分段/拼接算法本身给结果增加或保留了什么边界 ，以免把处理产物当未经编辑的逐字原件。未运行识别模型或音频测试。 检查项 已核范围 人工复核 不应推断 窗口 16k、最多28秒处理窗口 实际最后窗口与长度 每28秒必为完整一句 搜索区 末8秒低能量查找 声学切点而非语义 所有词都不会被切断 步长 1600帧约100ms 粒度与实际内容分开 每词100ms对齐 ASCII边界 两侧字母/数字时加空格 API与V2拼成API V2 空格一定来自原始口述 其他边界 直接拼接，不通用修辞 中文/标点/已有空格 自动语法纠错或段落分层 空/首段 按实现保留已有或下一段 实际原词和输出 自动补齐缺句 元数据进度 帧位置与文字不是同一度量 transcribedFrames与原音频 每段已人工审校 归档说明 原引用/实际处理稿/修订分开 新增空格或人工断句依据 自动生成原话真实性证书 合成拼接示意 API + V2得到API V2；样例 + 说明直接得到样例说明。这是简单边界规则示意，不是实际识别准确率。若人工补标点、断句或改别名，应标为编辑动作并保留依据，不能说成模型或源音频已经明确给出。 低能量不保证没有词，不用算法注释代替真实听核。用于后续简报时仍保持条件、否定与未知，不从拼接稿自动推导业务批准或已执行状态。 FAQ 28秒窗口是否就是自动语义分段？ 不是。声学窗口/切点不等于句子边界或说话人分离。 低能量切点能保证不切词吗？ 没有保证。该策略不替代真实音频与识别结果核对。 API V2中的空格必为原话吗？ 不必。join会在ASCII字母数字边界补空格，应区分处理规则与原始证据。 中文边界会自动补空格和标点吗？ 不由该join提供。其他边界直接拼接，不是通用中文排版或纠错器。 帧进度是否说明全部词已听核？ 不说明。处理位置、最终文字与人工验证分别看。 本页是否新增分段编辑或自动纪要？ 没有。只是按固定源码核拼接范围，不提供新界面/API或模型能力。 相关指南与源码 片段原词核对 · 导出文字格式 · 音文材料对应 · 开始 · 隐私 CollieNoteSegmenter与join · 处理帧元数据
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>已核范围</th>
+<th>人工复核</th>
+<th>不应推断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>窗口</td>
+<td>16k、最多28秒处理窗口</td>
+<td>实际最后窗口与长度</td>
+<td>每28秒必为完整一句</td>
+</tr>
+<tr>
+<td>搜索区</td>
+<td>末8秒低能量查找</td>
+<td>声学切点而非语义</td>
+<td>所有词都不会被切断</td>
+</tr>
+<tr>
+<td>步长</td>
+<td>1600帧约100ms</td>
+<td>粒度与实际内容分开</td>
+<td>每词100ms对齐</td>
+</tr>
+<tr>
+<td>ASCII边界</td>
+<td>两侧字母/数字时加空格</td>
+<td>API与V2拼成API V2</td>
+<td>空格一定来自原始口述</td>
+</tr>
+<tr>
+<td>其他边界</td>
+<td>直接拼接，不通用修辞</td>
+<td>中文/标点/已有空格</td>
+<td>自动语法纠错或段落分层</td>
+</tr>
+<tr>
+<td>空/首段</td>
+<td>按实现保留已有或下一段</td>
+<td>实际原词和输出</td>
+<td>自动补齐缺句</td>
+</tr>
+<tr>
+<td>元数据进度</td>
+<td>帧位置与文字不是同一度量</td>
+<td>transcribedFrames与原音频</td>
+<td>每段已人工审校</td>
+</tr>
+<tr>
+<td>归档说明</td>
+<td>原引用/实际处理稿/修订分开</td>
+<td>新增空格或人工断句依据</td>
+<td>自动生成原话真实性证书</td>
+</tr>
+</tbody>
+</table>
+
+### Segment joining: low-energy cuts, ASCII spaces and original-word evidence
+
+Canonical: https://getyihu.com/en/guides/note-segment-join-provenance/
+
+Segment joining: low-energy cuts, ASCII spaces and original-word evidence Joining may add a boundary space; it does not certify grammar, punctuation or meaning CollieNoteSegmenter uses 16 kHz, 28-second windows and a low-energy search over the last eight seconds in 1600-frame steps, with final/short-window handling. join inserts one space only when both adjacent characters are ASCII letters/digits; other boundaries concatenate. It is not semantic splitting, punctuation repair, diarization or word alignment. No structured-minutes engine is added. Different from original-word and encoding review Listening reviews content; export review checks serialization. Here what segmentation/joining itself adds or preserves at boundaries matters, so processed text is not mistaken for an untouched verbatim original. No model/audio benchmark ran. Check Verified scope Manual review Not established Window 16 kHz/up to 28 seconds Final window/actual length Each window is a whole sentence Search Last eight seconds, low energy Acoustic versus semantic cut Words never cut Step 1600 frames, about 100 ms Granularity versus content 100-ms word alignment ASCII boundary Letters/digits both sides add space API + V2 → API V2 Space necessarily came from speech Other boundaries Direct join, no rhetoric repair CJK/punctuation/existing spaces Grammar correction/paragraph hierarchy Empty/first piece Existing/next per implementation Original words/output Missing sentences generated Progress Frame position differs from text transcribedFrames/audio Every piece manually reviewed Retention Original/processed/edited text separated Added spaces/editorial reasons Automatic verbatim authenticity certificate Synthetic joining illustration API + V2 becomes API V2; 样例 + 说明 becomes 样例说明. These illustrate boundary rules, not recognition accuracy. Manual punctuation, splitting or alias edits must retain editorial status/evidence rather than claim the model/original explicitly supplied them. Low energy is not guaranteed word absence. Review actual audio/text. Later briefs still preserve conditions, negation and unknowns; joining does not establish business approval or execution. FAQ Are 28-second windows semantic segmentation? No. Acoustic windows/cuts differ from sentence boundaries or speaker separation. Do low-energy cuts guarantee no split words? No. Strategy does not replace actual audio/result review. Must the API V2 space come from speech? No. join can insert it at ASCII letter/digit boundaries. Distinguish processing from originals. Does CJK joining add spaces/punctuation? Not through this join. Other boundaries concatenate; it is not general typography/correction. Does frame progress establish all words heard/reviewed? No. Position, final text and manual acceptance differ. Is new segment editing or automatic minutes added? No. This reviews fixed implementation, not new UI/API/model capability. Reading and source Original-word review · Export format · Audio/text mapping · Start · Privacy Segmenter/join · Frame progress metadata
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Verified scope</th>
+<th>Manual review</th>
+<th>Not established</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Window</td>
+<td>16 kHz/up to 28 seconds</td>
+<td>Final window/actual length</td>
+<td>Each window is a whole sentence</td>
+</tr>
+<tr>
+<td>Search</td>
+<td>Last eight seconds, low energy</td>
+<td>Acoustic versus semantic cut</td>
+<td>Words never cut</td>
+</tr>
+<tr>
+<td>Step</td>
+<td>1600 frames, about 100 ms</td>
+<td>Granularity versus content</td>
+<td>100-ms word alignment</td>
+</tr>
+<tr>
+<td>ASCII boundary</td>
+<td>Letters/digits both sides add space</td>
+<td>API + V2 → API V2</td>
+<td>Space necessarily came from speech</td>
+</tr>
+<tr>
+<td>Other boundaries</td>
+<td>Direct join, no rhetoric repair</td>
+<td>CJK/punctuation/existing spaces</td>
+<td>Grammar correction/paragraph hierarchy</td>
+</tr>
+<tr>
+<td>Empty/first piece</td>
+<td>Existing/next per implementation</td>
+<td>Original words/output</td>
+<td>Missing sentences generated</td>
+</tr>
+<tr>
+<td>Progress</td>
+<td>Frame position differs from text</td>
+<td>transcribedFrames/audio</td>
+<td>Every piece manually reviewed</td>
+</tr>
+<tr>
+<td>Retention</td>
+<td>Original/processed/edited text separated</td>
+<td>Added spaces/editorial reasons</td>
+<td>Automatic verbatim authenticity certificate</td>
 </tr>
 </tbody>
 </table>
