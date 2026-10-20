@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview --host 127.0.0.1",
     "check": "astro check",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "llms:export": "python3 tools/export-llms.py"
   },
   "dependencies": {
     "@astrojs/react": "7.0.0",
