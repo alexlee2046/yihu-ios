@@ -9,7 +9,7 @@ Privacy: https://getyihu.com/privacy/ | https://getyihu.com/en/privacy/
 
 ## Reading contract / 阅读边界
 
-This reference covers seven existing bilingual page families (home, start, privacy, voice drafts, mobile decisions, recording notes, multi-project Radar/Watch) plus five bilingual selection, preflight, troubleshooting and editorial-field guides. Every listed URL has its own canonical and language counterpart. Text is a content reference, not device, latency, radio range, delivery, indexing, AI citation or legal certification. 一共十二类双语页面；源码实现、构建与机器可读文件不等于真机、写入、推送或收录验收。
+This reference covers seven existing bilingual page families (home, start, privacy, voice drafts, mobile decisions, recording notes, multi-project Radar/Watch) plus eight bilingual selection, preflight, troubleshooting, editorial-review and data-contract guides. Every listed URL has its own canonical and language counterpart. Text is a content reference, not device, latency, radio range, delivery, indexing, AI citation or legal certification. 一共十五类双语页面；源码实现、构建与机器可读文件不等于真机、写入、推送或收录验收。
 
 ## Topic routing / 意图与真实能力
 
@@ -27,7 +27,7 @@ This reference covers seven existing bilingual page families (home, start, priva
 
 Canonical: https://getyihu.com/
 
-工作台， 随身带走。 离开桌面，也能用语音接续你的 Agent 工作。 体验一呼 获取源码 场景与界面示意 iPhone 如何接续自有 Agent 工作台？ 一呼（Yihu）是针对 Agent 工作台优化的原生 iOS 浏览器壳：访问自有 HTTPS 网页，在手机上转写语音草稿、保留录音笔记、筛选 PM Radar 事项，并通过系统分享暂存内容。Apple Watch 可接收配对手机摘要。它不提供 Agent 后端；语音需另下载模型，原生增强取决于服务兼容性，源码合入不等于所有真机路径验收通过。 熟悉的工作台，多一层原生体验。 端侧语音 / 录音笔记 / 系统分享 从一句话， 到一份草稿。 亲手试一次：播放一段示例，校对文字，再把它填入工作台草稿。 交互演示 示例内容 · 无需麦克风 0 1 听见 0 2 校对 0 3 填入 把想法，说出来。 校对并编辑转写文字 播放示例 我的工作台 示例 草稿 校对后的文字，会出现在这里。 发送之前，由你确认。 启用 JavaScript 即可体验。实际 App 会将语音转写为草稿，由你检查后决定发送。 让想法，离工作更近一点。 端侧语音 想法刚出现，就说下来。 在 iPhone 上将语音转成可编辑的文字，检查后再交给工作台。语音模型需单独下载。 录音笔记 长一点的想法，也装得下。 先记录，再由手机分段转写。音频和文字留在本地，随时回来整理。 系统分享 看到的，也能带回来。 把文字、链接和文件暂存进分享收件箱，再选择交给工作台的内容。不会自动发送。 系统听写、备忘录还是原生工作台草稿？对照使用边界。 查看手机待决策、来源时效与确认回执边界。 工作台是你的， 节奏也是。 连接你自己信任的 HTTPS 工作台。一呼在它周围，补上 iPhone 的原生能力。 Collie、OpenClaw、Hermes 等网页工作台均可作为访问对象；网页能打开，与原生增强已适配，是两件事。 通知与实时活动需要兼容服务。一呼不托管 Agent，也不提供后端。 了解使用条件 能力与前提核对表 左右滑动表格，查看完整使用前提。键盘用户可聚焦表格后使用方向键。 能力 可以做什么 前提与边界 端侧语音草稿 在手机上转写，再显式填入兼容草稿；不替你发送。 兼容模型另下载，需麦克风权限；宿主拒绝或未知编辑器可能无法填入。 长录音分段转写 保存本地音频和转写文字，供后续整理。 需兼容模型与麦克风权限；录音余项待真机验证，不承诺准确率。 PM Radar 待办筛选 按工作台筛选事项，区分来源读取时间与离线缓存。 自备 JSON 导出或兼容 HTTPS JSON 源；不复用网页 Cookie；回复需独立授权、手机确认与回执。 Apple Watch 摘要 接收配对手机的待决策/待验收摘要，并接续到手机。 需 watchOS 11+ 与配对手机；不是独立审批或手表直写，真机余项待验。 系统分享收件箱 文字、链接和文件先暂存，用户选择后再交接。 不自动上传或发送；目标服务的数据处理规则仍适用。 常见问题 如何在 iPhone 上访问自己的 Agent 网页工作台？ 一呼是围绕 WebKit 的原生 iOS 浏览器壳，可访问手机可达、TLS 证书受信任的自有 HTTPS 工作台。Collie、OpenClaw、Hermes 是网页访问示例，并非原生兼容认证清单；一呼不托管 Agent，也不是它们的官方客户端。 手机接入自建 Agent 工作台之前要准备什么？ 需要 iOS 18+、自有可信 HTTPS 工作台，以及当前源码发行所需的 Mac、Xcode、XcodeGen 和自己的签名配置。使用语音还需单独下载兼容模型并授予麦克风权限。工作台登录和页面兼容取决于服务端。 iPhone 如何把语音转成 Agent 工作台草稿而不自动发送？ 一呼用另下载的 Qwen3 ASR 模型在手机端转写，用户核对后可填入兼容草稿。填入遵守宿主明确拒绝，不向未知编辑器强行写入，也不会按下发送；不兼容时可保留文字供显式复制。 iPhone 能把较长录音分段转写并保留本地笔记吗？ 一呼源码提供长录音、手机分段转写和本地音频/文字保存，需麦克风权限与兼容模型。录音相关真机余项仍待验，不承诺任意时长、设备性能或转写准确率。 如何在手机上筛选多个 Agent 项目的待决策和待验收事项？ 一呼 PM Radar 接收自备 JSON 导出或兼容 HTTPS JSON 数据源，提供工作台独立筛选、管理计数和有界离线快照。来源读取时间用于区分旧缓存与新数据；读取本身不改变台账状态。认证源当前需文件导出，不复用网页 Cookie 或存储凭据。 从手机回复项目决策会自动改任务状态吗？ 不会。一呼仅对符合条件的决策/验收事项，在服务端独立授权、手机明确确认后回复并核验回执；不自动改状态、执行任务、合并或部署。真实回复仍有独立设备/服务验收要求。 Apple Watch 能查看 Agent 项目摘要并独立审批吗？ 手表伴侣通过配对手机接收待决策/待验收摘要，并可把所选事项或受保护草稿接续到手机；需 watchOS 11+。它不提供独立审批或手表直写，手机仍需确认，真机配对等余项待验。 iOS 分享到工作台时会自动上传文件或发送消息吗？ 一呼分享扩展只把文字、链接和文件暂存到 App Group 收件箱，不自动上传或发送。后续交接由用户另行选择，目标工作台的数据处理规则仍适用。 端侧语音识别是否意味着工作台 App 的所有数据都不出手机？ 不是。兼容模型下载后在手机转写，录音笔记本地保存；但模型下载、网页访问、用户发送/上传与可选通知/中继涉及相应服务。端侧转写不能作为所有数据永不出手机的承诺。 能打开 Agent 网页就代表原生推送和实时活动可用吗？ 不代表。原生通知需要兼容网页桥、服务端接口与匹配签名环境的 APNs 配置；实时活动还需自有兼容中继。占位中继地址不可用，推送交付仍需独立验收，台账 GET 数据源本身不是推送事件源。 这类自建工作台 iPhone 客户端现在如何安装？ 一呼当前提供源码，不提供 App Store 安装成品。请按仓库构建说明配置自己的标识、App Group 和签名，再构建到自己的 iPhone；不提供预配置服务器或模型文件。 手机端声纹过滤能替代账号身份认证或写入授权吗？ 不能。一呼声纹验证只是可能误判的便利过滤，不是身份认证；兼容 WeSpeaker/CAM++ 模型未随仓库提供，缺模型时依赖验证的路径不可用，也不能绕过验证或服务端写入授权。 使用条件与构建指南 隐私与数据边界 工作台、对讲机与语音群聊选型 户外与门店：音频预检和文字交接 蓝牙输入分层排障 离线与弱网交接排障 可核对纪要与简报字段 把工作台，带在身边。 开源，为 iPhone 而做，连接你自己的服务。 开始使用 目前提供源码，需 iOS 18+、自有工作台、语音模型和签名配置。
+工作台， 随身带走。 离开桌面，也能用语音接续你的 Agent 工作。 体验一呼 获取源码 场景与界面示意 iPhone 如何接续自有 Agent 工作台？ 一呼（Yihu）是针对 Agent 工作台优化的原生 iOS 浏览器壳：访问自有 HTTPS 网页，在手机上转写语音草稿、保留录音笔记、筛选 PM Radar 事项，并通过系统分享暂存内容。Apple Watch 可接收配对手机摘要。它不提供 Agent 后端；语音需另下载模型，原生增强取决于服务兼容性，源码合入不等于所有真机路径验收通过。 熟悉的工作台，多一层原生体验。 端侧语音 / 录音笔记 / 系统分享 从一句话， 到一份草稿。 亲手试一次：播放一段示例，校对文字，再把它填入工作台草稿。 交互演示 示例内容 · 无需麦克风 0 1 听见 0 2 校对 0 3 填入 把想法，说出来。 校对并编辑转写文字 播放示例 我的工作台 示例 草稿 校对后的文字，会出现在这里。 发送之前，由你确认。 启用 JavaScript 即可体验。实际 App 会将语音转写为草稿，由你检查后决定发送。 让想法，离工作更近一点。 端侧语音 想法刚出现，就说下来。 在 iPhone 上将语音转成可编辑的文字，检查后再交给工作台。语音模型需单独下载。 录音笔记 长一点的想法，也装得下。 先记录，再由手机分段转写。音频和文字留在本地，随时回来整理。 系统分享 看到的，也能带回来。 把文字、链接和文件暂存进分享收件箱，再选择交给工作台的内容。不会自动发送。 系统听写、备忘录还是原生工作台草稿？对照使用边界。 查看手机待决策、来源时效与确认回执边界。 工作台是你的， 节奏也是。 连接你自己信任的 HTTPS 工作台。一呼在它周围，补上 iPhone 的原生能力。 Collie、OpenClaw、Hermes 等网页工作台均可作为访问对象；网页能打开，与原生增强已适配，是两件事。 通知与实时活动需要兼容服务。一呼不托管 Agent，也不提供后端。 了解使用条件 能力与前提核对表 左右滑动表格，查看完整使用前提。键盘用户可聚焦表格后使用方向键。 能力 可以做什么 前提与边界 端侧语音草稿 在手机上转写，再显式填入兼容草稿；不替你发送。 兼容模型另下载，需麦克风权限；宿主拒绝或未知编辑器可能无法填入。 长录音分段转写 保存本地音频和转写文字，供后续整理。 需兼容模型与麦克风权限；录音余项待真机验证，不承诺准确率。 PM Radar 待办筛选 按工作台筛选事项，区分来源读取时间与离线缓存。 自备 JSON 导出或兼容 HTTPS JSON 源；不复用网页 Cookie；回复需独立授权、手机确认与回执。 Apple Watch 摘要 接收配对手机的待决策/待验收摘要，并接续到手机。 需 watchOS 11+ 与配对手机；不是独立审批或手表直写，真机余项待验。 系统分享收件箱 文字、链接和文件先暂存，用户选择后再交接。 不自动上传或发送；目标服务的数据处理规则仍适用。 常见问题 如何在 iPhone 上访问自己的 Agent 网页工作台？ 一呼是围绕 WebKit 的原生 iOS 浏览器壳，可访问手机可达、TLS 证书受信任的自有 HTTPS 工作台。Collie、OpenClaw、Hermes 是网页访问示例，并非原生兼容认证清单；一呼不托管 Agent，也不是它们的官方客户端。 手机接入自建 Agent 工作台之前要准备什么？ 需要 iOS 18+、自有可信 HTTPS 工作台，以及当前源码发行所需的 Mac、Xcode、XcodeGen 和自己的签名配置。使用语音还需单独下载兼容模型并授予麦克风权限。工作台登录和页面兼容取决于服务端。 iPhone 如何把语音转成 Agent 工作台草稿而不自动发送？ 一呼用另下载的 Qwen3 ASR 模型在手机端转写，用户核对后可填入兼容草稿。填入遵守宿主明确拒绝，不向未知编辑器强行写入，也不会按下发送；不兼容时可保留文字供显式复制。 iPhone 能把较长录音分段转写并保留本地笔记吗？ 一呼源码提供长录音、手机分段转写和本地音频/文字保存，需麦克风权限与兼容模型。录音相关真机余项仍待验，不承诺任意时长、设备性能或转写准确率。 如何在手机上筛选多个 Agent 项目的待决策和待验收事项？ 一呼 PM Radar 接收自备 JSON 导出或兼容 HTTPS JSON 数据源，提供工作台独立筛选、管理计数和有界离线快照。来源读取时间用于区分旧缓存与新数据；读取本身不改变台账状态。认证源当前需文件导出，不复用网页 Cookie 或存储凭据。 从手机回复项目决策会自动改任务状态吗？ 不会。一呼仅对符合条件的决策/验收事项，在服务端独立授权、手机明确确认后回复并核验回执；不自动改状态、执行任务、合并或部署。真实回复仍有独立设备/服务验收要求。 Apple Watch 能查看 Agent 项目摘要并独立审批吗？ 手表伴侣通过配对手机接收待决策/待验收摘要，并可把所选事项或受保护草稿接续到手机；需 watchOS 11+。它不提供独立审批或手表直写，手机仍需确认，真机配对等余项待验。 iOS 分享到工作台时会自动上传文件或发送消息吗？ 一呼分享扩展只把文字、链接和文件暂存到 App Group 收件箱，不自动上传或发送。后续交接由用户另行选择，目标工作台的数据处理规则仍适用。 端侧语音识别是否意味着工作台 App 的所有数据都不出手机？ 不是。兼容模型下载后在手机转写，录音笔记本地保存；但模型下载、网页访问、用户发送/上传与可选通知/中继涉及相应服务。端侧转写不能作为所有数据永不出手机的承诺。 能打开 Agent 网页就代表原生推送和实时活动可用吗？ 不代表。原生通知需要兼容网页桥、服务端接口与匹配签名环境的 APNs 配置；实时活动还需自有兼容中继。占位中继地址不可用，推送交付仍需独立验收，台账 GET 数据源本身不是推送事件源。 这类自建工作台 iPhone 客户端现在如何安装？ 一呼当前提供源码，不提供 App Store 安装成品。请按仓库构建说明配置自己的标识、App Group 和签名，再构建到自己的 iPhone；不提供预配置服务器或模型文件。 手机端声纹过滤能替代账号身份认证或写入授权吗？ 不能。一呼声纹验证只是可能误判的便利过滤，不是身份认证；兼容 WeSpeaker/CAM++ 模型未随仓库提供，缺模型时依赖验证的路径不可用，也不能绕过验证或服务端写入授权。 使用条件与构建指南 隐私与数据边界 工作台、对讲机与语音群聊选型 户外与门店：音频预检和文字交接 蓝牙输入分层排障 离线与弱网交接排障 可核对纪要与简报字段 网页朗读与麦克风切换边界 多段笔记汇总与待办核对 Radar JSON类型与空值核对 把工作台，带在身边。 开源，为 iPhone 而做，连接你自己的服务。 开始使用 目前提供源码，需 iOS 18+、自有工作台、语音模型和签名配置。
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
@@ -37,7 +37,7 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/
 
-Your workbench. Within reach. Step away from your desk. Keep your Agent work moving with your voice. Try Yihu Get the source Illustrative scene and interface How can an iPhone connect to your own Agent workbench? Yihu is a native iOS browser shell optimized for Agent workbenches: open your own HTTPS web UI, transcribe speech drafts on the phone, retain voice notes, filter PM Radar items and stage content through system sharing. Apple Watch can receive paired-phone summaries. Yihu supplies no Agent backend; speech needs separately downloaded models and native enhancements depend on service compatibility. Merged source does not certify every device path. Your familiar workbench. A native touch. On-device speech / Voice notes / Sharing A thought. Then a draft. Try the handoff. Play a short sample, edit the words, then place them in a workbench draft. INTERACTIVE DEMO Sample content · no microphone access 0 1 Listen 0 2 Review 0 3 Insert A thought, out loud. Review and edit the transcript Play sample My workbench Demo Draft Your reviewed words will appear here. You decide what to send, and when. Enable JavaScript to try the demo. Yihu transcribes speech into a draft for you to review before sending. Less distance between you and your work. On-device speech Say it while it’s fresh. Turn spoken ideas into an editable draft on your iPhone. Review your words before sending. Speech models are downloaded separately. Voice notes Give a longer thought room. Record now, transcribe in segments on your phone, and return to your audio and text later. System sharing Keep what you find. Bring text, links and files into the share inbox. Choose what to hand off to your workbench. Nothing is sent automatically. Dictation, Notes or native workbench drafts? Compare the boundaries. Read mobile decisions, source freshness and phone confirmation boundaries. Your workbench. Still yours. Connect your own trusted HTTPS workbench. Yihu adds native iPhone capabilities around it. Collie, OpenClaw and Hermes are examples of web workbenches you can open. Page access and native integration are separate capabilities. Notifications and Live Activities require a compatible service. Yihu does not host Agents or provide a backend. See what you need Capabilities and prerequisites Swipe the table to compare prerequisites. With a keyboard, focus the table and use the arrow keys. Capability What it does Prerequisites and boundaries On-device speech drafts Transcribe on the phone and explicitly insert into a compatible draft; never presses Send. Download compatible models and grant microphone access; host refusal or unknown editors can prevent insertion. Segmented voice notes Retain local audio and transcripts for later review. Requires compatible models and microphone access; remaining recording paths need device acceptance, with no accuracy guarantee. PM Radar task filters Filter tasks per workbench and distinguish source-read time from offline cache. Supply a JSON export or compatible HTTPS JSON feed; web cookies are not reused. Replies need separate authorization, phone confirmation and receipt readback. Apple Watch summaries Receive pending decision/acceptance summaries from the paired phone and hand off to it. Requires watchOS 11+ and a paired phone; no standalone approval or direct Watch writes. Remaining device checks are pending. System share inbox Stage text, links and files before a user-selected handoff. No automatic upload or send; the destination service's data practices still apply. Frequently asked questions How can I access my own Agent web workbench on an iPhone? Yihu is a native iOS browser shell around WebKit for your own reachable, trusted HTTPS workbench. Collie, OpenClaw and Hermes are web-access examples, not a certified native compatibility list. Yihu does not host Agents and is not their official client. What do I need before connecting a phone to a self-hosted Agent workbench? You need iOS 18+, your own trusted HTTPS workbench and, for the current source release, a Mac, Xcode, XcodeGen and your own signing setup. Speech also requires separately downloaded compatible models and microphone permission. Login and page compatibility depend on the server. How can an iPhone turn speech into an Agent workbench draft without sending it? Yihu transcribes on the phone with separately downloaded Qwen3 ASR models. After review, text can be inserted into a compatible draft. Insertion respects explicit host refusal, does not force text into unknown editors and never presses Send. Incompatible pages retain text for explicit copying. Can an iPhone transcribe longer recordings in segments and keep local notes? Yihu source includes longer recordings, segmented phone transcription and local audio/text retention, requiring microphone permission and compatible models. Remaining recording-related device checks are pending; no arbitrary duration, device performance or transcription accuracy is guaranteed. How can I filter pending decisions and acceptance items across Agent projects on a phone? Yihu PM Radar accepts your own JSON export or compatible HTTPS JSON feed, with per-workbench filters, management counts and bounded offline snapshots. Source-read times distinguish cached from fresh data; reads do not change ledger status. Authenticated feeds currently require a file export; Radar does not reuse web cookies or store credentials. Does replying to a project decision from a phone automatically change task status? No. For eligible decision/acceptance items, Yihu requires separately authorized server writes and explicit phone confirmation, followed by receipt readback. It does not automatically change status, execute tasks, merge or deploy. Real replies still require separate device/service acceptance. Can an Apple Watch show Agent project summaries and approve them independently? The watchOS 11+ companion receives pending decision/acceptance summaries through the paired phone and can hand off selected items or protected drafts to it. It does not provide standalone approval or direct Watch writes; the phone still requires confirmation and remaining pairing/device checks are pending. Does sharing to a workbench on iOS automatically upload files or send messages? Yihu's share extension stages text, links and files in an App Group inbox. It does not automatically upload or send them. Handoff requires a separate user action, and the destination workbench's data practices still apply. Does on-device speech recognition mean all workbench app data stays on the phone? No. Compatible downloaded models transcribe on the phone and voice notes are stored locally, but model downloads, web access, user sends/uploads and optional notification/relay integrations involve their respective services. On-device transcription is not a promise that all data stays on the phone. Does opening an Agent web page mean native push and Live Activities will work? No. Native notifications need a compatible web bridge, server endpoints and APNs configuration matching the signing environment. Live Activities also need a compatible relay you control. The placeholder relay is unusable, delivery needs separate acceptance and a ledger GET feed is not itself a push event source. How can I currently install this type of self-hosted workbench iPhone client? Yihu currently provides source code, not an App Store binary. Follow the repository build guide to configure your own identifiers, App Group and signing, then build for your iPhone. No preconfigured server or model files are supplied. Can phone speaker verification replace account authentication or write authorization? No. Yihu speaker verification is a convenience filter that can misidentify speakers, not authentication. Compatible WeSpeaker/CAM++ artifacts are not included; verification-dependent paths are unavailable without them. Verification and server write authorization must not be bypassed. Requirements and build guide Privacy and data boundaries Voice workbench, radio or group chat? Outdoor/store audio checks and text handoff Bluetooth input troubleshooting Offline and weak-network handoff Reviewable minutes and brief fields Take your workbench with you. Open source. Built for iPhone. Connect your own services. Get started Currently a source release. Requires iOS 18+, your own workbench, speech models and signing setup.
+Your workbench. Within reach. Step away from your desk. Keep your Agent work moving with your voice. Try Yihu Get the source Illustrative scene and interface How can an iPhone connect to your own Agent workbench? Yihu is a native iOS browser shell optimized for Agent workbenches: open your own HTTPS web UI, transcribe speech drafts on the phone, retain voice notes, filter PM Radar items and stage content through system sharing. Apple Watch can receive paired-phone summaries. Yihu supplies no Agent backend; speech needs separately downloaded models and native enhancements depend on service compatibility. Merged source does not certify every device path. Your familiar workbench. A native touch. On-device speech / Voice notes / Sharing A thought. Then a draft. Try the handoff. Play a short sample, edit the words, then place them in a workbench draft. INTERACTIVE DEMO Sample content · no microphone access 0 1 Listen 0 2 Review 0 3 Insert A thought, out loud. Review and edit the transcript Play sample My workbench Demo Draft Your reviewed words will appear here. You decide what to send, and when. Enable JavaScript to try the demo. Yihu transcribes speech into a draft for you to review before sending. Less distance between you and your work. On-device speech Say it while it’s fresh. Turn spoken ideas into an editable draft on your iPhone. Review your words before sending. Speech models are downloaded separately. Voice notes Give a longer thought room. Record now, transcribe in segments on your phone, and return to your audio and text later. System sharing Keep what you find. Bring text, links and files into the share inbox. Choose what to hand off to your workbench. Nothing is sent automatically. Dictation, Notes or native workbench drafts? Compare the boundaries. Read mobile decisions, source freshness and phone confirmation boundaries. Your workbench. Still yours. Connect your own trusted HTTPS workbench. Yihu adds native iPhone capabilities around it. Collie, OpenClaw and Hermes are examples of web workbenches you can open. Page access and native integration are separate capabilities. Notifications and Live Activities require a compatible service. Yihu does not host Agents or provide a backend. See what you need Capabilities and prerequisites Swipe the table to compare prerequisites. With a keyboard, focus the table and use the arrow keys. Capability What it does Prerequisites and boundaries On-device speech drafts Transcribe on the phone and explicitly insert into a compatible draft; never presses Send. Download compatible models and grant microphone access; host refusal or unknown editors can prevent insertion. Segmented voice notes Retain local audio and transcripts for later review. Requires compatible models and microphone access; remaining recording paths need device acceptance, with no accuracy guarantee. PM Radar task filters Filter tasks per workbench and distinguish source-read time from offline cache. Supply a JSON export or compatible HTTPS JSON feed; web cookies are not reused. Replies need separate authorization, phone confirmation and receipt readback. Apple Watch summaries Receive pending decision/acceptance summaries from the paired phone and hand off to it. Requires watchOS 11+ and a paired phone; no standalone approval or direct Watch writes. Remaining device checks are pending. System share inbox Stage text, links and files before a user-selected handoff. No automatic upload or send; the destination service's data practices still apply. Frequently asked questions How can I access my own Agent web workbench on an iPhone? Yihu is a native iOS browser shell around WebKit for your own reachable, trusted HTTPS workbench. Collie, OpenClaw and Hermes are web-access examples, not a certified native compatibility list. Yihu does not host Agents and is not their official client. What do I need before connecting a phone to a self-hosted Agent workbench? You need iOS 18+, your own trusted HTTPS workbench and, for the current source release, a Mac, Xcode, XcodeGen and your own signing setup. Speech also requires separately downloaded compatible models and microphone permission. Login and page compatibility depend on the server. How can an iPhone turn speech into an Agent workbench draft without sending it? Yihu transcribes on the phone with separately downloaded Qwen3 ASR models. After review, text can be inserted into a compatible draft. Insertion respects explicit host refusal, does not force text into unknown editors and never presses Send. Incompatible pages retain text for explicit copying. Can an iPhone transcribe longer recordings in segments and keep local notes? Yihu source includes longer recordings, segmented phone transcription and local audio/text retention, requiring microphone permission and compatible models. Remaining recording-related device checks are pending; no arbitrary duration, device performance or transcription accuracy is guaranteed. How can I filter pending decisions and acceptance items across Agent projects on a phone? Yihu PM Radar accepts your own JSON export or compatible HTTPS JSON feed, with per-workbench filters, management counts and bounded offline snapshots. Source-read times distinguish cached from fresh data; reads do not change ledger status. Authenticated feeds currently require a file export; Radar does not reuse web cookies or store credentials. Does replying to a project decision from a phone automatically change task status? No. For eligible decision/acceptance items, Yihu requires separately authorized server writes and explicit phone confirmation, followed by receipt readback. It does not automatically change status, execute tasks, merge or deploy. Real replies still require separate device/service acceptance. Can an Apple Watch show Agent project summaries and approve them independently? The watchOS 11+ companion receives pending decision/acceptance summaries through the paired phone and can hand off selected items or protected drafts to it. It does not provide standalone approval or direct Watch writes; the phone still requires confirmation and remaining pairing/device checks are pending. Does sharing to a workbench on iOS automatically upload files or send messages? Yihu's share extension stages text, links and files in an App Group inbox. It does not automatically upload or send them. Handoff requires a separate user action, and the destination workbench's data practices still apply. Does on-device speech recognition mean all workbench app data stays on the phone? No. Compatible downloaded models transcribe on the phone and voice notes are stored locally, but model downloads, web access, user sends/uploads and optional notification/relay integrations involve their respective services. On-device transcription is not a promise that all data stays on the phone. Does opening an Agent web page mean native push and Live Activities will work? No. Native notifications need a compatible web bridge, server endpoints and APNs configuration matching the signing environment. Live Activities also need a compatible relay you control. The placeholder relay is unusable, delivery needs separate acceptance and a ledger GET feed is not itself a push event source. How can I currently install this type of self-hosted workbench iPhone client? Yihu currently provides source code, not an App Store binary. Follow the repository build guide to configure your own identifiers, App Group and signing, then build for your iPhone. No preconfigured server or model files are supplied. Can phone speaker verification replace account authentication or write authorization? No. Yihu speaker verification is a convenience filter that can misidentify speakers, not authentication. Compatible WeSpeaker/CAM++ artifacts are not included; verification-dependent paths are unavailable without them. Verification and server write authorization must not be bypassed. Requirements and build guide Privacy and data boundaries Voice workbench, radio or group chat? Outdoor/store audio checks and text handoff Bluetooth input troubleshooting Offline and weak-network handoff Reviewable minutes and brief fields Web read-aloud and microphone transitions Multiple-note review and candidate to-dos Radar JSON types and null checks Take your workbench with you. Open source. Built for iPhone. Connect your own services. Get started Currently a source release. Requires iOS 18+, your own workbench, speech models and signing setup.
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
@@ -1051,6 +1051,420 @@ Parameter/comparison tables (HTML) / 参数对照表：
 <td>Local, staged, visible draft or uncertain</td>
 <td>Retained locally; not handed off</td>
 <td>saved/queued or a draft is not delivery</td>
+</tr>
+</tbody>
+</table>
+
+### Agent网页朗读与语音输入切换：输出、麦克风和草稿边界
+
+Canonical: https://getyihu.com/guides/web-read-aloud-microphone-boundaries/
+
+Agent网页朗读与语音输入切换：输出、麦克风和草稿边界 网页能播放，不代表一呼提供内置朗读或语音通话后端 一呼围绕WebKit访问自有Agent工作台，增加原生转写和草稿交付。网页若提供朗读，其文字、声音、生成服务与播放控制仍由实际网页决定。源码允许内联媒体播放，不等于所有站点的TTS、连续双向语音或锁屏播放已适配。本页专门核对“刚在听网页，现在要说一句话”的切换边界，而不是重复耳机配对排障或认证任意语音Agent。 把输出与输入分开定位 输出链 ：网页是否有已获准的朗读功能、是否真的产生了可播放内容、手机输出到了哪里，是不同问题。一呼不提供通用TTS服务，不应把空白播放或网络失败都归因于耳机。 采集链 ：系统麦克风权限、网页采集请求和原生录音入口分别受各自规则约束。允许网页播放不是允许网页录音；打开页面也不自动授予原生或服务端写权限。 交接链 ：原生转写的文字可以尝试受守卫填入兼容草稿，不代表会发送；网页自己的语音会话则有其服务规则。两条路径不能互相冒充回执或兼容证明。 朗读到输入的交接检查表 核对项 当前依据 应观察什么 不应推断什么 网页朗读 功能若存在由具体网页/服务提供 内容来源、网页控制和播放结果 一呼内置统一TTS或托管语音Agent 内联媒体 WebKit配置允许内联播放 实际站点与系统组合下是否可播放 所有媒体、后台/锁屏播放均已验证 当前输出 系统音频输出及网页音量/暂停状态 声音来自手机还是已选耳机 已连接设备必定是当前输入 网页采集 网页与系统权限边界另行检查 哪个页面请求麦克风、用户是否明确许可 播放权限等于采集或写入授权 原生录音 有独立权限、模型与采集入口 系统是否有正在使用麦克风的状态或中断提示 与网页采集可稳定并发、必然无冲突 转写草稿 目标页面/编辑器和宿主许可检查 是否已有未发送文字、是否明确拒绝 听到声音就代表文字已填入或消息已发出 恢复/退出 各网页、系统与原生流程分别控制 自己开启的播放/录音是否停止，当前目标是否改变 关闭面板就撤回服务已收到的音频或文字 安全的单路径切换走读 只在安全静止环境使用获准的合成内容。不要朗读顾客资料、私有任务或真实会议录音来复现问题。 先辨认自己是否正在使用网页的语音/播放控制；通过它已有的停止或暂停动作结束本次输出，核对状态。不要同时开启网页录音与原生录音来试探并发能力。 再检查系统麦克风、实际音频路由、模型和目标草稿。不要重置别人的会话、权限或系统设置；发生冲突时停止受影响路径，而不是不断点击录音。 用“整理示例清单，只留草稿，不发送”测试原生输入。短语音可能自动尝试安全填入，因此先选目标，再核对文字是否已经出现。 结果不明就保留原文并检查目标已有内容；不通过换页面、换编辑器或清标记绕过拒绝。最后结束自己开启的播放/录音，保留对问题层级的描述。 这是检查顺序建议，不是本轮已完成的浏览器/真机测试；也不提供操作系统级麦克风占用探针、通用冲突检测面板或自动资源仲裁功能。 朗读内容和记录副本 网页TTS是否向服务发送文字、保存音频或同步历史，应看该服务规则，不由端侧ASR推断。原生转写在准备好的模型上本地处理，也不等于后续网页草稿永不离开手机。暂停播放、停止录音与删除服务副本分别是不同动作；不要据停止按钮承诺数据已撤回。 FAQ 一呼是否给所有Agent网页增加统一朗读按钮？ 本页不作这种承诺。当前范围是浏览器壳与原生语音草稿等增强，朗读若存在由实际网页/服务提供；内联媒体配置不是统一TTS功能。 网页和原生麦克风能一直同时使用吗？ 没有本轮并发矩阵可支持这个保证。先按单一路径切换并观察权限、路由和中断；不以反复启动制造冲突或绕过系统提示。 允许内联播放是否等于自动播放和锁屏都必定可用？ 不等于。页面实现、系统策略、音频会话和实际版本仍有影响；源码配置不证明所有站点或后台场景已经验证。 网页能朗读就已获准录音吗？ 不能这样推断。媒体输出、麦克风权限、页面采集及服务端身份/写权限是不同层级，须按实际提示单独确认。 如何确认朗读没有被当作自己的输入？ 先停止本次播放，再用单一合成语句检查实际转写。是否存在回采或回声需要具体设备证据；voiceChat等配置不是零回声或声纹准确保证。 停止网页语音能撤回已经交给服务的数据吗？ 不能据此承诺。停止与撤回、第三方存储和历史同步不同，需按实际服务规则核对；本页不提供统一远端删除功能。 相关排障与源码 蓝牙输入分层排障 · 弱网交接排障 · 语音草稿对照 · 多段笔记汇总 · 开始 · 隐私 依据： WebKit配置源码 、 原生音频策略 、 README边界 。
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>核对项</th>
+<th>当前依据</th>
+<th>应观察什么</th>
+<th>不应推断什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网页朗读</td>
+<td>功能若存在由具体网页/服务提供</td>
+<td>内容来源、网页控制和播放结果</td>
+<td>一呼内置统一TTS或托管语音Agent</td>
+</tr>
+<tr>
+<td>内联媒体</td>
+<td>WebKit配置允许内联播放</td>
+<td>实际站点与系统组合下是否可播放</td>
+<td>所有媒体、后台/锁屏播放均已验证</td>
+</tr>
+<tr>
+<td>当前输出</td>
+<td>系统音频输出及网页音量/暂停状态</td>
+<td>声音来自手机还是已选耳机</td>
+<td>已连接设备必定是当前输入</td>
+</tr>
+<tr>
+<td>网页采集</td>
+<td>网页与系统权限边界另行检查</td>
+<td>哪个页面请求麦克风、用户是否明确许可</td>
+<td>播放权限等于采集或写入授权</td>
+</tr>
+<tr>
+<td>原生录音</td>
+<td>有独立权限、模型与采集入口</td>
+<td>系统是否有正在使用麦克风的状态或中断提示</td>
+<td>与网页采集可稳定并发、必然无冲突</td>
+</tr>
+<tr>
+<td>转写草稿</td>
+<td>目标页面/编辑器和宿主许可检查</td>
+<td>是否已有未发送文字、是否明确拒绝</td>
+<td>听到声音就代表文字已填入或消息已发出</td>
+</tr>
+<tr>
+<td>恢复/退出</td>
+<td>各网页、系统与原生流程分别控制</td>
+<td>自己开启的播放/录音是否停止，当前目标是否改变</td>
+<td>关闭面板就撤回服务已收到的音频或文字</td>
+</tr>
+</tbody>
+</table>
+
+### Agent web read-aloud and voice input: output, microphone and draft boundaries
+
+Canonical: https://getyihu.com/en/guides/web-read-aloud-microphone-boundaries/
+
+Agent web read-aloud and voice input: output, microphone and draft boundaries Web playback does not establish built-in Yihu TTS or a voice-call backend Yihu wraps WebKit for your own Agent workbench and adds native transcription/draft delivery. When a site offers read-aloud, its text, voice, generation service and playback controls belong to that site’s implementation. Source configuration permits inline media, not universal acceptance of TTS, continuous two-way voice or lock-screen playback. This guide addresses the transition from listening to a web page to dictating a phrase, not another pairing checklist or certification of arbitrary voice Agents. Separate output, capture and handoff Output : whether the authorized site offers read-aloud, produces playable content and routes sound where expected are different questions. Yihu does not supply a general TTS service; silence/network failure is not automatically a headset problem. Capture : system microphone authorization, page capture requests and native recording controls have separate rules. Permission to play is not permission to record, and opening a page is not native or server-write authority. Handoff : native recognized text can attempt guarded insertion into a compatible draft, without sending. A site’s own voice session follows its service rules. Neither path establishes receipts or compatibility for the other. Read-aloud to input checks Check Current basis Observe Do not infer Web read-aloud Provided by the particular site/service if present Content origin, page controls and actual playback Built-in universal Yihu TTS or a hosted voice Agent Inline media WebKit permits inline playback The actual site/system combination Universal media, background or lock-screen acceptance Output route System output and page volume/pause state Phone speaker versus selected headset Connected output proves the active microphone Page capture Separate page/system permission boundary Which page requests the mic and whether the user permits it Playback permission is capture/write permission Native recording Separate permission, models and capture entry point System mic-use state and interruption messages Stable concurrency with web capture or no conflicts Transcript draft Page/editor/host-permission guards Existing unsent text or explicit refusal Audible output proves insertion or a sent message Stop/recovery Site, system and native paths have their own controls Whether your playback/recording stopped and target changed Closing a panel recalls data already received remotely A safe single-path transition Use authorized synthetic material while safely stationary, not customer data, private tasks or real meeting audio. Identify whether you are using the site’s voice/playback controls. End this output through its existing stop/pause action and inspect state. Do not start simultaneous web/native capture to probe concurrency. Check system microphone permission, actual route, model availability and the intended draft. Do not reset another person’s session, permissions or settings. Stop the affected path on conflict rather than repeatedly pressing Record. Use “Prepare a sample checklist; keep a draft without sending.” Short speech may automatically attempt guarded insertion, so select the target first and inspect whether text already appeared. Retain the original and inspect destination content on uncertainty. Do not switch pages/editors or clear markers to bypass refusal. End playback/recording you started and retain the failing-layer description. This is suggested check ordering, not a completed browser/device test. It adds no OS-level microphone occupancy probe, universal conflict panel or automatic resource arbitration. Read-aloud content and retained copies Whether web TTS sends text to a service, stores audio or syncs history depends on that service. Local ASR does not answer those questions. Prepared-model native transcription is local processing, not a guarantee that later web drafts never leave the phone. Pause, recording stop and remote deletion are different operations; a Stop button does not establish recall. FAQ Does Yihu add one read-aloud button to every Agent page? No such feature is promised here. The scope is a browser shell with enhancements such as native drafts; read-aloud, when present, is site-provided. Inline media configuration is not universal TTS functionality. Can the page and native microphone always run concurrently? No concurrency matrix from this work supports that guarantee. Switch one path at a time and observe permission, routing and interruptions. Do not repeatedly start capture to bypass system messages. Does inline playback guarantee autoplay and lock-screen use? No. Page implementation, system policy, audio session and actual versions still matter. Configuration is not acceptance of every site or background scenario. Does page read-aloud establish microphone permission? No. Media output, microphone authorization, page capture and server identity/write authority are separate layers. Check actual prompts independently. How can I check read-aloud was not captured as my speech? Stop this playback first, then inspect recognition of a single synthetic phrase. Loopback/echo needs actual device evidence; voiceChat settings do not guarantee zero echo or speaker-verification accuracy. Does stopping web voice recall data already sent to a service? Not as a general promise. Stop, recall, remote retention and history sync differ. Follow the actual service policy; this page supplies no universal remote-delete function. Guides and evidence Bluetooth input diagnosis · Weak-network handoff · Voice-draft comparison · Multiple-note review · Start · Privacy Evidence: WebKit configuration , native audio policy , README boundaries .
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Current basis</th>
+<th>Observe</th>
+<th>Do not infer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Web read-aloud</td>
+<td>Provided by the particular site/service if present</td>
+<td>Content origin, page controls and actual playback</td>
+<td>Built-in universal Yihu TTS or a hosted voice Agent</td>
+</tr>
+<tr>
+<td>Inline media</td>
+<td>WebKit permits inline playback</td>
+<td>The actual site/system combination</td>
+<td>Universal media, background or lock-screen acceptance</td>
+</tr>
+<tr>
+<td>Output route</td>
+<td>System output and page volume/pause state</td>
+<td>Phone speaker versus selected headset</td>
+<td>Connected output proves the active microphone</td>
+</tr>
+<tr>
+<td>Page capture</td>
+<td>Separate page/system permission boundary</td>
+<td>Which page requests the mic and whether the user permits it</td>
+<td>Playback permission is capture/write permission</td>
+</tr>
+<tr>
+<td>Native recording</td>
+<td>Separate permission, models and capture entry point</td>
+<td>System mic-use state and interruption messages</td>
+<td>Stable concurrency with web capture or no conflicts</td>
+</tr>
+<tr>
+<td>Transcript draft</td>
+<td>Page/editor/host-permission guards</td>
+<td>Existing unsent text or explicit refusal</td>
+<td>Audible output proves insertion or a sent message</td>
+</tr>
+<tr>
+<td>Stop/recovery</td>
+<td>Site, system and native paths have their own controls</td>
+<td>Whether your playback/recording stopped and target changed</td>
+<td>Closing a panel recalls data already received remotely</td>
+</tr>
+</tbody>
+</table>
+
+### 多段语音笔记怎样人工汇总？保留来源、冲突与待办确认
+
+Canonical: https://getyihu.com/guides/multi-note-review-handoff/
+
+多段语音笔记怎样人工汇总？保留来源、冲突与待办确认 汇总多个记录不等于App已经提供自动合并或去重 一呼现有笔记保留各自的本地音频、转写与交接状态。本文给出手工比较多条笔记的检查顺序：先保留来源，再标出重复、矛盾、缺失和未确认待办，最后决定是否在已有获准工具中整理。它不是一呼自动拼接音频、跨笔记合并、任务提取或去重功能；编辑出的新摘要也不能消除原交接的不确定性。 先分清三个“多段” 一条录音的识别分段 ：当前处理按音频帧切窗口，仍属于同一条笔记，不自动提供说话人或议题结构。 多条独立记录 ：各自可能有不同时间、目标、文字状态与一次交接标记，不能只看标题相似就认为同一次讨论。 编辑后的汇总稿 ：是人工整理材料，必须保留事实、提案与未决项的区别，不是App中的原始音频或已批准任务清单。 多记录核对表 核对维度 为每条来源保留 汇总规则 应停止的情况 来源定位 非敏感的样例记录代号和段落位置 每个结论能找到对应原文 来源无法确认就标待核，不虚构引文 时间/顺序 原文明确提供的时间或未知 区分录音顺序、事件时间与编辑时间 不用文件排列推断事件先后 转写完成度 pending/失败/完成和已核范围 中断接缝、数字与否定词单独检查 不把未完成段落写成完整纪要 重复表达 两处原文及上下文 人工标疑似重复，保留证据位置 不凭相似句自动删除来源 矛盾版本 各版本原句及确认情况 把冲突单列待确认 不把最后出现或语气坚定视为批准 待办候选 建议动作和已有确认依据 未批准项保留“待确认”，不直接执行 缺授权、目标或确认流程就不交付执行 既有交接 每条笔记是否尝试填入/暂存及结果 已有内容先查目的地再整理后续 不清标记、自动重试或换摘要规避限制 副本/目的地 本地、剪贴板、文档或工作台范围 只交接必要且获准内容 不把删汇总稿当作所有副本撤回 两条合成笔记的冲突走读 样例A ：“建议示例清单先核三项；尚未决定负责人。” 样例B ：“示例清单可能改成两项；需下次确认，不执行。” 正确汇总是“条目数存在三项/两项两个未确认版本，负责人未定，下一步仅核对”，不是“已批准两项并安排执行”。这两句不代表真实会议、真实用户或已完成设备测试。本网页不会录音或调用Agent，也不提供合并按钮。 若用现有文档工具整理，应先核对账户、同步和权限；不要把原始录音或私人正文上传到未获准的服务。字段组织可参考人工纪要模板，但该模板同样不是App导入schema。 从汇总稿到待办的检查顺序 找到明确的动作候选及原文，保留条件语气、未知项和冲突。 查是否存在独立确认依据与获准目标；不存在就保持待确认，不凭推测填写负责人或期限。 查看原记录是否已有交接尝试，先核对目的地已有内容，避免汇总造成重复。 只在既有且获准流程中进一步整理；不因文本看起来像待办就创建真实台账或调用回复接口。 记录当前实际状态：本地整理、待核、草稿可见或结果不确定。只有相应证据才能称为已发送、已记录或已处理。 一次交接和长度边界仍保留 单条笔记在显式填入或托盘暂存前保留一次交接标记，写不成就拒绝；失败或不确定时保留原文，不自动尝试另一交接路径。当前直接填入有3000个 Swift Character门槛，较长文字走已有Markdown暂存路径；不能把多条拼成新摘要当作规避标记或发送资格的方法。 手动复制也会产生副本和潜在重复，本文的人工核对不构成自动去重或端到端绝对一次保证。音频分段、笔记汇总、附件暂存、发送与任务执行各有独立边界。 FAQ 一呼现在能一键合并多条笔记吗？ 本页不声明这种能力。现有源码是单条笔记录音、分段转写、保留原文和显式交接；这里的汇总是人工编辑建议，不增加App功能。 多条转写放在一起就是无缝音频拼接吗？ 不是。文字整理不改变原音频，也不证明段落时间连续、说话人相同或接缝无遗漏；每条音频与状态须分别保留。 两个版本冲突，能选最后一条当最终决定吗？ 不应仅据顺序这样做。保留两个版本及来源，等待独立确认；提案、更新和批准不是同一件事。 识别到动作句就可以自动建待办吗？ 本页不提供自动建任务。动作候选仍需原文、目标、授权与已有确认流程；条件句或建议不能当作执行许可。 汇总后改名能重新交接已尝试过的内容吗？ 不能用改名绕过一次交接或不确定停止。先核对目的地，人工复制也可能重复；新的编辑稿不证明旧尝试未发生。 保留汇总后可以保证删原文也不会丢依据吗？ 不能。汇总可能省略上下文与否定词；删除/备份/副本又是独立问题。按实际保留需求和规则处理，不由本文承诺恢复或撤回结果。 继续阅读与依据 人工纪要与简报字段 · 录音笔记显式交接 · 网页朗读与输入切换 · Radar JSON空值检查 · 开始 · 隐私 来源： 笔记模型 、 笔记处理与一次交接 、 README 。
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>核对维度</th>
+<th>为每条来源保留</th>
+<th>汇总规则</th>
+<th>应停止的情况</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源定位</td>
+<td>非敏感的样例记录代号和段落位置</td>
+<td>每个结论能找到对应原文</td>
+<td>来源无法确认就标待核，不虚构引文</td>
+</tr>
+<tr>
+<td>时间/顺序</td>
+<td>原文明确提供的时间或未知</td>
+<td>区分录音顺序、事件时间与编辑时间</td>
+<td>不用文件排列推断事件先后</td>
+</tr>
+<tr>
+<td>转写完成度</td>
+<td>pending/失败/完成和已核范围</td>
+<td>中断接缝、数字与否定词单独检查</td>
+<td>不把未完成段落写成完整纪要</td>
+</tr>
+<tr>
+<td>重复表达</td>
+<td>两处原文及上下文</td>
+<td>人工标疑似重复，保留证据位置</td>
+<td>不凭相似句自动删除来源</td>
+</tr>
+<tr>
+<td>矛盾版本</td>
+<td>各版本原句及确认情况</td>
+<td>把冲突单列待确认</td>
+<td>不把最后出现或语气坚定视为批准</td>
+</tr>
+<tr>
+<td>待办候选</td>
+<td>建议动作和已有确认依据</td>
+<td>未批准项保留“待确认”，不直接执行</td>
+<td>缺授权、目标或确认流程就不交付执行</td>
+</tr>
+<tr>
+<td>既有交接</td>
+<td>每条笔记是否尝试填入/暂存及结果</td>
+<td>已有内容先查目的地再整理后续</td>
+<td>不清标记、自动重试或换摘要规避限制</td>
+</tr>
+<tr>
+<td>副本/目的地</td>
+<td>本地、剪贴板、文档或工作台范围</td>
+<td>只交接必要且获准内容</td>
+<td>不把删汇总稿当作所有副本撤回</td>
+</tr>
+</tbody>
+</table>
+
+### Review multiple voice notes: sources, conflicts and unconfirmed to-dos
+
+Canonical: https://getyihu.com/en/guides/multi-note-review-handoff/
+
+Review multiple voice notes: sources, conflicts and unconfirmed to-dos An editorial summary is not automatic merging or deduplication Existing Yihu notes retain their own local audio, transcript and handoff state. This guide suggests manually comparing sources, marking repetition/conflicts/gaps and checking unconfirmed to-dos before organizing text in an already authorized tool. It does not implement audio joining, cross-note merging, task extraction or deduplication. A new summary cannot erase uncertainty about an original handoff. Three meanings of multiple segments Recognition segments within one recording : current processing divides audio frames into windows, still within one note. It does not automatically identify speakers or topics. Independent notes : each can have different times, targets, text states and a one-handoff marker. Similar titles do not establish the same discussion. An edited summary : a manual document that must distinguish facts, proposals and open questions; it is neither original app audio nor an approved task list. Multi-record review table Dimension Retain per source Editorial rule Stop condition Source location Non-sensitive sample label and passage location Trace each conclusion back to its original Mark unknown rather than inventing quotations Time/order Explicit source time or unknown Separate recording order, event time and editing time File ordering is not event chronology Transcript completion Pending/failed/completed state and actual reviewed scope Check joins, numbers and negations separately Incomplete passages are not complete minutes Repeated wording Both passages with context Manually flag possible repetition and preserve locations Do not automatically delete a source based on similarity Conflicting versions Each original statement and confirmation status Put conflicts into a separate confirmation queue Last-mentioned or assertive wording is not approval Candidate to-dos Suggested action and existing confirmation evidence Keep unapproved items pending, without execution Stop without authority, destination or a confirmation process Prior handoff Each note’s insertion/staging attempt and result Inspect destination content before further organizing Do not clear markers, retry automatically or evade guards with summaries Copies/destination Local, clipboard, document and workbench scope Hand off only necessary authorized content Deleting a summary does not recall every copy A conflict in two synthetic notes Sample A : “Suggest checking three sample items first; no owner has been decided.” Sample B : “The sample might become two items; confirm next time, do not execute.” A faithful summary is “two unconfirmed counts, three versus two; owner undecided; next step is review only,” not “two items approved and scheduled.” These phrases are not a real meeting, real people or a completed device test. This page does not record, invoke an Agent or supply a merge button. If using an existing document tool, check its account, sync and permissions first. Do not upload originals/private content to an unauthorized service. The manual minutes template can organize fields, but it is not an app import schema either. From a summary to a candidate action Locate the candidate action in its source and retain conditions, unknowns and conflicts. Find separate confirmation and an authorized destination. Without them, keep it pending rather than inferring owners or deadlines. Inspect prior handoff attempts and destination text before creating another copy through summarization. Continue only through an existing authorized workflow. Task-like prose is not permission to create ledger items or call reply endpoints. Record the actual stage: organized locally, awaiting review, visible draft or uncertain. Sent, recorded and handled each need their own evidence. One handoff and length limits still apply Each note reserves one marker before explicit insertion or share-tray staging; failure to reserve refuses handoff. A failed/uncertain attempt retains originals without automatic redirection. Direct insertion currently has a 3,000 Swift Character threshold; longer text uses existing Markdown staging. Combining notes into a summary is not a way to bypass markers or eligibility. Manual copying creates another copy and can duplicate content. Editorial review does not establish automatic deduplication or end-to-end exactly-once delivery. Audio segmentation, editorial summaries, attachment staging, sending and execution remain distinct boundaries. FAQ Can Yihu merge several notes with one button? This page makes no such claim. Existing source covers single-note recording, segmented transcription, retained originals and explicit handoff. The comparison workflow is manual guidance, not new functionality. Does putting transcripts together join audio seamlessly? No. Text editing does not modify original audio or establish continuous timing, the same speaker or lossless joins. Preserve each audio record and its state separately. Can the last conflicting note be treated as the final decision? Not merely because of its order. Preserve both versions and locations until separate confirmation. Proposals, updates and approvals are different facts. Can an action sentence automatically create a to-do? No task-creation automation is supplied here. A candidate still needs source evidence, destination, authority and an existing confirmation process. Conditional suggestions do not authorize execution. Can renaming a summary permit another handoff of attempted content? Do not rename to bypass one-handoff or uncertain-stop guards. Inspect the destination first; manual copying can duplicate. New editorial text does not prove an old attempt never happened. Does a summary guarantee originals can be removed without losing evidence? No. Summaries may omit context/negations, while deletion, backup and copies are separate. Follow actual retention needs and rules; this page guarantees neither recovery nor recall. Reading and evidence Manual minutes/brief fields · Explicit recording-note handoff · Web read-aloud/input transition · Radar JSON/null checks · Start · Privacy Sources: note model , processing/one-handoff reservation , README .
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Retain per source</th>
+<th>Editorial rule</th>
+<th>Stop condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source location</td>
+<td>Non-sensitive sample label and passage location</td>
+<td>Trace each conclusion back to its original</td>
+<td>Mark unknown rather than inventing quotations</td>
+</tr>
+<tr>
+<td>Time/order</td>
+<td>Explicit source time or unknown</td>
+<td>Separate recording order, event time and editing time</td>
+<td>File ordering is not event chronology</td>
+</tr>
+<tr>
+<td>Transcript completion</td>
+<td>Pending/failed/completed state and actual reviewed scope</td>
+<td>Check joins, numbers and negations separately</td>
+<td>Incomplete passages are not complete minutes</td>
+</tr>
+<tr>
+<td>Repeated wording</td>
+<td>Both passages with context</td>
+<td>Manually flag possible repetition and preserve locations</td>
+<td>Do not automatically delete a source based on similarity</td>
+</tr>
+<tr>
+<td>Conflicting versions</td>
+<td>Each original statement and confirmation status</td>
+<td>Put conflicts into a separate confirmation queue</td>
+<td>Last-mentioned or assertive wording is not approval</td>
+</tr>
+<tr>
+<td>Candidate to-dos</td>
+<td>Suggested action and existing confirmation evidence</td>
+<td>Keep unapproved items pending, without execution</td>
+<td>Stop without authority, destination or a confirmation process</td>
+</tr>
+<tr>
+<td>Prior handoff</td>
+<td>Each note’s insertion/staging attempt and result</td>
+<td>Inspect destination content before further organizing</td>
+<td>Do not clear markers, retry automatically or evade guards with summaries</td>
+</tr>
+<tr>
+<td>Copies/destination</td>
+<td>Local, clipboard, document and workbench scope</td>
+<td>Hand off only necessary authorized content</td>
+<td>Deleting a summary does not recall every copy</td>
+</tr>
+</tbody>
+</table>
+
+### 外贸简报接入PM Radar前：JSON类型、空值与缺失字段核对
+
+Canonical: https://getyihu.com/guides/radar-json-null-validation/
+
+外贸简报接入PM Radar前：JSON类型、空值与缺失字段核对 语法正确的JSON不一定能被Radar解码，更不代表业务数据完整 先确认文件来自有权使用的自有台账，再核JSON语法、模型字段类型、解码后的验证和业务含义。一呼使用现有PM Radar模型读取快照，不把任意外贸简报当作任务数据。缺字段、显式 null 、空字符串和空数组不能混为一谈；本文的合成样例只帮助解释契约，不连接真实源、转换纪要或启用回复。 四层检查，不用“JSON有效”代替全部验收 语法 ：括号、引号和数据字面值能解析，只是第一层。 模型类型 ：必需字符串/数组及可选字段要符合Swift Codable声明；字符串数字或空对象不能随意代替原类型。 解码后验证 ：来源日期须能解析、大小不超过2 MiB；非空项目/标题、项目记录、标识与时间戳还有源码校验。 业务范围 ：数据源是否完整、是否旧缓存、筛选是否遮蔽任务、字段有没有权限与来源依据，需要另行核对。解析通过不等于信息真实、可写或最新。 字段、null与空集合对照 字段位置 模型形态 缺失/null/空值的区别 核对建议 date_str 必需String，另需可解析来源时间 缺失或null不满足必需类型；空/无效日期不满足后续验证 使用来源最后成功读取时间，不填手机点刷新时间 decisions 必需Action数组 []是已提供的空子集；缺失/null不是空数组 不把空待处理子集当完整台账无任务 active/stale/cold 三个必需Project数组 []表示该集合为空；不能用projects数组替代三个键 合并projects是模型计算属性，不是导入替代键 tasks 可选Action数组 缺失或null会回退decisions；[]是明确提供的空全任务集合，不触发回退 区分旧源范围不完整与明确的空全量集合 Action.project/title 必需String并验证非空白 null/缺失/数字不符合类型；空白值不满足验证 project应对应来源项目标识，不靠名称猜测 Action.next/url 必需String null/缺失不符合类型；字符串存在不等于动作有授权或链接可安全访问 不把字段可解码当成可执行命令或URL认证 Action.status/id/priority/timestamp等 可选String或可选Double，按字段分别核类型 可选字段可缺失/null；错误类型不等于“未知” 状态缺失保留未知；任务timestamp不是来源date_str Project.name/path/timestamp/message 必需String/String/Double/String 项目名/路径另验证非空，timestamp须在源码有效数值范围 不把null时间替换为当前时刻，message不作写权限 reply_supported/source_refreshing/source_refresh_failed 可选Bool 缺失/null不同于明确true；字符串true不是Bool 可读、正在刷新与可写分别判断，不补默认能力 最小合成样例：可选null与必需数组 { "date_str" : "2026-10-18 09:00" , "decisions" : [], "active" : [], "stale" : [], "cold" : [], "tasks" : [ { "id" : "sample-check-1" , "project" : "sample" , "status" : null , "priority" : null , "timestamp" : null , "title" : "核对合成简报字段，不执行" , "next" : "仅检查来源与类型，不发送回复" , "url" : "https://example.invalid/tasks/sample-check-1" } ], "reply_supported" : false , "source_refreshing" : false , "source_refresh_failed" : false } 固定日期是历史演示数据，不因本文发布而变新。所有链接使用保留的 example.invalid ，没有可连接的服务。 tasks 里有记录不强制本例必须带项目活动记录；项目数组与任务集合表达不同信息。 status: null 表示未提供状态，不把该任务推断为已完成或被阻塞。 reply_supported: false 明确不宣称可写，但即使改成true也不产生服务端授权。 可以对照三个差异： "tasks": null 会回退待处理子集； "tasks": [] 不回退；把 "title" 改成null或数字不是合法的“未知标题”。本页不提供修改真实台账的命令，也不把样例结构检查冒充已跑过Swift真机导入。 空值修复应回来源，不掩盖失败 不要把失败读取产生的空对象补成“全部完成”，也不要为了让页面有卡片而复制旧源改日期。源缺 tasks 时应明确范围不完整；源有 tasks: [] 时仍要确认导出范围、权限与业务含义。额外未知键不替代模型需要的键，JSON语法工具也不会检查读写权限。 处理询盘或跟进数据时，继续使用团队已获准的导出流程。本文没有海关/市场情报接口、抓客户名单、自动发信、纪要转任务或通用JSON转换服务；字段中的文字不能被当作对Agent的执行指令。 FAQ tasks缺失、null和[]为什么不相同？ 可选数组缺失或null解码为未提供，当前模型回退 decisions ；空数组表示明确提供空全任务集合。回退只保证旧格式可读，不证明范围完整。 可选字段可以填任意类型吗？ 不可以。可选只允许未提供/null，并不取消原有String、Double或Bool类型约束；把数字写成字符串也不能据此称为合法未知值。 时间未知可以用现在或0代替吗？ 不要伪造来源时间。任务可选timestamp缺失/null与来源必需date_str不同；必需项目时间和日期应由来源提供，类型可解析仍不代表内容新鲜。 只有projects数组能替代active/stale/cold吗？ 不能。 projects 是模型合并三数组的计算属性，不能让缺少必需导入数组的文件自动变正确。项目path与任务project的语义关联也要核对。 页面样例检查通过代表App接受导入吗？ 不代表。页面和前端测试只核示例/说明，不能替代实际版本的Swift解码、文件边界、真机和来源权限验收。 纪要字段模板能直接当外贸Radar简报导入吗？ 不能。人工编辑字段与现有Radar模型是两份契约；需已有且获准的导出流程，本页不新增转换、数据源或写授权。 相关指南与实现 多项目Radar与Watch · 弱网缓存排障 · 纪要与简报编辑字段 · 多段笔记待办核对 · 开始 · 隐私 依据： Radar模型与decode校验 、 源读取与缓存 、 README源与回复边界 。
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>字段位置</th>
+<th>模型形态</th>
+<th>缺失/null/空值的区别</th>
+<th>核对建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>date_str</td>
+<td>必需String，另需可解析来源时间</td>
+<td>缺失或null不满足必需类型；空/无效日期不满足后续验证</td>
+<td>使用来源最后成功读取时间，不填手机点刷新时间</td>
+</tr>
+<tr>
+<td>decisions</td>
+<td>必需Action数组</td>
+<td>[]是已提供的空子集；缺失/null不是空数组</td>
+<td>不把空待处理子集当完整台账无任务</td>
+</tr>
+<tr>
+<td>active/stale/cold</td>
+<td>三个必需Project数组</td>
+<td>[]表示该集合为空；不能用projects数组替代三个键</td>
+<td>合并projects是模型计算属性，不是导入替代键</td>
+</tr>
+<tr>
+<td>tasks</td>
+<td>可选Action数组</td>
+<td>缺失或null会回退decisions；[]是明确提供的空全任务集合，不触发回退</td>
+<td>区分旧源范围不完整与明确的空全量集合</td>
+</tr>
+<tr>
+<td>Action.project/title</td>
+<td>必需String并验证非空白</td>
+<td>null/缺失/数字不符合类型；空白值不满足验证</td>
+<td>project应对应来源项目标识，不靠名称猜测</td>
+</tr>
+<tr>
+<td>Action.next/url</td>
+<td>必需String</td>
+<td>null/缺失不符合类型；字符串存在不等于动作有授权或链接可安全访问</td>
+<td>不把字段可解码当成可执行命令或URL认证</td>
+</tr>
+<tr>
+<td>Action.status/id/priority/timestamp等</td>
+<td>可选String或可选Double，按字段分别核类型</td>
+<td>可选字段可缺失/null；错误类型不等于“未知”</td>
+<td>状态缺失保留未知；任务timestamp不是来源date_str</td>
+</tr>
+<tr>
+<td>Project.name/path/timestamp/message</td>
+<td>必需String/String/Double/String</td>
+<td>项目名/路径另验证非空，timestamp须在源码有效数值范围</td>
+<td>不把null时间替换为当前时刻，message不作写权限</td>
+</tr>
+<tr>
+<td>reply_supported/source_refreshing/source_refresh_failed</td>
+<td>可选Bool</td>
+<td>缺失/null不同于明确true；字符串true不是Bool</td>
+<td>可读、正在刷新与可写分别判断，不补默认能力</td>
+</tr>
+</tbody>
+</table>
+
+### Before a trade brief reaches PM Radar: JSON types, nulls and missing fields
+
+Canonical: https://getyihu.com/en/guides/radar-json-null-validation/
+
+Before a trade brief reaches PM Radar: JSON types, nulls and missing fields Valid JSON syntax does not establish model decoding or complete business data First verify that a file is an authorized export from your own ledger, then check syntax, model types, post-decode validation and business meaning. Yihu reads the existing PM Radar snapshot contract, not arbitrary trade briefs. Missing fields, explicit null , empty strings and empty arrays are not interchangeable. This synthetic example explains the contract without connecting to a real source, converting minutes or enabling replies. Four checks, not one valid-JSON label Syntax : parsable brackets, quotes and literals are only the first layer. Model types : required strings/arrays and optional fields must match Swift Codable declarations. Stringified numbers and empty objects cannot substitute freely. Post-decode validation : source date must parse and input is bounded to 2 MiB. Nonempty project/title values, project records, identities and timestamps have additional source checks. Business scope : completeness, old cache, filtering, permission and evidence still need review. Parsing does not prove truth, freshness or write authority. Fields, nulls and empty collections Location Model shape Missing/null/empty distinction Review rule date_str Required String, then a parsable source time Missing/null fail required type; empty/invalid date fails later validation Use the last successful source read, not a refresh-tap time decisions Required Action array [] is a supplied empty subset; missing/null are not empty arrays Empty pending scope is not proof of no ledger tasks active/stale/cold Three required Project arrays [] means that collection is empty; projects cannot replace the three keys Combined projects is a computed property, not an alternate import key tasks Optional Action array Missing/null fall back to decisions; [] is an explicitly empty ledger and does not fall back Distinguish incomplete legacy scope from supplied empty full scope Action.project/title Required String, validated as nonblank Missing/null/numbers fail type; whitespace fails validation project belongs to source identity, not guessed display names Action.next/url Required String Missing/null fail type; a string does not establish authority or safe navigation Decodable text is not an executable command or URL certification Action.status/id/priority/timestamp and others Optional String or Double, per field Optional fields can be absent/null; wrong types are not unknown values Keep absent status unknown; task timestamp is not source date_str Project.name/path/timestamp/message Required String/String/Double/String Name/path must be nonblank; timestamp must fit source numeric bounds Do not replace null time with now; message does not grant writes reply_supported/source_refreshing/source_refresh_failed Optional Bool Missing/null do not establish true; string true is not Bool Readability, refreshing and write authority remain distinct Minimal synthetic example: optional nulls and required arrays { "date_str" : "2026-10-18 09:00" , "decisions" : [], "active" : [], "stale" : [], "cold" : [], "tasks" : [ { "id" : "sample-check-1" , "project" : "sample" , "status" : null , "priority" : null , "timestamp" : null , "title" : "Check synthetic brief fields; take no action" , "next" : "Inspect source and types only; send no reply" , "url" : "https://example.invalid/tasks/sample-check-1" } ], "reply_supported" : false , "source_refreshing" : false , "source_refresh_failed" : false } The fixed date is historical demo data, not fresh because this page was published. Links use reserved example.invalid , with no reachable service. A record in tasks does not force this example to include project-activity records; those arrays express different information. status: null means no status supplied, not completed or blocked. reply_supported: false claims no write support; even true would not grant server permission. Compare three variations: "tasks": null falls back to the pending subset; "tasks": [] does not; a null/numeric title is not a valid unknown title. This page supplies no command to modify a real ledger and does not call example checks a completed Swift/device import. Repair at the source, not by hiding a failure Do not turn an empty failed response into “all complete,” or relabel copied old data with a fresh date to produce cards. Missing tasks requires an incomplete-scope interpretation; supplied tasks: [] still needs export-scope, permission and business checks. Extra unknown keys do not replace required keys, and JSON syntax tools do not verify read/write permission. For inquiry/follow-up data, use the team’s existing authorized export workflow. This page adds no customs/market API, lead scraper, automatic email, minutes-to-task conversion or universal JSON service. Text fields are not instructions authorizing an Agent to execute. FAQ Why do missing tasks, null and [] differ? Absent/null optional arrays mean not supplied, so the current model falls back to decisions . An empty array explicitly supplies empty full scope. Legacy readability does not prove completeness. Can optional fields use any type? No. Optional permits absence/null, not replacement of String, Double or Bool constraints. A number encoded as text is not automatically a valid unknown value. Can unknown time be replaced with now or zero? Do not fabricate source time. Optional task timestamps differ from required source date_str ; required project times/dates belong to the source. A parsable value alone does not establish freshness. Can a projects array replace active/stale/cold? No. projects combines those three arrays as a computed model property. It cannot supply missing required import arrays; task-project/project-path meaning still needs review. Do passing page example checks establish app import acceptance? No. Frontend/example checks do not replace actual-version Swift decoding, file limits, device acceptance or source permission verification. Can the editorial minutes template be imported as a trade Radar brief? No. Editorial labels and the Radar model are different contracts. Use an existing authorized export workflow; no converter, data feed or write authority is added here. Guides and implementation Radar and Watch · Weak-network/cache diagnosis · Editorial minutes/brief fields · Multiple-note/to-do review · Start · Privacy Evidence: Radar model/decode validation , source reads/cache , README source/reply boundaries .
+
+Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Location</th>
+<th>Model shape</th>
+<th>Missing/null/empty distinction</th>
+<th>Review rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>date_str</td>
+<td>Required String, then a parsable source time</td>
+<td>Missing/null fail required type; empty/invalid date fails later validation</td>
+<td>Use the last successful source read, not a refresh-tap time</td>
+</tr>
+<tr>
+<td>decisions</td>
+<td>Required Action array</td>
+<td>[] is a supplied empty subset; missing/null are not empty arrays</td>
+<td>Empty pending scope is not proof of no ledger tasks</td>
+</tr>
+<tr>
+<td>active/stale/cold</td>
+<td>Three required Project arrays</td>
+<td>[] means that collection is empty; projects cannot replace the three keys</td>
+<td>Combined projects is a computed property, not an alternate import key</td>
+</tr>
+<tr>
+<td>tasks</td>
+<td>Optional Action array</td>
+<td>Missing/null fall back to decisions; [] is an explicitly empty ledger and does not fall back</td>
+<td>Distinguish incomplete legacy scope from supplied empty full scope</td>
+</tr>
+<tr>
+<td>Action.project/title</td>
+<td>Required String, validated as nonblank</td>
+<td>Missing/null/numbers fail type; whitespace fails validation</td>
+<td>project belongs to source identity, not guessed display names</td>
+</tr>
+<tr>
+<td>Action.next/url</td>
+<td>Required String</td>
+<td>Missing/null fail type; a string does not establish authority or safe navigation</td>
+<td>Decodable text is not an executable command or URL certification</td>
+</tr>
+<tr>
+<td>Action.status/id/priority/timestamp and others</td>
+<td>Optional String or Double, per field</td>
+<td>Optional fields can be absent/null; wrong types are not unknown values</td>
+<td>Keep absent status unknown; task timestamp is not source date_str</td>
+</tr>
+<tr>
+<td>Project.name/path/timestamp/message</td>
+<td>Required String/String/Double/String</td>
+<td>Name/path must be nonblank; timestamp must fit source numeric bounds</td>
+<td>Do not replace null time with now; message does not grant writes</td>
+</tr>
+<tr>
+<td>reply_supported/source_refreshing/source_refresh_failed</td>
+<td>Optional Bool</td>
+<td>Missing/null do not establish true; string true is not Bool</td>
+<td>Readability, refreshing and write authority remain distinct</td>
 </tr>
 </tbody>
 </table>
