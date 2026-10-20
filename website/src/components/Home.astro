@@ -1,0 +1,34 @@
+---
+import Demo from './Demo';
+import HomeAnswers from './HomeAnswers.astro';
+interface Props { lang?: 'zh' | 'en' }
+const { lang = 'zh' } = Astro.props;
+const en = lang === 'en';
+const home = en ? '/en/' : '/';
+const features = en ? [
+  ['microphone', 'Say it while it’s fresh.', 'On-device speech', 'Turn spoken ideas into an editable draft on your iPhone. Review your words before sending. Speech models are downloaded separately.'],
+  ['waveform', 'Give a longer thought room.', 'Voice notes', 'Record now, transcribe in segments on your phone, and return to your audio and text later.'],
+  ['share-network', 'Keep what you find.', 'System sharing', 'Bring text, links and files into the share inbox. Choose what to hand off to your workbench. Nothing is sent automatically.'],
+] : [
+  ['microphone', '想法刚出现，就说下来。', '端侧语音', '在 iPhone 上将语音转成可编辑的文字，检查后再交给工作台。语音模型需单独下载。'],
+  ['waveform', '长一点的想法，也装得下。', '录音笔记', '先记录，再由手机分段转写。音频和文字留在本地，随时回来整理。'],
+  ['share-network', '看到的，也能带回来。', '系统分享', '把文字、链接和文件暂存进分享收件箱，再选择交给工作台的内容。不会自动发送。'],
+];
+---
+<section class="hero" aria-labelledby="hero-title">
+  <picture class="hero-photo"><source media="(max-width: 700px)" srcset="/images/workbench-small.webp" /><img src="/images/workbench.webp" width="1536" height="1024" fetchpriority="high" alt={en ? 'A laptop and an iPhone on a desk, showing an illustrative personal workbench.' : '桌上的笔记本与手中的 iPhone，展示个人工作台的使用场景示意。'} /></picture>
+  <div class="hero-copy wrap"><h1 id="hero-title">{en ? <>Your workbench.<br />Within reach.</> : <>工作台，<span>随身带走。</span></>}</h1><p>{en ? 'Step away from your desk. Keep your Agent work moving with your voice.' : '离开桌面，也能用语音接续你的 Agent 工作。'}</p><div class="hero-actions"><a class="button button-primary" href="#experience">{en ? 'Try Yihu' : '体验一呼'}<img src="/icons/arrow-right.svg" width="20" height="20" alt="" /></a><a class="button button-text" href="https://github.com/alexlee2046/yihu-ios">{en ? 'Get the source' : '获取源码'}<img src="/icons/arrow-up-right.svg" width="20" height="20" alt="" /></a></div></div>
+  <p class="scene-caption">{en ? 'Illustrative scene and interface' : '场景与界面示意'}</p>
+</section>
+<HomeAnswers lang={lang} part="intro" />
+<div class="feature-ribbon wrap"><p>{en ? 'Your familiar workbench. A native touch.' : '熟悉的工作台，多一层原生体验。'}</p><span>{en ? 'On-device speech / Voice notes / Sharing' : '端侧语音 / 录音笔记 / 系统分享'}</span></div>
+<section class="experience-section wrap" id="experience" aria-labelledby="experience-title">
+  <div class="section-heading"><h2 id="experience-title">{en ? <>A thought.<br />Then a draft.</> : <>从一句话，<br />到一份草稿。</>}</h2><p>{en ? 'Try the handoff. Play a short sample, edit the words, then place them in a workbench draft.' : '亲手试一次：播放一段示例，校对文字，再把它填入工作台草稿。'}</p></div>
+  <Demo client:visible lang={lang} />
+</section>
+<section class="features-section wrap" aria-labelledby="features-title"><h2 id="features-title">{en ? 'Less distance between you and your work.' : '让想法，离工作更近一点。'}</h2><div class="feature-list">{features.map(([icon, title, label, description]) => <article class="feature-row"><div class="feature-label"><img src={`/icons/${icon}.svg`} alt="" width="24" height="24" /><span>{label}</span></div><div><h3>{title}</h3><p>{description}</p></div></article>)}</div></section>
+<p class="wrap" style="padding-bottom:32px"><a class="inline-link" href={`${home}guides/iphone-agent-voice-drafts/`}>{en ? 'Dictation, Notes or native workbench drafts? Compare the boundaries.' : '系统听写、备忘录还是原生工作台草稿？对照使用边界。'}</a></p>
+<p class="wrap" style="padding-bottom:32px"><a class="inline-link" href={`${home}guides/mobile-agent-decisions/`}>{en ? 'Read mobile decisions, source freshness and phone confirmation boundaries.' : '查看手机待决策、来源时效与确认回执边界。'}</a></p>
+<section class="ownership-section wrap"><div><h2>{en ? <>Your workbench.<br />Still yours.</> : <>工作台是你的，<br />节奏也是。</>}</h2><p>{en ? 'Connect your own trusted HTTPS workbench. Yihu adds native iPhone capabilities around it.' : '连接你自己信任的 HTTPS 工作台。一呼在它周围，补上 iPhone 的原生能力。'}</p></div><div class="ownership-details"><p>{en ? 'Collie, OpenClaw and Hermes are examples of web workbenches you can open. Page access and native integration are separate capabilities.' : 'Collie、OpenClaw、Hermes 等网页工作台均可作为访问对象；网页能打开，与原生增强已适配，是两件事。'}</p><p>{en ? 'Notifications and Live Activities require a compatible service. Yihu does not host Agents or provide a backend.' : '通知与实时活动需要兼容服务。一呼不托管 Agent，也不提供后端。'}</p><a class="inline-link" href={`${home}start/`}>{en ? 'See what you need' : '了解使用条件'}<img src="/icons/arrow-up-right.svg" width="20" height="20" alt="" /></a></div></section>
+<HomeAnswers lang={lang} part="details" />
+<section class="get-started-section wrap"><div><h2>{en ? 'Take your workbench with you.' : '把工作台，带在身边。'}</h2><p>{en ? 'Open source. Built for iPhone. Connect your own services.' : '开源，为 iPhone 而做，连接你自己的服务。'}</p></div><a class="button button-primary" href={`${home}start/`}>{en ? 'Get started' : '开始使用'}<img src="/icons/arrow-right.svg" width="20" height="20" alt="" /></a><p class="release-note">{en ? 'Currently a source release. Requires iOS 18+, your own workbench, speech models and signing setup.' : '目前提供源码，需 iOS 18+、自有工作台、语音模型和签名配置。'}</p></section>

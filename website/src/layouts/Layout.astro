@@ -1,0 +1,97 @@
+---
+import '@fontsource-variable/manrope';
+import '../styles/global.css';
+import answers from '../data/home-answers.json';
+import AnalyticsConsent from '../components/AnalyticsConsent.astro';
+interface Props { title: string; description?: string; lang?: 'zh' | 'en'; }
+const { title, description = '一呼，为你的 Agent 工作台带来 iPhone 原生语音、录音笔记与系统分享。', lang = 'zh' } = Astro.props;
+const en = lang === 'en';
+const home = en ? '/en/' : '/';
+// Fixed production origin: query strings, previews and request hosts never define canonical URLs.
+const origin = 'https://getyihu.com';
+const pathname = Astro.url.pathname.replace(/\/+$/, '') + '/';
+const zhPath = pathname.replace(/^\/en(?:\/|$)/, '/') || '/';
+const enPath = `/en${zhPath}`;
+const canonical = origin + (en ? enPath : zhPath);
+const alternate = en ? zhPath : enPath;
+const isHome = zhPath === '/';
+const copy = answers[lang];
+const schema = isHome ? [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    '@id': canonical + '#software',
+    name: 'Yihu',
+    alternateName: '一呼',
+    url: canonical,
+    applicationCategory: 'ProductivityApplication',
+    operatingSystem: 'iOS 18+',
+    description: copy.answer,
+    image: origin + '/images/brand.webp',
+    sameAs: 'https://github.com/alexlee2046/yihu-ios',
+    license: 'https://github.com/alexlee2046/yihu-ios/blob/main/LICENSE',
+    inLanguage: en ? 'en' : 'zh-CN',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': canonical + '#faq',
+    url: canonical,
+    inLanguage: en ? 'en' : 'zh-CN',
+    mainEntity: copy.faqs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  },
+] : [];
+// Escape '<' so a future string cannot terminate the JSON-LD script element.
+const schemaJSON = JSON.stringify(schema).replace(/</g, '\\u003c');
+---
+<!doctype html>
+<html lang={en ? 'en' : 'zh-CN'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0c1b22" />
+    <meta name="description" content={description} />
+    <meta name="google-site-verification" content="3l0K41PF0zsd9A5CFd4Xu6n3MdFCEGOfDLzYI1pISt0" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="zh-CN" href={origin + zhPath} />
+    <link rel="alternate" hreflang="en" href={origin + enPath} />
+    <link rel="alternate" hreflang="x-default" href={origin + zhPath} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={origin + '/images/brand.webp'} />
+    <meta property="og:image:alt" content={en ? 'Yihu app icon' : '一呼应用图标'} />
+    <meta property="og:locale" content={en ? 'en_US' : 'zh_CN'} />
+    <meta property="og:locale:alternate" content={en ? 'zh_CN' : 'en_US'} />
+    {isHome && <script type="application/ld+json" set:html={schemaJSON} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/webp" href="/images/brand.webp" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{en ? 'Skip to content' : '跳到正文'}</a>
+    <header class="site-header">
+      <a class="brand" href={home} aria-label={en ? 'Yihu home' : '一呼首页'}>
+        <img src="/images/brand.webp" width="56" height="56" alt="" />
+        <span><strong>一呼</strong><small>YIHU</small></span>
+      </a>
+      <nav aria-label={en ? 'Main navigation' : '主导航'}>
+        <a href={`${home}#experience`}>{en ? 'Try it' : '体验'}</a>
+        <a href={`${home}start/`}>{en ? 'Get started' : '开始使用'}</a>
+        <a class="github-nav" href="https://github.com/alexlee2046/yihu-ios">GitHub</a>
+        <a class="language" href={alternate} lang={en ? 'zh-CN' : 'en'} aria-label={en ? '切换到中文' : 'Switch to English'}>{en ? '中文' : 'EN'}</a>
+      </nav>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer wrap">
+      <a class="footer-wordmark" href={home}>一呼 <span>YIHU</span></a>
+      <p>{en ? 'Your workbench. Within reach.' : '你的工作台，随时在手边。'}</p>
+      <div><a href={`${home}privacy/`}>{en ? 'Privacy' : '隐私说明'}</a><a href="https://github.com/alexlee2046/yihu-ios">GitHub</a><a href="https://github.com/alexlee2046/yihu-ios/blob/main/LICENSE">Apache 2.0</a><button id="analytics-settings" type="button" hidden aria-controls="analytics-consent" aria-expanded="false">{en ? 'Analytics preferences' : '统计偏好'}</button></div>
+    </footer>
+    <AnalyticsConsent lang={lang} />
+  </body>
+</html>
