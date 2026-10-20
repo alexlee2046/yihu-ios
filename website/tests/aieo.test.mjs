@@ -21,13 +21,14 @@ const wave15Slugs = ["share-batch-item-preflight","interruption-recapture-prefli
 const wave16Slugs = ["notification-payload-model-preflight","pcm-format-admission-review","reply-request-receipt-mapping"];
 const wave17Slugs = ["evidence-link-admission-preflight","capture-buffer-pressure-checklist","note-audio-text-evidence-mapping"];
 const wave18Slugs = ["radar-feed-url-boundary-preflight","near-field-policy-route-review","note-segment-join-provenance"];
+const wave19Slugs = ["reply-transport-budget-preflight","voiceprint-filter-not-authorization","status-alias-approval-boundaries"];
 const bots = ['OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'Applebot-Extended'];
 const urls = Array.from(read('public/sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g), x => x[1]);
 const page = url => 'dist/' + url.replace('https://getyihu.com/', '') + 'index.html';
 
-test('102 canonical URLs include all staged bilingual guides without fake routes', () => {
-  assert.equal(urls.length, 102); assert.equal(new Set(urls).size, 102);
-  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs, ...wave13Slugs, ...wave14Slugs, ...wave15Slugs, ...wave16Slugs, ...wave17Slugs, ...wave18Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
+test('108 canonical URLs include all staged bilingual guides without fake routes', () => {
+  assert.equal(urls.length, 108); assert.equal(new Set(urls).size, 108);
+  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs, ...wave13Slugs, ...wave14Slugs, ...wave15Slugs, ...wave16Slugs, ...wave17Slugs, ...wave18Slugs, ...wave19Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
 });
 test('seven explicit bot groups and general allow retain sitemap and LLM reference', () => {
   const robots = read('public/robots.txt');
@@ -70,7 +71,7 @@ test('built homepage graph keeps existing software/FAQ plus organization and web
     for (const slug of slugs) assert.ok(html.includes(`href="/${prefix}guides/${slug}/"`));
   }
 });
-test('all 102 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
+test('all 108 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
   for (const url of urls) {
     const html = read(page(url));
     assert.ok(html.includes(`<link rel="canonical" href="${url}"`), url);
