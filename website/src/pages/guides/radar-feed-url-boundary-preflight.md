@@ -7,7 +7,7 @@ lang: zh
 
 <h2 id="first-answer">证据链接能点，不代表同一地址能作为Radar源</h2>
 
-CollieRadarFeed.validate允许源URL带路径，但要求HTTPS、非空host、无内嵌用户名密码、无query和fragment，显式端口在1至65535。证据URL另用parseSafeEvidenceURLs，规则不能互换。通过源形态校验仍不证明认证、可达、成功读取或快照有效，本页不新增源服务或凭据配置。
+CollieRadarFeed.validate允许源URL带路径，但要求HTTPS、非空host、无内嵌用户名密码、无query和fragment；端口可省略，若显式指定则须在1至65535。证据URL另用parseSafeEvidenceURLs，规则不能互换。通过源形态校验仍不证明认证、可达、成功读取或快照有效，本页不新增源服务或凭据配置。
 
 ## 与证据URL准入和离线排障的分工
 
@@ -22,7 +22,7 @@ CollieRadarFeed.validate允许源URL带路径，但要求HTTPS、非空host、�
 | path | 源可有路径 | 路径是否实际提供源 | 浏览器可信origin规则直接代用 |
 | 内嵌凭据 | user/password必须空 | 沿既有获准认证流程 | 把密码塞URL就能使用 |
 | query/fragment | 必须都不存在 | 即使只是view=demo也不同 | 证据链接允许就源也允许 |
-| 端口 | 显式1…65535 | 服务可达性与访问权限 | 所有端口和来源已测试 |
+| 端口 | 可省略；显式指定时为1…65535 | 服务可达性与访问权限 | 所有端口和来源已测试 |
 | 返回内容 | 形态校验不是JSON解码 | 真实模型/日期/大小/身份 | 任意网页地址都是快照源 |
 | 失败处理 | 保持原守卫 | 错误类别和原来源配置 | 自动改HTTP/换服务/公开私有源 |
 

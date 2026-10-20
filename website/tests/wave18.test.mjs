@@ -32,6 +32,7 @@ test('feed URL, session preference and joining do not establish auth, route sele
     const feed = guide('radar-feed-url-boundary-preflight');
     for (const item of ['CollieRadarFeed', 'parseSafeEvidenceURLs', 'query', 'fragment', '65535']) assert.ok(feed.includes(item));
     assert.ok(feed.includes(prefix ? 'Passing feed shape proves neither authentication' : '通过源形态校验仍不证明认证'));
+    assert.ok(feed.includes(prefix ? 'The port may be omitted; if explicitly specified' : '端口可省略，若显式指定'));
     const policy = guide('near-field-policy-route-review');
     for (const item of ['playAndRecord', 'voiceChat', 'mixWithOthers', 'allowBluetoothHFP']) assert.ok(policy.includes(item));
     assert.ok(policy.includes(prefix ? 'not successful hardware activation' : '不是当前硬件已成功启用'));

@@ -7,7 +7,7 @@ lang: en
 
 <h2 id="first-answer">A clickable evidence URL is not automatically a valid Radar feed</h2>
 
-CollieRadarFeed.validate permits a path but requires HTTPS, nonempty host, no embedded user/password, no query/fragment and an explicit port within 1–65535. Evidence uses separate parseSafeEvidenceURLs rules. Passing feed shape proves neither authentication, reachability, a successful read nor valid snapshot. No source service or credential setup is added.
+CollieRadarFeed.validate permits a path but requires HTTPS, nonempty host, no embedded user/password, no query/fragment. The port may be omitted; if explicitly specified, it must be within 1–65535. Evidence uses separate parseSafeEvidenceURLs rules. Passing feed shape proves neither authentication, reachability, a successful read nor valid snapshot. No source service or credential setup is added.
 
 ## Different from evidence admission and offline diagnosis
 
@@ -22,7 +22,7 @@ Evidence admission checks clickable candidates; offline review checks failures. 
 | Path | Allowed on feeds | Actual source endpoint | Browser-origin rules interchangeable |
 | Credentials | No user/password | Existing authorized auth process | Passwords in URLs are supported |
 | Query/fragment | Both absent | Even view=demo differs | Evidence allowance transfers to feeds |
-| Port | Explicit 1…65535 | Access/reachability | Every port/source tested |
+| Port | Optional; if specified, 1…65535 | Access/reachability | Every port/source tested |
 | Response | URL validation is not JSON decoding | Model/date/size/identity | Any web page is a snapshot |
 | Failure | Original guards remain | Category/original configuration | Automatic HTTP/other service/private disclosure |
 
