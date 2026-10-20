@@ -1,0 +1,412 @@
+---
+interface Props { lang?: 'zh' | 'en' }
+const { lang = 'zh' } = Astro.props;
+const en = lang === 'en';
+const decisionsCopy = {
+  "zh": {
+    "title": "手机查看 Agent 待决策与待验收：先读，再确认",
+    "lead": "一呼 PM Radar 从你自己的 JSON 导出或兼容 HTTPS 数据源读取台账，按工作台筛选事项；读到一条任务不代表已经授权回复，更不代表任务已执行。下面用两条合成记录解释筛选、来源时效、手机确认与回执边界；Watch 是配对 iPhone 的伴侣，不是独立审批入口。",
+    "nav": "移动决策指南导航",
+    "exampleTitle": "最小合成 JSON：不是一个在线服务",
+    "exampleIntro": "本例仅有 demo 项目的两条合成事项。example.invalid 不可作为服务入口；reply_supported=false 将样例标为不支持回复，不能代替服务端授权。date_str 固定为演示时点，不会跟着网页时间更新；日后导入可能显示过期，这不是让样例冒充实时台账的理由。不要把私有台账或带凭据的 feed 放到公开网站。",
+    "exampleDetails": "date_str、decisions、active、stale、cold 是快照字段；tasks 在本例同时列出两条记录，避免旧导出缺少完整台账时的不完整提示。原始 status 保留“等你决策 / 等你验收”，不把展示语言翻译当成新的源状态。此例不含令牌、账号、真实条目或可写服务。",
+    "filterTitle": "同一份样例，筛选前后有什么变化？",
+    "tableHint": "左右滑动查看全部列；键盘用户可聚焦表格后用方向键阅读。",
+    "filterColumns": [
+      "视图 / 操作",
+      "样例结果",
+      "应如何理解"
+    ],
+    "filters": [
+      [
+        "before",
+        "未加其他筛选，查看这两条未完成事项",
+        "2 条：demo-decision 与 demo-acceptance。",
+        "只是这份合成快照的条数，不是你的真实项目量，也不是两项已完成。"
+      ],
+      [
+        "decision",
+        "状态精确筛选：等你决策",
+        "1 条：demo-decision。",
+        "只缩小当前显示，不写回来源，不自动开始执行。"
+      ],
+      [
+        "acceptance",
+        "状态精确筛选：等你验收",
+        "1 条：demo-acceptance。",
+        "等待验收不等于已经通过；手机需要查看证据与下一步。"
+      ],
+      [
+        "clear",
+        "在本例清除筛选，回到未完成范围",
+        "2 条。",
+        "来源未改变。项目、优先级、搜索与状态条件相交；其他条件仍有限制时不要把零结果误报为没有任务。"
+      ]
+    ],
+    "filteringNote": "tasks 表示完整任务集合，decisions 表示待决策/待验收子集；当前 Swift 视图的管理计数和状态分组从筛选后的完整任务形成，不把 decisions 当成全量台账。完成/搁置默认隐藏，可通过历史范围查看；缓存年龄或最近 Git 活动都不是任务完成/阻塞的依据。[R1][R7]",
+    "freshnessTitle": "来源读取时间，不是手机刚联网的时间",
+    "freshnessColumns": [
+      "信号",
+      "源码 / README 的语义",
+      "不能推断什么"
+    ],
+    "freshness": [
+      [
+        "source",
+        "date_str",
+        "最后一次成功来源读取的时间；当前模型按 yyyy-MM-dd HH:mm、UTC+08:00 解析。样例故意固定该值。",
+        "刷新按钮被点过、手机刚下载或命中缓存，都不能把旧来源时间改成新鲜来源。"
+      ],
+      [
+        "refresh",
+        "source_refreshing / source_refresh_failed",
+        "区分再验证中与来源读取失败。手机可先显示有界缓存，再用一次 no-cache 跟进同一次读取，不启动轮询循环。",
+        "失败时保留旧快照不是刷新成功；不能把没读到的新增事项记成零。"
+      ],
+      [
+        "age",
+        "过期 / 未来时钟提示",
+        "当前模型把超过 24 小时的数据标为旧数据；超过当前时钟五分钟的未来时点会触发时钟警告。这些是来源时效提示。",
+        "旧缓存不代表条目已搁置或阻塞；任务状态必须来自显式字段。"
+      ],
+      [
+        "adapter",
+        "可选只读适配器",
+        "README 描述按请求触发的有界内存缓存：30 秒新鲜、来源再验证期间最多使用五分钟旧快照；私网/权限检查仍独立。 [R6]",
+        "这些是特定适配器策略，不是所有 JSON 服务的承诺，不是五分钟一定有新业务数据。"
+      ]
+    ],
+    "sourceNote": "Radar 数据源不复用网页 Cookie、不存储数据源凭据或跟随重定向；需要认证的来源当前按 README 用文件导出。它与浏览工作台 origin 的配置不同，不能通过公开端口、移除认证或把密码放进 URL 来解决接入。请沿已有获准的私有访问路径核对。[R2][R5]",
+    "stateTitle": "只读 → 手机明确确认 → 服务端回执 / 不确定停止",
+    "stateIntro": "下列是源码/README 描述的可选写路径，不是本例已经可以写入：本例 reply_supported=false，也没有可连接服务。任何实际回复都需要独立服务端授权和符合条件的原条目。",
+    "flow": "读取快照 / 筛选（不写状态）\n    ↓\n原条目是否可回复 + 服务端独立授权？\n    ├─ 否 → 只读 / 保留草稿 → 停止\n    └─ 是 → 读取最新目标与版本 → 手机完整核对并明确确认\n                 ↓\n           持久保存同一 request_id → 服务端提交\n                 ├─ recorded 回执 → 已记录，待负责人处理（不等于执行/验收通过）\n                 └─ 超时 / 不确定 → 冻结输入，查回同一请求；不盲目重发\n目标 / 来源变化 → 重新读取并确认；未解决的待核结果不当作从未写入",
+    "stateColumns": [
+      "阶段",
+      "必须成立的条件",
+      "停止 / 回读边界"
+    ],
+    "states": [
+      [
+        "read",
+        "只读 / 草稿",
+        "筛选只是读取；未获得服务端独立写权限或目标不符合条件时停在只读。",
+        "界面可见、Watch 可见或能读历史，都不授予写权限。"
+      ],
+      [
+        "confirm",
+        "手机明确确认",
+        "获取最新标题、链接、状态、下一步及完整回复，再在第二次确认界面由用户确认。",
+        "来源或目标版本变化后重新确认；不能把旧缓存目标直接当本次写入凭证。"
+      ],
+      [
+        "receipt",
+        "提交 / 回执",
+        "提交前持久保存请求身份，服务端核对授权和目标；recorded 才表明该回复被记录。",
+        "记录回复不是改任务状态、执行 Agent、合并或部署；负责人是否处理另需证据。"
+      ],
+      [
+        "uncertain",
+        "不确定 / 停止",
+        "超时或结果不明时保留待核状态并查回同一请求；丢失回执不等于没有写入。",
+        "不生成新请求来盲目重发，不以重启服务器后的查无结果强行当作从未提交。"
+      ]
+    ],
+    "stateNote": "本指南不提供写入启用命令或真实回复入口，也不替你操作服务。源码中的同一请求/回执保护不是全链路 exactly-once 保证；实际设备、服务与真机回复仍需原验收。[R3][R5][R6]",
+    "watchTitle": "Watch 和通知：把边界放在能力之前",
+    "watch": [
+      "watchOS 11+ 伴侣通过已配对 iPhone 的 WatchConnectivity 接收待决策/待验收摘要；手机桥检查配对和 Watch App 状态。摘要不是任意 Agent 后端直连，也不是完整来源数据或凭据传输。[R4]",
+      "所选事项或受保护草稿可以接续到手机；Watch 收到“草稿已保存”类确认，只代表手机安全保留了提案，不等于服务端回复已记录。手机仍要读取最新目标并明确确认，直接手表写入/独立审批仍未授权。[R4]",
+      "读取 JSON feed 不是推送事件源。原生通知与系统镜像需要兼容服务、权限及设备条件；现有源码里的通知事件解析不证明上游事件源已获准或推送已送达。不开新通知后端、不加轮询，不把独立 Watch APNs 当作已有能力。[R1][R4][R5]"
+    ],
+    "limitsTitle": "这份演示没有验收什么",
+    "limits": [
+      "只有合成 JSON、离线模型解码/筛选与静态页面检查；未导入真实设备、未读私有台账、未登录服务、未发回复、未配对 Watch 或注册通知。",
+      "读数/筛选、手机已保存草稿、服务端已记录回复、任务已处理/已执行，是不同状态，不互相代替。界面显示和文案不能补成真机回复或推送验收通过。",
+      "不提供后台、签名、账号凭据或默认可写源，不承诺完整离线、全链路 exactly-once 或自动运营；使用自己的可信服务并遵守原授权。"
+    ],
+    "sourcesTitle": "源码依据与接续",
+    "startLink": "接入预检",
+    "privacyLink": "数据流与权限边界",
+    "voiceLink": "语音草稿选择与交接",
+    "homeLink": "返回能力概览"
+  },
+  "en": {
+    "title": "Mobile Agent decisions: read first, then confirm",
+    "lead": "Yihu PM Radar reads your own JSON export or compatible HTTPS ledger feed and filters items per workbench. Seeing a task does not authorize a reply or prove execution. Two synthetic records illustrate filters, source freshness, phone confirmation and receipts. Watch is a paired-iPhone companion, not an independent approval endpoint.",
+    "nav": "Mobile decisions guide navigation",
+    "exampleTitle": "Minimal synthetic JSON, not a live service",
+    "exampleIntro": "This example has two synthetic items in project demo. example.invalid is not a service endpoint; reply_supported=false marks the sample as not supporting replies and does not replace server authorization. date_str is a fixed demonstration time, not refreshed with the website clock. A later import may appear stale; do not relabel it as live data. Never publish private ledger data or credential-bearing feeds.",
+    "exampleDetails": "date_str, decisions, active, stale and cold are snapshot fields. tasks repeats the two records so this example has an explicit full-task collection rather than a legacy incomplete-ledger notice. Raw status values remain 等你决策 / 等你验收; translating display prose must not invent source statuses. There are no tokens, accounts, real items or writable services here.",
+    "filterTitle": "What changes when you filter this same sample?",
+    "tableHint": "Swipe to read all columns. Keyboard users can focus the table and use the arrow keys.",
+    "filterColumns": [
+      "View / action",
+      "Sample result",
+      "Interpretation"
+    ],
+    "filters": [
+      [
+        "before",
+        "These unfinished items, with no other filters",
+        "2 items: demo-decision and demo-acceptance.",
+        "A count in this synthetic snapshot, not your real project count or two completed tasks."
+      ],
+      [
+        "decision",
+        "Exact status filter: 等你决策",
+        "1 item: demo-decision.",
+        "Changes the visible subset, not source status, and does not start execution."
+      ],
+      [
+        "acceptance",
+        "Exact status filter: 等你验收",
+        "1 item: demo-acceptance.",
+        "Awaiting acceptance is not accepted; inspect evidence and the next step on the phone."
+      ],
+      [
+        "clear",
+        "Clear filters back to the unfinished scope in this example",
+        "2 items.",
+        "The source is unchanged. Project, priority, search and status conditions intersect; a zero under other restrictions is not proof of no tasks."
+      ]
+    ],
+    "filteringNote": "tasks is the full-task collection and decisions is the pending decision/acceptance subset. Current Swift management counts and status groups use filtered full tasks; decisions must not be treated as the whole ledger. Completed/on-hold items are hidden by default and available through history. Cache age and Git activity do not determine completed or blocked status. [R1][R7]",
+    "freshnessTitle": "Source-read time is not the phone's last download",
+    "freshnessColumns": [
+      "Signal",
+      "Source / README meaning",
+      "What it does not establish"
+    ],
+    "freshness": [
+      [
+        "source",
+        "date_str",
+        "The last successful source read. The current model parses yyyy-MM-dd HH:mm in UTC+08:00; this fixture intentionally fixes it.",
+        "A refresh tap, phone download or cache hit cannot make an old source-read time fresh."
+      ],
+      [
+        "refresh",
+        "source_refreshing / source_refresh_failed",
+        "Distinguish revalidation from failed source reads. The phone can paint bounded cache and make one no-cache follow-up joining the same read, without a polling loop.",
+        "Keeping the old snapshot after failure is not successful refresh. Missing new items must not be counted as zero."
+      ],
+      [
+        "age",
+        "Stale / future-clock warnings",
+        "The current model marks data older than 24 hours stale and warns when the source time is more than five minutes ahead. These are source-freshness signals.",
+        "Old cache does not make a task paused or blocked; task state comes from explicit source fields."
+      ],
+      [
+        "adapter",
+        "Optional read-only adapter",
+        "The README describes request-triggered bounded memory caching: 30 seconds fresh, at most five minutes old while revalidating. Private access/permission checks remain separate. [R6]",
+        "These are this adapter's policies, not a guarantee for every JSON service or of new business data every five minutes."
+      ]
+    ],
+    "sourceNote": "Radar feeds do not reuse web cookies, store feed credentials or follow redirects; the README currently directs authenticated feeds to file export. This differs from configuring a browser workbench origin. Do not fix access by exposing public ports, removing authentication or putting passwords in URLs; use the existing authorized private path. [R2][R5]",
+    "stateTitle": "Read-only → explicit phone confirmation → receipt or uncertain-stop",
+    "stateIntro": "This is the optional write path described by source/README, not permission enabled by this fixture: reply_supported=false and no reachable service are provided. Actual replies require separate server authorization and eligible original items.",
+    "flow": "Read snapshot / filter (no status write)\n    ↓\nEligible original target + separate server write authorization?\n    ├─ No → read-only / retain draft → stop\n    └─ Yes → fetch fresh target/version → full phone review + explicit confirmation\n                 ↓\n           persist the same request_id → server submission\n                 ├─ recorded receipt → recorded, awaiting owner handling (not execution/acceptance)\n                 └─ timeout / uncertainty → freeze input, read back the same request; no blind resend\nChanged target/source → fresh read and confirmation; unresolved is not proof of no write",
+    "stateColumns": [
+      "Stage",
+      "Required condition",
+      "Stop / readback boundary"
+    ],
+    "states": [
+      [
+        "read",
+        "Read-only / draft",
+        "Filters only read. Stay read-only without separate server write permission or an eligible target.",
+        "Visibility, Watch visibility or history-read access do not grant write authority."
+      ],
+      [
+        "confirm",
+        "Explicit phone confirmation",
+        "Fetch current title, link, status, next step and the complete reply, then let the user confirm in the second confirmation view.",
+        "Changed source/target versions require new confirmation; an old cached target is not a current write credential."
+      ],
+      [
+        "receipt",
+        "Submit / receipt",
+        "Persist request identity before submission; the server checks target/authority. Only a recorded receipt establishes the reply was recorded.",
+        "Recording a reply does not change task status, execute an Agent, merge or deploy; later handling needs separate evidence."
+      ],
+      [
+        "uncertain",
+        "Uncertain / stop",
+        "After timeout or an unclear result, retain pending state and read back the same request. A lost receipt is not proof of no write.",
+        "Do not generate a new request to resend blindly or treat an absent result after server restart as proof no submission occurred."
+      ]
+    ],
+    "stateNote": "This guide supplies no write-enabling command or real reply endpoint and does not operate a service. Request/receipt guards are not an end-to-end exactly-once guarantee; actual device/service replies still need their original acceptance. [R3][R5][R6]",
+    "watchTitle": "Watch and notifications: prerequisites before promises",
+    "watch": [
+      "The watchOS 11+ companion receives pending decision/acceptance summaries through the paired iPhone's WatchConnectivity. The phone bridge checks pairing and Watch-app installation. This is not arbitrary Agent-backend connectivity or transfer of complete source data/credentials. [R4]",
+      "Selected items or protected drafts can hand off to the phone. A draft-saved acknowledgement only means the phone retained the proposal, not that a server reply was recorded. Fresh phone target checks and explicit confirmation remain necessary; direct Watch writes/standalone approval are not authorized. [R4]",
+      "A JSON GET feed is not a push event source. Native notifications and mirroring depend on compatible service, permission and device support. Notification-event parsing code does not prove an authorized upstream event source or delivered push. No new notification backend, polling or independent Watch APNs is enabled here. [R1][R4][R5]"
+    ],
+    "limitsTitle": "What this demonstration has not accepted",
+    "limits": [
+      "Only synthetic JSON, offline model decoding/filtering and static page checks are involved. No real device import, private ledger, service login, reply, Watch pairing or notification registration was tested.",
+      "Read/filter results, a phone-saved draft, a server-recorded reply and a handled/executed task are different states. Displayed content cannot substitute for device reply or push-delivery acceptance.",
+      "No backend, signing, account credentials or preconfigured writable feed is supplied. There is no promise of full offline behavior, end-to-end exactly-once or autonomous operations; use your trusted services and original authorization gates."
+    ],
+    "sourcesTitle": "Source evidence and next steps",
+    "startLink": "Setup checks",
+    "privacyLink": "Data and permission boundaries",
+    "voiceLink": "Voice-draft choices and handoff",
+    "homeLink": "Back to capabilities"
+  }
+};
+const copy = decisionsCopy[lang];
+const synthetic = {
+  "date_str": "2026-10-18 09:00",
+  "decisions": [
+    {
+      "id": "demo-decision",
+      "project": "demo",
+      "status": "等你决策",
+      "title": "Choose a synthetic option",
+      "next": "Read the sample evidence; do not execute.",
+      "url": "https://example.invalid/tasks/demo-decision"
+    },
+    {
+      "id": "demo-acceptance",
+      "project": "demo",
+      "status": "等你验收",
+      "title": "Review a synthetic preview",
+      "next": "Inspect the synthetic preview; do not send a reply.",
+      "url": "https://example.invalid/tasks/demo-acceptance"
+    }
+  ],
+  "active": [],
+  "stale": [],
+  "cold": [],
+  "tasks": [
+    {
+      "id": "demo-decision",
+      "project": "demo",
+      "status": "等你决策",
+      "title": "Choose a synthetic option",
+      "next": "Read the sample evidence; do not execute.",
+      "url": "https://example.invalid/tasks/demo-decision"
+    },
+    {
+      "id": "demo-acceptance",
+      "project": "demo",
+      "status": "等你验收",
+      "title": "Review a synthetic preview",
+      "next": "Inspect the synthetic preview; do not send a reply.",
+      "url": "https://example.invalid/tasks/demo-acceptance"
+    }
+  ],
+  "reply_supported": false,
+  "source_refreshing": false,
+  "source_refresh_failed": false
+};
+const fixtureJSON = JSON.stringify(synthetic, null, 2);
+const sources = [
+  [
+    "R1",
+    "Snapshot fields, exact filters, source-time parsing",
+    "https://github.com/alexlee2046/yihu-ios/blob/main/Apps/Collie/CollieRadarModel.swift"
+  ],
+  [
+    "R2",
+    "Bounded feed reads, one revalidation follow-up, cache storage",
+    "https://github.com/alexlee2046/yihu-ios/blob/main/Apps/Collie/CollieRadarStore.swift#L240-L325"
+  ],
+  [
+    "R3",
+    "Phone confirmation, pending request and receipt/readback",
+    "https://github.com/alexlee2046/yihu-ios/blob/main/Apps/Collie/CollieRadarReply.swift"
+  ],
+  [
+    "R4",
+    "Paired-phone Watch summaries and protected draft acknowledgement",
+    "https://github.com/alexlee2046/yihu-ios/blob/main/Apps/Collie/CollieWatchPhoneBridge.swift#L38-L107"
+  ],
+  [
+    "R5",
+    "README: workbenches, Watch, notifications and reply prerequisites",
+    "https://github.com/alexlee2046/yihu-ios#workbenches-and-pm-radar"
+  ],
+  [
+    "R6",
+    "Optional private read adapter and separately authorized reply path",
+    "https://github.com/alexlee2046/yihu-ios/blob/main/tools/serve-radar.py"
+  ],
+  [
+    "R7",
+    "Current management counts, status groups and clear-filter behavior",
+    "https://github.com/alexlee2046/yihu-ios/blob/main/Apps/Collie/CollieRadarView.swift#L250-L325"
+  ]
+];
+---
+<article class="document decisions-guide">
+  <style is:inline>
+    .decisions-guide { max-width:1120px; }
+    .decisions-guide > h1 { max-width:25ch; font-size:clamp(36px,4vw,56px); }
+    .decisions-guide > p, .decisions-guide > ul { max-width:78ch; }
+    .decisions-guide nav { display:flex; flex-wrap:wrap; gap:8px 24px; padding-block:16px; }
+    .decisions-guide nav a { display:inline-flex; align-items:center; min-height:44px; }
+    .decisions-guide .table-region { overflow-x:auto; }
+    .decisions-guide table { width:100%; min-width:940px; table-layout:fixed; border-collapse:collapse; text-align:start; }
+    .decisions-guide th, .decisions-guide td { padding:16px; border-bottom:1px solid var(--line); vertical-align:top; overflow-wrap:anywhere; text-align:start; }
+    .decisions-guide th { font-weight:600; }
+    .decisions-guide th:first-child { width:26%; }
+    .decisions-guide td { color:var(--muted); }
+    .decisions-guide caption { text-align:start; margin-bottom:12px; }
+    .decisions-guide .table-hint { font-size:13px; }
+    .decisions-guide pre { white-space:pre; overflow-x:auto; overflow-wrap:normal; padding:16px; background:var(--surface); border-radius:8px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:14px; line-height:1.7; }
+    .decisions-guide pre code { display:block; padding:0; background:transparent; }
+  </style>
+  <h1>{copy.title}</h1>
+  <p class="lead">{copy.lead}</p>
+  <nav aria-label={copy.nav}>
+    <a href="#example">{copy.exampleTitle}</a><a href="#filters">{copy.filterTitle}</a><a href="#freshness">{copy.freshnessTitle}</a><a href="#reply-flow">{copy.stateTitle}</a><a href="#watch-notifications">{copy.watchTitle}</a>
+  </nav>
+  <h2 id="example">{copy.exampleTitle}</h2>
+  <p>{copy.exampleIntro}</p>
+  <p class="table-hint" id="example-scroll-hint">{en ? 'Scroll sideways to read the full content. Keyboard users can focus this block and use the arrow keys.' : '左右滑动查看完整内容；键盘用户可聚焦此区域后用方向键阅读。'}</p>
+  <pre id="synthetic-json" role="region" aria-label={copy.exampleTitle} aria-describedby="example-scroll-hint" tabindex="0"><code>{fixtureJSON}</code></pre>
+  <p>{copy.exampleDetails}</p>
+  <h2 id="filters">{copy.filterTitle}</h2>
+  <p class="table-hint" id="filters-hint">{copy.tableHint}</p>
+  <div class="table-region" role="region" aria-label={copy.filterTitle} aria-describedby="filters-hint" tabindex="0">
+    <table><caption>{copy.filterTitle}</caption>
+      <thead><tr>{copy.filterColumns.map(text => <th scope="col">{text}</th>)}</tr></thead>
+      <tbody>{copy.filters.map(([id, label, value, meaning]) => <tr id={`filter-${id}`}><th scope="row">{label}</th><td>{value}</td><td>{meaning}</td></tr>)}</tbody>
+    </table>
+  </div>
+  <p>{copy.filteringNote}</p>
+  <h2 id="freshness">{copy.freshnessTitle}</h2>
+  <p class="table-hint" id="freshness-hint">{copy.tableHint}</p>
+  <div class="table-region" role="region" aria-label={copy.freshnessTitle} aria-describedby="freshness-hint" tabindex="0">
+    <table><caption>{copy.freshnessTitle}</caption>
+      <thead><tr>{copy.freshnessColumns.map(text => <th scope="col">{text}</th>)}</tr></thead>
+      <tbody>{copy.freshness.map(([id, label, meaning, boundary]) => <tr id={`freshness-${id}`}><th scope="row">{label}</th><td>{meaning}</td><td>{boundary}</td></tr>)}</tbody>
+    </table>
+  </div>
+  <p>{copy.sourceNote}</p>
+  <h2 id="reply-flow">{copy.stateTitle}</h2>
+  <p>{copy.stateIntro}</p>
+  <p class="table-hint" id="flow-scroll-hint">{en ? 'Scroll sideways to read the full content. Keyboard users can focus this block and use the arrow keys.' : '左右滑动查看完整内容；键盘用户可聚焦此区域后用方向键阅读。'}</p>
+  <pre class="state-flow" role="region" aria-label={copy.stateTitle} aria-describedby="flow-scroll-hint" tabindex="0">{copy.flow}</pre>
+  <p class="table-hint" id="states-hint">{copy.tableHint}</p>
+  <div class="table-region" role="region" aria-label={copy.stateTitle} aria-describedby="states-hint" tabindex="0">
+    <table><caption>{copy.stateTitle}</caption>
+      <thead><tr>{copy.stateColumns.map(text => <th scope="col">{text}</th>)}</tr></thead>
+      <tbody>{copy.states.map(([id, label, meaning, boundary]) => <tr id={`state-${id}`}><th scope="row">{label}</th><td>{meaning}</td><td>{boundary}</td></tr>)}</tbody>
+    </table>
+  </div>
+  <p>{copy.stateNote}</p>
+  <h2 id="watch-notifications">{copy.watchTitle}</h2>
+  <ul>{copy.watch.map(text => <li>{text}</li>)}</ul>
+  <h2 id="limits">{copy.limitsTitle}</h2>
+  <ul>{copy.limits.map(text => <li>{text}</li>)}</ul>
+  <h2 id="sources">{copy.sourcesTitle}</h2>
+  <ul>{sources.map(([id,label,url]) => <li id={`source-${id}`}><a href={url}>[{id}] {label}</a></li>)}</ul>
+  <p><a href={en ? '/en/start/' : '/start/'}>{copy.startLink}</a> · <a href={en ? '/en/privacy/' : '/privacy/'}>{copy.privacyLink}</a> · <a href={en ? '/en/guides/iphone-agent-voice-drafts/' : '/guides/iphone-agent-voice-drafts/'}>{copy.voiceLink}</a> · <a href={en ? '/en/' : '/'}>{copy.homeLink}</a></p>
+  <p><a href={en ? '/en/guides/multi-project-radar-watch/' : '/guides/multi-project-radar-watch/'}>{en ? 'Multi-project Radar: JSON, cache age and Watch handoff' : '多项目 Radar：JSON、缓存与 Watch 交接'}</a></p>
+</article>

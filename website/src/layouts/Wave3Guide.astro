@@ -1,0 +1,21 @@
+---
+import Layout from './Layout.astro';
+interface Props {
+  frontmatter: { title: string; description: string; lang: 'zh' | 'en' };
+}
+const { title, description, lang } = Astro.props.frontmatter;
+---
+<Layout title={title} description={description} lang={lang}>
+  <article class="document wave3-guide">
+    <h1>{title}</h1>
+    <slot />
+  </article>
+</Layout>
+<style is:global>
+  .wave3-guide { overflow-wrap:anywhere; }
+  .wave3-guide [role="region"] { max-width:100%; overflow-x:auto; margin-block:24px; }
+  .wave3-guide [role="region"]:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+  .wave3-guide table { width:100%; min-width:640px; border-collapse:collapse; text-align:start; }
+  .wave3-guide th, .wave3-guide td { padding:12px; min-width:160px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .wave3-guide h2 { scroll-margin-top:100px; }
+</style>

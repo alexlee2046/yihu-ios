@@ -1,0 +1,69 @@
+---
+import answers from '../data/home-answers.json';
+interface Props { lang?: 'zh' | 'en'; part: 'intro' | 'details' }
+const { lang = 'zh', part } = Astro.props;
+const copy = answers[lang];
+const home = lang === 'en' ? '/en/' : '/';
+---
+{part === 'intro' ? <section class="answers-intro wrap" id="first-answer" aria-labelledby="answer-title">
+  <h2 id="answer-title">{copy.heading}</h2>
+  <p>{copy.answer}</p>
+</section> : <section class="answers wrap" aria-labelledby="capabilities-title">
+  <h2 id="capabilities-title">{copy.caption}</h2>
+  <p class="table-hint" id="table-hint">{lang === 'en' ? 'Swipe the table to compare prerequisites. With a keyboard, focus the table and use the arrow keys.' : '左右滑动表格，查看完整使用前提。键盘用户可聚焦表格后使用方向键。'}</p>
+  <div class="table-scroll" role="region" aria-label={copy.caption} aria-describedby="table-hint" tabindex="0">
+    <table>
+      <thead><tr>{copy.columns.map(column => <th scope="col">{column}</th>)}</tr></thead>
+      <tbody>{copy.rows.map(row => <tr id={`capability-${row.id}`}><th scope="row">{row.name}</th><td>{row.scope}</td><td>{row.boundary}</td></tr>)}</tbody>
+    </table>
+  </div>
+  <div class="faq-section">
+    <h2 id="faq">{copy.faqHeading}</h2>
+    <div class="faq-list">{copy.faqs.map(faq => <details class="faq-item"><summary><h3>{faq.question}</h3></summary><div id={`faq-${faq.id}`} class="faq-answer"><p>{faq.answer}</p></div></details>)}</div>
+  </div>
+  <div class="answer-links"><a href={`${home}start/`}>{copy.start}<img src="/icons/arrow-up-right.svg" width="18" height="18" alt="" /></a><a href={`${home}privacy/`}>{copy.privacy}<img src="/icons/arrow-up-right.svg" width="18" height="18" alt="" /></a></div>
+</section>}
+<style>
+  .answers-intro { display: grid; grid-template-columns: 1fr 1.3fr; gap: 64px; padding-block: 64px; border-bottom: 1px solid var(--line); }
+  .answers-intro h2 { font-size: clamp(26px, 2.6vw, 36px); max-width: 20ch; }
+  .answers-intro p, .answers p { color: var(--muted); max-width: 72ch; line-height: 1.8; }
+  .answers { padding-block: 72px; border-top: 1px solid var(--line); }
+  .answers > h2 { font-size: clamp(28px, 3vw, 40px); }
+  .table-hint { display: none; }
+  .table-scroll { overflow-x: auto; margin-block: 32px 64px; scrollbar-color: var(--muted) var(--surface); scrollbar-width: thin; }
+  table { width: 100%; min-width: 720px; border-collapse: collapse; text-align: start; table-layout: fixed; font-size: 16px; }
+  th, td { padding: 20px 24px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: start; overflow-wrap: break-word; }
+  th:first-child { width: 23%; padding-left: 0; }
+  th:nth-child(2) { width: 33%; }
+  td:last-child, th:last-child { padding-right: 0; }
+  thead th { color: var(--muted); font-size: 14px; font-weight: 500; }
+  tbody td { color: var(--muted); }
+  .faq-section { display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start; }
+  .faq-section > h2 { font-size: clamp(28px, 3vw, 40px); }
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-item:first-child { border-top: 1px solid var(--line); }
+  summary { padding: 22px 4px; cursor: pointer; color: var(--ink); }
+  summary::marker { color: var(--accent); font-size: .8em; }
+  summary:hover { color: var(--accent); }
+  summary h3 { display: inline; font-size: 18px; font-weight: 600; line-height: 1.6; letter-spacing: -.015em; }
+  .faq-answer { padding: 0 4px 24px 22px; scroll-margin-top: 160px; }
+  .answer-links { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 40px; }
+  .answer-links a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: underline; }
+  .answer-links a:hover { color: var(--accent); }
+  .answer-links img { filter: invert(1); }
+  @media (max-width: 1000px) {
+    .answers-intro { gap: 32px; grid-template-columns: 1fr 1.5fr; }
+    .faq-section { gap: 32px; grid-template-columns: 1fr; }
+    .table-hint { display: block; margin-top: 16px; font-size: 13px; }
+  }
+  @media (max-width: 700px) {
+    .answers-intro { grid-template-columns: 1fr; gap: 20px; padding-block: 40px; }
+    .answers-intro h2 { max-width: none; }
+    .answers { padding-block: 48px; }
+    .table-scroll { margin-block: 24px 48px; }
+    summary { padding-block: 20px; }
+    summary h3 { font-size: 16px; }
+    .faq-answer { padding-left: 0; }
+    .answer-links { flex-direction: column; align-items: flex-start; }
+  }
+</style>

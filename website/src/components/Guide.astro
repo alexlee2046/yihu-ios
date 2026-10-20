@@ -1,0 +1,609 @@
+---
+interface Props { lang?: 'zh' | 'en'; type: 'start' | 'privacy' }
+const { lang = 'zh', type } = Astro.props;
+const en = lang === 'en';
+const decisionsGuidePath = en ? '/en/guides/mobile-agent-decisions/' : '/guides/mobile-agent-decisions/';
+const voiceGuidePath = en ? '/en/guides/iphone-agent-voice-drafts/' : '/guides/iphone-agent-voice-drafts/';
+const startCopy = {
+  "zh": {
+    "title": "在 iPhone 接入你的 Agent 工作台",
+    "lead": "一呼目前提供源码，不是 App Store 安装成品。先完成自有 HTTPS 工作台、源码签名和模型预检，再用一条合成文字验证“确认目标 → 转写与草稿交付 → 核对未发送草稿”；本指南到草稿为止，不发送消息或执行任务。",
+    "nav": "本页导航",
+    "preflightTitle": "接入前：六项预检",
+    "columns": [
+      "检查与操作",
+      "成功信号",
+      "失败去向"
+    ],
+    "preflight": [
+      [
+        "origin",
+        "只填自有 HTTPS origin，例如 https://workbench.example.com；不带账号密码、路径、查询参数或片段。示例域名不能当成可用服务器。",
+        "你有自己可用的 HTTPS 源地址，而不是带 /chat?mode=1#draft 的完整页面链接。",
+        "地址格式不符 → 地址分流；不要把访问令牌或密码放入网址。"
+      ],
+      [
+        "network",
+        "在同一台 iPhone 的 Safari 打开你自己的地址，检查可达性、TLS 和已有登录。手机上的 localhost 指手机本身，不是电脑。",
+        "手机能访问预期服务且没有证书警告；登录后看到自己的工作台。Safari 成功只是网络/页面预检，不证明原生增强已兼容。",
+        "无法访问、TLS 警告或登录失败 → 网络与权限分流；不关闭证书校验，不为此开放公网端口。"
+      ],
+      [
+        "build",
+        "准备 iOS 18+ iPhone，以及带 Xcode、iOS 18+ SDK、Swift 6、XcodeGen 的 Mac。按仓库构建说明配置自己的 Team、Bundle ID 和共享 App Group。",
+        "用自己的签名构建并在目标 iPhone 打开一呼。此项需要你实际验证；网页演示或源码合入不是安装证明。",
+        "构建/签名错误 → 构建分流；不复制别人签名、凭据或配置，不把签名材料提交到仓库。"
+      ],
+      [
+        "models",
+        "在 App 中单独下载兼容的 Qwen3 ASR 模型并等待校验；使用语音需要存储、带宽、适用设备与麦克风权限。",
+        "实际版本的模型状态显示可用、录音入口可用；此处先不录音，完成目标与合成内容检查后再按下方走读操作。",
+        "模型缺失、校验/权限失败 → 模型分流；不跳过哈希校验，不绕过声纹验证要求。"
+      ],
+      [
+        "editor",
+        "先确认目标工作台、页面与最后聚焦的可编辑草稿框；确认它不会把输入自动当成提交。不要选终端、发送中界面或未知编辑器。",
+        "目标明确、草稿可编辑且应用允许填入；转写后仍需用户检查与单独发送。",
+        "宿主拒绝或目标不明 → 草稿分流；不强行写入，不通过改宿主绕过拒绝。"
+      ],
+      [
+        "synthetic",
+        "只用合成内容和获准的空白草稿练习，不触碰已有真实任务、私有台账、录音或顾客数据。",
+        "你能区分官网静态演示、App 本机转写、工作台草稿及最终发送这几个阶段。",
+        "无法确认目标是否会执行或是否含真实数据 → 停在本地笔记，不继续填入。"
+      ]
+    ],
+    "formatTitle": "源地址示例，不是连接测试",
+    "formatText": "正确的输入形态是下面的 origin；网页深层路径不是配置入口。源地址能通过格式检查，也不等于服务器可达或原生功能兼容。",
+    "originExample": "https://workbench.example.com",
+    "badExample": "不要填：https://workbench.example.com/chat?mode=1#draft",
+    "buildTitle": "先构建，再连接",
+    "buildSteps": [
+      "获取源码，按 README 的 Build locally 配置 project.yml：YIHU_BUNDLE_ID、YIHU_APP_GROUP 与 DEVELOPMENT_TEAM 使用你自己的值；主 App 和分享扩展使用同一 App Group。",
+      "按仓库步骤运行 XcodeGen，打开 Yihu.xcodeproj，选 CollieiOS scheme 与自己的设备完成签名构建。推送及相关会员/服务配置是独立前提；不要为了第一份草稿新购服务或配置中继。",
+      "打开一呼，输入你自己的可信 HTTPS origin，并按服务端规则登录或配对。不要把其他系统的 Android/SSH 配对说明当成一呼安装步骤。"
+    ],
+    "flowTitle": "首次语音草稿：合成数据走读",
+    "flowCaption": "流程示意，不是一次已通过的真机测试；官网演示不访问麦克风、不连接你的服务。App 短语音转写后可能自动尝试安全填入，不应假定一定还有二次填入按钮；自动填入不等于自动发送。",
+    "syntheticLabel": "合成语句",
+    "synthetic": "整理一份示例读书清单，仅保留草稿，不发送或执行。",
+    "flow": "预检通过 → 确认工作台/页面/空白草稿框\n    ↓\n主动录音 → 手机转写 → 守卫下的草稿交付（可能自动）\n    ├─ 已填入 → 核对文字、目标和未发送状态 → 停止\n    └─ 拒绝/不明 → 保留转写 → 复制到受控本地笔记 → 停止\n任一步失败 → 下方故障分流；不盲目重复填入或发送",
+    "stepColumns": [
+      "步骤与操作",
+      "成功信号",
+      "不满足时"
+    ],
+    "steps": [
+      [
+        "1. 确认目的地",
+        "在你获准使用的工作台打开空白草稿，最后聚焦目标编辑框；记录你要填入的工作台和页面。",
+        "目的地明确、没有正在发送/执行的任务；编辑器已确认可保留草稿。",
+        "目标不明就停在本地笔记；不要跨页面或跨工作台盲目重试。"
+      ],
+      [
+        "2. 主动录音并转写",
+        "授予所需麦克风权限，用上面的合成语句作短录音。转写结束后，App 可能自动尝试安全填入；先看草稿与原生面板，不要假定还要再点一次填入。",
+        "能在草稿或原生面板核对文字；不保证准确率、任意时长或设备性能。填入不是发送。",
+        "按模型/麦克风分流处理，不绕过缺失模型或验证要求。"
+      ],
+      [
+        "3. 检查草稿或保留的文字",
+        "若已自动填入，只核对文字与目标，不要再次填入。若文字保留在面板，先核对目的地；只有宿主允许且实际界面提供明确手动入口时才选择填入，不把明确拒绝当成再次尝试的理由。",
+        "文字位于预期的未发送草稿，或安全保留在面板；没有按下发送。宿主明确拒绝后不降级绕过。",
+        "拒绝或不兼容时保留转写，按草稿分流处理；不要为了测试点击发送。"
+      ],
+      [
+        "4. 在草稿处停止",
+        "只检查合成文字、目标与未发送状态，不触发 Agent。若结果不确定，先核对目的地。",
+        "走读结束在未发送草稿或受控本地笔记；不把成功转写当成任务已执行。",
+        "不确定时不要盲目再次填入；保留原文，按实际界面处理。"
+      ]
+    ],
+    "failureTitle": "失败分流：只停受影响步骤",
+    "failures": [
+      [
+        "address",
+        "地址格式不通过",
+        "从自己的服务信息取 HTTPS origin，移除路径、查询参数与片段；不要移除认证边界来“让它通过”。只有示例网址、没有自己的服务时先停；一呼不提供预配置服务器。"
+      ],
+      [
+        "network",
+        "手机打不开、TLS 或登录失败",
+        "先区分电脑能开与手机能开，检查你已有且获准的网络/私网路径、服务在线状态和证书信任。交由服务维护者修复登录或证书；不忽略安全警告，不公开私有台账，不自行新增隧道、端口或权限。"
+      ],
+      [
+        "build",
+        "构建或签名失败",
+        "回到当前版本 README 的构建前提，核对 Xcode/SDK、scheme、自有标识、Team 与 App Group。原维护者确认具体错误后再继续；不要上传签名材料或照抄别人开发者配置。"
+      ],
+      [
+        "models",
+        "模型、录音或校验失败",
+        "按实际 App 提示检查模型下载完整性、设备空间/兼容性和麦克风权限；下载需要网络。不以关闭校验、强行替换模型或跳过声纹验证来恢复。可以先停在文字/本地笔记路径。"
+      ],
+      [
+        "draft",
+        "宿主拒绝、编辑器未知或填入结果不确定",
+        "保留原生面板里的转写，不自动改走其他编辑器，不改宿主绕过明确拒绝。可显式复制到你控制的本地笔记；只有确认另一目标允许草稿且不会自动提交，才考虑手动粘贴，否则停止。结果不确定先查目的地，不盲目再次填入。"
+      ]
+    ],
+    "limitsTitle": "接入成功后，仍要分开的能力",
+    "limits": [
+      "HTTPS 页面能打开，不代表任意工作台原生增强兼容；Collie、OpenClaw、Hermes 仅是网页工作台示例，一呼不是它们的官方客户端，不托管 Agent 或提供后端。",
+      "端侧转写和本地笔记不等于所有数据不出手机：模型下载、网页访问、用户交接/上传及可选中继涉及相应服务。请先读隐私说明。",
+      "PM Radar 需要自备 JSON 导出或兼容数据源；通知、实时活动与 Watch 还有独立服务、配对/授权和设备验收要求。它们不是第一份语音草稿已通过的附带承诺。"
+    ],
+    "buildLink": "查看当前版本完整构建说明",
+    "privacyLink": "隐私与数据边界",
+    "homeLink": "返回能力与前提核对表"
+  },
+  "en": {
+    "title": "Connect your Agent workbench on iPhone",
+    "lead": "Yihu is a source release, not an App Store binary. Check your own HTTPS workbench, source signing and models first, then use synthetic text to test target confirmation → transcription and draft delivery → review of the unsent draft. This guide does not send a message or run a task.",
+    "nav": "On this page",
+    "preflightTitle": "Before connecting: six checks",
+    "columns": [
+      "Check and action",
+      "Success signal",
+      "If it fails"
+    ],
+    "preflight": [
+      [
+        "origin",
+        "Enter only your own HTTPS origin, for example https://workbench.example.com, with no credentials, path, query or fragment. The example is not a working server.",
+        "You have your own usable HTTPS origin, not a full page link containing /chat?mode=1#draft.",
+        "Invalid format → address troubleshooting. Do not put access tokens or passwords in a URL."
+      ],
+      [
+        "network",
+        "Open your own address in Safari on the same iPhone to check reachability, TLS and existing login. localhost on the phone is the phone, not your computer.",
+        "The expected service opens without a certificate warning and you can sign in. Safari success is only a network/page precheck, not proof of native integration.",
+        "Unreachable, TLS warning or login failure → network and permission troubleshooting. Do not disable certificate checks or open public ports for this."
+      ],
+      [
+        "build",
+        "Prepare an iOS 18+ iPhone and a Mac with Xcode, the iOS 18+ SDK, Swift 6 and XcodeGen. Follow the repository build guide with your own Team, bundle identifiers and shared App Group.",
+        "Yihu opens on your target iPhone after you build with your own signing. You must verify this yourself; a website demo or merged source is not installation evidence.",
+        "Build/signing error → build troubleshooting. Do not copy someone else's signing, credentials or configuration, or commit signing materials."
+      ],
+      [
+        "models",
+        "Download compatible Qwen3 ASR models separately in the app and wait for verification. Speech needs storage, bandwidth, a capable device and microphone permission.",
+        "Your version reports a usable model and recording entry point. Do not record yet; finish the destination and synthetic-content checks before following the walkthrough below.",
+        "Missing model, verification or permission failure → model troubleshooting. Never skip hash checks or speaker-verification requirements."
+      ],
+      [
+        "editor",
+        "Confirm the target workbench, page and last-focused editable draft field, and that input will not be auto-submitted. Do not select a terminal, a sending interface or an unknown editor.",
+        "The target is clear, its draft is editable and the app permits insertion. Review and a separate user send remain necessary.",
+        "Host refusal or unclear target → draft troubleshooting. Do not force insertion or modify the host to bypass refusal."
+      ],
+      [
+        "synthetic",
+        "Practice only with synthetic content and an authorized empty draft, not real tasks, private ledgers, recordings or customer data.",
+        "You can distinguish the website demo, phone transcription, workbench draft and final send.",
+        "If you cannot confirm the target will not execute or contains no real data, stop in a local note instead of inserting."
+      ]
+    ],
+    "formatTitle": "Origin example, not a connection test",
+    "formatText": "Use the origin shape below, not a deep page URL. Passing format validation does not establish server reachability or native compatibility.",
+    "originExample": "https://workbench.example.com",
+    "badExample": "Do not enter: https://workbench.example.com/chat?mode=1#draft",
+    "buildTitle": "Build first, then connect",
+    "buildSteps": [
+      "Get the source and follow Build locally in the README. In project.yml, set YIHU_BUNDLE_ID, YIHU_APP_GROUP and DEVELOPMENT_TEAM to your own values; the main app and share extension must use the same App Group.",
+      "Follow the repository's XcodeGen steps, open Yihu.xcodeproj, and select the CollieiOS scheme and your device to configure signing and build. Push and any membership/service setup are separate prerequisites; do not buy a service or configure a relay just to try the first draft.",
+      "Open Yihu, enter your own trusted HTTPS origin, and authenticate or pair according to your server. Another project's Android/SSH pairing instructions are not Yihu installation steps."
+    ],
+    "flowTitle": "First voice draft: a synthetic walkthrough",
+    "flowCaption": "A process illustration, not a passed physical-device test. The website demo does not use your microphone or connect to your service. Short-speech transcription may automatically attempt guarded insertion; do not assume a second insertion button always appears. Automatic insertion is not automatic sending.",
+    "syntheticLabel": "Synthetic phrase",
+    "synthetic": "Draft a sample reading list; keep it as a draft, without sending or running it.",
+    "flow": "Prechecks pass → confirm workbench / page / empty draft field\n    ↓\nIntentional recording → phone transcription → guarded draft delivery (possibly automatic)\n    ├─ Inserted → review text, destination and unsent state → stop\n    └─ Refused / unclear → retain text → copy to a controlled local note → stop\nAny failed step → troubleshooting below; no blind repeat insertion or send",
+    "stepColumns": [
+      "Step and action",
+      "Success signal",
+      "Otherwise"
+    ],
+    "steps": [
+      [
+        "1. Confirm the destination",
+        "Open an authorized empty draft and last-focus the intended editor. Identify the workbench and page you intend to use.",
+        "The destination is clear, no task is sending/running, and the editor is confirmed to retain a draft.",
+        "If the target is unclear, stop in a local note; do not retry blindly across pages or workbenches."
+      ],
+      [
+        "2. Intentionally record and transcribe",
+        "Grant required microphone access and make a short recording of the synthetic phrase. After transcription the app may automatically attempt guarded insertion. Inspect the draft and native panel first; do not assume another insertion click is required.",
+        "Text is available for review in the draft or native panel. Accuracy, arbitrary recording length and device performance are not guaranteed. Insertion is not sending.",
+        "Follow model/microphone troubleshooting; do not bypass missing models or verification requirements."
+      ],
+      [
+        "3. Inspect the draft or retained text",
+        "If already inserted automatically, review the text and target without inserting again. If retained in the panel, verify the destination first. Use a manual insertion action only if the host permits it and your actual interface offers one; explicit refusal is not a reason to retry.",
+        "Text is in the intended unsent draft or safely retained in the panel, without pressing Send. Explicit host refusal never falls through to a bypass.",
+        "If refused or incompatible, retain the transcript and follow draft troubleshooting. Do not press Send for this test."
+      ],
+      [
+        "4. Stop at the draft",
+        "Inspect only the synthetic text, destination and unsent state; do not trigger the Agent. If the result is uncertain, inspect the destination first.",
+        "The walkthrough ends in an unsent draft or a controlled local note. Successful transcription is not task execution.",
+        "Do not blindly insert again after uncertainty; retain the original text and follow the actual interface."
+      ]
+    ],
+    "failureTitle": "Troubleshooting: stop only the affected step",
+    "failures": [
+      [
+        "address",
+        "Origin format rejected",
+        "Use the HTTPS origin from your own service details, without a path, query or fragment. Do not remove authentication boundaries to make it pass. If you only have the example URL and no service, stop; Yihu provides no preconfigured server."
+      ],
+      [
+        "network",
+        "Phone cannot connect, TLS or login fails",
+        "Distinguish access from your computer from access on the phone. Check your existing authorized network/private route, service availability and certificate trust. Ask the service maintainer to fix login or certificates; do not ignore warnings, publish private ledger data, or add tunnels, ports or permissions yourself."
+      ],
+      [
+        "build",
+        "Build or signing fails",
+        "Return to the current README and check Xcode/SDK, scheme, your own identifiers, Team and App Group. Continue after the maintainer identifies the error; never upload signing material or copy another developer's configuration."
+      ],
+      [
+        "models",
+        "Model, recording or verification fails",
+        "Use the app's actual messages to check download completeness, device space/compatibility and microphone permission. Downloads need network access. Do not disable verification, force replacement models or bypass speaker checks. You can stop at a text/local-note path."
+      ],
+      [
+        "draft",
+        "Host refuses, editor is unknown or insertion is uncertain",
+        "Keep the transcript in the native panel. Do not automatically switch editors or modify the host to bypass explicit refusal. You may explicitly copy to a local note you control. Consider manual pasting elsewhere only after confirming that target permits drafts and does not auto-submit; otherwise stop. Inspect the destination before repeating an uncertain insertion."
+      ]
+    ],
+    "limitsTitle": "Capabilities that remain separate after connecting",
+    "limits": [
+      "Opening HTTPS does not certify native enhancements for arbitrary workbenches. Collie, OpenClaw and Hermes are web UI examples; Yihu is not their official client, does not host Agents and supplies no backend.",
+      "On-device transcription and local notes do not mean all data stays on the phone: model downloads, web access, user handoffs/uploads and optional relays involve their respective services. Read the privacy explanation first.",
+      "PM Radar requires your own JSON export or compatible feed. Notifications, Live Activities and Watch have separate service, pairing/authorization and device-acceptance prerequisites. They are not implied by a successful first voice draft."
+    ],
+    "buildLink": "Read the current full build guide",
+    "privacyLink": "Privacy and data boundaries",
+    "homeLink": "Back to capabilities and prerequisites"
+  }
+};
+const copy = startCopy[lang];
+const privacyCopy = {
+  "zh": {
+    "title": "每阶段的数据，去了哪里？",
+    "lead": "端侧语音只说明识别发生的位置，不代表整个 App 永不联网。这份说明区分官网演示、手机本地处理、网页工作台及可选通知服务，依据当前公开源码与 README；不是完整设备、备份或第三方服务隐私审计。",
+    "nav": "隐私说明导航",
+    "websiteTitle": "先区分官网演示与 iPhone App",
+    "website": [
+      "官网演示播放随站点提供的合成语音，不请求麦克风、不连接你的工作台、不发送消息。编辑文字和演示草稿只存在当前页面的 React 状态中，刷新后不保留。",
+      "官网仅在你明确允许后加载 Google Analytics 4（GA4），向 Google 发送访问与设备相关信息，并可能使用 Cookie。允许仅在当前页面生效，刷新或换页需再次选择；浏览器只记住拒绝，不会凭旧的允许记录自动开启。未选择或拒绝时不加载统计脚本，拒绝不影响网站功能。可通过页脚「统计偏好」撤回；撤回会刷新本页、停止后续采集并清除本站可访问的 GA Cookie，不会删除 Google 已收到的数据。初始页面统计使用固定规范网址，不发送查询参数、片段或来源网址；预览环境不启用统计。站点关闭 Google signals 和广告个性化信号，不将演示草稿正文作为统计事件发送；托管平台仍可能处理请求日志。"
+    ],
+    "flowTitle": "逐阶段数据流对照表",
+    "hint": "左右滑动可查看完整表格；键盘用户可聚焦表格后用方向键阅读。",
+    "columns": [
+      "阶段 / 数据",
+      "手机侧发生什么",
+      "何时涉及外部服务",
+      "不能据此承诺"
+    ],
+    "rows": [
+      [
+        "download",
+        "1. 模型下载",
+        "Qwen3 ASR 模型需单独下载到手机；当前模型存储代码检查固定版本、文件大小与 SHA-256。",
+        "下载从 Hugging Face 或 ModelScope 发起网络请求，需要带宽与空间，服务方可处理相应请求。",
+        "下载模型不等于上传录音；模型可本地运行也不代表安装和所有功能都无需网络。不要跳过校验。"
+      ],
+      [
+        "transcription",
+        "2. 手机端侧转写",
+        "兼容模型在手机处理语音。短语音结束后可能自动尝试守卫下的草稿填入；被拒绝或结果不明确时可保留文字。",
+        "一旦文字交给网页工作台，就进入对应服务的数据边界；不能把整条交接链统称为离线。",
+        "端侧识别不是全 App 不联网的证明，也没有在这里承诺准确率、任意录音时长或所有设备性能。"
+      ],
+      [
+        "notes",
+        "3. 本地录音笔记",
+        "录音笔记在 App 本地保存音频与转写；当前代码为笔记目录尝试设置系统备份排除标记。",
+        "用户之后的复制、分享或工作台交接会产生新的数据去向，不能用原笔记的本地保存替它们担保。",
+        "源码设置备份排除不等于已经核验某台设备的备份或清除结果；不承诺所有副本都只在此手机、或已永久删除。"
+      ],
+      [
+        "workbench",
+        "4. 网页工作台与草稿交接",
+        "WebKit 打开用户自己的 HTTPS 来源；当前网页数据存储是持久化的，可保留该来源的网页数据。语音文字可交给兼容草稿框。",
+        "网页加载、登录、草稿处理及用户发送/上传由对应服务参与；其脚本可能保存或同步已收到的草稿。",
+        "一呼不替你按发送，不等于网页在发送前不处理数据。HTTPS 和网页能打开，也不等于服务已获得所有原生增强或相同隐私规则。"
+      ],
+      [
+        "sharing",
+        "5. 系统分享收件箱",
+        "文字、链接和文件先存到 App Group 收件箱，主 App 与分享扩展共享这份暂存；暂存本身不自动发送。",
+        "用户选择交接后，文字可进入网页草稿，文件通过页面的附件/上传入口交给服务；上传时机和后续处理取决于工作台。",
+        "暂存、交接、附件上传与消息发送不是同一个步骤。消息未发送不能证明附件未上传；不把 App Group 误称为云服务或绝对加密承诺。"
+      ],
+      [
+        "notifications",
+        "6. 可选中继、通知与实时活动",
+        "通知功能还需系统授权、兼容网页桥/服务端接口与匹配签名环境的 APNs 配置；实时活动可依赖自有兼容中继。",
+        "启用兼容路径时，注册所需的设备/通知标识及活动更新会涉及相应服务与 APNs；APNs 私钥应由服务端保管。",
+        "默认中继是不可用占位地址，不会自动创建服务。能浏览网页不证明推送已送达，也不把可选通知注册描述为纯本地处理。"
+      ]
+    ],
+    "verificationTitle": "声纹不是身份认证或写入授权",
+    "verificationIntro": "声纹匹配是可能误判的便利过滤，不是账号身份认证。当前源码将登记特征保存在本地，并设置文件保护与备份排除；这不是对设备备份或防攻击能力的验收证明。兼容 WeSpeaker/CAM++ 模型未随仓库提供，缺失时依赖它们的验证路径不可用，不应关闭验证来绕过缺失模型。",
+    "identityColumns": [
+      "层面",
+      "由什么决定",
+      "不代表什么"
+    ],
+    "identities": [
+      [
+        "speaker",
+        "声纹便利过滤",
+        "本地登记特征与兼容模型提供匹配判断。",
+        "不证明账号归属、当前操作意愿、活体检测、防重放或写入权限；不能把“匹配”当成身份认证。"
+      ],
+      [
+        "account",
+        "工作台身份认证",
+        "你自己的工作台处理登录、配对和会话权限，具体机制以该服务为准。",
+        "一呼能打开页面或填入草稿不表示已获得其他账号、设备或资源的权限。"
+      ],
+      [
+        "authorization",
+        "写入与确认",
+        "服务端决定目标与操作是否允许；PM Radar 决策/验收回复还需独立写入授权、手机明确确认与回执核验。",
+        "声纹通过不授权写入；读台账不自动改状态，不自动执行任务、合并或部署。"
+      ]
+    ],
+    "checksTitle": "使用前，按目的地核对",
+    "checks": [
+      "先核对工作台来源和草稿目标；短语音可能自动尝试填入，录音前就应确认目的地。宿主明确拒绝后不降级绕过，结果不确定先查目标，不盲目再次填入。",
+      "复制到本地笔记或其他 App 后，是新的数据副本与处理边界；核对其同步/备份规则。不要在截图、日志或公开反馈中放服务地址、账号/设备标识、录音、私有任务正文或签名材料。",
+      "本说明没有替第三方承诺数据保留期、司法地区、删除保证或合规认证；请检查你实际版本、服务配置、系统备份及目标服务政策。录音、推送和 Watch 余项仍沿原设备/服务验收，不由这张表补成已通过。"
+    ],
+    "linksTitle": "查看当前实现与接入前提",
+    "sourceLink": "源码与能力限制",
+    "securityLink": "安全说明",
+    "startLink": "接入预检与首次草稿"
+  },
+  "en": {
+    "title": "Where data goes at each stage",
+    "lead": "On-device speech describes where recognition happens, not an app that never uses the network. This explanation separates the website demo, phone-local processing, web workbenches and optional notification services using current public source and README evidence. It is not a complete device, backup or third-party privacy audit.",
+    "nav": "Privacy page navigation",
+    "websiteTitle": "Separate the website demo from the iPhone app",
+    "website": [
+      "The website demo plays a synthetic sample served with the site. It does not request microphone access, connect to your workbench or send a message. Edited text and its demo draft live only in the current page's React state and are not retained after reload.",
+      "The website loads Google Analytics 4 (GA4) only after you explicitly allow it. GA4 sends visit and device-related information to Google and may use cookies. Permission applies to the current page only; reloading or navigating asks again. The browser remembers only refusals, never automatically enabling analytics from an old grant. Before a choice or after declining, the tag is not loaded; declining does not affect the website. Withdraw anytime through Analytics preferences in the footer. Withdrawal reloads this page, stops future collection and clears accessible GA cookies; it does not delete data Google already received. The initial page view uses the fixed canonical URL without query parameters, fragments or a referrer URL. Analytics is disabled in previews. Google signals and advertising personalization signals are disabled, and demo draft text is not sent as analytics event content. The hosting provider may still process request logs."
+    ],
+    "flowTitle": "Data flow, stage by stage",
+    "hint": "Swipe to read the full table. Keyboard users can focus the table and use the arrow keys.",
+    "columns": [
+      "Stage / data",
+      "On the phone",
+      "When external services are involved",
+      "What this does not promise"
+    ],
+    "rows": [
+      [
+        "download",
+        "1. Model downloads",
+        "Qwen3 ASR models are downloaded separately to the phone. Current model-store code checks pinned revisions, file sizes and SHA-256 hashes.",
+        "Downloads make network requests to Hugging Face or ModelScope, requiring bandwidth and storage; the provider can process the corresponding requests.",
+        "Downloading models is not uploading recordings. Local inference does not make installation or every feature network-free. Do not skip verification."
+      ],
+      [
+        "transcription",
+        "2. On-device transcription",
+        "Compatible models process speech on the phone. Short-speech completion may automatically attempt guarded draft insertion; refused or uncertain delivery can retain text.",
+        "Once text is handed to a web workbench, it crosses the service boundary in the next relevant row; the whole handoff is not an offline operation.",
+        "On-device recognition does not prove the entire app makes no network requests. No accuracy, arbitrary recording-duration or all-device performance guarantee is made here."
+      ],
+      [
+        "notes",
+        "3. Local voice notes",
+        "Voice notes retain audio and transcripts in app-local storage. Current code attempts to mark the notes directory as excluded from system backups.",
+        "Later copying, sharing or workbench handoffs create new destinations; local retention of the original note does not guarantee how those copies are handled.",
+        "Setting backup-exclusion flags in source is not verification of a particular device's backups or erasure. It does not promise every copy stays on that phone or has been permanently deleted."
+      ],
+      [
+        "workbench",
+        "4. Web workbench and draft handoff",
+        "WebKit opens your own HTTPS origin. Its current website data store is persistent and can retain that origin's website data. Speech text can be handed to a compatible draft editor.",
+        "Page loads, login, draft handling and user sends/uploads involve the corresponding service; its scripts may save or sync drafts they receive.",
+        "Yihu not pressing Send does not mean the page cannot process data beforehand. HTTPS access also does not certify native enhancements or uniform privacy practices."
+      ],
+      [
+        "sharing",
+        "5. System share inbox",
+        "Text, links and files are staged in an App Group inbox shared by the app and share extension. Staging itself does not automatically send them.",
+        "After a user-selected handoff, text can enter a web draft and files can be handed to the page's attachment/upload control. Upload timing and subsequent handling depend on the workbench.",
+        "Staging, handoff, attachment upload and message submission are distinct. An unsent message does not prove no file was uploaded. App Group is not a cloud service or a blanket encryption guarantee."
+      ],
+      [
+        "notifications",
+        "6. Optional relay, notifications and Live Activities",
+        "Notifications also need system permission, a compatible web bridge/server and APNs configuration matching the signing environment. Live Activities may depend on a compatible relay you control.",
+        "Enabled compatible paths involve the service and APNs for registration-related device/notification identifiers and activity updates. APNs private keys belong on the server.",
+        "The default relay is an unusable placeholder, not an automatically provisioned service. Browsing does not prove push delivery, and optional notification registration is not purely local processing."
+      ]
+    ],
+    "verificationTitle": "Speaker verification is not authentication or write authorization",
+    "verificationIntro": "Speaker matching is a convenience filter that can misidentify people, not account authentication. Current source stores enrolled features locally and sets file protection and backup exclusion; that is not device-backup or attack-resistance acceptance evidence. Compatible WeSpeaker/CAM++ artifacts are not included in the repository. Verification-dependent paths are unavailable without them; do not disable verification to bypass missing models.",
+    "identityColumns": [
+      "Layer",
+      "What determines it",
+      "What it does not establish"
+    ],
+    "identities": [
+      [
+        "speaker",
+        "Speaker convenience filter",
+        "Local enrolled features and compatible models provide a matching decision.",
+        "It does not establish account ownership, current intent, liveness, replay resistance or write permission. A match is not authentication."
+      ],
+      [
+        "account",
+        "Workbench authentication",
+        "Your own workbench handles login, pairing and session permissions under its particular implementation.",
+        "Opening a page or inserting a draft does not grant access to other accounts, devices or resources."
+      ],
+      [
+        "authorization",
+        "Writes and confirmation",
+        "The server authorizes the target and operation. PM Radar decision/acceptance replies also need separate write authorization, explicit phone confirmation and receipt readback.",
+        "A voice match does not authorize a write. Reading the ledger does not automatically change status, execute tasks, merge or deploy."
+      ]
+    ],
+    "checksTitle": "Check each destination before use",
+    "checks": [
+      "Confirm the workbench origin and draft target before recording because short speech may automatically attempt insertion. Explicit host refusal never falls through to a bypass. Inspect the target after uncertainty instead of blindly inserting again.",
+      "Copying into a local note or another app creates another copy and handling boundary; check its sync/backup settings. Do not put service origins, account/device identifiers, recordings, private task text or signing materials in public screenshots, logs or feedback.",
+      "This explanation does not promise third-party retention periods, processing jurisdictions, guaranteed deletion or compliance certification. Check your actual app version, service configuration, system backups and destination policy. Remaining recording, push and Watch acceptance is not established by this table."
+    ],
+    "linksTitle": "Inspect the current implementation and setup prerequisites",
+    "sourceLink": "Source and limitations",
+    "securityLink": "Security guidance",
+    "startLink": "Connection checks and first draft"
+  }
+};
+const privacy = privacyCopy[lang];
+const cellStyle = 'padding:20px 16px; border-bottom:1px solid var(--line); vertical-align:top; overflow-wrap:anywhere; text-align:start; font-weight:400;';
+const failureTarget = (id: string) => id === 'origin' ? 'address' : ['editor', 'synthetic'].includes(id) ? 'draft' : id;
+---
+<article class={type === 'start' ? 'document guide-start' : 'document guide-privacy'}>
+{type === 'start' ? <>
+  <style is:inline>
+    .guide-start { max-width: 1120px; }
+    .guide-start > h1 { max-width: 20ch; font-size: clamp(36px, 4vw, 56px); }
+    .guide-start > p, .guide-start > ul, .guide-start > ol, .guide-start > section { max-width: 75ch; }
+    .guide-start .guide-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 28px; padding-block: 20px; border-block: 1px solid var(--line); }
+    .guide-start .guide-nav a { display: flex; align-items: center; min-height: 44px; }
+    .guide-start .guide-scroll-hint { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+    .guide-start .guide-table { scrollbar-color: var(--muted) var(--surface); scrollbar-width: thin; }
+    .guide-start caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .guide-start th:first-child { width: 40%; }
+    .guide-start thead th { color: var(--muted); font-size: 14px; }
+    .guide-start td { color: var(--muted); }
+    .guide-start h3 { font-size: 22px; line-height: 1.4; margin: 32px 0 12px; }
+    .guide-start figcaption { color: var(--muted); max-width: 75ch; margin-bottom: 20px; }
+    @media (max-width: 600px) { .guide-start .guide-nav { grid-template-columns: 1fr; gap: 4px; } }
+  </style>
+  <h1>{copy.title}</h1>
+  <p class="lead">{copy.lead}</p>
+  <nav class="guide-nav" aria-label={copy.nav}>
+    <a href="#preflight">{copy.preflightTitle}</a><a href="#build-connect">{copy.buildTitle}</a><a href="#first-draft">{copy.flowTitle}</a><a href="#troubleshooting">{copy.failureTitle}</a>
+  </nav>
+
+  <h2 id="preflight">{copy.preflightTitle}</h2>
+  <p class="guide-scroll-hint" id="preflight-scroll-hint">{en ? 'Swipe the table to read all columns. Keyboard: focus it and use the arrow keys.' : '左右滑动表格可查看全部列；键盘用户可聚焦表格后使用方向键。'}</p>
+  <div class="guide-table" role="region" aria-label={copy.preflightTitle} aria-describedby="preflight-scroll-hint" tabindex="0" style="overflow-x:auto">
+    <table style="width:100%; min-width:900px; table-layout:fixed; border-collapse:collapse; text-align:start">
+      <caption>{copy.preflightTitle}</caption>
+      <thead><tr>{copy.columns.map(label => <th scope="col" style={cellStyle}>{label}</th>)}</tr></thead>
+      <tbody>{copy.preflight.map(([id, action, success, failure]) => <tr id={`check-${id}`}>
+        <th scope="row" style={cellStyle}>{action}</th>
+        <td style={cellStyle}>{success}</td>
+        <td style={cellStyle}><a href={`#troubleshoot-${failureTarget(id)}`}>{failure}</a></td>
+      </tr>)}</tbody>
+    </table>
+  </div>
+
+  <h2 id="origin-format">{copy.formatTitle}</h2>
+  <p>{copy.formatText}</p>
+  <p><code>{copy.originExample}</code></p>
+  <p><code>{copy.badExample}</code></p>
+
+  <h2 id="build-connect">{copy.buildTitle}</h2>
+  <ol>{copy.buildSteps.map(step => <li>{step}</li>)}</ol>
+  <p><a href="https://github.com/alexlee2046/yihu-ios#build-locally">{copy.buildLink}</a></p>
+
+  <h2 id="first-draft">{copy.flowTitle}</h2>
+  <p><strong>{copy.syntheticLabel}:</strong> <q>{copy.synthetic}</q></p>
+  <figure style="margin:24px 0">
+    <figcaption>{copy.flowCaption}</figcaption>
+    <pre style="white-space:pre-wrap; overflow-wrap:anywhere; font:inherit; line-height:1.8; padding:16px; background:var(--surface); border-radius:8px">{copy.flow}</pre>
+  </figure>
+  <p class="guide-scroll-hint" id="draft-scroll-hint">{en ? 'Swipe the table to read all columns. Keyboard: focus it and use the arrow keys.' : '左右滑动表格可查看全部列；键盘用户可聚焦表格后使用方向键。'}</p>
+  <div class="guide-table" role="region" aria-label={copy.flowTitle} aria-describedby="draft-scroll-hint" tabindex="0" style="overflow-x:auto">
+    <table style="width:100%; min-width:900px; table-layout:fixed; border-collapse:collapse; text-align:start">
+      <caption>{copy.flowTitle}</caption>
+      <thead><tr>{copy.stepColumns.map(label => <th scope="col" style={cellStyle}>{label}</th>)}</tr></thead>
+      <tbody>{copy.steps.map(([title, action, success, failure], index) => <tr id={`draft-step-${index + 1}`}>
+        <th scope="row" style={cellStyle}><strong>{title}</strong><br />{action}</th>
+        <td style={cellStyle}>{success}</td>
+        <td style={cellStyle}>{failure}</td>
+      </tr>)}</tbody>
+    </table>
+  </div>
+
+  <h2 id="troubleshooting">{copy.failureTitle}</h2>
+  {copy.failures.map(([id, title, instruction]) => <section aria-labelledby={`troubleshoot-${id}`}>
+    <h3 id={`troubleshoot-${id}`}>{title}</h3>
+    <p>{instruction}</p>
+  </section>)}
+
+  <h2 id="capability-boundaries">{copy.limitsTitle}</h2>
+  <ul>{copy.limits.map(limit => <li>{limit}</li>)}</ul>
+  <p><a href={en ? '/en/privacy/' : '/privacy/'}>{copy.privacyLink}</a> · <a href={en ? '/en/#capability-speech' : '/#capability-speech'}>{copy.homeLink}</a></p>
+  <p><a href={voiceGuidePath}>{en ? 'Compare Dictation, Notes and native workbench drafts' : '对照系统听写、备忘录与原生工作台草稿边界'}</a></p>
+  <p><a href={decisionsGuidePath}>{en ? 'Read mobile decisions, source freshness and phone confirmation boundaries' : '查看手机待决策、来源时效与确认回执边界'}</a></p>
+  <a class="button button-primary" href="https://github.com/alexlee2046/yihu-ios#build-locally">{en ? 'Build from source' : '从源码构建'}<img src="/icons/arrow-up-right.svg" width="20" height="20" alt="" /></a>
+</> : <>
+  <style is:inline>
+    .guide-privacy { max-width: 1120px; }
+    .guide-privacy > h1 { max-width: 22ch; font-size: clamp(36px, 4vw, 56px); }
+    .guide-privacy > p, .guide-privacy > ul { max-width: 78ch; }
+    .guide-privacy nav { display: flex; flex-wrap: wrap; gap: 8px 24px; padding-block: 16px; }
+    .guide-privacy nav a { display: inline-flex; align-items: center; min-height: 44px; }
+    .guide-privacy .privacy-table { overflow-x: auto; }
+    .guide-privacy table { width: 100%; min-width: 960px; table-layout: fixed; border-collapse: collapse; text-align: start; }
+    .guide-privacy caption { text-align: start; font-weight: 600; margin-bottom: 12px; }
+    .guide-privacy th, .guide-privacy td { padding: 16px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: start; overflow-wrap: anywhere; }
+    .guide-privacy th:first-child { width: 22%; }
+    .guide-privacy th { font-weight: 600; }
+    .guide-privacy td { color: var(--muted); }
+    .guide-privacy .privacy-hint { font-size: 13px; }
+  </style>
+  <h1>{privacy.title}</h1>
+  <p class="lead">{privacy.lead}</p>
+  <nav aria-label={privacy.nav}>
+    <a href="#website-demo">{privacy.websiteTitle}</a><a href="#data-flow">{privacy.flowTitle}</a><a href="#verification">{privacy.verificationTitle}</a>
+  </nav>
+  <h2 id="website-demo">{privacy.websiteTitle}</h2>
+  {privacy.website.map(text => <p>{text}</p>)}
+  <h2 id="data-flow">{privacy.flowTitle}</h2>
+  <p class="privacy-hint" id="data-flow-hint">{privacy.hint}</p>
+  <div class="privacy-table" role="region" aria-label={privacy.flowTitle} aria-describedby="data-flow-hint" tabindex="0">
+    <table>
+      <caption>{privacy.flowTitle}</caption>
+      <thead><tr>{privacy.columns.map(label => <th scope="col">{label}</th>)}</tr></thead>
+      <tbody>{privacy.rows.map(([id, stage, local, external, limitation]) => <tr id={`flow-${id}`}>
+        <th scope="row">{stage}</th><td>{local}</td><td>{external}</td><td>{limitation}</td>
+      </tr>)}</tbody>
+    </table>
+  </div>
+  <h2 id="verification">{privacy.verificationTitle}</h2>
+  <p>{privacy.verificationIntro}</p>
+  <p class="privacy-hint" id="verification-hint">{privacy.hint}</p>
+  <div class="privacy-table" role="region" aria-label={privacy.verificationTitle} aria-describedby="verification-hint" tabindex="0">
+    <table>
+      <caption>{privacy.verificationTitle}</caption>
+      <thead><tr>{privacy.identityColumns.map(label => <th scope="col">{label}</th>)}</tr></thead>
+      <tbody>{privacy.identities.map(([id, layer, control, limitation]) => <tr id={`identity-${id}`}>
+        <th scope="row">{layer}</th><td>{control}</td><td>{limitation}</td>
+      </tr>)}</tbody>
+    </table>
+  </div>
+  <h2 id="before-use">{privacy.checksTitle}</h2>
+  <ul>{privacy.checks.map(text => <li>{text}</li>)}</ul>
+  <h2 id="sources">{privacy.linksTitle}</h2>
+  <p><a href="https://github.com/alexlee2046/yihu-ios">{privacy.sourceLink}</a> · <a href="https://github.com/alexlee2046/yihu-ios/blob/main/SECURITY.md">{privacy.securityLink}</a> · <a href={en ? '/en/start/' : '/start/'}>{privacy.startLink}</a></p>
+  <p><a href={voiceGuidePath}>{en ? 'Compare Dictation, Notes and native workbench drafts' : '对照系统听写、备忘录与原生工作台草稿边界'}</a></p>
+  <p><a href={decisionsGuidePath}>{en ? 'Read mobile decisions, source freshness and phone confirmation boundaries' : '查看手机待决策、来源时效与确认回执边界'}</a></p>
+</>}
+</article>

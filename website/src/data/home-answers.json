@@ -1,0 +1,216 @@
+{
+  "zh": {
+    "heading": "iPhone 如何接续自有 Agent 工作台？",
+    "answer": "一呼（Yihu）是针对 Agent 工作台优化的原生 iOS 浏览器壳：访问自有 HTTPS 网页，在手机上转写语音草稿、保留录音笔记、筛选 PM Radar 事项，并通过系统分享暂存内容。Apple Watch 可接收配对手机摘要。它不提供 Agent 后端；语音需另下载模型，原生增强取决于服务兼容性，源码合入不等于所有真机路径验收通过。",
+    "caption": "能力与前提核对表",
+    "columns": [
+      "能力",
+      "可以做什么",
+      "前提与边界"
+    ],
+    "faqHeading": "常见问题",
+    "start": "使用条件与构建指南",
+    "privacy": "隐私与数据边界",
+    "rows": [
+      {
+        "id": "speech",
+        "name": "端侧语音草稿",
+        "scope": "在手机上转写，再显式填入兼容草稿；不替你发送。",
+        "boundary": "兼容模型另下载，需麦克风权限；宿主拒绝或未知编辑器可能无法填入。"
+      },
+      {
+        "id": "notes",
+        "name": "长录音分段转写",
+        "scope": "保存本地音频和转写文字，供后续整理。",
+        "boundary": "需兼容模型与麦克风权限；录音余项待真机验证，不承诺准确率。"
+      },
+      {
+        "id": "radar",
+        "name": "PM Radar 待办筛选",
+        "scope": "按工作台筛选事项，区分来源读取时间与离线缓存。",
+        "boundary": "自备 JSON 导出或兼容 HTTPS JSON 源；不复用网页 Cookie；回复需独立授权、手机确认与回执。"
+      },
+      {
+        "id": "watch",
+        "name": "Apple Watch 摘要",
+        "scope": "接收配对手机的待决策/待验收摘要，并接续到手机。",
+        "boundary": "需 watchOS 11+ 与配对手机；不是独立审批或手表直写，真机余项待验。"
+      },
+      {
+        "id": "sharing",
+        "name": "系统分享收件箱",
+        "scope": "文字、链接和文件先暂存，用户选择后再交接。",
+        "boundary": "不自动上传或发送；目标服务的数据处理规则仍适用。"
+      }
+    ],
+    "faqs": [
+      {
+        "id": "workbench",
+        "question": "如何在 iPhone 上访问自己的 Agent 网页工作台？",
+        "answer": "一呼是围绕 WebKit 的原生 iOS 浏览器壳，可访问手机可达、TLS 证书受信任的自有 HTTPS 工作台。Collie、OpenClaw、Hermes 是网页访问示例，并非原生兼容认证清单；一呼不托管 Agent，也不是它们的官方客户端。"
+      },
+      {
+        "id": "requirements",
+        "question": "手机接入自建 Agent 工作台之前要准备什么？",
+        "answer": "需要 iOS 18+、自有可信 HTTPS 工作台，以及当前源码发行所需的 Mac、Xcode、XcodeGen 和自己的签名配置。使用语音还需单独下载兼容模型并授予麦克风权限。工作台登录和页面兼容取决于服务端。"
+      },
+      {
+        "id": "speech",
+        "question": "iPhone 如何把语音转成 Agent 工作台草稿而不自动发送？",
+        "answer": "一呼用另下载的 Qwen3 ASR 模型在手机端转写，用户核对后可填入兼容草稿。填入遵守宿主明确拒绝，不向未知编辑器强行写入，也不会按下发送；不兼容时可保留文字供显式复制。"
+      },
+      {
+        "id": "notes",
+        "question": "iPhone 能把较长录音分段转写并保留本地笔记吗？",
+        "answer": "一呼源码提供长录音、手机分段转写和本地音频/文字保存，需麦克风权限与兼容模型。录音相关真机余项仍待验，不承诺任意时长、设备性能或转写准确率。"
+      },
+      {
+        "id": "radar",
+        "question": "如何在手机上筛选多个 Agent 项目的待决策和待验收事项？",
+        "answer": "一呼 PM Radar 接收自备 JSON 导出或兼容 HTTPS JSON 数据源，提供工作台独立筛选、管理计数和有界离线快照。来源读取时间用于区分旧缓存与新数据；读取本身不改变台账状态。认证源当前需文件导出，不复用网页 Cookie 或存储凭据。"
+      },
+      {
+        "id": "replies",
+        "question": "从手机回复项目决策会自动改任务状态吗？",
+        "answer": "不会。一呼仅对符合条件的决策/验收事项，在服务端独立授权、手机明确确认后回复并核验回执；不自动改状态、执行任务、合并或部署。真实回复仍有独立设备/服务验收要求。"
+      },
+      {
+        "id": "watch",
+        "question": "Apple Watch 能查看 Agent 项目摘要并独立审批吗？",
+        "answer": "手表伴侣通过配对手机接收待决策/待验收摘要，并可把所选事项或受保护草稿接续到手机；需 watchOS 11+。它不提供独立审批或手表直写，手机仍需确认，真机配对等余项待验。"
+      },
+      {
+        "id": "sharing",
+        "question": "iOS 分享到工作台时会自动上传文件或发送消息吗？",
+        "answer": "一呼分享扩展只把文字、链接和文件暂存到 App Group 收件箱，不自动上传或发送。后续交接由用户另行选择，目标工作台的数据处理规则仍适用。"
+      },
+      {
+        "id": "privacy",
+        "question": "端侧语音识别是否意味着工作台 App 的所有数据都不出手机？",
+        "answer": "不是。兼容模型下载后在手机转写，录音笔记本地保存；但模型下载、网页访问、用户发送/上传与可选通知/中继涉及相应服务。端侧转写不能作为所有数据永不出手机的承诺。"
+      },
+      {
+        "id": "notifications",
+        "question": "能打开 Agent 网页就代表原生推送和实时活动可用吗？",
+        "answer": "不代表。原生通知需要兼容网页桥、服务端接口与匹配签名环境的 APNs 配置；实时活动还需自有兼容中继。占位中继地址不可用，推送交付仍需独立验收，台账 GET 数据源本身不是推送事件源。"
+      },
+      {
+        "id": "install",
+        "question": "这类自建工作台 iPhone 客户端现在如何安装？",
+        "answer": "一呼当前提供源码，不提供 App Store 安装成品。请按仓库构建说明配置自己的标识、App Group 和签名，再构建到自己的 iPhone；不提供预配置服务器或模型文件。"
+      },
+      {
+        "id": "verification",
+        "question": "手机端声纹过滤能替代账号身份认证或写入授权吗？",
+        "answer": "不能。一呼声纹验证只是可能误判的便利过滤，不是身份认证；兼容 WeSpeaker/CAM++ 模型未随仓库提供，缺模型时依赖验证的路径不可用，也不能绕过验证或服务端写入授权。"
+      }
+    ]
+  },
+  "en": {
+    "heading": "How can an iPhone connect to your own Agent workbench?",
+    "answer": "Yihu is a native iOS browser shell optimized for Agent workbenches: open your own HTTPS web UI, transcribe speech drafts on the phone, retain voice notes, filter PM Radar items and stage content through system sharing. Apple Watch can receive paired-phone summaries. Yihu supplies no Agent backend; speech needs separately downloaded models and native enhancements depend on service compatibility. Merged source does not certify every device path.",
+    "caption": "Capabilities and prerequisites",
+    "columns": [
+      "Capability",
+      "What it does",
+      "Prerequisites and boundaries"
+    ],
+    "faqHeading": "Frequently asked questions",
+    "start": "Requirements and build guide",
+    "privacy": "Privacy and data boundaries",
+    "rows": [
+      {
+        "id": "speech",
+        "name": "On-device speech drafts",
+        "scope": "Transcribe on the phone and explicitly insert into a compatible draft; never presses Send.",
+        "boundary": "Download compatible models and grant microphone access; host refusal or unknown editors can prevent insertion."
+      },
+      {
+        "id": "notes",
+        "name": "Segmented voice notes",
+        "scope": "Retain local audio and transcripts for later review.",
+        "boundary": "Requires compatible models and microphone access; remaining recording paths need device acceptance, with no accuracy guarantee."
+      },
+      {
+        "id": "radar",
+        "name": "PM Radar task filters",
+        "scope": "Filter tasks per workbench and distinguish source-read time from offline cache.",
+        "boundary": "Supply a JSON export or compatible HTTPS JSON feed; web cookies are not reused. Replies need separate authorization, phone confirmation and receipt readback."
+      },
+      {
+        "id": "watch",
+        "name": "Apple Watch summaries",
+        "scope": "Receive pending decision/acceptance summaries from the paired phone and hand off to it.",
+        "boundary": "Requires watchOS 11+ and a paired phone; no standalone approval or direct Watch writes. Remaining device checks are pending."
+      },
+      {
+        "id": "sharing",
+        "name": "System share inbox",
+        "scope": "Stage text, links and files before a user-selected handoff.",
+        "boundary": "No automatic upload or send; the destination service's data practices still apply."
+      }
+    ],
+    "faqs": [
+      {
+        "id": "workbench",
+        "question": "How can I access my own Agent web workbench on an iPhone?",
+        "answer": "Yihu is a native iOS browser shell around WebKit for your own reachable, trusted HTTPS workbench. Collie, OpenClaw and Hermes are web-access examples, not a certified native compatibility list. Yihu does not host Agents and is not their official client."
+      },
+      {
+        "id": "requirements",
+        "question": "What do I need before connecting a phone to a self-hosted Agent workbench?",
+        "answer": "You need iOS 18+, your own trusted HTTPS workbench and, for the current source release, a Mac, Xcode, XcodeGen and your own signing setup. Speech also requires separately downloaded compatible models and microphone permission. Login and page compatibility depend on the server."
+      },
+      {
+        "id": "speech",
+        "question": "How can an iPhone turn speech into an Agent workbench draft without sending it?",
+        "answer": "Yihu transcribes on the phone with separately downloaded Qwen3 ASR models. After review, text can be inserted into a compatible draft. Insertion respects explicit host refusal, does not force text into unknown editors and never presses Send. Incompatible pages retain text for explicit copying."
+      },
+      {
+        "id": "notes",
+        "question": "Can an iPhone transcribe longer recordings in segments and keep local notes?",
+        "answer": "Yihu source includes longer recordings, segmented phone transcription and local audio/text retention, requiring microphone permission and compatible models. Remaining recording-related device checks are pending; no arbitrary duration, device performance or transcription accuracy is guaranteed."
+      },
+      {
+        "id": "radar",
+        "question": "How can I filter pending decisions and acceptance items across Agent projects on a phone?",
+        "answer": "Yihu PM Radar accepts your own JSON export or compatible HTTPS JSON feed, with per-workbench filters, management counts and bounded offline snapshots. Source-read times distinguish cached from fresh data; reads do not change ledger status. Authenticated feeds currently require a file export; Radar does not reuse web cookies or store credentials."
+      },
+      {
+        "id": "replies",
+        "question": "Does replying to a project decision from a phone automatically change task status?",
+        "answer": "No. For eligible decision/acceptance items, Yihu requires separately authorized server writes and explicit phone confirmation, followed by receipt readback. It does not automatically change status, execute tasks, merge or deploy. Real replies still require separate device/service acceptance."
+      },
+      {
+        "id": "watch",
+        "question": "Can an Apple Watch show Agent project summaries and approve them independently?",
+        "answer": "The watchOS 11+ companion receives pending decision/acceptance summaries through the paired phone and can hand off selected items or protected drafts to it. It does not provide standalone approval or direct Watch writes; the phone still requires confirmation and remaining pairing/device checks are pending."
+      },
+      {
+        "id": "sharing",
+        "question": "Does sharing to a workbench on iOS automatically upload files or send messages?",
+        "answer": "Yihu's share extension stages text, links and files in an App Group inbox. It does not automatically upload or send them. Handoff requires a separate user action, and the destination workbench's data practices still apply."
+      },
+      {
+        "id": "privacy",
+        "question": "Does on-device speech recognition mean all workbench app data stays on the phone?",
+        "answer": "No. Compatible downloaded models transcribe on the phone and voice notes are stored locally, but model downloads, web access, user sends/uploads and optional notification/relay integrations involve their respective services. On-device transcription is not a promise that all data stays on the phone."
+      },
+      {
+        "id": "notifications",
+        "question": "Does opening an Agent web page mean native push and Live Activities will work?",
+        "answer": "No. Native notifications need a compatible web bridge, server endpoints and APNs configuration matching the signing environment. Live Activities also need a compatible relay you control. The placeholder relay is unusable, delivery needs separate acceptance and a ledger GET feed is not itself a push event source."
+      },
+      {
+        "id": "install",
+        "question": "How can I currently install this type of self-hosted workbench iPhone client?",
+        "answer": "Yihu currently provides source code, not an App Store binary. Follow the repository build guide to configure your own identifiers, App Group and signing, then build for your iPhone. No preconfigured server or model files are supplied."
+      },
+      {
+        "id": "verification",
+        "question": "Can phone speaker verification replace account authentication or write authorization?",
+        "answer": "No. Yihu speaker verification is a convenience filter that can misidentify speakers, not authentication. Compatible WeSpeaker/CAM++ artifacts are not included; verification-dependent paths are unavailable without them. Verification and server write authorization must not be bypassed."
+      }
+    ]
+  }
+}
