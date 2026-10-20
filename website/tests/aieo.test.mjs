@@ -7,13 +7,14 @@ const root = new URL('../', import.meta.url);
 const read = path => readFileSync(new URL(path, root), 'utf8');
 const built = existsSync(new URL('dist/index.html', root));
 const slugs = ['voice-workbench-vs-radio-chat', 'outdoor-store-voice-preflight'];
+const deepSlugs = ['bluetooth-audio-input-troubleshooting', 'offline-workbench-handoff-troubleshooting', 'meeting-notes-brief-fields'];
 const bots = ['OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'Applebot-Extended'];
 const urls = Array.from(read('public/sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g), x => x[1]);
 const page = url => 'dist/' + url.replace('https://getyihu.com/', '') + 'index.html';
 
-test('18 canonical URLs include four new bilingual guides without fake routes', () => {
-  assert.equal(urls.length, 18); assert.equal(new Set(urls).size, 18);
-  for (const slug of slugs) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
+test('24 canonical URLs include Wave4 and Wave5 bilingual guides without fake routes', () => {
+  assert.equal(urls.length, 24); assert.equal(new Set(urls).size, 24);
+  for (const slug of [...slugs, ...deepSlugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
 });
 test('seven explicit bot groups and general allow retain sitemap and LLM reference', () => {
   const robots = read('public/robots.txt');
@@ -56,7 +57,7 @@ test('built homepage graph keeps existing software/FAQ plus organization and web
     for (const slug of slugs) assert.ok(html.includes(`href="/${prefix}guides/${slug}/"`));
   }
 });
-test('all 18 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
+test('all 24 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
   for (const url of urls) {
     const html = read(page(url));
     assert.ok(html.includes(`<link rel="canonical" href="${url}"`), url);
@@ -72,6 +73,28 @@ test('all 18 built pages have valid canonical/language pairs; new guides have ta
     const home = url.includes('/en/') ? '/en/' : '/';
     assert.ok(html.includes(`href="${home}privacy/"`) && html.includes(`href="${home}start/"`));
     for (const slug of slugs) assert.ok(html.includes(`href="${home}guides/${slug}/"`) || url.includes(slug));
+  }
+});
+test('six Wave5 pages have reviewable content, FAQs, tables, source evidence and inbound links', { skip: !built }, () => {
+  for (const prefix of ['', 'en/']) {
+    const home = read('dist/' + prefix + 'index.html');
+    for (const slug of deepSlugs) {
+      assert.ok(home.includes(`href="/${prefix}guides/${slug}/"`));
+      const html = read('dist/' + prefix + 'guides/' + slug + '/index.html');
+      assert.ok(html.includes('id="first-answer"'));
+      assert.equal(Array.from(html.matchAll(/id="faq-[^"]+"/g)).length, 6);
+      assert.ok(html.includes('<table') && html.includes('<thead>') && html.includes('<tbody>'));
+      assert.ok(html.includes('tabindex="0"'));
+      assert.ok(html.includes('github.com/alexlee2046/yihu-ios/blob/a59676a'));
+      assert.ok(html.includes(`href="/${prefix}start/"`) && html.includes(`href="/${prefix}privacy/"`));
+      assert.ok(html.includes(`href="/${prefix}guides/recording-notes-handoff/"`));
+      assert.equal(Array.from(html.matchAll(/<h1\b/g)).length, 1);
+    }
+    const brief = read('dist/' + prefix + 'guides/meeting-notes-brief-fields/index.html');
+    for (const field of ['source_note', 'source_time', 'review_state', 'observed_facts', 'unconfirmed_proposals', 'confirmed_decisions', 'open_questions', 'next_step', 'handoff_target', 'handoff_state']) assert.ok(brief.includes(field));
+    assert.ok(brief.includes(prefix ? 'not an app import format' : '不是App导入格式'));
+    const offline = read('dist/' + prefix + 'guides/offline-workbench-handoff-troubleshooting/index.html');
+    for (const field of ['date_str', 'source_refreshing', 'source_refresh_failed', 'tasks', 'decisions', 'request_id']) assert.ok(offline.includes(field));
   }
 });
 test('LLM static copies ship unchanged in dist, and full content matches the built site', { skip: !built }, () => {
