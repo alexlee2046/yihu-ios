@@ -11,13 +11,14 @@ const deepSlugs = ['bluetooth-audio-input-troubleshooting', 'offline-workbench-h
 const wave6Slugs = ['web-read-aloud-microphone-boundaries', 'multi-note-review-handoff', 'radar-json-null-validation'];
 const wave7Slugs = ['first-trial-go-no-go-checklist', 'recording-segment-review-labels', 'radar-snapshot-batch-comparison'];
 const wave8Slugs = ['noisy-transcript-text-correction', 'department-minutes-ownership-archive', 'radar-evidence-second-check'];
+const wave9Slugs = ['brief-format-change-compatibility', 'degraded-handoff-go-no-go', 'handoff-evidence-audit-checklist'];
 const bots = ['OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'Applebot-Extended'];
 const urls = Array.from(read('public/sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g), x => x[1]);
 const page = url => 'dist/' + url.replace('https://getyihu.com/', '') + 'index.html';
 
-test('42 canonical URLs include all staged bilingual guides without fake routes', () => {
-  assert.equal(urls.length, 42); assert.equal(new Set(urls).size, 42);
-  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
+test('48 canonical URLs include all staged bilingual guides without fake routes', () => {
+  assert.equal(urls.length, 48); assert.equal(new Set(urls).size, 48);
+  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
 });
 test('seven explicit bot groups and general allow retain sitemap and LLM reference', () => {
   const robots = read('public/robots.txt');
@@ -60,7 +61,7 @@ test('built homepage graph keeps existing software/FAQ plus organization and web
     for (const slug of slugs) assert.ok(html.includes(`href="/${prefix}guides/${slug}/"`));
   }
 });
-test('all 42 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
+test('all 48 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
   for (const url of urls) {
     const html = read(page(url));
     assert.ok(html.includes(`<link rel="canonical" href="${url}"`), url);
