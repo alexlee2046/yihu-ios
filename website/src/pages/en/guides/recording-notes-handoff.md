@@ -3,6 +3,8 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Turn voice notes into action items: keep the original and the next step"
 description: "An iPhone voice-note workflow from recording to reviewable next steps, with a synthetic meeting example and a transcription-versus-action comparison."
 lang: en
+preview: voice
+voiceSample: meeting
 ---
 
 <h2 id="first-answer">Start with a useful next step</h2>

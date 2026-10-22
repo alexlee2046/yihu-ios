@@ -26,4 +26,19 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+      - run: npm run llms:export && npm run build
       - run: npm test
+      - name: Browser preview acceptance (existing remote runner)
+        run: node tools/preview-browser-smoke.mjs
+      - name: Verify committed discovery exports
+        run: python3 tools/export-llms.py --check && git diff --exit-code -- public/llms.txt public/llms-full.txt
+      - name: Preserve preview and discovery evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: website-preview-evidence
+          path: |
+            website/public/llms.txt
+            website/public/llms-full.txt
+            ${{ runner.temp }}/yihu-preview-smoke/
+          retention-days: 3
