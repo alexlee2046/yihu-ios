@@ -1,75 +1,66 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "多项目PM Radar：JSON结构、缓存时效与Watch到手机交接"
-description: "识别tasks与decisions、项目来源与旧缓存，诊断筛选零结果，区分手腕摘要、手机确认、回复授权和通知事件源。"
+title: "外贸每日跟进简报：在iPhone先看询盘、依据与下一步"
+description: "把已有询盘与市场资料整理成受支持的JSON事项，在手机上查看优先跟进内容、来源与下一步；含合成示例。"
 lang: zh
 ---
 
-<h2 id="first-answer">首答</h2>
+<h2 id="first-answer">先找到一个有用的下一步</h2>
 
-一呼的PM Radar消费你提供的多项目JSON快照：先分清全任务、待处理子集与来源时间，再交叉筛选。配对Watch提供既有摘要与手机交接，不提供独立台账刷新、审批、推送或执行保证。能读数据不代表能写；缺字段、旧缓存或读取失败必须显式呈现。
+每天打开手机，先看需要你决定或跟进的事项，再核来源和下一步。一呼读取你自己的结构化简报；客户资料与市场信息由你现有的业务工作流准备。
 
-## 从源契约到手腕摘要
-1. **选来源**：导入有权限取得的JSON文件，或配置现有受控HTTPS数据源；不要把私有台账公开，也不要在源地址中塞账号、令牌或参数。原生源读取与网页登录认证不是同一条会话。
-2. **核结构**：确认date_str、decisions、active/stale/cold，以及可选tasks。任务的project与项目记录的path对应。别用一个叫projects的数组替代模型要求的三个项目数组。
-3. **看来源时间和失败状态**：展示旧快照不等于刚刷新成功；source_refreshing与source_refresh_failed须分别呈现。请求发起、缓存命中和源读取成功不能共享一个“最新”标签。
-4. **再筛选**：检查项目/状态/优先级/搜索与历史开关。管理分组/计数按当前View的筛选后全任务集合；README概述不覆盖View行为证据，不能把decisions视为完整台账。
-5. **手腕只作速览/交接**：核对来源日期和手机可达性。同步重发已有快照；打开事项和提案仍需手机校验来源/事项、忙碌状态、独立确认及服务端权限，不直接审批。
+## 三类材料，三种下一步
 
-<div role="region" aria-label="实现边界（可左右滚动）" tabindex="0">
+<div role="region" aria-label="每日外贸简报" tabindex="0">
 
-| 数据/层级 | 含义 | 常见误读 |
-| --- | --- | --- |
-| tasks / decisions | 全任务 / 待决策验收子集；旧源缺tasks时标不完整 | 子集少就表示项目没任务 |
-| active / stale / cold | 源提供的项目活动记录，path关联任务project | stale数组等于快照过期，或Git不活跃等于任务阻塞 |
-| 源date_str | 最后成功读取的UTC+08:00时间 | 手机点刷新就改成现在 |
-| 手机离线缓存 | 上次有效快照；失败时保留并提示 | 有卡片就表示本次刷新成功 |
-| 可选适配器缓存 | 请求触发；30秒新鲜，重验时最多五分钟旧值；无可用值且读取失败可503 | 全部源都会每30秒刷新、手机端延迟SLA |
-| Watch同步 | 重发手机已有待决策/验收摘要；超限裁剪提示回手机 | 重新读取台账、queued即页面已打开 |
-| 写/通知 | 各自授权、服务端/订阅和设备条件 | 能GET就能回写/收到推送，Watch是独立审批器 |
+| 你已有的材料 | 手机简报怎么写 | 下一步 |
+|---|---|---|
+| 询盘资料不完整 | 规格参数待补，报价范围待确认。 | 列出要问的问题，核对后回复。 |
+| 市场资料有变化 | 标明资料来源与更新时间。 | 回看原资料，确认是否影响当前报价。 |
+| 昨日跟进未完成 | 写清当前卡点和下一次联系准备。 | 在自己的业务工具中继续处理。 |
 
 </div>
 
-**合成走读**：本地样例有demo-alpha两任务、demo-beta一任务，tasks=3而decisions=1。demo-beta与“等你决策”相交为0，改为该项目实际状态“待做”后为1；不是项目丢失。Watch只筛待决策/验收，所以无beta摘要不等于beta不存在。固定日期2026-10-18 09:00是历史演示数据，不能据当前页面发布时间称其新鲜。样例reply_supported=false、所有链接为example.invalid，不连接真实源或触发写入。
+## 一个当前格式的合成简报
 
-**两层时效不要混用**：客户端以24小时与未来5分钟标记数据/时钟问题；可选适配器的30秒/五分钟是服务器读缓存边界，不代表台账内容更新频率。刷新中的源可先显示缓存并一次no-cache跟进，不新增计时器、调度器或轮询。
+示例只演示结构，不是真实商机或市场情报。下面的任务project与项目path对应；完整数据还包含decisions和active/stale/cold集合。
 
-## 详细问答
+```json
+{"date_str":"2026-10-22 09:00（合成示例）","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"询盘规格待补","status":"等你决策","priority":"P1","next":"确认缺少的规格参数后起草回复","url":"https://example.com/brief","evidence":"合成材料，仅供预览"}],"decisions":[],"active":[{"name":"外贸跟进","path":"export-demo","timestamp":0,"message":"合成示例，非实时资料"}],"stale":[],"cold":[]}
+```
 
-<a id="faq-radar-feed-schema"></a>
-## 多项目任务快照怎样区分完整任务集合、待处理子集和项目活动？
+把已有资料按受支持格式准备好，再通过兼容来源或文件导出接入。需要登录的数据按既有文件导出路径处理；网页账户登录与简报读取各自准备。
 
-当前JSON使用tasks表达全任务集合、decisions表达待决策/验收子集，active/stale/cold提供项目记录；projects是模型合并这三个数组的计算属性，不是替代导入键。任务project对应项目path。旧导出没有tasks时回退到decisions并提示台账不完整，不能拿子集数量当全任务数；实际管理计数以当前View的筛选后全任务集合为准。
+## 与日常业务工具怎么分工
 
+一呼便于在手机查看事项和接续工作台；你现有的邮箱、CRM或业务文档继续负责数据和实际跟进。一呼不自动连接这些账户，也不提供客户数据库或商机采集服务。来源时间不清时先回看原资料。
 
-<a id="faq-radar-source-identity"></a>
-## 切换多项目工作台的数据源时，怎样防止旧缓存冒充新来源？
+配对Apple Watch可接收手机摘要，方便提醒你回手机继续查看；关键决定仍在手机和原业务流程中确认。
 
-原生JSON读取不复用网页Cookie、不存凭据且不跟随重定向；需认证的源按现有说明使用文件导出，不把密钥拼进地址。改源前需清理旧缓存，清理失败则拒绝变更，未决回复也会阻止换源；来源修订检查丢弃旧请求结果。它不替代服务端访问控制，也不保证任何两个来源的权限相同。
+## FAQ
 
+<h3 id="faq-source">简报会自动抓取客户询盘吗？</h3>
 
-<a id="faq-radar-filter-intersection"></a>
-## 项目、状态和搜索条件相交后没有结果，怎样判断是空台账还是筛选遮蔽？
+数据由你的业务工作流提供。一呼读取已准备的结构化来源，不代替邮箱/CRM接入或市场数据服务。
 
-项目、源状态、优先级与搜索条件相交；已完成/搁置事项默认隐藏，必要时显示历史并核对筛选。先看是否有tasks，再清除不相关条件、单选目标项目、逐项恢复筛选。零结果不能证明项目完工、被阻塞或来源为空，状态缺失也不靠代码活跃度推断。
+<h3 id="faq-json">一定要自己搭一个后端吗？</h3>
 
+先看现有工作流能否提供兼容JSON或受支持的文件导出；一呼本身是客户端，接入步骤见使用条件。
 
-<a id="faq-radar-freshness-clock"></a>
-## 怎样区分任务来源时间、缓存命中和手机刚发起的刷新？
+<h3 id="faq-fresh">手机显示了事项，就代表来源是最新的吗？</h3>
 
-date_str是来源最后成功读取时间，按UTC+08:00解释，不能用手机请求时间或缓存命中改写。source_refreshing/source_refresh_failed分别提示后台源读取中或失败；手机保留旧快照，最多一次no-cache后续请求，不建立轮询。超过24小时标旧、来源时钟超前超过5分钟警告；可选服务端适配器的30秒/5分钟缓存是另一层，不是手机刷新SLA。
+查看来源时间与读取状态。遇到旧资料或读取失败时，先在原业务系统核对再做决定。
 
+<h3 id="faq-send">看完就会自动回复客户吗？</h3>
 
-<a id="faq-watch-snapshot-handoff"></a>
-## 手表上的项目速览和同步提示，能证明台账已刷新或手机已处理吗？
+不会。你先选择和核对下一步；实际回复取决于原业务工具和已配置的工作台能力。
 
-配对Watch接收手机既有快照中的待决策/验收摘要，并显示来源时间、读取失败和可达性；同步请求重新传手机已有快照，不触发源台账刷新。queued只代表请求入队，saved只代表手机安全保存提案，不等于页面已打开、回复已提交或任务已处理；最终确认与回执仍在iPhone及授权服务链。
+## 接着看
 
+[语音草稿](/guides/iphone-agent-voice-drafts/) · [音频排障](/guides/bluetooth-audio-input-troubleshooting/) · [录音笔记](/guides/recording-notes-handoff/) · [每日简报](/guides/multi-project-radar-watch/) · [接入条件](/start/) · [隐私](/privacy/)
 
-<a id="faq-radar-capability-planes"></a>
-## 能读取任务JSON和手表摘要，为什么不等于能写回复或收到任务推送？
+<details><summary>实现参考</summary>
 
-JSON GET、回复写授权与通知事件源是分开的能力面。可读快照或reply_supported标记不代替服务端身份、目标权限、手机显式确认与回读；源GET也不是推送事件流。通知另需授权上游、设备订阅与匹配签名/系统条件，Watch直写另走独立授权，本候选不声称生产送达或自动改状态。
+[冻结实现](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieRadarModel.swift) · [README](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md)
 
-
-承接阅读： [开始](https://getyihu.com/start/) · [隐私](https://getyihu.com/privacy/) · [移动决策流程](https://getyihu.com/guides/mobile-agent-decisions/)
+</details>

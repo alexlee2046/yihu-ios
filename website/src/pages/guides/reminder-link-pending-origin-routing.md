@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "提醒点开为什么还没跳转？pendingURL、语音保护与已保存来源"
 description: "核Hermes提醒URL门、未填录文/笔记阻塞、当前或已保存origin及connected后消费；不添加新服务器，不保证登录/会话或服务完成。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">点击提醒只产生待处理链接，不等目标会话已经可用</h2>

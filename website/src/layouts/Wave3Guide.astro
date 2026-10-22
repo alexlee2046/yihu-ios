@@ -1,12 +1,17 @@
 ---
 import Layout from './Layout.astro';
 interface Props {
-  frontmatter: { title: string; description: string; lang: 'zh' | 'en' };
+  frontmatter: { title: string; description: string; lang: 'zh' | 'en'; indexable?: boolean };
 }
-const { title, description, lang } = Astro.props.frontmatter;
+const { title, description, lang, indexable = true } = Astro.props.frontmatter;
+const home = lang === 'en' ? '/en/' : '/';
+const slug = Astro.url.pathname.split('/').filter(Boolean).at(-1) ?? '';
+const pillar = /radar|reply|history|attention|status|evidence/.test(slug) ? 'multi-project-radar-watch' : /audio|bluetooth|voiceprint|pcm|capture|microphone|interruption|recognition/.test(slug) ? 'bluetooth-audio-input-troubleshooting' : /note|minutes|brief|transcript|recording|archive/.test(slug) ? 'recording-notes-handoff' : 'iphone-agent-voice-drafts';
 ---
-<Layout title={title} description={description} lang={lang}>
+<Layout title={title} description={description} lang={lang} indexable={indexable}>
   <article class="document wave3-guide">
+    <nav class="guide-context" aria-label={lang === 'en' ? 'Guide context' : '指南归属'}><a href={`${home}#scenarios`}>{lang === 'en' ? 'All scenarios' : '场景指南'}</a>{slug !== pillar && <> · <a href={`${home}guides/${pillar}/`}>{lang === 'en' ? 'Related practical guide' : '相关使用指南'}</a></>}</nav>
+    {!indexable && <p class="reference-label">{lang === 'en' ? 'Technical reference · for existing users' : '技术参考 · 供现有用户查阅'}</p>}
     <h1>{title}</h1>
     <slot />
   </article>

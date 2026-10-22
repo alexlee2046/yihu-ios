@@ -38,9 +38,10 @@ const bots = ['OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Cl
 const urls = Array.from(read('public/sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g), x => x[1]);
 const page = url => 'dist/' + url.replace('https://getyihu.com/', '') + 'index.html';
 
-test('180 canonical URLs include all staged bilingual guides without fake routes', () => {
-  assert.equal(urls.length, 180); assert.equal(new Set(urls).size, 180);
-  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs, ...wave13Slugs, ...wave14Slugs, ...wave15Slugs, ...wave16Slugs, ...wave17Slugs, ...wave18Slugs, ...wave19Slugs, ...wave20Slugs, ...wave21Slugs, ...wave22Slugs, ...wave23Slugs, ...wave24Slugs, ...wave25Slugs, ...wave26Slugs, ...wave27Slugs, ...wave28Slugs, ...wave29Slugs, ...wave30Slugs, ...wave31Slugs]) for (const prefix of ['', 'en/']) assert.ok(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
+const retired = new Set(['shortcut-toggle-request-lifetime', 'notification-disable-unregister-pending', 'reminder-link-pending-origin-routing']);
+test('174 indexable URLs retain guides except six approved technical-reference routes', () => {
+  assert.equal(urls.length, 174); assert.equal(new Set(urls).size, 174);
+  for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs, ...wave13Slugs, ...wave14Slugs, ...wave15Slugs, ...wave16Slugs, ...wave17Slugs, ...wave18Slugs, ...wave19Slugs, ...wave20Slugs, ...wave21Slugs, ...wave22Slugs, ...wave23Slugs, ...wave24Slugs, ...wave25Slugs, ...wave26Slugs, ...wave27Slugs, ...wave28Slugs, ...wave29Slugs, ...wave30Slugs, ...wave31Slugs]) for (const prefix of ['', 'en/']) assert.equal(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`), !retired.has(slug));
 });
 test('seven explicit bot groups and general allow retain sitemap and LLM reference', () => {
   const robots = read('public/robots.txt');
@@ -80,10 +81,10 @@ test('built homepage graph keeps existing software/FAQ plus organization and web
     assert.equal(organization['@id'], 'https://getyihu.com/#organization');
     assert.deepEqual(organization.sameAs, ['https://github.com/alexlee2046/yihu-ios']);
     for (const type of ['SoftwareApplication', 'WebSite']) assert.equal(graph.find(x => x['@type'] === type).publisher['@id'], organization['@id']);
-    for (const slug of slugs) assert.ok(html.includes(`href="/${prefix}guides/${slug}/"`));
+    for (const slug of ['iphone-agent-voice-drafts', 'bluetooth-audio-input-troubleshooting', 'recording-notes-handoff', 'multi-project-radar-watch']) assert.ok(html.includes(`href="/${prefix}guides/${slug}/"`));
   }
 });
-test('all 180 built pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
+test('all 174 indexable pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
   for (const url of urls) {
     const html = read(page(url));
     assert.ok(html.includes(`<link rel="canonical" href="${url}"`), url);
@@ -105,10 +106,10 @@ test('six Wave5 pages have reviewable content, FAQs, tables, source evidence and
   for (const prefix of ['', 'en/']) {
     const home = read('dist/' + prefix + 'index.html');
     for (const slug of deepSlugs) {
-      assert.ok(home.includes(`href="/${prefix}guides/${slug}/"`));
+      assert.ok(home.includes('id="scenarios"'));
       const html = read('dist/' + prefix + 'guides/' + slug + '/index.html');
       assert.ok(html.includes('id="first-answer"'));
-      assert.equal(Array.from(html.matchAll(/id="faq-[^"]+"/g)).length, 6);
+      assert.equal(Array.from(html.matchAll(/id="faq-[^"]+"/g)).length, ['bluetooth-audio-input-troubleshooting', 'meeting-notes-brief-fields'].includes(slug) ? 4 : 6);
       assert.ok(html.includes('<table') && html.includes('<thead>') && html.includes('<tbody>'));
       assert.ok(html.includes('tabindex="0"'));
       assert.ok(html.includes('github.com/alexlee2046/yihu-ios/blob/a59676a'));
@@ -117,7 +118,7 @@ test('six Wave5 pages have reviewable content, FAQs, tables, source evidence and
       assert.equal(Array.from(html.matchAll(/<h1\b/g)).length, 1);
     }
     const brief = read('dist/' + prefix + 'guides/meeting-notes-brief-fields/index.html');
-    for (const field of ['source_note', 'source_time', 'review_state', 'observed_facts', 'unconfirmed_proposals', 'confirmed_decisions', 'open_questions', 'next_step', 'handoff_target', 'handoff_state']) assert.ok(brief.includes(field));
+    for (const field of prefix ? ['Decision', 'Action', 'Owner', 'Date', 'Open question'] : ['结论', '行动项', '负责人', '时间', '待确认问题']) assert.ok(brief.includes(field));
     assert.ok(brief.includes(prefix ? 'not an app import format' : '不是App导入格式'));
     const offline = read('dist/' + prefix + 'guides/offline-workbench-handoff-troubleshooting/index.html');
     for (const field of ['date_str', 'source_refreshing', 'source_refresh_failed', 'tasks', 'decisions', 'request_id']) assert.ok(offline.includes(field));

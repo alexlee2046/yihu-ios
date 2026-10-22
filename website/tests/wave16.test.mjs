@@ -10,7 +10,7 @@ test('Wave16 bilingual guides retain structural, fixed-source and local-link con
   for (const prefix of ['', 'en/']) {
     const home = read('dist/' + prefix + 'index.html');
     for (const slug of slugs) {
-      assert.ok(home.includes(`href="/${prefix}guides/${slug}/"`));
+      assert.ok(home.includes('id="scenarios"'), 'homepage offers the approved scenario hub, not an exhaustive guide wall');
       const html = read('dist/' + prefix + 'guides/' + slug + '/index.html');
       assert.equal(Array.from(html.matchAll(/<h1\b/g)).length, 1);
       assert.ok(html.includes('id="first-answer"'));

@@ -1,100 +1,56 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "From transcript to reviewable minutes and briefs: fields, evidence and open questions"
-description: "A manual meeting/brief editorial template separates originals, facts, proposals and confirmed decisions. Not automatic Yihu minutes, an import API or the PM Radar JSON model."
+title: "Meeting notes template: decisions, action items and open questions"
+description: "A practical template for turning a transcript into reviewable follow-ups, with owners, dates and a synthetic example."
 lang: en
 ---
 
-<h2 id="first-answer">Retain the original, then organize fields; a template is not automatic minutes</h2>
+<h2 id="first-answer">Keep the original, make the next step easy to find</h2>
 
-Yihu source provides local recording notes, segmented transcription and user-selected draft/attachment handoff, not guaranteed accurate automatic minutes. The following is a manual editorial template separating sources, review state, facts, proposals and unanswered questions. It is not an app import format, API contract or PM Radar JSON model. Transcription, summarization, approval and execution remain different states.
+Start with the transcript and separate decisions, actions and open questions. Leave owners and dates unconfirmed when the conversation did not supply them. Your chosen organizing tool can help draft; review the result against the original.
 
-## Four layers between text and decisions
+<div role="region" aria-label="Meeting note template" tabindex="0">
 
-1. **Original transcript** retains recognition risk and context, especially names, numbers, negations and segment joins. Do not shorten away “uncertain” or “not approved.”
-2. **Reviewed quotations/facts** identify evidence locations and the reviewed scope. Leave unverifiable material pending; fluent prose is not factual evidence.
-3. **Proposals/open questions** identify what needs confirmation through which existing process. Do not rewrite “suggested” or “could consider” as “decided.”
-4. **Handoff/handling** records where text went and the actual completed step. A draft or attachment does not prove sending, reading or execution.
-
-## Manual editorial field table
-
-<div role="region" aria-label="Manual minutes and brief fields, scroll horizontally" tabindex="0">
-
-| Editorial field | Content | Synthetic example | Verification/missing-data rule |
-| --- | --- | --- | --- |
-| source_note | Location in the original/authorized record | Sample note A, paragraph 2 | Retain the original; do not publish audio or private paths |
-| source_time | Source time, explicitly unknown when absent | Not provided | Do not substitute editing/publication time |
-| review_state | Unreviewed, partially reviewed or the actual reviewed scope | Only the synthetic passage checked | Transcribed does not mean reviewed |
-| observed_facts | Facts directly supported by the source | Three open questions in a sample checklist | Unverified facts stay pending; no invented numbers/conclusions |
-| unconfirmed_proposals | Suggestions without approval | Suggest reviewing fields at a future meeting | Preserve proposal wording; do not execute |
-| confirmed_decisions | Decisions with separate confirmation evidence | None | Leave empty without approval evidence; do not infer tone |
-| open_questions | Questions needing further answers | Which existing process confirms the sample field? | A question is not an assigned task |
-| next_step | Authorized manual next action | Save for review only; do not send | Separate it from automatic execution, ordering, merging or deployment |
-| handoff_target | Verified destination and content scope | Empty draft in own workbench | No account/token values; stop if unclear |
-| handoff_state | Local, staged, visible draft or uncertain | Retained locally; not handed off | saved/queued or a draft is not delivery |
+| Part | What to write | Synthetic example |
+|---|---|---|
+| Decision | A confirmed point, with its source | Gather the missing specifications before quoting. |
+| Action | One concrete next step | List the missing parameters. |
+| Owner | Who agreed to do it | Unconfirmed. |
+| Date | An agreed deadline, or unconfirmed | Unconfirmed. |
+| Open question | Information needed before a commitment | Check delivery time before replying. |
 
 </div>
 
-These keys are editorial labels for paper, a controlled local document or an already authorized tool. This page adds no database, automatic annotation, parser or app persistence behavior. Storage/sync/backup depend on the chosen tool and account.
+## Choose a workflow
 
-## A brief draft that executes nothing
+For a searchable transcript, a standalone transcription tool can be enough. For follow-up work, add a review step for actions, owners and dates. If you already use an Agent web workspace, Yihu helps bring phone recordings/text into that workflow.
 
-```text
-Topic: Sample checklist discussion (synthetic, not a real meeting)
-source_note: Sample note A, paragraph 2
-source_time: Not provided
-review_state: Only this synthetic passage reviewed
-observed_facts: Three sample questions; no real business data
-unconfirmed_proposals: Suggest checking fields at a future meeting; no execution
-confirmed_decisions: Empty; no independent confirmation
-open_questions: Which role confirms through the existing workflow?
-next_step: Save for review only; do not send or execute
-handoff_target: Not selected
-handoff_state: Retained locally; not handed off
-```
+[Compare transcription and action-item workflows](/en/guides/recording-notes-handoff/#compare)
 
-If you use a model to assist summarization, still check every item against the original and confirmation evidence. This page calls no Agent/model and reports no generation-quality, diarization or meeting-accuracy result. A synthetic example is not an approval record from a real meeting.
-
-## Distinguish editorial fields from PM Radar
-
-Radar uses model fields such as `date_str`, `tasks`, `decisions` and `active/stale/cold`; a task's `project` corresponds to a project record's `path`. The editorial labels above cannot replace those import keys. Naming minutes as a JSON file does not make them model-compatible.
-
-A team with an existing authorized export/transformation process must validate sources, fields and permissions through that process. Legacy exports missing `tasks` fall back to a pending subset. This page implements no minutes-to-task conversion, automatic writeback or trade-data collection. A brief's proposal is not automatically an approved decision, and read permission is not reply-write authority.
-
-## A subtraction checklist before handoff
-
-Only hand off necessary authorized text. Do not use original audio, private participant details or customer content as a public example. Check workbench/page and existing destination text. Direct note insertion currently has a 3,000 Swift Character threshold and eligibility checks; longer content uses existing Markdown staging, which does not attach original audio. The length rule is not a meeting-duration or model limit.
-
-Choose one handoff path. Each note reserves one marker before explicit insertion/staging; failure or uncertainty retains originals rather than clearing a marker or switching routes to resend. Keep visible drafts, staged attachments, sent messages and handled work separate. Completing a field table is not proof any of those occurred.
+This is an editorial template, not an app import format. For Radar JSON, use the supported brief format instead of turning these labels into invented API keys.
 
 ## FAQ
 
-<h3 id="faq-automatic">Do these fields make Yihu generate minutes automatically?</h3>
+<h3 id="faq-summary">Does choosing a template create finished minutes?</h3>
 
-No. This is editorial guidance, not new app functionality, hosted summarization or background tasks. Existing recording, transcription and explicit handoff still require manual review and a separately authorized next workflow.
+It provides an organizing prompt. Inspect the output from your chosen tool and confirm it against the recording.
 
-<h3 id="faq-approval">Can a summary saying decided populate confirmed_decisions?</h3>
+<h3 id="faq-missing">What if the owner or date is missing?</h3>
 
-Not merely because the summary says so. Find separate confirmation and retain its location. A suggestion or conditional statement belongs under proposals/questions; leave a decision empty without evidence.
+Mark it unconfirmed and ask, instead of guessing a person or deadline.
 
-<h3 id="faq-import">Can I save this template as JSON and import it into Radar?</h3>
+<h3 id="faq-proposal">How should I handle a proposal?</h3>
 
-No. These fields are not Radar's model or an import API. Actual JSON must match the existing contract and authorized source process. This page supplies no converter or task-creation automation.
+Keep it as a proposal or open question until confirmed, rather than upgrading it to a decision.
 
-<h3 id="faq-times">Can a missing source time be replaced with now?</h3>
+<h3 id="faq-review">What should I check before sharing?</h3>
 
-Do not fabricate it. Preserve unknown and label editing time separately. Radar's `date_str` is the last successful source-read time, not a phone-refresh/cache-hit timestamp.
+Check the destination, necessary material and whether a draft already exists. Retain the original while reviewing uncertainty.
 
-<h3 id="faq-copy">Can a shorter brief bypass the one-handoff limit?</h3>
+[Voice notes](/en/guides/recording-notes-handoff/) · [Daily brief](/en/guides/multi-project-radar-watch/) · [Setup](/en/start/) · [Privacy](/en/privacy/)
 
-No. Editing text does not remove uncertainty about an original handoff. Inspect destination content first; a different summary is neither a sanctioned automatic retry nor duplicate prevention.
+<details><summary>Implementation reference</summary>
 
-<h3 id="faq-retention">Does deleting a local template withdraw all meeting material?</h3>
+[Voice notes](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceNotes.swift)
 
-No. Notes, clipboard, document accounts, workbenches and later attachments can retain separate copies. Follow actual destination policies; this guide does not guarantee deletion, backup exclusion or third-party retention outcomes.
-
-## Guides and source evidence
-
-[Recording notes and explicit handoff](/en/guides/recording-notes-handoff/) · [Weak-network handoff/cache diagnosis](/en/guides/offline-workbench-handoff-troubleshooting/) · [Radar JSON and Watch](/en/guides/multi-project-radar-watch/) · [Voice-draft path choices](/en/guides/iphone-agent-voice-drafts/) · [Privacy](/en/privacy/) · [Start](/en/start/)
-
-Existing implementation: [README](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md), [note model/one marker](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceNote.swift), [Radar model](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieRadarModel.swift). The editorial template is a suggestion from this article, not a source field schema or device acceptance.
+</details>

@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Did a shortcut return start recording? A 30-second toggle request consumed once"
 description: "AppIntent sets pendingToggle; foreground ready starts, recording finishes. A 30-second lifetime is not SLA/background authority, repeated Bool requests are not an N-item queue."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">An Intent result is not completed recording, insertion or sending</h2>

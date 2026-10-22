@@ -2,350 +2,51 @@
 interface Props { lang?: 'zh' | 'en' }
 const { lang = 'zh' } = Astro.props;
 const en = lang === 'en';
-const guideCopy = {
-  "zh": {
-    "title": "iPhone 语音草稿：系统听写、备忘录，还是一呼？",
-    "lead": "先按任务选择，而不是按“语音 App”标签选择：已在可信输入框内可先用系统听写；还没确定工作台时先在备忘录整理；需要接续自有 Agent 网页工作台时，再评估一呼的原生转写与草稿守卫。下面只比较有官方资料或一呼源码依据的边界，不比较未测准确率、时长、速度或 Watch 独立审批。",
-    "nav": "专题导航",
-    "decisionTitle": "先选一条符合当前任务的路径",
-    "decisions": [
-      "已有可信、可编辑且不会自动提交的工作台输入框：系统键盘听写可以减少切换；先确认宿主的草稿保存/提交规则，不把键盘输入当成工作台兼容认证。",
-      "想先整理一句话、尚未选择 Agent 目的地：用系统听写输入到备忘录，再手动选择后续交接。先核对笔记账户和同步策略，不把备忘录一概叫作纯本地存储。",
-      "已有自有 HTTPS 工作台，并希望用原生端侧模型与带目标检查的草稿交付：可评估一呼。当前是源码发行，需自备服务、签名和模型；它不托管 Agent，也不是通用工作台兼容承诺。"
-    ],
-    "comparisonTitle": "三条路径的事实对照",
-    "tableHint": "左右滑动查看全部列；键盘用户可聚焦表格后使用方向键。",
-    "columns": [
-      "核对维度",
-      "系统键盘听写 → 输入框",
-      "系统听写 → 备忘录 → 手动交接",
-      "一呼原生语音 → 自有工作台"
-    ],
-    "rows": [
-      [
-        "recognition",
-        "识别位置",
-        "Apple 说明键盘设置会显示是否在设备处理；否则听写内容会发往服务器。不能给所有设备/语言统一贴上“全端侧”标签。[A1][A2]",
-        "此处指用键盘听写写入笔记，不是另行评测 Apple 录音转写；识别边界仍按系统听写设置。笔记存在哪个账户另行核对。[A1][A2][A3]",
-        "兼容 Qwen3 ASR 模型另下载、校验后在手机转写；下载、网页与后续交接不是离线保证。[Y1]"
-      ],
-      [
-        "send",
-        "是否自动送出",
-        "官方指南描述在当前文本插入点输入文字；宿主是否自动提交或保存不是键盘指南保证的行为。[A1]",
-        "本文手动路径只先写笔记，不调用 Agent 发送；随后复制/分享会产生新副本与接收方规则，其他自动化不在比较内。[A3]",
-        "短语音可能自动尝试安全填入，但插入代码不按发送；网页可先保存/同步草稿，不等于文字永不离开手机。[Y2a][Y2]"
-      ],
-      [
-        "target",
-        "工作台 / 页面绑定",
-        "目标是用户当前选中的文本插入点，不据此推断存在一呼的工作台/请求 ID 守卫。[A1]",
-        "笔记账户/笔记不是 Agent 页面绑定；交接前还要重新核对工作台、页面和草稿框。",
-        "一呼草稿交付检查受信来源、页面和请求目标；录音笔记显式填入还核对打开记录时捕获的工作台/页面与当前交互状态。[Y2][Y3]"
-      ],
-      [
-        "refusal",
-        "宿主拒绝处理",
-        "未核实任意宿主的拒绝/自动提交实现；不要把系统键盘可输入当作所有编辑器都安全。",
-        "可先保留笔记，不强迫接入宿主；手动粘贴前确认目标允许草稿且不会自动提交。",
-        "明确拒绝或未知响应不降级绕过；安全交付失败时保留转写，先查目标，不盲目重复填入。[Y2]"
-      ],
-      [
-        "sharing",
-        "App Group 暂存与上传",
-        "系统听写本身不是一呼 App Group 收件箱；输入后的处理由接收 App/网页决定。",
-        "只有实际选择分享到一呼才涉及其暂存箱；复制到其他 App 则按该目的地规则处理。",
-        "一呼分享收件箱先暂存文字/链接/文件；用户交接后可进入页面草稿或附件入口，消息未发送不证明文件未上传。[Y4]"
-      ],
-      [
-        "requirements",
-        "模型 / 权限前提",
-        "按实际系统版本启用听写，核对可用语言和键盘设置中的处理说明；这里不要求安装一呼模型。[A1][A2]",
-        "同样核对听写前提，并检查 Notes 账户/同步配置；移除账户不表示互联网账户中的笔记已删除。[A3]",
-        "iOS 18+、自有可信 HTTPS 工作台、源码构建/自有签名、兼容模型与麦克风权限；缺声纹模型不绕过所需验证。[Y1]"
-      ]
-    ],
-    "notesTitle": "“笔记在本地”与“交给工作台”是两件事",
-    "notes": [
-      "Apple 官方资料说明，从 iPhone 移除 Notes 账户后，笔记仍可保留在互联网账户和其他已设置设备；因此先核对所选账户，不用“没点发送”代替同步/备份检查。[A3]",
-      "一呼录音笔记源码保存本地音频与转写，并尝试排除系统备份；这不是本轮真机备份、任意长录音或性能验收。显式交接可能产生另一份副本或网页处理边界。[Y3][Y3a]",
-      "声纹只是可能误判的便利过滤，不是账号认证或写入授权。通知、实时活动、Watch 及真实回复另有前提；不能从一次草稿交付推断它们已通过。[Y1]"
-    ],
-    "walkthroughTitle": "一份合成转写走读：只到未发送草稿",
-    "demoLabel": "合成语句",
-    "synthetic": "整理一份示例读书清单，仅保留草稿，不发送或执行。",
-    "walkthroughIntro": "这是文字流程示意，不是一次已经通过的真机测试，也不在本网页调用麦克风或工作台。只选获准的空白草稿/笔记，不使用真实任务或顾客内容。",
-    "stepColumns": [
-      "步骤 / 操作",
-      "成功信号",
-      "不满足时"
-    ],
-    "steps": [
-      [
-        "destination",
-        "1. 录音前选路径与目的地",
-        "先核对服务、页面、可编辑草稿及不自动提交规则；若未确定目的地，先选备忘录并核对账户。选择一呼则先完成接入预检。",
-        "目标清楚，或明确先停在受控笔记里；不会碰到已有真实任务。",
-        "不知道宿主会不会执行就不录到该输入框；保留本地整理路径。"
-      ],
-      [
-        "capture",
-        "2. 只采集这条合成语句",
-        "系统路径按键盘听写指南输入并停止；一呼路径按当前已允许的录音入口操作，短语音结束后可能自动尝试安全填入。",
-        "看到笔记/草稿/原生面板中的文字；不假定一呼必有第二次填入按钮。",
-        "权限、模型或宿主拒绝就停在相应边界，不关闭校验/验证来绕过。"
-      ],
-      [
-        "review",
-        "3. 核对文字、目标与交接边界",
-        "已填入就只检查，不再次填入。笔记手动交接前确认目的地；若选择一呼分享，区分 App Group 暂存、附件交接与消息发送。",
-        "文字位于预期未发送草稿，或安全保留在笔记/面板；没有为演示按发送。",
-        "结果不确定先查目标；拒绝后不换编辑器强塞，不盲目重试。"
-      ],
-      [
-        "stop",
-        "4. 在草稿处结束",
-        "检查后停止；不调用 Agent，不触发上传测试或真实回复，不用这条走读证明性能与其他功能。",
-        "走读终点是未发送草稿或受控笔记，不是已执行任务。",
-        "如目的地已产生同步/附件处理，按该服务实际规则核对，不宣称所有副本都已删除。"
-      ]
-    ],
-    "limitsTitle": "这份比较没有证明什么",
-    "limits": [
-      "不是三套产品的等价功能认证或性能榜单；Apple 列来自官方说明，一呼列来自当前源码/README。系统版本、语言、账户、编辑器与服务配置仍需实际核对。",
-      "不承诺任意长录音、转写准确率、速度、续航、推送交付或 Watch 独立审批。已合入源码、官网演示和静态构建都不能替代真机/服务验收。",
-      "App 不按发送不等于网页不处理草稿；端侧转写不等于所有数据都不出手机。不要绕过证书、声纹、权限或明确宿主拒绝。"
-    ],
-    "sourcesTitle": "依据与下一步",
-    "startLink": "接入预检与首次草稿",
-    "privacyLink": "逐阶段数据流与声纹边界",
-    "homeLink": "返回能力概览"
-  },
-  "en": {
-    "title": "iPhone voice drafts: Dictation, Notes or Yihu?",
-    "lead": "Choose by task, not by the label “voice app”: use keyboard Dictation in a trusted editor, collect thoughts in Notes before choosing an Agent destination, or evaluate Yihu's native transcription and guarded draft handoff for your own web workbench. This compares documented boundaries, not untested accuracy, duration, speed or standalone Watch approval.",
-    "nav": "Guide navigation",
-    "decisionTitle": "Choose a path for the task in front of you",
-    "decisions": [
-      "Already in a trusted, editable workbench field that does not auto-submit: keyboard Dictation may avoid a separate handoff. Confirm the host's draft/submission rules; keyboard input is not workbench compatibility certification.",
-      "Capturing a thought before choosing an Agent destination: dictate into Notes, then explicitly choose a later handoff. Check the note account and sync policy; Notes is not automatically local-only storage.",
-      "Already own a trusted HTTPS workbench and want native local models plus target-checked draft delivery: evaluate Yihu. It is a source release requiring your service, signing and models; it does not host Agents or certify arbitrary workbench compatibility."
-    ],
-    "comparisonTitle": "Documented boundaries across three paths",
-    "tableHint": "Swipe to read all columns. Keyboard users can focus the table and use the arrow keys.",
-    "columns": [
-      "Dimension",
-      "Keyboard Dictation → editor",
-      "Dictation → Notes → manual handoff",
-      "Yihu native speech → your workbench"
-    ],
-    "rows": [
-      [
-        "recognition",
-        "Recognition location",
-        "Apple says Keyboard Settings indicates on-device processing; otherwise dictated content is sent to a server. Do not label every device/language fully on-device. [A1][A2]",
-        "This path means keyboard Dictation into a note, not a separate review of Apple's recording transcription. Recognition follows Dictation settings; check the note account separately. [A1][A2][A3]",
-        "Compatible Qwen3 ASR models run on the phone after separate download and verification. Downloads, browsing and later handoff are not offline guarantees. [Y1]"
-      ],
-      [
-        "send",
-        "Automatic submission",
-        "Apple documents text entry at the selected insertion point. It does not guarantee whether a host automatically submits or saves that text. [A1]",
-        "This manual path first writes a note without calling an Agent send action. Later copy/share creates new copies and destination rules; other automations are outside this comparison. [A3]",
-        "Short speech may automatically attempt guarded insertion, but insertion code does not press Send. A page can save/sync drafts before message submission. [Y2a][Y2]"
-      ],
-      [
-        "target",
-        "Workbench / page binding",
-        "The target is the user's selected text insertion point; that does not establish Yihu-style workbench/request-ID guards. [A1]",
-        "A note/account is not a binding to an Agent page. Recheck the workbench, page and draft editor before handoff.",
-        "Yihu checks trusted origin, page and request targets. Explicit voice-note insertion also checks the workbench/page captured when opening notes and the current interaction state. [Y2][Y3]"
-      ],
-      [
-        "refusal",
-        "Host refusal",
-        "Arbitrary host refusal and auto-submit behavior is unverified. Keyboard editability alone does not make every editor safe.",
-        "Retain the note rather than forcing host integration. Paste only after confirming the destination permits drafts and does not auto-submit.",
-        "Explicit refusal or unknown responses do not fall through to a bypass. Failed safe delivery retains text; inspect the target instead of blindly inserting again. [Y2]"
-      ],
-      [
-        "sharing",
-        "App Group staging / upload",
-        "Keyboard Dictation itself is not Yihu's App Group inbox; the receiving app/page controls subsequent processing.",
-        "Yihu staging applies only when you actually choose to share into Yihu. Other copy/share destinations have their own rules.",
-        "Yihu stages text, links and files first. A user handoff can reach a page draft or attachment control; an unsent message does not prove no file was uploaded. [Y4]"
-      ],
-      [
-        "requirements",
-        "Models / permissions",
-        "Enable Dictation for the actual system version and check language availability and processing details in Keyboard Settings. This path does not require Yihu models. [A1][A2]",
-        "Check Dictation prerequisites and Notes account/sync settings. Removing an account does not erase notes from the internet account. [A3]",
-        "iOS 18+, your trusted HTTPS workbench, source build/own signing, compatible models and microphone permission. Do not bypass required verification when speaker models are missing. [Y1]"
-      ]
-    ],
-    "notesTitle": "Keeping a note and handing it to a workbench are different",
-    "notes": [
-      "Apple documents that removing a Notes account from an iPhone can leave notes in the internet account and other configured devices. Check the selected account rather than treating “not sent” as a sync/backup check. [A3]",
-      "Yihu voice-note source retains local audio/transcripts and attempts backup exclusion. That is not this guide's proof of device backups, arbitrary long recordings or performance. Explicit handoff may create another copy or web-processing boundary. [Y3][Y3a]",
-      "Speaker matching is a convenience filter that can misidentify people, not account authentication or write authorization. Notifications, Live Activities, Watch and real replies have separate prerequisites; one draft handoff does not certify them. [Y1]"
-    ],
-    "walkthroughTitle": "One synthetic walkthrough: stop at an unsent draft",
-    "demoLabel": "Synthetic phrase",
-    "synthetic": "Draft a sample reading list; keep it as a draft, without sending or running it.",
-    "walkthroughIntro": "This is a written process illustration, not a passed device test. This page does not call your microphone or workbench. Use an authorized empty draft/note, never real tasks or customer content.",
-    "stepColumns": [
-      "Step / action",
-      "Success signal",
-      "Otherwise"
-    ],
-    "steps": [
-      [
-        "destination",
-        "1. Choose the path and target before recording",
-        "Confirm the service, page, editable draft and no-auto-submit rule. If the destination is unclear, choose Notes first and check its account. For Yihu, complete setup checks first.",
-        "The target is clear, or you intentionally stop in a controlled note without touching existing real tasks.",
-        "Do not record into an editor with unknown execution behavior; keep the separate capture path."
-      ],
-      [
-        "capture",
-        "2. Capture only the synthetic phrase",
-        "Use keyboard Dictation and stop it for the system path. For Yihu, use the recording entry point currently permitted by your version; short-speech completion may automatically attempt guarded insertion.",
-        "Text appears in a note, draft or native panel. Do not assume Yihu needs a second insertion click.",
-        "Stop at permission, model or host-refusal boundaries; do not disable checks or verification to bypass them."
-      ],
-      [
-        "review",
-        "3. Review text, destination and handoff boundaries",
-        "If already inserted, inspect rather than insert again. Verify the destination before handing off a note. With Yihu sharing, distinguish App Group staging, attachment handoff and message submission.",
-        "Text is in the intended unsent draft or retained safely in a note/panel. No Send action is used for this illustration.",
-        "Inspect uncertainty at the destination. Do not force another editor after refusal or retry blindly."
-      ],
-      [
-        "stop",
-        "4. End at the draft",
-        "Stop after inspection. Do not invoke the Agent, test uploads or send real replies, and do not use this walkthrough as performance or feature certification.",
-        "The endpoint is an unsent draft or controlled note, not an executed task.",
-        "If the destination already performed sync/attachment processing, follow its actual rules; do not claim every copy was erased."
-      ]
-    ],
-    "limitsTitle": "What this comparison does not establish",
-    "limits": [
-      "This is not feature-equivalence certification or a performance ranking. Apple columns use official documentation; Yihu columns use current source/README evidence. Check the actual system version, language, account, editor and service configuration.",
-      "No arbitrary long-recording, transcription-accuracy, speed, battery, push-delivery or independent Watch-approval claim is made. Merged source, website demos and static builds do not replace device/service acceptance.",
-      "Not pressing Send does not stop a web page processing drafts. On-device transcription is not a promise that all data stays on the phone. Do not bypass certificates, speaker checks, permissions or explicit host refusal."
-    ],
-    "sourcesTitle": "Evidence and next steps",
-    "startLink": "Setup checks and first draft",
-    "privacyLink": "Data flow and speaker boundaries",
-    "homeLink": "Back to capabilities"
-  }
-};
-const copy = guideCopy[lang];
-const sources = [
-  [
-    "A1",
-    "Apple · Dictate text on iPhone",
-    "https://support.apple.com/guide/iphone/dictate-text-iph2c0651d2/ios"
-  ],
-  [
-    "A2",
-    "Apple · Siri, Dictation & Privacy",
-    "https://www.apple.com/legal/privacy/data/en/ask-siri-dictation/"
-  ],
-  [
-    "A3",
-    "Apple · Notes accounts",
-    "https://support.apple.com/guide/iphone/add-or-remove-accounts-iph7262fd4fe/ios"
-  ],
-  [
-    "Y1",
-    "Yihu README · source release, models and limitations",
-    "https://github.com/alexlee2046/yihu-ios#models-and-limitations"
-  ],
-  [
-    "Y2",
-    "Yihu · guarded short-speech delivery and insertion",
-    "https://github.com/alexlee2046/yihu-ios/blob/main/Apps/Collie/CollieWebView.swift#L265-L325"
-  ],
-  [
-    "Y2a",
-    "Yihu · automatic guarded short-speech delivery",
-    "https://github.com/alexlee2046/yihu-ios/blob/main/Apps/Collie/CollieVoiceController.swift#L450-L523"
-  ],
-  [
-    "Y3",
-    "Yihu · captured voice-note destination",
-    "https://github.com/alexlee2046/yihu-ios/blob/main/Apps/Collie/CollieShellApp.swift#L724-L750"
-  ],
-  [
-    "Y3a",
-    "Yihu · local voice-note storage and backup-exclusion attempt",
-    "https://github.com/alexlee2046/yihu-ios/blob/main/Apps/Collie/CollieVoiceNotes.swift#L40-L105"
-  ],
-  [
-    "Y4",
-    "Yihu · explicit share handoff",
-    "https://github.com/alexlee2046/yihu-ios/blob/main/Apps/Collie/CollieShareTray.swift#L81-L125"
-  ]
+const home = en ? '/en/' : '/';
+const rows = en ? [
+  ['Mobile browser + typing / copy and paste', 'You already have the text or can dictate into an editor.', 'Select the destination, move the text and review it.'],
+  ['Standalone recording / transcription tool', 'You mainly need a recording and its transcript.', 'Check storage, then choose a later organizing tool if needed.'],
+  ['Yihu + your Agent web workspace', 'You want to continue existing workspace tasks by voice on iPhone.', 'Prepare the app/models, speak, review the draft and decide when to send.'],
+] : [
+  ['手机浏览器 + 手动输入/复制粘贴', '已有文字，或系统听写已能满足输入需求。', '选好目的地，带入文字再检查。'],
+  ['独立录音/转录工具', '主要想保存录音并得到文字。', '了解存储方式，需要整理时再选后续工具。'],
+  ['一呼 + 你自己的 Agent 网页工作台', '想在 iPhone 上用语音接续已有工作台任务。', '准备 App 与模型，口述、检查草稿，再决定发送。'],
 ];
 ---
 <article class="document voice-guide">
-  <style is:inline>
-    .voice-guide { max-width: 1120px; }
-    .voice-guide > h1 { max-width: 26ch; font-size: clamp(36px, 4vw, 56px); }
-    .voice-guide > p, .voice-guide > ul, .voice-guide > ol { max-width: 78ch; }
-    .voice-guide nav { display:flex; flex-wrap:wrap; gap:8px 24px; padding-block:16px; }
-    .voice-guide nav a { display:inline-flex; align-items:center; min-height:44px; }
-    .voice-guide .table-region { overflow-x:auto; }
-    .voice-guide table { width:100%; min-width:1000px; table-layout:fixed; border-collapse:collapse; text-align:start; }
-    .voice-guide th, .voice-guide td { padding:16px; border-bottom:1px solid var(--line); vertical-align:top; overflow-wrap:anywhere; text-align:start; }
-    .voice-guide th { font-weight:600; }
-    .voice-guide th:first-child { width:20%; }
-    .voice-guide .walkthrough-table { min-width:900px; }
-    .voice-guide .walkthrough-table th:first-child { width:30%; }
-    .voice-guide .walkthrough-table tbody th { font-weight:400; }
-    .voice-guide td { color:var(--muted); }
-    .voice-guide caption { text-align:start; margin-bottom:12px; }
-    .voice-guide .table-hint { font-size:13px; }
-  </style>
-  <h1>{copy.title}</h1>
-  <p class="lead">{copy.lead}</p>
-  <nav aria-label={copy.nav}>
-    <a href="#choose">{copy.decisionTitle}</a><a href="#compare">{copy.comparisonTitle}</a><a href="#walkthrough">{copy.walkthroughTitle}</a><a href="#sources">{copy.sourcesTitle}</a>
-  </nav>
-  <h2 id="choose">{copy.decisionTitle}</h2>
-  <ul>{copy.decisions.map(text => <li>{text}</li>)}</ul>
-  <h2 id="compare">{copy.comparisonTitle}</h2>
-  <p class="table-hint" id="comparison-hint">{copy.tableHint}</p>
-  <div class="table-region" role="region" aria-label={copy.comparisonTitle} aria-describedby="comparison-hint" tabindex="0">
-    <table>
-      <caption>{copy.comparisonTitle}</caption>
-      <thead><tr>{copy.columns.map(text => <th scope="col">{text}</th>)}</tr></thead>
-      <tbody>{copy.rows.map(([id, label, system, notes, native]) => <tr id={`compare-${id}`}>
-        <th scope="row">{label}</th><td>{system}</td><td>{notes}</td><td>{native}</td>
-      </tr>)}</tbody>
-    </table>
+  <nav aria-label={en ? 'Guide context' : '指南归属'}><a href={`${home}#scenarios`}>{en ? 'All scenarios' : '场景指南'}</a></nav>
+  <h1>{en ? 'Voice drafts on iPhone, ready for your web workspace' : 'iPhone 语音 AI 草稿，把想法接到网页工作台'}</h1>
+  <p class="lead">{en ? 'Speak the next step while it is fresh. Yihu transcribes on your phone and can place text in a compatible workspace draft. Review it, then decide when to send.' : '想法出现时，先说下来。一呼在手机转写，并可把文字填入兼容的工作台草稿。检查后，再由你决定什么时候发送。'}</p>
+  <h2 id="first-answer">{en ? 'Less app switching, one clear next step' : '少切一次应用，把下一步说清楚'}</h2>
+  <p>{en ? 'For example: after reading project material, dictate a question or a reply outline instead of switching through notes and clipboard steps. Keep the wording editable in your own workspace.' : '例如：看完项目资料，口述一个追问或回复提纲，不必先切到笔记再来回复制。文字留作你自己工作台里可检查的草稿。'}</p>
+  <h2 id="compare">{en ? 'Voice-first workspace vs mobile-browser copy and paste' : '语音工作台，还是手机浏览器手动复制粘贴？'}</h2>
+  <div role="region" aria-label={en ? 'Choose an input workflow' : '选择输入工作流'} tabindex="0">
+    <table><thead><tr>{(en ? ['Approach', 'A good fit when', 'Your next step'] : ['方式', '适合什么任务', '你接着做什么']).map(x => <th scope="col">{x}</th>)}</tr></thead><tbody>{rows.map(r => <tr><th scope="row">{r[0]}</th><td>{r[1]}</td><td>{r[2]}</td></tr>)}</tbody></table>
   </div>
-  <h2 id="notes">{copy.notesTitle}</h2>
-  {copy.notes.map(text => <p>{text}</p>)}
-  <h2 id="walkthrough">{copy.walkthroughTitle}</h2>
-  <p>{copy.walkthroughIntro}</p>
-  <p><strong>{copy.demoLabel}:</strong> <q>{copy.synthetic}</q></p>
-  <p class="table-hint" id="walkthrough-hint">{copy.tableHint}</p>
-  <div class="table-region" role="region" aria-label={copy.walkthroughTitle} aria-describedby="walkthrough-hint" tabindex="0">
-    <table class="walkthrough-table">
-      <caption>{copy.walkthroughTitle}</caption>
-      <thead><tr>{copy.stepColumns.map(text => <th scope="col">{text}</th>)}</tr></thead>
-      <tbody>{copy.steps.map(([id, title, action, success, failure]) => <tr id={`step-${id}`}>
-        <th scope="row"><strong>{title}</strong><br />{action}</th><td>{success}</td><td>{failure}</td>
-      </tr>)}</tbody>
-    </table>
-  </div>
-  <h2 id="limits">{copy.limitsTitle}</h2>
-  <ul>{copy.limits.map(text => <li>{text}</li>)}</ul>
-  <h2 id="sources">{copy.sourcesTitle}</h2>
-  <ul>{sources.map(([id, label, url]) => <li id={`source-${id}`}><a href={url}>[{id}] {label}</a></li>)}</ul>
-  <p><a href={en ? '/en/start/' : '/start/'}>{copy.startLink}</a> · <a href={en ? '/en/privacy/' : '/privacy/'}>{copy.privacyLink}</a> · <a href={en ? '/en/' : '/'}>{copy.homeLink}</a></p>
-  <p><a href={en ? '/en/guides/mobile-agent-decisions/' : '/guides/mobile-agent-decisions/'}>{en ? 'Read mobile decisions, source freshness and phone confirmation boundaries' : '查看手机待决策、来源时效与确认回执边界'}</a></p>
-  <p><a href={en ? '/en/guides/recording-notes-handoff/' : '/guides/recording-notes-handoff/'}>{en ? 'Recording notes: segmented transcription and explicit handoff' : '录音笔记：分段转写与显式交接'}</a></p>
+  <p>{en ? 'If keyboard Dictation in your current browser already works, it may be the shortest path. Yihu fits people who already have an Agent web workspace and want local speech models, voice notes and selected sharing around it.' : '如果当前浏览器里的系统听写已经够用，可以先用最短的路径。一呼更适合已有 Agent 网页工作台，希望在周围加上端侧语音、录音笔记和自主分享的人。'}</p>
+  <h2>{en ? 'Try a small, reviewable task first' : '先从一件能核对的小事开始'}</h2>
+  <ol>
+    <li>{en ? 'Open your trusted workspace and choose a suitable draft.' : '打开你信任的工作台，选好合适的草稿位置。'}</li>
+    <li>{en ? 'Say a question or short reply outline, then stop capture.' : '说一个追问或简短回复提纲，再结束录音。'}</li>
+    <li>{en ? 'Review text and destination. Yihu does not press Send; the page may save or sync a draft.' : '核对文字与目的地。一呼不会按下发送，网页仍可能保存或同步草稿。'}</li>
+  </ol>
+  <h2>{en ? 'What to prepare' : '使用前准备什么'}</h2>
+  <p>{en ? 'The current release is source code: iOS 18+, a Mac with Xcode/XcodeGen, your own signing, a trusted HTTPS workspace and separately downloaded speech models. Setup instructions explain the supported paths.' : '当前提供源码：需要 iOS 18+、Mac 与 Xcode/XcodeGen、自有签名、可信 HTTPS 工作台及另行下载的语音模型。接入指南列出了可用路径。'}</p>
+  <h2>FAQ</h2>
+  <h3 id="faq-assistant">{en ? 'Is it a general-purpose phone assistant?' : '它是能控制所有手机应用的语音助手吗？'}</h3>
+  <p>{en ? 'Yihu focuses on your web workspace. It does not replace Siri or supply an Agent backend; the connected service provides its own capabilities.' : '一呼聚焦你自己的网页工作台，不替代 Siri，也不提供 Agent 后端；所连接服务提供各自能力。'}</p>
+  <h3 id="faq-editor">{en ? 'Will any web editor work?' : '任何网页输入框都能用吗？'}</h3>
+  <p>{en ? 'Use a compatible draft and check the result. If a page cannot accept text, keep it and choose an explicit copying path rather than forcing another input.' : '使用兼容草稿并查看结果。页面无法接纳文字时，保留录文，再选择明确的复制方式。'}</p>
+  <h3 id="faq-background">{en ? 'Can it listen continuously in the background?' : '可以一直在后台听我说话吗？'}</h3>
+  <p>{en ? 'Capture is a foreground interaction with microphone permission. Start and stop deliberately, and park before operating vehicle controls.' : '录音在前台并需麦克风权限，按需开始和结束；车载操作请先停车。'}</p>
+  <h3 id="faq-install">{en ? 'Where is the download?' : '在哪里下载？'}</h3>
+  <p>{en ? 'Follow the source-build setup guide. There is no App Store binary linked here.' : '目前按源码构建指南安装，这里没有可直接下载的 App Store 成品。'}</p>
+  <p><a href={`${home}start/`}>{en ? 'See setup requirements' : '查看接入条件'}</a> · <a href={`${home}guides/recording-notes-handoff/#compare`}>{en ? 'Compare note workflows' : '录音笔记工作流选型'}</a> · <a href={`${home}guides/bluetooth-audio-input-troubleshooting/`}>{en ? 'Check audio input' : '检查音频输入'}</a> · <a href={`${home}privacy/`}>{en ? 'Privacy' : '隐私'}</a></p>
+  <details><summary>{en ? 'Implementation and platform references' : '实现与平台参考'}</summary><p><a href="https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md">Yihu source release</a> · <a href="https://support.apple.com/guide/iphone/dictate-text-iph2c0651d2/ios">Apple Dictation</a></p></details>
 </article>
+<style>
+  table { width:100%; min-width:600px; border-collapse:collapse; text-align:start; }
+  th,td { padding:16px; border-bottom:1px solid var(--line); vertical-align:top; }
+  [role='region'] { overflow-x:auto; margin-block:24px; }
+  .voice-guide > nav { margin-bottom:24px; font-size:14px; }
+</style>

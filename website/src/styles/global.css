@@ -33,6 +33,12 @@
   .brand small { display:block; font-size:10px; letter-spacing:.34em; margin-top:7px; }
   .site-header nav { display:flex; align-items:center; gap:36px; font-size:15px; }
   .site-header nav a { white-space:nowrap; }
+  .scenario-menu { position:relative; }
+  .scenario-menu summary { cursor:pointer; }
+  .scenario-menu > div { position:absolute; top:calc(100% + 12px); left:0; width:min(320px,80vw); z-index:15; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px; box-shadow:0 12px 30px #0005; }
+  .scenario-menu a { display:block; padding:10px; min-height:44px; white-space:normal !important; }
+  .guide-context { font-size:14px; margin-bottom:24px; }
+  .reference-label { font-size:13px; color:var(--muted); }
   .site-header nav a:hover, .site-footer a:hover { color:var(--accent); }
   .site-header .language { padding-left:26px; border-left:1px solid var(--line); font-size:12px; letter-spacing:.04em; }
   .hero { position:relative; isolation:isolate; height:clamp(680px,65vw,920px); overflow:hidden; }

@@ -14,26 +14,25 @@ class MainText(HTMLParser):
   if self.active and not self.skip:self.parts.append(data)
 intro='''# 一呼 · Yihu
 
-> Source-release native iOS browser shell for your own HTTPS Agent workbench. 原生 iOS 语音交互浏览器壳，需自有工作台、模型与签名；不是多人对讲、外贸数据服务或已发布 App Store 成品。
+> Voice-first iPhone workspace for your own HTTPS Agent services. 在 iPhone 上口述草稿、整理录音笔记、检查音频输入，并查看自己的每日跟进简报。
 
 Canonical site: https://getyihu.com/
 Source: https://github.com/alexlee2046/yihu-ios
 Full bilingual content: https://getyihu.com/llms-full.txt
 Privacy: https://getyihu.com/privacy/ | https://getyihu.com/en/privacy/
 
-## Reading contract / 阅读边界
+## Start with a task / 从真实任务开始
 
-This reference covers seven existing bilingual page families (home, start, privacy, voice drafts, mobile decisions, recording notes, multi-project Radar/Watch) plus eighty-three bilingual selection, preflight, troubleshooting, editorial-review, data-contract, evaluation, compatibility, cross-device, context, terminology, time, encoding, lifecycle and evidence-check guides. Every listed URL has its own canonical and language counterpart. Text is a content reference, not device, latency, radio range, delivery, indexing, AI citation or legal certification. 一共九十类双语页面；源码实现、构建与机器可读文件不等于真机、写入、推送或收录验收。
+- Voice drafts / iPhone语音AI草稿: /guides/iphone-agent-voice-drafts/ compares a voice-first workspace with mobile-browser copy and paste.
+- Bluetooth / 蓝牙与停车后车载排障: /guides/bluetooth-audio-input-troubleshooting/ checks input, playback, a short sample and device switching. AirPods and other headset routes depend on device/system conditions.
+- Voice notes and meeting action items / 录音与结构化待办: /guides/recording-notes-handoff/ retains the original and hands material to your chosen organizing tool.
+- Foreign-trade daily brief / 外贸每日跟进: /guides/multi-project-radar-watch/ displays your own inquiry/task JSON, sources and next steps; Apple Watch can show paired-phone summaries.
+- Offline / 弱网准备: /start/ explains setup and the difference between prepared local transcription and a remote workspace.
+- FAQ / 选型与使用条件: the website is a source release requiring iOS 18+, signing, speech models and your own workspace. Review drafts before sending; the destination may save or sync them. Preview cards use samples, not live AI results.
 
-## Topic routing / 意图与真实能力
+## Reading index / 阅读索引
 
-- Bluetooth headset / 蓝牙耳机免提预检: /guides/outdoor-store-voice-preflight/ and its /en/ counterpart describe safely stationary input/output checks. Audio-session configuration requests voiceChat/allowBluetoothHFP; pairing is not microphone selection, headset compatibility, headset-button trigger or continuous intercom certification. 安全静止时核对输入，不承诺骑行风噪或多人免按键通话。
-- Offline and weak connectivity / 离线与弱网: /start/ and /privacy/ separate prepared local transcription, local notes, existing cached snapshots, model downloads and remote HTTPS handoff. No blanket offline guarantee. 蓝牙、转写完成与远端送达是不同状态；旧缓存不代表本次读取成功。
-- Apple Watch / AirPods: /guides/multi-project-radar-watch/ covers paired-phone summaries and phone handoff, not independent approval/refresh. Headset routing checks belong to the preflight guide; no AirPods model is certified by this content. 手腕摘要不是独立对讲或服务写授权。
-- AI meeting recording / AI会议录音纪要: /guides/recording-notes-handoff/ explains local audio, segmented transcription, review and one explicit handoff. Transcription is not verified meeting minutes, speaker diarization or automatic action extraction. 原文与副本、暂存与上传、填入与发送分别核对。
-- Foreign-trade Radar / 外贸雷达JSON解读: /guides/multi-project-radar-watch/ and /guides/mobile-agent-decisions/ explain authorized user-provided tasks/decisions JSON, source dates, filters and bounded cache. No customs database, market-data subscription, lead scraping or automatic email. 仅自有询盘/跟进台账的通用任务解读，不新增外贸数据产品。
-- Radio and voice group chat comparison / 对讲机与语音群聊选型: /guides/voice-workbench-vs-radio-chat/ compares different destinations and prerequisites without invented range/latency. Select independently validated equipment/services for person-to-person live dispatch. 一呼的工作台草稿不是群组语音频道。
-- FAQ / 常见问题: visible answers in all guides distinguish source availability, models/signing, host refusal, retained original text, phone confirmation, server authority and receipts. No App Store URL is invented. 重要动作先核对目标；不确定结果先停止，不盲目重试或绕过权限。
+The index follows the sitemap's 174 indexable bilingual URLs. Six technical-reference routes remain accessible with noindex,follow and are not exported here. 中文根路径为/，英文为/en/。Descriptions explain workflows, not measured accuracy, background recording, radio range, delivery, search indexing or AI-citation guarantees. No App Store listing, hosted Agent/CRM service or inquiry collection is supplied.
 
 '''
 urls=[x.text for x in ET.parse(root/'public/sitemap.xml').iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
