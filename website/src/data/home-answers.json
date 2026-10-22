@@ -74,28 +74,28 @@
         "slug": "iphone-agent-voice-drafts",
         "title": "iPhone 语音 AI 草稿",
         "description": "口述一个想法，校对后接续网页工作台，少一次应用切换。",
-        "help": "mobile-agent-decisions",
+        "help": "iphone-agent-voice-drafts/#compare",
         "helpTitle": "已有工作台，还是只需转写？"
       },
       {
         "slug": "bluetooth-audio-input-troubleshooting",
         "title": "蓝牙与停车后的车载拾音",
         "description": "听得到却录不到？用四步对照，先找对输入设备。",
-        "help": "vehicle-exhibition-microphone-preflight",
+        "help": "vehicle-exhibition-microphone-preflight/",
         "helpTitle": "停车与展会的试录清单"
       },
       {
         "slug": "recording-notes-handoff",
         "title": "录音整理成下一步",
         "description": "从原录文提炼结论、待办和待确认项，保留核对依据。",
-        "help": "meeting-notes-brief-fields",
-        "helpTitle": "转录工具与行动项工作流怎么选"
+        "help": "meeting-notes-brief-fields/",
+        "helpTitle": "一份能接着做的会后笔记模板"
       },
       {
         "slug": "multi-project-radar-watch",
         "title": "外贸每日跟进简报",
         "description": "把你已有的询盘和市场简报放在手机上，先看今天该跟什么。",
-        "help": "radar-json-null-validation",
+        "help": "multi-project-radar-watch/#brief-format",
         "helpTitle": "准备你自己的结构化简报"
       }
     ]
@@ -175,28 +175,28 @@
         "slug": "iphone-agent-voice-drafts",
         "title": "Voice drafts on iPhone",
         "description": "Speak an idea, review the words and continue in your web workspace with less app switching.",
-        "help": "mobile-agent-decisions",
+        "help": "iphone-agent-voice-drafts/#compare",
         "helpTitle": "A workspace or just a transcript?"
       },
       {
         "slug": "bluetooth-audio-input-troubleshooting",
         "title": "Bluetooth & parked-car audio",
         "description": "You can hear audio, but recording is silent? Check the input in four steps.",
-        "help": "vehicle-exhibition-microphone-preflight",
+        "help": "vehicle-exhibition-microphone-preflight/",
         "helpTitle": "A short stationary recording check"
       },
       {
         "slug": "recording-notes-handoff",
         "title": "Voice notes into next steps",
         "description": "Keep the original, then organize decisions, action items and questions to confirm.",
-        "help": "meeting-notes-brief-fields",
-        "helpTitle": "Transcription app or action-item workflow?"
+        "help": "meeting-notes-brief-fields/",
+        "helpTitle": "Use an actionable meeting-note template"
       },
       {
         "slug": "multi-project-radar-watch",
         "title": "Daily export-sales brief",
         "description": "Bring your existing inquiry and market brief to your phone. See what needs follow-up first.",
-        "help": "radar-json-null-validation",
+        "help": "multi-project-radar-watch/#brief-format",
         "helpTitle": "Prepare your structured brief"
       }
     ]

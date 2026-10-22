@@ -3,6 +3,8 @@ layout: ../../layouts/Wave3Guide.astro
 title: "把录音整理成行动项：原文、结论与下一步放在一起"
 description: "从iPhone录音笔记到可跟进的结构化待办，展示一份合成会后笔记，并比较纯转写与行动项工作流。"
 lang: zh
+preview: voice
+voiceSample: meeting
 ---
 
 <h2 id="first-answer">先找到一个有用的下一步</h2>

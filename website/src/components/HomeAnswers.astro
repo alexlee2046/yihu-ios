@@ -10,7 +10,7 @@ const home = lang === 'en' ? '/en/' : '/';
   <p>{copy.answer}</p>
 </section> : <section class="answers wrap" aria-labelledby="capabilities-title">
   <h2 id="capabilities-title">{copy.caption}</h2>
-  <div id="scenarios" class="scenario-grid">{copy.scenarios.map(scene => <article><h3><a href={`${home}guides/${scene.slug}/`}>{scene.title}</a></h3><p>{scene.description}</p><a class="scenario-help" href={`${home}guides/${scene.help}/`}>{scene.helpTitle} →</a></article>)}</div>
+  <div id="scenarios" class="scenario-grid">{copy.scenarios.map(scene => <article><h3><a href={`${home}guides/${scene.slug}/`}>{scene.title}</a></h3><p>{scene.description}</p><a class="scenario-help" href={`${home}guides/${scene.help}`}>{scene.helpTitle} →</a></article>)}</div>
   <p class="table-hint" id="table-hint">{lang === 'en' ? 'Swipe the table to compare prerequisites. With a keyboard, focus the table and use the arrow keys.' : '左右滑动表格，查看完整使用前提。键盘用户可聚焦表格后使用方向键。'}</p>
   <div class="table-scroll" role="region" aria-label={copy.caption} aria-describedby="table-hint" tabindex="0">
     <table>

@@ -1,4 +1,5 @@
 ---
+import Demo from './Demo';
 interface Props { lang?: 'zh' | 'en' }
 const { lang = 'zh' } = Astro.props;
 const en = lang === 'en';
@@ -13,10 +14,11 @@ const rows = en ? [
   ['一呼 + 你自己的 Agent 网页工作台', '想在 iPhone 上用语音接续已有工作台任务。', '准备 App 与模型，口述、检查草稿，再决定发送。'],
 ];
 ---
-<article class="document voice-guide">
+<article class="document voice-guide task-document">
   <nav aria-label={en ? 'Guide context' : '指南归属'}><a href={`${home}#scenarios`}>{en ? 'All scenarios' : '场景指南'}</a></nav>
   <h1>{en ? 'Voice drafts on iPhone, ready for your web workspace' : 'iPhone 语音 AI 草稿，把想法接到网页工作台'}</h1>
   <p class="lead">{en ? 'Speak the next step while it is fresh. Yihu transcribes on your phone and can place text in a compatible workspace draft. Review it, then decide when to send.' : '想法出现时，先说下来。一呼在手机转写，并可把文字填入兼容的工作台草稿。检查后，再由你决定什么时候发送。'}</p>
+  <Demo client:visible lang={lang} />
   <h2 id="first-answer">{en ? 'Less app switching, one clear next step' : '少切一次应用，把下一步说清楚'}</h2>
   <p>{en ? 'For example: after reading project material, dictate a question or a reply outline instead of switching through notes and clipboard steps. Keep the wording editable in your own workspace.' : '例如：看完项目资料，口述一个追问或回复提纲，不必先切到笔记再来回复制。文字留作你自己工作台里可检查的草稿。'}</p>
   <h2 id="compare">{en ? 'Voice-first workspace vs mobile-browser copy and paste' : '语音工作台，还是手机浏览器手动复制粘贴？'}</h2>

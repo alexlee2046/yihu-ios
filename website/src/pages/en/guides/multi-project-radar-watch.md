@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Daily inquiry & market brief for export sales, on iPhone"
 description: "Review your existing inquiry tasks, source material and next steps from a supported JSON brief. Includes a synthetic export-sales example."
 lang: en
+preview: radar
 ---
 
 <h2 id="first-answer">Start with a useful next step</h2>
@@ -21,12 +22,12 @@ Start the day with what needs your decision or follow-up, then inspect its sourc
 
 </div>
 
-## A synthetic brief in the current format
+<h2 id="brief-format">A synthetic brief in the current format</h2>
 
 This illustrates structure, not actual leads or market intelligence. Task project matches project path. A complete snapshot also carries decisions and active/stale/cold collections.
 
 ```json
-{"date_str":"2026-10-22 09:00 (synthetic)","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"Missing inquiry specifications","status":"等你决策","priority":"P1","next":"Confirm missing parameters before drafting a reply","url":"https://example.com/brief","evidence":"Synthetic material for preview"}],"decisions":[],"active":[{"name":"Export follow-up","path":"export-demo","timestamp":0,"message":"Synthetic, not live material"}],"stale":[],"cold":[]}
+{"date_str":"2026-10-22 09:00:00","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"Missing inquiry specifications","status":"等你决策","priority":"P1","next":"Confirm missing parameters before drafting a reply","url":"https://example.com/brief","evidence":"Synthetic material for preview"}],"decisions":[],"active":[{"name":"Export follow-up","path":"export-demo","timestamp":1792630800,"message":"Synthetic, not live material"}],"stale":[],"cold":[]}
 ```
 
 Prepare the supported shape using your existing workflow, then connect a compatible source or supported file export. Authenticated material uses the existing file-export path; web login and brief access have separate setup.

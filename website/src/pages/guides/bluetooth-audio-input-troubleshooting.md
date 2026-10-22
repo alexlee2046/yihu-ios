@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "iPhone 蓝牙耳机能听到却录不到？四步检查输入设备"
 description: "用四个实际检查区分播放与拾音，排查蓝牙耳机、停车后的车载音频和手机麦克风；附清晰的下一步。"
 lang: zh
+preview: audio
 ---
 
 <h2 id="first-answer">先找到一个有用的下一步</h2>

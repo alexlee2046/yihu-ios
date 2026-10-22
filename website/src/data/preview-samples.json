@@ -1,0 +1,194 @@
+{
+  "zh": {
+    "voice": {
+      "web": {
+        "title": "网页材料样例",
+        "material": "项目资料里还缺规格参数。先确认报价需要的信息，再回复价格和交期。",
+        "summary": "先补规格资料；价格与交期核过再答复。",
+        "draft": "请先确认还缺哪些规格参数，方便继续核对报价范围与交期。"
+      },
+      "meeting": {
+        "title": "会后录文样例",
+        "material": "会上讨论了规格资料缺口，要先列出缺少的参数，还没约定负责人和时间；交期核过再回复。",
+        "summary": "待办：列出缺少参数。负责人和时间：待确认。交期：先核对。",
+        "draft": "待办：列出缺少的规格参数。负责人、截止时间待确认；对外回复前先核对交期。"
+      }
+    },
+    "radar": {
+      "inquiry": {
+        "date_str": "2026-10-22 09:00:00",
+        "tasks": [
+          {
+            "id": "sample-inquiry",
+            "project": "export-demo",
+            "title": "询盘规格待补",
+            "status": "等你决策",
+            "priority": "P1",
+            "next": "确认缺少的参数，再起草报价回复",
+            "url": "https://example.com/brief#inquiry",
+            "evidence": "合成询盘资料"
+          }
+        ],
+        "decisions": [],
+        "active": [
+          {
+            "name": "外贸跟进",
+            "path": "export-demo",
+            "timestamp": 1792630800,
+            "message": "合成示例，非实时资料"
+          }
+        ],
+        "stale": [],
+        "cold": []
+      },
+      "market": {
+        "date_str": "2026-10-22 09:00:00",
+        "tasks": [
+          {
+            "id": "sample-market",
+            "project": "export-demo",
+            "title": "市场资料需要复核",
+            "status": "等你决策",
+            "priority": "P2",
+            "next": "回看原资料与日期，再决定是否调整报价依据",
+            "url": "https://example.com/brief#market",
+            "evidence": "合成市场资料"
+          }
+        ],
+        "decisions": [],
+        "active": [
+          {
+            "name": "外贸跟进",
+            "path": "export-demo",
+            "timestamp": 1792630800,
+            "message": "合成示例，非实时资料"
+          }
+        ],
+        "stale": [],
+        "cold": []
+      },
+      "followup": {
+        "date_str": "2026-10-22 09:00:00",
+        "tasks": [
+          {
+            "id": "sample-followup",
+            "project": "export-demo",
+            "title": "准备下一次跟进",
+            "status": "等你决策",
+            "priority": "P2",
+            "next": "核对未解决的问题，在自己的工具中起草后续回复",
+            "url": "https://example.com/brief#followup",
+            "evidence": "合成跟进资料"
+          }
+        ],
+        "decisions": [],
+        "active": [
+          {
+            "name": "外贸跟进",
+            "path": "export-demo",
+            "timestamp": 1792630800,
+            "message": "合成示例，非实时资料"
+          }
+        ],
+        "stale": [],
+        "cold": []
+      }
+    }
+  },
+  "en": {
+    "voice": {
+      "web": {
+        "title": "Sample webpage",
+        "material": "The project brief is missing specifications. Confirm quote inputs before replying with price or delivery time.",
+        "summary": "Gather specifications first; keep price and delivery time open until checked.",
+        "draft": "Please confirm the missing specifications so we can review quote scope and delivery time."
+      },
+      "meeting": {
+        "title": "Sample meeting transcript",
+        "material": "We discussed the specification gaps. Someone needs to list the missing parameters, but no owner or deadline was agreed. Check delivery time before replying.",
+        "summary": "Action: list missing parameters. Owner and deadline: unconfirmed. Delivery time: check first.",
+        "draft": "Action: list missing specifications. Owner and deadline: to confirm. Check delivery time before an external reply."
+      }
+    },
+    "radar": {
+      "inquiry": {
+        "date_str": "2026-10-22 09:00:00",
+        "tasks": [
+          {
+            "id": "sample-inquiry",
+            "project": "export-demo",
+            "title": "Missing inquiry specifications",
+            "status": "等你决策",
+            "priority": "P1",
+            "next": "Confirm missing parameters before drafting a quote reply",
+            "url": "https://example.com/brief#inquiry",
+            "evidence": "Synthetic inquiry material"
+          }
+        ],
+        "decisions": [],
+        "active": [
+          {
+            "name": "Export follow-up",
+            "path": "export-demo",
+            "timestamp": 1792630800,
+            "message": "Synthetic example, not live material"
+          }
+        ],
+        "stale": [],
+        "cold": []
+      },
+      "market": {
+        "date_str": "2026-10-22 09:00:00",
+        "tasks": [
+          {
+            "id": "sample-market",
+            "project": "export-demo",
+            "title": "Review a market update",
+            "status": "等你决策",
+            "priority": "P2",
+            "next": "Check the original source and date before changing quote assumptions",
+            "url": "https://example.com/brief#market",
+            "evidence": "Synthetic market material"
+          }
+        ],
+        "decisions": [],
+        "active": [
+          {
+            "name": "Export follow-up",
+            "path": "export-demo",
+            "timestamp": 1792630800,
+            "message": "Synthetic example, not live material"
+          }
+        ],
+        "stale": [],
+        "cold": []
+      },
+      "followup": {
+        "date_str": "2026-10-22 09:00:00",
+        "tasks": [
+          {
+            "id": "sample-followup",
+            "project": "export-demo",
+            "title": "Prepare the next follow-up",
+            "status": "等你决策",
+            "priority": "P2",
+            "next": "Review the outstanding question and draft a follow-up in your own tool",
+            "url": "https://example.com/brief#followup",
+            "evidence": "Synthetic follow-up material"
+          }
+        ],
+        "decisions": [],
+        "active": [
+          {
+            "name": "Export follow-up",
+            "path": "export-demo",
+            "timestamp": 1792630800,
+            "message": "Synthetic example, not live material"
+          }
+        ],
+        "stale": [],
+        "cold": []
+      }
+    }
+  }
+}

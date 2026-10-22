@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "iPhone Bluetooth mic not recording? Check the input in four steps"
 description: "A practical check for Bluetooth headsets, parked-car audio and the iPhone microphone: separate playback from recording, then choose a next step."
 lang: en
+preview: audio
 ---
 
 <h2 id="first-answer">Start with a useful next step</h2>

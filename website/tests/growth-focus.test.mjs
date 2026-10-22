@@ -56,3 +56,15 @@ test('core pages explain workflow choices and keep practical setup/source links'
     assert.ok(read('dist/' + prefix + 'guides/recording-notes-handoff/index.html').includes('id="compare"'));
   }
 });
+
+test('home and four core scenario pairs reuse exactly one three-card preview with appropriate defaults', () => {
+  for (const prefix of ['', 'en/']) for (const [path, scene] of [['', 'voice'], ['guides/iphone-agent-voice-drafts/', 'voice'], ['guides/bluetooth-audio-input-troubleshooting/', 'audio'], ['guides/recording-notes-handoff/', 'voice'], ['guides/multi-project-radar-watch/', 'radar']]) {
+    const html = read('dist/' + prefix + path + 'index.html');
+    assert.equal([...html.matchAll(/data-preview=/g)].length, 1);
+    assert.ok(html.includes('data-preview="' + scene + '"'));
+    assert.ok(html.includes('class="preview-scenes"'));
+    assert.ok(html.includes('aria-controls='));
+    if (!path) assert.ok(html.indexOf('class="preview-scenes"') < html.indexOf('id="capabilities-title"'));
+    if (path.includes('recording-notes')) assert.ok(html.includes(prefix ? 'no owner or deadline was agreed' : '还没约定负责人和时间'));
+  }
+});

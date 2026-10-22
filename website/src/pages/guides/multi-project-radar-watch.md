@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "外贸每日跟进简报：在iPhone先看询盘、依据与下一步"
 description: "把已有询盘与市场资料整理成受支持的JSON事项，在手机上查看优先跟进内容、来源与下一步；含合成示例。"
 lang: zh
+preview: radar
 ---
 
 <h2 id="first-answer">先找到一个有用的下一步</h2>
@@ -21,12 +22,12 @@ lang: zh
 
 </div>
 
-## 一个当前格式的合成简报
+<h2 id="brief-format">一个当前格式的合成简报</h2>
 
 示例只演示结构，不是真实商机或市场情报。下面的任务project与项目path对应；完整数据还包含decisions和active/stale/cold集合。
 
 ```json
-{"date_str":"2026-10-22 09:00（合成示例）","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"询盘规格待补","status":"等你决策","priority":"P1","next":"确认缺少的规格参数后起草回复","url":"https://example.com/brief","evidence":"合成材料，仅供预览"}],"decisions":[],"active":[{"name":"外贸跟进","path":"export-demo","timestamp":0,"message":"合成示例，非实时资料"}],"stale":[],"cold":[]}
+{"date_str":"2026-10-22 09:00:00","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"询盘规格待补","status":"等你决策","priority":"P1","next":"确认缺少的规格参数后起草回复","url":"https://example.com/brief","evidence":"合成材料，仅供预览"}],"decisions":[],"active":[{"name":"外贸跟进","path":"export-demo","timestamp":1792630800,"message":"合成示例，非实时资料"}],"stale":[],"cold":[]}
 ```
 
 把已有资料按受支持格式准备好，再通过兼容来源或文件导出接入。需要登录的数据按既有文件导出路径处理；网页账户登录与简报读取各自准备。

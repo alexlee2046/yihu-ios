@@ -15,17 +15,16 @@ const features = en ? [
   ['share-network', '看到的，也能带回来。', '系统分享', '把文字、链接和文件暂存进分享收件箱，再选择交给工作台的内容。不会自动发送。'],
 ];
 ---
-<section class="hero" aria-labelledby="hero-title">
-  <picture class="hero-photo"><source media="(max-width: 700px)" srcset="/images/workbench-small.webp" /><img src="/images/workbench.webp" width="1536" height="1024" fetchpriority="high" alt={en ? 'A laptop and an iPhone on a desk, showing an illustrative personal workbench.' : '桌上的笔记本与手中的 iPhone，展示个人工作台的使用场景示意。'} /></picture>
-  <div class="hero-copy wrap"><h1 id="hero-title">{en ? <>Speak your next step.<br />Keep work moving.</> : <>下一步，<span>先说下来。</span></>}</h1><p>{en ? 'Voice drafts, notes and your daily brief, around the Agent workspace you already use.' : '用语音草稿、录音笔记和每日简报，接续你已有的 Agent 网页工作台。'}</p><div class="hero-actions"><a class="button button-primary" href="#experience">{en ? 'Try the preview' : '试试场景预览'}<img src="/icons/arrow-right.svg" width="20" height="20" alt="" /></a><a class="button button-text" href={`${home}start/`}>{en ? 'See setup requirements' : '查看接入条件'}<img src="/icons/arrow-up-right.svg" width="20" height="20" alt="" /></a></div></div>
-  <p class="scene-caption">{en ? 'Illustrative scene and interface' : '场景与界面示意'}</p>
+<section class="task-hero wrap" aria-labelledby="hero-title">
+  <h1 id="hero-title">{en ? 'Speak your next step.' : '下一步，先说下来。'}</h1>
+  <p>{en ? 'Voice drafts, notes and your daily brief, around the Agent workspace you already use.' : '用语音草稿、录音笔记和每日简报，接续你已有的 Agent 网页工作台。'}</p>
+  <div class="hero-actions"><a class="button button-primary" href="#experience">{en ? 'Try a sample' : '试试免登录预览'}</a><a class="button button-text" href={`${home}start/`}>{en ? 'Source release · setup requirements' : '源码版本 · 查看接入条件'} →</a></div>
 </section>
-<HomeAnswers lang={lang} part="intro" />
-<div class="feature-ribbon wrap"><p>{en ? 'Your familiar workbench. A native touch.' : '熟悉的工作台，多一层原生体验。'}</p><span>{en ? 'On-device speech / Voice notes / Sharing' : '端侧语音 / 录音笔记 / 系统分享'}</span></div>
-<section class="experience-section wrap" id="experience" aria-labelledby="experience-title">
-  <div class="section-heading"><h2 id="experience-title">{en ? <>A thought.<br />Then a draft.</> : <>从一句话，<br />到一份草稿。</>}</h2><p>{en ? 'Try the handoff. Play a short sample, edit the words, then place them in a workbench draft.' : '亲手试一次：播放一段示例，校对文字，再把它填入工作台草稿。'}</p></div>
+<section class="task-preview wrap" id="experience" aria-labelledby="experience-title">
+  <h2 id="experience-title">{en ? 'Try a task. No login.' : '不用登录，先试一个场景。'}</h2>
   <Demo client:visible lang={lang} />
 </section>
+<HomeAnswers lang={lang} part="intro" />
 <section class="features-section wrap" aria-labelledby="features-title"><h2 id="features-title">{en ? 'Less distance between you and your work.' : '让想法，离工作更近一点。'}</h2><div class="feature-list">{features.map(([icon, title, label, description]) => <article class="feature-row"><div class="feature-label"><img src={`/icons/${icon}.svg`} alt="" width="24" height="24" /><span>{label}</span></div><div><h3>{title}</h3><p>{description}</p></div></article>)}</div></section>
 <p class="wrap" style="padding-bottom:32px"><a class="inline-link" href={`${home}guides/iphone-agent-voice-drafts/`}>{en ? 'Voice workspace or browser copy and paste? Choose a workflow.' : '语音工作台，还是浏览器复制粘贴？按任务选择。'}</a></p>
 <p class="wrap" style="padding-bottom:32px"><a class="inline-link" href={`${home}guides/recording-notes-handoff/#compare`}>{en ? 'Transcription app or action-item workflow?' : '转文字工具，还是行动项工作流？'}</a></p>
