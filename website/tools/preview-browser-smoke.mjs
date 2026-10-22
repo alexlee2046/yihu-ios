@@ -50,6 +50,7 @@ async function openPage(path, width, height) {
   await send('Page.enable', {}, sessionId);
   await send('Runtime.enable', {}, sessionId);
   await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 700 }, sessionId);
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] }, sessionId);
   await send('Page.addScriptToEvaluateOnNewDocument', { source: init }, sessionId);
   await send('Fetch.enable', { patterns: [{ urlPattern: '*', requestStage: 'Request' }] }, sessionId);
   const loaded = event('Page.loadEventFired', sessionId);
@@ -110,6 +111,11 @@ try {
   });
   const page = await openPage('/', 390, 844), s = page.session;
   assert.ok(results[0].cards.every(x => x.bottom <= 844), 'all three homepage cards are in the first viewport');
+  await act(s, "document.querySelector('.scenario-menu summary').click()");
+  const menu = await evaluate(s, "(()=>{const r=document.querySelector('.scenario-menu>div').getBoundingClientRect();return {left:r.left,right:r.right,links:document.querySelectorAll('.scenario-menu a').length,width:document.documentElement.scrollWidth}})()");
+  assert.ok(menu.left >= 0 && menu.right <= 390 && menu.width <= 390, 'scenario navigation fits the viewport: ' + JSON.stringify(menu));
+  assert.equal(menu.links, 4);
+  await act(s, "document.querySelector('.scenario-menu').open=false;document.activeElement?.blur()");
   await screenshot(s, 'home-zh-390');
   await act(s, "document.querySelector('.preview-scenes>button').focus()");
   await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9 }, s);

@@ -35,7 +35,7 @@
   .site-header nav a { white-space:nowrap; }
   .scenario-menu { position:relative; }
   .scenario-menu summary { cursor:pointer; }
-  .scenario-menu > div { position:absolute; top:calc(100% + 12px); left:0; width:min(320px,80vw); z-index:15; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px; box-shadow:0 12px 30px #0005; }
+  .scenario-menu > div { position:absolute; top:calc(100% + 12px); right:0; width:min(320px,80vw); z-index:15; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px; box-shadow:0 12px 30px #0005; }
   .scenario-menu a { display:block; padding:10px; min-height:44px; white-space:normal !important; }
   .guide-context { font-size:14px; margin-bottom:24px; }
   .reference-label { font-size:13px; color:var(--muted); }
@@ -169,6 +169,7 @@
     .site-header nav { gap:18px; font-size:13px; }
     html[lang='en'] .site-header nav { gap:14px; font-size:12px; }
     .site-header .language { padding-left:0; border:0; }
+    .scenario-menu > div { position:fixed; top:84px; left:20px; right:20px; width:auto; max-height:calc(100dvh - 104px); overflow:auto; }
     .github-nav { display:none; }
     .hero { height:760px; display:flex; flex-direction:column; }
     .hero-copy { padding-top:26px; }
