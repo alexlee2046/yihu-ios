@@ -10,7 +10,7 @@ const dist = resolve('dist');
 const output = resolve(process.env.RUNNER_TEMP || tmpdir(), 'yihu-preview-smoke');
 await mkdir(output, { recursive: true });
 const profile = await mkdtemp(resolve(tmpdir(), 'yihu-preview-chrome-'));
-let chrome, socket;
+let chrome, socket, chromeClosed;
 const results = [], failures = [];
 const pending = new Map(), listeners = new Map();
 let sequence = 0;
@@ -73,7 +73,8 @@ try {
   const cjk = execFileSync('fc-match', ['--format=%{family}', ':lang=zh-cn'], { encoding: 'utf8' });
   assert.ok(/Noto.*CJK/.test(cjk), 'Chinese glyphs must be available, not tofu: ' + cjk);
   const binary = execFileSync('which', ['google-chrome'], { encoding: 'utf8' }).trim();
-  chrome = spawn(binary, ['--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run', '--no-default-browser-check', '--disable-background-networking', '--disable-sync', '--disable-extensions', '--disable-component-update', '--remote-debugging-address=127.0.0.1', '--remote-debugging-port=0', '--user-data-dir=' + profile, 'about:blank'], { stdio: ['ignore', 'ignore', 'pipe'] });
+  chrome = spawn(binary, ['--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run', '--no-default-browser-check', '--disable-background-networking', '--disable-sync', '--disable-extensions', '--disable-component-update', '--remote-debugging-address=127.0.0.1', '--remote-debugging-port=0', '--user-data-dir=' + profile, 'about:blank'], { detached: true, stdio: ['ignore', 'ignore', 'pipe'] });
+  chromeClosed = once(chrome, 'close');
   let stderr = '';
   const ready = new Promise((resolve, reject) => {
     const timeout = setTimeout(() => reject(Error('Chrome did not become ready')), 15000);
@@ -175,13 +176,22 @@ try {
     } finally { await p.close(); }
   }
   assert.deepEqual(failures, []);
-  console.log('Browser preview acceptance PASS: 5 pages, 390/1440px, keyboard, sample switching, TTS mock/fallback, consent/privacy.');
+  // Success is reported only after the owned Chrome group and profile are cleaned up.
 } finally {
-  await writeFile(resolve(output, 'evidence.json'), JSON.stringify({ results, failures }, null, 2));
+  await writeFile(resolve(output, 'evidence.json'), JSON.stringify({ results, failures, cleanup: 'pending' }, null, 2));
   if (socket?.readyState === 1) { try { await send('Browser.close'); } catch { /* Exit may close the socket before a reply. */ } socket.close(); }
-  if (chrome && chrome.exitCode === null) {
-    chrome.kill('SIGTERM');
-    await Promise.race([once(chrome, 'exit'), new Promise(resolve => { const t = setTimeout(() => { chrome.kill('SIGKILL'); resolve(); }, 3000); t.unref(); })]);
+  if (chrome && chromeClosed) {
+    // This fresh process group belongs only to this test. Parent exit alone is not
+    // enough: Chrome utility children may still be flushing the temporary profile.
+    const signalGroup = signal => {
+      try { process.kill(-chrome.pid, signal); } catch (error) { if (error.code !== 'ESRCH') throw error; }
+    };
+    signalGroup('SIGTERM');
+    await Promise.race([chromeClosed, new Promise(resolve => { const t = setTimeout(resolve, 2000); t.unref(); })]);
+    signalGroup('SIGKILL');
+    await chromeClosed;
   }
-  await rm(profile, { recursive: true, force: true });
+  await rm(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+  await writeFile(resolve(output, 'evidence.json'), JSON.stringify({ results, failures, cleanup: 'closed' }, null, 2));
 }
+console.log('Browser preview acceptance PASS: 5 pages, 390/1440px, keyboard, sample switching, TTS mock/fallback, consent/privacy; owned browser closed.');
