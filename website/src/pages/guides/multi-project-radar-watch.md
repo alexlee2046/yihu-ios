@@ -22,7 +22,7 @@ preview: radar
 
 </div>
 
-## 一个当前格式的合成简报
+<h2 id="brief-format">一个当前格式的合成简报</h2>
 
 示例只演示结构，不是真实商机或市场情报。下面的任务project与项目path对应；完整数据还包含decisions和active/stale/cold集合。
 

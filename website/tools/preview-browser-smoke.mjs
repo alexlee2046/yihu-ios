@@ -56,7 +56,7 @@ async function openPage(path, width, height) {
   await send('Page.navigate', { url: 'https://getyihu.com' + path }, sessionId);
   await loaded;
   await evaluate(sessionId, '(async()=>{await document.fonts.ready;const i=document.querySelector("astro-island");if(i?.hasAttribute("ssr"))await new Promise(r=>i.addEventListener("astro:hydrate",r,{once:true}));return true})()');
-  await act(sessionId, "document.getElementById('analytics-deny').click()");
+  await act(sessionId, "document.getElementById('analytics-deny').click();document.activeElement?.blur()");
   const geometry = await evaluate(sessionId, `({path:location.pathname,width:innerWidth,scrollWidth:document.documentElement.scrollWidth,font: getComputedStyle(document.body).fontFamily,permissions:__permissions,autoplay:__speech.calls.length,scene:document.querySelector('[data-preview]').dataset.preview,cards:[...document.querySelectorAll('.preview-scenes>button')].map(x=>({bottom:x.getBoundingClientRect().bottom,name:x.textContent.trim()}))})`);
   assert.ok(geometry.scrollWidth <= width, JSON.stringify(geometry));
   assert.equal(geometry.permissions, 0); assert.equal(geometry.autoplay, 0);
@@ -69,6 +69,8 @@ async function screenshot(session, name) {
   await writeFile(resolve(output, name + '.png'), Buffer.from(data, 'base64'));
 }
 try {
+  const cjk = execFileSync('fc-match', ['--format=%{family}', ':lang=zh-cn'], { encoding: 'utf8' });
+  assert.ok(/Noto.*CJK/.test(cjk), 'Chinese glyphs must be available, not tofu: ' + cjk);
   const binary = execFileSync('which', ['google-chrome'], { encoding: 'utf8' }).trim();
   chrome = spawn(binary, ['--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run', '--no-default-browser-check', '--disable-background-networking', '--disable-sync', '--disable-extensions', '--disable-component-update', '--remote-debugging-address=127.0.0.1', '--remote-debugging-port=0', '--user-data-dir=' + profile, 'about:blank'], { stdio: ['ignore', 'ignore', 'pipe'] });
   let stderr = '';
@@ -110,10 +112,10 @@ try {
   assert.ok(results[0].cards.every(x => x.bottom <= 844), 'all three homepage cards are in the first viewport');
   await screenshot(s, 'home-zh-390');
   await act(s, "document.querySelector('.preview-scenes>button').focus()");
-  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Tab', code: 'Tab' }, s);
-  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Tab', code: 'Tab' }, s);
-  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter' }, s);
-  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter' }, s);
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9 }, s);
+  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9 }, s);
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13, text: '\r' }, s);
+  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 }, s);
   await act(s, 'void 0');
   assert.equal(await evaluate(s, "document.querySelector('[data-preview]').dataset.preview"), 'audio');
   await act(s, "[...document.querySelectorAll('.preview-checks select')].forEach((x,i)=>{x.value=['headset','yes','no','yes'][i];x.dispatchEvent(new Event('change',{bubbles:true}))})");

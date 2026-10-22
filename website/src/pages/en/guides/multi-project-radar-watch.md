@@ -22,7 +22,7 @@ Start the day with what needs your decision or follow-up, then inspect its sourc
 
 </div>
 
-## A synthetic brief in the current format
+<h2 id="brief-format">A synthetic brief in the current format</h2>
 
 This illustrates structure, not actual leads or market intelligence. Task project matches project path. A complete snapshot also carries decisions and active/stale/cold collections.
 

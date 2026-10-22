@@ -83,12 +83,12 @@ export default function Demo({ lang, initialScene = 'voice', initialVoiceSample 
       value.lang = en ? 'en-US' : 'zh-CN';
       utterance.current = value;
       value.onend = () => {
-        if (generation.current !== token) return;
+        if (generation.current !== token || utterance.current !== value) return;
         utterance.current = null; setReading(false);
         setAudioStatus(en ? 'Read-aloud finished. The summary below is preset sample output.' : '朗读结束；下方摘要仍是预设样例结果。');
       };
       value.onerror = () => {
-        if (generation.current !== token) return;
+        if (generation.current !== token || utterance.current !== value) return;
         utterance.current = null; setReading(false); setAudioStatus(fallback);
       };
       setReading(true);
