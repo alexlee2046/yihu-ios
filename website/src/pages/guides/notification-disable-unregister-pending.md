@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "关闭通知就远端解绑了吗？本地停用、待注销与绑定轮换回报"
 description: "核disable先本地关闭、尝试保留标记、unregister响应和轮换保存；disabled/超时非远端停推或零副本证明，不读Keychain或改变授权。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">本地开关关闭，不等远端已注销或系统通知权限已撤回</h2>

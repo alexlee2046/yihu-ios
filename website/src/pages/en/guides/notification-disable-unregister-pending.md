@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Does disabling notifications unregister remotely? Local choice, pending removal and binding rotation"
 description: "Review local false, attempted pending persistence, unregister acknowledgement and rotation. Disabled/timeout is not stopped remote delivery or deletion; no Keychain/authority change runs."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">A local off switch is not completed remote unregister or revoked system permission</h2>

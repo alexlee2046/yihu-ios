@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Why a reminder tap stays pending: voice guards, pendingURL and saved origins"
 description: "Review Hermes HTTPS/host admission, retained speech/notes, known origins and connected consumption. No new server is added; login/session/service success is not established."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">A reminder tap creates a pending link, not proof the destination session is usable</h2>

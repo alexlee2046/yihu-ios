@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "快捷指令返回就开麦了吗？30秒录音切换请求与一次消费"
 description: "核AppIntent仅置pendingToggle、前台就绪消费与录音中结束；30秒窗口非响应SLA/后台权限，重复请求Bool非N次排队，不保证设备绑定。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">系统意图返回，不等录音、填入或发送已经完成</h2>

@@ -1,81 +1,63 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Bluetooth connected but no recording? Diagnose Yihu audio by layer"
-description: "Separate permission, input routing, near-field policy, interruptions, model processing and destination drafts. Pairing is not headset certification or lock-screen hands-free acceptance."
+title: "iPhone Bluetooth mic not recording? Check the input in four steps"
+description: "A practical check for Bluetooth headsets, parked-car audio and the iPhone microphone: separate playback from recording, then choose a next step."
 lang: en
+preview: audio
 ---
 
-<h2 id="first-answer">Find the failing layer; paired does not establish the recording input</h2>
+<h2 id="first-answer">Start with a useful next step</h2>
 
-Bluetooth pairing, the active input, saved audio, local recognition and a web draft are five separate results. Yihu's near-field capture source requests `playAndRecord`, `voiceChat` and `allowBluetoothHFP`, but those options do not certify a headset or microphone route. In a safely stationary setting, check each layer using a synthetic phrase. Do not change the workbench first when recognition is absent, or blame the microphone first when only the remote draft is missing.
+Park or move somewhere safe, pause calls and other playback, then record a short sample. Compare the device, audible output, recording playback and a second sample after switching.
 
-## Identify the symptom first
+## Four checks, in order
 
-**No readable text**: inspect whether recording is permitted, microphone permission, actual input and model availability. Starting recording does not prove useful audio, and useful audio does not prove a compatible model is downloaded and verified.
+<div role="region" aria-label="Four audio input checks" tabindex="0">
 
-**Text exists but no draft**: retain it, then inspect the current workbench, captured page, editable composer and host refusal. Do not hand off the same recording note repeatedly to diagnose audio.
-
-**Failure after a headset change**: the input route, format or system audio session may have changed. Inspect actual saved/failure states. Retargeting and interruption handlers in source are not guarantees of lossless continuation.
-
-## Parameter and evidence layers
-
-<div role="region" aria-label="Bluetooth audio diagnostic layers, scroll horizontally" tabindex="0">
-
-| Layer | Observable evidence | Condition to inspect | Does not establish |
-| --- | --- | --- | --- |
-| Pairing | System reports a connected headset | The actual phone, headset and environment | Recording necessarily uses the headset microphone |
-| Permission | System microphone authorization and app messages | Explicit user permission; no bypass | Authorization guarantees usable audio |
-| Session policy | Near-field requests voiceChat/allowBluetoothHFP; disabled mode differs | Actual app version and selected policy; no blind setting changes | All HFP accessories work or wind/echo targets are met |
-| Audio/storage | Recording state, inspectable saved content and error messages | Space, calls/audio-service changes and input switches | Unlimited duration, no interruption or no lost words |
-| Transcription | Reviewable text and pending/failed/completed state | Compatible verified local models and an eligible foreground period | Verified minutes or a promised accuracy level |
-| Draft target | Text in the intended unsent composer | Same workbench/page, editable composer and host permission | Sent message, uploaded attachment or executed task |
-| Watch | Existing phone summary and handoff state | Pairing, phone reachability and original eligibility checks | Correct headset input, standalone intercom or direct Watch writes |
+| Step | What to check | Next action |
+|---|---|---|
+| 1. Device | Phone, headset or parked-car audio? | Decide which microphone you intend to use; a paired name alone does not select it. |
+| 2. Playback | Can you hear a prompt or recording after pausing other playback? | Check output and volume first if not, then check recording. |
+| 3. Sample | Record a phrase in an app with permission and play it back. | For quiet/silent input, check that app's mic permission and compare the phone mic. |
+| 4. Switch | Disconnect the accessory, record on the phone, then reconnect and compare. | If only the accessory fails, inspect available input choices, device settings and app compatibility. |
 
 </div>
 
-## Localize with one synthetic phrase
+## Turn the result into one next step
 
-1. In a safe stationary location, choose a workbench that permits drafts and contains no real orders or private content. Use “Prepare a sample reading list; keep a draft without sending.”
-2. Inspect input/output and permission through the actual system interface. Note non-sensitive conditions such as headset model, system version and a recent route change, not unique device IDs, accounts or service tokens.
-3. Observe recording/storage errors. Stop at capture if there is no usable audio evidence; requesting system processing is not proof sound was captured.
-4. With audio but no text, inspect models and transcription state. A longer note can wait for foreground processing. Pending is neither failure nor a guarantee of continuous background work.
-5. With text, inspect whether it was already inserted. Short speech may automatically attempt guarded delivery; unknown editors, busy states and host refusal are not solved by changing headsets.
-6. On uncertainty, inspect destination content and retain the original. Never clear a note's one-handoff marker to force another attempt.
+- **Playback works, recording does not:** inspect the recording app's microphone permission and any available system input selector, then test a phrase.
+- **Phone records, accessory does not:** keep this comparison and check the accessory connection/settings. Output alone does not establish input readiness.
+- **Trouble after a call or returning to the app:** stop the current capture, reopen recording in the foreground and inspect retained text before starting another clip.
+- **Recording works, but the page has no text:** check speech models and the intended workspace/editor. Keep the transcript while reviewing the destination.
 
-This is not a completed physical-device test and does not require customer content to reproduce a problem. Stop reproduction if it only occurs while moving, in a dangerous place or where recording is not permitted.
+## Where Yihu fits
 
-## Useful evidence for a maintainer
-
-Provide the source/build version, system/headset model, failing layer, whether it followed a new recording or input switch, a shareable error category and whether the synthetic phrase became readable text. Do not expose real audio, private tasks, workbench URL parameters, accounts, unique device identifiers or signing material in screenshots/logs. “Audio save failed” is more useful than an unsupported conclusion that Bluetooth is incompatible.
+Yihu uses iPhone audio input, transcribes with prepared local models and hands text to a compatible web draft. This checklist suggests a next action; it does not inspect or switch a website visitor's Bluetooth hardware. Available inputs vary by system/device/app. Operate car controls only while parked.
 
 ## FAQ
 
-<h3 id="faq-connected">Why does connected not prove the headset microphone is in use?</h3>
+<h3 id="faq-output">Why does recording use my phone when the headset plays music?</h3>
 
-Connection describes pairing. System routing and the app's session affect actual input, which needs checking on the device. This page does not promise a dedicated app route-diagnostics screen.
+Playback and capture are separate choices. Compare short phone/accessory recordings and inspect the input options your system provides.
 
-<h3 id="faq-near-field">Is near-field mode a required universal fix?</h3>
+<h3 id="faq-permission">Where do I check mic permission?</h3>
 
-No. The source configures different session/processing paths for its two states. Check the actual version and established configuration; this page does not require permanent changes or treat a processing mode as a benchmark result.
+Open Settings → Privacy & Security → Microphone for the recording app. A web workspace and native capture can have different permission requirements.
 
-<h3 id="faq-call">Can recording always resume completely after a call?</h3>
+<h3 id="faq-car">Should I do this while driving?</h3>
 
-No such guarantee follows. Note source handles interruptions, media-service resets and input changes separately, and may report retention up to interruption. Inspect saved content and joins; recovery code is not device acceptance.
+Park first. This is a troubleshooting checklist, not driving guidance or a dedicated CarPlay interface.
 
-<h3 id="faq-airpods">Which AirPods model is guaranteed compatible?</h3>
+<h3 id="faq-quality">Is a particular headset guaranteed to work well?</h3>
 
-No model-level device matrix was tested in this work, so there is no guaranteed list. Allowing Bluetooth HFP is not acceptance of every model, firmware or audio scenario.
+Try it on your own device and in your environment. No headset, wind-noise, distance or accuracy promise is made without device evidence.
 
-<h3 id="faq-empty-draft">Should I record again when text exists but the draft is empty?</h3>
+## Continue
 
-First inspect the target, captured page, busy/refusal state and existing destination content. Do not repeat insertion blindly after a handoff attempt or uncertainty. Separate audio diagnosis from web-write diagnosis.
+[Voice drafts](/en/guides/iphone-agent-voice-drafts/) · [Audio checks](/en/guides/bluetooth-audio-input-troubleshooting/) · [Voice notes](/en/guides/recording-notes-handoff/) · [Daily brief](/en/guides/multi-project-radar-watch/) · [Setup](/en/start/) · [Privacy](/en/privacy/)
 
-<h3 id="faq-lock-screen">Does this certify lock-screen recording and continuous button-free dispatch?</h3>
+<details><summary>Implementation references</summary>
 
-No. This is layered troubleshooting, not a lock-screen, riding or long-call test. No group voice channel or production-dispatch delivery is promised.
+[Frozen implementation](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift) · [README](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md) · [Apple microphone help](https://support.apple.com/en-ie/101600)
 
-## Continue troubleshooting
-
-[Stationary preflight](/en/guides/outdoor-store-voice-preflight/) · [Offline/weak-network handoff](/en/guides/offline-workbench-handoff-troubleshooting/) · [Short voice drafts](/en/guides/iphone-agent-voice-drafts/) · [Recording notes](/en/guides/recording-notes-handoff/) · [Privacy](/en/privacy/) · [Setup](/en/start/)
-
-Evidence: [audio capture policy](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift), [note interruptions/input changes](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieNoteRecorder.swift), [README scope](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md).
+</details>

@@ -3,8 +3,8 @@ import '@fontsource-variable/manrope';
 import '../styles/global.css';
 import answers from '../data/home-answers.json';
 import AnalyticsConsent from '../components/AnalyticsConsent.astro';
-interface Props { title: string; description?: string; lang?: 'zh' | 'en'; }
-const { title, description = '一呼，为你的 Agent 工作台带来 iPhone 原生语音、录音笔记与系统分享。', lang = 'zh' } = Astro.props;
+interface Props { title: string; description?: string; lang?: 'zh' | 'en'; indexable?: boolean; }
+const { title, description = '一呼，为你的 Agent 工作台带来 iPhone 原生语音、录音笔记与系统分享。', lang = 'zh', indexable = true } = Astro.props;
 const en = lang === 'en';
 const home = en ? '/en/' : '/';
 // Fixed production origin: query strings, previews and request hosts never define canonical URLs.
@@ -77,9 +77,12 @@ const schemaJSON = JSON.stringify(schema).replace(/</g, '\\u003c');
     <meta name="description" content={description} />
     <meta name="google-site-verification" content="3l0K41PF0zsd9A5CFd4Xu6n3MdFCEGOfDLzYI1pISt0" />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="zh-CN" href={origin + zhPath} />
-    <link rel="alternate" hreflang="en" href={origin + enPath} />
-    <link rel="alternate" hreflang="x-default" href={origin + zhPath} />
+    {!indexable && <meta name="robots" content="noindex,follow" />}
+    {indexable && <>
+      <link rel="alternate" hreflang="zh-CN" href={origin + zhPath} />
+      <link rel="alternate" hreflang="en" href={origin + enPath} />
+      <link rel="alternate" hreflang="x-default" href={origin + zhPath} />
+    </>}
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={origin + '/images/brand.webp'} />
     <meta property="og:image:alt" content={en ? 'Yihu app icon' : '一呼应用图标'} />
@@ -100,9 +103,8 @@ const schemaJSON = JSON.stringify(schema).replace(/</g, '\\u003c');
         <span><strong>一呼</strong><small>YIHU</small></span>
       </a>
       <nav aria-label={en ? 'Main navigation' : '主导航'}>
-        <a href={`${home}#experience`}>{en ? 'Try it' : '体验'}</a>
-        <a href={`${home}start/`}>{en ? 'Get started' : '开始使用'}</a>
-        <a class="github-nav" href="https://github.com/alexlee2046/yihu-ios">GitHub</a>
+        <details class="scenario-menu"><summary>{en ? 'Scenarios' : '使用场景'}</summary><div>{copy.scenarios.map(scene => <a href={`${home}guides/${scene.slug}/`}>{scene.title}</a>)}</div></details>
+        <a href={`${home}start/`}>{en ? 'Setup' : '接入条件'}</a>
         <a class="language" href={alternate} lang={en ? 'zh-CN' : 'en'} aria-label={en ? '切换到中文' : 'Switch to English'}>{en ? '中文' : 'EN'}</a>
       </nav>
     </header>
