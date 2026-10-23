@@ -40,7 +40,6 @@ export function mountContactChat(root: HTMLElement) {
   const { baseUrl, websiteToken } = config.chat;
   const win = window as ChatWindow;
   const en = root.dataset.lang === 'en';
-  const label = button.textContent;
   let started = false, ready = false, failed = false, inactive = false, sdkStarted = false;
   let ownedAPI: ChatAPI | undefined;
   let script: HTMLScriptElement | undefined;
@@ -61,7 +60,6 @@ export function mountContactChat(root: HTMLElement) {
     clearTimeout(timer);
     script?.remove();
     button.disabled = true;
-    button.textContent = label;
     button.removeAttribute('aria-busy');
     status.textContent = en ? 'Chat could not load. Refresh the page to try again.' : '客服暂未能加载，请刷新页面后重试。';
   };
@@ -73,7 +71,6 @@ export function mountContactChat(root: HTMLElement) {
     ready = true;
     clearTimeout(timer);
     button.disabled = false;
-    button.textContent = label;
     button.removeAttribute('aria-busy');
     status.textContent = '';
     try { win.$chatwoot.toggle('open'); } catch { fail(); }
@@ -89,7 +86,7 @@ export function mountContactChat(root: HTMLElement) {
     win.chatwootSettings = { hideMessageBubble: true, showUnreadMessagesDialog: false, locale: en ? 'en' : 'zh_CN', useBrowserLanguage: false };
     // Keep native keyboard focus while the guarded single attempt is pending.
     button.setAttribute('aria-busy', 'true');
-    button.textContent = en ? 'Loading chat…' : '正在加载客服…';
+    status.textContent = en ? 'Loading chat…' : '正在加载客服…';
     script = document.createElement('script');
     script.src = `${baseUrl}/packs/js/sdk.js`;
     script.async = true;

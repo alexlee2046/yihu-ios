@@ -123,6 +123,6 @@ test('integration never adds user identity, draft extraction, sending APIs or an
   for (const forbidden of ['setUser(', 'setCustomAttributes(', 'getUserMedia', 'localStorage', 'sessionStorage', 'gtag(', 'fetch(', 'XMLHttpRequest', 'chatwoot:on-message', 'chatwoot:closed', 'chatwoot:opened']) assert.ok(!source.includes(forbidden),forbidden);
   const layout=read('src/layouts/Layout.astro');
   assert.ok(layout.includes('contact.chat && <ContactChat'));
-  assert.ok(layout.includes('contact.email && <a href={`mailto:${contact.email}`}'));
+  assert.ok(layout.includes('contact.email && <a class="contact-email" href={`mailto:${contact.email}`}'));
   assert.ok(!layout.includes('bcc=') && !layout.includes('subject='));
 });

@@ -100,6 +100,14 @@ for (const [engine,type] of [['chromium',chromium],['webkit',webkit]]) {
           assert.equal(events.length,0,'contact never adds preview/user-content telemetry');
           item.keys='native Enter/Space and focused-launcher Escape; external iframe keyboard untested';
           item.mail='href only; no mail app or sending API invoked';
+          await page.screenshot({path:resolve(output,`${engine}-configured-main-${path==='/en/'?'en':'zh'}-${width}.png`),fullPage:false});
+          await email.scrollIntoViewIfNeeded();
+          item.footer=await email.evaluate(a=>{
+            const r=a.getBoundingClientRect(),b=document.querySelector('[data-contact-chat] button').getBoundingClientRect();
+            return {width:r.width,height:r.height,covered:!(r.right<=b.left||r.left>=b.right||r.bottom<=b.top||r.top>=b.bottom)};
+          });
+          assert.ok(item.footer.width>=44 && item.footer.height>=44,'mail touch target');
+          assert.equal(item.footer.covered,false,'launcher must not cover the mail link');
         }
         const g=await geometry(page);assert.ok(g.scrollWidth<=width,'no page-level horizontal overflow');
         assert.deepEqual(network.unexpected,[]);assert.deepEqual(errors,[]);

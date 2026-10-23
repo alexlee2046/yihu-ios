@@ -115,7 +115,7 @@ const schemaJSON = JSON.stringify(schema).replace(/</g, '\\u003c');
     <footer class="site-footer wrap">
       <a class="footer-wordmark" href={home}>一呼 <span>YIHU</span></a>
       <p>{en ? 'Your workbench. Within reach.' : '你的工作台，随时在手边。'}</p>
-      <div>{contact.email && <a href={`mailto:${contact.email}`}>{en ? 'Email us' : '联系邮箱'}</a>}<a href={`${home}privacy/`}>{en ? 'Privacy' : '隐私说明'}</a><a href="https://github.com/alexlee2046/yihu-ios">GitHub</a><a href="https://github.com/alexlee2046/yihu-ios/blob/main/LICENSE">Apache 2.0</a><button id="analytics-settings" type="button" hidden aria-controls="analytics-consent" aria-expanded="false">{en ? 'Analytics preferences' : '统计偏好'}</button></div>
+      <div>{contact.email && <a class="contact-email" href={`mailto:${contact.email}`}>{en ? 'Email us' : '联系邮箱'}</a>}<a href={`${home}privacy/`}>{en ? 'Privacy' : '隐私说明'}</a><a href="https://github.com/alexlee2046/yihu-ios">GitHub</a><a href="https://github.com/alexlee2046/yihu-ios/blob/main/LICENSE">Apache 2.0</a><button id="analytics-settings" type="button" hidden aria-controls="analytics-consent" aria-expanded="false">{en ? 'Analytics preferences' : '统计偏好'}</button></div>
     </footer>
     <AnalyticsConsent lang={lang} />
     {contact.chat && <ContactChat chat={contact.chat} lang={lang} />}

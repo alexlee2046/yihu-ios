@@ -130,6 +130,7 @@
   .footer-wordmark { color:var(--ink); font-size:20px; white-space:nowrap; }
   .footer-wordmark span { font-size:10px; margin-left:8px; letter-spacing:.2em; }
   .site-footer > div { display:flex; flex-wrap:wrap; align-items:center; gap:16px 26px; margin-left:auto; }
+  .contact-email { display:inline-flex; align-items:center; min-width:44px; min-height:44px; }
   body:has(.contact-chat) .site-footer { padding-bottom:calc(104px + env(safe-area-inset-bottom)); }
   .document { max-width:800px; margin-inline:auto; padding:64px 32px 100px; }
   .document h1 { font-size:clamp(40px,5vw,64px); margin-bottom:24px; }
