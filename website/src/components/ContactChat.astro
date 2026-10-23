@@ -1,0 +1,24 @@
+---
+import type { ContactConfig } from '../lib/contact-channels';
+interface Props { chat: NonNullable<ContactConfig['chat']>; lang: 'zh' | 'en'; }
+const { chat, lang } = Astro.props;
+const en = lang === 'en';
+---
+<div class="contact-chat" data-contact-chat data-base-url={chat.baseUrl} data-website-token={chat.websiteToken} data-lang={lang}>
+  <button class="button button-primary" type="button" aria-describedby="contact-chat-notice" aria-label={en ? 'Open or close support chat' : '打开或关闭客服窗口'} title={en ? 'Load external support chat when clicked' : '点击后加载外部客服'}>
+    {en ? 'Chat' : '客服咨询'}
+  </button>
+  <span id="contact-chat-notice" class="contact-notice">{en ? 'Loads external support chat only when you open it. See the privacy page for data handling.' : '主动打开后才加载外部客服，数据处理详见隐私说明。'}</span>
+  <p role="status" aria-live="polite"></p>
+</div>
+<script>
+  import { mountContactChat } from '../lib/contact-channels';
+  document.querySelectorAll<HTMLElement>('[data-contact-chat]').forEach(mountContactChat);
+</script>
+<style>
+  .contact-chat { position:fixed; right:max(20px,env(safe-area-inset-right)); bottom:calc(var(--contact-bottom,20px) + env(safe-area-inset-bottom)); z-index:30; max-width:calc(100vw - 40px); }
+  .contact-chat .button { min-height:52px; box-shadow:0 4px 20px #0004; }
+  .contact-notice { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+  .contact-chat p { position:absolute; bottom:100%; right:0; width:260px; max-width:calc(100vw - 40px); background:var(--surface); color:var(--ink); border:1px solid var(--line); border-radius:var(--radius); padding:12px; margin-bottom:8px; font-size:13px; }
+  .contact-chat p:empty { display:none; }
+</style>
