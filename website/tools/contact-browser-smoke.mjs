@@ -104,10 +104,11 @@ for (const [engine,type] of [['chromium',chromium],['webkit',webkit]]) {
           await email.scrollIntoViewIfNeeded();
           item.footer=await email.evaluate(a=>{
             const r=a.getBoundingClientRect(),b=document.querySelector('[data-contact-chat] button').getBoundingClientRect();
-            return {width:r.width,height:r.height,covered:!(r.right<=b.left||r.left>=b.right||r.bottom<=b.top||r.top>=b.bottom)};
+            const controls=[...document.querySelectorAll('.site-footer a,.site-footer button')].map(node=>{ const c=node.getBoundingClientRect(); return {control:node.id||node.className||node.tagName,width:c.width,height:c.height,covered:!(c.right<=b.left||c.left>=b.right||c.bottom<=b.top||c.top>=b.bottom)}; }).filter(c=>c.width>0&&c.height>0);
+            return {width:r.width,height:r.height,controls};
           });
           assert.ok(item.footer.width>=44 && item.footer.height>=44,'mail touch target');
-          assert.equal(item.footer.covered,false,'launcher must not cover the mail link');
+          assert.ok(item.footer.controls.every(c=>!c.covered),'launcher must not cover any footer control, including analytics preferences');
         }
         const g=await geometry(page);assert.ok(g.scrollWidth<=width,'no page-level horizontal overflow');
         assert.deepEqual(network.unexpected,[]);assert.deepEqual(errors,[]);
