@@ -1,75 +1,56 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before recording in a parked vehicle or exhibition: accessory input checks"
-description: "Check phone, car, headset and adapter input roles only in safe stationary authorized settings. No noise benchmark, accessory certification, driving-time dispatch or automatic microphone selection."
+title: "Before recording at a parked car or exhibition, test one phrase"
+description: "Move somewhere safe where recording is permitted. Choose the intended microphone, record a synthetic phrase and play it back. Check the sound and text before starting your own note."
 lang: en
 ---
 
-<h2 id="first-answer">Establish safe authorized capture first, then inspect accessories; noise is not a benchmark</h2>
+<h2 id="first-answer">Start with one useful check</h2>
 
-For mobile notes, park safely or leave exhibition aisles/hazardous equipment areas and confirm recording permission. Do not operate the phone while driving or needing environmental attention. A Bluetooth/car/wired device name establishes neither the actual input, prepared model nor reliable noisy recognition. Near-field configuration is a source policy; no high-noise test, guaranteed model recommendation or new accessory selector is supplied.
+Move somewhere safe where recording is permitted. Choose the intended microphone, record a synthetic phrase and play it back. Check the sound and text before starting your own note.
 
-## Different from earlier guides
+## Try this order
 
-Stationary preflight covers the overall text workflow; input diagnosis addresses failed capture; the recovery matrix addresses events after recording begins. Here **before starting, identify each accessory's input/output role and whether safety/permission allow capture at all**. Do not manufacture failures by repeatedly switching devices.
+1. Park fully or leave the exhibition aisle; confirm participant consent and recording scope.
+2. Pause other playback and calls. Inspect available input options separately from output.
+3. Record “Do not send these 3 sample items; keep a draft,” play it back and check the number and negation in the text.
+4. Check the intended unsent draft. After changing devices or finishing a call, repeat a short sample.
 
-## Environment and accessory preflight
+<div role="region" aria-label="Choose your next step" tabindex="0">
 
-<div role="region" aria-label="Parked-vehicle/exhibition accessory checks, scroll horizontally" tabindex="0">
-
-| Context/accessory | Confirm before starting | Non-sensitive evidence | Stop condition/no guarantee |
-| --- | --- | --- | --- |
-| Parked location | Stationary, not obstructing traffic, applicable rules followed | Whether safe stationary conditions exist | No phone operation while driving; no hands-free-driving promise |
-| Exhibition position | Recording permitted, away from bystanders/aisles | Authorized synthetic phrase and bounded scope | No unauthorized customers, badges or private discussions |
-| Phone input | Actual system microphone and permission | Current visible permission/route state | A nearby phone does not prove built-in input is active |
-| Bluetooth headset | Input/output roles checked separately | Model/system version and actual route, not unique IDs | Paired does not certify microphone use or compatibility |
-| Vehicle Bluetooth | Which system/session currently uses the connection | Actual route and audio operation | Successful car playback is not app capture/lock-screen acceptance |
-| Wired/USB/adapter | System supplies an input and compatible format | Device type/visible state | No arbitrary-adapter certification or purchase requirement |
-| Speakers/other playback | Interference with capture or disclosure risk | Stop unnecessary playback you started | voiceChat is not zero-echo/noise-performance evidence |
-| Model/target | Verified available model, authorized non-executing blank draft | Actual version and target readiness | Accessories do not replace models, services, permission or confirmation |
+| Your situation | What to do | Before continuing |
+|---|---|---|
+| Phone microphone | Make a comparison recording first. | Use it as a baseline for the accessory. |
+| Headset / parked-car audio | Inspect available input and record. | Music playback establishes output only. |
+| Wired / USB input | Check whether the system offers it. | Try existing hardware before buying accessories. |
+| Overwhelming background sound | Move somewhere quieter or take manual notes. | Device, environment and model all affect the result. |
 
 </div>
 
-## One synthetic check only when prerequisites are ready
-
-Decide between a local note and a workbench draft before testing. Do not send equipment tests to real orders/customer conversations. Use “Prepare a sample equipment checklist; keep a draft without sending,” then distinguish capture, recognition and destination results. This page runs no test, requests no permission and connects no accessory.
-
-Stop with unresolved conditions if the environment/input is unsuitable. Higher volume, approaching other people's conversations and repeated recording are not default fixes. After a device change or call during capture, use the corresponding recovery matrix rather than treating preflight as proof of complete recording.
-
-## Record conditions, not invented performance
-
-A useful finding is “authorized stationary location, actual input still unconfirmed, capture not started,” not “car Bluetooth supports reliable noisy calls.” Device, firmware, distance, background sound, route and model can affect outcomes. Source settings are not fixed-device/environment evidence.
-
-No wind suppression, signal-to-noise ratio, distance, accuracy, battery or lock-screen continuity is promised. Selecting equipment supplies no group channel, real-time dispatch or emergency-delivery guarantee. Safety-related communication needs established validated channels, not this static page.
-
 ## FAQ
 
-<h3 id="faq-driving">Does car Bluetooth permit operating Yihu while driving?</h3>
+<h3 id="faq-step-1">Can I test while driving?</h3>
 
-Not on this guide. Park safely and follow applicable rules. Phone operation or audio isolation must not compromise environmental awareness.
+Park first. Do not operate the phone while driving or when attention to the surroundings is required.
 
-<h3 id="faq-booth">Can real exhibition customer conversations be recognition samples?</h3>
+<h3 id="faq-step-2">What material should I use at an exhibition?</h3>
 
-Do not collect real customers, badges or private discussions for public tests. Confirm permission/scope and use authorized synthetic material.
+Use synthetic phrases within the agreed scope, away from customer records and unrelated conversations.
 
-<h3 id="faq-output">Does successful car playback prove microphone capture?</h3>
+<h3 id="faq-step-3">Which headset is guaranteed to be better?</h3>
 
-No. Output and input differ. Inspect the actual system/app route; this guide provides no automatic microphone selector or occupancy probe.
+Try your own device. There is no high-noise test or model-specific performance guarantee here.
 
-<h3 id="faq-wired">Is wired/USB always better than Bluetooth?</h3>
+<h3 id="faq-step-4">What changes after switching hardware?</h3>
 
-No detached-device/environment guarantee is appropriate. Check the actual input/format. There is no performance ranking, certification list or purchase requirement here.
+Repeat the check before starting, review the selected input and inspect any existing draft.
 
-<h3 id="faq-noise">Does near-field voiceChat prove reliable high-noise recognition?</h3>
+## Continue with your task
 
-No. It requests system processing, not a measured noise level, device combination, accuracy or endurance result.
+[Voice drafts](/en/guides/iphone-agent-voice-drafts/) · [Audio input checks](/en/guides/bluetooth-audio-input-troubleshooting/) · [Voice notes](/en/guides/recording-notes-handoff/) · [Setup](/en/start/) · [Privacy](/en/privacy/)
 
-<h3 id="faq-ready">Can preflight conclusions survive a later headset change unchanged?</h3>
+<details><summary>Implementation reference</summary>
 
-Do not assume that. Routes/formats can change. Initial readiness does not establish later recovery; inspect actual retention/interruption and destination state.
+[README](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md) · [Frozen implementation](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
 
-## Reading and source
-
-[Stationary workflow](/en/guides/outdoor-store-voice-preflight/) · [Input diagnosis](/en/guides/bluetooth-audio-input-troubleshooting/) · [Recovery source matrix](/en/guides/audio-route-recovery-matrix/) · [Manual correction](/en/guides/noisy-transcript-text-correction/) · [Start](/en/start/) · [Privacy](/en/privacy/)
-
-Evidence: [near-field/capture source](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift), [README device/model/service limits](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md).
+</details>

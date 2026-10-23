@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "Watch点了在手机打开就打开了吗？queued、前台路由与本地任务核对"
 description: "核open基本消息确认与phone前台二次验证；sourceToken不当登录权限，不套用voice/draft的taskToken门，queued非UI/业务成功。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">接纳打开请求，不等手机已经显示正确事项</h2>

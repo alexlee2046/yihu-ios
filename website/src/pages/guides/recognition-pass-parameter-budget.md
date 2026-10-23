@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "识别参数什么时候生效？每pass快照与输出token预算核对"
 description: "核语言/usesTerms/maxTokens快照、448默认64–1024范围；token不是字数/音频秒，调高不直接提高准确率，不提供实时或Agent云端调参。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">一次识别的参数快照，不等整段会话永久同设置或实时调参</h2>

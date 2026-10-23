@@ -54,10 +54,14 @@ test('unknown runtime parameters and disabled tags cannot leak arbitrary content
 test('all three Radar examples use existing native fields and matching project identities in both languages', () => {
   const data = JSON.parse(read('src/data/preview-samples.json'));
   const model = readFileSync(new URL('../Apps/Collie/CollieRadarModel.swift', root), 'utf8');
+  assert.ok(model.includes('formatter.dateFormat = "yyyy-MM-dd HH:mm"'));
+  assert.ok(model.includes('formatter.string(from: date) == date_str'));
   for (const lang of ['zh', 'en']) for (const name of ['inquiry', 'market', 'followup']) {
     const sample = data[lang].radar[name];
     assert.deepEqual(Object.keys(sample).sort(), ['active', 'cold', 'date_str', 'decisions', 'stale', 'tasks']);
-    assert.equal(typeof sample.date_str, 'string');
+    assert.match(sample.date_str, /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
+    assert.equal(sample.date_str.length, 16);
+    assert.equal(new Date(sample.date_str.replace(' ', 'T') + ':00+08:00').getTime() / 1000, sample.active[0].timestamp);
     assert.equal(sample.tasks.length, 1);
     for (const [kind, rows] of [['tasks', sample.tasks], ['active', sample.active]]) for (const row of rows) for (const key of Object.keys(row)) assert.ok(new RegExp('(?:let|var)\\s+' + key + '\\s*[:=]').test(model), kind + '.' + key);
     assert.equal(sample.tasks[0].project, sample.active[0].path);
@@ -79,4 +83,22 @@ test('recording-note intent is distinct from the web-draft buyer scenario', () =
   const h = harness({ canonical: 'https://getyihu.com/en/guides/recording-notes-handoff/' });
   assert.equal(h.track('preview_complete', 'notes', 'en', 'insert'), true);
   assert.equal(h.calls[0][2].scenario, 'notes');
+});
+
+test('Radar guide examples preserve native minute precision and successful snapshot-read semantics', () => {
+  for (const prefix of ['', 'en/']) {
+    const source = read('src/pages/' + prefix + 'guides/multi-project-radar-watch.md');
+    const json = source.split('```json')[1].split('```')[0].trim();
+    const sample = JSON.parse(json);
+    assert.match(sample.date_str, /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
+    assert.ok(source.includes('UTC+08:00') && source.includes('yyyy-MM-dd HH:mm'));
+    assert.ok(source.includes(prefix ? 'last successful source-read time' : '最后一次成功读取来源的时间'));
+    assert.ok(source.includes(prefix ? 'not an inquiry or market document date' : '不是询盘或市场文档的日期'));
+  }
+});
+test('preflight recording phrases actually contain the requested number and negation', () => {
+  const zh = read('src/pages/guides/vehicle-exhibition-microphone-preflight.md');
+  const en = read('src/pages/en/guides/vehicle-exhibition-microphone-preflight.md');
+  assert.ok(zh.includes('不要发送这3项示例清单，只留草稿'));
+  assert.ok(en.includes('Do not send these 3 sample items; keep a draft'));
 });

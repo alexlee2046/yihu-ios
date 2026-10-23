@@ -10,7 +10,7 @@ permissions:
 jobs:
   website:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: website
@@ -30,7 +30,16 @@ jobs:
       - run: npm test
       - name: Prepare Chinese glyphs for Linux visual checks
         run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends fonts-noto-cjk
-      - name: Browser preview acceptance (existing remote runner)
+      - name: Prepare pinned test-only WebKit SDK
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/yihu-playwright-browsers
+        run: |
+          npm install --prefix "$RUNNER_TEMP/yihu-browser-sdk" --no-save --ignore-scripts --no-audit --no-fund playwright@1.64.1
+          node "$RUNNER_TEMP/yihu-browser-sdk/node_modules/playwright/cli.js" install --with-deps webkit
+      - name: Chromium and WebKit preview acceptance
+        env:
+          NODE_PATH: ${{ runner.temp }}/yihu-browser-sdk/node_modules
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/yihu-playwright-browsers
         run: node tools/preview-browser-smoke.mjs
       - name: Verify committed discovery exports
         run: python3 tools/export-llms.py --check && git diff --exit-code -- public/llms.txt public/llms-full.txt

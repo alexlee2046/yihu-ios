@@ -27,7 +27,7 @@ Start the day with what needs your decision or follow-up, then inspect its sourc
 This illustrates structure, not actual leads or market intelligence. Task project matches project path. A complete snapshot also carries decisions and active/stale/cold collections.
 
 ```json
-{"date_str":"2026-10-22 09:00:00","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"Missing inquiry specifications","status":"等你决策","priority":"P1","next":"Confirm missing parameters before drafting a reply","url":"https://example.com/brief","evidence":"Synthetic material for preview"}],"decisions":[],"active":[{"name":"Export follow-up","path":"export-demo","timestamp":1792630800,"message":"Synthetic, not live material"}],"stale":[],"cold":[]}
+{"date_str":"2026-10-22 09:00","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"Missing inquiry specifications","status":"等你决策","priority":"P1","next":"Confirm missing parameters before drafting a reply","url":"https://example.com/brief","evidence":"Synthetic material for preview"}],"decisions":[],"active":[{"name":"Export follow-up","path":"export-demo","timestamp":1792630800,"message":"Synthetic, not live material"}],"stale":[],"cold":[]}
 ```
 
 Prepare the supported shape using your existing workflow, then connect a compatible source or supported file export. Authenticated material uses the existing file-export path; web login and brief access have separate setup.
@@ -37,6 +37,22 @@ Prepare the supported shape using your existing workflow, then connect a compati
 Yihu makes tasks and workspace handoff accessible on iPhone. Your email, CRM and documents still supply data and handle actual follow-up. Yihu does not automatically connect those accounts or supply a lead database/collection service. Check original material when its freshness is unclear.
 
 A paired Apple Watch can show phone summaries and prompt you to return to the phone. Confirm important decisions in the phone and original business workflow.
+
+<h2 id="case-guide">What to fill in each of the three sample cases</h2>
+
+The preview switches business situations, not a hidden processing queue. All three use the same supported task fields.
+
+<div role="region" aria-label="Prepare inquiry market and follow-up material" tabindex="0">
+
+| Case | Bring your own material | Map it to existing fields | Review before acting |
+|---|---|---|---|
+| Inquiry | The actual question and missing specifications. | title: gap; next: what to ask; evidence/url: original material. | Quote scope and delivery time remain open until confirmed. |
+| Market | A dated source relevant to the current task. | title: item to review; evidence/url: source; next: what to check. | A synthetic example is not market intelligence or a buying signal. |
+| Follow-up | Your last contact note and unresolved question. | title: outstanding task; next: preparation; project: matching project path. | Continue in your existing business tool after review; no scheduled sending is implied. |
+
+</div>
+
+date_str is the snapshot’s last successful source-read time in UTC+08:00, using exactly yyyy-MM-dd HH:mm (no seconds), not an inquiry or market document date. Preserve it after a failed read; put document dates in the evidence text. Keep unknown facts marked “to confirm.” Task project matches an existing project path. Do not invent CRM IDs, contact fields, conversion scores or API integrations. The three preset samples are for understanding structure, not importing customer data into this website.
 
 ## FAQ
 

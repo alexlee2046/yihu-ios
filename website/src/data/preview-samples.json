@@ -16,7 +16,7 @@
     },
     "radar": {
       "inquiry": {
-        "date_str": "2026-10-22 09:00:00",
+        "date_str": "2026-10-22 09:00",
         "tasks": [
           {
             "id": "sample-inquiry",
@@ -42,7 +42,7 @@
         "cold": []
       },
       "market": {
-        "date_str": "2026-10-22 09:00:00",
+        "date_str": "2026-10-22 09:00",
         "tasks": [
           {
             "id": "sample-market",
@@ -68,7 +68,7 @@
         "cold": []
       },
       "followup": {
-        "date_str": "2026-10-22 09:00:00",
+        "date_str": "2026-10-22 09:00",
         "tasks": [
           {
             "id": "sample-followup",
@@ -112,7 +112,7 @@
     },
     "radar": {
       "inquiry": {
-        "date_str": "2026-10-22 09:00:00",
+        "date_str": "2026-10-22 09:00",
         "tasks": [
           {
             "id": "sample-inquiry",
@@ -138,7 +138,7 @@
         "cold": []
       },
       "market": {
-        "date_str": "2026-10-22 09:00:00",
+        "date_str": "2026-10-22 09:00",
         "tasks": [
           {
             "id": "sample-market",
@@ -164,7 +164,7 @@
         "cold": []
       },
       "followup": {
-        "date_str": "2026-10-22 09:00:00",
+        "date_str": "2026-10-22 09:00",
         "tasks": [
           {
             "id": "sample-followup",

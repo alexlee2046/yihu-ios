@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "取消导航等于断网吗？加载替换、转圈复核与进程重载边界"
 description: "按error domain/code区分取消/策略交接与真实加载错误；500ms复核和15秒防重载环不是恢复SLA，不保证表单或服务动作恢复。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">导航被替换、页面加载失败与Web进程关闭，不是同一结论</h2>

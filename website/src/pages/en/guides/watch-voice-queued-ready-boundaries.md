@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "What Watch voice queued and ready mean: a transcription is not a saved phone draft"
 description: "Review target tokens, 176000-frame audio and foreground gates. queued is not complete; bounded ready cache is not a phone draft/web insertion/service receipt or cloud relay."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Watch acceptance, phone transcription readiness and saved reply drafts are separate stages</h2>
