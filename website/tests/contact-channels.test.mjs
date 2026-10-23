@@ -53,7 +53,7 @@ function harness(options = {}) {
   class Observer { constructor(fn) { this.fn=fn; observers.push(this); } observe() {} disconnect() {} }
   const doc = { getElementById(id) { assert.equal(id, 'analytics-consent'); return banner; }, createElement(tag) { assert.equal(tag, 'script'); return { removed:false, remove() { this.removed=true; } }; }, head: { appendChild(s) { scripts.push(s); } } };
   const exports = module({ window: win, document: doc, ResizeObserver: Observer, MutationObserver: Observer, setTimeout(fn) { const n=nextTimer++; timers.set(n,fn); return n; }, clearTimeout(n) { timers.delete(n); } });
-  const ownedAPI = { toggle(state) { calls.push(state); } };
+  const ownedAPI = { baseUrl:base.PUBLIC_CHATWOOT_BASE_URL, websiteToken:base.PUBLIC_CHATWOOT_WEBSITE_TOKEN, hasLoaded:true, toggle(state) { calls.push(state); } };
   const mount = () => exports.mountContactChat(box);
   const click = () => button.dispatchEvent(new Event('click'));
   const ready = () => win.dispatchEvent(new Event('chatwoot:ready'));
@@ -100,6 +100,62 @@ test('Chinese locale, duplicate mounts and malformed datasets stay bounded', () 
   const h=harness({dataset:{lang:'zh'}}); h.mount(); h.click(); assert.equal(h.scripts.length,1); h.load(); assert.equal(h.win.chatwootSettings.locale,'zh_CN');
   const bad=harness({dataset:{baseUrl:'https://elsewhere.example'}}); bad.click(); assert.equal(bad.scripts.length,0);
 });
+test('run-to-ready replacement is rejected without opening a foreign API', () => {
+  const h=harness(); let sdkRuns=0, foreignOpens=0;
+  h.click(); h.load(()=>{sdkRuns++;h.win.$chatwoot=h.ownedAPI;});
+  const foreign={baseUrl:base.PUBLIC_CHATWOOT_BASE_URL,websiteToken:'synthetic-other-inbox',hasLoaded:true,toggle(){foreignOpens++;}};
+  h.win.$chatwoot=foreign; h.ready();
+  console.log('OFFLINE run-to-ready probe',JSON.stringify({sdkRuns,ownOpens:h.calls.length,foreignOpens}));
+  assert.equal(foreignOpens,0);
+  assert.equal(h.button.disabled,true);
+  assert.equal(h.win.$chatwoot,foreign,'do not reset or replace another session');
+});
+test('matching public fields cannot substitute another API, SDK or run method after installation', () => {
+  for (const kind of ['api','sdk','run','toggle']) {
+    const h=harness(); let foreignOpens=0;
+    h.click(); h.load(()=>{h.win.$chatwoot=h.ownedAPI;});
+    if(kind==='api') h.win.$chatwoot={...h.ownedAPI,toggle(){foreignOpens++;}};
+    if(kind==='sdk') h.win.chatwootSDK={run(){throw Error('foreign installer');}};
+    if(kind==='run') h.win.chatwootSDK.run=()=>{throw Error('replaced run');};
+    if(kind==='toggle') h.ownedAPI.toggle=()=>{foreignOpens++;};
+    h.ready(); assert.equal(h.button.disabled,true,kind);
+    assert.deepEqual(h.calls,[],kind);assert.equal(foreignOpens,0,kind);
+  }
+});
+test('installed tenant fields are checked at ready and again on subsequent use', () => {
+  for(const key of ['baseUrl','websiteToken']) for(const phase of ['before-ready','after-ready']) {
+    const h=harness();h.click();
+    if(phase==='before-ready') h.load(()=>{h.win.$chatwoot=h.ownedAPI;}); else h.load();
+    h.ownedAPI[key]='synthetic-other-tenant';
+    if(phase==='before-ready') h.ready(); else h.click();
+    assert.equal(h.button.disabled,true,key+' '+phase);
+    assert.deepEqual(h.calls,phase==='before-ready'?[]:['open']);
+    assert.equal(h.win.$chatwoot,h.ownedAPI,'never reset another identity/session');
+    assert.equal(h.ownedAPI[key],'synthetic-other-tenant');
+  }
+});
+test('a forged ready without loaded state or a synchronous run-installed API is not adopted', () => {
+  const h=harness();h.ownedAPI.hasLoaded=false;h.click();h.load(()=>{h.win.$chatwoot=h.ownedAPI;});
+  h.ready();assert.deepEqual(h.calls,[]);assert.equal(h.button.attrs['aria-busy'],'true');
+  h.ownedAPI.hasLoaded=true;h.ready();assert.deepEqual(h.calls,['open'],'later genuine ready still works');
+  const missing=harness();missing.click();missing.load(()=>{});assert.equal(missing.button.disabled,true);
+  missing.win.$chatwoot=missing.ownedAPI;missing.ready();assert.deepEqual(missing.calls,[],'no late adoption');
+  const preexisting=harness();preexisting.click();preexisting.win.$chatwoot=preexisting.ownedAPI;
+  preexisting.load(()=>{throw Error('must not run against a pre-existing API');});assert.equal(preexisting.button.disabled,true);
+});
+test('synchronous ready is deferred through run and rejects replacement before run returns', () => {
+  const sync=harness();sync.click();sync.load(()=>{
+    sync.ready();assert.deepEqual(sync.calls,[]);
+    sync.win.$chatwoot=sync.ownedAPI;
+  });assert.deepEqual(sync.calls,['open']);assert.equal(sync.button.disabled,false);
+  for(const kind of ['api','toggle']) {
+    const replaced=harness();let foreignOpens=0;replaced.click();replaced.load(()=>{
+      replaced.win.$chatwoot=replaced.ownedAPI;replaced.ready();assert.deepEqual(replaced.calls,[]);
+      if(kind==='api') replaced.win.$chatwoot={...replaced.ownedAPI,toggle(){foreignOpens++;}};
+      else replaced.ownedAPI.toggle=()=>{foreignOpens++;};
+    });assert.equal(replaced.button.disabled,true);assert.deepEqual(replaced.calls,[]);assert.equal(foreignOpens,0);
+  }
+});
 test('pre-existing or replaced SDK state is never borrowed across inboxes', () => {
   const h=harness({foreign:true}); h.click(); assert.equal(h.scripts.length,0); assert.equal(h.button.disabled,true);
   const replaced=harness(); replaced.click(); replaced.load(); replaced.win.$chatwoot={toggle() { throw Error('foreign API'); }}; replaced.click(); assert.equal(replaced.button.disabled,true); assert.deepEqual(replaced.calls,['open']);
@@ -120,7 +176,7 @@ test('a ready owned widget closes for navigation and resumes only its own API on
   h.win.dispatchEvent(new Event('pageshow')); h.click(); assert.deepEqual(h.calls,['open','close',undefined]);
 });
 test('integration never adds user identity, draft extraction, sending APIs or analytics changes', () => {
-  for (const forbidden of ['setUser(', 'setCustomAttributes(', 'getUserMedia', 'localStorage', 'sessionStorage', 'gtag(', 'fetch(', 'XMLHttpRequest', 'chatwoot:on-message', 'chatwoot:closed', 'chatwoot:opened']) assert.ok(!source.includes(forbidden),forbidden);
+  for (const forbidden of ['.reset(', 'document.cookie', 'setUser(', 'setCustomAttributes(', 'getUserMedia', 'localStorage', 'sessionStorage', 'gtag(', 'fetch(', 'XMLHttpRequest', 'chatwoot:on-message', 'chatwoot:closed', 'chatwoot:opened']) assert.ok(!source.includes(forbidden),forbidden);
   const layout=read('src/layouts/Layout.astro');
   assert.ok(layout.includes('contact.chat && <ContactChat'));
   assert.ok(layout.includes('contact.email && <a class="contact-email" href={`mailto:${contact.email}`}'));

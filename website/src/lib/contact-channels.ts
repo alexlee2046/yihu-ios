@@ -24,10 +24,11 @@ export function contactConfig(env: Record<string, unknown>): ContactConfig {
   return result;
 }
 
-type ChatAPI = { toggle(state?: 'open' | 'close'): void };
+type ChatAPI = { baseUrl: string; websiteToken: string; hasLoaded: boolean; toggle(state?: 'open' | 'close'): void };
+type ChatSDK = { run(config: { baseUrl: string; websiteToken: string }): void };
 type ChatWindow = Window & {
   chatwootSettings?: Record<string, unknown>;
-  chatwootSDK?: { run(config: { baseUrl: string; websiteToken: string }): void };
+  chatwootSDK?: ChatSDK;
   $chatwoot?: ChatAPI;
 };
 
@@ -41,7 +42,10 @@ export function mountContactChat(root: HTMLElement) {
   const win = window as ChatWindow;
   const en = root.dataset.lang === 'en';
   let started = false, ready = false, failed = false, inactive = false, sdkStarted = false;
-  let ownedAPI: ChatAPI | undefined;
+  let ownedAPI: ChatAPI | undefined, ownedSDK: ChatSDK | undefined;
+  let ownedRun: ChatSDK['run'] | undefined, ownedToggle: ChatAPI['toggle'] | undefined;
+  let installing = false, queuedReady = false;
+  let queuedAPI: ChatAPI | undefined, queuedToggle: ChatAPI['toggle'] | undefined;
   let script: HTMLScriptElement | undefined;
   let timer: ReturnType<typeof setTimeout> | undefined;
   const banner = document.getElementById('analytics-consent');
@@ -63,17 +67,39 @@ export function mountContactChat(root: HTMLElement) {
     button.removeAttribute('aria-busy');
     status.textContent = en ? 'Chat could not load. Refresh the page to try again.' : '客服暂未能加载，请刷新页面后重试。';
   };
-  const api = () => ready && !failed && !inactive && win.$chatwoot === ownedAPI ? ownedAPI : null;
-  window.addEventListener('chatwoot:ready', () => {
-    if (!sdkStarted || failed || inactive || ready) return;
-    if (typeof win.$chatwoot?.toggle !== 'function') { fail(); return; }
-    ownedAPI = win.$chatwoot;
+  const binding = (candidate: ChatAPI | undefined): candidate is ChatAPI => !!candidate
+    && typeof candidate.toggle === 'function' && candidate.baseUrl === baseUrl && candidate.websiteToken === websiteToken;
+  const installer = () => !!ownedSDK && win.chatwootSDK === ownedSDK && ownedSDK.run === ownedRun;
+  const installedAPI = (): ChatAPI | undefined => win.$chatwoot;
+  const api = () => ready && !failed && !inactive && installer() && win.$chatwoot === ownedAPI
+    && binding(ownedAPI) && ownedAPI.toggle === ownedToggle && ownedAPI.hasLoaded === true ? ownedAPI : null;
+  const finishReady = () => {
+    if (!installer() || win.$chatwoot !== ownedAPI || !binding(ownedAPI) || ownedAPI.toggle !== ownedToggle) { fail(); return; }
+    // The upstream SDK installs this flag as false and sets it before ready.
+    // A window event alone is not proof that this installed instance is ready.
+    if (ownedAPI.hasLoaded !== true) return;
     ready = true;
     clearTimeout(timer);
     button.disabled = false;
     button.removeAttribute('aria-busy');
     status.textContent = '';
-    try { win.$chatwoot.toggle('open'); } catch { fail(); }
+    try { ownedAPI.toggle('open'); } catch { fail(); }
+  };
+  window.addEventListener('chatwoot:ready', () => {
+    if (!sdkStarted || failed || inactive || ready) return;
+    if (!installer()) { fail(); return; }
+    if (installing) {
+      queuedReady = true;
+      const observed = win.$chatwoot;
+      if (observed && !binding(observed)) { fail(); return; }
+      if (observed?.hasLoaded === true) {
+        if (queuedAPI && (queuedAPI !== observed || queuedToggle !== observed.toggle)) { fail(); return; }
+        queuedAPI = observed;
+        queuedToggle = observed.toggle;
+      }
+      return; // run may emit synchronously; do not open before its installation finishes.
+    }
+    finishReady();
   });
   button.addEventListener('click', () => {
     const current = api();
@@ -94,9 +120,25 @@ export function mountContactChat(root: HTMLElement) {
     script.onerror = fail;
     script.onload = () => {
       if (failed || inactive) return;
-      if (typeof win.chatwootSDK?.run !== 'function') { fail(); return; }
+      const sdk = win.chatwootSDK;
+      if (typeof sdk?.run !== 'function' || win.$chatwoot) { fail(); return; }
+      ownedSDK = sdk;
+      ownedRun = sdk.run;
       sdkStarted = true;
-      try { win.chatwootSDK.run({ baseUrl, websiteToken }); } catch { fail(); }
+      installing = true;
+      try { ownedRun.call(ownedSDK, { baseUrl, websiteToken }); }
+      catch { installing = false; fail(); return; }
+      installing = false;
+      if (failed || inactive) return;
+      // Capture immediately from this run, never adopt a later global at ready.
+      const installed = installedAPI();
+      if (!installer() || !binding(installed) || (queuedAPI && (queuedAPI !== installed || queuedToggle !== installed.toggle))) { fail(); return; }
+      ownedAPI = installed;
+      ownedToggle = installed.toggle;
+      if (queuedReady) finishReady();
+      queuedReady = false;
+      queuedAPI = undefined;
+      queuedToggle = undefined;
     };
     timer = setTimeout(fail, 15000);
     document.head.appendChild(script);

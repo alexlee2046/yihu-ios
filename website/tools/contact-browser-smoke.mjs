@@ -15,7 +15,7 @@ const sdkStub = `// Literal fixture, never fetched from the platform.
 window.__contactFixture = { runs: [], toggles: [] };
 window.chatwootSDK = { run(config) {
   window.__contactFixture.runs.push(config);
-  window.$chatwoot = { toggle(state) { window.__contactFixture.toggles.push(state ?? 'toggle'); } };
+  window.$chatwoot = { ...config, hasLoaded:true, toggle(state) { window.__contactFixture.toggles.push(state ?? 'toggle'); } };
   window.dispatchEvent(new Event('chatwoot:ready'));
 } };`;
 for (const signal of ['SIGTERM','SIGINT']) process.once(signal, async () => {
