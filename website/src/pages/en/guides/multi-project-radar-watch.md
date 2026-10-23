@@ -27,7 +27,7 @@ Start the day with what needs your decision or follow-up, then inspect its sourc
 This illustrates structure, not actual leads or market intelligence. Task project matches project path. A complete snapshot also carries decisions and active/stale/cold collections.
 
 ```json
-{"date_str":"2026-10-22 09:00:00","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"Missing inquiry specifications","status":"等你决策","priority":"P1","next":"Confirm missing parameters before drafting a reply","url":"https://example.com/brief","evidence":"Synthetic material for preview"}],"decisions":[],"active":[{"name":"Export follow-up","path":"export-demo","timestamp":1792630800,"message":"Synthetic, not live material"}],"stale":[],"cold":[]}
+{"date_str":"2026-10-22 09:00","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"Missing inquiry specifications","status":"等你决策","priority":"P1","next":"Confirm missing parameters before drafting a reply","url":"https://example.com/brief","evidence":"Synthetic material for preview"}],"decisions":[],"active":[{"name":"Export follow-up","path":"export-demo","timestamp":1792630800,"message":"Synthetic, not live material"}],"stale":[],"cold":[]}
 ```
 
 Prepare the supported shape using your existing workflow, then connect a compatible source or supported file export. Authenticated material uses the existing file-export path; web login and brief access have separate setup.
@@ -52,7 +52,7 @@ The preview switches business situations, not a hidden processing queue. All thr
 
 </div>
 
-Use your own source time in date_str and keep unknown facts in the wording as “to confirm.” Task project matches an existing project path. Do not invent CRM IDs, contact fields, conversion scores or API integrations. The three preset samples are for understanding structure, not importing customer data into this website.
+date_str is the snapshot’s last successful source-read time in UTC+08:00, using exactly yyyy-MM-dd HH:mm (no seconds), not an inquiry or market document date. Preserve it after a failed read; put document dates in the evidence text. Keep unknown facts marked “to confirm.” Task project matches an existing project path. Do not invent CRM IDs, contact fields, conversion scores or API integrations. The three preset samples are for understanding structure, not importing customer data into this website.
 
 ## FAQ
 

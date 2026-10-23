@@ -27,7 +27,7 @@ preview: radar
 示例只演示结构，不是真实商机或市场情报。下面的任务project与项目path对应；完整数据还包含decisions和active/stale/cold集合。
 
 ```json
-{"date_str":"2026-10-22 09:00:00","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"询盘规格待补","status":"等你决策","priority":"P1","next":"确认缺少的规格参数后起草回复","url":"https://example.com/brief","evidence":"合成材料，仅供预览"}],"decisions":[],"active":[{"name":"外贸跟进","path":"export-demo","timestamp":1792630800,"message":"合成示例，非实时资料"}],"stale":[],"cold":[]}
+{"date_str":"2026-10-22 09:00","tasks":[{"id":"sample-inquiry","project":"export-demo","title":"询盘规格待补","status":"等你决策","priority":"P1","next":"确认缺少的规格参数后起草回复","url":"https://example.com/brief","evidence":"合成材料，仅供预览"}],"decisions":[],"active":[{"name":"外贸跟进","path":"export-demo","timestamp":1792630800,"message":"合成示例，非实时资料"}],"stale":[],"cold":[]}
 ```
 
 把已有资料按受支持格式准备好，再通过兼容来源或文件导出接入。需要登录的数据按既有文件导出路径处理；网页账户登录与简报读取各自准备。
@@ -52,7 +52,7 @@ preview: radar
 
 </div>
 
-date_str使用你自己的来源时间，缺少的事实在文字中写“待确认”。任务project与已有项目path对应；不新增CRM编号、联系人、商机评分或API字段。三个预设样例用于理解结构，不把顾客资料导入本网页。
+date_str是快照最后一次成功读取来源的时间，按UTC+08:00使用严格的yyyy-MM-dd HH:mm格式（不含秒），不是询盘或市场文档的日期。读取失败时保留原时间；原资料日期可记在evidence文字里，缺少的事实仍写“待确认”。任务project与已有项目path对应；不新增CRM编号、联系人、商机评分或API字段。三个预设样例用于理解结构，不把顾客资料导入本网页。
 
 ## FAQ
 
