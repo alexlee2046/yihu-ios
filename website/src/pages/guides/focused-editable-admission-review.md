@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "焦点框为什么不能接收录文？DOM可编辑、可用与草稿准入"
 description: "核受守卫DOM的元素类型、连接/禁用/只读例外与已知Collie草稿条件；焦点非授权或通用表单支持，不操作网页。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">有焦点只是一项条件，不是任意输入框都能接收原生文字</h2>

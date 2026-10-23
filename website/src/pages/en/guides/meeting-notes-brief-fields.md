@@ -29,6 +29,10 @@ For a searchable transcript, a standalone transcription tool can be enough. For 
 
 This is an editorial template, not an app import format. For Radar JSON, use the supported brief format instead of turning these labels into invented API keys.
 
+## A reviewed action card, using the same sample
+
+Keep the original line “check delivery time before replying” next to the action. Write “confirm delivery time,” leave owner/date unconfirmed, and keep the proposed reply separate until reviewed. This is an editorial example, not a new native task-creation feature.
+
 ## FAQ
 
 <h3 id="faq-summary">Does choosing a template create finished minutes?</h3>

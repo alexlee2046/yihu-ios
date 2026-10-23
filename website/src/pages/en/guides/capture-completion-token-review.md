@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Stop, cancel and late capture callbacks: inspect activeToken ownership"
 description: "Review asynchronous completion tokens, stop draining and cancel invalidation. A token is neither authentication nor universal idempotency or automatic recapture."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Stop can yield this capture's drained result; canceled tokens cannot identify a new capture</h2>

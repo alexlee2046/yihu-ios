@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "When recognition settings apply: per-pass snapshots and output-token budgets"
 description: "Review language/usesTerms/maxTokens snapshots, default 448 and 64–1024 bounds. Tokens are not characters/audio seconds or accuracy, and no live/cloud tuning is added."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Per-pass settings are not a permanently fixed session or real-time tuning feature</h2>

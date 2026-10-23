@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "A block ending is not capture ending: noDataNow, endOfStream and converter tails"
 description: "Review state across blocks and up to 16 finish drains. Block/tail handling is not semantic segmentation, zero-loss evidence or a general file transcoder."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Temporarily missing another block is not the end of the entire audio stream</h2>

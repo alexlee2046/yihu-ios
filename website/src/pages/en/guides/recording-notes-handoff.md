@@ -47,6 +47,24 @@ Synthetic example, not a real meeting or customer record:
 
 “Meeting minutes” selects an organizing prompt rather than producing finished native minutes. Obtain any required participant consent and prepare your models/workspace first.
 
+<h2 id="same-task">Compare one recording through to a usable follow-up</h2>
+
+Use the synthetic transcript above for each approach. The test is whether you can find the next action and its source, not whether a generated paragraph sounds polished.
+
+<div role="region" aria-label="Transcription versus action workflow" tabindex="0">
+
+| Check | Transcript-only task | Voice-to-action workflow |
+|---|---|---|
+| Expected result | Searchable text alongside its recording. | A reviewed decision, action and open-question list alongside the original. |
+| Additional work | Correct words needed for later use. | Separate proposals from decisions; verify names, numbers, owners and dates. |
+| Missing information | Leave unclear wording marked. | Keep owner/deadline unconfirmed instead of assigning them by guess. |
+| Data handling | Inspect the selected tool's storage/export settings. | Inspect both the recorder and the organizing destination; hand over only needed material. |
+| Where Yihu fits | A lighter transcription tool may meet this task. | Local notes plus your existing Agent web workspace, with model/signing setup. |
+
+</div>
+
+A useful reviewed outcome from the sample is “list the missing specifications; owner and deadline to confirm.” Keep the source and check the destination draft before another handoff. [Use the meeting-note template](/en/guides/meeting-notes-brief-fields/).
+
 ## FAQ
 
 <h3 id="faq-tool">Do I need a workspace just for transcription?</h3>
