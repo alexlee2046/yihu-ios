@@ -13,7 +13,7 @@ Move somewhere safe where recording is permitted. Choose the intended microphone
 
 1. Park fully or leave the exhibition aisle; confirm participant consent and recording scope.
 2. Pause other playback and calls. Inspect available input options separately from output.
-3. Record “organize a sample item list,” play it back and check numbers and negation in the text.
+3. Record “Do not send these 3 sample items; keep a draft,” play it back and check the number and negation in the text.
 4. Check the intended unsent draft. After changing devices or finishing a call, repeat a short sample.
 
 <div role="region" aria-label="Choose your next step" tabindex="0">
