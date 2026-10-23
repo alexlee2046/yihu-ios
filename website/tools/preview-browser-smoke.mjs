@@ -129,7 +129,8 @@ async function interactions(page, en) {
   const sampleGroup = page.getByRole('group', { name: en ? 'Synthetic brief samples' : '切换合成简报' });
   const view = page.getByRole('group', { name: en ? 'Brief view' : '简报视图', exact: true });
   for (const [name, id] of en ? [['Inquiry', 'inquiry'], ['Market', 'market'], ['Follow-up', 'followup']] : [['询盘', 'inquiry'], ['市场', 'market'], ['跟进', 'followup']]) {
-    await sampleGroup.getByRole('button', { name, exact: true }).click();
+    await sampleGroup.getByRole('button', { name, exact: true }).focus();
+    await page.keyboard.press('Enter');
     assert.ok(await sampleGroup.getByRole('button', { name, exact: true }).evaluate(x => x === document.activeElement));
     await view.getByRole('button', { name: 'JSON', exact: true }).click();
     const sample = JSON.parse(await page.locator('.preview-json').innerText()); assert.equal(sample.tasks[0].id, 'sample-' + id);
@@ -144,7 +145,7 @@ async function interactions(page, en) {
   await page.locator('#analytics-settings').click(); await page.locator('#analytics-allow').click();
   await page.locator('.preview-panel textarea').fill('SYNTHETIC_EDIT_ONLY_42');
   const insert = page.getByRole('button', { name: en ? 'Place in sample draft' : '填入本页示例草稿', exact: true });
-  await insert.click(); assert.equal(await page.locator('.preview-draft').innerText(), 'SYNTHETIC_EDIT_ONLY_42');
+  await insert.focus(); await page.keyboard.press('Enter'); assert.equal(await page.locator('.preview-draft').innerText(), 'SYNTHETIC_EDIT_ONLY_42');
   assert.ok(await insert.evaluate(x => x === document.activeElement), 'insertion preserves focus');
   await insert.click();
   let captured = await events(page); assert.deepEqual(captured.map(x => x[1]), ['scenario_select', 'preview_complete']);
@@ -155,13 +156,14 @@ async function interactions(page, en) {
   await page.locator('#analytics-settings').click(); await page.locator('#analytics-deny').click();
   await scene(page, 'radar').click(); await view.getByRole('button', { name: 'JSON', exact: true }).click();
   captured = await events(page); assert.equal(captured.length, 3, 'withdrawal blocks further events');
+  await geometry(page, page.viewportSize().width);
   await scene(page, 'voice').click();
-  let canceledOnNavigation = 0;
-  await page.exposeFunction('__cancelWitness', () => { canceledOnNavigation++; });
-  await page.evaluate(() => Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: { speak() {}, cancel() { void window.__cancelWitness(); } } }));
+  // Test-only counter survives this isolated page's navigation; app code stores nothing.
+  await page.evaluate(() => { sessionStorage.removeItem('preview-test-cancel'); Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: { speak() {}, cancel() { sessionStorage.setItem('preview-test-cancel', String(Number(sessionStorage.getItem('preview-test-cancel') || 0) + 1)); } } }); });
   await page.getByRole('button', { name: en ? 'Read sample aloud' : '朗读示例材料', exact: true }).click();
   assert.equal(await page.evaluate(() => window.__permissions), 0);
   await page.goto('https://getyihu.com/' + (en ? 'en/' : '') + 'start/', { waitUntil: 'load' });
+  const canceledOnNavigation = await page.evaluate(() => Number(sessionStorage.getItem('preview-test-cancel') || 0));
   assert.equal(canceledOnNavigation, 1, 'actual navigation cancels the owned utterance exactly once');
   return { keyboard: 'Tab/Enter/Arrow/Space and visible focus PASS', nativeSpeech: native, speechContracts: contracts, actualNavigationCancellation: canceledOnNavigation, telemetry: captured };
 }
@@ -189,9 +191,9 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
         if (path.includes('recording-notes')) await p.page.locator('#same-task').scrollIntoViewIfNeeded();
         await shot(p.page, engine, name);
         const item = { path, ...g };
-        if (path === '/' || path === '/en/') item.interactions = await interactions(p.page, path === '/en/');
-        await geometry(p.page, width);
         record.pages.push(item);
+        if (path === '/' || path === '/en/') item.interactions = await interactions(p.page, path === '/en/');
+        else await geometry(p.page, width);
       } finally { await p.close(); }
     }
     assert.deepEqual(failures, []);
