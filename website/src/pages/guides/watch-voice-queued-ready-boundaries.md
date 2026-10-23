@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "Watch语音queued和ready代表什么？手机转写结果不是已存回复草稿"
 description: "核配对语音请求目标指纹、176000帧输入与前台门；queued非完成，ready单槽结果缓存非phone草稿/网页插入/服务回执，无云中继。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">Watch语音接纳、手机转写就绪、回复草稿保存是不同阶段</h2>

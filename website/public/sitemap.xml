@@ -110,8 +110,6 @@
   <url><loc>https://getyihu.com/en/guides/status-alias-approval-boundaries/</loc></url>
   <url><loc>https://getyihu.com/guides/history-reference-integrity-review/</loc></url>
   <url><loc>https://getyihu.com/en/guides/history-reference-integrity-review/</loc></url>
-  <url><loc>https://getyihu.com/guides/capture-completion-token-review/</loc></url>
-  <url><loc>https://getyihu.com/en/guides/capture-completion-token-review/</loc></url>
   <url><loc>https://getyihu.com/guides/reply-draft-restoration-scope/</loc></url>
   <url><loc>https://getyihu.com/en/guides/reply-draft-restoration-scope/</loc></url>
   <url><loc>https://getyihu.com/guides/source-switch-cache-isolation/</loc></url>
@@ -122,14 +120,10 @@
   <url><loc>https://getyihu.com/en/guides/note-removal-retention-boundaries/</loc></url>
   <url><loc>https://getyihu.com/guides/note-radar-draft-candidate-preflight/</loc></url>
   <url><loc>https://getyihu.com/en/guides/note-radar-draft-candidate-preflight/</loc></url>
-  <url><loc>https://getyihu.com/guides/audio-recovery-debounce-boundaries/</loc></url>
-  <url><loc>https://getyihu.com/en/guides/audio-recovery-debounce-boundaries/</loc></url>
   <url><loc>https://getyihu.com/guides/local-file-protection-scope/</loc></url>
   <url><loc>https://getyihu.com/en/guides/local-file-protection-scope/</loc></url>
   <url><loc>https://getyihu.com/guides/attention-filter-identity-boundaries/</loc></url>
   <url><loc>https://getyihu.com/en/guides/attention-filter-identity-boundaries/</loc></url>
-  <url><loc>https://getyihu.com/guides/pcm-stream-end-boundaries/</loc></url>
-  <url><loc>https://getyihu.com/en/guides/pcm-stream-end-boundaries/</loc></url>
   <url><loc>https://getyihu.com/guides/share-manifest-visibility-review/</loc></url>
   <url><loc>https://getyihu.com/en/guides/share-manifest-visibility-review/</loc></url>
   <url><loc>https://getyihu.com/guides/workbench-origin-page-boundaries/</loc></url>
@@ -152,24 +146,14 @@
   <url><loc>https://getyihu.com/en/guides/privacy-declaration-evidence-scope/</loc></url>
   <url><loc>https://getyihu.com/guides/file-chunk-bridge-not-upload-receipt/</loc></url>
   <url><loc>https://getyihu.com/en/guides/file-chunk-bridge-not-upload-receipt/</loc></url>
-  <url><loc>https://getyihu.com/guides/recognition-pass-parameter-budget/</loc></url>
-  <url><loc>https://getyihu.com/en/guides/recognition-pass-parameter-budget/</loc></url>
   <url><loc>https://getyihu.com/guides/attachment-name-metadata-provenance/</loc></url>
   <url><loc>https://getyihu.com/en/guides/attachment-name-metadata-provenance/</loc></url>
-  <url><loc>https://getyihu.com/guides/focused-editable-admission-review/</loc></url>
-  <url><loc>https://getyihu.com/en/guides/focused-editable-admission-review/</loc></url>
   <url><loc>https://getyihu.com/guides/recognition-error-layer-review/</loc></url>
   <url><loc>https://getyihu.com/en/guides/recognition-error-layer-review/</loc></url>
   <url><loc>https://getyihu.com/guides/list-preview-not-transcript-archive/</loc></url>
   <url><loc>https://getyihu.com/en/guides/list-preview-not-transcript-archive/</loc></url>
-  <url><loc>https://getyihu.com/guides/navigation-cancel-process-reload-boundaries/</loc></url>
-  <url><loc>https://getyihu.com/en/guides/navigation-cancel-process-reload-boundaries/</loc></url>
-  <url><loc>https://getyihu.com/guides/watch-voice-queued-ready-boundaries/</loc></url>
-  <url><loc>https://getyihu.com/en/guides/watch-voice-queued-ready-boundaries/</loc></url>
   <url><loc>https://getyihu.com/guides/app-group-inbox-access-evidence/</loc></url>
   <url><loc>https://getyihu.com/en/guides/app-group-inbox-access-evidence/</loc></url>
-  <url><loc>https://getyihu.com/guides/watch-open-request-ui-boundaries/</loc></url>
-  <url><loc>https://getyihu.com/en/guides/watch-open-request-ui-boundaries/</loc></url>
   <url><loc>https://getyihu.com/guides/note-organization-prompt-not-minutes/</loc></url>
   <url><loc>https://getyihu.com/en/guides/note-organization-prompt-not-minutes/</loc></url>
   <url><loc>https://getyihu.com/guides/voiceprint-enrollment-profile-version-review/</loc></url>

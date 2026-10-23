@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "音频块结束不等录音结束：noDataNow、endOfStream与尾部排空"
 description: "核有状态转换器跨块保留、finish至多16次排空与停止边界；块/尾部不是语义断句或零丢失保证，不新增文件转码器。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">暂时没有下一块，不该被解释成整段音频已经结束</h2>

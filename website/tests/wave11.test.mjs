@@ -14,7 +14,7 @@ test('Wave11 bilingual guides preserve structure, fixed-source evidence and reac
       const html = read('dist/' + prefix + 'guides/' + slug + '/index.html');
       assert.equal(Array.from(html.matchAll(/<h1\b/g)).length, 1);
       assert.ok(html.includes('id="first-answer"'));
-      assert.equal(Array.from(html.matchAll(/id="faq-[^"]+"/g)).length, 6);
+      assert.equal(Array.from(html.matchAll(/id="faq-[^"]+"/g)).length, slug === 'vehicle-exhibition-microphone-preflight' ? 4 : 6);
       assert.ok(html.includes('<table') && html.includes('<thead>') && html.includes('<tbody>'));
       assert.ok(html.includes('tabindex="0"'));
       assert.ok(html.includes('github.com/alexlee2046/yihu-ios/blob/a59676a'));

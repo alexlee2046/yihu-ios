@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Did Open on iPhone actually open? Watch queued messages, foreground routing and local tasks"
 description: "Review basic open acknowledgement versus phone UI checks. sourceToken is not login authority; do not import voice/draft taskToken guards or treat queued as UI/business success."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Accepting an open request does not prove the correct task appeared on iPhone</h2>

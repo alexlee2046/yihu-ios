@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Is cancelled navigation offline? Replaced loads, spinner checks and process reloads"
 description: "Separate domain/code cancellation from load failure. A 500 ms recheck and 15-second loop guard are not recovery SLAs or restoration of forms/service actions."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Replaced navigation, failed loading and a terminated Web process mean different things</h2>

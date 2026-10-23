@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "停止、取消与迟到回调怎样区分？短语音activeToken核对"
 description: "按短语音异步完成令牌核stop排空与cancel失效，旧回调不代表新录音结果；token不是认证或通用幂等，不新增自动重录。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">stop后可有本次排空结果，cancel后旧令牌不能代表新会话</h2>

@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Why a focused field refuses transcription: editable, usable and draft conditions"
 description: "Review element types, connected/disabled/readOnly exceptions and known Collie drafts. Focus is not authority or universal forms support; no page is operated."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Focus is one prerequisite, not permission for every field to receive native text</h2>

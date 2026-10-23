@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Why recovery notifications are suppressed: a two-second window is not a recovery SLA"
 description: "Review matching token, running engine and unchanged route/format. Real same-shape changes can be suppressed too; no forced recovery or zero-miss guarantee."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Two seconds is notification policy, not guaranteed recovery or a mandatory wait</h2>

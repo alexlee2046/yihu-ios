@@ -38,6 +38,22 @@ Yihu makes tasks and workspace handoff accessible on iPhone. Your email, CRM and
 
 A paired Apple Watch can show phone summaries and prompt you to return to the phone. Confirm important decisions in the phone and original business workflow.
 
+<h2 id="case-guide">What to fill in each of the three sample cases</h2>
+
+The preview switches business situations, not a hidden processing queue. All three use the same supported task fields.
+
+<div role="region" aria-label="Prepare inquiry market and follow-up material" tabindex="0">
+
+| Case | Bring your own material | Map it to existing fields | Review before acting |
+|---|---|---|---|
+| Inquiry | The actual question and missing specifications. | title: gap; next: what to ask; evidence/url: original material. | Quote scope and delivery time remain open until confirmed. |
+| Market | A dated source relevant to the current task. | title: item to review; evidence/url: source; next: what to check. | A synthetic example is not market intelligence or a buying signal. |
+| Follow-up | Your last contact note and unresolved question. | title: outstanding task; next: preparation; project: matching project path. | Continue in your existing business tool after review; no scheduled sending is implied. |
+
+</div>
+
+Use your own source time in date_str and keep unknown facts in the wording as “to confirm.” Task project matches an existing project path. Do not invent CRM IDs, contact fields, conversion scores or API integrations. The three preset samples are for understanding structure, not importing customer data into this website.
+
 ## FAQ
 
 <h3 id="faq-source">Will it collect customer inquiries automatically?</h3>

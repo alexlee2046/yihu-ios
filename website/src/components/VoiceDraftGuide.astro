@@ -26,6 +26,24 @@ const rows = en ? [
     <table><thead><tr>{(en ? ['Approach', 'A good fit when', 'Your next step'] : ['方式', '适合什么任务', '你接着做什么']).map(x => <th scope="col">{x}</th>)}</tr></thead><tbody>{rows.map(r => <tr><th scope="row">{r[0]}</th><td>{r[1]}</td><td>{r[2]}</td></tr>)}</tbody></table>
   </div>
   <p>{en ? 'If keyboard Dictation in your current browser already works, it may be the shortest path. Yihu fits people who already have an Agent web workspace and want local speech models, voice notes and selected sharing around it.' : '如果当前浏览器里的系统听写已经够用，可以先用最短的路径。一呼更适合已有 Agent 网页工作台，希望在周围加上端侧语音、录音笔记和自主分享的人。'}</p>
+  <h2 id="same-task">{en ? 'Compare the same reply, not abstract feature lists' : '用同一份回复比较，而不是比功能词'}</h2>
+  <p>{en ? 'Sample task: reply to a request with missing specifications. Keep price and delivery time unconfirmed until checked. Both paths should end at the same reviewable draft.' : '合成任务：回复一份缺少规格参数的询问。价格和交期先待确认，两条路径都以同一份可检查的草稿为终点。'}</p>
+  <div role="region" aria-label={en ? 'Same-task workflow comparison' : '同任务工作流比较'} tabindex="0"><table><thead><tr>{(en ? ['Check', 'Your mobile browser', 'Yihu + your workspace'] : ['核对项', '你现有的手机浏览器', '一呼 + 自有工作台']).map(x => <th scope="col">{x}</th>)}</tr></thead><tbody>
+    {(en ? [
+      ['Prepare', 'Use an existing signed-in editor; available keyboard Dictation may already be enough.', 'Source-build/sign the app, download models and open your trusted workspace.'],
+      ['Move the wording', 'Type/dictate directly, or copy from your note and check the paste destination.', 'Speak, then inspect the text placed in a compatible draft; keep a copy if the editor cannot accept it.'],
+      ['Review', 'Check names, missing facts and the intended recipient.', 'Check the same facts and destination; insertion does not press Send.'],
+      ['Data handling', 'Inspect your chosen keyboard, browser and service settings.', 'Prepared models transcribe on-device; handed-over text follows the destination’s save/sync policy.'],
+      ['Choose this when', 'The current editor and input method already meet the task.', 'You already use an Agent workspace and want voice notes/sharing around it.'],
+    ] : [
+      ['准备', '使用已有登录的编辑器；系统听写可用时，直接输入也许已足够。', '源码构建并签名、准备模型，再打开自己的可信工作台。'],
+      ['带入文字', '直接打字/听写，或从笔记复制，检查粘贴目的地。', '口述后查看兼容草稿中的文字；无法接纳时先保留录文。'],
+      ['核对', '检查人名、缺失事实和收件对象。', '核对同样的信息与目的地；填入不会按发送。'],
+      ['资料处理', '了解所选键盘、浏览器与服务的设置。', '已备模型在端侧转写；带入网页后遵循其保存/同步规则。'],
+      ['适合谁', '现有编辑器与输入方式已能完成任务。', '已有Agent工作台，希望周围加上录音笔记和分享的人。'],
+    ]).map(r => <tr><th scope="row">{r[0]}</th><td>{r[1]}</td><td>{r[2]}</td></tr>)}
+  </tbody></table></div>
+  <p>{en ? 'No measured speed, accuracy or privacy ranking is implied. Compare the actual editor and service you use, not every browser or transcription product as one category.' : '这里不作速度、准确率或隐私排名。请对照你实际使用的编辑器与服务，不把所有浏览器或转录产品看成同一种能力。'}</p>
   <h2>{en ? 'Try a small, reviewable task first' : '先从一件能核对的小事开始'}</h2>
   <ol>
     <li>{en ? 'Open your trusted workspace and choose a suitable draft.' : '打开你信任的工作台，选好合适的草稿位置。'}</li>

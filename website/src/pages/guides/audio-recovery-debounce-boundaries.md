@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "恢复通知为什么被抑制？2秒去抖窗口不是恢复时限或零漏报保证"
 description: "核同token、引擎运行、相同格式/路由的去抖条件；窗口内真实同形态变化也可能被抑制，不新增强制恢复或时延SLA。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">2秒是通知抑制策略，不是两秒内必恢复或必须等待两秒</h2>
