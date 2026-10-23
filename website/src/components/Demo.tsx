@@ -120,7 +120,15 @@ export default function Demo({ lang, initialScene = 'voice', initialVoiceSample 
   return <div className="demo scenario-preview" data-preview={scene}>
     <div className="demo-topline"><span>{en ? 'SAMPLE PREVIEW' : '场景预览 · 合成样例'}</span><span>{en ? 'No login or microphone needed' : '无需登录 · 无需麦克风'}</span></div>
     <div className="preview-scenes" role="group" aria-label={en ? 'Choose a preview' : '选择一个预览'}>
-      {cards.map(([value, title, description], i) => <button type="button" key={value} id={`${id}-${value}`} aria-controls={`${id}-panel`} aria-pressed={scene === value} onClick={() => chooseScene(value)}>
+      {cards.map(([value, title, description], i) => <button type="button" key={value} id={`${id}-${value}`} aria-controls={`${id}-panel`} aria-pressed={scene === value} aria-keyshortcuts="ArrowLeft ArrowRight Home End" onClick={() => chooseScene(value)} onKeyDown={event => {
+        const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+        if (!keys.includes(event.key)) return;
+        event.preventDefault();
+        const buttons = event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('button');
+        if (!buttons) return;
+        const target = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (i + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
+        buttons[target]?.focus();
+      }}>
         <span className="preview-scene-title">0{i + 1} · {title}</span><span>{description}</span>
       </button>)}
     </div>
@@ -160,6 +168,15 @@ export default function Demo({ lang, initialScene = 'voice', initialVoiceSample 
         <div className="preview-toolbar"><div role="group" aria-label={en ? 'Synthetic brief samples' : '切换合成简报'} className="preview-switches">{(en ? [['inquiry', 'Inquiry'], ['market', 'Market'], ['followup', 'Follow-up']] : [['inquiry', '询盘'], ['market', '市场'], ['followup', '跟进']]).map(([value, label]) => <button type="button" key={value} aria-pressed={radarCase === value} onClick={() => { intent('radar'); setRadarCase(value as typeof radarCase); }}>{label}</button>)}</div>
           <div role="group" aria-label={en ? 'Brief view' : '简报视图'} className="preview-switches"><button type="button" aria-pressed={!showJSON} onClick={() => radarView(false)}>{en ? 'Readable brief' : '可读简报'}</button><button type="button" aria-pressed={showJSON} onClick={() => radarView(true)}>JSON</button></div></div>
         <p className="preview-caption">{en ? 'Synthetic examples in the supported Radar shape. Your workflow supplies the actual data; these are not live leads or market facts.' : '按当前Radar结构制作的合成样例。真实数据由你的工作流提供；这里不是真实询盘或市场情报。'}</p>
+        <p className="preview-summary" role="status">{(en ? {
+          inquiry: 'Bring the missing specifications. Review quote scope and delivery time before replying.',
+          market: 'Bring a dated source. Check the original material before changing a quote assumption.',
+          followup: 'Bring the last contact note and open question. Continue in your own business tool after review.',
+        } : {
+          inquiry: '先补齐规格信息，报价范围与交期核过再回复。',
+          market: '先准备带日期的来源，回看原资料后再决定是否调整报价依据。',
+          followup: '先核上次联系记录与未解决的问题，复核后回自己的业务工具继续。',
+        })[radarCase]}</p>
         {showJSON ? <pre className="preview-json" tabIndex={0} aria-label={en ? 'Sample Radar JSON' : '示例Radar JSON'}><code>{JSON.stringify(snapshot, null, 2)}</code></pre> : <dl className="preview-brief">
           {(en ? [['Task', task.title], ['Status / priority', 'Needs your decision · ' + task.priority], ['Next', task.next], ['Evidence', task.evidence], ['Sample time', snapshot.date_str]] : [['事项', task.title], ['状态 / 优先级', task.status + ' · ' + task.priority], ['下一步', task.next], ['依据', task.evidence], ['示例时间', snapshot.date_str]]).map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
         </dl>}
