@@ -576,6 +576,9 @@ const failureTarget = (id: string) => id === 'origin' ? 'address' : ['editor', '
   </nav>
   <h2 id="website-demo">{privacy.websiteTitle}</h2>
   {privacy.website.map(text => <p>{text}</p>)}
+  <h2 id="website-contact">{en ? 'Optional website contact channels' : '可选网站联系渠道'}</h2>
+  <p>{en ? 'Contact options appear only when that deployment has approved configuration. Opening chat loads the external Chatwoot SDK; the integration does not attach demo edits, recordings, workbench drafts or identity attributes. The service can process network/page information and what you choose to provide, and its scripts run on this page. This is separate from analytics preferences and never grants analytics consent.' : '联系入口仅在该部署具备获准配置时显示。主动打开客服后才加载外部 Chatwoot SDK；接入代码不附送演示编辑内容、录音、工作台草稿或身份属性。该服务可能处理网络/页面信息以及你主动提供的内容，其脚本在此页面运行。客服与统计偏好独立，不会自动授予统计同意。'}</p>
+  <p>{en ? 'Closing chat hides the window; it does not delete an existing conversation or undo requests already sent. The optional email link opens your mail app with the approved public address; this website does not send an email automatically. Do not include sensitive material you do not want the recipient or service to process.' : '关闭客服窗口不等于删除已有会话或撤回已发送的请求。可选邮箱链接只以获准的公开地址打开邮件应用，本站不会自动发信；不要提供你不愿收件方或服务处理的敏感资料。'}</p>
   <h2 id="data-flow">{privacy.flowTitle}</h2>
   <p class="privacy-hint" id="data-flow-hint">{privacy.hint}</p>
   <div class="privacy-table" role="region" aria-label={privacy.flowTitle} aria-describedby="data-flow-hint" tabindex="0">

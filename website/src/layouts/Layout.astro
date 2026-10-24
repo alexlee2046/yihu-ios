@@ -3,9 +3,12 @@ import '@fontsource-variable/manrope';
 import '../styles/global.css';
 import answers from '../data/home-answers.json';
 import AnalyticsConsent from '../components/AnalyticsConsent.astro';
+import ContactChat from '../components/ContactChat.astro';
+import { contactConfig } from '../lib/contact-channels';
 interface Props { title: string; description?: string; lang?: 'zh' | 'en'; indexable?: boolean; }
 const { title, description = '一呼，为你的 Agent 工作台带来 iPhone 原生语音、录音笔记与系统分享。', lang = 'zh', indexable = true } = Astro.props;
 const en = lang === 'en';
+const contact = contactConfig(import.meta.env);
 const home = en ? '/en/' : '/';
 // Fixed production origin: query strings, previews and request hosts never define canonical URLs.
 const origin = 'https://getyihu.com';
@@ -112,8 +115,9 @@ const schemaJSON = JSON.stringify(schema).replace(/</g, '\\u003c');
     <footer class="site-footer wrap">
       <a class="footer-wordmark" href={home}>一呼 <span>YIHU</span></a>
       <p>{en ? 'Your workbench. Within reach.' : '你的工作台，随时在手边。'}</p>
-      <div><a href={`${home}privacy/`}>{en ? 'Privacy' : '隐私说明'}</a><a href="https://github.com/alexlee2046/yihu-ios">GitHub</a><a href="https://github.com/alexlee2046/yihu-ios/blob/main/LICENSE">Apache 2.0</a><button id="analytics-settings" type="button" hidden aria-controls="analytics-consent" aria-expanded="false">{en ? 'Analytics preferences' : '统计偏好'}</button></div>
+      <div>{contact.email && <a class="contact-email" href={`mailto:${contact.email}`}>{en ? 'Email us' : '联系邮箱'}</a>}<a href={`${home}privacy/`}>{en ? 'Privacy' : '隐私说明'}</a><a href="https://github.com/alexlee2046/yihu-ios">GitHub</a><a href="https://github.com/alexlee2046/yihu-ios/blob/main/LICENSE">Apache 2.0</a><button id="analytics-settings" type="button" hidden aria-controls="analytics-consent" aria-expanded="false">{en ? 'Analytics preferences' : '统计偏好'}</button></div>
     </footer>
     <AnalyticsConsent lang={lang} />
+    {contact.chat && <ContactChat chat={contact.chat} lang={lang} />}
   </body>
 </html>

@@ -41,6 +41,26 @@ jobs:
           NODE_PATH: ${{ runner.temp }}/yihu-browser-sdk/node_modules
           PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/yihu-playwright-browsers
         run: node tools/preview-browser-smoke.mjs
+      - name: Offline synthetic contact contracts (never a live widget)
+        env:
+          NODE_PATH: ${{ runner.temp }}/yihu-browser-sdk/node_modules
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/yihu-playwright-browsers
+          YIHU_CONTACT_DIST: ${{ runner.temp }}/yihu-contact-configured
+          PUBLIC_CHATWOOT_ENABLED: 'true'
+          PUBLIC_CHATWOOT_BASE_URL: 'https://chatwoot.kynora.world'
+          PUBLIC_CHATWOOT_WEBSITE_TOKEN: 'synthetic-not-a-real-inbox'
+          PUBLIC_CONTACT_EMAIL_ENABLED: 'true'
+          PUBLIC_CONTACT_EMAIL: 'support@example.test'
+        run: |
+          npm run build -- --outDir "$YIHU_CONTACT_DIST"
+          node tools/contact-browser-smoke.mjs
+      - name: Preserve offline contact evidence separately
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: website-contact-offline
+          path: ${{ runner.temp }}/yihu-contact-offline/
+          retention-days: 3
       - name: Verify committed discovery exports
         run: python3 tools/export-llms.py --check && git diff --exit-code -- public/llms.txt public/llms-full.txt
       - name: Preserve preview and discovery evidence
