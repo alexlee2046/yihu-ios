@@ -16,14 +16,26 @@ final class CollieWorkbenchUITests: XCTestCase {
             app.launch()
             defer { app.terminate() }
             XCTAssertTrue(app.staticTexts[title].waitForExistence(timeout: 15))
+            attachWorkbenchScreen(name: "candidate-yihu-onboarding-\(language)-initial")
+            // At accessibility sizes Form virtualizes offscreen rows. Use its
+            // actual vertical collection, not the shell's horizontal shortcuts.
+            let form = app.collectionViews.firstMatch
+            XCTAssertTrue(form.exists)
             let address = app.textFields["collie-connection-origin"]
+            for _ in 0..<4 where !address.exists || !address.isHittable { form.swipeUp() }
             XCTAssertTrue(address.waitForExistence(timeout: 5))
+            XCTAssertTrue(address.isHittable)
             XCTAssertEqual(address.label, label)
             XCTAssertEqual(address.placeholderValue, "https://workbench.example.com")
+            attachWorkbenchScreen(name: "candidate-yihu-onboarding-\(language)-address")
             XCTAssertFalse(app.staticTexts["Connect to a Collie workbench"].exists)
             XCTAssertFalse(app.staticTexts["连接 Collie 工作台"].exists)
-            XCTAssertFalse(app.buttons["collie-connection-save"].isEnabled)
-            attachWorkbenchScreen(name: "candidate-yihu-onboarding-\(language)")
+            let connect = app.buttons["collie-connection-save"]
+            for _ in 0..<4 where !connect.exists || !form.frame.contains(connect.frame) { form.swipeUp() }
+            XCTAssertTrue(connect.waitForExistence(timeout: 5))
+            XCTAssertTrue(form.frame.contains(connect.frame), "disabled action is still fully visible")
+            XCTAssertFalse(connect.isEnabled)
+            attachWorkbenchScreen(name: "candidate-yihu-onboarding-\(language)-controls")
             // Do not enter an origin, connect, record, download a model or send.
         }
     }
