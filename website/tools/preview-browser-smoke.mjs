@@ -27,8 +27,8 @@ async function geometry(page, width) {
   assert.equal(data.permissions, 0); assert.ok(data.font.includes('Manrope'));
   return data;
 }
-async function openPage(browser, path, width, height) {
-  const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1, isMobile: width < 700, hasTouch: width < 700, reducedMotion: 'reduce', locale: path.startsWith('/en/') ? 'en-US' : 'zh-CN' });
+async function openPage(browser, path, width, height, scripting = true) {
+  const context = await browser.newContext({ javaScriptEnabled: scripting, viewport: { width, height }, deviceScaleFactor: 1, isMobile: width < 700, hasTouch: width < 700, reducedMotion: 'reduce', locale: path.startsWith('/en/') ? 'en-US' : 'zh-CN' });
   try {
     await context.addInitScript(() => {
       window.__permissions = 0;
@@ -50,6 +50,7 @@ async function openPage(browser, path, width, height) {
     const page = await context.newPage();
     page.on('pageerror', error => failures.push('Page error: ' + error.message));
     await page.goto('https://getyihu.com' + path, { waitUntil: 'load', timeout: 20000 });
+    if (!scripting) return { page, close: () => context.close() };
     await page.waitForFunction(() => !document.querySelector('astro-island')?.hasAttribute('ssr'), null, { timeout: 15000 });
     await page.evaluate(() => document.fonts.ready);
     assert.equal((await events(page)).length, 0, 'no preview events before consent');
@@ -167,11 +168,40 @@ async function interactions(page, en) {
   assert.equal(canceledOnNavigation, 1, 'actual navigation cancels the owned utterance exactly once');
   return { keyboard: 'Tab/Enter/Arrow/Space and visible focus PASS', nativeSpeech: native, speechContracts: contracts, actualNavigationCancellation: canceledOnNavigation, telemetry: captured };
 }
+async function quickCheck(page, audio, en) {
+  const root = page.locator('[data-guide-quick-check]');
+  const select = root.locator('select'), primary = root.locator('.quick-preview-link');
+  assert.equal(await root.count(), 1);
+  assert.equal(await page.locator('[data-preview]').count(), 0, 'light landing does not mount the heavy preview');
+  const fold = await root.evaluate(x => ({ primary: x.querySelector('.quick-preview-link').getBoundingClientRect().bottom, scenarios: x.querySelector('nav').getBoundingClientRect().bottom, height: innerHeight }));
+  assert.ok(fold.primary <= fold.height && fold.scenarios <= fold.height, 'initial preview and four task links are above the fold: '+JSON.stringify(fold));
+  const home = en ? '/en/' : '/';
+  const pillars = ['iphone-agent-voice-drafts','bluetooth-audio-input-troubleshooting','recording-notes-handoff','multi-project-radar-watch'];
+  assert.deepEqual(await root.locator('nav a').evaluateAll(as => as.map(a => a.getAttribute('href'))), pillars.map(p => home+'guides/'+p+'/#interactive-preview'));
+  await select.focus(); await page.keyboard.press('Tab');
+  assert.ok(await primary.evaluate(a => a === document.activeElement), 'Tab reaches native preview link');
+  assert.ok(await primary.evaluate(a => getComputedStyle(a).outlineStyle !== 'none'), 'keyboard focus is visible');
+  for (const [value, text] of audio ? [['silent',/phone|手机/],['interrupted',/saved|保存/],['explore',/four-question|四问/]] : [['unclear',/original|原音频/],['edit',/draft|草稿/],['actions',/owner|负责人/]]) {
+    await select.selectOption(value);assert.match(await root.locator('[role="status"]').innerText(),text);
+  }
+  assert.equal((await events(page)).length,0,'local choices emit no preview events');
+  assert.equal(await page.evaluate(() => window.__permissions),0);
+  await primary.focus();await page.keyboard.press('Enter');
+  await page.waitForURL('**/'+(audio?'bluetooth-audio-input-troubleshooting':'recording-notes-handoff')+'/#interactive-preview');
+  await page.waitForFunction(() => !document.querySelector('astro-island')?.hasAttribute('ssr'));
+  assert.equal(await page.locator('[data-preview]').getAttribute('data-preview'),audio?'audio':'voice');
+  assert.equal(await page.locator('.preview-scenes>button').count(),3);
+  await scene(page,'radar').click();assert.equal(await page.locator('[data-preview]').getAttribute('data-preview'),'radar');
+  assert.equal((await events(page)).length,0,'denied destination preview stays gated');
+  assert.equal(await page.evaluate(() => window.__permissions),0);
+  return { initialFold:fold, localChoices:'all three PASS', nativeKeyboard:'Tab/focus/Enter navigation PASS', destination:'existing three-card preview', analytics:'no denied preview events', hardwarePermissions:0 };
+}
 const targets = [
   ['/', 390, 844, 'voice', 'home-zh-390'], ['/en/', 1440, 1000, 'voice', 'home-en-1440'],
   ['/guides/bluetooth-audio-input-troubleshooting/', 390, 844, 'audio', 'audio-zh-390'],
   ['/en/guides/multi-project-radar-watch/', 390, 844, 'radar', 'radar-en-390'],
   ['/en/guides/recording-notes-handoff/', 1440, 1000, 'voice', 'comparison-en-1440'],
+  ...['', 'en/'].flatMap(prefix => [['audio-route-recovery-matrix','audio'],['noisy-transcript-text-correction','notes']].flatMap(([slug,task]) => [[390,844],[1440,1000]].map(([w,h]) => ['/'+prefix+'guides/'+slug+'/',w,h,'quick-'+task,'quick-'+task+'-'+(prefix?'en':'zh')+'-'+w]))),
 ];
 for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
   const record = { engine, platform: process.platform, safariOrDevice: false, pages: [], cleanup: 'pending' };
@@ -182,7 +212,14 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
     for (const [path, width, height, expected, name] of targets) {
       const p = await openPage(activeBrowser, path, width, height);
       try {
-        const g = await geometry(p.page, width); assert.equal(await p.page.locator('[data-preview]').getAttribute('data-preview'), expected);
+        const g = await geometry(p.page, width);
+        if (expected.startsWith('quick-')) {
+          await shot(p.page, engine, name);
+          const checked = await quickCheck(p.page, expected === 'quick-audio', path.startsWith('/en/'));
+          record.pages.push({ path, ...g, quickCheck:checked });
+          continue;
+        }
+        assert.equal(await p.page.locator('[data-preview]').getAttribute('data-preview'), expected);
         if (path === '/') assert.ok(g.cards.every(bottom => bottom <= height), 'three cards in first viewport');
         if (path.includes('multi-project')) {
           await p.page.getByRole('group', { name: 'Brief view', exact: true }).getByRole('button', { name: 'JSON', exact: true }).click();
@@ -196,6 +233,18 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
         else await geometry(p.page, width);
       } finally { await p.close(); }
     }
+    for (const path of ['/guides/audio-route-recovery-matrix/','/en/guides/noisy-transcript-text-correction/']) {
+      const p = await openPage(activeBrowser,path,390,844,false);
+      try {
+        const root=p.page.locator('[data-guide-quick-check]');
+        assert.equal(await root.locator('select').isDisabled(),true);
+        assert.ok(await root.locator('noscript').isVisible());
+        await root.locator('.quick-preview-link').click();
+        await p.page.waitForURL('**/#interactive-preview');
+        assert.equal(await p.page.locator('#interactive-preview').count(),1);
+        record.pages.push({ path, javascript:false, fallback:'native task-guide link navigates with no JavaScript' });
+      } finally { await p.close(); }
+    }
     assert.deepEqual(failures, []);
   } finally {
     await activeBrowser?.close(); activeBrowser = undefined;
@@ -203,4 +252,4 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
     await writeFile(resolve(output, 'evidence.json'), JSON.stringify({ results, failures }, null, 2));
   }
 }
-console.log('Browser preview acceptance PASS: Chromium + WebKit, 5 pages per engine, 390/1440px; native speech API and injected contracts reported separately; browsers closed.');
+console.log('Browser preview acceptance PASS: Chromium + WebKit, 5 original pages + 8 P2 landing views + 2 no-JavaScript navigations per engine, 390/1440px; native speech API and injected contracts reported separately; browsers closed.');

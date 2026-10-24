@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Transcript typos? Check the original, then the destination draft"
 description: "Play back available source audio and inspect names, numbers and negation. Mark unsupported wording as unconfirmed, then revise it in an editor or draft that is actually available."
 lang: en
+quickCheck: notes
 ---
 
 <h2 id="first-answer">Start with one useful check</h2>
@@ -35,7 +36,7 @@ Inspect destinations and attachments separately; there is no cross-copy updater.
 
 <h3 id="faq-step-2">Can I hand it off again after an edit?</h3>
 
-Check the existing destination first. Correction does not clear it: the previous handoff state still applies; pause for uncertain results.
+Open the draft already at the destination first. Review or edit that copy; do not hand it off again while the earlier result is unclear.
 
 <h3 id="faq-step-3">What if a number or name is unclear?</h3>
 

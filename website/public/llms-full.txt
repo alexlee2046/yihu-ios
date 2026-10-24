@@ -18,7 +18,7 @@ Privacy: https://getyihu.com/privacy/ | https://getyihu.com/en/privacy/
 
 ## Reading index / 阅读索引
 
-The index follows the sitemap's 158 indexable bilingual URLs. Twenty-two technical-reference routes remain accessible with noindex,follow and are not exported here. 中文根路径为/，英文为/en/。Descriptions explain workflows, not measured accuracy, background recording, radio range, delivery, search indexing or AI-citation guarantees. No App Store listing, hosted Agent/CRM service or inquiry collection is supplied.
+The index follows the sitemap's 150 indexable bilingual URLs. Thirty technical-reference routes remain accessible with noindex,follow and are not exported here. 中文根路径为/，英文为/en/。Descriptions explain workflows, not measured accuracy, background recording, radio range, delivery, search indexing or AI-citation guarantees. No App Store listing, hosted Agent/CRM service or inquiry collection is supplied.
 
 ## Complete page text / 逐页完整正文
 
@@ -1764,7 +1764,7 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/noisy-transcript-text-correction/
 
-场景指南 · 相关使用指南 转写有错字？对照原文改好，再检查目的地草稿 先做一个有用的检查 先回放能核对的原音频，检查人名、数字和否定词。把没有依据的部分标成待确认，再在实际可编辑的草稿或工具中修订。 按这个顺序做 保留原文与音频，对照不确定的词，不靠句子流畅程度猜事实。 在已有、获准可编辑的位置修订；保留要确认的问题。 查看目的地是否已有旧稿，以及剪贴板和附件分别是哪一版。 检查修改后的草稿，再决定发送；已有交接结果不明时先停下核对。 遇到的情况 你可以怎么做 继续前确认 原生保留文字 / 原音频 保留核对依据。 改字不会改变原音频。 修订稿 写清要采用的句子。 用实际已有的编辑工具处理。 目的地旧草稿 检查那里显示的版本。 按目标服务自己的保存/同步规则修改。 剪贴板 / 已有附件 分别检查副本。 不要假定其他位置一起更新。 FAQ 能自动把所有副本更新吗？ 分别检查目的地和附件；一呼不提供跨副本自动更新。 改字后可以重新交接吗？ 先查已有目的地，文本修订不取消既有状态，结果不明时保持停止。 数字或人名听不清怎么办？ 保留待确认，向原资料或参与者核实，不补出一个看起来合理的答案。 修订后能证明降噪效果吗？ 人工修订与原始识别成绩不同，具体设备和环境需要单独试录。 回到自己的任务 语音草稿 · 输入排障 · 录音笔记 · 接入条件 · 隐私 实现参考 README · 冻结实现
+场景指南 · 相关使用指南 转写有错字？对照原文改好，再检查目的地草稿 先做 10 秒场景自检 你现在准备到哪一步？ 选择当前情况 人名、数字或否定词还听不清 文字已核清，想试着改一份草稿 文字已核清，想整理跟进行动 选一个情况看下一步，也可直接打开示例；无需登录或安装。 打开可编辑笔记交互预览 → 语音草稿 音频输入 录音笔记 每日跟进简报 本地问答与预设样例，不诊断硬件、不录音或调用真实 AI。“10 秒”是自检目标，未作为真人耗时实测。 关闭脚本时仍可直接打开场景指南；问答选择与交互示例都需要 JavaScript。 先做一个有用的检查 先回放能核对的原音频，检查人名、数字和否定词。把没有依据的部分标成待确认，再在实际可编辑的草稿或工具中修订。 按这个顺序做 保留原文与音频，对照不确定的词，不靠句子流畅程度猜事实。 在已有、获准可编辑的位置修订；保留要确认的问题。 查看目的地是否已有旧稿，以及剪贴板和附件分别是哪一版。 检查修改后的草稿，再决定发送；已有交接结果不明时先停下核对。 遇到的情况 你可以怎么做 继续前确认 原生保留文字 / 原音频 保留核对依据。 改字不会改变原音频。 修订稿 写清要采用的句子。 用实际已有的编辑工具处理。 目的地旧草稿 检查那里显示的版本。 按目标服务自己的保存/同步规则修改。 剪贴板 / 已有附件 分别检查副本。 不要假定其他位置一起更新。 FAQ 能自动把所有副本更新吗？ 分别检查目的地和附件；一呼不提供跨副本自动更新。 改字后可以重新交接吗？ 先打开目的地已有草稿，核对或修改那一份；上次结果还不清楚时，不要再次交接。 数字或人名听不清怎么办？ 保留待确认，向原资料或参与者核实，不补出一个看起来合理的答案。 修订后能证明降噪效果吗？ 人工修订与原始识别成绩不同，具体设备和环境需要单独试录。 回到自己的任务 语音草稿 · 输入排障 · 录音笔记 · 接入条件 · 隐私 实现参考 README · 冻结实现
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
@@ -1804,7 +1804,7 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/noisy-transcript-text-correction/
 
-All scenarios · Related practical guide Transcript typos? Check the original, then the destination draft Start with one useful check Play back available source audio and inspect names, numbers and negation. Mark unsupported wording as unconfirmed, then revise it in an editor or draft that is actually available. Try this order Keep the original and audio. Check uncertain words rather than inferring facts from fluent phrasing. Revise in an existing, permitted editor and keep open questions visible. Inspect any old destination draft, clipboard text and attachment version separately. Review before sending. If the previous handoff result is uncertain, pause and inspect it first. Your situation What to do Before continuing Retained text / original audio Keep the review evidence. Text edits do not change source audio. Revised text Identify the wording you intend to use. Use an editor that is actually available. Destination draft Inspect the version shown there. Follow its own save/sync behavior. Clipboard / existing attachments Check copies individually. Do not assume every location updates together. FAQ Will every copy update automatically? Inspect destinations and attachments separately; there is no cross-copy updater. Can I hand it off again after an edit? Check the existing destination first. Correction does not clear it: the previous handoff state still applies; pause for uncertain results. What if a number or name is unclear? Leave it unconfirmed and check the source or participant rather than supplying a plausible answer. Does corrected text prove noise performance? Manual correction and original recognition performance differ. Test the particular device and environment separately. Continue with your task Voice drafts · Audio input checks · Voice notes · Setup · Privacy Implementation reference README · Frozen implementation
+All scenarios · Related practical guide Transcript typos? Check the original, then the destination draft A 10-second starting check What is ready for your next step? Choose your situation A name, number or negation is still unclear The wording is clear; I want to edit a draft The text is checked; I need follow-up actions Choose a situation for a next step, or open the sample now. No login or installation needed. Open the editable notes preview → Voice drafts Audio input Voice notes Daily sales brief Local question guide and preset samples; no hardware diagnosis, recording or live AI. “10 seconds” is a starting goal, not a measured user result. Without JavaScript, links still open the task guides; interactive samples also need JavaScript. Start with one useful check Play back available source audio and inspect names, numbers and negation. Mark unsupported wording as unconfirmed, then revise it in an editor or draft that is actually available. Try this order Keep the original and audio. Check uncertain words rather than inferring facts from fluent phrasing. Revise in an existing, permitted editor and keep open questions visible. Inspect any old destination draft, clipboard text and attachment version separately. Review before sending. If the previous handoff result is uncertain, pause and inspect it first. Your situation What to do Before continuing Retained text / original audio Keep the review evidence. Text edits do not change source audio. Revised text Identify the wording you intend to use. Use an editor that is actually available. Destination draft Inspect the version shown there. Follow its own save/sync behavior. Clipboard / existing attachments Check copies individually. Do not assume every location updates together. FAQ Will every copy update automatically? Inspect destinations and attachments separately; there is no cross-copy updater. Can I hand it off again after an edit? Open the draft already at the destination first. Review or edit that copy; do not hand it off again while the earlier result is unclear. What if a number or name is unclear? Leave it unconfirmed and check the source or participant rather than supplying a plausible answer. Does corrected text prove noise performance? Manual correction and original recognition performance differ. Test the particular device and environment separately. Continue with your task Voice drafts · Audio input checks · Voice notes · Setup · Privacy Implementation reference README · Frozen implementation
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
@@ -2668,278 +2668,92 @@ Parameter/comparison tables (HTML) / 参数对照表：
 </tbody>
 </table>
 
-### 蓝牙音频切换后会恢复还是停止？短语音与录音笔记源码矩阵
+### 切换耳机后录音中断？先检查保存，再试录一句
 
 Canonical: https://getyihu.com/guides/audio-route-recovery-matrix/
 
-场景指南 · 相关使用指南 蓝牙音频切换后会恢复还是停止？短语音与录音笔记源码矩阵 先确认正在走哪条录音路径，再解释对应事件 一呼短语音采集和长录音笔记使用不同处理路径。短语音在音频引擎配置变化时可能尝试保留转换器和已采PCM，但要求输入格式不变；笔记的输入变化路径会尝试重定向写入格式。恢复失败、来电或某些路由事件仍可能停止/提示中断。本页解释固定源码分支，不是所有蓝牙设备切换的无损恢复承诺，也不新增恢复按钮或故障探针。 与输入排障、网页切换的区别 输入排障先问为什么没有声音/文字，网页切换指南检查输出和采集的互斥；这里面对 录音已经开始之后，某种系统事件会走哪条代码分支 。不能把短语音的条件套到笔记，也不能把笔记有重定向逻辑解读成网页通话必然继续。 路径与事件恢复矩阵 录音路径/事件 当前源码分支 继续所需条件 仍须核对的结果 短语音：引擎配置变化 重建输入tap/图并尝试重启 活跃记录身份匹配、仍录音、原引擎/管线可用且输入格式相同 是否有失败/中断、文字是否完整；不是自动送达 短语音：输入格式变化 转换器不能安全复用则失败停止 不以强转格式绕过检查 保留可用结果与错误，不声称继续无损 短语音：重启失败 标记中断并停止引擎 无继续成功推断 看实际状态，不连续点击重录制造重复 短语音：重复配置通知 条件满足时去抖，不重复触发恢复 同一记录身份、引擎运行、格式/路由不变且在宽限内 去抖不是忽略真正的新设备变化 短语音：来电开始/媒体服务丢失或重置 对应监听分支使采集失败并停止 按实际事件和当前录音状态处理 没有“来电后一定自动接着录”的保证 短语音：被处理的路由通知 oldDeviceUnavailable/noSuitableRouteForCategory进入中断分支 其他原因有过滤，仍可能另有引擎配置事件 不从通知被过滤推断输入可用或录音未受影响 录音笔记：引擎配置变化 停旧tap、尝试writer重定向、重装tap并启动 仍是当前记录/引擎且重定向与启动成功 失败会提示保存到此前，需查音频和接缝 录音笔记：来电/音频服务重置 对应中断提示路径 按实际保存状态核对 不承诺后台持续、任意时长或绝不丢字 短语音当前格式相等检查包括采样率、通道数、公共格式和交错状态。去抖源码默认宽限为2秒，但它是内部事件条件，不是重连耗时、UI等待时长或恢复SLA。不能通过手动等待两秒就证明某款耳机已经恢复。 遇到变化后的人工检查顺序 先在安全静止环境停下业务操作，辨认短语音还是录音笔记。记录不含私人信息的事件类别（例如来电或更换耳机）、前后可见状态以及是否已有文字；不要收集设备唯一标识、真实录音或客户正文来公开复现。 再看当前保存/转写/错误状态，不从“耳机重新连接”跳到“原录音完整”。需要检查的内容包括断点附近的数字、否定和语句接缝；未核就保持未知。若文字已尝试交接，继续原目标与一次标记边界，音频恢复不是重发许可。 本文不要求关闭系统保护、改采样率、清记录或强制重启服务；也不提供让用户人为制造中断的自动脚本。无法安全复现就保留最小错误描述给已有维护流程。 FAQ 短语音和录音笔记能用同一恢复结论吗？ 不能。它们的管线、格式处理和错误路径不同，必须先识别记录入口与实际版本，再对照分支。 短语音格式变化后能强行复用旧转换器吗？ 源码选择失败停止而非不安全复用。本文不提供绕过办法，也不把失败停止解释成无损继续。 等两秒就能确保蓝牙恢复吗？ 不能。两秒是去抖宽限的代码常量，依赖记录身份、引擎、格式和路由条件，不是蓝牙性能指标。 笔记writer支持重定向是否说明任何耳机都能无缝切换？ 不说明。重定向和重启仍可能失败，实际保存及接缝要核；没有本轮型号/固件/场景的真机恢复矩阵。 音频恢复成功可以自动补发刚才的草稿吗？ 不能。音频采集与交接结果是不同状态，已有填入、拒绝或不确定结果仍按原守卫和标记处理。 提交问题需要完整路由UID或真实录音吗？ 不应为公开反馈收集这些资料。先提供版本、设备型号、事件类别和合成内容的可见结果，私有数据仅沿已有获准流程处理。 相关指南与源码 输入分层排障 · 网页输出/采集切换 · 片段复核 · 降级前许可 · 开始 · 隐私 依据： 短语音事件、格式检查与去抖 、 笔记输入重定向与中断 。这是源码矩阵，不冒浏览器视觉或真机音频验收。
+场景指南 · 相关使用指南 切换耳机后录音中断？先检查保存，再试录一句 先做 10 秒场景自检 切换音频后，现在是哪种情况？ 选择当前情况 能回放，但新录音没有声音 来电或切换外设后录音中断 想先了解检查顺序，还不录音 选一个情况看下一步，也可直接打开示例；无需登录或安装。 打开蓝牙四问交互预览 → 语音草稿 音频输入 录音笔记 每日跟进简报 本地问答与预设样例，不诊断硬件、不录音或调用真实 AI。“10 秒”是自检目标，未作为真人耗时实测。 关闭脚本时仍可直接打开场景指南；问答选择与交互示例都需要 JavaScript。 先听已保存片段，再用手机麦克风作对照 在安全静止环境，先查看录音是否还在进行、有没有保存或错误提示。回放已有片段，检查中断前后的数字和否定词；再用手机麦克风单独试录一句，与耳机输入对照。不要边驾驶边操作。 按这个顺序排查 区分听不到与录不到。 先播放一段已有音频确认输出；能听到不代表耳机麦克风也被选作输入。 保留已有内容。 来电或切换后，先看实际保存、转写和错误状态，标出不完整的句子。 做一条短对照。 用手机麦克风说一句带数字和否定词的合成话，例如“明天核对三项，不发送”。再核对耳机输入和 App 麦克风权限。 核对草稿再继续。 如果前一段文字已经出现在工作台，只检查那里已有的草稿；结果不清楚时先停止，不重复交接。 按现象选择下一步 你看到的情况 先做什么 继续前看什么 回放也没有声音 检查音量与输出设备，再播放已有样本 先让回放可用，再单独核录音输入 能回放，但耳机录不到 与手机麦克风试录对照，核输入与权限 用实际新样本确认，不只看连接图标 来电或换设备后停止 保留已存片段，查看中断提示 检查最后一句、数字、否定与缺口 录音笔记保存到中途 回放保存部分并标记接缝 保留原件；需要时另录一段，不覆盖依据 录音有声，工作台没文字 转去核语音模型与目标编辑框 先确认文字在哪，不盲目重录或重发 为什么短语音和录音笔记要分别检查？ 短语音与录音笔记用不同的采集和保存路径。切换输入后，源码会在条件允许时尝试恢复，但也可能停止并提示中断。因此先辨认自己用了哪个入口，再检查实际音频、文字和保存结果；“耳机已重连”不能替代这一检查。 FAQ 耳机能听到声音，为什么还是录不到？ 播放输出和录音输入要分别检查。先用手机麦克风对照，再核实际 App 的可选输入及麦克风权限。 切换后应该马上再录一遍吗？ 先保留和回放已保存片段，标出缺口；需要补充时另做短样本，避免覆盖原件或重复已有草稿。 来电结束会自动接着录吗？ 先看实际录音入口与状态。来电可能中断采集，不把结束通话当成已恢复或内容完整。 录音笔记提示保存到此前，怎么办？ 回放已保存部分，记下最后一句和缺口，再决定是否另录补充；核对接缝后才整理行动项。 声音恢复后，可以再把刚才的草稿交接一次吗？ 先查看目标已有草稿。音频恢复不说明上次交接失败，已有文字只核对，不自动再次填入。 反馈问题需要提供什么？ 先给版本、设备型号、事件类别和合成样本结果。不要在公开反馈放完整设备标识、真实录音或客户正文。 回到自己的任务 蓝牙输入四问与交互预览 · 录音变行动项 · 语音草稿 · 每日跟进简报 · 接入条件 · 隐私 实现参考：恢复条件和停止提示 短语音在输入格式相同等条件下尝试恢复；oldDeviceUnavailable/noSuitableRouteForCategory 等通知可能使采集停止。内部去抖默认宽限为2秒，但它不是重连耗时或恢复保证。录音笔记会尝试重定向写入，失败仍要核已保存部分。本页没有完成耳机、来电或真机恢复验收。 依据： 短语音事件与格式检查 、 录音笔记与中断 。
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
 <table>
 <thead>
 <tr>
-<th>录音路径/事件</th>
-<th>当前源码分支</th>
-<th>继续所需条件</th>
-<th>仍须核对的结果</th>
+<th>你看到的情况</th>
+<th>先做什么</th>
+<th>继续前看什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>短语音：引擎配置变化</td>
-<td>重建输入tap/图并尝试重启</td>
-<td>活跃记录身份匹配、仍录音、原引擎/管线可用且输入格式相同</td>
-<td>是否有失败/中断、文字是否完整；不是自动送达</td>
+<td>回放也没有声音</td>
+<td>检查音量与输出设备，再播放已有样本</td>
+<td>先让回放可用，再单独核录音输入</td>
 </tr>
 <tr>
-<td>短语音：输入格式变化</td>
-<td>转换器不能安全复用则失败停止</td>
-<td>不以强转格式绕过检查</td>
-<td>保留可用结果与错误，不声称继续无损</td>
+<td>能回放，但耳机录不到</td>
+<td>与手机麦克风试录对照，核输入与权限</td>
+<td>用实际新样本确认，不只看连接图标</td>
 </tr>
 <tr>
-<td>短语音：重启失败</td>
-<td>标记中断并停止引擎</td>
-<td>无继续成功推断</td>
-<td>看实际状态，不连续点击重录制造重复</td>
+<td>来电或换设备后停止</td>
+<td>保留已存片段，查看中断提示</td>
+<td>检查最后一句、数字、否定与缺口</td>
 </tr>
 <tr>
-<td>短语音：重复配置通知</td>
-<td>条件满足时去抖，不重复触发恢复</td>
-<td>同一记录身份、引擎运行、格式/路由不变且在宽限内</td>
-<td>去抖不是忽略真正的新设备变化</td>
+<td>录音笔记保存到中途</td>
+<td>回放保存部分并标记接缝</td>
+<td>保留原件；需要时另录一段，不覆盖依据</td>
 </tr>
 <tr>
-<td>短语音：来电开始/媒体服务丢失或重置</td>
-<td>对应监听分支使采集失败并停止</td>
-<td>按实际事件和当前录音状态处理</td>
-<td>没有“来电后一定自动接着录”的保证</td>
-</tr>
-<tr>
-<td>短语音：被处理的路由通知</td>
-<td>oldDeviceUnavailable/noSuitableRouteForCategory进入中断分支</td>
-<td>其他原因有过滤，仍可能另有引擎配置事件</td>
-<td>不从通知被过滤推断输入可用或录音未受影响</td>
-</tr>
-<tr>
-<td>录音笔记：引擎配置变化</td>
-<td>停旧tap、尝试writer重定向、重装tap并启动</td>
-<td>仍是当前记录/引擎且重定向与启动成功</td>
-<td>失败会提示保存到此前，需查音频和接缝</td>
-</tr>
-<tr>
-<td>录音笔记：来电/音频服务重置</td>
-<td>对应中断提示路径</td>
-<td>按实际保存状态核对</td>
-<td>不承诺后台持续、任意时长或绝不丢字</td>
+<td>录音有声，工作台没文字</td>
+<td>转去核语音模型与目标编辑框</td>
+<td>先确认文字在哪，不盲目重录或重发</td>
 </tr>
 </tbody>
 </table>
 
-### Recover or stop after an audio switch? Short speech versus recording-note source matrix
+### Recording stopped after switching headsets? Check what was saved
 
 Canonical: https://getyihu.com/en/guides/audio-route-recovery-matrix/
 
-All scenarios · Related practical guide Recover or stop after an audio switch? Short speech versus recording-note source matrix Identify the capture path before interpreting the event Short-speech capture and recording notes use different paths. Short speech can attempt to retain its converter/captured PCM after engine configuration changes only with an unchanged input format. Notes try writer retargeting after an input change. Restart failures, calls and some route events can still stop capture or report interruption. This explains fixed source branches, not lossless Bluetooth-switch acceptance or a new recovery button/probe. Different from input diagnosis and web switching Input diagnosis asks why audio/text is absent; web switching separates output and capture. Here recording has already started and an event selects a source branch . Do not apply short-speech conditions to notes or infer an uninterrupted web call from writer retargeting. Capture path and event matrix Path/event Current branch Continuation conditions Result still needing review Short speech: engine configuration change Rebuild input tap/graph and attempt restart Same active record, still recording, existing engine/pipeline and unchanged input format Failure/interruption and text completeness; not delivery Short speech: changed input format Fail closed rather than reuse an unsafe converter No format-coercion bypass Retained result/error, not lossless continuation Short speech: restart failure Mark interrupted and stop engine No success inference Actual state; no repeated recording that duplicates content Short speech: repeated configuration notification Conditional debounce avoids repeated recovery Same record, running engine, unchanged format/route within grace period Not ignoring genuine device changes Short speech: interruption began/media services lost/reset Corresponding observer fails capture and stops Actual event/current recording state No always-resume-after-call promise Short speech: handled route notification oldDeviceUnavailable/noSuitableRouteForCategory interrupt Other reasons filtered, but an engine event can also occur Filtered does not establish valid input/unaffected capture Notes: engine configuration change Stop tap, try writer retargeting, reinstall tap/start Same active recording/engine with successful retarget/start Failure can report retention up to that point; inspect audio/joins Notes: call/media-service reset Corresponding interruption-message path Check actual saved state No continuous-background, arbitrary-duration or no-loss guarantee Short-speech format equality checks sample rate, channel count, common format and interleaving. The debounce’s current default grace is two seconds, an internal conditional window, not reconnection latency, a UI wait time or recovery SLA. Waiting two seconds does not prove a headset recovered. Manual review after a change Stop business operations in a safe stationary setting and identify short speech versus notes. Record non-sensitive event categories, such as a call/headset switch, visible before/after states and whether text exists. Do not collect unique route/device identifiers, actual audio or customer text for public reproduction. Inspect saved/transcription/error state rather than jumping from reconnected to complete recording. Review quantities, negations and joins near interruption, retaining unknowns. If text was already handed off, original target/one-handoff rules remain: audio recovery is not resend permission. This page does not ask users to disable system protection, alter sample rates, clear records or forcibly restart services. No automatic interruption-generation script is supplied. When safe reproduction is impossible, give the existing maintenance process a minimal error description. FAQ Can short speech and recording notes share one recovery conclusion? No. Their pipelines, format handling and failures differ. Identify the recording entry point and actual version before applying a branch. Can a changed short-speech input forcibly reuse the old converter? The source fails closed instead of unsafe reuse. No bypass is supplied, and failing closed is not lossless continuation. Does waiting two seconds guarantee Bluetooth recovery? No. Two seconds is a debounce constant conditional on identity, engine, format and route, not a Bluetooth performance result. Does writer retargeting guarantee every headset switches seamlessly? No. Retarget/restart can fail; inspect actual retention and joins. This work supplies no device/firmware/scenario recovery acceptance matrix. Can recovered audio automatically resend the earlier draft? No. Capture and handoff are separate states. Prior insertion/refusal/uncertainty keeps original guards and markers. Does a report require full route UIDs or real recordings? Do not collect them for public feedback. Start with version, model, event category and synthetic-content outcomes; private material stays within existing authorized procedures. Reading and source Input diagnosis · Web output/capture transition · Passage review · Fallback permission · Start · Privacy Evidence: short-speech events/format/debounce , note retarget/interruption . A source matrix is not browser-visual or device-audio acceptance.
+All scenarios · Related practical guide Recording stopped after switching headsets? Check what was saved A 10-second starting check What happened after the audio switch? Choose your situation Playback works, but the new recording is silent A call or device switch interrupted recording I want to try the checks before recording Choose a situation for a next step, or open the sample now. No login or installation needed. Open the audio self-check preview → Voice drafts Audio input Voice notes Daily sales brief Local question guide and preset samples; no hardware diagnosis, recording or live AI. “10 seconds” is a starting goal, not a measured user result. Without JavaScript, links still open the task guides; interactive samples also need JavaScript. Listen to the saved passage, then compare the phone microphone In a safe stationary setting, check whether recording is still active and whether the app reports a saved result or error. Play back the saved passage and inspect numbers and negation around the interruption. Make a separate short phone-mic sample to compare with headset input. Do not operate while driving. Try this order Separate playback from input. Play existing audio to check output; hearing it does not establish that the headset microphone is selected. Keep what was saved. After a call or switch, inspect saved audio, transcription and error state, and mark incomplete wording. Make a short comparison. Use the phone microphone with a synthetic phrase such as “Check three items tomorrow; do not send.” Then inspect headset input and the app’s microphone permission. Inspect the existing draft. If earlier text already reached the workbench, review that draft. Pause when the result is unclear rather than handing it off again. Choose your next check What you see First action Before continuing Playback is silent too Check volume and output, then play an existing sample Restore playback before testing input separately Playback works but the headset records nothing Compare a phone-mic sample; inspect input and permission Use the actual new sample, not just the connection icon A call or device switch stopped recording Keep saved passages and inspect interruption messages Check the last sentence, numbers, negation and gaps A note was saved only up to a point Play back the retained portion and mark the join Keep the original; make a separate supplement if needed Audio exists but the workbench has no text Next inspect speech models and the intended editor Locate the text before recording or handing off again Why inspect short speech and recording notes separately? Short speech and notes use different capture and saving paths. After an input change, the source attempts recovery when its conditions allow, but can also stop and report an interruption. Identify which entry point you used, then inspect actual audio, text and saved results. A reconnected headset cannot replace that check. FAQ Why can I hear the headset but not record through it? Playback and recording input need separate checks. Compare the phone microphone first, then inspect available input choices and microphone permission in the actual app. Should I immediately record everything again? Keep and play back saved passages first. Mark gaps and make a separate short supplement if needed, without overwriting the original or duplicating a draft. Will recording automatically resume after a call? Inspect the actual recording entry point and state. A call can interrupt capture; ending it does not establish recovery or completeness. What if a note says it was saved only up to that point? Play back the saved part, identify its last sentence and gaps, then decide whether to record a separate supplement. Review joins before organizing action items. Can recovered audio hand off the earlier draft again? Inspect the destination draft first. Audio recovery does not establish that the earlier handoff failed; review existing text instead of inserting it automatically again. What should I include in a report? Start with version, device model, event category and synthetic-sample results. Keep unique device identifiers, real recordings and customer text out of public feedback. Continue with your task Audio input questions and preview · Notes to action items · Voice drafts · Daily sales brief · Setup · Privacy Implementation reference: recovery conditions and stop messages Short speech attempts recovery under conditions including unchanged input format; oldDeviceUnavailable/noSuitableRouteForCategory notifications can stop capture. The internal debounce grace is two seconds, not reconnection latency or a recovery guarantee. Notes attempt writer retargeting; failures still require inspection of what was saved. This page supplies no headset, call-interruption or physical-device acceptance results. Evidence: short-speech events and format checks , notes and interruptions .
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
 <table>
 <thead>
 <tr>
-<th>Path/event</th>
-<th>Current branch</th>
-<th>Continuation conditions</th>
-<th>Result still needing review</th>
+<th>What you see</th>
+<th>First action</th>
+<th>Before continuing</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Short speech: engine configuration change</td>
-<td>Rebuild input tap/graph and attempt restart</td>
-<td>Same active record, still recording, existing engine/pipeline and unchanged input format</td>
-<td>Failure/interruption and text completeness; not delivery</td>
+<td>Playback is silent too</td>
+<td>Check volume and output, then play an existing sample</td>
+<td>Restore playback before testing input separately</td>
 </tr>
 <tr>
-<td>Short speech: changed input format</td>
-<td>Fail closed rather than reuse an unsafe converter</td>
-<td>No format-coercion bypass</td>
-<td>Retained result/error, not lossless continuation</td>
+<td>Playback works but the headset records nothing</td>
+<td>Compare a phone-mic sample; inspect input and permission</td>
+<td>Use the actual new sample, not just the connection icon</td>
 </tr>
 <tr>
-<td>Short speech: restart failure</td>
-<td>Mark interrupted and stop engine</td>
-<td>No success inference</td>
-<td>Actual state; no repeated recording that duplicates content</td>
+<td>A call or device switch stopped recording</td>
+<td>Keep saved passages and inspect interruption messages</td>
+<td>Check the last sentence, numbers, negation and gaps</td>
 </tr>
 <tr>
-<td>Short speech: repeated configuration notification</td>
-<td>Conditional debounce avoids repeated recovery</td>
-<td>Same record, running engine, unchanged format/route within grace period</td>
-<td>Not ignoring genuine device changes</td>
+<td>A note was saved only up to a point</td>
+<td>Play back the retained portion and mark the join</td>
+<td>Keep the original; make a separate supplement if needed</td>
 </tr>
 <tr>
-<td>Short speech: interruption began/media services lost/reset</td>
-<td>Corresponding observer fails capture and stops</td>
-<td>Actual event/current recording state</td>
-<td>No always-resume-after-call promise</td>
-</tr>
-<tr>
-<td>Short speech: handled route notification</td>
-<td>oldDeviceUnavailable/noSuitableRouteForCategory interrupt</td>
-<td>Other reasons filtered, but an engine event can also occur</td>
-<td>Filtered does not establish valid input/unaffected capture</td>
-</tr>
-<tr>
-<td>Notes: engine configuration change</td>
-<td>Stop tap, try writer retargeting, reinstall tap/start</td>
-<td>Same active recording/engine with successful retarget/start</td>
-<td>Failure can report retention up to that point; inspect audio/joins</td>
-</tr>
-<tr>
-<td>Notes: call/media-service reset</td>
-<td>Corresponding interruption-message path</td>
-<td>Check actual saved state</td>
-<td>No continuous-background, arbitrary-duration or no-loss guarantee</td>
-</tr>
-</tbody>
-</table>
-
-### 客户跟进证据归档前：最小披露、私有引用与副本范围核对
-
-Canonical: https://getyihu.com/guides/followup-evidence-minimization/
-
-场景指南 · 相关使用指南 客户跟进证据归档前：最小披露、私有引用与副本范围核对 证据足够不等于资料越多越好，先核可保留与可披露的范围 团队若把已有客户跟进任务导出为Radar JSON，应继续按来源权限使用；一呼不是CRM、客户采集器或外贸数据归档平台。这里专门检查归档材料中的不必要正文、身份与链接参数，把私有原始依据和对外合成说明分开。它不是自动脱敏工具、合规认证或一键删除副本功能。 与认领、证据审计和二次核实的分工 责任认领清单核谁确认、资料该存哪里；事后审计核完成主张是否有依据；证据二次核实核单个异常主张真假。此处的任务是 在已有获准证据准备保存或分享时，只保留必要内容并标明私有范围 ，不再决定谁负责或裁定业务真相。 归档/披露前最小材料表 材料 先问的问题 合成/最小化做法 不可据此保证 任务标题与next 是否含客户姓名、订单或内部指令？ 公开说明用无真实含义的样例，不照抄正文 App自动识别并移除敏感内容 evidence URL 参数、路径或片段是否暴露身份/令牌？ 私有引用留在原授权范围；公开样例用example.invalid HTTPS候选已脱敏、内容可信或可公开 来源/任务标识 是否确有必要暴露内部UUID/保护标记？ 使用人工样例代号，不外传实际标记 假名化即匿名或解除访问权限要求 原始音频/转写 是否必须为该归档目的保留？ 优先引用获准最小范围，别为公开演示上传录音 本地存储天然无备份/副本 回执/回复历史 是否含私人事项与原请求信息？ 有权复核者在原流程读必要部分 读取权限等于全文导出/公开授权 截图与日志 是否显示账号、源地址、客户正文或设备信息？ 公开回证仅用合成内容与非敏感结果 官网或App自动遮挡截图内容 文档/剪贴板/附件 是否扩大复制、同步或可访问范围？ 核实际目的地规则和必要副本 删除一份即可撤回全部资料 保存期限与访问 团队已有规则和获准角色是什么？ 引用实际规则，未知就停 统一保留时长、保证删除或合规通过 一个只含合成信息的公开说明 来源：样例项目sample，不是真实客户/订单。 核对范围：字段形态与可见状态，不提供原始业务正文。 证据链接：https://example.invalid/evidence/sample 归档位置：按已有授权规则确认，未创建新共享位置。 尚未确认：私有原记录的保留/访问范围，由原流程处理。 该链接是保留域名，不提供真实可访问证据，也不应被写进生产台账冒充原始记录。公开合成说明和私有真实依据作用不同；不能删掉所有来源信息后又声称公开说明足以证明真实客户事项。 从已获准材料到最小归档包 先定义归档目的和有权阅读者，再逐项判断是否需要正文、音频、标识或仅一个受权限控制的原记录引用。没有权限时，记录未核而不是索取更多材料。不要为实现所谓“完整归档”新建账号、公开共享链接或批量导出私人任务。 原生Radar保留来源文字，并不会因 safeEvidenceURLs 筛出HTTPS就替你移除查询参数。笔记文字交接也不代表原音频或其他副本已删除。人工整理之后仍须核原笔记交接状态和目的地已有内容，不能用脱敏稿绕过一次交接或不确定停止。 FAQ 一呼是否能自动归档客户往来和跟进证据？ 本文不声明这种CRM能力。这里只解释团队自有获准任务数据的最小化检查，不采集客户、发信或自动建档。 HTTPS证据链接会被App自动脱敏吗？ 不能据此推断。当前解析检查链接形态，不保证移除参数、身份或业务路径；公开材料需人工按实际权限核查。 把客户名字改成角色A就一定匿名了吗？ 不一定。正文、时间、路径、订单和其他组合仍可能识别对象。本页不提供匿名化认证，公开示例应使用完全合成内容。 有权看Radar就有权导出全部历史吗？ 不能这样扩大权限。按原事项、服务与团队规则核必要范围，读取和批量导出/公开是不同操作。 归档后删手机记录是否意味着服务端副本也删除？ 不是。工作台、剪贴板、附件、账户同步和备份可能各留副本，需按实际目的地规则核对，不保证远端撤回。 最小化之后仍可声明真实业务已验收吗？ 只有真实且获准的依据支持相应范围时才可作有限结论；合成公开说明本身不是原记录、批准、送达或处理证明。 相关指南与依据 部门认领与归档 · 交接证据审计 · 异常证据二次核实 · 跨端字段呈现 · 开始 · 隐私 依据： Radar原文字段与证据解析 、 README分享/历史/权限边界 。
-
-Parameter/comparison tables (HTML) / 参数对照表：
-
-<table>
-<thead>
-<tr>
-<th>材料</th>
-<th>先问的问题</th>
-<th>合成/最小化做法</th>
-<th>不可据此保证</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>任务标题与next</td>
-<td>是否含客户姓名、订单或内部指令？</td>
-<td>公开说明用无真实含义的样例，不照抄正文</td>
-<td>App自动识别并移除敏感内容</td>
-</tr>
-<tr>
-<td>evidence URL</td>
-<td>参数、路径或片段是否暴露身份/令牌？</td>
-<td>私有引用留在原授权范围；公开样例用example.invalid</td>
-<td>HTTPS候选已脱敏、内容可信或可公开</td>
-</tr>
-<tr>
-<td>来源/任务标识</td>
-<td>是否确有必要暴露内部UUID/保护标记？</td>
-<td>使用人工样例代号，不外传实际标记</td>
-<td>假名化即匿名或解除访问权限要求</td>
-</tr>
-<tr>
-<td>原始音频/转写</td>
-<td>是否必须为该归档目的保留？</td>
-<td>优先引用获准最小范围，别为公开演示上传录音</td>
-<td>本地存储天然无备份/副本</td>
-</tr>
-<tr>
-<td>回执/回复历史</td>
-<td>是否含私人事项与原请求信息？</td>
-<td>有权复核者在原流程读必要部分</td>
-<td>读取权限等于全文导出/公开授权</td>
-</tr>
-<tr>
-<td>截图与日志</td>
-<td>是否显示账号、源地址、客户正文或设备信息？</td>
-<td>公开回证仅用合成内容与非敏感结果</td>
-<td>官网或App自动遮挡截图内容</td>
-</tr>
-<tr>
-<td>文档/剪贴板/附件</td>
-<td>是否扩大复制、同步或可访问范围？</td>
-<td>核实际目的地规则和必要副本</td>
-<td>删除一份即可撤回全部资料</td>
-</tr>
-<tr>
-<td>保存期限与访问</td>
-<td>团队已有规则和获准角色是什么？</td>
-<td>引用实际规则，未知就停</td>
-<td>统一保留时长、保证删除或合规通过</td>
-</tr>
-</tbody>
-</table>
-
-### Before archiving follow-up evidence: minimal disclosure, private references and copies
-
-Canonical: https://getyihu.com/en/guides/followup-evidence-minimization/
-
-All scenarios · Related practical guide Before archiving follow-up evidence: minimal disclosure, private references and copies Sufficient evidence is not maximum collection; check retention and disclosure scope first Teams exporting existing follow-up tasks to Radar JSON keep the source’s permissions. Yihu is not a CRM, customer collector or trade-data archive. This guide checks unnecessary text, identities and URL parameters in material being retained/shared, separating private originals from public synthetic examples. It is not an automatic redactor, compliance certification or delete-all-copies feature. Different from ownership, claim audit and verification Ownership checks responsibility/storage; evidence audit checks completion claims; second checks assess evidence for one anomaly claim. Here already authorized material is being prepared for retention/disclosure, so minimize content and mark private scope . It does not assign owners or adjudicate business truth. Minimal material before retention/disclosure Material First question Minimal/synthetic treatment Not guaranteed Task title/next Customer names, orders or internal instructions? Use meaningless synthetic examples publicly, not copied business text Automatic sensitive-content detection/removal evidence URL Identity/tokens in query, path or fragment? Private references remain authorized; public examples use example.invalid HTTPS candidates are redacted, trustworthy or public Source/item identity Is an internal UUID/protected marker necessary? Use editorial sample labels, not actual markers Pseudonyms guarantee anonymity or waive permission Original audio/text Necessary for this retention purpose? Prefer authorized minimal scope; no recordings for public demos Local storage has no backup/copies Receipts/history Private items or original-request information? Authorized reviewers inspect only necessary source material Read access permits complete export/publication Screenshots/logs Accounts, feeds, customer text or device identity visible? Synthetic content and non-sensitive outcomes publicly Automatic screenshot masking Documents/clipboard/attachments Expanded copying, syncing or access? Check actual destination rules and necessary copies One deletion recalls everything Retention/access Actual policy and authorized roles? Cite existing policy; stop if unknown One retention period, guaranteed deletion or compliance A fully synthetic public explanation Source: Sample project, not a real customer/order. Scope: Field shape and visible state, without original business text. Evidence example: https://example.invalid/evidence/sample Archive: Confirm existing authorized rules; no new share destination created. Unknown: Private-source retention/access remains with the original process. The reserved-domain example supplies no real evidence and should not be placed in a live ledger as an original record. Public synthetic explanations and private authentic evidence serve different purposes. Removing all provenance does not make a public example proof of a real customer item. From authorized material to a minimal package Define retention purpose and authorized readers before deciding whether text, audio, identifiers or a controlled original reference is necessary. Mark unavailable evidence unreviewed rather than demanding more data. Do not provision accounts, public shares or bulk private-task exports under a complete-archive label. Native Radar retains source text; safeEvidenceURLs selecting HTTPS does not strip queries. Text handoff does not delete original audio or other copies. After editing, still inspect note reservation/destination state. A redacted draft cannot bypass one-handoff or uncertain-stop guards. FAQ Does Yihu automatically archive customer correspondence and evidence? No CRM capability is asserted. This is minimization guidance for your authorized task data, without customer collection, email or automatic record creation. Are HTTPS evidence links automatically redacted? Do not infer that. Parsing checks shape, not removal of parameters, identity or business paths. Review public material manually under actual permissions. Does replacing a name with role A guarantee anonymity? No. Text, time, paths, orders and combinations can remain identifying. No anonymization certification is supplied; use fully synthetic public examples. Does Radar visibility permit exporting all history? No. Check original-item, service and team scope. Reading, bulk export and publication are different operations. Does deleting phone records delete remote copies after archiving? No. Workbenches, clipboard, attachments, account sync and backups can retain separate copies. Check actual policies without a remote-recall guarantee. Does minimization establish acceptance of the real business event? Only actual authorized evidence supports a limited conclusion. A synthetic public explanation is not the original, approval, delivery or handling record. Guides and evidence Ownership/archive planning · Handoff evidence audit · Second-check claims · Cross-device presentation · Start · Privacy Evidence: Radar source fields/link parsing , README sharing/history/permissions .
-
-Parameter/comparison tables (HTML) / 参数对照表：
-
-<table>
-<thead>
-<tr>
-<th>Material</th>
-<th>First question</th>
-<th>Minimal/synthetic treatment</th>
-<th>Not guaranteed</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Task title/next</td>
-<td>Customer names, orders or internal instructions?</td>
-<td>Use meaningless synthetic examples publicly, not copied business text</td>
-<td>Automatic sensitive-content detection/removal</td>
-</tr>
-<tr>
-<td>evidence URL</td>
-<td>Identity/tokens in query, path or fragment?</td>
-<td>Private references remain authorized; public examples use example.invalid</td>
-<td>HTTPS candidates are redacted, trustworthy or public</td>
-</tr>
-<tr>
-<td>Source/item identity</td>
-<td>Is an internal UUID/protected marker necessary?</td>
-<td>Use editorial sample labels, not actual markers</td>
-<td>Pseudonyms guarantee anonymity or waive permission</td>
-</tr>
-<tr>
-<td>Original audio/text</td>
-<td>Necessary for this retention purpose?</td>
-<td>Prefer authorized minimal scope; no recordings for public demos</td>
-<td>Local storage has no backup/copies</td>
-</tr>
-<tr>
-<td>Receipts/history</td>
-<td>Private items or original-request information?</td>
-<td>Authorized reviewers inspect only necessary source material</td>
-<td>Read access permits complete export/publication</td>
-</tr>
-<tr>
-<td>Screenshots/logs</td>
-<td>Accounts, feeds, customer text or device identity visible?</td>
-<td>Synthetic content and non-sensitive outcomes publicly</td>
-<td>Automatic screenshot masking</td>
-</tr>
-<tr>
-<td>Documents/clipboard/attachments</td>
-<td>Expanded copying, syncing or access?</td>
-<td>Check actual destination rules and necessary copies</td>
-<td>One deletion recalls everything</td>
-</tr>
-<tr>
-<td>Retention/access</td>
-<td>Actual policy and authorized roles?</td>
-<td>Cite existing policy; stop if unknown</td>
-<td>One retention period, guaranteed deletion or compliance</td>
+<td>Audio exists but the workbench has no text</td>
+<td>Next inspect speech models and the intended editor</td>
+<td>Locate the text before recording or handing off again</td>
 </tr>
 </tbody>
 </table>
@@ -7578,144 +7392,6 @@ Parameter/comparison tables (HTML) / 参数对照表：
 </tbody>
 </table>
 
-### 提到我为何命中或漏项？固定展示规则不等账户与负责人识别
-
-Canonical: https://getyihu.com/guides/attention-filter-identity-boundaries/
-
-场景指南 · 相关使用指南 提到我为何命中或漏项？固定展示规则不等账户与负责人识别 “提到我”是派生筛选，不是服务端认领、身份或授权结论 当前requiresMyAttention在状态去首尾空白后匹配等你决策/等你验收，或检查next是否包含源码固定字样Alex。它没有在这个getter中读取当前登录账户。命中不等于任务属于某个真实用户，也不授予回复权；未命中同样不能证明没有工作需要处理。 与状态别名、认领与空字段的区别 别名指南核展示类别，认领清单核责任范围，空字段指南核占位；这里核**“只看提到我”的匹配原因和过滤覆盖**。源码固定字样仅作代码条件说明，不是真实顾客记录或新账户识别服务。 检查项 已核范围 人工复核 不应推断 状态分支 trim后两个明确状态可命中 原status与匹配条件 正文必须含名字才命中 next分支 localizedStandardContains检查固定Alex 检查的是next而非所有正文 动态读取当前账号/联系人 过滤开启 matchingActions可基于allTasks 全台账/来源范围另核 后台发现全部待办 其他条件 项目/状态/优先级/搜索/历史仍可过滤 当前显示配置 匹配后一定显示 未命中/空列表 受来源与多重条件影响 原材料、范围和未知 没人找我或任务全完成 派生Bool 不把原状态改写 源字段与显示结论分开 自动认领/批准 回复资格 实际目标/能力/权限另核 原生prepare/确认 匹配即可提交 人工归档 保留原值与实际核查范围 编辑说明非原生reason API 自动生成负责人证据 合成筛选记录 样例A的状态为等你验收，即使next不含固定字样也可命中；样例B的next包含该字样，也不由此证明实际登录人是负责人。列表被项目过滤后变空，不能报告原来源没有待处理项。 若要用匹配结果整理简报，注明来源和已核范围，不把UI筛选截图当账户、审批或签收证明。不修改名字/状态来绕过写入口条件。 FAQ 提到我是否读取当前登录账号？ 该getter用固定状态/字样条件，不提供动态账户身份识别保证。 没有名字为什么仍命中？ 明确待决策/验收状态本身可命中，不只检查next。 标题提了名字就必命中吗？ 该名字分支检查next，不等于扫描所有字段；其他条件仍可能影响结果。 列表为空就证明没有待办吗？ 不能。来源范围、其他显示条件和数据缺口都要核。 命中后自动成为负责人或可回复吗？ 不会由这个筛选授予责任/写权，原生目标和权限仍独立。 本页新增多用户身份或自动认领吗？ 没有。只核派生展示逻辑，不创建账户/授权或分发流程。 相关指南与源码 状态别名 · 认领责任 · 显示占位 · 开始 · 隐私 requiresMyAttention/matchingActions · 显示过滤入口
-
-Parameter/comparison tables (HTML) / 参数对照表：
-
-<table>
-<thead>
-<tr>
-<th>检查项</th>
-<th>已核范围</th>
-<th>人工复核</th>
-<th>不应推断</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>状态分支</td>
-<td>trim后两个明确状态可命中</td>
-<td>原status与匹配条件</td>
-<td>正文必须含名字才命中</td>
-</tr>
-<tr>
-<td>next分支</td>
-<td>localizedStandardContains检查固定Alex</td>
-<td>检查的是next而非所有正文</td>
-<td>动态读取当前账号/联系人</td>
-</tr>
-<tr>
-<td>过滤开启</td>
-<td>matchingActions可基于allTasks</td>
-<td>全台账/来源范围另核</td>
-<td>后台发现全部待办</td>
-</tr>
-<tr>
-<td>其他条件</td>
-<td>项目/状态/优先级/搜索/历史仍可过滤</td>
-<td>当前显示配置</td>
-<td>匹配后一定显示</td>
-</tr>
-<tr>
-<td>未命中/空列表</td>
-<td>受来源与多重条件影响</td>
-<td>原材料、范围和未知</td>
-<td>没人找我或任务全完成</td>
-</tr>
-<tr>
-<td>派生Bool</td>
-<td>不把原状态改写</td>
-<td>源字段与显示结论分开</td>
-<td>自动认领/批准</td>
-</tr>
-<tr>
-<td>回复资格</td>
-<td>实际目标/能力/权限另核</td>
-<td>原生prepare/确认</td>
-<td>匹配即可提交</td>
-</tr>
-<tr>
-<td>人工归档</td>
-<td>保留原值与实际核查范围</td>
-<td>编辑说明非原生reason API</td>
-<td>自动生成负责人证据</td>
-</tr>
-</tbody>
-</table>
-
-### Why attention filtering matches or misses: fixed display rules are not account identity
-
-Canonical: https://getyihu.com/en/guides/attention-filter-identity-boundaries/
-
-All scenarios · Related practical guide Why attention filtering matches or misses: fixed display rules are not account identity Attention filtering is derived display, not server ownership, identity or authority Current requiresMyAttention trims status and checks the two decision/acceptance states, or tests next for the fixed source string Alex. This getter does not read the signed-in account. A match does not establish actual ownership or reply access; a miss does not prove nothing needs handling. Different from aliases, ownership and placeholders Aliases concern categories, ownership concerns responsibility, placeholders concern missing data. Here attention-match reasons and display coverage matter. The literal is a public code condition, not customer content or a new account-identification service. Check Verified scope Manual review Not established State branch Two explicit trimmed states can match Raw status/condition Name must occur in prose Next branch localizedStandardContains for fixed Alex next, not all contents Current account/contact inferred Filter enabled matchingActions can use allTasks Actual ledger/source coverage Every pending task discovered Other conditions Project/status/priority/search/history still filter Current display configuration Matches always visible No match/list empty Source/multiple conditions matter Originals/scope/unknowns Nobody awaits action/all done Derived Bool No source-status rewrite Raw versus display Automatic claiming/approval Reply eligibility Actual target/capability/authority separately Original prepare/confirmation Match grants submit Editorial retention Original values/reviewed scope Not a native reason API Automatic owner evidence Synthetic filter note A can match an acceptance state without the literal in next. B containing the literal does not prove the signed-in user owns it. A project-filtered empty list does not establish no pending source items. Briefs should state source/scope instead of treating filter screenshots as account, approval or receipt evidence. Do not edit names/states to bypass write guards. FAQ Does attention read the logged-in account? This getter uses fixed states/text, without dynamic account-identity guarantees. Why match without a name? The explicit decision/acceptance states can match independently. Does a name in title guarantee matching? The name branch checks next, not every field; other filters also apply. Does empty mean no tasks? No. Source coverage, filters and gaps need review. Does matching assign ownership or replies? No. Responsibility/target/authority remain separate. Is multi-user identification or claiming added? No. Derived display only, without provisioning accounts/authority/dispatch. Reading and source Status aliases · Ownership · Placeholders · Start · Privacy Attention/matchingActions · Display controls
-
-Parameter/comparison tables (HTML) / 参数对照表：
-
-<table>
-<thead>
-<tr>
-<th>Check</th>
-<th>Verified scope</th>
-<th>Manual review</th>
-<th>Not established</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>State branch</td>
-<td>Two explicit trimmed states can match</td>
-<td>Raw status/condition</td>
-<td>Name must occur in prose</td>
-</tr>
-<tr>
-<td>Next branch</td>
-<td>localizedStandardContains for fixed Alex</td>
-<td>next, not all contents</td>
-<td>Current account/contact inferred</td>
-</tr>
-<tr>
-<td>Filter enabled</td>
-<td>matchingActions can use allTasks</td>
-<td>Actual ledger/source coverage</td>
-<td>Every pending task discovered</td>
-</tr>
-<tr>
-<td>Other conditions</td>
-<td>Project/status/priority/search/history still filter</td>
-<td>Current display configuration</td>
-<td>Matches always visible</td>
-</tr>
-<tr>
-<td>No match/list empty</td>
-<td>Source/multiple conditions matter</td>
-<td>Originals/scope/unknowns</td>
-<td>Nobody awaits action/all done</td>
-</tr>
-<tr>
-<td>Derived Bool</td>
-<td>No source-status rewrite</td>
-<td>Raw versus display</td>
-<td>Automatic claiming/approval</td>
-</tr>
-<tr>
-<td>Reply eligibility</td>
-<td>Actual target/capability/authority separately</td>
-<td>Original prepare/confirmation</td>
-<td>Match grants submit</td>
-</tr>
-<tr>
-<td>Editorial retention</td>
-<td>Original values/reviewed scope</td>
-<td>Not a native reason API</td>
-<td>Automatic owner evidence</td>
-</tr>
-</tbody>
-</table>
-
 ### manifest出现后代表什么？本地批次可见点与残留目录核查
 
 Canonical: https://getyihu.com/guides/share-manifest-visibility-review/
@@ -8126,144 +7802,6 @@ Parameter/comparison tables (HTML) / 参数对照表：
 <td>Final/processing/audio separately</td>
 <td>Actual reviewed scope</td>
 <td>Screenshot is verbatim certification</td>
-</tr>
-</tbody>
-</table>
-
-### 模型校验通过代表什么？revision、资产SHA、加载与预热分账
-
-Canonical: https://getyihu.com/guides/model-artifact-validation-evidence/
-
-场景指南 · 相关使用指南 模型校验通过代表什么？revision、资产SHA、加载与预热分账 固定资产匹配不是识别准确率，下载/加载/预热也非同一个门 Qwen3ModelStore.isInstalled会核固定revision标记，并对清单资产核大小和SHA-256，不只是检查目录存在。加载时仍有完整性门，之后CoreML加载和预热也可能失败；validateInstalledModel可复用已加载/预热实例，不代表每次都全盘重读。文件证据不证明每词准确或真实场景可用。 与首次试用、声纹和材料hash的区别 试用核整条链路，声纹是另一便捷过滤，材料hash核某份字节；这里核 本地ASR固定资产、安装判定、内存加载与预热的证据层级 。不下载模型、读取私有声音、卸载或运行推理。 检查项 已核范围 人工复核 不应推断 固定清单 指定repository revision和每项字节/SHA 对应固定源码清单 任意同名权重都兼容 isInstalled 标记及列出资产逐项大小/摘要 false的取消/缺项/失配等区别 仅有目录就已通过 清单范围 核列出的资产 已核文件与其他材料分开 整个目录全部文件真实性认证 发布安装树 已验证staging后再替换/移动 实际安装结果和错误 下载进度数字即加载成功 加载 loadIfNeeded先看内存实例 新加载需要完整性/代际条件 每次调用都重新全盘校验 代际隔离 installGeneration变化保护旧等待加载 旧准备与当前模型分开 数字提供身份签名 预热 validate调用/已预热可复用 实际失败与结果 预热成功等真实讲话准确 归档证据 版本/清单/实际通过范围 设备/权限/原音频/内容另验 模型安全认证、语义正确或恢复SLA 合成校验说明 已知：某固定清单资产匹配；未证：本机CoreML加载、预热和真实语音效果。只能写文件完整性范围通过，不报告识别成绩。若已加载实例被复用，也不写“刚刚全盘重新验过”。 不要改revision标记或清单来掩盖失配，不为页面演示下载/移除真实模型。哈希对应预期字节，不替代发布信任、使用许可、运行兼容或真实准确率验收；本页没有测这些项。 FAQ isInstalled只看文件夹存在吗？ 不是。当前实现核固定revision及清单资产的大小和SHA。 全部hash对就每句话准确吗？ 不能推出，文件完整性与运行、设备、语音内容和语义分别核。 validate每次都重新读全部文件吗？ 不能这样说，已加载/预热实例可复用，首次加载仍需完整性门。 安装返回后还可能加载失败吗？ 可能，CoreML加载/预热是不同阶段，不能用下载状态替代。 isInstalled为false必定是恶意篡改吗？ 不能单独判断，取消、缺项、读取/大小/摘要或版本等条件都需核。 本页运行过模型或下载吗？ 没有。只核源码和证据层级，不称模型性能或真实设备验收。 相关指南与源码 整链试用 · 声纹区别 · 材料与版本 · 预览与最终 · 开始 · 隐私 固定清单/isInstalled/install · loadIfNeeded/validateInstalledModel · 现有准备入口
-
-Parameter/comparison tables (HTML) / 参数对照表：
-
-<table>
-<thead>
-<tr>
-<th>检查项</th>
-<th>已核范围</th>
-<th>人工复核</th>
-<th>不应推断</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>固定清单</td>
-<td>指定repository revision和每项字节/SHA</td>
-<td>对应固定源码清单</td>
-<td>任意同名权重都兼容</td>
-</tr>
-<tr>
-<td>isInstalled</td>
-<td>标记及列出资产逐项大小/摘要</td>
-<td>false的取消/缺项/失配等区别</td>
-<td>仅有目录就已通过</td>
-</tr>
-<tr>
-<td>清单范围</td>
-<td>核列出的资产</td>
-<td>已核文件与其他材料分开</td>
-<td>整个目录全部文件真实性认证</td>
-</tr>
-<tr>
-<td>发布安装树</td>
-<td>已验证staging后再替换/移动</td>
-<td>实际安装结果和错误</td>
-<td>下载进度数字即加载成功</td>
-</tr>
-<tr>
-<td>加载</td>
-<td>loadIfNeeded先看内存实例</td>
-<td>新加载需要完整性/代际条件</td>
-<td>每次调用都重新全盘校验</td>
-</tr>
-<tr>
-<td>代际隔离</td>
-<td>installGeneration变化保护旧等待加载</td>
-<td>旧准备与当前模型分开</td>
-<td>数字提供身份签名</td>
-</tr>
-<tr>
-<td>预热</td>
-<td>validate调用/已预热可复用</td>
-<td>实际失败与结果</td>
-<td>预热成功等真实讲话准确</td>
-</tr>
-<tr>
-<td>归档证据</td>
-<td>版本/清单/实际通过范围</td>
-<td>设备/权限/原音频/内容另验</td>
-<td>模型安全认证、语义正确或恢复SLA</td>
-</tr>
-</tbody>
-</table>
-
-### What model validation proves: revision, asset SHA, loading and warm-up differ
-
-Canonical: https://getyihu.com/en/guides/model-artifact-validation-evidence/
-
-All scenarios · Related practical guide What model validation proves: revision, asset SHA, loading and warm-up differ Pinned asset identity is not accuracy; installation, loading and warming are separate gates Qwen3ModelStore.isInstalled checks a fixed revision marker and listed asset sizes/SHA-256, not directory existence alone. New loading still has an integrity gate, while CoreML load/warm-up can fail separately. validateInstalledModel can reuse a loaded/warmed instance rather than reread every file each call. File evidence does not establish every word’s accuracy or scenario readiness. Different from trial, voiceprint and material digests Trial checks the whole chain; voiceprint is another convenience filter; digests identify bytes. Here pinned ASR assets, installation, memory loading and warming have separate evidence scopes. No download, private voice access, removal or inference ran. Check Verified scope Manual review Not established Pinned manifest Repository revisions/per-asset bytes/SHA Actual fixed-source manifest Any same-name weights compatible isInstalled Marker and listed sizes/digests Cancellation/missing/mismatch causes Directory presence suffices Manifest scope Listed assets checked Reviewed files versus other material Every directory file authenticated Publish tree Verified staging then replace/move Actual install/error Progress means loaded Load loadIfNeeded checks memory first New load integrity/generation Every call rescans all files Generation installGeneration guards suspended old load Old preparation/current model Identity signature Warm-up validate can reuse warmed instance Actual results/errors Real speech accuracy accepted Retention evidence Version/manifest/actual checks Device/permissions/audio/content separately Security certification/semantic truth/restore SLA Synthetic validation note Known: assets match one pinned manifest. Unknown: this device’s CoreML load, warming and speech quality. Report file integrity only, not recognition performance. Reusing a loaded instance cannot be described as a just-completed full disk recheck. Do not falsify revision markers/manifests or download/remove real models for demonstration. Digests match expected bytes, not release trust, usage permission, runtime compatibility or speech accuracy. None was benchmarked here. FAQ Does isInstalled check only folder existence? No. Fixed revision, listed sizes and SHA are checked. Do matching hashes guarantee every sentence? No. Integrity differs from runtime, device/audio and meaning. Does validate reread all files every time? Not necessarily. Loaded/warmed instances can be reused; new loading still needs integrity. Can loading fail after installation? Yes. CoreML load/warm-up differ from download status. Does false prove malicious modification? No. Cancellation, missing/read/size/hash/version conditions need separate review. Was a model run/downloaded? No. Source/evidence review only, without performance/device acceptance. Reading and source Whole-chain trial · Voiceprint distinction · Material/version mapping · Preview/final · Start · Privacy Manifest/install/verification · Load/validation · Existing preparation
-
-Parameter/comparison tables (HTML) / 参数对照表：
-
-<table>
-<thead>
-<tr>
-<th>Check</th>
-<th>Verified scope</th>
-<th>Manual review</th>
-<th>Not established</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Pinned manifest</td>
-<td>Repository revisions/per-asset bytes/SHA</td>
-<td>Actual fixed-source manifest</td>
-<td>Any same-name weights compatible</td>
-</tr>
-<tr>
-<td>isInstalled</td>
-<td>Marker and listed sizes/digests</td>
-<td>Cancellation/missing/mismatch causes</td>
-<td>Directory presence suffices</td>
-</tr>
-<tr>
-<td>Manifest scope</td>
-<td>Listed assets checked</td>
-<td>Reviewed files versus other material</td>
-<td>Every directory file authenticated</td>
-</tr>
-<tr>
-<td>Publish tree</td>
-<td>Verified staging then replace/move</td>
-<td>Actual install/error</td>
-<td>Progress means loaded</td>
-</tr>
-<tr>
-<td>Load</td>
-<td>loadIfNeeded checks memory first</td>
-<td>New load integrity/generation</td>
-<td>Every call rescans all files</td>
-</tr>
-<tr>
-<td>Generation</td>
-<td>installGeneration guards suspended old load</td>
-<td>Old preparation/current model</td>
-<td>Identity signature</td>
-</tr>
-<tr>
-<td>Warm-up</td>
-<td>validate can reuse warmed instance</td>
-<td>Actual results/errors</td>
-<td>Real speech accuracy accepted</td>
-</tr>
-<tr>
-<td>Retention evidence</td>
-<td>Version/manifest/actual checks</td>
-<td>Device/permissions/audio/content separately</td>
-<td>Security certification/semantic truth/restore SLA</td>
 </tr>
 </tbody>
 </table>
@@ -9644,144 +9182,6 @@ Parameter/comparison tables (HTML) / 参数对照表：
 <td>Screenshot shows limited display</td>
 <td>Authorized references/full material</td>
 <td>Preview certifies completeness/truth</td>
-</tr>
-</tbody>
-</table>
-
-### 共享收件箱不可访问就是网络坏了吗？AppGroup声明、签名与本机容器
-
-Canonical: https://getyihu.com/guides/app-group-inbox-access-evidence/
-
-场景指南 · 相关使用指南 共享收件箱不可访问就是网络坏了吗？AppGroup声明、签名与本机容器 AppGroup本机容器、产物权限与网站网络/账户，是不同证据 App和Share Extension的Info.plist、entitlements引用YIHU_APP_GROUP；运行代码读取YihuAppGroup，再向系统请求containerURL。shared()未取到容器就返回nil。相同声明只能说明配置意图，不证明产物签名权限或真实设备可访问；本机共享不等公网上传或第三方账户授权。 与manifest可见点、文件保护和网站缓存的区别 manifest核批次发布，保护核写选项，网站缓存核origin；这里核 容器入口及声明/签名/运行三类证据 。不读真实容器，不注册AppGroup、不改配置或签名。 检查项 已核范围 人工复核 不应推断 变量声明 YIHU_APP_GROUP用于两端配置 源码意图 发布签名已正确 Bundle键 YihuAppGroup供运行时读取 键名与构建变量分层 两个名字可互换 entitlement com.apple.security.application-groups 最终签名另核 plist相同就获系统授权 运行入口 containerURL取不到则shared()==nil 实际系统结果 唯一根因就是断网或模型损坏 示例fallback 缺键有源码后备标识 非生产权限证据 示例ID能直接当生产配置 测试root init(root:)可注入位置 测试代码与系统授权分开 本地构造root验证跨Extension权限 工作台边界 容器名不是网页账户/部门身份 目标页面权限另核 按每个origin自动独立收件箱 后续写入 访问、批次发布、文件保护另核 入口成功非全链完成 成功取容器就已安全交付 合成入口记录 若shared()为nil，只记录未得到容器入口，不直接诊断网络、模型或某一唯一签名故障。声明相同、测试目录可写、运行时可访问，各自不能替另一层证明。 本页不指导用任意目录绕过系统权限，也不把AppGroup注册当网页登录或新存储服务。未检查安装产物/签名或真机，不把源码配置宣称为已生效。 FAQ 共享收件箱不可访问一定是断网吗？ 不能这样推，shared容器入口与网站网络是不同层。 两个配置文件相同能证明签名正确吗？ 不能，最终产物权限及运行结果仍需各自证据。 YihuAppGroup和YIHU_APP_GROUP是同一种键吗？ 不是，前者为Bundle读取键，后者为构建替换变量。 测试能注入root就是系统授予共享权限吗？ 不是，测试构造与系统AppGroup访问不是同一证据。 容器是否天然按每个工作台网站隔离？ 不能由这段共享容器入口推出，网页权限/存储边界另核。 本文注册AppGroup或验证了签名吗？ 没有，不改配置、第三方授权或签名，不做真机能力验收。 相关指南与源码 批次发布 · 保护选项 · 网站缓存 · 声明证据 · 开始 · 隐私 appGroup/shared/root · App Bundle键 · Extension Bundle键 · App声明 · Extension声明
-
-Parameter/comparison tables (HTML) / 参数对照表：
-
-<table>
-<thead>
-<tr>
-<th>检查项</th>
-<th>已核范围</th>
-<th>人工复核</th>
-<th>不应推断</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>变量声明</td>
-<td>YIHU_APP_GROUP用于两端配置</td>
-<td>源码意图</td>
-<td>发布签名已正确</td>
-</tr>
-<tr>
-<td>Bundle键</td>
-<td>YihuAppGroup供运行时读取</td>
-<td>键名与构建变量分层</td>
-<td>两个名字可互换</td>
-</tr>
-<tr>
-<td>entitlement</td>
-<td>com.apple.security.application-groups</td>
-<td>最终签名另核</td>
-<td>plist相同就获系统授权</td>
-</tr>
-<tr>
-<td>运行入口</td>
-<td>containerURL取不到则shared()==nil</td>
-<td>实际系统结果</td>
-<td>唯一根因就是断网或模型损坏</td>
-</tr>
-<tr>
-<td>示例fallback</td>
-<td>缺键有源码后备标识</td>
-<td>非生产权限证据</td>
-<td>示例ID能直接当生产配置</td>
-</tr>
-<tr>
-<td>测试root</td>
-<td>init(root:)可注入位置</td>
-<td>测试代码与系统授权分开</td>
-<td>本地构造root验证跨Extension权限</td>
-</tr>
-<tr>
-<td>工作台边界</td>
-<td>容器名不是网页账户/部门身份</td>
-<td>目标页面权限另核</td>
-<td>按每个origin自动独立收件箱</td>
-</tr>
-<tr>
-<td>后续写入</td>
-<td>访问、批次发布、文件保护另核</td>
-<td>入口成功非全链完成</td>
-<td>成功取容器就已安全交付</td>
-</tr>
-</tbody>
-</table>
-
-### Is an inaccessible share inbox offline? App Group declarations, signing and local containers
-
-Canonical: https://getyihu.com/en/guides/app-group-inbox-access-evidence/
-
-All scenarios · Related practical guide Is an inaccessible share inbox offline? App Group declarations, signing and local containers Local App Group access, signed authority and website network/accounts are separate evidence App and Share Extension Info.plist/entitlements reference YIHU_APP_GROUP. Runtime reads YihuAppGroup and asks the system for containerURL; shared() returns nil without it. Matching declarations establish intent, not signed entitlement or real-device access. Local sharing is not public upload or third-party account authority. Different from manifest visibility, file protection and site caches Manifests check publication, protection checks writes, caches check origins. Here container entry and declaration/signing/runtime evidence matter. No real container, registration, configuration or signing operation is accessed. Check Verified scope Manual review Not established Variable YIHU_APP_GROUP on both sides Source intent Release signing correct Bundle key YihuAppGroup at runtime Key versus build variable Names interchangeable Entitlement com.apple.security.application-groups Final signature separately Matching plist grants authority Runtime entry No containerURL means shared()==nil Actual system result Only cause offline/broken model Fallback Source default identifier if key absent Not production entitlement Example ID is production setup Test root init(root:) injects location Test versus system grant Injected root validates Extension access Workbench scope Container name is not site/account identity Destination permissions One automatic inbox per origin Later writes Access/publication/protection differ Entry versus end-to-end Container success guarantees safe handoff Synthetic entry note shared()==nil establishes no obtained container entry, not a unique network/model/signing diagnosis. Matching declarations, writable test roots and runtime access cannot replace each other’s evidence. Do not bypass system authority through arbitrary directories or call App Group registration website login/new storage service. No installed artifact/signature/device was checked; source configuration is not proven effective setup. FAQ Does inaccessible inbox mean offline? No. System container entry and website networking differ. Do matching files prove valid signing? No. Final entitlement/runtime evidence remain separate. Are YihuAppGroup and YIHU_APP_GROUP interchangeable keys? No. The Bundle key differs from the build substitution variable. Does injected root prove system shared access? No. Test construction differs from App Group authority. Is every workbench origin automatically isolated here? Not from this shared-container entry; site/storage permissions need separate review. Was an App Group registered or signature verified? No. No configuration/third-party grant/signing/device operation ran. Reading and source Batch publication · Protection · Site caches · Declaration evidence · Start · Privacy Group/container/root · App key · Extension key · App declaration · Extension declaration
-
-Parameter/comparison tables (HTML) / 参数对照表：
-
-<table>
-<thead>
-<tr>
-<th>Check</th>
-<th>Verified scope</th>
-<th>Manual review</th>
-<th>Not established</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Variable</td>
-<td>YIHU_APP_GROUP on both sides</td>
-<td>Source intent</td>
-<td>Release signing correct</td>
-</tr>
-<tr>
-<td>Bundle key</td>
-<td>YihuAppGroup at runtime</td>
-<td>Key versus build variable</td>
-<td>Names interchangeable</td>
-</tr>
-<tr>
-<td>Entitlement</td>
-<td>com.apple.security.application-groups</td>
-<td>Final signature separately</td>
-<td>Matching plist grants authority</td>
-</tr>
-<tr>
-<td>Runtime entry</td>
-<td>No containerURL means shared()==nil</td>
-<td>Actual system result</td>
-<td>Only cause offline/broken model</td>
-</tr>
-<tr>
-<td>Fallback</td>
-<td>Source default identifier if key absent</td>
-<td>Not production entitlement</td>
-<td>Example ID is production setup</td>
-</tr>
-<tr>
-<td>Test root</td>
-<td>init(root:) injects location</td>
-<td>Test versus system grant</td>
-<td>Injected root validates Extension access</td>
-</tr>
-<tr>
-<td>Workbench scope</td>
-<td>Container name is not site/account identity</td>
-<td>Destination permissions</td>
-<td>One automatic inbox per origin</td>
-</tr>
-<tr>
-<td>Later writes</td>
-<td>Access/publication/protection differ</td>
-<td>Entry versus end-to-end</td>
-<td>Container success guarantees safe handoff</td>
 </tr>
 </tbody>
 </table>

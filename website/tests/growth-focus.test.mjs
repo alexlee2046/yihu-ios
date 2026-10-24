@@ -3,16 +3,16 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 const root = new URL('../', import.meta.url);
 const read = p => readFileSync(new URL(p, root), 'utf8');
-const retired = ["shortcut-toggle-request-lifetime","notification-disable-unregister-pending","reminder-link-pending-origin-routing","capture-completion-token-review","watch-voice-queued-ready-boundaries","watch-open-request-ui-boundaries","navigation-cancel-process-reload-boundaries","audio-recovery-debounce-boundaries","recognition-pass-parameter-budget","focused-editable-admission-review","pcm-stream-end-boundaries"];
+const retired = ["shortcut-toggle-request-lifetime","notification-disable-unregister-pending","reminder-link-pending-origin-routing","capture-completion-token-review","watch-voice-queued-ready-boundaries","watch-open-request-ui-boundaries","navigation-cancel-process-reload-boundaries","audio-recovery-debounce-boundaries","recognition-pass-parameter-budget","focused-editable-admission-review","pcm-stream-end-boundaries","model-artifact-validation-evidence","app-group-inbox-access-evidence","attention-filter-identity-boundaries","followup-evidence-minimization"];
 const hasBuild = existsSync(new URL('dist/index.html', root));
 const core = ['iphone-agent-voice-drafts', 'bluetooth-audio-input-troubleshooting', 'recording-notes-handoff', 'multi-project-radar-watch'];
 const urls = [...read('public/sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map(x => x[1]);
 function pages(path = 'dist/') {
   return readdirSync(new URL(path, root), { withFileTypes: true }).flatMap(e => e.isDirectory() ? pages(path + e.name + '/') : e.name === 'index.html' ? [path + e.name] : []);
 }
-test('180 built routes remain accessible; the 22 approved references leave the 158-page index', { skip: !hasBuild }, () => {
+test('180 built routes remain accessible; the 30 approved references leave the 150-page index', { skip: !hasBuild }, () => {
   const built = pages(); assert.equal(built.length, 180);
-  assert.equal(urls.length, 158); assert.equal(new Set(urls).size, 158);
+  assert.equal(urls.length, 150); assert.equal(new Set(urls).size, 150);
   let excluded = 0;
   for (const file of built) {
     const html = read(file), url = 'https://getyihu.com/' + file.slice(5).replace(/index\.html$/, '');
@@ -29,7 +29,7 @@ test('180 built routes remain accessible; the 22 approved references leave the 1
       }
     }
   }
-  assert.equal(excluded, 22);
+  assert.equal(excluded, 30);
   assert.ok(!/^Disallow:\s*\/\s*$/m.test(read('public/robots.txt')), 'crawler can see noindex');
 });
 test('bilingual home offers four buyer scenarios, not the old technical link wall', { skip: !hasBuild }, () => {

@@ -1,73 +1,74 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Recover or stop after an audio switch? Short speech versus recording-note source matrix"
-description: "Review same-format restart, format changes, interruptions and failures by capture path. Recovery code does not certify lossless headset switching or any device combination."
+title: "Recording stopped after switching headsets? Check what was saved"
+description: "Choose a next step for silent playback, missing input or interrupted recording: compare the phone microphone, inspect saved passages, then review text and drafts."
 lang: en
+quickCheck: audio
 ---
 
-<h2 id="first-answer">Identify the capture path before interpreting the event</h2>
+<h2 id="first-answer">Listen to the saved passage, then compare the phone microphone</h2>
 
-Short-speech capture and recording notes use different paths. Short speech can attempt to retain its converter/captured PCM after engine configuration changes only with an unchanged input format. Notes try writer retargeting after an input change. Restart failures, calls and some route events can still stop capture or report interruption. This explains fixed source branches, not lossless Bluetooth-switch acceptance or a new recovery button/probe.
+In a safe stationary setting, check whether recording is still active and whether the app reports a saved result or error. Play back the saved passage and inspect numbers and negation around the interruption. Make a separate short phone-mic sample to compare with headset input. Do not operate while driving.
 
-## Different from input diagnosis and web switching
+## Try this order
 
-Input diagnosis asks why audio/text is absent; web switching separates output and capture. Here **recording has already started and an event selects a source branch**. Do not apply short-speech conditions to notes or infer an uninterrupted web call from writer retargeting.
+1. **Separate playback from input.** Play existing audio to check output; hearing it does not establish that the headset microphone is selected.
+2. **Keep what was saved.** After a call or switch, inspect saved audio, transcription and error state, and mark incomplete wording.
+3. **Make a short comparison.** Use the phone microphone with a synthetic phrase such as “Check three items tomorrow; do not send.” Then inspect headset input and the app’s microphone permission.
+4. **Inspect the existing draft.** If earlier text already reached the workbench, review that draft. Pause when the result is unclear rather than handing it off again.
 
-## Capture path and event matrix
+## Choose your next check
 
-<div role="region" aria-label="Audio capture recovery event matrix, scroll horizontally" tabindex="0">
+<div role="region" aria-label="Checks after switching audio devices, scroll horizontally" tabindex="0">
 
-| Path/event | Current branch | Continuation conditions | Result still needing review |
-| --- | --- | --- | --- |
-| Short speech: engine configuration change | Rebuild input tap/graph and attempt restart | Same active record, still recording, existing engine/pipeline and unchanged input format | Failure/interruption and text completeness; not delivery |
-| Short speech: changed input format | Fail closed rather than reuse an unsafe converter | No format-coercion bypass | Retained result/error, not lossless continuation |
-| Short speech: restart failure | Mark interrupted and stop engine | No success inference | Actual state; no repeated recording that duplicates content |
-| Short speech: repeated configuration notification | Conditional debounce avoids repeated recovery | Same record, running engine, unchanged format/route within grace period | Not ignoring genuine device changes |
-| Short speech: interruption began/media services lost/reset | Corresponding observer fails capture and stops | Actual event/current recording state | No always-resume-after-call promise |
-| Short speech: handled route notification | oldDeviceUnavailable/noSuitableRouteForCategory interrupt | Other reasons filtered, but an engine event can also occur | Filtered does not establish valid input/unaffected capture |
-| Notes: engine configuration change | Stop tap, try writer retargeting, reinstall tap/start | Same active recording/engine with successful retarget/start | Failure can report retention up to that point; inspect audio/joins |
-| Notes: call/media-service reset | Corresponding interruption-message path | Check actual saved state | No continuous-background, arbitrary-duration or no-loss guarantee |
+| What you see | First action | Before continuing |
+| --- | --- | --- |
+| Playback is silent too | Check volume and output, then play an existing sample | Restore playback before testing input separately |
+| Playback works but the headset records nothing | Compare a phone-mic sample; inspect input and permission | Use the actual new sample, not just the connection icon |
+| A call or device switch stopped recording | Keep saved passages and inspect interruption messages | Check the last sentence, numbers, negation and gaps |
+| A note was saved only up to a point | Play back the retained portion and mark the join | Keep the original; make a separate supplement if needed |
+| Audio exists but the workbench has no text | Next inspect speech models and the intended editor | Locate the text before recording or handing off again |
 
 </div>
 
-Short-speech format equality checks sample rate, channel count, common format and interleaving. The debounce's current default grace is two seconds, an internal conditional window, not reconnection latency, a UI wait time or recovery SLA. Waiting two seconds does not prove a headset recovered.
+## Why inspect short speech and recording notes separately?
 
-## Manual review after a change
-
-Stop business operations in a safe stationary setting and identify short speech versus notes. Record non-sensitive event categories, such as a call/headset switch, visible before/after states and whether text exists. Do not collect unique route/device identifiers, actual audio or customer text for public reproduction.
-
-Inspect saved/transcription/error state rather than jumping from reconnected to complete recording. Review quantities, negations and joins near interruption, retaining unknowns. If text was already handed off, original target/one-handoff rules remain: audio recovery is not resend permission.
-
-This page does not ask users to disable system protection, alter sample rates, clear records or forcibly restart services. No automatic interruption-generation script is supplied. When safe reproduction is impossible, give the existing maintenance process a minimal error description.
+Short speech and notes use different capture and saving paths. After an input change, the source attempts recovery when its conditions allow, but can also stop and report an interruption. Identify which entry point you used, then inspect actual audio, text and saved results. A reconnected headset cannot replace that check.
 
 ## FAQ
 
-<h3 id="faq-same-path">Can short speech and recording notes share one recovery conclusion?</h3>
+<h3 id="faq-output">Why can I hear the headset but not record through it?</h3>
 
-No. Their pipelines, format handling and failures differ. Identify the recording entry point and actual version before applying a branch.
+Playback and recording input need separate checks. Compare the phone microphone first, then inspect available input choices and microphone permission in the actual app.
 
-<h3 id="faq-format">Can a changed short-speech input forcibly reuse the old converter?</h3>
+<h3 id="faq-switch">Should I immediately record everything again?</h3>
 
-The source fails closed instead of unsafe reuse. No bypass is supplied, and failing closed is not lossless continuation.
+Keep and play back saved passages first. Mark gaps and make a separate short supplement if needed, without overwriting the original or duplicating a draft.
 
-<h3 id="faq-grace">Does waiting two seconds guarantee Bluetooth recovery?</h3>
+<h3 id="faq-call">Will recording automatically resume after a call?</h3>
 
-No. Two seconds is a debounce constant conditional on identity, engine, format and route, not a Bluetooth performance result.
+Inspect the actual recording entry point and state. A call can interrupt capture; ending it does not establish recovery or completeness.
 
-<h3 id="faq-retarget">Does writer retargeting guarantee every headset switches seamlessly?</h3>
+<h3 id="faq-notes">What if a note says it was saved only up to that point?</h3>
 
-No. Retarget/restart can fail; inspect actual retention and joins. This work supplies no device/firmware/scenario recovery acceptance matrix.
+Play back the saved part, identify its last sentence and gaps, then decide whether to record a separate supplement. Review joins before organizing action items.
 
-<h3 id="faq-reply">Can recovered audio automatically resend the earlier draft?</h3>
+<h3 id="faq-draft">Can recovered audio hand off the earlier draft again?</h3>
 
-No. Capture and handoff are separate states. Prior insertion/refusal/uncertainty keeps original guards and markers.
+Inspect the destination draft first. Audio recovery does not establish that the earlier handoff failed; review existing text instead of inserting it automatically again.
 
-<h3 id="faq-evidence">Does a report require full route UIDs or real recordings?</h3>
+<h3 id="faq-report">What should I include in a report?</h3>
 
-Do not collect them for public feedback. Start with version, model, event category and synthetic-content outcomes; private material stays within existing authorized procedures.
+Start with version, device model, event category and synthetic-sample results. Keep unique device identifiers, real recordings and customer text out of public feedback.
 
-## Reading and source
+## Continue with your task
 
-[Input diagnosis](/en/guides/bluetooth-audio-input-troubleshooting/) · [Web output/capture transition](/en/guides/web-read-aloud-microphone-boundaries/) · [Passage review](/en/guides/recording-segment-review-labels/) · [Fallback permission](/en/guides/degraded-handoff-go-no-go/) · [Start](/en/start/) · [Privacy](/en/privacy/)
+[Audio input questions and preview](/en/guides/bluetooth-audio-input-troubleshooting/#interactive-preview) · [Notes to action items](/en/guides/recording-notes-handoff/#interactive-preview) · [Voice drafts](/en/guides/iphone-agent-voice-drafts/#interactive-preview) · [Daily sales brief](/en/guides/multi-project-radar-watch/#interactive-preview) · [Setup](/en/start/) · [Privacy](/en/privacy/)
 
-Evidence: [short-speech events/format/debounce](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift), [note retarget/interruption](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieNoteRecorder.swift). A source matrix is not browser-visual or device-audio acceptance.
+<details><summary>Implementation reference: recovery conditions and stop messages</summary>
+
+Short speech attempts recovery under conditions including unchanged input format; oldDeviceUnavailable/noSuitableRouteForCategory notifications can stop capture. The internal debounce grace is two seconds, not reconnection latency or a recovery guarantee. Notes attempt writer retargeting; failures still require inspection of what was saved. This page supplies no headset, call-interruption or physical-device acceptance results.
+
+Evidence: [short-speech events and format checks](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift), [notes and interruptions](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieNoteRecorder.swift).
+
+</details>

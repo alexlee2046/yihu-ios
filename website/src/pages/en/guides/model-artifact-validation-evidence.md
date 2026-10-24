@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "What model validation proves: revision, asset SHA, loading and warm-up differ"
 description: "isInstalled checks revision, asset sizes and hashes. Integrity is not CoreML readiness or accuracy; loaded/warmed instances can be reused. No downloads/inference ran."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Pinned asset identity is not accuracy; installation, loading and warming are separate gates</h2>

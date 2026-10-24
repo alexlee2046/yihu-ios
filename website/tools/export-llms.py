@@ -32,7 +32,7 @@ Privacy: https://getyihu.com/privacy/ | https://getyihu.com/en/privacy/
 
 ## Reading index / 阅读索引
 
-The index follows the sitemap's 158 indexable bilingual URLs. Twenty-two technical-reference routes remain accessible with noindex,follow and are not exported here. 中文根路径为/，英文为/en/。Descriptions explain workflows, not measured accuracy, background recording, radio range, delivery, search indexing or AI-citation guarantees. No App Store listing, hosted Agent/CRM service or inquiry collection is supplied.
+The index follows the sitemap's 150 indexable bilingual URLs. Thirty technical-reference routes remain accessible with noindex,follow and are not exported here. 中文根路径为/，英文为/en/。Descriptions explain workflows, not measured accuracy, background recording, radio range, delivery, search indexing or AI-citation guarantees. No App Store listing, hosted Agent/CRM service or inquiry collection is supplied.
 
 '''
 urls=[x.text for x in ET.parse(root/'public/sitemap.xml').iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]

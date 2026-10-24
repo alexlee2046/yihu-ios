@@ -31,7 +31,7 @@ test('correction, ownership and evidence checklists remain manual and preserve s
     const correction = read('src/pages/' + prefix + 'guides/noisy-transcript-text-correction.md');
     assert.ok(correction.includes(prefix ? 'Retained text' : '原生保留文字'));
     assert.ok(correction.includes(prefix ? 'no cross-copy updater' : '不提供跨副本自动更新'));
-    assert.ok(correction.includes(prefix ? 'Correction does not clear it' : '文本修订不取消既有状态'));
+    assert.ok(correction.includes(prefix ? 'do not hand it off again while the earlier result is unclear' : '上次结果还不清楚时，不要再次交接'));
     const ownership = read('src/pages/' + prefix + 'guides/department-minutes-ownership-archive.md');
     for (const field of ['proposed_role', 'acknowledgment_evidence', 'approved_scope', 'archive_location', 'retention_rule_reference', 'handoff_state']) assert.ok(ownership.includes(field));
     assert.ok(ownership.includes(prefix ? 'not app/Radar imports' : '不是App、Radar导入'));

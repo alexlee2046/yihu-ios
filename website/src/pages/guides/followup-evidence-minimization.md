@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "客户跟进证据归档前：最小披露、私有引用与副本范围核对"
 description: "为获准的自有任务材料选择最少必要归档证据，区分私有原记录与可公开合成说明；不提供CRM归档、自动脱敏、客户采集或删除保证。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">证据足够不等于资料越多越好，先核可保留与可披露的范围</h2>

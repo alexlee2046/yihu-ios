@@ -117,7 +117,7 @@ export default function Demo({ lang, initialScene = 'voice', initialVoiceSample 
     if (json !== showJSON) { setShowJSON(json); complete('radar', json ? 'view_json' : 'view_readable'); }
   }
 
-  return <div className="demo scenario-preview" data-preview={scene}>
+  return <div id="interactive-preview" tabIndex={-1} className="demo scenario-preview" data-preview={scene}>
     <div className="demo-topline"><span>{en ? 'SAMPLE PREVIEW' : '场景预览 · 合成样例'}</span><span>{en ? 'No login or microphone needed' : '无需登录 · 无需麦克风'}</span></div>
     <div className="preview-scenes" role="group" aria-label={en ? 'Choose a preview' : '选择一个预览'}>
       {cards.map(([value, title, description], i) => <button type="button" key={value} id={`${id}-${value}`} aria-controls={`${id}-panel`} aria-pressed={scene === value} aria-keyshortcuts="ArrowLeft ArrowRight Home End" onClick={() => chooseScene(value)} onKeyDown={event => {
