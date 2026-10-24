@@ -21,10 +21,22 @@ final class CollieWorkbenchUITests: XCTestCase {
             // actual vertical collection, not the shell's horizontal shortcuts.
             let form = app.collectionViews.firstMatch
             XCTAssertTrue(form.exists)
+            let navigationBottom = app.navigationBars.firstMatch.frame.maxY
+            @MainActor func revealBelowNavigation(_ element: XCUIElement) {
+                if element.exists, element.frame.minY < navigationBottom {
+                    let start = form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                    let distance = min(form.frame.height * 0.3, navigationBottom - element.frame.minY + 24)
+                    start.press(forDuration: 0.1, thenDragTo: start.withOffset(CGVector(dx: 0, dy: distance)))
+                }
+            }
             let address = app.textFields["collie-connection-origin"]
             for _ in 0..<4 where !address.exists || !address.isHittable { form.swipeUp() }
             XCTAssertTrue(address.waitForExistence(timeout: 5))
             XCTAssertTrue(address.isHittable)
+            revealBelowNavigation(address)
+            XCTAssertTrue(address.isHittable)
+            XCTAssertGreaterThanOrEqual(address.frame.minY, navigationBottom)
+            XCTAssertTrue(form.frame.contains(address.frame), "address is fully visible outside navigation chrome")
             XCTAssertEqual(address.label, label)
             XCTAssertEqual(address.placeholderValue, "https://workbench.example.com")
             attachWorkbenchScreen(name: "candidate-yihu-onboarding-\(language)-address")
@@ -33,6 +45,8 @@ final class CollieWorkbenchUITests: XCTestCase {
             let connect = app.buttons["collie-connection-save"]
             for _ in 0..<4 where !connect.exists || !form.frame.contains(connect.frame) { form.swipeUp() }
             XCTAssertTrue(connect.waitForExistence(timeout: 5))
+            revealBelowNavigation(connect)
+            XCTAssertGreaterThanOrEqual(connect.frame.minY, navigationBottom)
             XCTAssertTrue(form.frame.contains(connect.frame), "disabled action is still fully visible")
             XCTAssertFalse(connect.isEnabled)
             attachWorkbenchScreen(name: "candidate-yihu-onboarding-\(language)-controls")
