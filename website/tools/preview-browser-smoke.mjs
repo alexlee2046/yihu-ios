@@ -11,6 +11,7 @@ const { chromium, webkit } = createRequire(import.meta.url)('playwright');
 const dist = resolve('dist'), output = resolve(process.env.RUNNER_TEMP || tmpdir(), 'yihu-preview-smoke');
 await mkdir(output, { recursive: true });
 const results = [], failures = [];
+const store = JSON.parse(await readFile('src/data/app-store.json', 'utf8'));
 let activeBrowser;
 for (const signal of ['SIGTERM', 'SIGINT']) process.once(signal, async () => {
   try { await activeBrowser?.close(); } finally { process.exit(signal === 'SIGINT' ? 130 : 143); }
@@ -201,6 +202,8 @@ const targets = [
   ['/guides/bluetooth-audio-input-troubleshooting/', 390, 844, 'audio', 'audio-zh-390'],
   ['/en/guides/multi-project-radar-watch/', 390, 844, 'radar', 'radar-en-390'],
   ['/en/guides/recording-notes-handoff/', 1440, 1000, 'voice', 'comparison-en-1440'],
+  ['/start/',390,844,'store-start','store-start-zh-390'],
+  ['/en/start/',1440,1000,'store-start','store-start-en-1440'],
   ...['', 'en/'].flatMap(prefix => [['audio-route-recovery-matrix','audio'],['noisy-transcript-text-correction','notes']].flatMap(([slug,task]) => [[390,844],[1440,1000]].map(([w,h]) => ['/'+prefix+'guides/'+slug+'/',w,h,'quick-'+task,'quick-'+task+'-'+(prefix?'en':'zh')+'-'+w]))),
 ];
 for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
@@ -213,6 +216,21 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
       const p = await openPage(activeBrowser, path, width, height);
       try {
         const g = await geometry(p.page, width);
+        if (expected === 'store-start') {
+          const start=p.page.locator('#store-start');
+          assert.equal(await start.locator('.app-store-link').getAttribute('href'),store.url);
+          assert.ok(await start.locator('.app-store-link').evaluate(a=>a.getBoundingClientRect().bottom<=innerHeight),'store install action above fold');
+          const developer=p.page.locator('#source-setup');
+          assert.equal(await developer.getAttribute('open'),null,'developer requirements start collapsed');
+          await developer.locator('summary').focus();await p.page.keyboard.press('Enter');
+          assert.notEqual(await developer.getAttribute('open'),null);
+          assert.equal(await developer.locator('[id^="check-"]').count(),6);
+          await p.page.keyboard.press('Enter');
+          await p.page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+          await shot(p.page,engine,name);
+          record.pages.push({path,...g,storeVersion:store.version,storeLink:'href verified; never navigated or installed',developerDetails:'native keyboard open/close PASS'});
+          continue;
+        }
         if (expected.startsWith('quick-')) {
           await shot(p.page, engine, name);
           const checked = await quickCheck(p.page, expected === 'quick-audio', path.startsWith('/en/'));
@@ -220,7 +238,11 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
           continue;
         }
         assert.equal(await p.page.locator('[data-preview]').getAttribute('data-preview'), expected);
-        if (path === '/') assert.ok(g.cards.every(bottom => bottom <= height), 'three cards in first viewport');
+        if (path === '/' || path === '/en/') {
+          assert.ok(g.cards.every(bottom => bottom <= height),'three cards in first viewport');
+          const link=p.page.locator('.hero-actions .app-store-link');assert.equal(await link.getAttribute('href'),store.url);
+          assert.ok(await link.evaluate(a=>a.getBoundingClientRect().bottom<=innerHeight),'store entry above fold');
+        }
         if (path.includes('multi-project')) {
           await p.page.getByRole('group', { name: 'Brief view', exact: true }).getByRole('button', { name: 'JSON', exact: true }).click();
           await p.page.locator('.preview-panel').scrollIntoViewIfNeeded();
@@ -252,4 +274,4 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
     await writeFile(resolve(output, 'evidence.json'), JSON.stringify({ results, failures }, null, 2));
   }
 }
-console.log('Browser preview acceptance PASS: Chromium + WebKit, 5 original pages + 8 P2 landing views + 2 no-JavaScript navigations per engine, 390/1440px; native speech API and injected contracts reported separately; browsers closed.');
+console.log('Browser preview acceptance PASS: Chromium + WebKit, 5 original pages + 2 store/source setup views + 8 P2 landing views + 2 no-JavaScript navigations per engine, 390/1440px; native speech API and injected contracts reported separately; browsers closed.');

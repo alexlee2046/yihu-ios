@@ -1,4 +1,5 @@
 ---
+import store from '../data/app-store.json';
 interface Props { lang?: 'zh' | 'en'; type: 'start' | 'privacy' }
 const { lang = 'zh', type } = Astro.props;
 const en = lang === 'en';
@@ -6,10 +7,10 @@ const decisionsGuidePath = en ? '/en/guides/mobile-agent-decisions/' : '/guides/
 const voiceGuidePath = en ? '/en/guides/iphone-agent-voice-drafts/' : '/guides/iphone-agent-voice-drafts/';
 const startCopy = {
   "zh": {
-    "title": "在 iPhone 接入你的 Agent 工作台",
-    "lead": "一呼目前提供源码，不是 App Store 安装成品。先完成自有 HTTPS 工作台、源码签名和模型预检，再用一条合成文字验证“确认目标 → 转写与草稿交付 → 核对未发送草稿”；本指南到草稿为止，不发送消息或执行任务。",
+    "title": "安装一呼，连接你的工作台",
+    "lead": "先从 App Store 安装，再连接你自己的 HTTPS 工作台。需要语音时再下载模型；Mac、Xcode 与签名只属于下方源码开发者路径。",
     "nav": "本页导航",
-    "preflightTitle": "接入前：六项预检",
+    "preflightTitle": "源码开发者：六项预检",
     "columns": [
       "检查与操作",
       "成功信号",
@@ -138,10 +139,10 @@ const startCopy = {
     "homeLink": "返回能力与前提核对表"
   },
   "en": {
-    "title": "Connect your Agent workbench on iPhone",
-    "lead": "Yihu is a source release, not an App Store binary. Check your own HTTPS workbench, source signing and models first, then use synthetic text to test target confirmation → transcription and draft delivery → review of the unsent draft. This guide does not send a message or run a task.",
+    "title": "Install Yihu and connect your workspace",
+    "lead": "Install from the App Store and bring your own workspace. Speech models are optional downloads. Mac, Xcode and signing are only for source developers.",
     "nav": "On this page",
-    "preflightTitle": "Before connecting: six checks",
+    "preflightTitle": "Source developers: six checks",
     "columns": [
       "Check and action",
       "Success signal",
@@ -495,6 +496,19 @@ const failureTarget = (id: string) => id === 'origin' ? 'address' : ['editor', '
   </style>
   <h1>{copy.title}</h1>
   <p class="lead">{copy.lead}</p>
+  <section id="store-start" aria-labelledby="store-start-title">
+    <h2 id="store-start-title">{en ? 'Install the store edition' : '从 App Store 安装'}</h2>
+    <p>{en ? `Public edition ${store.version}, iOS/iPadOS ${store.minimumOSVersion}+. US listing verified on ${store.observedOn}; availability follows your storefront.` : `公开商店版 ${store.version}，需 iOS/iPadOS ${store.minimumOSVersion}+。${store.observedOn} 已核美区页面，地区供应以商店为准。`}</p>
+    <a class="button button-primary app-store-link" href={store.url}>{en ? 'View Yihu on App Store' : '在 App Store 查看一呼'}</a>
+    <ol>
+      <li>{en ? 'Install from your available storefront; no Mac or personal signing is needed for this path.' : '按所在地区商店的实际供应安装；这条路径不需要 Mac 或自行签名。'}</li>
+      <li>{en ? 'Open your own trusted HTTPS workspace using the address and account you already have. No hosted Agent account is included.' : '用你已有的地址和账号打开可信 HTTPS 工作台；一呼不附带托管 Agent 账号。'}</li>
+      <li>{en ? 'Choose the optional speech-model download when you need dictation. The store description lists about 950 MB, separate from the app installation.' : '需要语音时再选择下载模型。商店说明约 950 MB，与 App 安装包分开。'}</li>
+      <li>{en ? 'Use an authorized empty draft and synthetic phrase. Check the final transcript in the destination before deciding to send; Yihu does not press Send.' : '用获准的空白草稿和合成语句练习，检查目的地最终录文后再决定发送；一呼不会替你按发送。'}</li>
+    </ol>
+    <p>{en ? 'The source guides below describe additional implementation paths, not a promise that every source capability is in store edition 0.1.0.' : '下方源码指南说明更多实现路径，不代表商店版 0.1.0 已包含全部源码能力。'}</p>
+  </section>
+  <details id="source-setup"><summary>{en ? 'Source developers: build, signing and advanced setup' : '源码开发者：构建、签名与高级接入'}</summary>
   <nav class="guide-nav" aria-label={copy.nav}>
     <a href="#preflight">{copy.preflightTitle}</a><a href="#build-connect">{copy.buildTitle}</a><a href="#first-draft">{copy.flowTitle}</a><a href="#troubleshooting">{copy.failureTitle}</a>
   </nav>
@@ -553,6 +567,7 @@ const failureTarget = (id: string) => id === 'origin' ? 'address' : ['editor', '
   <p><a href={voiceGuidePath}>{en ? 'Compare Dictation, Notes and native workbench drafts' : '对照系统听写、备忘录与原生工作台草稿边界'}</a></p>
   <p><a href={decisionsGuidePath}>{en ? 'Read mobile decisions, source freshness and phone confirmation boundaries' : '查看手机待决策、来源时效与确认回执边界'}</a></p>
   <a class="button button-primary" href="https://github.com/alexlee2046/yihu-ios#build-locally">{en ? 'Build from source' : '从源码构建'}<img src="/icons/arrow-up-right.svg" width="20" height="20" alt="" /></a>
+  </details>
 </> : <>
   <style is:inline>
     .guide-privacy { max-width: 1120px; }

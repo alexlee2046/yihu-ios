@@ -2,6 +2,7 @@
 import '@fontsource-variable/manrope';
 import '../styles/global.css';
 import answers from '../data/home-answers.json';
+import store from '../data/app-store.json';
 import AnalyticsConsent from '../components/AnalyticsConsent.astro';
 import ContactChat from '../components/ContactChat.astro';
 import { contactConfig } from '../lib/contact-channels';
@@ -24,8 +25,8 @@ const schema = isHome ? [
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': origin + '/#organization',
-    name: 'Yihu open-source project',
-    alternateName: '一呼开源项目',
+    name: store.name,
+    alternateName: store.alternateName,
     url: origin + '/',
     logo: origin + '/images/brand.webp',
     sameAs: ['https://github.com/alexlee2046/yihu-ios'],
@@ -42,17 +43,21 @@ const schema = isHome ? [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    '@id': canonical + '#software',
+    '@id': origin + '/#software',
     name: 'Yihu',
     alternateName: '一呼',
     url: canonical,
     applicationCategory: 'ProductivityApplication',
     publisher: { '@id': origin + '/#organization' },
-    operatingSystem: 'iOS 18+',
+    operatingSystem: `iOS ${store.minimumOSVersion}+, iPadOS ${store.minimumOSVersion}+`,
+    softwareVersion: store.version,
+    identifier: store.bundleId,
+    installUrl: store.url,
+    datePublished: store.releaseDate,
+    author: { '@type': 'Organization', name: store.sellerName },
     description: copy.answer,
     image: origin + '/images/brand.webp',
-    sameAs: 'https://github.com/alexlee2046/yihu-ios',
-    license: 'https://github.com/alexlee2046/yihu-ios/blob/main/LICENSE',
+    sameAs: [store.url, 'https://github.com/alexlee2046/yihu-ios'],
     inLanguage: en ? 'en' : 'zh-CN',
   },
   {

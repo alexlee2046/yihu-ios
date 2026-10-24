@@ -1,6 +1,6 @@
 from pathlib import Path
 from html.parser import HTMLParser
-import re,html,xml.etree.ElementTree as ET
+import re,html,json,xml.etree.ElementTree as ET
 root=Path(__file__).resolve().parent.parent
 class MainText(HTMLParser):
  def __init__(self):super().__init__();self.active=False;self.skip=0;self.parts=[]
@@ -12,12 +12,15 @@ class MainText(HTMLParser):
   if self.active and tag in ['style','script']:self.skip-=1
  def handle_data(self,data):
   if self.active and not self.skip:self.parts.append(data)
-intro='''# 一呼 · Yihu
+store=json.loads((root/'src/data/app-store.json').read_text())
+intro=f'''# 一呼 · Yihu
 
 > Voice-first iPhone workspace for your own HTTPS Agent services. 在 iPhone 上口述草稿、整理录音笔记、检查音频输入，并查看自己的每日跟进简报。
 
 Canonical site: https://getyihu.com/
 Source: https://github.com/alexlee2046/yihu-ios
+App Store (verified US listing): {store['url']}
+Public store edition: {store['version']}, released {store['releaseDate']}; iOS/iPadOS {store['minimumOSVersion']}+. Apple public metadata checked {store['observedOn']}. Regional availability follows the store. Source development may be ahead; a source merge is not a store update or proof of binary feature parity.
 Full bilingual content: https://getyihu.com/llms-full.txt
 Privacy: https://getyihu.com/privacy/ | https://getyihu.com/en/privacy/
 
@@ -28,11 +31,11 @@ Privacy: https://getyihu.com/privacy/ | https://getyihu.com/en/privacy/
 - Voice notes and meeting action items / 录音与结构化待办: /guides/recording-notes-handoff/ retains the original and hands material to your chosen organizing tool.
 - Foreign-trade daily brief / 外贸每日跟进: /guides/multi-project-radar-watch/ displays your own inquiry/task JSON, sources and next steps; Apple Watch can show paired-phone summaries.
 - Offline / 弱网准备: /start/ explains setup and the difference between prepared local transcription and a remote workspace.
-- FAQ / 选型与使用条件: the website is a source release requiring iOS 18+, signing, speech models and your own workspace. Review drafts before sending; the destination may save or sync them. Preview cards use samples, not live AI results.
+- FAQ / 安装与版本: Yihu is on the App Store; installing that edition does not require a Mac or your own signing. Bring your own workspace; download the optional speech model when chosen (about 950 MB per the store description, separate from app installation). Source developers follow separate build/signing steps. Review drafts before sending; the destination may save or sync them. Preview cards use samples, not live AI results.
 
 ## Reading index / 阅读索引
 
-The index follows the sitemap's 150 indexable bilingual URLs. Thirty technical-reference routes remain accessible with noindex,follow and are not exported here. 中文根路径为/，英文为/en/。Descriptions explain workflows, not measured accuracy, background recording, radio range, delivery, search indexing or AI-citation guarantees. No App Store listing, hosted Agent/CRM service or inquiry collection is supplied.
+The index follows the sitemap's 150 indexable bilingual URLs. Thirty technical-reference routes remain accessible with noindex,follow and are not exported here. 中文根路径为/，英文为/en/。Descriptions explain workflows, not measured accuracy, background recording, radio range, delivery, search indexing or AI-citation guarantees. The verified store listing is linked above; this website does not supply a hosted Agent/CRM service or automatically collect inquiries. Documentation includes source workflows whose availability must be checked against the installed version.
 
 '''
 urls=[x.text for x in ET.parse(root/'public/sitemap.xml').iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
