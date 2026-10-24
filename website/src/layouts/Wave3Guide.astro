@@ -7,7 +7,7 @@ interface Props {
 const { title, description, lang, indexable = true, preview, voiceSample } = Astro.props.frontmatter;
 const home = lang === 'en' ? '/en/' : '/';
 const slug = Astro.url.pathname.split('/').filter(Boolean).at(-1) ?? '';
-const pillar = /radar|reply|history|attention|status|evidence/.test(slug) ? 'multi-project-radar-watch' : /audio|bluetooth|voiceprint|pcm|capture|microphone|interruption|recognition/.test(slug) ? 'bluetooth-audio-input-troubleshooting' : /note|minutes|brief|transcript|recording|archive/.test(slug) ? 'recording-notes-handoff' : 'iphone-agent-voice-drafts';
+const pillar = /model-artifact|app-group/.test(slug) ? 'iphone-agent-voice-drafts' : /radar|reply|history|attention|status|evidence/.test(slug) ? 'multi-project-radar-watch' : /audio|bluetooth|voiceprint|pcm|capture|microphone|interruption|recognition/.test(slug) ? 'bluetooth-audio-input-troubleshooting' : /note|minutes|brief|transcript|recording|archive/.test(slug) ? 'recording-notes-handoff' : 'iphone-agent-voice-drafts';
 ---
 <Layout title={title} description={description} lang={lang} indexable={indexable}>
   <article class:list={['document', 'wave3-guide', { 'task-document': preview }]}>

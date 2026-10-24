@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Before archiving follow-up evidence: minimal disclosure, private references and copies"
 description: "Choose necessary evidence from authorized task material, separating private originals from public synthetic explanations. No CRM archive, automatic redaction, customer collection or deletion guarantee."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Sufficient evidence is not maximum collection; check retention and disclosure scope first</h2>

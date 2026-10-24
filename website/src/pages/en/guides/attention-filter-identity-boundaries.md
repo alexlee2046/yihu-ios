@@ -3,6 +3,7 @@ layout: ../../../layouts/Wave3Guide.astro
 title: "Why attention filtering matches or misses: fixed display rules are not account identity"
 description: "Review requiresMyAttention states and a fixed next-text match alongside other filters. No account resolution, ownership, approval or write authority follows."
 lang: en
+indexable: false
 ---
 
 <h2 id="first-answer">Attention filtering is derived display, not server ownership, identity or authority</h2>

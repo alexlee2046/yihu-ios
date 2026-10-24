@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "模型校验通过代表什么？revision、资产SHA、加载与预热分账"
 description: "isInstalled本身核revision/逐资产大小与SHA；文件完整性不等CoreML加载、预热或准确率，已加载实例可复用，不运行下载或模型。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">固定资产匹配不是识别准确率，下载/加载/预热也非同一个门</h2>

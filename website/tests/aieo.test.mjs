@@ -38,9 +38,9 @@ const bots = ['OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Cl
 const urls = Array.from(read('public/sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g), x => x[1]);
 const page = url => 'dist/' + url.replace('https://getyihu.com/', '') + 'index.html';
 
-const retired = new Set(["shortcut-toggle-request-lifetime","notification-disable-unregister-pending","reminder-link-pending-origin-routing","capture-completion-token-review","watch-voice-queued-ready-boundaries","watch-open-request-ui-boundaries","navigation-cancel-process-reload-boundaries","audio-recovery-debounce-boundaries","recognition-pass-parameter-budget","focused-editable-admission-review","pcm-stream-end-boundaries"]);
-test('158 indexable URLs retain guides except 22 approved technical-reference routes', () => {
-  assert.equal(urls.length, 158); assert.equal(new Set(urls).size, 158);
+const retired = new Set(["shortcut-toggle-request-lifetime","notification-disable-unregister-pending","reminder-link-pending-origin-routing","capture-completion-token-review","watch-voice-queued-ready-boundaries","watch-open-request-ui-boundaries","navigation-cancel-process-reload-boundaries","audio-recovery-debounce-boundaries","recognition-pass-parameter-budget","focused-editable-admission-review","pcm-stream-end-boundaries","model-artifact-validation-evidence","app-group-inbox-access-evidence","attention-filter-identity-boundaries","followup-evidence-minimization"]);
+test('150 indexable URLs retain guides except 30 approved technical-reference routes', () => {
+  assert.equal(urls.length, 150); assert.equal(new Set(urls).size, 150);
   for (const slug of [...slugs, ...deepSlugs, ...wave6Slugs, ...wave7Slugs, ...wave8Slugs, ...wave9Slugs, ...wave10Slugs, ...wave11Slugs, ...wave12Slugs, ...wave13Slugs, ...wave14Slugs, ...wave15Slugs, ...wave16Slugs, ...wave17Slugs, ...wave18Slugs, ...wave19Slugs, ...wave20Slugs, ...wave21Slugs, ...wave22Slugs, ...wave23Slugs, ...wave24Slugs, ...wave25Slugs, ...wave26Slugs, ...wave27Slugs, ...wave28Slugs, ...wave29Slugs, ...wave30Slugs, ...wave31Slugs]) for (const prefix of ['', 'en/']) assert.equal(urls.includes(`https://getyihu.com/${prefix}guides/${slug}/`), !retired.has(slug));
 });
 test('seven explicit bot groups and general allow retain sitemap and LLM reference', () => {
@@ -84,7 +84,7 @@ test('built homepage graph keeps existing software/FAQ plus organization and web
     for (const slug of ['iphone-agent-voice-drafts', 'bluetooth-audio-input-troubleshooting', 'recording-notes-handoff', 'multi-project-radar-watch']) assert.ok(html.includes(`href="/${prefix}guides/${slug}/"`));
   }
 });
-test('all 158 indexable pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
+test('all 150 indexable pages have valid canonical/language pairs; new guides have table, first answer and FAQ', { skip: !built }, () => {
   for (const url of urls) {
     const html = read(page(url));
     assert.ok(html.includes(`<link rel="canonical" href="${url}"`), url);

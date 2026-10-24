@@ -3,6 +3,7 @@ layout: ../../layouts/Wave3Guide.astro
 title: "提到我为何命中或漏项？固定展示规则不等账户与负责人识别"
 description: "按requiresMyAttention核指定状态与next固定字样匹配，其他显示条件仍有效；过滤不是权限、审批或当前账户身份识别。"
 lang: zh
+indexable: false
 ---
 
 <h2 id="first-answer">“提到我”是派生筛选，不是服务端认领、身份或授权结论</h2>
