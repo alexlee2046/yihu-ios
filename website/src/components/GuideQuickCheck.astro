@@ -1,0 +1,72 @@
+---
+interface Props { lang: 'zh' | 'en'; task: 'audio' | 'notes' }
+const { lang, task } = Astro.props;
+const en = lang === 'en';
+const home = en ? '/en/' : '/';
+const audio = task === 'audio';
+const guide = audio ? 'bluetooth-audio-input-troubleshooting' : 'recording-notes-handoff';
+const choices = audio
+  ? (en ? [
+    ['silent', 'Playback works, but the new recording is silent', 'In a safe stationary setting, compare a short phone-mic sample with the headset sample. Check input and microphone permission separately from playback.'],
+    ['interrupted', 'A call or device switch interrupted recording', 'Inspect the saved audio and text first. Mark missing words before making a separate short sample; do not repeat a draft handoff blindly.'],
+    ['explore', 'I want to try the checks before recording', 'Open the four-question preview. It uses your selected answers, without accessing a microphone or Bluetooth device.'],
+  ] : [
+    ['silent', '能回放，但新录音没有声音', '先在安全静止环境，用手机麦克风与耳机各试录一句。把输入选择、麦克风权限和回放分别核对。'],
+    ['interrupted', '来电或切换外设后录音中断', '先检查已保存的音频与文字，标出缺口，再单独试录一句；不要盲目再次交接已有草稿。'],
+    ['explore', '想先了解检查顺序，还不录音', '打开蓝牙四问示例，按你选择的状态看建议；不访问麦克风或蓝牙设备。'],
+  ])
+  : (en ? [
+    ['unclear', 'A name, number or negation is still unclear', 'Keep the original audio and mark the uncertain words. Confirm them with the source before revising the draft.'],
+    ['edit', 'The wording is clear; I want to edit a draft', 'Try the editable meeting sample, place it in the on-page draft, then review it. This does not transcribe audio or send a message.'],
+    ['actions', 'The text is checked; I need follow-up actions', 'Compare the sample transcript with its preset action items. Leave an owner or date unconfirmed when the source did not agree one.'],
+  ] : [
+    ['unclear', '人名、数字或否定词还听不清', '保留原音频，标出不确定的词；先向原资料核实，再修改草稿。'],
+    ['edit', '文字已核清，想试着改一份草稿', '试改会议示例，填入本页草稿后核对；这里不转写录音，也不发送消息。'],
+    ['actions', '文字已核清，想整理跟进行动', '对照示例录文与预设行动项；原文没有约定的负责人或日期，继续保留待确认。'],
+  ]);
+const scenarios = en ? [
+  ['iphone-agent-voice-drafts', 'Voice drafts'], ['bluetooth-audio-input-troubleshooting', 'Audio input'],
+  ['recording-notes-handoff', 'Voice notes'], ['multi-project-radar-watch', 'Daily sales brief'],
+] : [
+  ['iphone-agent-voice-drafts', '语音草稿'], ['bluetooth-audio-input-troubleshooting', '音频输入'],
+  ['recording-notes-handoff', '录音笔记'], ['multi-project-radar-watch', '每日跟进简报'],
+];
+---
+<section class="guide-quick-check" data-guide-quick-check aria-labelledby="quick-check-title">
+  <h2 id="quick-check-title">{en ? 'A 10-second starting check' : '先做 10 秒场景自检'}</h2>
+  <label for="quick-check-choice">{audio ? (en ? 'What happened after the audio switch?' : '切换音频后，现在是哪种情况？') : (en ? 'What is ready for your next step?' : '你现在准备到哪一步？')}</label>
+  <select id="quick-check-choice" aria-describedby="quick-check-result" disabled>
+    <option value="">{en ? 'Choose your situation' : '选择当前情况'}</option>
+    {choices.map(([value, label, advice]) => <option value={value} data-advice={advice}>{label}</option>)}
+  </select>
+  <p id="quick-check-result" role="status" aria-live="polite" data-quick-result>{en ? 'Choose a situation for a next step, or open the sample now. No login or installation needed.' : '选一个情况看下一步，也可直接打开示例；无需登录或安装。'}</p>
+  <a class="quick-preview-link" href={`${home}guides/${guide}/#interactive-preview`}>{audio ? (en ? 'Open the audio self-check preview' : '打开蓝牙四问交互预览') : (en ? 'Open the editable notes preview' : '打开可编辑笔记交互预览')} →</a>
+  <nav aria-label={en ? 'Four task guides' : '四大场景入口'}>{scenarios.map(([slug, title]) => <a href={`${home}guides/${slug}/#interactive-preview`}>{title}</a>)}</nav>
+  <p class="quick-boundary">{en ? 'Local question guide and preset samples; no hardware diagnosis, recording or live AI. “10 seconds” is a starting goal, not a measured user result.' : '本地问答与预设样例，不诊断硬件、不录音或调用真实 AI。“10 秒”是自检目标，未作为真人耗时实测。'}</p>
+  <noscript><p>{en ? 'Without JavaScript, links still open the task guides; interactive samples also need JavaScript.' : '关闭脚本时仍可直接打开场景指南；问答选择与交互示例都需要 JavaScript。'}</p></noscript>
+</section>
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-guide-quick-check]')) {
+    const select = root.querySelector<HTMLSelectElement>('select');
+    const result = root.querySelector<HTMLElement>('[data-quick-result]');
+    if (!select || !result) continue;
+    const initial = result.textContent;
+    const update = () => { result.textContent = select.selectedOptions[0]?.dataset.advice || initial; };
+    select.addEventListener('change', update);
+    window.addEventListener('pageshow', update);
+    select.disabled = false;
+    update();
+  }
+</script>
+<style>
+  .guide-quick-check { margin:20px 0 28px; padding:18px; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); }
+  .guide-quick-check h2 { margin:0 0 10px; font-size:1.15rem; }
+  .guide-quick-check label { display:block; margin-bottom:6px; font-weight:600; }
+  .guide-quick-check select { width:100%; max-width:100%; min-width:0; min-height:44px; padding:10px; border:1px solid var(--line); border-radius:8px; color:var(--ink); background:var(--surface); font:inherit; }
+  .guide-quick-check p { margin:10px 0; font-size:.9rem; line-height:1.5; }
+  .quick-preview-link { display:flex; align-items:center; min-height:44px; font-weight:700; }
+  .guide-quick-check nav { display:flex; flex-wrap:wrap; gap:0 16px; margin-top:4px; }
+  .guide-quick-check nav a { display:inline-flex; align-items:center; min-height:44px; font-size:.9rem; }
+  .guide-quick-check .quick-boundary { color:var(--muted); font-size:.8rem; margin-bottom:0; }
+  .guide-quick-check :is(a,select):focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+</style>
