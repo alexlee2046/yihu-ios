@@ -59,7 +59,9 @@ test('static LLM references cover every bilingual canonical URL and factual topi
     assert.ok(Buffer.byteLength(text) > 8192, name);
     for (const url of urls) assert.ok(text.includes(url), name + ': ' + url);
     for (const term of ['Bluetooth', 'AirPods', 'Apple Watch', 'Offline', 'meeting', 'Foreign-trade', 'FAQ']) assert.ok(text.includes(term), term);
-    assert.ok(!text.includes('https://apps.apple.com/'), 'no invented App Store identity');
+    const store=JSON.parse(read('src/data/app-store.json'));
+    assert.ok(text.includes(store.url),'verified store identity is discoverable');
+    for(const url of text.matchAll(/https:\/\/apps\.apple\.com\/[^\s<>"']+/g)) assert.equal(url[0],store.url,'no invented alternate App Store identity');
   }
   assert.ok(read('public/llms-full.txt').includes('<table'));
 });
@@ -67,7 +69,8 @@ test('source-only schema leaves no fabricated app-store or search endpoint', () 
   const layout = read('src/layouts/Layout.astro');
   assert.ok(layout.includes("'@type': 'Organization'"));
   assert.ok(layout.includes("'@type': 'WebSite'"));
-  assert.ok(!layout.includes('apps.apple.com'));
+  assert.ok(layout.includes('installUrl: store.url'));
+  assert.equal(JSON.parse(read('src/data/app-store.json')).url,'https://apps.apple.com/us/app/yihu/id6819057500');
   assert.ok(!layout.includes('SearchAction'));
 });
 test('built homepage graph keeps existing software/FAQ plus organization and website', { skip: !built }, () => {

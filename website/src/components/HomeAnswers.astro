@@ -1,5 +1,6 @@
 ---
 import answers from '../data/home-answers.json';
+import store from '../data/app-store.json';
 interface Props { lang?: 'zh' | 'en'; part: 'intro' | 'details' }
 const { lang = 'zh', part } = Astro.props;
 const copy = answers[lang];
@@ -10,6 +11,7 @@ const home = lang === 'en' ? '/en/' : '/';
   <p>{copy.answer}</p>
 </section> : <section class="answers wrap" aria-labelledby="capabilities-title">
   <h2 id="capabilities-title">{copy.caption}</h2>
+  <p class="version-boundary">{lang === 'en' ? `Store edition ${store.version} is separate from later source work. The guides and samples below include source workflows; they do not certify that every feature is in the installed store version.` : `商店版 ${store.version} 与后续源码分开。下列指南和样例包含源码工作流，不代表当前商店版全部具备。`}</p>
   <div id="scenarios" class="scenario-grid">{copy.scenarios.map(scene => <article><h3><a href={`${home}guides/${scene.slug}/`}>{scene.title}</a></h3><p>{scene.description}</p><a class="scenario-help" href={`${home}guides/${scene.help}`}>{scene.helpTitle} →</a></article>)}</div>
   <p class="table-hint" id="table-hint">{lang === 'en' ? 'Swipe the table to compare prerequisites. With a keyboard, focus the table and use the arrow keys.' : '左右滑动表格，查看完整使用前提。键盘用户可聚焦表格后使用方向键。'}</p>
   <div class="table-scroll" role="region" aria-label={copy.caption} aria-describedby="table-hint" tabindex="0">
@@ -20,7 +22,7 @@ const home = lang === 'en' ? '/en/' : '/';
   </div>
   <div class="faq-section">
     <h2 id="faq">{copy.faqHeading}</h2>
-    <div class="faq-list">{copy.faqs.map(faq => <details class="faq-item"><summary><h3>{faq.question}</h3></summary><div id={`faq-${faq.id}`} class="faq-answer"><p>{faq.answer}</p></div></details>)}</div>
+    <div class="faq-list">{copy.faqs.map(faq => <details class="faq-item"><summary><h3>{faq.question}</h3></summary><div id={`faq-${faq.id}`} class="faq-answer"><p>{faq.answer}</p>{faq.id === 'install' && <a class="app-store-link" href={store.url}>{lang === 'en' ? 'View the official App Store listing' : '查看正式 App Store 页面'}</a>}</div></details>)}</div>
   </div>
   <div class="answer-links"><a href={`${home}start/`}>{copy.start}</a><a href={`${home}privacy/`}>{copy.privacy}</a></div>
 </section>}

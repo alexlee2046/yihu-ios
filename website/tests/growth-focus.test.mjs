@@ -41,7 +41,8 @@ test('bilingual home offers four buyer scenarios, not the old technical link wal
     for (const slug of core) assert.ok(html.includes('href="/' + prefix + 'guides/' + slug + '/"'));
     for (const slug of [...retired, 'capture-completion-token-review', 'host-bridge-outcome-boundaries']) assert.ok(!html.includes('/guides/' + slug + '/'));
     assert.ok(html.includes('id="scenarios"'));
-    assert.ok(!html.includes('apps.apple.com/'));
+    assert.ok(html.includes('href="https://apps.apple.com/us/app/yihu/id6819057500"'),'real App Store listing, not an invented download');
+    for(const link of html.matchAll(/href="(https:\/\/apps\.apple\.com\/[^\"]+)"/g)) assert.equal(link[1],'https://apps.apple.com/us/app/yihu/id6819057500');
   }
 });
 test('core pages explain workflow choices and keep practical setup/source links', { skip: !hasBuild }, () => {

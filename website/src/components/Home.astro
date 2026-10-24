@@ -1,24 +1,25 @@
 ---
 import Demo from './Demo';
 import HomeAnswers from './HomeAnswers.astro';
+import store from '../data/app-store.json';
 interface Props { lang?: 'zh' | 'en' }
 const { lang = 'zh' } = Astro.props;
 const en = lang === 'en';
 const home = en ? '/en/' : '/';
 const features = en ? [
-  ['microphone', 'Say it while it’s fresh.', 'On-device speech', 'Turn spoken ideas into an editable draft on your iPhone. Review your words before sending. Speech models are downloaded separately.'],
-  ['waveform', 'Give a longer thought room.', 'Voice notes', 'Record now, transcribe in segments on your phone, and return to your audio and text later.'],
-  ['share-network', 'Keep what you find.', 'System sharing', 'Bring text, links and files into the share inbox. Choose what to hand off to your workbench. Nothing is sent automatically.'],
+  ['share-network', 'Start with your workspace.', 'Your address, your account', 'Open a workspace you already use. Yihu does not include a hosted Agent account or backend.'],
+  ['microphone', 'Speak when it helps.', 'Optional on-device speech', 'Download the speech model when you choose; the store description lists about 950 MB. Recognition runs on your iPhone.'],
+  ['waveform', 'A draft, not an automatic send.', 'Review before sending', 'The final transcript goes into the current draft. Check the wording and destination, then decide what happens next.'],
 ] : [
-  ['microphone', '想法刚出现，就说下来。', '端侧语音', '在 iPhone 上将语音转成可编辑的文字，检查后再交给工作台。语音模型需单独下载。'],
-  ['waveform', '长一点的想法，也装得下。', '录音笔记', '先记录，再由手机分段转写。音频和文字留在本地，随时回来整理。'],
-  ['share-network', '看到的，也能带回来。', '系统分享', '把文字、链接和文件暂存进分享收件箱，再选择交给工作台的内容。不会自动发送。'],
+  ['share-network', '从你已有的工作台开始。', '自己的地址与账号', '打开你已经在用的工作台；一呼不附带托管 Agent 账号或后端。'],
+  ['microphone', '需要少打字时，再说下来。', '按需下载端侧语音', '选择使用语音时再下载模型；商店说明约 950 MB，识别在 iPhone 上完成。'],
+  ['waveform', '留作草稿，不替你发送。', '检查后再决定下一步', '最终录文进入当前草稿。核对文字与目的地，再由你决定下一步。'],
 ];
 ---
 <section class="task-hero wrap" aria-labelledby="hero-title">
-  <h1 id="hero-title">{en ? 'Speak your next step.' : '下一步，先说下来。'}</h1>
-  <p>{en ? 'Voice drafts, notes and your daily brief, around the Agent workspace you already use.' : '用语音草稿、录音笔记和每日简报，接续你已有的 Agent 网页工作台。'}</p>
-  <div class="hero-actions"><a class="button button-primary" href="#experience">{en ? 'Try a sample' : '试试免登录预览'}</a><a class="button button-text" href={`${home}start/`}>{en ? 'Source release · setup requirements' : '源码版本 · 查看接入条件'} →</a></div>
+  <h1 id="hero-title">{en ? 'Yihu. Speak your next step.' : '一呼，让下一步更轻。'}</h1>
+  <p>{en ? 'An iPhone voice companion for the workspace you already use. Bring your own address and account.' : '你自己的工作台，iPhone 上的语音入口。用已有地址和账号，少打字，继续手边的工作。'}</p>
+  <div class="hero-actions"><a class="button button-primary" href="#experience">{en ? 'Try a sample' : '试试免登录预览'}</a><a class="button button-text app-store-link" href={store.url}>{en ? 'View on App Store' : '在 App Store 查看'} →</a></div>
 </section>
 <section class="task-preview wrap" id="experience" aria-labelledby="experience-title">
   <h2 id="experience-title">{en ? 'Try a task. No login.' : '不用登录，先试一个场景。'}</h2>
@@ -30,4 +31,4 @@ const features = en ? [
 <p class="wrap" style="padding-bottom:32px"><a class="inline-link" href={`${home}guides/recording-notes-handoff/#compare`}>{en ? 'Transcription app or action-item workflow?' : '转文字工具，还是行动项工作流？'}</a></p>
 <section class="ownership-section wrap"><div><h2>{en ? <>Your workbench.<br />Still yours.</> : <>工作台是你的，<br />节奏也是。</>}</h2><p>{en ? 'Connect your own trusted HTTPS workbench. Yihu adds native iPhone capabilities around it.' : '连接你自己信任的 HTTPS 工作台。一呼在它周围，补上 iPhone 的原生能力。'}</p></div><div class="ownership-details"><p>{en ? 'Open a trusted HTTPS workspace you already use. For native enhancements, follow that service’s setup instructions.' : '打开你已在用的可信 HTTPS 工作台，需要原生增强时，再按该服务的说明接入。'}</p><p>{en ? 'Notifications and Live Activities require a compatible service. Yihu does not host Agents or provide a backend.' : '通知与实时活动需要兼容服务。一呼不托管 Agent，也不提供后端。'}</p><a class="inline-link" href={`${home}start/`}>{en ? 'See what you need' : '了解使用条件'}<img src="/icons/arrow-up-right.svg" width="20" height="20" alt="" /></a></div></section>
 <HomeAnswers lang={lang} part="details" />
-<section class="get-started-section wrap"><div><h2>{en ? 'Take your workbench with you.' : '把工作台，带在身边。'}</h2><p>{en ? 'Open source. Built for iPhone. Connect your own services.' : '开源，为 iPhone 而做，连接你自己的服务。'}</p></div><a class="button button-primary" href={`${home}start/`}>{en ? 'Get started' : '开始使用'}<img src="/icons/arrow-right.svg" width="20" height="20" alt="" /></a><p class="release-note">{en ? 'Currently a source release. Requires iOS 18+, your own workbench, speech models and signing setup.' : '目前提供源码，需 iOS 18+、自有工作台、语音模型和签名配置。'}</p></section>
+<section class="get-started-section wrap"><div><h2>{en ? 'Take your workbench with you.' : '把工作台，带在身边。'}</h2><p>{en ? 'Open source. Built for iPhone. Connect your own services.' : '开源，为 iPhone 而做，连接你自己的服务。'}</p></div><a class="button button-primary app-store-link" href={store.url}>{en ? 'View on App Store' : '在 App Store 查看'}<img src="/icons/arrow-right.svg" width="20" height="20" alt="" /></a><p class="release-note">{en ? `Store edition ${store.version} · iOS ${store.minimumOSVersion}+ · your own workspace. US listing verified; regional availability follows the store. Source builds and later capabilities are separate.` : `商店版 ${store.version} · iOS ${store.minimumOSVersion}+ · 需自有工作台。已核美区页面，地区供应以商店为准；源码构建和后续能力另行区分。`} <a href={`${home}start/`}>{en ? 'Setup & source options' : '接入与源码选项'}</a></p></section>

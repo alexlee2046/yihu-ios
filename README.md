@@ -4,9 +4,9 @@
 [![Platform: iOS 18+](https://img.shields.io/badge/iOS-18%2B-blue.svg)](project.yml)
 [![Swift: 6](https://img.shields.io/badge/Swift-6-orange.svg)](project.yml)
 
-Yihu is an independent native iOS browser shell optimized for Agent workbenches, including your own [Collie](https://github.com/AltanS/collie), OpenClaw or Hermes web UI. It adds on-device speech, voice notes and iOS sharing around WebKit; compatible integrations can enable native notifications and Live Activities. It is **not a general-purpose Agent platform**: it does not host Agents, supply a backend or make arbitrary workbenches natively compatible. This is a source release, not an App Store binary or an official client of those services.
+Yihu is an independent native iOS browser shell optimized for Agent workbenches, including your own [Collie](https://github.com/AltanS/collie), OpenClaw or Hermes web UI. It adds on-device speech, voice notes and iOS sharing around WebKit; compatible integrations can enable native notifications and Live Activities. It is **not a general-purpose Agent platform**: it does not host Agents, supply a backend or make arbitrary workbenches natively compatible. Yihu is available on the [App Store (verified US listing)](https://apps.apple.com/us/app/yihu/id6819057500): public version **0.1.0**, released **2026-10-19**, requiring iOS/iPadOS **18.0+** (Apple public metadata checked 2026-10-24). Regional availability follows the store. This repository contains source development that may be ahead of that edition; a source merge does not establish a store update or binary feature parity. Yihu is not an official client of those workspace services.
 
-一呼是**针对 Agent 场景优化的原生 iOS 浏览器壳**，用于访问自有 Collie、OpenClaw、Hermes 等网页工作台，并提供端侧语音、录音笔记与系统分享。基础 HTTPS 浏览不等于原生增强已适配；通知、实时活动等需兼容接口与服务。它不是通用 Agent 平台，不托管 Agent、不提供后端，也不承诺任意工作台原生兼容。需要自备服务、模型和签名配置；仓库不提供预配置服务器或可安装的 App Store 成品，也不是上述服务的官方客户端。
+一呼是**针对 Agent 场景优化的原生 iOS 浏览器壳**，用于访问自有 Collie、OpenClaw、Hermes 等网页工作台，并提供端侧语音、录音笔记与系统分享。基础 HTTPS 浏览不等于原生增强已适配；通知、实时活动等需兼容接口与服务。它不是通用 Agent 平台，不托管 Agent、不提供后端，也不承诺任意工作台原生兼容。已上架 [App Store（已核美区页面）](https://apps.apple.com/us/app/yihu/id6819057500)，当前公开版本 **0.1.0**，发布于 **2026-10-19**，需 iOS/iPadOS **18.0+**（2026-10-24 核对 Apple 公开数据，地区供应以商店为准）。商店安装无需 Mac 或自行签名；工作台由用户自备，语音模型按需另行下载，商店说明约 950 MB。仓库包含可能领先商店版的源码开发，合入不等于商店更新或全部功能已在该版发布。仓库不提供预配置服务器，也不是上述服务的官方客户端。
 
 [Build / 构建](#build-locally) · [Connection / 连接](#connect-to-your-own-workbench) · [Limitations / 限制](#models-and-limitations) · [Contributing / 贡献](CONTRIBUTING.md) · [Security / 安全](SECURITY.md)
 
@@ -55,6 +55,8 @@ Relay server/containers/MCP, configurable or inferred relay registration, genera
 本轮撤出中继服务/容器/MCP、可配置或推断式中继注册、通用Agent抽象、独立手表审批及对应实现声明；既有手表草稿→手机确认保持不变，通知生产接入与手表直写仍走原独立授权门。
 
 ## Build locally
+
+This path is for source developers, separate from [App Store installation](https://apps.apple.com/us/app/yihu/id6819057500). Source signing and build prerequisites below are not requirements for installing the store edition.
 
 Requires macOS, Xcode with the iOS 18 SDK or newer and Swift 6, and [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 
