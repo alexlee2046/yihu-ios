@@ -1,6 +1,33 @@
 import XCTest
 
 final class CollieWorkbenchUITests: XCTestCase {
+    /// Next-version candidate UI only. The existing CI installs into an isolated
+    /// simulator; launch-domain overrides never run against a daily-use device.
+    @MainActor
+    func testInitialYihuBranding() throws {
+        continueAfterFailure = false
+        for (language, locale, title, label) in [
+            ("en", "en_US", "Start with Yihu", "HTTPS workspace address"),
+            ("zh-Hans", "zh_CN", "开始使用一呼", "工作台 HTTPS 地址"),
+        ] {
+            let app = XCUIApplication()
+            app.launchArguments = ["-AppleLanguages", "(\(language))", "-AppleLocale", locale,
+                                   "-collie.connection.origin", "", "-collie.workbench.selection.v1", "web"]
+            app.launch()
+            defer { app.terminate() }
+            XCTAssertTrue(app.staticTexts[title].waitForExistence(timeout: 15))
+            let address = app.textFields["collie-connection-origin"]
+            XCTAssertTrue(address.waitForExistence(timeout: 5))
+            XCTAssertEqual(address.label, label)
+            XCTAssertEqual(address.placeholderValue, "https://workbench.example.com")
+            XCTAssertFalse(app.staticTexts["Connect to a Collie workbench"].exists)
+            XCTAssertFalse(app.staticTexts["连接 Collie 工作台"].exists)
+            XCTAssertFalse(app.buttons["collie-connection-save"].isEnabled)
+            attachWorkbenchScreen(name: "candidate-yihu-onboarding-\(language)")
+            // Do not enter an origin, connect, record, download a model or send.
+        }
+    }
+
     /// Uses only synthetic workbenches in an isolated simulator installation.
     /// Does not access a real server, microphone or user draft.
     @MainActor

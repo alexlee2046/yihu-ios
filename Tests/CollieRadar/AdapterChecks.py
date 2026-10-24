@@ -643,5 +643,42 @@ class HistoryChecks(unittest.TestCase):
         self.mocks[-1].assert_not_called()
 
 
+class YihuBrandChecks(unittest.TestCase):
+    def test_onboarding_brand_uses_existing_localization_keys_in_both_languages(self):
+        root = Path(__file__).resolve().parents[2]
+        catalog = json.loads((root / "Apps/Collie/Yihu.xcstrings").read_text())["strings"]
+        expected = {
+            "连接 Collie 工作台": {"en": "Start with Yihu", "zh-Hans": "开始使用一呼"},
+            "Collie 工作台地址": {"en": "HTTPS workspace address", "zh-Hans": "工作台 HTTPS 地址"},
+        }
+        for key, translations in expected.items():
+            for language, value in translations.items():
+                self.assertEqual(catalog[key]["localizations"][language]["stringUnit"]["value"], value)
+        for language in ["en", "zh-Hans"]:
+            helper = catalog["连接后即可查看工作台并使用本机语音输入。"]["localizations"][language]["stringUnit"]["value"]
+            self.assertIn("models" if language == "en" else "模型", helper)
+        source = (root / "Apps/Collie/CollieConnectionSettings.swift").read_text()
+        self.assertIn('TextField("https://workbench.example.com", text: $settings.draft)', source)
+        for key in ["collie.connection.origin", "collie.connection.recent", "collie.connection.custom-names",
+                    "collie.connection.page-names", "collie.connection.favorites",
+                    "collie-connection-origin", "collie-connection-save"]:
+            self.assertIn(key, source)
+
+    def test_generic_example_keeps_origin_safety_and_workspace_provider_examples(self):
+        root = Path(__file__).resolve().parents[2]
+        catalog = json.loads((root / "Apps/Collie/Yihu.xcstrings").read_text())["strings"]
+        key = "请输入以 https:// 开头的工作台地址，例如 https://collie.example.com；只填主机名或 IP 地址（可带端口），不要带账号密码、路径、参数或 # 片段。"
+        for language in ["en", "zh-Hans"]:
+            value = catalog[key]["localizations"][language]["stringUnit"]["value"]
+            self.assertIn("https://workbench.example.com", value)
+            for word in (["credentials", "paths", "query", "fragments"] if language == "en" else ["账号密码", "路径", "参数", "片段"]):
+                self.assertIn(word, value)
+        footer = catalog["可以是 Collie、OpenClaw 控制台、Hermes 管理台或其他网页工作台。地址保存在这台 iPhone 的本地设置中。"]
+        for language in ["en", "zh-Hans"]:
+            value = footer["localizations"][language]["stringUnit"]["value"]
+            for provider in ["Collie", "OpenClaw", "Hermes"]:
+                self.assertIn(provider, value)
+
+
 if __name__ == "__main__":
     unittest.main()
