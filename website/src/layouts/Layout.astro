@@ -124,5 +124,9 @@ const schemaJSON = JSON.stringify(schema).replace(/</g, '\\u003c');
     </footer>
     <AnalyticsConsent lang={lang} />
     {contact.chat && <ContactChat chat={contact.chat} lang={lang} />}
+    <script>
+      import { bindConversionEvents } from '../lib/conversion-events';
+      bindConversionEvents();
+    </script>
   </body>
 </html>

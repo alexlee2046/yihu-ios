@@ -15,6 +15,7 @@ function harness({ value = null, origin = 'https://getyihu.com', readFails = fal
   const window = {
     'ga-disable-G-CWT1FWEHCL': preDisabled,
     addEventListener(name, fn) { windows[name] = fn; },
+    dispatchEvent(event) { windows[event.type]?.(event); return true; },
   };
   const ids = ['analytics-consent', 'analytics-settings', 'analytics-deny', 'analytics-allow', 'analytics-status', 'main'];
   for (const id of ids) nodes[id] = {
@@ -34,7 +35,7 @@ function harness({ value = null, origin = 'https://getyihu.com', readFails = fal
   };
   function queue() { return Array.from(window.dataLayer || [], args => Array.from(args)); }
   vm.runInNewContext(script, {
-    window, document, URL, location: { origin, hostname: new URL(origin).hostname },
+    window, document, URL, Event: class { constructor(type) { this.type = type; } }, location: { origin, hostname: new URL(origin).hostname },
     localStorage: {
       getItem(k) { if (readFails) throw Error('blocked'); return storage.get(k) ?? null; },
       setItem(k, v) { if (writeFails) throw Error('blocked'); storage.set(k, v); },

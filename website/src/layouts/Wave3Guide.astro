@@ -2,11 +2,13 @@
 import Layout from './Layout.astro';
 import Demo from '../components/Demo';
 import GuideQuickCheck from '../components/GuideQuickCheck.astro';
+import { guideConversion } from '../lib/conversion-events';
 interface Props {
   frontmatter: { title: string; description: string; lang: 'zh' | 'en'; indexable?: boolean; quickCheck?: 'audio' | 'notes'; preview?: 'voice' | 'audio' | 'radar'; voiceSample?: 'web' | 'meeting' };
 }
 const { title, description, lang, indexable = true, preview, voiceSample, quickCheck } = Astro.props.frontmatter;
 const home = lang === 'en' ? '/en/' : '/';
+const conversion = guideConversion(Astro.url.pathname);
 const slug = Astro.url.pathname.split('/').filter(Boolean).at(-1) ?? '';
 const pillar = /model-artifact|app-group/.test(slug) ? 'iphone-agent-voice-drafts' : /radar|reply|history|attention|status|evidence/.test(slug) ? 'multi-project-radar-watch' : /audio|bluetooth|voiceprint|pcm|capture|microphone|interruption|recognition/.test(slug) ? 'bluetooth-audio-input-troubleshooting' : /note|minutes|brief|transcript|recording|archive/.test(slug) ? 'recording-notes-handoff' : 'iphone-agent-voice-drafts';
 ---
@@ -16,6 +18,11 @@ const pillar = /model-artifact|app-group/.test(slug) ? 'iphone-agent-voice-draft
     {!indexable && <p class="reference-label">{lang === 'en' ? 'Technical reference · for existing users' : '技术参考 · 供现有用户查阅'}</p>}
     <h1>{title}</h1>
     {quickCheck && <GuideQuickCheck lang={lang} task={quickCheck} />}
+    {conversion && <section class="guide-conversion" data-guide-conversion aria-label={lang === 'en' ? 'Try a sample or view the store edition' : '先试示例或查看商店版'}>
+      <p>{conversion.sourceContext}</p>
+      <div class="hero-actions"><a class="button button-primary" href={conversion.demoHref}>{conversion.demoLabel}</a><a class="button button-text app-store-link" href={conversion.storeHref}>{conversion.storeLabel}</a></div>
+      <p>{conversion.storeContext}</p>
+    </section>}
     {preview && <><p class="lead">{description}</p><Demo client:visible lang={lang} initialScene={preview} initialVoiceSample={voiceSample} /></>}
     <slot />
   </article>

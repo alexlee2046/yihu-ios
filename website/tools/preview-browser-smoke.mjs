@@ -150,14 +150,14 @@ async function interactions(page, en) {
   await insert.focus(); await page.keyboard.press('Enter'); assert.equal(await page.locator('.preview-draft').innerText(), 'SYNTHETIC_EDIT_ONLY_42');
   assert.ok(await insert.evaluate(x => x === document.activeElement), 'insertion preserves focus');
   await insert.click();
-  let captured = await events(page); assert.deepEqual(captured.map(x => x[1]), ['scenario_select', 'preview_complete']);
+  let captured = await events(page); assert.deepEqual(captured.map(x => x[1]), ['funnel_entry', 'scenario_select', 'preview_complete']);
   assert.ok(!JSON.stringify(captured).includes('SYNTHETIC_EDIT_ONLY_42'));
-  for (const x of captured) assert.deepEqual(Object.keys(x[2]).sort(), ['action', 'language', 'page', 'scenario']);
+  for (const x of captured) assert.deepEqual(Object.keys(x[2]).sort(), x[1] === 'funnel_entry' ? ['language', 'page_group', 'placement', 'scenario'] : ['action', 'language', 'page', 'scenario']);
   await page.locator('.preview-footer a[href$="/start/"]').evaluate(a => { a.addEventListener('click', e => e.preventDefault(), { once: true }); a.click(); });
-  assert.equal((await events(page)).length, 3);
+  assert.equal((await events(page)).length, 4);
   await page.locator('#analytics-settings').click(); await page.locator('#analytics-deny').click();
   await scene(page, 'radar').click(); await view.getByRole('button', { name: 'JSON', exact: true }).click();
-  captured = await events(page); assert.equal(captured.length, 3, 'withdrawal blocks further events');
+  captured = await events(page); assert.equal(captured.length, 4, 'withdrawal blocks further events');
   await geometry(page, page.viewportSize().width);
   await scene(page, 'voice').click();
   // Test-only counter survives this isolated page's navigation; app code stores nothing.
@@ -197,6 +197,48 @@ async function quickCheck(page, audio, en) {
   assert.equal(await page.evaluate(() => window.__permissions),0);
   return { initialFold:fold, localChoices:'all three PASS', nativeKeyboard:'Tab/focus/Enter navigation PASS', destination:'existing three-card preview', analytics:'no denied preview events', hardwarePermissions:0 };
 }
+async function conversionGuide(page, engine, path, width) {
+  const root = page.locator('[data-guide-conversion]');
+  assert.equal(await root.count(), 1);
+  assert.equal(await page.locator('[data-preview]').count(), 0);
+  const demo = root.locator('a').first(), app = root.locator('.app-store-link');
+  const href = await demo.getAttribute('href');
+  assert.ok(href.startsWith(path.startsWith('/en/') ? '/en/guides/' : '/guides/'));
+  assert.ok(href.endsWith('/#interactive-preview'));
+  assert.equal(await app.getAttribute('href'), store.url);
+  assert.match(await root.innerText(), path.startsWith('/en/') ? /source\/troubleshooting/ : /源码\/排障/);
+  const intentOnly = async locator => {
+    await locator.evaluate(a => a.addEventListener('click', e => e.preventDefault(), { once: true }));
+    await locator.click();
+  };
+  await intentOnly(demo); await intentOnly(app);
+  assert.equal((await events(page)).length, 0, 'declined navigation intents are never queued');
+  await page.locator('#analytics-settings').click(); await page.locator('#analytics-allow').click();
+  assert.deepEqual((await events(page)).map(x => x[1]), ['funnel_entry']);
+  await intentOnly(app); await intentOnly(demo);
+  const captured = await events(page);
+  assert.deepEqual(captured.map(x => x[1]), ['funnel_entry','app_store_click','guide_demo_click']);
+  for (const x of captured) assert.deepEqual(Object.keys(x[2]).sort(), ['language','page_group','placement','scenario']);
+  await page.evaluate(() => window.dispatchEvent(new Event('yihu:analytics-choice')));
+  assert.equal((await events(page)).length, 3, 'successful entry is not duplicated');
+  await page.locator('#analytics-settings').click(); await page.locator('#analytics-deny').click();
+  await intentOnly(app); assert.equal((await events(page)).length, 3, 'withdrawal blocks navigation events');
+  await page.locator('#analytics-settings').click(); await page.locator('#analytics-allow').click();
+  await root.scrollIntoViewIfNeeded(); await demo.focus(); await page.keyboard.press('Tab');
+  assert.ok(await app.evaluate(a => a === document.activeElement), 'paired links use native keyboard order');
+  assert.ok(await app.evaluate(a => getComputedStyle(a).outlineStyle !== 'none'), 'focus visible');
+  await geometry(page, width);
+  await shot(page, engine, 'p4-'+path.replace(/^\/|\/$/g,'').replaceAll('/','-')+'-'+width);
+  await demo.focus(); await page.keyboard.press('Enter'); await page.waitForURL('**'+href);
+  await page.waitForFunction(() => !document.querySelector('astro-island')?.hasAttribute('ssr'));
+  assert.equal(await page.locator('#interactive-preview').count(), 1);
+  assert.equal(await page.evaluate(() => localStorage.getItem('yihu.analytics-consent.v1')), 'granted');
+  assert.deepEqual((await events(page)).map(x => x[1]), ['funnel_entry'], 'same explicit grant on destination; no custom session state');
+  return { events: captured, keyboard:'Tab/focus/Enter PASS', destination:href, store:'intent stub only; never visited/installed', sameConsent:'PASS', permissions:await page.evaluate(() => window.__permissions) };
+}
+const p4Source = await readFile('src/lib/conversion-events.ts','utf8');
+const p4Paths = [...p4Source.matchAll(/'(\/[^']+)': '(?:voice|audio|notes|radar)'/g)].map(x => x[1]);
+assert.equal(p4Paths.length,14);
 const targets = [
   ['/', 390, 844, 'voice', 'home-zh-390'], ['/en/', 1440, 1000, 'voice', 'home-en-1440'],
   ['/guides/bluetooth-audio-input-troubleshooting/', 390, 844, 'audio', 'audio-zh-390'],
@@ -255,6 +297,11 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
         else await geometry(p.page, width);
       } finally { await p.close(); }
     }
+    for (const path of p4Paths) for (const width of [390,1440]) {
+      const p = await openPage(activeBrowser,path,width,width===390?844:1000);
+      try { record.pages.push({path,width,p4:await conversionGuide(p.page,engine,path,width)}); }
+      finally { await p.close(); }
+    }
     for (const path of ['/guides/audio-route-recovery-matrix/','/en/guides/noisy-transcript-text-correction/']) {
       const p = await openPage(activeBrowser,path,390,844,false);
       try {
@@ -274,4 +321,4 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
     await writeFile(resolve(output, 'evidence.json'), JSON.stringify({ results, failures }, null, 2));
   }
 }
-console.log('Browser preview acceptance PASS: Chromium + WebKit, 5 original pages + 2 store/source setup views + 8 P2 landing views + 2 no-JavaScript navigations per engine, 390/1440px; native speech API and injected contracts reported separately; browsers closed.');
+console.log('Browser preview acceptance PASS: Chromium + WebKit, 5 original pages + 2 store/source setup views + 8 P2 views + 28 P4 views + 2 no-JavaScript navigations per engine; consent-only funnel, actual same-language preview navigation, store intent stub only; native speech API separate; browsers closed.');
