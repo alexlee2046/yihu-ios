@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Agent web read-aloud and voice input: output, microphone and draft boundaries"
-description: "Separate site-provided read-aloud, WebKit media settings, microphone capture, native transcription and destination drafts. No built-in TTS or continuous two-way voice-service guarantee."
+title: "iPhone read-aloud vs voice input: what differs? | Yihu"
+description: "Playback is not recording or a sent draft. Check the boundaries, US App Store 0.1.0 listing and Apache-2.0 source—not a native TTS promise."
 lang: en
 ---
 

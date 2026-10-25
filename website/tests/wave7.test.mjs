@@ -29,7 +29,7 @@ test('Wave7 six guides have first answers, tables, six FAQs, source evidence and
 test('new tasks retain timebox, manual-label and source-scope limits instead of claiming app features', () => {
   for (const prefix of ['', 'en/']) {
     const trial = read('src/pages/' + prefix + 'guides/first-trial-go-no-go-checklist.md');
-    assert.ok(trial.includes(prefix ? 'not a setup or performance promise' : '不承诺五分钟装好或接通'));
+    assert.ok(trial.includes(prefix ? 'promises neither setup time nor performance' : '不承诺五分钟装好、接通或性能'));
     assert.ok(trial.includes(prefix ? 'not an app configuration/import format' : '不是App的配置导入格式'));
     const segments = read('src/pages/' + prefix + 'guides/recording-segment-review-labels.md');
     assert.ok(segments.includes(prefix ? 'not native timestamps' : '不是App时间戳'));

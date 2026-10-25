@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "共享收件箱不可访问就是网络坏了吗？AppGroup声明、签名与本机容器"
-description: "核App/Extension的变量、YihuAppGroup键和运行时containerURL；代码匹配非签名/真机访问验收，本机共享不是公网API或网站身份隔离。"
+title: "App Group收件箱：本地保存不是上传回执｜一呼"
+description: "App Group源码参考：核容器、manifest与条目可读性，不把写入当上传。美区商店0.1.0已核，Apache-2.0代码可查；不代表商店版新增能力。"
 lang: zh
 indexable: false
 ---

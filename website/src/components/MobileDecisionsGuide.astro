@@ -365,7 +365,7 @@ const sources = [
   </style>
   <h1>{copy.title}</h1>
   <p class="lead">{copy.lead}</p>
-  {conversion && <section class="guide-conversion" data-guide-conversion aria-label="Try a sample or view the store edition">
+  {conversion && <section class="guide-conversion" data-guide-conversion aria-label={en ? 'Try a sample or view the store edition' : '先试示例或查看商店版'}>
     <p>{conversion.sourceContext}</p>
     <div class="hero-actions"><a class="button button-primary" href={conversion.demoHref}>{conversion.demoLabel}</a><a class="button button-text app-store-link" href={conversion.storeHref}>{conversion.storeLabel}</a></div>
     <p>{conversion.storeContext}</p>
