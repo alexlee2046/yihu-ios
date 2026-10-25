@@ -28,6 +28,8 @@ jobs:
           persist-credentials: false
       - name: Native model checks and companion builds
         run: |
+          swiftc -swift-version 6 Shared/YihuWatchSnapshot.swift Shared/YihuWatchDraft.swift Shared/YihuWatchWidgetSnapshot.swift Tests/CollieRadar/WatchExperienceChecks.swift -o "$RUNNER_TEMP/watch-experience-checks"
+          "$RUNNER_TEMP/watch-experience-checks"
           swiftc -swift-version 6 -parse-as-library Apps/Collie/CollieTextInsertion.swift Apps/Collie/CollieKeyboardPolicy.swift Tests/CollieRadar/InsertionChecks.swift -o "$RUNNER_TEMP/insertion-checks"
           "$RUNNER_TEMP/insertion-checks"
           swiftc -swift-version 6 Shared/YihuWatchVoice.swift Tests/CollieRadar/WatchVoiceChecks.swift -o "$RUNNER_TEMP/watch-voice-checks"
@@ -86,6 +88,8 @@ jobs:
           persist-credentials: false
       - name: Model and persistence checks
         run: |
+          swiftc -swift-version 6 Shared/YihuWatchSnapshot.swift Shared/YihuWatchDraft.swift Shared/YihuWatchWidgetSnapshot.swift Tests/CollieRadar/WatchExperienceChecks.swift -o "$RUNNER_TEMP/watch-experience-checks"
+          "$RUNNER_TEMP/watch-experience-checks"
           swiftc -swift-version 6 -parse-as-library Apps/Collie/CollieTextInsertion.swift Apps/Collie/CollieKeyboardPolicy.swift Tests/CollieRadar/InsertionChecks.swift -o "$RUNNER_TEMP/insertion-checks"
           "$RUNNER_TEMP/insertion-checks"
           swiftc -swift-version 6 Shared/YihuWatchVoice.swift Tests/CollieRadar/WatchVoiceChecks.swift -o "$RUNNER_TEMP/watch-voice-checks"
