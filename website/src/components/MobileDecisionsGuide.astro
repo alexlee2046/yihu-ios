@@ -1,7 +1,9 @@
 ---
+import { guideConversion } from '../lib/conversion-events';
 interface Props { lang?: 'zh' | 'en' }
 const { lang = 'zh' } = Astro.props;
 const en = lang === 'en';
+const conversion = guideConversion(Astro.url.pathname);
 const decisionsCopy = {
   "zh": {
     "title": "手机查看 Agent 待决策与待验收：先读，再确认",
@@ -363,6 +365,11 @@ const sources = [
   </style>
   <h1>{copy.title}</h1>
   <p class="lead">{copy.lead}</p>
+  {conversion && <section class="guide-conversion" data-guide-conversion aria-label="Try a sample or view the store edition">
+    <p>{conversion.sourceContext}</p>
+    <div class="hero-actions"><a class="button button-primary" href={conversion.demoHref}>{conversion.demoLabel}</a><a class="button button-text app-store-link" href={conversion.storeHref}>{conversion.storeLabel}</a></div>
+    <p>{conversion.storeContext}</p>
+  </section>}
   <nav aria-label={copy.nav}>
     <a href="#example">{copy.exampleTitle}</a><a href="#filters">{copy.filterTitle}</a><a href="#freshness">{copy.freshnessTitle}</a><a href="#reply-flow">{copy.stateTitle}</a><a href="#watch-notifications">{copy.watchTitle}</a>
   </nav>

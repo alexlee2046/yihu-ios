@@ -136,6 +136,7 @@ const en = lang === 'en';
       try { localStorage.setItem(key, value); storageError = false; } catch { storageError = true; }
       panel.hidden = !storageError;
       render();
+      window.dispatchEvent(new Event('yihu:analytics-choice'));
       const target = openedFromSettings ? settings : document.getElementById('main');
       if (target) { if (!openedFromSettings) target.setAttribute('tabindex', '-1'); target.focus({ preventScroll:true }); }
     }
@@ -160,6 +161,7 @@ const en = lang === 'en';
       applyChoice();
       panel.hidden = choice !== null;
       render();
+      window.dispatchEvent(new Event('yihu:analytics-choice'));
     }
     window.addEventListener('storage', event => {
       if (event.key === key || event.key === null) syncChoice();

@@ -140,6 +140,10 @@
   .document li { padding-left:8px; }
   .document code { background:var(--surface); padding:3px 6px; border-radius:4px; overflow-wrap:anywhere; }
   .document .button { margin-top:16px; }
+  .guide-conversion { margin-block:24px; padding-block:20px; border-block:1px solid var(--line); }
+  .guide-conversion .hero-actions { flex-wrap:wrap; gap:12px; margin-block:16px; }
+  .guide-conversion .button { white-space:normal; text-align:center; margin-top:0; }
+  .guide-conversion > p { font-size:14px; color:var(--muted); }
   .task-document { max-width:1080px; }
   .task-document h1 { font-size:clamp(32px,4vw,48px); }
   .task-document .lead { font-size:18px; margin-bottom:24px; }
