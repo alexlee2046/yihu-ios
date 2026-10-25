@@ -40,6 +40,7 @@ jobs:
           command -v xcodegen >/dev/null || brew install xcodegen
           xcodegen generate --spec project.yml
           xcodebuild -quiet -project Yihu.xcodeproj -scheme YihuWatch -destination 'generic/platform=watchOS Simulator' -derivedDataPath "$RUNNER_TEMP/YihuWatch" CODE_SIGNING_ALLOWED=NO build
+          PYTHONDONTWRITEBYTECODE=1 python3 Tests/CollieRadar/WatchBundleChecks.py "$RUNNER_TEMP/YihuWatch/Build/Products/Debug-watchsimulator/YihuWatch.app"
           xcodebuild -quiet -project Yihu.xcodeproj -scheme CollieiOS -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/YihuPhone" CODE_SIGNING_ALLOWED=NO build
       - name: Capture synthetic watch interface if runtime is available
         run: |
@@ -116,6 +117,7 @@ jobs:
       - name: Build app, extensions and UI tests
         run: |
           xcodebuild -quiet -project Yihu.xcodeproj -scheme CollieiOS -configuration Debug -destination "platform=iOS Simulator,id=$YIHU_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/YihuBuild" CODE_SIGN_IDENTITY=- build-for-testing
+          PYTHONDONTWRITEBYTECODE=1 python3 Tests/CollieRadar/WatchBundleChecks.py "$RUNNER_TEMP/YihuBuild/Build/Products/Debug-watchsimulator/YihuWatch.app"
       - name: Light, dark and accessibility-size navigation
         run: |
           xcrun simctl boot "$YIHU_SIMULATOR" || true
