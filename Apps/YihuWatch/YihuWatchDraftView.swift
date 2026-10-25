@@ -150,9 +150,15 @@ struct YihuWatchDraftView: View {
             applyVoiceResult()
         }
         .onChange(of: voice.result) { _, _ in applyVoiceResult() }
+        .onChange(of: text) { _, _ in
+            if !blocked && !busy && !frozen && record() != nil { _ = save() }
+        }
         .onChange(of: scenePhase) { _, phase in
             voice.foreground = phase == .active
-            if phase != .active { voice.stop(send: false) }
+            if phase != .active {
+                voice.stop(send: false)
+                if !blocked && !busy && record() != nil { _ = save() }
+            }
         }
         .onDisappear {
             voice.foreground = false; voice.stop(send: false)

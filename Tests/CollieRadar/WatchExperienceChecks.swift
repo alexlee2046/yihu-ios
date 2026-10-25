@@ -42,6 +42,10 @@ struct WatchExperienceChecks {
         precondition(YihuWatchWidgetSnapshot(snapshot).needsRefresh(at: now))
         snapshot.hasSource = false
         precondition(YihuWatchWidgetSnapshot(snapshot).status(at: now) == "请在手机同步")
+        var invalidWidget = widget; invalidWidget.decisionCount = Int.max
+        rejects { _ = try YihuWatchWidgetSnapshot.decode(JSONEncoder().encode(invalidWidget)) }
+        snapshot.sourceDate = nil
+        precondition(YihuWatchWidgetSnapshot(snapshot).needsRefresh(at: now))
         let bytes = try JSONEncoder().encode(widget)
         let keys = Set((try JSONSerialization.jsonObject(with: bytes) as! [String: Any]).keys)
         precondition(keys == Set(["decisionCount", "acceptanceCount", "sourceDate", "hasSource", "readFailed", "incompleteSources"]))
@@ -59,6 +63,11 @@ struct WatchExperienceChecks {
         precondition(tryValue { try store.load() } == nil)
         var draft = YihuWatchDraft(requestID: UUID(), workbench: item.workbench, task: item.task,
             sourceToken: item.sourceToken!, taskToken: item.taskToken!, text: "测试草稿", transferAttempted: false)
+        // Pre-extension records lack title and phone acknowledgement and remain readable.
+        var legacyObject = try JSONSerialization.jsonObject(with: JSONEncoder().encode(draft)) as! [String: Any]
+        legacyObject.removeValue(forKey: "transferAttempted")
+        let legacy = try YihuWatchDraft.decode(JSONSerialization.data(withJSONObject: legacyObject))
+        precondition(legacy.phoneSaved == nil && legacy.title == nil && legacy.transferAttempted == nil)
         try store.save(draft)
         precondition(tryValue { try store.load()?.text } == draft.text)
         precondition(draft.matches(item))
@@ -81,6 +90,8 @@ struct WatchExperienceChecks {
         precondition(tryValue { try store.load()?.phoneSaved } == true)
         other = draft; other.phoneSaved = false
         rejects { try store.save(other) }
+        other = draft; other.transferAttempted = false
+        rejects { _ = try YihuWatchDraft.decode(JSONEncoder().encode(other)) }
         try store.save(draft) // Original-ID duplicate is safe.
         try store.clear()
         precondition(tryValue { try store.load() } == nil)

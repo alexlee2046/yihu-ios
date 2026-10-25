@@ -99,6 +99,7 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
 struct YihuWatchApp: App {
     @State private var link = YihuWatchLink()
     @State private var route: YihuWatchRoute = .all
+    @State private var navigationID = UUID()
     private var demoDraftItem: YihuWatchSnapshot.Item? {
         #if DEBUG
         if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO_PAGE"] == "draft" ||
@@ -191,8 +192,14 @@ struct YihuWatchApp: App {
                 }.navigationTitle(route.status ?? "一呼")
                 }
             }
+            .id(navigationID)
             .onOpenURL { url in
-                if let destination = YihuWatchRoute(url: url) { route = destination }
+                guard let destination = YihuWatchRoute(url: url) else { return }
+                // An explicit widget tap returns to its category, even from a warm detail screen.
+                // The shared voice object and durably saved drafts outlive this navigation stack.
+                link.voice.stop(send: false)
+                route = destination
+                navigationID = UUID()
             }
         }
     }

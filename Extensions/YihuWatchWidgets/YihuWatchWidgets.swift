@@ -27,9 +27,15 @@ private struct ActionsProvider: TimelineProvider {
 private struct ActionsWidgetView: View {
     let entry: ActionsEntry
     @Environment(\.widgetFamily) private var family
-    private var total: String { entry.snapshot?.total.map(String.init) ?? "—" }
+    private var total: String {
+        guard entry.snapshot?.hasSource == true else { return "—" }
+        return entry.snapshot?.total.map(String.init) ?? "—"
+    }
+    private func count(_ value: Int?) -> String {
+        entry.snapshot?.hasSource == true ? value.map(String.init) ?? "—" : "—"
+    }
     private var status: String { entry.snapshot?.status(at: entry.date) ?? "请打开一呼同步" }
-    private var warning: Bool { entry.snapshot?.needsRefresh(at: entry.date) ?? true }
+    private var warning: Bool { (entry.snapshot?.needsRefresh(at: entry.date) ?? true) || entry.snapshot?.total == nil }
 
     var body: some View {
         Group {
@@ -47,10 +53,10 @@ private struct ActionsWidgetView: View {
                     Text("一呼 · 待我处理").font(.headline)
                     HStack {
                         Link(destination: YihuWatchRoute.decision.url) {
-                            Text("决策 \(entry.snapshot?.decisionCount.map(String.init) ?? "—")")
+                            Text("决策 \(count(entry.snapshot?.decisionCount))")
                         }
                         Link(destination: YihuWatchRoute.acceptance.url) {
-                            Text("验收 \(entry.snapshot?.acceptanceCount.map(String.init) ?? "—")")
+                            Text("验收 \(count(entry.snapshot?.acceptanceCount))")
                         }
                     }
                     HStack(spacing: 4) {
