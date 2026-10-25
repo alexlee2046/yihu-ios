@@ -1,8 +1,8 @@
 {
   "zh": {
-    "heading": "把说出来的想法，接到手边的工作。",
-    "answer": "一呼是面向自有 Agent 网页工作台的 iPhone 语音工具：口述草稿、保存录音笔记、带入文字和资料，也能查看你自己的结构化事项简报。先用下面的示例试试，再判断是否适合你的工作方式。",
-    "caption": "你想先解决哪件事？",
+    "heading": "一呼 Yihu：你自己的工作台，iPhone 上的语音入口。",
+    "answer": "一呼（Yihu）把 iPhone 语音变成你已有工作台的草稿：识别在手机完成，最终文字填入当前草稿，不替你发送。App Store 商店版为 0.1.0，需 iOS 18+；工作台地址与账号由你提供。",
+    "caption": "从语音草稿开始，按场景查看指南",
     "columns": [
       "能力",
       "可以做什么",
@@ -22,19 +22,19 @@
         "id": "audio",
         "name": "外设拾音排障",
         "scope": "按输入、播放、试录和切换结果逐步对照。",
-        "boundary": "停车后操作；具体可选输入依设备与系统界面而定。"
+        "boundary": "源码指南：停车后操作；具体可选输入依设备与系统界面而定。"
       },
       {
         "id": "notes",
         "name": "结构化笔记",
         "scope": "保留录音与文字，再选择整理与交接方式。",
-        "boundary": "摘要与待办由所选工作台或工具整理，并对照原文确认。"
+        "boundary": "源码指南：摘要与待办由所选工作台或工具整理，并对照原文确认。"
       },
       {
         "id": "radar",
         "name": "每日跟进简报",
         "scope": "读取你准备的JSON事项，查看来源和下一步。",
-        "boundary": "需自有导出或兼容来源，询盘与市场资料由你提供。"
+        "boundary": "源码指南：需自有导出或兼容来源，询盘与市场资料由你提供。"
       }
     ],
     "faqs": [
@@ -45,8 +45,13 @@
       },
       {
         "id": "install",
-        "question": "现在如何安装？",
-        "answer": "目前提供源码：需要 iOS 18+、Mac、Xcode/XcodeGen、自有签名和可信 HTTPS 工作台；语音模型另行下载。安装步骤在接入指南中。"
+        "question": "一呼已经上架 App Store 了吗？",
+        "answer": "已上架，当前公开商店版为 0.1.0，App ID 6819057500，需 iOS 18+。已核美区页面，地区供应以商店显示为准；从商店安装不要求 Mac 或自行签名。源码开发者另按构建指南操作，不能把后续源码合入当成商店已更新。"
+      },
+      {
+        "id": "models",
+        "question": "需要一开始就下载语音模型吗？",
+        "answer": "语音模型由你选择时再下载。商店版 0.1.0 说明的模型约 950 MB，与 App 安装包分开；先了解下载、存储和设备条件，再启用语音，不把未下载模型的状态说成语音已可用。"
       },
       {
         "id": "demo",
@@ -61,12 +66,12 @@
       {
         "id": "notes",
         "question": "录音之后就有会议纪要了吗？",
-        "answer": "一呼保存本地录音并分段转写。你可交给所选工作台或工具整理，再对照原文确认人名、数字和待办负责人。"
+        "answer": "以下为源码与工作流说明，当前商店版支持范围请核对实际版本。一呼保存本地录音并分段转写。你可交给所选工作台或工具整理，再对照原文确认人名、数字和待办负责人。"
       },
       {
         "id": "radar",
         "question": "商机简报从哪里来？",
-        "answer": "来自你现有工作流准备的 JSON 导出或兼容数据源。一呼负责呈现事项，客户数据与询盘资料由你提供。"
+        "answer": "以下为源码与工作流说明，当前商店版支持范围请核对实际版本。来自你现有工作流准备的 JSON 导出或兼容数据源。一呼负责呈现事项，客户数据与询盘资料由你提供。"
       }
     ],
     "scenarios": [
@@ -101,9 +106,9 @@
     ]
   },
   "en": {
-    "heading": "Turn a spoken thought into your next step.",
-    "answer": "Yihu brings voice drafts, local voice notes, sharing and your structured task brief to an iPhone connected to your own Agent web workspace. Try the samples below, then decide whether it fits how you work.",
-    "caption": "What would you like to work on?",
+    "heading": "Yihu: voice for the workspace you already use.",
+    "answer": "Yihu is an iPhone voice companion for your existing workspace. Speech recognition runs on your phone, and the final transcript goes into the current draft without pressing Send. The App Store edition is 0.1.0 for iOS 18+; bring your own workspace address and account.",
+    "caption": "Start with voice drafts; explore the task guides",
     "columns": [
       "Capability",
       "What it does",
@@ -123,19 +128,19 @@
         "id": "audio",
         "name": "Audio input checks",
         "scope": "Compare your device, playback, recording and switching results.",
-        "boundary": "Park before operating. Available inputs depend on your device and system UI."
+        "boundary": "Source guide: Park before operating. Available inputs depend on your device and system UI."
       },
       {
         "id": "notes",
         "name": "Structured notes",
         "scope": "Keep audio and text, then choose how to organize and hand them off.",
-        "boundary": "Your selected workspace or tool organizes summaries and actions; review against the original."
+        "boundary": "Source guide: Your selected workspace or tool organizes summaries and actions; review against the original."
       },
       {
         "id": "radar",
         "name": "Daily follow-up brief",
         "scope": "Read your JSON tasks with their source and next steps.",
-        "boundary": "Bring your own export or compatible feed, inquiry data and market material."
+        "boundary": "Source guide: Bring your own export or compatible feed, inquiry data and market material."
       }
     ],
     "faqs": [
@@ -147,7 +152,12 @@
       {
         "id": "install",
         "question": "Can I install it from the App Store?",
-        "answer": "Yihu is currently a source release. Setup requires iOS 18+, a Mac with Xcode and XcodeGen, your own signing and a trusted HTTPS workspace. Speech models are downloaded separately."
+        "answer": "Yes. The public store edition is 0.1.0, App ID 6819057500, for iOS 18+. The US listing is verified; availability follows your storefront. Store installation does not require a Mac or your own signing. Source developers follow separate build instructions; a source merge is not a store update."
+      },
+      {
+        "id": "models",
+        "question": "Do I have to download a speech model immediately?",
+        "answer": "You choose when to download the optional speech model. Store edition 0.1.0 describes about 950 MB, separate from the app installation. Check download, storage and device requirements before using speech; a missing model does not mean speech is ready."
       },
       {
         "id": "demo",
@@ -162,12 +172,12 @@
       {
         "id": "notes",
         "question": "Will it write finished meeting minutes for me?",
-        "answer": "Yihu keeps local audio and segmented transcription. Choose a workspace or tool to organize it, then check names, numbers and action owners against the original."
+        "answer": "This describes source and workflow capabilities; check your installed store version for availability. Yihu keeps local audio and segmented transcription. Choose a workspace or tool to organize it, then check names, numbers and action owners against the original."
       },
       {
         "id": "radar",
         "question": "Where does the sales brief come from?",
-        "answer": "You supply a JSON export or compatible feed from your existing workflow. Yihu displays your tasks; it does not supply a customer database or automatically collect inquiries."
+        "answer": "This describes source and workflow capabilities; check your installed store version for availability. You supply a JSON export or compatible feed from your existing workflow. Yihu displays your tasks; it does not supply a customer database or automatically collect inquiries."
       }
     ],
     "scenarios": [

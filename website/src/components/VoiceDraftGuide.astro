@@ -1,5 +1,6 @@
 ---
 import Demo from './Demo';
+import store from '../data/app-store.json';
 interface Props { lang?: 'zh' | 'en' }
 const { lang = 'zh' } = Astro.props;
 const en = lang === 'en';
@@ -30,13 +31,13 @@ const rows = en ? [
   <p>{en ? 'Sample task: reply to a request with missing specifications. Keep price and delivery time unconfirmed until checked. Both paths should end at the same reviewable draft.' : '合成任务：回复一份缺少规格参数的询问。价格和交期先待确认，两条路径都以同一份可检查的草稿为终点。'}</p>
   <div role="region" aria-label={en ? 'Same-task workflow comparison' : '同任务工作流比较'} tabindex="0"><table><thead><tr>{(en ? ['Check', 'Your mobile browser', 'Yihu + your workspace'] : ['核对项', '你现有的手机浏览器', '一呼 + 自有工作台']).map(x => <th scope="col">{x}</th>)}</tr></thead><tbody>
     {(en ? [
-      ['Prepare', 'Use an existing signed-in editor; available keyboard Dictation may already be enough.', 'Source-build/sign the app, download models and open your trusted workspace.'],
+      ['Prepare', 'Use an existing signed-in editor; available keyboard Dictation may already be enough.', 'Install the store edition, choose the speech-model download and open your trusted workspace. Developers can build from source separately.'],
       ['Move the wording', 'Type/dictate directly, or copy from your note and check the paste destination.', 'Speak, then inspect the text placed in a compatible draft; keep a copy if the editor cannot accept it.'],
       ['Review', 'Check names, missing facts and the intended recipient.', 'Check the same facts and destination; insertion does not press Send.'],
       ['Data handling', 'Inspect your chosen keyboard, browser and service settings.', 'Prepared models transcribe on-device; handed-over text follows the destination’s save/sync policy.'],
       ['Choose this when', 'The current editor and input method already meet the task.', 'You already use an Agent workspace and want voice notes/sharing around it.'],
     ] : [
-      ['准备', '使用已有登录的编辑器；系统听写可用时，直接输入也许已足够。', '源码构建并签名、准备模型，再打开自己的可信工作台。'],
+      ['准备', '使用已有登录的编辑器；系统听写可用时，直接输入也许已足够。', '从商店安装、选择下载语音模型，再打开自己的可信工作台；开发者也可另走源码构建。'],
       ['带入文字', '直接打字/听写，或从笔记复制，检查粘贴目的地。', '口述后查看兼容草稿中的文字；无法接纳时先保留录文。'],
       ['核对', '检查人名、缺失事实和收件对象。', '核对同样的信息与目的地；填入不会按发送。'],
       ['资料处理', '了解所选键盘、浏览器与服务的设置。', '已备模型在端侧转写；带入网页后遵循其保存/同步规则。'],
@@ -51,7 +52,7 @@ const rows = en ? [
     <li>{en ? 'Review text and destination. Yihu does not press Send; the page may save or sync a draft.' : '核对文字与目的地。一呼不会按下发送，网页仍可能保存或同步草稿。'}</li>
   </ol>
   <h2>{en ? 'What to prepare' : '使用前准备什么'}</h2>
-  <p>{en ? 'The current release is source code: iOS 18+, a Mac with Xcode/XcodeGen, your own signing, a trusted HTTPS workspace and separately downloaded speech models. Setup instructions explain the supported paths.' : '当前提供源码：需要 iOS 18+、Mac 与 Xcode/XcodeGen、自有签名、可信 HTTPS 工作台及另行下载的语音模型。接入指南列出了可用路径。'}</p>
+  <p>{en ? 'Install the App Store edition on iOS 18+ and bring your own trusted HTTPS workspace. Speech models are a separate, optional download; choose them when using speech. Mac/Xcode/signing requirements apply to source developers, not store installation. Later source capabilities are not automatically available in the store edition.' : '在 iOS 18+ 从 App Store 安装，并准备你自己的可信 HTTPS 工作台。语音模型按需另行下载，使用语音时再准备；Mac、Xcode 和签名只适用于源码开发者，不是商店安装条件。后续源码能力不代表商店版已更新。'}</p>
   <h2>FAQ</h2>
   <h3 id="faq-assistant">{en ? 'Is it a general-purpose phone assistant?' : '它是能控制所有手机应用的语音助手吗？'}</h3>
   <p>{en ? 'Yihu focuses on your web workspace. It does not replace Siri or supply an Agent backend; the connected service provides its own capabilities.' : '一呼聚焦你自己的网页工作台，不替代 Siri，也不提供 Agent 后端；所连接服务提供各自能力。'}</p>
@@ -60,7 +61,7 @@ const rows = en ? [
   <h3 id="faq-background">{en ? 'Can it listen continuously in the background?' : '可以一直在后台听我说话吗？'}</h3>
   <p>{en ? 'Capture is a foreground interaction with microphone permission. Start and stop deliberately, and park before operating vehicle controls.' : '录音在前台并需麦克风权限，按需开始和结束；车载操作请先停车。'}</p>
   <h3 id="faq-install">{en ? 'Where is the download?' : '在哪里下载？'}</h3>
-  <p>{en ? 'Follow the source-build setup guide. There is no App Store binary linked here.' : '目前按源码构建指南安装，这里没有可直接下载的 App Store 成品。'}</p>
+  <p><a class="app-store-link" href={store.url}>{en ? 'View Yihu on App Store' : '在 App Store 查看一呼'}</a> · {en ? `Public edition ${store.version}; US listing verified, regional availability follows the store. Source builds have a separate setup path.` : `公开商店版 ${store.version}；已核美区页面，地区供应以商店为准。源码构建另走开发者路径。`}</p>
   <p><a href={`${home}start/`}>{en ? 'See setup requirements' : '查看接入条件'}</a> · <a href={`${home}guides/recording-notes-handoff/#compare`}>{en ? 'Compare note workflows' : '录音笔记工作流选型'}</a> · <a href={`${home}guides/bluetooth-audio-input-troubleshooting/`}>{en ? 'Check audio input' : '检查音频输入'}</a> · <a href={`${home}privacy/`}>{en ? 'Privacy' : '隐私'}</a></p>
   <details><summary>{en ? 'Implementation and platform references' : '实现与平台参考'}</summary><p><a href="https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md">Yihu source release</a> · <a href="https://support.apple.com/guide/iphone/dictate-text-iph2c0651d2/ios">Apple Dictation</a></p></details>
 </article>
