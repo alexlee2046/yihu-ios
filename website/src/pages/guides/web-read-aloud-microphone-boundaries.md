@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "Agent网页朗读与语音输入切换：输出、麦克风和草稿边界"
-description: "区分网页提供的朗读、WebKit媒体配置、系统麦克风、原生转写与目标草稿；检查播放和采集切换，不承诺内置朗读或连续双向语音服务。"
+title: "iPhone网页朗读与语音输入有何不同？｜一呼"
+description: "朗读是输出，不等于录音或已发送草稿；核清边界再用。已核美区App Store 0.1.0，Apache-2.0源码可查，不承诺内置TTS或连续双向语音。"
 lang: zh
 ---
 

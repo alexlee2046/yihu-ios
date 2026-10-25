@@ -7,7 +7,10 @@ import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { resolve, extname, sep } from 'node:path';
 if (process.platform !== 'linux' || !process.env.CI) throw Error('Use the existing remote CI job for browser acceptance.');
-const { chromium, webkit } = createRequire(import.meta.url)('playwright');
+const sdk = createRequire(import.meta.url);
+const { chromium, webkit } = sdk('playwright');
+const axeSource = await readFile(sdk.resolve('axe-core/axe.min.js'), 'utf8');
+const p5 = JSON.parse(await readFile('tests/fixtures/p5-contract.json','utf8'));
 const dist = resolve('dist'), output = resolve(process.env.RUNNER_TEMP || tmpdir(), 'yihu-preview-smoke');
 await mkdir(output, { recursive: true });
 const results = [], failures = [];
@@ -197,10 +200,10 @@ async function quickCheck(page, audio, en) {
   assert.equal(await page.evaluate(() => window.__permissions),0);
   return { initialFold:fold, localChoices:'all three PASS', nativeKeyboard:'Tab/focus/Enter navigation PASS', destination:'existing three-card preview', analytics:'no denied preview events', hardwarePermissions:0 };
 }
-async function conversionGuide(page, engine, path, width) {
+async function conversionGuide(page, engine, path, width, existingPreview = false, wave = 'p4') {
   const root = page.locator('[data-guide-conversion]');
   assert.equal(await root.count(), 1);
-  assert.equal(await page.locator('[data-preview]').count(), 0);
+  assert.equal(await page.locator('[data-preview]').count(), existingPreview ? 1 : 0);
   const demo = root.locator('a').first(), app = root.locator('.app-store-link');
   const href = await demo.getAttribute('href');
   assert.ok(href.startsWith(path.startsWith('/en/') ? '/en/guides/' : '/guides/'));
@@ -228,17 +231,31 @@ async function conversionGuide(page, engine, path, width) {
   assert.ok(await app.evaluate(a => a === document.activeElement), 'paired links use native keyboard order');
   assert.ok(await app.evaluate(a => getComputedStyle(a).outlineStyle !== 'none'), 'focus visible');
   await geometry(page, width);
-  await shot(page, engine, 'p4-'+path.replace(/^\/|\/$/g,'').replaceAll('/','-')+'-'+width);
+  await shot(page, engine, wave+'-'+path.replace(/^\/|\/$/g,'').replaceAll('/','-')+'-'+width);
   await demo.focus(); await page.keyboard.press('Enter'); await page.waitForURL('**'+href);
   await page.waitForFunction(() => !document.querySelector('astro-island')?.hasAttribute('ssr'));
   assert.equal(await page.locator('#interactive-preview').count(), 1);
   assert.equal(await page.evaluate(() => localStorage.getItem('yihu.analytics-consent.v1')), 'granted');
-  assert.deepEqual((await events(page)).map(x => x[1]), ['funnel_entry'], 'same explicit grant on destination; no custom session state');
-  return { events: captured, keyboard:'Tab/focus/Enter PASS', destination:href, store:'intent stub only; never visited/installed', sameConsent:'PASS', permissions:await page.evaluate(() => window.__permissions) };
+  const sameDocument = new URL(href,'https://getyihu.com'+path).pathname === path;
+  assert.deepEqual((await events(page)).map(x => x[1]), sameDocument ? ['funnel_entry','app_store_click','guide_demo_click','guide_demo_click'] : ['funnel_entry'], 'same explicit grant; self-fragment never duplicates the entry');
+  return { events: captured, keyboard:'Tab/focus/Enter PASS', destination:href, sameDocument, store:'intent stub only; never visited/installed', sameConsent:'PASS', permissions:await page.evaluate(() => window.__permissions) };
 }
-const p4Source = await readFile('src/lib/conversion-events.ts','utf8');
-const p4Paths = [...p4Source.matchAll(/'(\/[^']+)': '(?:voice|audio|notes|radar)'/g)].map(x => x[1]);
+const p4Paths = p5.p4.filter(r => r.context.page_group === 'guide').map(r => r.path);
 assert.equal(p4Paths.length,14);
+const p5Paths = [
+  ...['', 'en/'].flatMap(prefix => ['bluetooth-audio-input-troubleshooting','recording-notes-handoff','multi-project-radar-watch','first-trial-go-no-go-checklist','web-read-aloud-microphone-boundaries'].map(slug => '/'+prefix+'guides/'+slug+'/')),
+  '/guides/mobile-agent-decisions/', '/en/guides/attachment-name-metadata-provenance/',
+];
+assert.equal(p5Paths.length,12);
+async function cardAccessibility(page) {
+  await page.addScriptTag({content:axeSource});
+  const result = await page.evaluate(async () => {
+    const r = await window.axe.run('[data-guide-conversion]', {runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}});
+    return {version:window.axe.version,scope:'new paired CTA only; not entire legacy article',violations:r.violations.map(v=>({id:v.id,impact:v.impact,targets:v.nodes.map(n=>n.target)})),incomplete:r.incomplete.map(v=>v.id)};
+  });
+  assert.deepEqual(result.violations,[],'new card accessibility violations: '+JSON.stringify(result));
+  return result;
+}
 const targets = [
   ['/', 390, 844, 'voice', 'home-zh-390'], ['/en/', 1440, 1000, 'voice', 'home-en-1440'],
   ['/guides/bluetooth-audio-input-troubleshooting/', 390, 844, 'audio', 'audio-zh-390'],
@@ -302,6 +319,32 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
       try { record.pages.push({path,width,p4:await conversionGuide(p.page,engine,path,width)}); }
       finally { await p.close(); }
     }
+    for (const path of p5Paths) for (const width of [390,1440]) {
+      const p = await openPage(activeBrowser,path,width,width===390?844:1000);
+      try {
+        const accessibility=await cardAccessibility(p.page);
+        const existingPreview=['bluetooth-audio-input-troubleshooting','recording-notes-handoff','multi-project-radar-watch'].some(s=>path.endsWith('/'+s+'/'));
+        record.pages.push({path,width,p5:await conversionGuide(p.page,engine,path,width,existingPreview,'p5'),accessibility});
+      } finally {await p.close();}
+    }
+    for(const path of ['/privacy/','/en/privacy/','/guides/app-group-inbox-access-evidence/']) {
+      const p=await openPage(activeBrowser,path,390,844);
+      try {
+        assert.equal(await p.page.locator('[data-guide-conversion]').count(),0);
+        await p.page.locator('#analytics-settings').click();await p.page.locator('#analytics-allow').click();
+        assert.equal((await events(p.page)).length,0,'P5 cannot add privacy/retired eligibility');
+        record.pages.push({path,p5Negative:'no new card or conversion events even with explicit grant'});
+      } finally {await p.close();}
+    }
+    for(const path of ['/guides/first-trial-go-no-go-checklist/','/en/guides/first-trial-go-no-go-checklist/']) {
+      const p=await openPage(activeBrowser,path,390,844,false);
+      try {
+        const card=p.page.locator('[data-guide-conversion]');assert.equal(await card.locator('.app-store-link').getAttribute('href'),store.url);
+        await card.locator('a').first().click();await p.page.waitForURL('**/#interactive-preview');
+        assert.equal(await p.page.locator('#interactive-preview').count(),1);
+        record.pages.push({path,p5NoJavaScript:'paired native links and existing scenario anchor PASS; store never visited'});
+      } finally {await p.close();}
+    }
     for (const path of ['/guides/audio-route-recovery-matrix/','/en/guides/noisy-transcript-text-correction/']) {
       const p = await openPage(activeBrowser,path,390,844,false);
       try {
@@ -321,4 +364,4 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
     await writeFile(resolve(output, 'evidence.json'), JSON.stringify({ results, failures }, null, 2));
   }
 }
-console.log('Browser preview acceptance PASS: Chromium + WebKit, 5 original pages + 2 store/source setup views + 8 P2 views + 28 P4 views + 2 no-JavaScript navigations per engine; consent-only funnel, actual same-language preview navigation, store intent stub only; native speech API separate; browsers closed.');
+console.log('Browser preview acceptance PASS: Chromium + WebKit, all original 45 entries + 24 P5 views + 3 denied-scope cases + 2 P5 no-JavaScript views per engine; 12 representative new routes / 390+1440px, scoped axe-card WCAG checks, core self-fragment keeps entry once, no actual Store/GA/SDK; 180-route/144-target exhaustive source coverage is in Node tests; browsers closed.');

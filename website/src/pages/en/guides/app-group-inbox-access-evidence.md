@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Is an inaccessible share inbox offline? App Group declarations, signing and local containers"
-description: "Review App/Extension variables, YihuAppGroup and runtime containerURL. Matching source is not signing/device acceptance; local sharing is not a public API or site identity isolation."
+title: "App Group inbox: local evidence vs upload | Yihu"
+description: "Reference only: container and manifest access are not upload receipts. US store 0.1.0 and Apache-2.0 source are available; source scope is not a store-feature promise."
 lang: en
 indexable: false
 ---
