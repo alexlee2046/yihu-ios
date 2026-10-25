@@ -83,6 +83,18 @@ test('correct same-language targets only; no query payload, campaign links, text
  h.click('https://getyihu.com/en/guides/recording-notes-handoff/#interactive-preview');assert.equal(h.calls[1][2].scenario,'notes');
  assert.ok(!JSON.stringify(h.calls).includes('never'));assert.ok(!JSON.stringify(h.calls).includes('secret'));
 });
+test('www production pages track relative preview links resolved on the www origin',()=>{
+ const h=harness({origin:'https://www.getyihu.com'});
+ h.conversion.bindConversionEvents();
+ const c=h.conversion.guideConversion('/en/guides/mobile-agent-decisions/');
+ h.click(new URL(c.demoHref,h.browser.location.origin).href,true);
+ assert.deepEqual(h.calls.map(c=>c[1]),['funnel_entry','guide_demo_click']);
+ assert.equal(h.calls[1][2].scenario,'radar');
+ const denied=harness({origin:'https://www.getyihu.com',preference:'denied'});
+ denied.conversion.bindConversionEvents();
+ denied.click(new URL(c.demoHref,denied.browser.location.origin).href,true);
+ assert.equal(denied.calls.length,0);
+});
 test('home, scenario and setup denominators share explicit grant without expanding old preview events',()=>{
  const h=harness();for(const path of h.conversion.conversionPaths){
   const x=harness({path});x.conversion.bindConversionEvents();assert.equal(x.calls.length,1,path);

@@ -92,7 +92,7 @@ export function bindConversionEvents(): void {
     try { target = new URL(anchor.href); } catch { return; }
     const prefix = current.language === 'en' ? '/en/' : '/';
     const scenario = (Object.keys(pillars) as BuyerScenario[]).find(s => target.pathname === prefix + 'guides/' + pillars[s] + '/');
-    if (target.origin === 'https://getyihu.com' && target.hash === '#interactive-preview' && !target.search && scenario && enter()) {
+    if (['https://getyihu.com', 'https://www.getyihu.com'].includes(target.origin) && target.hash === '#interactive-preview' && !target.search && scenario && enter()) {
       trackConversionEvent('guide_demo_click', scenario, placement);
     }
     // Native navigation is never delayed or prevented for measurement.
