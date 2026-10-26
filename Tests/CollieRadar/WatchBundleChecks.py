@@ -21,7 +21,11 @@ def check(app):
     schemes = [scheme for entry in phone_companion.get("CFBundleURLTypes", [])
                for scheme in entry.get("CFBundleURLSchemes", [])]
     assert "yihu-watch" in schemes, "Watch category links need a registered URL scheme"
-    print("Watch bundle checks passed: resolved shared group, widget identity and URL scheme")
+    icon_name = phone_companion.get("CFBundleIconName") or phone_companion.get("CFBundleIcons", {}).get("CFBundlePrimaryIcon", {}).get("CFBundleIconName")
+    assert icon_name == "AppIcon", "Watch app must declare its compiled launcher icon"
+    assert (app / "Assets.car").is_file() and (app / "Assets.car").stat().st_size > 0, \
+        "Watch icon asset catalog must be included in the installed bundle"
+    print("Watch bundle checks passed: resolved shared group, widget identity, URL scheme and launcher icon")
 
 
 if __name__ == "__main__":
