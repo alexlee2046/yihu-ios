@@ -1,6 +1,59 @@
 import XCTest
 
 final class CollieWorkbenchUITests: XCTestCase {
+    /// Next-version candidate UI only. The existing CI installs into an isolated
+    /// simulator; launch-domain overrides never run against a daily-use device.
+    @MainActor
+    func testInitialYihuBranding() throws {
+        continueAfterFailure = false
+        for (language, locale, title, label) in [
+            ("en", "en_US", "Start with Yihu", "HTTPS workspace address"),
+            ("zh-Hans", "zh_CN", "开始使用一呼", "工作台 HTTPS 地址"),
+        ] {
+            let app = XCUIApplication()
+            app.launchArguments = ["-AppleLanguages", "(\(language))", "-AppleLocale", locale,
+                                   "-collie.connection.origin", "", "-collie.workbench.selection.v1", "web"]
+            app.launch()
+            defer { app.terminate() }
+            XCTAssertTrue(app.staticTexts[title].waitForExistence(timeout: 15))
+            attachWorkbenchScreen(name: "candidate-yihu-onboarding-\(language)-initial")
+            // At accessibility sizes Form virtualizes offscreen rows. Use its
+            // actual vertical collection, not the shell's horizontal shortcuts.
+            let form = app.collectionViews.firstMatch
+            XCTAssertTrue(form.exists)
+            let navigationBottom = app.navigationBars.firstMatch.frame.maxY
+            @MainActor func revealBelowNavigation(_ element: XCUIElement) {
+                if element.exists, element.frame.minY < navigationBottom {
+                    let start = form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                    let distance = min(form.frame.height * 0.3, navigationBottom - element.frame.minY + 24)
+                    start.press(forDuration: 0.1, thenDragTo: start.withOffset(CGVector(dx: 0, dy: distance)))
+                }
+            }
+            let address = app.textFields["collie-connection-origin"]
+            for _ in 0..<4 where !address.exists || !address.isHittable { form.swipeUp() }
+            XCTAssertTrue(address.waitForExistence(timeout: 5))
+            XCTAssertTrue(address.isHittable)
+            revealBelowNavigation(address)
+            XCTAssertTrue(address.isHittable)
+            XCTAssertGreaterThanOrEqual(address.frame.minY, navigationBottom)
+            XCTAssertTrue(form.frame.contains(address.frame), "address is fully visible outside navigation chrome")
+            XCTAssertEqual(address.label, label)
+            XCTAssertEqual(address.placeholderValue, "https://workbench.example.com")
+            attachWorkbenchScreen(name: "candidate-yihu-onboarding-\(language)-address")
+            XCTAssertFalse(app.staticTexts["Connect to a Collie workbench"].exists)
+            XCTAssertFalse(app.staticTexts["连接 Collie 工作台"].exists)
+            let connect = app.buttons["collie-connection-save"]
+            for _ in 0..<4 where !connect.exists || !form.frame.contains(connect.frame) { form.swipeUp() }
+            XCTAssertTrue(connect.waitForExistence(timeout: 5))
+            revealBelowNavigation(connect)
+            XCTAssertGreaterThanOrEqual(connect.frame.minY, navigationBottom)
+            XCTAssertTrue(form.frame.contains(connect.frame), "disabled action is still fully visible")
+            XCTAssertFalse(connect.isEnabled)
+            attachWorkbenchScreen(name: "candidate-yihu-onboarding-\(language)-controls")
+            // Do not enter an origin, connect, record, download a model or send.
+        }
+    }
+
     /// Uses only synthetic workbenches in an isolated simulator installation.
     /// Does not access a real server, microphone or user draft.
     @MainActor

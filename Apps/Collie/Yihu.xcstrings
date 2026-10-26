@@ -1812,17 +1812,17 @@
     "请输入以 https:// 开头的工作台地址，例如 https://collie.example.com；只填主机名或 IP 地址（可带端口），不要带账号密码、路径、参数或 # 片段。": {
       "extractionState": "manual",
       "localizations": {
-        "en": { "stringUnit": { "state": "translated", "value": "Enter an HTTPS workbench address, such as https://collie.example.com. Use only the host or IP address and optional port, without credentials, paths, query parameters, or fragments." } },
-        "zh-Hans": { "stringUnit": { "state": "translated", "value": "请输入以 https:// 开头的工作台地址，例如 https://collie.example.com；只填主机名或 IP 地址（可带端口），不要带账号密码、路径、参数或 # 片段。" } }
+        "en": { "stringUnit": { "state": "translated", "value": "Enter an HTTPS workbench address, such as https://workbench.example.com. Use only the host or IP address and optional port, without credentials, paths, query parameters, or fragments." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "请输入以 https:// 开头的工作台地址，例如 https://workbench.example.com；只填主机名或 IP 地址（可带端口），不要带账号密码、路径、参数或 # 片段。" } }
       }
     },
     "连接后即可查看工作台并使用本机语音输入。": { "extractionState": "manual", "localizations": {
-      "en": { "stringUnit": { "state": "translated", "value": "Connect to view your workbench and use on-device voice input." } },
-      "zh-Hans": { "stringUnit": { "state": "translated", "value": "连接后即可查看工作台并使用本机语音输入。" } }
+      "en": { "stringUnit": { "state": "translated", "value": "Connect your own workspace. Set up speech models when you need voice input." } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "连接你自己的工作台；需要语音时，再按提示准备模型。" } }
     } },
     "Collie 工作台地址": { "extractionState": "manual", "localizations": {
-      "en": { "stringUnit": { "state": "translated", "value": "Collie workbench address" } },
-      "zh-Hans": { "stringUnit": { "state": "translated", "value": "Collie 工作台地址" } }
+      "en": { "stringUnit": { "state": "translated", "value": "HTTPS workspace address" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "工作台 HTTPS 地址" } }
     } },
     "工作台地址": { "extractionState": "manual", "localizations": {
       "en": { "stringUnit": { "state": "translated", "value": "Workbench address" } },
@@ -1849,8 +1849,8 @@
       "zh-Hans": { "stringUnit": { "state": "translated", "value": "切换工作台" } }
     } },
     "连接 Collie 工作台": { "extractionState": "manual", "localizations": {
-      "en": { "stringUnit": { "state": "translated", "value": "Connect to a Collie workbench" } },
-      "zh-Hans": { "stringUnit": { "state": "translated", "value": "连接 Collie 工作台" } }
+      "en": { "stringUnit": { "state": "translated", "value": "Start with Yihu" } },
+      "zh-Hans": { "stringUnit": { "state": "translated", "value": "开始使用一呼" } }
     } },
     "更换工作台": { "extractionState": "manual", "localizations": {
       "en": { "stringUnit": { "state": "translated", "value": "Change workbench" } },
