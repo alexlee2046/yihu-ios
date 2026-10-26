@@ -33,7 +33,12 @@ final class YihuWatchVoiceCapture: NSObject, AVAudioRecorderDelegate {
 
     func attach(_ item: YihuWatchSnapshot.Item) {
         self.item = item
-        guard !recording, pending == nil || blocked else { return }
+        restore()
+    }
+
+    /// Restore before any result callback, even if the original task vanished.
+    func restore() {
+        guard !recording, !sending, pending == nil || blocked else { return }
         blocked = false
         guard FileManager.default.fileExists(atPath: pendingFile.path) else {
             blocked = FileManager.default.fileExists(atPath: audioFile.path)
@@ -148,7 +153,8 @@ final class YihuWatchVoiceCapture: NSObject, AVAudioRecorderDelegate {
     }
 
     func receive(_ data: Data) -> Bool {
-        guard let value = try? YihuWatchVoiceResult.decode(data), value.request == pending else { return false }
+        restore()
+        guard !blocked, let value = try? YihuWatchVoiceResult.decode(data), value.request == pending else { return false }
         do {
             if value.outcome == .ready {
                 if let result, result != value { return false }
@@ -194,6 +200,12 @@ final class YihuWatchVoiceCapture: NSObject, AVAudioRecorderDelegate {
         }, errorHandler: { [weak self] _ in
             Task { @MainActor in self?.sending = false; self?.notice = "丢弃结果待核，原录音仍保留" }
         })
+    }
+
+    /// Explicit recovery-only deletion; never retracts anything on the phone.
+    func clearUnreadableCopy() {
+        guard blocked, !recording, !sending else { return }
+        clearLocal()
     }
 
     private func prepareDirectory() throws {

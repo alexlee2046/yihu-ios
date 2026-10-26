@@ -46,9 +46,12 @@ final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
         guard let store, WCSession.default.activationState == .activated,
               WCSession.default.isPaired, WCSession.default.isWatchAppInstalled else { return }
         var rows: [YihuWatchSnapshot.Item] = []
+        var decisions = 0
+        var acceptances = 0
         for workbench in store.ordered {
             guard let snapshot = store.snapshots[workbench.id] else { continue }
             for task in snapshot.allTasks where ["等你决策", "等你验收"].contains(task.status ?? "") {
+                if task.status == "等你决策" { decisions += 1 } else { acceptances += 1 }
                 guard let id = task.id, !id.isEmpty else { continue }
                 rows.append(.init(workbench: workbench.id.uuidString, task: id, sourceToken: Self.sourceToken(workbench), taskToken: Self.taskToken(task),
                     canDraft: workbench.supportsWatchDrafts,
@@ -58,8 +61,11 @@ final class CollieWatchPhoneBridge: NSObject, WCSessionDelegate {
             }
         }
         var payload = YihuWatchSnapshot(items: Array(rows.prefix(200)), capturedAt: Date(),
-                                        truncated: rows.count > 200, hasSource: !store.snapshots.isEmpty,
-            sourceDate: store.snapshots.values.compactMap(\.generatedAt).min(), readFailed: !store.errors.isEmpty, phoneNotificationState: phoneNotificationState())
+                                        truncated: decisions + acceptances > min(rows.count, 200), hasSource: !store.snapshots.isEmpty,
+            sourceDate: store.snapshots.values.contains(where: { $0.generatedAt == nil }) ? nil : store.snapshots.values.compactMap(\.generatedAt).min(),
+            readFailed: !store.errors.isEmpty, phoneNotificationState: phoneNotificationState(),
+            decisionCount: decisions, acceptanceCount: acceptances,
+            incompleteSources: store.ordered.contains(where: { store.snapshots[$0.id] == nil || store.errors[$0.id] != nil }))
         while let data = try? JSONEncoder().encode(payload) {
             if data.count <= YihuWatchSnapshot.maximumBytes {
                 try? WCSession.default.updateApplicationContext(["radar": data])

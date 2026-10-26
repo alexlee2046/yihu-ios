@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import SwiftUI
 import WatchConnectivity
+import WidgetKit
 
 private struct YihuWatchVoiceCallback: @unchecked Sendable { var send: ([String: Any]) -> Void }
 
@@ -30,6 +31,7 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
             return
         }
         #endif
+        voice.restore()
         guard WCSession.isSupported() else { notice = "此设备不支持手机接续"; return }
         WCSession.default.delegate = self
         WCSession.default.activate()
@@ -38,8 +40,14 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
     private func receive(_ data: Data?) {
         connected = WCSession.default.isReachable
         guard let data else { return }
-        do { snapshot = try YihuWatchSnapshot.decode(data) }
-        catch { notice = "手机数据无法读取，保留上次数据" }
+        do {
+            let value = try YihuWatchSnapshot.decode(data)
+            snapshot = value
+            do {
+                try YihuWatchWidgetStore.save(.init(value), to: YihuWatchWidgetStore.file)
+                WidgetCenter.shared.reloadTimelines(ofKind: YihuWatchWidgetStore.kind)
+            } catch { notice = "列表已同步；表盘数据暂未保存，请检查共享容器配置" }
+        } catch { notice = "手机数据无法读取，保留上次数据" }
     }
 
     func request(_ item: YihuWatchSnapshot.Item? = nil) {
@@ -90,6 +98,8 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
 @main
 struct YihuWatchApp: App {
     @State private var link = YihuWatchLink()
+    @State private var route: YihuWatchRoute = .all
+    @State private var navigationID = UUID()
     private var demoDraftItem: YihuWatchSnapshot.Item? {
         #if DEBUG
         if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO_PAGE"] == "draft" ||
@@ -120,6 +130,8 @@ struct YihuWatchApp: App {
                             Label(link.connected ? "手机可达" : "手机暂未连接", systemImage: link.connected ? "iphone" : "iphone.slash")
                                 .foregroundStyle(link.connected ? Color.secondary : Color.orange)
                             if let notice = link.notice { Text(notice).font(.footnote) }
+                            NavigationLink("未完成草稿／录音") { YihuWatchRecoveryView(link: link) }
+                            if route != .all { Button("查看全部待处理") { route = .all } }
                             Button("同步手机已有数据") { link.request() }
                             NavigationLink("通知状态与镜像") {
                                 List {
@@ -134,10 +146,15 @@ struct YihuWatchApp: App {
                         if let snapshot = link.snapshot {
                             if !snapshot.hasSource { Text("请先在手机配置或刷新需求台账") }
                             else if snapshot.stale { Text("数据过期或读取失败，请在手机刷新").foregroundStyle(.orange) }
-                            ForEach(["等你决策", "等你验收"], id: \.self) { status in
+                            if snapshot.incompleteSources == true {
+                                Text("部分来源未读取或刷新失败，数量不是完整台账总数").font(.footnote).foregroundStyle(.orange)
+                            }
+                            ForEach(route.status.map { [$0] } ?? ["等你决策", "等你验收"], id: \.self) { status in
                                 let items = snapshot.items.filter { $0.status == status }
-                                Section(status + " · " + String(items.count)) {
-                                    if items.isEmpty { Text("暂无事项").foregroundStyle(.secondary) }
+                                Section(status + " · " + (snapshot.count(for: status).map(String.init) ?? "数量不完整")) {
+                                    if items.isEmpty {
+                                        Text(snapshot.truncated ? "当前传输未包含此类事项，请在手机查看" : "当前快照暂无事项").foregroundStyle(.secondary)
+                                    }
                                     ForEach(items) { item in
                                         NavigationLink {
                                             List {
@@ -172,8 +189,17 @@ struct YihuWatchApp: App {
                             Text("暂无手机数据；请在已配对手机打开一呼并刷新台账").font(.footnote)
                         }
                     }
-                }.navigationTitle("一呼")
+                }.navigationTitle(route.status ?? "一呼")
                 }
+            }
+            .id(navigationID)
+            .onOpenURL { url in
+                guard let destination = YihuWatchRoute(url: url) else { return }
+                // An explicit widget tap returns to its category, even from a warm detail screen.
+                // The shared voice object and durably saved drafts outlive this navigation stack.
+                link.voice.stop(send: false)
+                route = destination
+                navigationID = UUID()
             }
         }
     }
