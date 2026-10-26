@@ -1,5 +1,7 @@
 """Check final Watch bundle metadata, not merely Xcode build settings."""
+import json
 import plistlib
+import subprocess
 import sys
 from pathlib import Path
 
@@ -23,8 +25,15 @@ def check(app):
     assert "yihu-watch" in schemes, "Watch category links need a registered URL scheme"
     icon_name = phone_companion.get("CFBundleIconName") or phone_companion.get("CFBundleIcons", {}).get("CFBundlePrimaryIcon", {}).get("CFBundleIconName")
     assert icon_name == "AppIcon", "Watch app must declare its compiled launcher icon"
-    assert (app / "Assets.car").is_file() and (app / "Assets.car").stat().st_size > 0, \
+    catalog = app / "Assets.car"
+    assert catalog.is_file() and catalog.stat().st_size > 0, \
         "Watch icon asset catalog must be included in the installed bundle"
+    inspection = subprocess.run(["xcrun", "assetutil", "--info", str(catalog)],
+                                check=True, capture_output=True, text=True, timeout=30)
+    renditions = json.loads(inspection.stdout)
+    assert any(item.get("Name") == "AppIcon" and item.get("PixelWidth", 0) > 0
+               and item.get("PixelHeight", 0) > 0 for item in renditions), \
+        "Watch asset catalog must contain a rendered AppIcon, not just unrelated assets"
     print("Watch bundle checks passed: resolved shared group, widget identity, URL scheme and launcher icon")
 
 
