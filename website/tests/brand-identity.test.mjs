@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 const root=new URL('../',import.meta.url),read=p=>readFileSync(new URL(p,root),'utf8');
 const store=JSON.parse(read('src/data/app-store.json'));
 const built=existsSync(new URL('dist/index.html',root));
@@ -52,6 +53,40 @@ test('current entry points no longer claim there is no App Store release; source
  }
  const intro=read('tools/export-llms.py');assert.ok(!intro.includes('No App Store listing'));
  const readme=read('../README.md');assert.ok(readme.includes(official));assert.ok(readme.includes('Source signing and build prerequisites below are not requirements'));
+});
+test('reschedule practice retains the approved bilingual four-field synthetic data without replacing preview samples',()=>{
+ const raw=read('public/samples/first-draft-reschedule.json'),data=JSON.parse(raw);
+ assert.equal(createHash('sha256').update(raw).digest('hex'),'1ff4f6b7bfcdf197f2b9a2ecdc325613626c044b753e432204733f10f8d349bf');
+ assert.deepEqual(Object.keys(data),['zh','en']);
+ for(const lang of ['zh','en']){
+  assert.deepEqual(Object.keys(data[lang]),['title','material','summary','draft']);
+  assert.equal(data[lang].material,data[lang].draft);assert.ok(data[lang].draft.length<600);
+  for(const fact of ['2027-01-12','14:00','15:30','UTC+08:00','20'])assert.ok(data[lang].summary.includes(fact));
+ }
+ assert.match(data.zh.summary,/尚未确认/);assert.match(data.en.summary,/not confirmed/);
+ const source=read('src/components/Guide.astro');assert.ok(source.includes('reschedule[lang]'));
+ assert.ok(!source.includes("from '../data/preview-samples.json'"));
+});
+test('both setup guides offer static reschedule practice and data without device operations or a second demo',{skip:!built},()=>{
+ const data=JSON.parse(read('public/samples/first-draft-reschedule.json'));
+ assert.equal(read('dist/samples/first-draft-reschedule.json'),read('public/samples/first-draft-reschedule.json'));
+ const full=read('public/llms-full.txt');
+ for(const [prefix,lang] of [['','zh'],['en/','en']]){
+  const html=read('dist/'+prefix+'start/index.html');
+  const card=html.match(/<section id="reschedule-practice"[\s\S]*?<\/section>/)?.[0];assert.ok(card);
+  assert.equal([...html.matchAll(/id="reschedule-practice"/g)].length,1);
+  const install=html.match(/<section id="store-start"[\s\S]*?<\/section>/)[0];assert.ok(install.includes('href="#reschedule-practice"'));
+  assert.ok(html.indexOf('id="first-draft"')<html.indexOf('id="reschedule-practice"'));
+  for(const text of [data[lang].title,data[lang].material,data[lang].summary]){assert.ok(card.includes(text));assert.ok(full.includes(text));}
+  assert.match(card,/<a href="\/samples\/first-draft-reschedule.json" download/);
+  assert.ok(card.includes('href="#store-start"'));assert.ok(card.includes('No-Go'));
+  assert.ok(card.includes(lang==='en'?'No login, installation or microphone':'不需登录、安装或麦克风'));
+  assert.ok(card.includes(lang==='en'?'not require a source build':'不要求源码构建'));
+  assert.ok(card.includes(lang==='en'?'before retrying':'不盲重试'));
+  assert.ok(card.includes(lang==='en'?'Do not press Send/Run':'不点发送或运行'));
+  assert.ok(!/astro-island|data-preview|<script|onclick|data-funnel/.test(card));
+  assert.ok(html.includes(lang==='en'?'Draft a sample reading list':'整理一份示例读书清单'));
+ }
 });
 test('brand answers explain optional model size and source-version boundaries without claiming downloads or new models',()=>{
  const d=JSON.parse(read('src/data/home-answers.json'));
