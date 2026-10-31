@@ -1,0 +1,64 @@
+{
+  "date_str": "2026-10-31 12:00",
+  "decisions": [
+    {
+      "id": "demo-decision",
+      "project": "synthetic-samples-31",
+      "status": " 等你决策 ",
+      "priority": "P1",
+      "title": "SYNTHETIC review: 12 swatches, not an order",
+      "next": "Confirm shipping destination, budget, purchase window and authorized contact. No quote, shipment or CRM write.",
+      "url": "https://example.invalid/tasks/demo-decision",
+      "timestamp": 1793419200.0,
+      "evidence": "Entirely synthetic: 12 swatches requested; destination, budget, purchase window and authorized contact unknown. No real lead, customer, order or approval."
+    },
+    {
+      "id": "demo-acceptance",
+      "project": "synthetic-samples-31",
+      "status": "等你验收",
+      "priority": "P2",
+      "title": "SYNTHETIC identity check: claimed role is not verified authority",
+      "next": "Check source, signed-in account and target authorization. Prepare only a reviewable draft; do not send or change business state.",
+      "url": "https://example.invalid/tasks/demo-acceptance",
+      "timestamp": 1793419200.0,
+      "evidence": "Entirely synthetic: 12 swatches requested; destination, budget, purchase window and authorized contact unknown. No real lead, customer, order or approval."
+    }
+  ],
+  "active": [
+    {
+      "name": "SYNTHETIC sample request SYN-LEAD-31",
+      "path": "synthetic-samples-31",
+      "timestamp": 1793419200.0,
+      "message": "Entirely synthetic: 12 swatches requested; destination, budget, purchase window and authorized contact unknown. No real lead, customer, order or approval."
+    }
+  ],
+  "stale": [],
+  "cold": [],
+  "tasks": [
+    {
+      "id": "demo-decision",
+      "project": "synthetic-samples-31",
+      "status": " 等你决策 ",
+      "priority": "P1",
+      "title": "SYNTHETIC review: 12 swatches, not an order",
+      "next": "Confirm shipping destination, budget, purchase window and authorized contact. No quote, shipment or CRM write.",
+      "url": "https://example.invalid/tasks/demo-decision",
+      "timestamp": 1793419200.0,
+      "evidence": "Entirely synthetic: 12 swatches requested; destination, budget, purchase window and authorized contact unknown. No real lead, customer, order or approval."
+    },
+    {
+      "id": "demo-acceptance",
+      "project": "synthetic-samples-31",
+      "status": "等你验收",
+      "priority": "P2",
+      "title": "SYNTHETIC identity check: claimed role is not verified authority",
+      "next": "Check source, signed-in account and target authorization. Prepare only a reviewable draft; do not send or change business state.",
+      "url": "https://example.invalid/tasks/demo-acceptance",
+      "timestamp": 1793419200.0,
+      "evidence": "Entirely synthetic: 12 swatches requested; destination, budget, purchase window and authorized contact unknown. No real lead, customer, order or approval."
+    }
+  ],
+  "reply_supported": false,
+  "source_refreshing": false,
+  "source_refresh_failed": false
+}
