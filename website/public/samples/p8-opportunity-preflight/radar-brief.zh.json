@@ -1,0 +1,64 @@
+{
+  "date_str": "2026-10-31 12:00",
+  "decisions": [
+    {
+      "id": "demo-decision",
+      "project": "synthetic-samples-31",
+      "status": " 等你决策 ",
+      "priority": "P1",
+      "title": "合成需求核对：12块色样，不是订单",
+      "next": "先核寄送地址、预算、采购时间和授权联系人；不报价、不发货、不写CRM。",
+      "url": "https://example.invalid/tasks/demo-decision",
+      "timestamp": 1793419200.0,
+      "evidence": "纯合成输入：需要12块色样；地址、预算、采购时间、授权联系人未知。没有真实询盘/客户/订单或批准。"
+    },
+    {
+      "id": "demo-acceptance",
+      "project": "synthetic-samples-31",
+      "status": "等你验收",
+      "priority": "P2",
+      "title": "合成身份预检：自称负责人不等已核权限",
+      "next": "核对来源、当前账号与目标授权。仅准备人工可核对草稿，不发送或改动业务状态。",
+      "url": "https://example.invalid/tasks/demo-acceptance",
+      "timestamp": 1793419200.0,
+      "evidence": "纯合成输入：需要12块色样；地址、预算、采购时间、授权联系人未知。没有真实询盘/客户/订单或批准。"
+    }
+  ],
+  "active": [
+    {
+      "name": "合成样板申请 SYN-LEAD-31",
+      "path": "synthetic-samples-31",
+      "timestamp": 1793419200.0,
+      "message": "纯合成输入：需要12块色样；地址、预算、采购时间、授权联系人未知。没有真实询盘/客户/订单或批准。"
+    }
+  ],
+  "stale": [],
+  "cold": [],
+  "tasks": [
+    {
+      "id": "demo-decision",
+      "project": "synthetic-samples-31",
+      "status": " 等你决策 ",
+      "priority": "P1",
+      "title": "合成需求核对：12块色样，不是订单",
+      "next": "先核寄送地址、预算、采购时间和授权联系人；不报价、不发货、不写CRM。",
+      "url": "https://example.invalid/tasks/demo-decision",
+      "timestamp": 1793419200.0,
+      "evidence": "纯合成输入：需要12块色样；地址、预算、采购时间、授权联系人未知。没有真实询盘/客户/订单或批准。"
+    },
+    {
+      "id": "demo-acceptance",
+      "project": "synthetic-samples-31",
+      "status": "等你验收",
+      "priority": "P2",
+      "title": "合成身份预检：自称负责人不等已核权限",
+      "next": "核对来源、当前账号与目标授权。仅准备人工可核对草稿，不发送或改动业务状态。",
+      "url": "https://example.invalid/tasks/demo-acceptance",
+      "timestamp": 1793419200.0,
+      "evidence": "纯合成输入：需要12块色样；地址、预算、采购时间、授权联系人未知。没有真实询盘/客户/订单或批准。"
+    }
+  ],
+  "reply_supported": false,
+  "source_refreshing": false,
+  "source_refresh_failed": false
+}

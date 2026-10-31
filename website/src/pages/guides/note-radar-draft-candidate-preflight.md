@@ -65,3 +65,11 @@ writableDraftCandidates从本地工作台与快照枚举目标：源URL形态有
 [草稿所属](/guides/reply-draft-restoration-scope/) · [状态与资格](/guides/status-alias-approval-boundaries/) · [笔记一次交接](/guides/recording-notes-handoff/) · [开始](/start/) · [隐私](/privacy/)
 
 [候选与本地草稿](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieRadarStore.swift) · [预留后保存顺序](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift) · [已有候选入口](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceNotesView.swift)
+
+## 已填合成样板申请：需要关注不等于可以写入
+
+演练申请只确认需要12块色样，寄送地址、预算、采购时间与授权联系人未知。两条事项不是两个已核商机；A保留原状态两侧空白，注意力getter去空白后命中，但候选枚举按原状态精确匹配而不匹配；B即使在额外本地前提满足时出现候选，也不证明已获身份/写权，样例reply_supported=false保留。不要改状态或人名来绕门。
+
+<a href="/samples/p8-opportunity-preflight/radar-brief.zh.json" download>下载合成中文Radar源格式简报</a> · <a href="/samples/p8-opportunity-preflight/buyer-card.md" download>阅读已填中英注意力/身份预检手卡</a>
+
+这里只提供离线源码核对；不表示商店0.1.0已交付完整Radar/身份/笔记候选能力，不新增商机后台或回复服务。手卡另有商店语音草稿练习及同语上手入口，只准备未发送文字，不写CRM、不发货、不后台常驻监听或代发。
