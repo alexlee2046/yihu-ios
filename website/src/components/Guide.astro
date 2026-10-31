@@ -1,8 +1,11 @@
 ---
 import store from '../data/app-store.json';
+// Approved synthetic material: growth/yihu@bca296ccb624cd1faf6153f0442da6d3bb344539.
+import reschedule from '../../public/samples/first-draft-reschedule.json';
 interface Props { lang?: 'zh' | 'en'; type: 'start' | 'privacy' }
 const { lang = 'zh', type } = Astro.props;
 const en = lang === 'en';
+const practice = reschedule[lang];
 const decisionsGuidePath = en ? '/en/guides/mobile-agent-decisions/' : '/guides/mobile-agent-decisions/';
 const voiceGuidePath = en ? '/en/guides/iphone-agent-voice-drafts/' : '/guides/iphone-agent-voice-drafts/';
 const startCopy = {
@@ -506,6 +509,7 @@ const failureTarget = (id: string) => id === 'origin' ? 'address' : ['editor', '
       <li>{en ? 'Choose the optional speech-model download when you need dictation. The store description lists about 950 MB, separate from the app installation.' : '需要语音时再选择下载模型。商店说明约 950 MB，与 App 安装包分开。'}</li>
       <li>{en ? 'Use an authorized empty draft and synthetic phrase. Check the final transcript in the destination before deciding to send; Yihu does not press Send.' : '用获准的空白草稿和合成语句练习，检查目的地最终录文后再决定发送；一呼不会替你按发送。'}</li>
     </ol>
+    <p><a href="#reschedule-practice">{en ? 'Review the synthetic reschedule exercise offline first' : '先离线核对合成改期练习'}</a></p>
     <p>{en ? 'The source guides below describe additional implementation paths, not a promise that every source capability is in store edition 0.1.0.' : '下方源码指南说明更多实现路径，不代表商店版 0.1.0 已包含全部源码能力。'}</p>
   </section>
   <details id="source-setup"><summary>{en ? 'Source developers: build, signing and advanced setup' : '源码开发者：构建、签名与高级接入'}</summary>
@@ -537,6 +541,22 @@ const failureTarget = (id: string) => id === 'origin' ? 'address' : ['editor', '
   <p><a href="https://github.com/alexlee2046/yihu-ios#build-locally">{copy.buildLink}</a></p>
 
   <h2 id="first-draft">{copy.flowTitle}</h2>
+  <section id="reschedule-practice" aria-labelledby="reschedule-practice-title" style="padding:16px; background:var(--surface); border-radius:8px; overflow-wrap:anywhere">
+    <h3 id="reschedule-practice-title">{practice.title}</h3>
+    <p>{en ? 'Synthetic material · 2026-10-29 · US store edition 0.1.0 scope. Stop during a trip and prepare a question for a colleague. No login, installation or microphone is needed to review this card; no device or ASR test has been performed. This exercise does not require a source build.' : '合成材料 · 2026-10-29 · 美区商店版 0.1.0 范围。出差间隙安全停下，先准备向同事询问的文字。离线读卡不需登录、安装或麦克风；没有真机或 ASR 验收，也不要求源码构建。'}</p>
+    <p><strong>{en ? 'Phrase to dictate' : '完整口述语句'}</strong></p>
+    <blockquote><p>{practice.material}</p></blockquote>
+    <p>{en ? 'The ideal draft retains the phrase above verbatim. It is a reference, not a promise of transcription formatting, automatic rewriting, summarization or translation.' : '理想草稿逐字保留上方语句。这是参考答案，不是转写格式、自动润色、摘要或翻译的承诺。'}</p>
+    <p><strong>{en ? 'Worked paper review — not an observed result' : '已填纸面核对参考，不是实测结果'}</strong></p>
+    <p>{practice.summary}</p>
+    <ul>
+      <li>{en ? 'Check 12 January 2027, original 14:00 → proposed 15:30 on the same day, Beijing time UTC+08:00, and 20 minutes. Do not substitute the device time zone.' : '核对 2027-01-12、同日原 14:00 → 拟 15:30、北京时间 UTC+08:00、20 分钟；不换成设备本地时区。'}</li>
+      <li>{en ? 'Keep the question and pending confirmation: the original arrangement stands. A wrong date or zone, or “Meeting moved to 15:30”, fails the review. Do not invent a recipient, location, link or agreement.' : '保留询问和待确认状态，原安排不变。日期或时区错误、写成“会议已改到15:30”都不通过；不补造收件人、地点、链接或对方同意。'}</li>
+      <li>{en ? 'Only practice on a device if separately authorized: bring your own trusted workspace/account and an empty training draft, and confirm input cannot auto-send or execute. Stop if destination, model, permission or language support is uncertain. Inspect possible existing insertion before retrying.' : '另获准设备练习时，先准备自有可信工作台、账号和空白练习草稿，并确认输入不会自动发送或执行。目的地、模型、权限或语言支持不明就停；可能已经填入时先检查，不盲重试。'}</li>
+      <li>{en ? 'Finish with a reviewed, unsent draft. Do not press Send/Run, change a calendar or create an invitation. This paper answer proves no actual destination or unsent state; sending remains No-Go. A workspace may save, sync or process input.' : '终点是已核对但未发送的草稿。不点发送或运行，不改日历、不建邀请。纸面答案不能证明真实目的地或未发送状态，发送仍为 No-Go；工作台可能保存、同步或处理输入。'}</li>
+    </ul>
+    <p><a href="/samples/first-draft-reschedule.json" download>{en ? 'Download the bilingual phrase, ideal draft and preset review (JSON)' : '下载双语口述、理想草稿与预设核对卡（JSON）'}</a> · <a href="#store-start">{en ? 'Store installation and workspace prerequisites' : '商店安装与自有工作台前提'}</a></p>
+  </section>
   <p><strong>{copy.syntheticLabel}:</strong> <q>{copy.synthetic}</q></p>
   <figure style="margin:24px 0">
     <figcaption>{copy.flowCaption}</figcaption>

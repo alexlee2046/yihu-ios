@@ -1,0 +1,14 @@
+{
+  "zh": {
+    "title": "合成演练：改期询问，尚未确认",
+    "material": "请问可以把二〇二七年一月十二日的演示核对会，从北京时间十四点改到当天十五点三十分吗？时区是 UTC 加八，时长仍为二十分钟。请先确认是否方便；双方确认前，原安排不变。",
+    "summary": "预设核对卡，不是实时AI结果：2027-01-12；原14:00，拟15:30；UTC+08:00；20分钟；只是询问，尚未确认。",
+    "draft": "请问可以把二〇二七年一月十二日的演示核对会，从北京时间十四点改到当天十五点三十分吗？时区是 UTC 加八，时长仍为二十分钟。请先确认是否方便；双方确认前，原安排不变。"
+  },
+  "en": {
+    "title": "SYNTHETIC: request a new time, not a confirmed change",
+    "material": "Could we move the demo review on January twelfth, twenty twenty-seven, from two p.m. to three thirty p.m. Beijing time, UTC plus eight? Please keep it twenty minutes and confirm whether that works. Until we both confirm, the original arrangement stays unchanged.",
+    "summary": "Preset check card, not live AI output: 2027-01-12; original 14:00, proposed 15:30; UTC+08:00; 20 minutes; request only, not confirmed.",
+    "draft": "Could we move the demo review on January twelfth, twenty twenty-seven, from two p.m. to three thirty p.m. Beijing time, UTC plus eight? Please keep it twenty minutes and confirm whether that works. Until we both confirm, the original arrangement stays unchanged."
+  }
+}
