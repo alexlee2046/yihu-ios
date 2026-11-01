@@ -66,3 +66,9 @@ No device/concurrency test or recovery feature is supplied; fixed guards only.
 [Lifecycle](/en/guides/foreground-audio-rebind-preflight/) · [Queue/final](/en/guides/capture-buffer-pressure-checklist/) · [Recapture scope](/en/guides/interruption-recapture-preflight/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Capture lifecycle/token](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift) · [Pipeline stop/cancel](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/ColliePCMStream.swift)
+
+## SYN-TOKEN-33 source-order example
+
+The original completion method checks activeToken before export or cleanup. A stopped capture can still complete, while cancellation invalidates an old result. Matching failure also forwards failure; identical phase/text proves neither capture ownership nor authority or universal exactly-once. Memory success/export counts are not recording or file results.
+
+[See the filled example on the same-language active recapture guide](/en/guides/interruption-recapture-preflight/#syn-token-33). This remains a noindex,follow technical reference outside the150-URL reading export, without automatic recapture, callback injection or resend features.

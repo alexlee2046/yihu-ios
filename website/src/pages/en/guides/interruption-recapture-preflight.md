@@ -65,3 +65,11 @@ No merging/deduplication/resend authority is added. Reservations and uncertainty
 [Foreground state](/en/guides/foreground-audio-rebind-preflight/) · [Audio recovery](/en/guides/audio-route-recovery-matrix/) · [Segment review](/en/guides/recording-segment-review-labels/) · [One handoff](/en/guides/recording-notes-handoff/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Lock/transcription UI](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceNotesView.swift) · [Disk writes/interruptions](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieNoteRecorder.swift) · [Note state/handoff](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceNotes.swift)
+
+<h2 id="syn-token-33">SYN-TOKEN-33: review obsolete completions and gaps before recapture</h2>
+
+The filled synthetic case has three runs/twenty-one operations: stop retains the current drain, cancellation invalidates its token, and an old A success/failure during B must neither represent nor clean up B. Segment B remains unknown until separately checked. Only a confirmed gap justifies an authorized B-v2; preserve originals without invented continuity or resending.
+
+<a href="/samples/p10-token-recapture/token-recapture-preflight.en.json" download>Download SYN-TOKEN-33 English synthetic preflight JSON</a> · <a href="/samples/p10-token-recapture/preflight-card.md" download>Read the filled bilingual token/recapture card</a>
+
+Compilation covers verbatim source methods in a Foundation memory-spy adapter, not an independent upstream completion helper or real PCM draining, concurrency or device results. Source does not certify store0.1.0 parity; device interruption, ASR, insertion and sending are not_run. Cancellation does not undo existing remote effects.

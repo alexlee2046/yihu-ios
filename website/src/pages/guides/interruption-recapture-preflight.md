@@ -65,3 +65,11 @@ lang: zh
 [前台状态](/guides/foreground-audio-rebind-preflight/) · [音频恢复](/guides/audio-route-recovery-matrix/) · [片段核对](/guides/recording-segment-review-labels/) · [一次交接](/guides/recording-notes-handoff/) · [开始](/start/) · [隐私](/privacy/)
 
 [锁屏与转写界面说明](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceNotesView.swift) · [写盘与中断](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieNoteRecorder.swift) · [笔记状态与交接](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceNotes.swift)
+
+<h2 id="syn-token-33">SYN-TOKEN-33：先核旧完成与缺口，再决定重采</h2>
+
+合成样例预填3组/21步：stop保留本次排空，cancel使旧令牌失效；B期间的旧A成功或失败都不能当作B，也不应清理B。纸面B是否保存仍未知，只有另外确认真实缺口后才另录B-v2，不覆盖原件、不拼造连续原话或重发。
+
+<a href="/samples/p10-token-recapture/token-recapture-preflight.zh.json" download>下载SYN-TOKEN-33中文合成预检JSON</a> · <a href="/samples/p10-token-recapture/preflight-card.md" download>阅读已填中英令牌/重采核对卡</a>
+
+编译验证仅为原方法的Foundation内存替身隔离夹具；没有独立上游completion helper或真实PCM排空/并发/设备成绩。源码不等商店0.1.0功能同版，真机打断、ASR、填入与发送全not_run；取消也不撤销已发生远端副作用。

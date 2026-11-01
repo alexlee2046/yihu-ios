@@ -105,6 +105,40 @@ test('P9 download sections stay on four active guides and never restore retired 
   }
   for(const file of ['audio-preflight.zh.json','audio-preflight.en.json','preflight-card.md']) assert.equal(read('dist/samples/p9-audio-preflight/'+file),read('public/samples/p9-audio-preflight/'+file));
 });
+test('P10 frozen token cases preserve twenty-one adapter operations without device or permission claims', () => {
+  const hashes = { 'token-recapture-preflight.zh.json':'9a03fd9e958349b7c0df72763eb5b121e424228e414278f280f95523c7601ece', 'token-recapture-preflight.en.json':'99844069a5f2da24e22e89b652164ea384182c425fbe23b4031b226438c65b8f', 'preflight-card.md':'16b262671ad30c2d9945b6c11a75206944d119bd7bcd7e80343f530e6df87815' };
+  for(const [file,hash] of Object.entries(hashes)) assert.equal(createHash('sha256').update(read('public/samples/p10-token-recapture/'+file)).digest('hex'),hash);
+  for(const lang of ['zh','en']) {
+    const d=JSON.parse(read('public/samples/p10-token-recapture/token-recapture-preflight.'+lang+'.json'));
+    assert.equal(d.case_id,'SYN-TOKEN-33');assert.equal(d.language,lang);assert.equal(d.synthetic,true);
+    assert.equal(d.source_commit,'318dbfaa9976568ff6c052c011a5e636612f6419');assert.equal(d.is_app_import_schema,false);
+    assert.equal(d.device_status,'not_run');assert.equal(d.observed_audio,null);assert.equal(d.observed_transcript,null);
+    assert.equal(d.reference_utterance.spoken_text,d.reference_utterance.ideal_verbatim_text);assert.equal(d.reference_utterance.observed_text,null);
+    assert.deepEqual(d.runs.map(r=>r.steps.length),[6,8,7]);assert.equal(d.runs.flatMap(r=>r.steps).length,21);
+    assert.equal(d.runs[0].steps[2].expect.start_preflight,'busy');
+    assert.equal(d.runs[0].steps.at(-1).expect.start_preflight,'would_reach_permission_check');
+    assert.equal(d.runs[1].steps.at(-1).expect.callback_count,1);assert.equal(d.runs[1].steps.at(-1).expect.export_spy_calls,1);
+    assert.equal(d.runs[2].steps.at(-1).expect.callback_count,2);assert.equal(d.runs[2].steps.at(-1).expect.failure_count,2);
+    assert.ok(Object.values(d.runtime_checks).every(v=>v==='not_run'));
+    assert.equal(d.recapture_worksheet.actual_file_check,'not_run');assert.equal(d.recapture_worksheet.physical_recapture,'not_run');
+  }
+});
+test('P10 active recapture downloads have stable anchors while retired token references only link to them', {skip:!hasBuild}, () => {
+  for(const [prefix,lang] of [['','zh'],['en/','en']]) {
+    const active=prefix+'guides/interruption-recapture-preflight/',html=read('dist/'+active+'index.html');
+    assert.ok(urls.includes('https://getyihu.com/'+active));assert.ok(!html.includes('content="noindex,follow"'));
+    assert.equal([...html.matchAll(/id="syn-token-33"/g)].length,1);
+    assert.ok(html.includes('<a href="/samples/p10-token-recapture/token-recapture-preflight.'+lang+'.json" download'));
+    assert.ok(html.includes('<a href="/samples/p10-token-recapture/preflight-card.md" download'));
+    const retiredRoute=prefix+'guides/capture-completion-token-review/',reference=read('dist/'+retiredRoute+'index.html');
+    assert.ok(reference.includes('content="noindex,follow"'));assert.ok(!reference.includes('hreflang='));
+    assert.ok(reference.includes('href="/'+active+'#syn-token-33"'));
+    assert.ok(!reference.includes('/samples/p10-token-recapture/'));assert.ok(!urls.includes('https://getyihu.com/'+retiredRoute));
+    for(const name of ['llms.txt','llms-full.txt']) assert.ok(!read('public/'+name).includes('https://getyihu.com/'+retiredRoute));
+    assert.ok(read('public/llms-full.txt').includes('https://getyihu.com/'+active));
+  }
+  for(const file of ['token-recapture-preflight.zh.json','token-recapture-preflight.en.json','preflight-card.md']) assert.equal(read('dist/samples/p10-token-recapture/'+file),read('public/samples/p10-token-recapture/'+file));
+});
 test('bilingual home offers four buyer scenarios, not the old technical link wall', { skip: !hasBuild }, () => {
   const copy = JSON.parse(read('src/data/home-answers.json'));
   for (const [lang, prefix] of [['zh', ''], ['en', 'en/']]) {
