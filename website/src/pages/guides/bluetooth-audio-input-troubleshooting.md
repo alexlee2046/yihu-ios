@@ -61,3 +61,11 @@ preview: audio
 [冻结实现](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift) · [README](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md) · [Apple microphone help](https://support.apple.com/en-ie/101600)
 
 </details>
+
+## SYN-AUDIO-32：连接与播放不是麦克风已录入的证据
+
+用完整合成短句核32、7与不提交/不覆盖，先看原结果，再分别核手机与外设输入。附已填去抖/路由条件表：2秒只是通知抑制窗口，路由变化与格式变化、系统中断不走同一个保证恢复分支；没有提示也不证明内容完整。
+
+<a href="/samples/p9-audio-preflight/audio-preflight.zh.json" download>下载SYN-AUDIO-32合成参数与源码预期JSON</a> · <a href="/samples/p9-audio-preflight/preflight-card.md" download>阅读中英已填核对卡</a>
+
+样例是源码预检，不是App可导入配置、实机蓝牙/USB成绩或商店0.1.0实现一致性验收。未执行系统通知、录音、ASR或发送；未知旧草稿先核，不盲重插、不后台常驻监听。

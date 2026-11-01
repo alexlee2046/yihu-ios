@@ -72,3 +72,11 @@ quickCheck: audio
 依据：[短语音事件与格式检查](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)、[录音笔记与中断](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieNoteRecorder.swift)。
 
 </details>
+
+## SYN-AUDIO-32：区分抑制、尝试恢复与停止
+
+本合成例给出4组/13条去抖参数和8条短语音分支的已填答案：恰2秒仍可能抑制，错token不清当前期望；配置通知在格式相同时可尝试重建，但设备丢失/来电等是停止分支。保留converter/PCM不等无缺帧或已保存音频，不能套用笔记式部分保存承诺。
+
+<a href="/samples/p9-audio-preflight/audio-preflight.zh.json" download>下载SYN-AUDIO-32合成参数与源码预期JSON</a> · <a href="/samples/p9-audio-preflight/preflight-card.md" download>阅读中英已填核对卡</a>
+
+样例是源码预检，不是App可导入配置、实机蓝牙/USB成绩或商店0.1.0实现一致性验收。未执行系统通知、录音、ASR或发送；未知旧草稿先核，不盲重插、不后台常驻监听。
