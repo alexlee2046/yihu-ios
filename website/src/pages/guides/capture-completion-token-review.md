@@ -66,3 +66,9 @@ indexable: false
 [生命周期](/guides/foreground-audio-rebind-preflight/) · [队列与最终结果](/guides/capture-buffer-pressure-checklist/) · [重录范围](/guides/interruption-recapture-preflight/) · [开始](/start/) · [隐私](/privacy/)
 
 [start/stop/cancel/captureCompleted](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift) · [管线停止与取消](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/ColliePCMStream.swift)
+
+## SYN-TOKEN-33源码时序补例
+
+原完成方法在任何导出/清理前先比activeToken；stop后本次完成可继续，cancel后旧完成不能代表新采集。匹配失败也须转发failure，不从同一阶段或相同文字推会话归属、授权或通用exactly-once。隔离夹具的内存success/export计数不等录音成功或已写音频。
+
+[在同语在役重采指南查看完整已填样例](/guides/interruption-recapture-preflight/#syn-token-33)。本页保留noindex,follow技术参考属性，不加入150条索引/LLM出口；不提供自动重录、回调注入或重发功能。

@@ -1,0 +1,248 @@
+{
+  "case_id": "SYN-TOKEN-33",
+  "language": "zh",
+  "synthetic": true,
+  "source_commit": "318dbfaa9976568ff6c052c011a5e636612f6419",
+  "is_app_import_schema": false,
+  "device_status": "not_run",
+  "observed_audio": null,
+  "observed_transcript": null,
+  "purpose": "区分stop保留本次排空、cancel使旧令牌失效与重采新版本；不是路由去抖。",
+  "token_roles": "令牌A/B为手工合成关联值，不是设备/账号标识、签名或写权限。",
+  "fixture_scope": "原方法隔离编译，源没有独立completion-token helper；管线/引擎/导出都是内存替身。seed不执行真实start，complete是隔离夹具事件，不注入系统回调。",
+  "runs": [
+    {
+      "run_id": "T1-stop-drain-not-cancel",
+      "steps": [
+        {
+          "op": "seed",
+          "expect": {
+            "active_token": "00000000-0000-4000-8000-000000000033",
+            "recording_active": true,
+            "pipeline_present": true,
+            "callback_count": 0
+          },
+          "token": "00000000-0000-4000-8000-000000000033"
+        },
+        {
+          "op": "stop",
+          "expect": {
+            "active_token": "00000000-0000-4000-8000-000000000033",
+            "recording_active": false,
+            "pipeline_present": true,
+            "pipeline_stop_calls": 1,
+            "callback_count": 0
+          }
+        },
+        {
+          "op": "probe_start",
+          "expect": {
+            "start_preflight": "busy",
+            "active_token": "00000000-0000-4000-8000-000000000033"
+          }
+        },
+        {
+          "op": "complete_success",
+          "expect": {
+            "active_token": null,
+            "pipeline_present": false,
+            "callback_count": 1,
+            "success_count": 1,
+            "export_spy_calls": 1
+          },
+          "token": "00000000-0000-4000-8000-000000000033"
+        },
+        {
+          "op": "complete_success",
+          "expect": {
+            "callback_count": 1,
+            "export_spy_calls": 1
+          },
+          "token": "00000000-0000-4000-8000-000000000033"
+        },
+        {
+          "op": "probe_start",
+          "expect": {
+            "start_preflight": "would_reach_permission_check"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "T2-cancel-late-old-before-and-after-B",
+      "steps": [
+        {
+          "op": "seed",
+          "expect": {
+            "active_token": "00000000-0000-4000-8000-000000000033",
+            "recording_active": true
+          },
+          "token": "00000000-0000-4000-8000-000000000033"
+        },
+        {
+          "op": "cancel",
+          "expect": {
+            "active_token": null,
+            "recording_active": false,
+            "pipeline_present": false,
+            "pipeline_cancel_calls": 1
+          }
+        },
+        {
+          "op": "complete_success",
+          "expect": {
+            "callback_count": 0,
+            "export_spy_calls": 0
+          },
+          "token": "00000000-0000-4000-8000-000000000033"
+        },
+        {
+          "op": "probe_start",
+          "expect": {
+            "start_preflight": "would_reach_permission_check"
+          }
+        },
+        {
+          "op": "seed",
+          "expect": {
+            "active_token": "00000000-0000-4000-8000-000000000034",
+            "recording_active": true
+          },
+          "token": "00000000-0000-4000-8000-000000000034"
+        },
+        {
+          "op": "complete_success",
+          "expect": {
+            "active_token": "00000000-0000-4000-8000-000000000034",
+            "recording_active": true,
+            "pipeline_present": true,
+            "callback_count": 0,
+            "export_spy_calls": 0
+          },
+          "token": "00000000-0000-4000-8000-000000000033"
+        },
+        {
+          "op": "complete_success",
+          "expect": {
+            "active_token": null,
+            "pipeline_present": false,
+            "callback_count": 1,
+            "success_count": 1,
+            "export_spy_calls": 1
+          },
+          "token": "00000000-0000-4000-8000-000000000034"
+        },
+        {
+          "op": "complete_success",
+          "expect": {
+            "callback_count": 1,
+            "export_spy_calls": 1
+          },
+          "token": "00000000-0000-4000-8000-000000000034"
+        }
+      ]
+    },
+    {
+      "run_id": "T3-current-failure-and-old-failure",
+      "steps": [
+        {
+          "op": "seed",
+          "expect": {
+            "active_token": "00000000-0000-4000-8000-000000000033"
+          },
+          "token": "00000000-0000-4000-8000-000000000033"
+        },
+        {
+          "op": "stop",
+          "expect": {
+            "active_token": "00000000-0000-4000-8000-000000000033",
+            "recording_active": false,
+            "pipeline_present": true
+          }
+        },
+        {
+          "op": "complete_failure",
+          "expect": {
+            "active_token": null,
+            "pipeline_present": false,
+            "callback_count": 1,
+            "failure_count": 1,
+            "export_spy_calls": 0
+          },
+          "token": "00000000-0000-4000-8000-000000000033"
+        },
+        {
+          "op": "seed",
+          "expect": {
+            "active_token": "00000000-0000-4000-8000-000000000034",
+            "recording_active": true
+          },
+          "token": "00000000-0000-4000-8000-000000000034"
+        },
+        {
+          "op": "complete_failure",
+          "expect": {
+            "active_token": "00000000-0000-4000-8000-000000000034",
+            "recording_active": true,
+            "callback_count": 1,
+            "failure_count": 1
+          },
+          "token": "00000000-0000-4000-8000-000000000033"
+        },
+        {
+          "op": "complete_failure",
+          "expect": {
+            "active_token": null,
+            "callback_count": 2,
+            "failure_count": 2,
+            "export_spy_calls": 0
+          },
+          "token": "00000000-0000-4000-8000-000000000034"
+        },
+        {
+          "op": "complete_failure",
+          "expect": {
+            "callback_count": 2,
+            "failure_count": 2
+          },
+          "token": "00000000-0000-4000-8000-000000000034"
+        }
+      ]
+    }
+  ],
+  "run_notes": {
+    "T1": "stop保留A与pipeline；尚未排空时再次start的源码前两guard会busy；A完成后清理，重复完成忽略。",
+    "T2": "cancel后旧A在空闲或B期间均忽略；B不被A清理，只有B自己的完成可回调。",
+    "T3": "匹配的失败也须完成清理并转发failure；旧失败不应损坏B。没有成功final或ASR结论。"
+  },
+  "reference_utterance": {
+    "spoken_text": "样本三十三。先核对九号附件，不提交，也不覆盖旧稿。",
+    "ideal_verbatim_text": "样本三十三。先核对九号附件，不提交，也不覆盖旧稿。",
+    "observed_text": null
+  },
+  "recapture_worksheet": {
+    "original_A": "纸面设定：原材料A可用，但本包没有真实文件/音频证明",
+    "segment_B": "是否保存/是否缺失仍未知，未看到文字不等没有音频",
+    "reference_decision": "先核B及旧草稿；仅在额外实际证据确认缺口后，另行获准录B-v2，保A/B原件与版本说明，不合成连续原录音、不自动合并/重发",
+    "actual_file_check": "not_run",
+    "physical_recapture": "not_run"
+  },
+  "not_proven": [
+    "hardware interruption or lock-screen/battery survival",
+    "real PCM queue draining/conversion/storage",
+    "App Store binary/source parity",
+    "actual UUID generation/start/permission flow",
+    "concurrency or cross-service exactly-once",
+    "ASR/insertion/remote rollback/submission/delivery"
+  ],
+  "runtime_checks": {
+    "hardware_interruption": "not_run",
+    "real_recapture": "not_run",
+    "real_pcm_drain_and_storage": "not_run",
+    "concurrency": "not_run",
+    "asr": "not_run",
+    "draft_insertion": "not_run",
+    "sending_and_delivery": "not_run",
+    "real_start_UUID_and_permission_flow": "not_run"
+  }
+}
