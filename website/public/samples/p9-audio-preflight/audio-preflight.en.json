@@ -1,0 +1,248 @@
+{
+  "case_id": "SYN-AUDIO-32",
+  "language": "en",
+  "synthetic": true,
+  "source_commit": "bf339e21b5ffad3f899715c285d6c52d3e291a76",
+  "purpose": "Source-only Bluetooth/external-mic route and recording-recovery preflight, not a device result",
+  "is_app_import_schema": false,
+  "is_device_log": false,
+  "hardware_status": "not_run",
+  "observed_audio": null,
+  "observed_transcript": null,
+  "timing_basis": "Synthetic Date offsets in milliseconds; no wall-clock modification, real-time waiting, latency measurement or 2-second recovery SLA.",
+  "reference_utterance": {
+    "spoken_text": "Audio sample thirty-two. Check label seven first; do not submit or overwrite the original.",
+    "ideal_verbatim_text": "Audio sample thirty-two. Check label seven first; do not submit or overwrite the original.",
+    "human_review": "Check32,7 and both negations; actual output unknown, never stitch a fictional complete capture."
+  },
+  "virtual_input_formats": {
+    "A": {
+      "sampleRate": 16000,
+      "channelCount": 1,
+      "commonFormat": "pcmFormatFloat32",
+      "isInterleaved": false
+    },
+    "B": {
+      "sampleRate": 48000,
+      "channelCount": 1,
+      "commonFormat": "pcmFormatFloat32",
+      "isInterleaved": false
+    },
+    "disclaimer": "Illustrative values only, not accessory specifications, measured formats or forced settings."
+  },
+  "virtual_route_aliases": {
+    "A": [
+      "SYN-INPUT-A"
+    ],
+    "B": [
+      "SYN-INPUT-B"
+    ],
+    "comparison": "Recorder compares sorted current input UIDs. Aliases are not actual UIDs, product names or selectable inputs."
+  },
+  "debouncer_runs": [
+    {
+      "run_id": "D1-inclusive-deadline",
+      "arm_token": "00000000-0000-4000-8000-000000000032",
+      "arm_at_ms": 0,
+      "events": [
+        {
+          "at_ms": 200,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": true,
+          "route_unchanged": true,
+          "expected_should_suppress": true
+        },
+        {
+          "at_ms": 1000,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": true,
+          "route_unchanged": true,
+          "expected_should_suppress": true
+        },
+        {
+          "at_ms": 2000,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": true,
+          "route_unchanged": true,
+          "expected_should_suppress": true
+        },
+        {
+          "at_ms": 2001,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": true,
+          "route_unchanged": true,
+          "expected_should_suppress": false
+        },
+        {
+          "at_ms": 2100,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": true,
+          "route_unchanged": true,
+          "expected_should_suppress": false
+        }
+      ]
+    },
+    {
+      "run_id": "D2-old-token-and-route-reset",
+      "arm_token": "00000000-0000-4000-8000-000000000032",
+      "arm_at_ms": 0,
+      "events": [
+        {
+          "at_ms": 300,
+          "token": "00000000-0000-4000-8000-000000000033",
+          "engine_is_running": false,
+          "input_format_unchanged": false,
+          "route_unchanged": false,
+          "expected_should_suppress": false
+        },
+        {
+          "at_ms": 400,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": true,
+          "route_unchanged": true,
+          "expected_should_suppress": true
+        },
+        {
+          "at_ms": 500,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": true,
+          "route_unchanged": false,
+          "expected_should_suppress": false
+        },
+        {
+          "at_ms": 600,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": true,
+          "route_unchanged": true,
+          "expected_should_suppress": false
+        }
+      ]
+    },
+    {
+      "run_id": "D3-engine-reset",
+      "arm_token": "00000000-0000-4000-8000-000000000032",
+      "arm_at_ms": 0,
+      "events": [
+        {
+          "at_ms": 400,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": false,
+          "input_format_unchanged": true,
+          "route_unchanged": true,
+          "expected_should_suppress": false
+        },
+        {
+          "at_ms": 500,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": true,
+          "route_unchanged": true,
+          "expected_should_suppress": false
+        }
+      ]
+    },
+    {
+      "run_id": "D4-format-reset",
+      "arm_token": "00000000-0000-4000-8000-000000000032",
+      "arm_at_ms": 0,
+      "events": [
+        {
+          "at_ms": 400,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": false,
+          "route_unchanged": true,
+          "expected_should_suppress": false
+        },
+        {
+          "at_ms": 500,
+          "token": "00000000-0000-4000-8000-000000000032",
+          "engine_is_running": true,
+          "input_format_unchanged": true,
+          "route_unchanged": true,
+          "expected_should_suppress": false
+        }
+      ]
+    }
+  ],
+  "debouncer_explanation": {
+    "D1": "Same token and all conditions allow repeated suppression through exactly2.000s;2.001s expires and resets, no automatic re-arm.",
+    "D2": "A mismatched token returns false without clearing A even with other flags false; A may still suppress. A route change resets; reverting flags does not re-arm.",
+    "D3_D4": "For the armed token, stopped engine or changed format resets; flags are supplied synthetic predicate inputs, not an observed hardware timeline."
+  },
+  "recorder_branches": [
+    {
+      "branch_id": "R1",
+      "synthetic_condition": "AVAudioEngineConfigurationChange; active token/capture; not suppressed; four format fields unchanged",
+      "expected_source_branch": "attempt_engine_rebuild_keep_converter_and_existing_PCM_not_gap_free",
+      "evidence_scope": "source_read_only_not_native_engine_execution",
+      "boundary_note": "App-only engine/tap/start result not executed"
+    },
+    {
+      "branch_id": "R2",
+      "synthetic_condition": "Configuration rebuild yields changed sampleRate/channelCount/commonFormat/isInterleaved",
+      "expected_source_branch": "fail_pipeline_interrupted_and_stop",
+      "evidence_scope": "source_read_only_not_native_engine_execution",
+      "boundary_note": "Any one changed field fails format equality"
+    },
+    {
+      "branch_id": "R3",
+      "synthetic_condition": "configureInputGraph or engine.start throws during configuration recovery",
+      "expected_source_branch": "fail_pipeline_interrupted_and_stop",
+      "evidence_scope": "source_read_only_not_native_engine_execution",
+      "boundary_note": "arm happens before engine.start; failure resets expectation"
+    },
+    {
+      "branch_id": "R4",
+      "synthetic_condition": "Valid routeChange reason oldDeviceUnavailable or noSuitableRouteForCategory",
+      "expected_source_branch": "fail_pipeline_interrupted_and_stop",
+      "evidence_scope": "source_read_only_not_native_engine_execution",
+      "boundary_note": "Not the same branch as an engine configuration notification"
+    },
+    {
+      "branch_id": "R5",
+      "synthetic_condition": "Interruption began or media services lost/reset",
+      "expected_source_branch": "fail_pipeline_interrupted_and_stop",
+      "evidence_scope": "source_read_only_not_native_engine_execution",
+      "boundary_note": "Valid interruption ended is ignored by this observer; not an auto-resume instruction"
+    },
+    {
+      "branch_id": "R6",
+      "synthetic_condition": "Valid routeChange reason newDeviceAvailable",
+      "expected_source_branch": "ignore_this_route_notification_only",
+      "evidence_scope": "source_read_only_not_native_engine_execution",
+      "boundary_note": "Does not choose a mic or exclude a separate configuration notification"
+    },
+    {
+      "branch_id": "R7",
+      "synthetic_condition": "Stale activeToken or recordingActive=false in observer task",
+      "expected_source_branch": "ignore_obsolete_observer_callback",
+      "evidence_scope": "source_read_only_not_native_engine_execution",
+      "boundary_note": "A token is correlation, not hardware or account authentication"
+    },
+    {
+      "branch_id": "R8",
+      "synthetic_condition": "Short-voice capture completion failure while controller phase is recording",
+      "expected_source_branch": "clear_preview_and_enter_failure_not_final_transcription",
+      "evidence_scope": "source_read_only_not_native_engine_execution",
+      "boundary_note": "Does not promise note-style partial audio saving; note recorder is a separate path"
+    }
+  ],
+  "buyer_decision": "Use the offline worked checks. Only separately authorized foreground capture: inspect own account, permissions/model/input and any existing draft; no blind duplicate insertion, Send or Run.",
+  "not_proven": [
+    "actual microphone selection or accessory compatibility",
+    "App Store binary contains exact source recovery implementation",
+    "gap-free recording, saved partial audio or uninterrupted capture",
+    "ASR accuracy or real final transcript",
+    "draft insertion/submission/delivery",
+    "noise/distance/latency/SLA or background listening"
+  ]
+}

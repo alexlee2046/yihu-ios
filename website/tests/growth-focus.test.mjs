@@ -67,6 +67,44 @@ test('P8 two existing technical sections expose static downloads without restori
   assert.ok(!read('public/llms-full.txt').includes('Filled offline example: attention is not identity or write authority'));
   for(const file of ['radar-brief.zh.json','radar-brief.en.json','buyer-card.md']) assert.equal(read('dist/samples/p8-opportunity-preflight/'+file),read('public/samples/p8-opportunity-preflight/'+file));
 });
+test('P9 frozen audio preflight stays synthetic with thirteen helper inputs and eight source-only branches', () => {
+  const hashes = { 'audio-preflight.zh.json':'3b7e88759c9f70eed22b99b629d79d141224ff13ad33f56e4c375d930b9b2fb1', 'audio-preflight.en.json':'5edc1cc499a605ef916d625244c855d815fc8ff33ae9ab112249b99e9c5f8632', 'preflight-card.md':'962c211326a95d5b6de90a8aee5ad702f347f46004342ce246fdbb2a7d53f14d' };
+  for(const [file,hash] of Object.entries(hashes)) assert.equal(createHash('sha256').update(read('public/samples/p9-audio-preflight/'+file)).digest('hex'),hash);
+  for(const lang of ['zh','en']) {
+    const d=JSON.parse(read('public/samples/p9-audio-preflight/audio-preflight.'+lang+'.json'));
+    assert.equal(d.case_id,'SYN-AUDIO-32');assert.equal(d.language,lang);assert.equal(d.synthetic,true);
+    assert.equal(d.source_commit,'bf339e21b5ffad3f899715c285d6c52d3e291a76');
+    assert.equal(d.is_app_import_schema,false);assert.equal(d.is_device_log,false);assert.equal(d.hardware_status,'not_run');
+    assert.equal(d.observed_audio,null);assert.equal(d.observed_transcript,null);
+    assert.equal(d.reference_utterance.spoken_text,d.reference_utterance.ideal_verbatim_text);
+    assert.equal(d.debouncer_runs.length,4);assert.equal(d.debouncer_runs.flatMap(r=>r.events).length,13);
+    assert.deepEqual(d.debouncer_runs.map(r=>r.events.map(e=>e.expected_should_suppress)),[[true,true,true,false,false],[false,true,false,false],[false,false],[false,false]]);
+    assert.deepEqual(d.debouncer_runs[0].events.map(e=>e.at_ms),[200,1000,2000,2001,2100]);
+    assert.equal(d.recorder_branches.length,8);
+    for(const b of d.recorder_branches) assert.equal(b.evidence_scope,'source_read_only_not_native_engine_execution');
+    assert.ok(d.not_proven.includes('actual microphone selection or accessory compatibility'));
+    assert.ok(d.not_proven.includes('ASR accuracy or real final transcript'));
+  }
+});
+test('P9 download sections stay on four active guides and never restore retired debounce pairs', {skip:!hasBuild}, () => {
+  const full=read('public/llms-full.txt');
+  for(const [prefix,lang] of [['','zh'],['en/','en']]) {
+    for(const slug of ['audio-route-recovery-matrix','bluetooth-audio-input-troubleshooting']) {
+      const route=prefix+'guides/'+slug+'/',html=read('dist/'+route+'index.html');
+      assert.ok(urls.includes('https://getyihu.com/'+route));assert.ok(!html.includes('content="noindex,follow"'));
+      assert.ok(html.includes('rel="canonical" href="https://getyihu.com/'+route+'"'));assert.ok(html.includes('SYN-AUDIO-32'));
+      assert.ok(html.includes('<a href="/samples/p9-audio-preflight/audio-preflight.'+lang+'.json" download'));
+      assert.ok(html.includes('<a href="/samples/p9-audio-preflight/preflight-card.md" download'));
+      assert.ok(html.includes(lang==='zh'?'不是真机':'not a device') || html.includes(lang==='zh'?'不是App可导入配置':'not an app import format'));
+      assert.ok(full.includes('https://getyihu.com/'+route));
+    }
+    const retiredRoute=prefix+'guides/audio-recovery-debounce-boundaries/',html=read('dist/'+retiredRoute+'index.html');
+    assert.ok(html.includes('content="noindex,follow"'));assert.ok(!html.includes('hreflang='));
+    assert.ok(!html.includes('/samples/p9-audio-preflight/'));assert.ok(!urls.includes('https://getyihu.com/'+retiredRoute));
+    for(const name of ['llms.txt','llms-full.txt']) assert.ok(!read('public/'+name).includes('https://getyihu.com/'+retiredRoute));
+  }
+  for(const file of ['audio-preflight.zh.json','audio-preflight.en.json','preflight-card.md']) assert.equal(read('dist/samples/p9-audio-preflight/'+file),read('public/samples/p9-audio-preflight/'+file));
+});
 test('bilingual home offers four buyer scenarios, not the old technical link wall', { skip: !hasBuild }, () => {
   const copy = JSON.parse(read('src/data/home-answers.json'));
   for (const [lang, prefix] of [['zh', ''], ['en', 'en/']]) {

@@ -61,3 +61,11 @@ Try it on your own device and in your environment. No headset, wind-noise, dista
 [Frozen implementation](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift) · [README](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md) · [Apple microphone help](https://support.apple.com/en-ie/101600)
 
 </details>
+
+## SYN-AUDIO-32: a connection or playback is not capture evidence
+
+Use the complete synthetic phrase to check32,7 and both negations before comparing separate phone/accessory samples. The worked debounce/route card distinguishes notification suppression, changed format and interruption branches. A two-second grace period is not a recovery deadline, and no warning does not prove complete audio.
+
+<a href="/samples/p9-audio-preflight/audio-preflight.en.json" download>Download SYN-AUDIO-32 synthetic inputs and source expectations</a> · <a href="/samples/p9-audio-preflight/preflight-card.md" download>Read the filled bilingual preflight card</a>
+
+This is source preflight, not an app import format, Bluetooth/USB hardware result or store-edition0.1.0 parity acceptance. No OS event, capture, ASR or sending was performed. Inspect existing drafts before repeating insertion; no continuous background listening.
