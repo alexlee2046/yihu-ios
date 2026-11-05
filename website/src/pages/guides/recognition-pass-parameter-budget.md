@@ -66,3 +66,7 @@ contextTerms在构造解码入参时取得，不能把每项配置读取描述�
 [词表](/guides/multilingual-terms-preflight/) · [PCM准入](/guides/pcm-format-admission-review/) · [预览语义](/guides/replaceable-voice-preview-review/) · [重试范围](/guides/note-transcription-retry-checkpoint/) · [开始](/start/) · [隐私](/privacy/)
 
 [每pass偏好与入参](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/Qwen3OnDeviceTranscriber.swift) · [默认值/范围/clamp](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceInterfaces.swift) · [设置文案与忙态](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieLinkSettingsView.swift)
+
+## SYN-BUF-37技术转接（保持退休）
+
+输出maxTokens是识别pass预算，不是源帧、等待水位、字节或录音秒数，调高不能修补采集缺口、复活取消或授权重发。[同语采集缓冲检查](/guides/capture-buffer-pressure-checklist/)把有界FIFO、溢出失败、时长裁块与snapshot/final分开；无环形丢旧帧或自动分段保证。此页仍indexable: false/noindex,follow，不入sitemap/LLM独立出口，不增下载/Store卡。SYNTHETIC_EXAMPLE，真实模型/硬件压力/丢帧与准确率未测，不抹历史副作用。
