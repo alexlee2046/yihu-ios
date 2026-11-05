@@ -139,6 +139,47 @@ test('P10 active recapture downloads have stable anchors while retired token ref
   }
   for(const file of ['token-recapture-preflight.zh.json','token-recapture-preflight.en.json','preflight-card.md']) assert.equal(read('dist/samples/p10-token-recapture/'+file),read('public/samples/p10-token-recapture/'+file));
 });
+test('P11 separates pinned model metadata from tiny-file expectations and memory loading spies', () => {
+  const hashes = { 'model-preflight.zh.json':'258aae2172a40b62f7142f795426f3bcc8065580174e4adf6613b7e5b28bf826', 'model-preflight.en.json':'22ce1d52325e185477abb57eb8f4d3e72a424dfa8d582744b5399e2fef30c7bb', 'preflight-card.md':'50ef5253f20f2f0b5ba81d309b0e7f387515354023a11c5daa80d8e16aed4006' };
+  for(const [file,hash] of Object.entries(hashes)) assert.equal(createHash('sha256').update(read('public/samples/p11-model-preflight/'+file)).digest('hex'),hash);
+  for(const lang of ['zh','en']) {
+    const d=JSON.parse(read('public/samples/p11-model-preflight/model-preflight.'+lang+'.json'));
+    assert.equal(d.case_id,'SYN-MODEL-34');assert.equal(d.language,lang);assert.equal(d.synthetic,true);
+    assert.equal(d.source_commit,'acd44181a445e6c497709ba26b63e4302b21044e');assert.equal(d.is_app_import_schema,false);
+    assert.equal(d.pinned_source_manifest.assets.length,24);assert.equal(d.pinned_source_manifest.asset_count,24);
+    assert.equal(d.pinned_source_manifest.assets.reduce((s,a)=>s+a.byteCount,0),945583332);
+    assert.equal(d.pinned_source_manifest.total_byte_count,945583332);
+    assert.equal(d.isolated_test_manifest.marker,'.fixture-revision');assert.equal(d.isolated_test_manifest.assets.length,2);
+    for(const a of d.isolated_test_manifest.assets) {
+      assert.equal(Buffer.byteLength(a.bytes_utf8),8);assert.equal(a.byteCount,8);
+      assert.equal(createHash('sha256').update(a.bytes_utf8).digest('hex'),a.sha256);
+    }
+    assert.deepEqual(d.integrity_cases.map(c=>c.expected_isInstalled),[false,false,false,false,false,true,true,false]);
+    assert.equal(d.load_generation_cases.length,7);
+    assert.equal(d.load_generation_cases[3].expected.warm_spy_calls,2);
+    assert.equal(d.load_generation_cases[4].expected.load_spy_calls,0);
+    assert.equal(d.load_generation_cases[6].expected.integrity_calls,2);assert.equal(d.load_generation_cases[6].expected.load_spy_calls,1);
+    assert.equal(d.reference_utterance.spoken_text,d.reference_utterance.ideal_verbatim_text);assert.equal(d.reference_utterance.observed_transcript,null);
+    assert.ok(Object.values(d.runtime_checks).every(v=>v==='not_run'));
+  }
+});
+test('P11 first-trial downloads clarify store installation while retired model pages only transfer technically', {skip:!hasBuild}, () => {
+  for(const [prefix,lang] of [['','zh'],['en/','en']]) {
+    const active=prefix+'guides/first-trial-go-no-go-checklist/',html=read('dist/'+active+'index.html');
+    assert.ok(urls.includes('https://getyihu.com/'+active));assert.ok(!html.includes('content="noindex,follow"'));
+    assert.equal([...html.matchAll(/id="syn-model-34"/g)].length,1);
+    assert.ok(html.includes('<a href="/samples/p11-model-preflight/model-preflight.'+lang+'.json" download'));
+    assert.ok(html.includes('<a href="/samples/p11-model-preflight/preflight-card.md" download'));
+    assert.ok(html.includes(lang==='zh'?'商店版不需Mac/Xcode/自行签名':'needs no Mac/Xcode/self-signing for installation'));
+    const retiredRoute=prefix+'guides/model-artifact-validation-evidence/',ref=read('dist/'+retiredRoute+'index.html');
+    assert.ok(ref.includes('content="noindex,follow"'));assert.ok(!ref.includes('hreflang='));
+    assert.ok(ref.includes('href="/'+active+'#syn-model-34"'));assert.ok(!ref.includes('/samples/p11-model-preflight/'));
+    assert.ok(!urls.includes('https://getyihu.com/'+retiredRoute));
+    for(const name of ['llms.txt','llms-full.txt']) assert.ok(!read('public/'+name).includes('https://getyihu.com/'+retiredRoute));
+    assert.ok(read('public/llms-full.txt').includes('https://getyihu.com/'+active));
+  }
+  for(const file of ['model-preflight.zh.json','model-preflight.en.json','preflight-card.md']) assert.equal(read('dist/samples/p11-model-preflight/'+file),read('public/samples/p11-model-preflight/'+file));
+});
 test('bilingual home offers four buyer scenarios, not the old technical link wall', { skip: !hasBuild }, () => {
   const copy = JSON.parse(read('src/data/home-answers.json'));
   for (const [lang, prefix] of [['zh', ''], ['en', 'en/']]) {

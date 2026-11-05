@@ -54,3 +54,11 @@ lang: zh
 [README](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md)
 
 </details>
+
+<h2 id="syn-model-34">SYN-MODEL-34：先分清文件匹配、已加载与已预热</h2>
+
+已填合成包给出固定源24资产的只读revision/SHA参考、另设微型假清单的8个文件例及7个内存加载/代际例。目录存在、同大小、文件门通过都不等CoreML可加载或讲话准确；已加载/预热实例可能复用，不表示刚刚重新全盘验过。installGeneration在Transcriber，不是ModelStore清单revision。
+
+<a href="/samples/p11-model-preflight/model-preflight.zh.json" download>下载SYN-MODEL-34中文合成预检JSON</a> · <a href="/samples/p11-model-preflight/preflight-card.md" download>阅读中英已填模型Go/No-Go核对卡</a>
+
+上文源码构建步骤与商店安装是两条路径：已核美区0.1.0/id6819057500商店版不需Mac/Xcode/自行签名，按商店段准备自有工作台/账号、模型与权限。隔离小文件和内存load/warm替身不证明设备可用；真实CoreML加载/预热/准确率、录音/填入/发送全not_run，不改真实marker/hash来过门。

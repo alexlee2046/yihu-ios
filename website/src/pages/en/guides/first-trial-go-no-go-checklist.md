@@ -54,3 +54,11 @@ It is a manual checklist, not an app configuration/import format. Continue with 
 [README](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md)
 
 </details>
+
+<h2 id="syn-model-34">SYN-MODEL-34: distinguish matching files, loaded state and warm-up</h2>
+
+The filled synthetic pack separates a read-only24-asset source revision/SHA reference from eight tiny-manifest file cases and seven memory loading/generation cases. A directory, equal size or file-gate pass does not establish CoreML loading or speech accuracy. Loaded/warmed instances may be reused without a fresh full scan; installGeneration belongs to Transcriber, not the Store manifest revision.
+
+<a href="/samples/p11-model-preflight/model-preflight.en.json" download>Download SYN-MODEL-34 English synthetic preflight JSON</a> · <a href="/samples/p11-model-preflight/preflight-card.md" download>Read the filled bilingual model Go/No-Go card</a>
+
+Source building above is separate from store installation: verified US0.1.0/id6819057500 needs no Mac/Xcode/self-signing for installation. Use store setup with your own workspace/account, models and permission. Tiny-file and memory load/warm spies do not prove device readiness; real CoreML loading/warm-up, accuracy, capture/insertion/sending are not_run. Never alter real markers/hashes to force a pass.
