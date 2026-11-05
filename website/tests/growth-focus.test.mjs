@@ -217,6 +217,42 @@ test('P12 preserves all four active routes and limits downloads to outdoor secti
   }
   for(const f of ['level-preflight.zh.json','level-preflight.en.json','preflight-card.md']) assert.equal(read('dist/samples/p12-level-preflight/'+f),read('public/samples/p12-level-preflight/'+f));
 });
+test('P13 frozen busy/debounce matrix retains layered expectations and no observed runtime', () => {
+  const hashes={ 'busy-debounce-preflight.zh.json':'ace2ff7b7e4ecc838e3dd1b7333c8aeee1165f342b93afe4815fc6ba824f8e59', 'busy-debounce-preflight.en.json':'7896ad7acd778c9e7275c47622c3e5a44b9db7a46d90f8a05496560dcbfb2fe3', 'preflight-card.md':'b92c425faf7761088f80f709e62d19446bf87b60dbcaf30b470e72ad72936198' };
+  for(const [file,hash] of Object.entries(hashes)) assert.equal(createHash('sha256').update(read('public/samples/p13-busy-debounce/'+file)).digest('hex'),hash);
+  const variants=['zh','en'].map(lang=>JSON.parse(read('public/samples/p13-busy-debounce/busy-debounce-preflight.'+lang+'.json')));
+  assert.deepEqual(variants[0].scenarios,variants[1].scenarios);
+  for(const [i,d] of variants.entries()) {
+    assert.equal(d.case_id,'SYN-BUSY-36');assert.equal(d.language,['zh','en'][i]);assert.equal(d.synthetic,true);assert.equal(d.is_app_import_schema,false);
+    assert.equal(d.source_commit,'915523951dfc5ae7458954c6989d3664396ef558');
+    assert.deepEqual(d.scenarios.map(s=>s.steps.length),[4,3,3,2,4,7,2,5]);assert.equal(d.scenarios.reduce((n,s)=>n+s.steps.length,0),30);
+    assert.equal(new Set(d.scenarios.map(s=>s.id)).size,8);
+    const pending=d.scenarios[1],preparing=d.scenarios[5],suppression=d.scenarios[7];
+    assert.equal(pending.preset.pending_transcript,'');assert.equal(pending.steps[0].expect.can_retry_delivery,true);
+    assert.ok(pending.steps.every(s=>s.expect.enabled===false&&s.expect.pending_present===true));
+    assert.deepEqual(preparing.steps.filter(s=>s.op==='start_if_ready').map(s=>s.expect.recorder_start_calls),[0,0,1]);
+    assert.deepEqual(suppression.steps.filter(s=>s.op==='debounce').map(s=>s.expect.suppressed),[true,false]);
+    assert.equal(suppression.steps.at(-1).expect.claim_result,false);assert.equal(suppression.steps.at(-1).expect.phase,'recording');
+    assert.equal(d.reference_utterance.spoken_text,d.reference_utterance.ideal_verbatim_text);assert.equal(d.reference_utterance.observed_audio,null);assert.equal(d.reference_utterance.observed_transcript,null);
+    assert.ok(Object.values(d.runtime_checks).every(v=>v==='not_run'));
+  }
+});
+test('P13 active busy downloads keep retired debounce references outside index and reading exports', {skip:!hasBuild}, () => {
+  for(const [prefix,lang] of [['','zh'],['en/','en']]) {
+    const active=prefix+'guides/audio-busy-state-admission/',retired=prefix+'guides/audio-recovery-debounce-boundaries/';
+    const html=read('dist/'+active+'index.html'),ref=read('dist/'+retired+'index.html');
+    assert.ok(urls.includes('https://getyihu.com/'+active));assert.ok(!html.includes('content="noindex,follow"'));
+    assert.equal([...html.matchAll(/id="syn-busy-36"/g)].length,1);
+    assert.ok(html.includes('<a href="/samples/p13-busy-debounce/busy-debounce-preflight.'+lang+'.json" download'));
+    assert.ok(html.includes('<a href="/samples/p13-busy-debounce/preflight-card.md" download'));
+    assert.ok(ref.includes('content="noindex,follow"'));assert.ok(!ref.includes('hreflang='));assert.ok(ref.includes('href="/'+active+'#syn-busy-36"'));
+    assert.ok(!ref.includes('/samples/p13-busy-debounce/'));assert.ok(!urls.includes('https://getyihu.com/'+retired));
+    for(const f of ['llms.txt','llms-full.txt']) {
+      assert.ok(read('public/'+f).includes('https://getyihu.com/'+active));assert.ok(!read('public/'+f).includes('https://getyihu.com/'+retired));
+    }
+  }
+  for(const f of ['busy-debounce-preflight.zh.json','busy-debounce-preflight.en.json','preflight-card.md']) assert.equal(read('dist/samples/p13-busy-debounce/'+f),read('public/samples/p13-busy-debounce/'+f));
+});
 test('bilingual home offers four buyer scenarios, not the old technical link wall', { skip: !hasBuild }, () => {
   const copy = JSON.parse(read('src/data/home-answers.json'));
   for (const [lang, prefix] of [['zh', ''], ['en', 'en/']]) {

@@ -1,0 +1,388 @@
+{
+  "case_id": "SYN-BUSY-36",
+  "language": "zh",
+  "synthetic": true,
+  "source_commit": "915523951dfc5ae7458954c6989d3664396ef558",
+  "is_app_import_schema": false,
+  "scope": "主语音局部准入与通知抑制是正交条件；不是全局调度/录音笔记互斥证明。",
+  "scenarios": [
+    {
+      "id": "B1-ready-reservation-cycle",
+      "preset": {
+        "phase": "ready",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": true,
+            "can_cancel": false,
+            "is_recording": false
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": true,
+            "test_mic_reserved": true,
+            "enabled": false
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": false,
+            "recorder_start_calls": 0
+          }
+        },
+        {
+          "op": "release_test_mic",
+          "expect": {
+            "test_mic_reserved": false,
+            "enabled": true,
+            "recorder_start_calls": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "B2-empty-pending-is-not-nil",
+      "preset": {
+        "phase": "ready",
+        "pending_transcript": "",
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": false,
+            "can_retry_delivery": true,
+            "pending_present": true
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": true,
+            "enabled": false,
+            "pending_present": true
+          }
+        },
+        {
+          "op": "release_test_mic",
+          "expect": {
+            "enabled": false,
+            "can_retry_delivery": true,
+            "pending_present": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "B3-needs-model-enabled-is-not-recording",
+      "preset": {
+        "phase": "needsModel",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": true,
+            "can_cancel": false,
+            "is_recording": false
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": true,
+            "test_mic_reserved": true,
+            "enabled": true
+          }
+        },
+        {
+          "op": "release_test_mic",
+          "expect": {
+            "enabled": true,
+            "recorder_start_calls": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "B4-delivering-not-cancellable-not-idle",
+      "preset": {
+        "phase": "delivering",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": false,
+            "can_cancel": false,
+            "is_recording": false
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": false,
+            "recorder_start_calls": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "B5-transcribing-low-level-is-not-admission",
+      "preset": {
+        "phase": "transcribing",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": false,
+            "can_cancel": true,
+            "is_recording": false
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": false
+          }
+        },
+        {
+          "op": "start_if_ready",
+          "expect": {
+            "recorder_start_calls": 0,
+            "phase": "transcribing"
+          }
+        },
+        {
+          "op": "probe_recorder",
+          "expect": {
+            "recorder_probe": "would_reach_permission_check",
+            "phase": "transcribing",
+            "recorder_start_calls": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "B6-foreground-and-permission-intersection",
+      "preset": {
+        "phase": "preparing",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": false,
+            "can_cancel": true
+          }
+        },
+        {
+          "op": "start_if_ready",
+          "expect": {
+            "recorder_start_calls": 0,
+            "phase": "preparing"
+          }
+        },
+        {
+          "op": "set_fixture_readiness",
+          "expect": {
+            "phase": "preparing"
+          },
+          "permission": true,
+          "foreground": false
+        },
+        {
+          "op": "start_if_ready",
+          "expect": {
+            "recorder_start_calls": 0
+          }
+        },
+        {
+          "op": "set_fixture_readiness",
+          "expect": {
+            "phase": "preparing"
+          },
+          "permission": true,
+          "foreground": true
+        },
+        {
+          "op": "start_if_ready",
+          "expect": {
+            "recorder_start_calls": 1,
+            "phase": "recording",
+            "is_recording": true,
+            "prewarm_spy_calls": 1,
+            "preview_spy_calls": 1
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": false,
+            "can_cancel": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "B7-draining-pipeline-lower-gate",
+      "preset": {
+        "phase": "preparing",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": true,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": true
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": false,
+            "can_cancel": true
+          }
+        },
+        {
+          "op": "probe_recorder",
+          "expect": {
+            "recorder_probe": "busy",
+            "recorder_start_calls": 0,
+            "phase": "preparing"
+          }
+        }
+      ]
+    },
+    {
+      "id": "B8-suppression-does-not-release-busy",
+      "preset": {
+        "phase": "recording",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": true,
+        "pipeline_present_fixture": true
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": true,
+            "can_cancel": true,
+            "is_recording": true
+          }
+        },
+        {
+          "op": "arm_debounce",
+          "expect": {
+            "phase": "recording"
+          },
+          "token": "00000000-0000-4000-8000-000000000036",
+          "at_ms": 0
+        },
+        {
+          "op": "debounce",
+          "expect": {
+            "suppressed": true,
+            "enabled": true,
+            "can_cancel": true
+          },
+          "token": "00000000-0000-4000-8000-000000000036",
+          "at_ms": 400,
+          "engine_running": true,
+          "format_unchanged": true,
+          "route_unchanged": true
+        },
+        {
+          "op": "debounce",
+          "expect": {
+            "suppressed": false,
+            "phase": "recording",
+            "can_cancel": true
+          },
+          "token": "00000000-0000-4000-8000-000000000036",
+          "at_ms": 700,
+          "engine_running": true,
+          "format_unchanged": true,
+          "route_unchanged": false
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": false,
+            "phase": "recording",
+            "is_recording": true
+          }
+        }
+      ]
+    }
+  ],
+  "worked_answers": {
+    "B1_B2": "ready仍要核待处理文字与测试保留；空字符串也非nil。release只清保留，不清待核内容或启动录音；claim本身不检查pending。",
+    "B3_B4": "needsModel按钮true对应模型动作，不等已准备录音；delivering不可取消也不等空闲。",
+    "B5_B7": "底层pipeline为空只到权限门，不能越过转写等上层忙态；pipeline未排空则busy。",
+    "B6": "preparing需permission和foreground同时真。start只触内存recorder，phase recording/预热/预览均夹具效果，不是设备结果。",
+    "B8": "通知抑制true或false都不会由helper把controller置ready或释放测试准入；未执行外层恢复函数。recording按钮true在实际分支表示stop。"
+  },
+  "fixture_boundary": "每场景preset/readiness是手工假设，不运行UI动作/权限/后台/模型或完整start。底层probe只原前两guard；防抖只给定Date/UUID/布尔，不运行系统通知。",
+  "reference_utterance": {
+    "spoken_text": "样本三十六。先核对二号记录，不发送，也不覆盖待核内容。",
+    "ideal_verbatim_text": "样本三十六。先核对二号记录，不发送，也不覆盖待核内容。",
+    "observed_audio": null,
+    "observed_transcript": null
+  },
+  "buyer_decision": "离线核对可用；真实授权/模型/目的地/忙态未知不试探，不删待核内容、不反复点录音或伪造flag绕门。",
+  "runtime_checks": {
+    "device_interruption": "not_run",
+    "system_audio_route": "not_run",
+    "accessory_recovery": "not_run",
+    "real_microphone_permission_or_capture": "not_run",
+    "real_model_prewarm": "not_run",
+    "real_UI_preview": "not_run",
+    "ASR_or_draft_insertion": "not_run",
+    "sending_and_delivery": "not_run",
+    "global_concurrency_or_lifecycle": "not_run"
+  }
+}

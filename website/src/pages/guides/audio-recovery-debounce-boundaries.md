@@ -66,3 +66,9 @@ CollieAudioRecoveryChangeDebouncer默认窗口2秒。匹配expectedToken、未�
 [恢复矩阵](/guides/audio-route-recovery-matrix/) · [采集令牌](/guides/capture-completion-token-review/) · [显示与证据](/guides/audio-level-not-accuracy-review/) · [开始](/start/) · [隐私](/privacy/)
 
 [RecoveryChangeDebouncer与调用路径](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
+
+## SYN-BUSY-36：抑制不释放忙态
+
+去抖只决定这条配置通知是否被抑制，不改controller的phase、待核文字或测试保留。原局部准入还看pending、前台/权限、pipeline等；抑制true不证明外设恢复，false也不授重采/重发。新的合成忙态例核这些层次，而不重复把2秒当等待准入或恢复时延。
+
+[转到同语在役忙态页查看完整已填样例](/guides/audio-busy-state-admission/#syn-busy-36)。本页仍为noindex,follow退休技术参考，不纳入150条索引/LLM出口，不在本页新增下载/商店推广卡或自动恢复功能。
