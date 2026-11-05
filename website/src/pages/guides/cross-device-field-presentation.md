@@ -5,6 +5,51 @@ description: "区分手机全任务、Watch待处理摘要、网页草稿与文�
 lang: zh
 ---
 
+<h2 id="syn-xdev-38">SYN-XDEV-38：字段子集、占位与截断核查</h2>
+
+SYNTHETIC_EXAMPLE，内存桥接/codec与源表达式，不是真实配对、同步或发送。
+
+[ZH: /samples/p17-cross-device-fields/cross-device-fields-preflight.zh.json](/samples/p17-cross-device-fields/cross-device-fields-preflight.zh.json) · [EN: /samples/p17-cross-device-fields/cross-device-fields-preflight.en.json](/samples/p17-cross-device-fields/cross-device-fields-preflight.en.json) · [Card: /samples/p17-cross-device-fields/preflight-card.md](/samples/p17-cross-device-fields/preflight-card.md)
+
+<div role="region" aria-label="合成跨端字段/缺省/裁剪核对表，可左右滚动" tabindex="0">
+
+| Case | Synthetic condition / 合成条件 | Scoped expectation / 范围内结果 | Not certified / 未证 |
+| --- | --- | --- | --- |
+| P1 | 完整tasks与Watch待处理子集不同 | {'item_count': 1, 'truncated': False, 'phone_all_count': 3} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P2 | 字段前缀已裁剪，truncated仍可false | {'item_count': 1, 'title_characters': 160, 'project_characters': 80, 'next_characters': 600, 'truncated': False} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P3 | 扩展字形前缀不等UTF8字节 | {'item_count': 1, 'title_characters': 160, 'project_characters': 80, 'next_characters': 600, 'title_utf8_greater_than_characters': True, 'truncated': False} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P4 | 显式空tasks不回退decisions | {'item_count': 0, 'phone_all_count': 0} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P5 | 缺tasks旧源回退decisions | {'item_count': 1, 'phone_all_count': 1} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P6 | trim或提及Alex可手机命中但不进Watch精确状态 | {'item_count': 0, 'phone_attention_count': 2} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P7 | nil和空id跳过，空白id不等空 | {'item_count': 1, 'first_task': ' '} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P8 | 201原事项并不保证200全传 | {'within_200_items': True, 'truncated': True} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P9 | 未到200也会因50000字节裁尾 | {'item_count_less_than_input': True, 'truncated': True, 'first_task': 'syn-0'} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P10 | 新封包时间不补缺失来源时间 | {'item_count': 1, 'source_date_missing': True, 'stale': True} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P11 | 仍有缓存显示但读取失败过期 | {'item_count': 1, 'read_failed': True, 'stale': True} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| D1 | normal | shared codec accepted=True | Host JSON codec only; not a received device packet |
+| D2 | bytes_exact | shared codec accepted=True | Host JSON codec only; not a received device packet |
+| D3 | bytes_over | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D4 | rows200 | shared codec accepted=True | Host JSON codec only; not a received device packet |
+| D5 | rows201 | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D6 | duplicate | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D7 | invalid_uuid | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D8 | uppercase_token | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D9 | missing_next | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D10 | long_title | shared codec accepted=True | Host JSON codec only; not a received device packet |
+| D11 | invalid_status | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| F1 | next=''; priority=None | label='下一步待补'; priority predicate=False | Extracted expressions, not pixels/localization/full SwiftUI |
+| F2 | next=' '; priority=' ' | label=' '; priority predicate=True | Extracted expressions, not pixels/localization/full SwiftUI |
+| F3 | next='SYNTHETIC_EXAMPLE: pending verification'; priority='P1' | label='SYNTHETIC_EXAMPLE: pending verification'; priority predicate=True | Extracted expressions, not pixels/localization/full SwiftUI |
+| F4 | next=''; priority='' | label='下一步待补'; priority predicate=False | Extracted expressions, not pixels/localization/full SwiftUI |
+| B1 | 网页草稿/文字附件非台账镜像且不附原音频 | source/manual review; runtime not_run | No carrier sync, auth or business delivery receipt |
+| B2 | queued/ready非phone草稿/网页填入/发送回执 | source/manual review; runtime not_run | No carrier sync, auth or business delivery receipt |
+| B3 | 本地指纹与canDraft标记不取代认证授权 | source/manual review; runtime not_run | No carrier sync, auth or business delivery receipt |
+| B4 | 屏幕行数/字体布局与真实配对未执行 | source/manual review; runtime not_run | No carrier sync, auth or business delivery receipt |
+
+</div>
+
+Watch title/project/next前缀为Swift字符160/80/600，非UTF8字节；字段已裁短但truncated仍可false，该旗标只覆盖行数/总字节裁尾。50000字节和200项是上限，不保证200全传。缺next字段拒解码，空串才用“下一步待补”，空白串不自动补；占位不写回源。capturedAt非sourceDate，queued/ready非草稿保存/网页填入/服务发送。网页草稿/附件不是全台账镜像，任何真实转交/目的地保存同步/授权另核，不盲补造缺字段或重发。真实配对/布局/ASR/交接全部not_run。
+
 <h2 id="first-answer">不同载体不是同一份全量副本，字段少不等于数据丢失或任务完成</h2>
 
 一呼的手机Radar、配对Watch摘要、网页草稿和分享附件有不同的数据与权限边界。Watch拿到的是手机已有待决策/验收摘要，并可裁剪；网页和附件则是用户选择交接的文字，不是手机台账镜像。跨端核对应先确认载体、来源身份和集合，再检查时间与字段，不从外观相似推断全字段同步或独立刷新。

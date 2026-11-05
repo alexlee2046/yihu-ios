@@ -2536,9 +2536,202 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/cross-device-field-presentation/
 
-场景指南 · 相关使用指南 手机、Watch、网页与附件为何字段不同？跨端简报呈现核对 本页是源码/排障参考，示例不证明商店版已包含本页全部能力。若你需要已有工作台的语音草稿入口，可查看已核 0.1.0 商店版。 先看合成简报示例 在 App Store 查看 · 0.1.0 已核美区商店，当前地区是否可获取以商店为准。安装不需 Mac 或自行签名；需你已有的工作台地址与账号，语音模型约 950 MB、按需下载。 不同载体不是同一份全量副本，字段少不等于数据丢失或任务完成 一呼的手机Radar、配对Watch摘要、网页草稿和分享附件有不同的数据与权限边界。Watch拿到的是手机已有待决策/验收摘要，并可裁剪；网页和附件则是用户选择交接的文字，不是手机台账镜像。跨端核对应先确认载体、来源身份和集合，再检查时间与字段，不从外观相似推断全字段同步或独立刷新。 与批次比较、模板改版的分工 批次比较面对同源两次导出，格式兼容面对生产者契约变化；这里比较 同一工作流程里不同载体本来就不同的呈现 。缺字段可能来自子集选择、裁剪、未提供数据或尚未交接，不能直接称作同步故障，更不能填造数据让各端看起来一样。 跨端字段与范围表 载体/字段 当前实现范围 核对方法 不可推断 手机tasks/decisions 全任务与待决策/验收子集，旧源可回退 先看来源有无tasks、界面筛选范围 子集少就代表台账没任务 Watch事项集合 配对手机提供的待处理摘要 看源时间、读取失败、手机可达性和裁剪提示 手表拥有完整台账或独立刷新源 Watch title/project/next 桥接时分别取最多160/80/600个字符前缀 回手机看完整来源，不从截断句作最终判断 每个字段都完整或字节与字符相同 Watch载荷 decode大小最多50000字节、事项最多200个，桥接可继续裁剪 结合truncated与“回手机”提示 200项保证全传、截断表示业务删除 来源/采集时间 sourceDate与capturedAt含义不同 用来源时间判断数据时效，不用封包时间替换 新封包意味着刚读源成功 目标身份 workbench/task及受保护来源/事项标记 由既有手机校验原事项，不自行构造标记 标记等同账号认证或手表直写授权 网页草稿 已选择目标里的未发送文字 核工作台/页面和具体草稿内容 自动成为Radar字段或已发送回复 文字附件 托盘暂存文字/Markdown，不附原录音 核版本和后续交接/上传阶段 全量台账镜像、原音频或自动跨端更新 这些数字是固定源码的载荷/前缀边界，不是网络吞吐、响应时间或所有设备配对成功率。前缀按Swift字符串处理，不能直接等同UTF-8字节。载荷受总大小限制，可能在200项之前就裁剪。 一个合成的字段缺口走读 手机：样例tasks有三项，其中一项等待决策。 Watch：只见这一项摘要，next文字被截短。 网页：尚未选择交接，所以没有该文字草稿。 正确解释：载体范围不同；回手机核完整来源。 不能解释：其余任务已完成、手表丢数据或网页同步失败。 样例不是本轮真机传输记录，不调用Watch、工作台或服务器。核对时保留未知与来源，只使用有权读取的最少必要信息；不要公开任务正文、源地址或内部身份标记。 核对顺序 先确认是不是同一来源/事项，再看每个载体承诺的集合与权限。随后核 sourceDate 、失败和裁剪状态；不要仅比较屏幕上显示几行。若要继续到手机或真实回复，仍走已有目标校验、忙碌守卫、手机确认及服务端授权，不能因为Watch能显示就跳过。 修改网页草稿或本地整理稿不会自动改手机源JSON，也不会保证已暂存附件更新。跨端校验只描述证据差异，不提供修复同步、字段转换或跨设备写入工具。 FAQ Watch是否应该显示手机所有tasks字段？ 不是。当前伴侣传递待处理摘要而非完整源台账，字段和数量可能裁剪，应回手机看完整来源。 next变短是否证明源文本被删了？ 不能。桥接有前缀和总载荷边界；显示裁剪不等于源被删除或更改。 capturedAt较新是否代表台账已刷新？ 不代表。封包时间与来源时间不同，手表同步可重发手机已有快照，不是独立源读取。 来源/事项标记是否授予手表直接审批？ 不能。它们用于既有目标保护检查，不取代账号/服务写权限与手机确认，本页不提供构造或绕过办法。 Markdown附件是否包含原录音和全任务？ 不能这样概括。当前笔记分享是文字或Markdown，不附原录音，也不自动成为全量台账快照。 在网页修订文字会同步改回Radar源吗？ 本页不声明这种同步。网页文字、手机源JSON和附件分别核对；没有新增双向字段同步或回写功能。 相关指南与源码 多项目Radar与Watch · 格式改版兼容 · 原文与显式交接 · 跟进证据最小化 · 开始 · 隐私 依据： Watch载荷模型 、 手机桥接与裁剪 、 README 。
+场景指南 · 相关使用指南 手机、Watch、网页与附件为何字段不同？跨端简报呈现核对 本页是源码/排障参考，示例不证明商店版已包含本页全部能力。若你需要已有工作台的语音草稿入口，可查看已核 0.1.0 商店版。 先看合成简报示例 在 App Store 查看 · 0.1.0 已核美区商店，当前地区是否可获取以商店为准。安装不需 Mac 或自行签名；需你已有的工作台地址与账号，语音模型约 950 MB、按需下载。 SYN-XDEV-38：字段子集、占位与截断核查 SYNTHETIC_EXAMPLE，内存桥接/codec与源表达式，不是真实配对、同步或发送。 ZH: /samples/p17-cross-device-fields/cross-device-fields-preflight.zh.json · EN: /samples/p17-cross-device-fields/cross-device-fields-preflight.en.json · Card: /samples/p17-cross-device-fields/preflight-card.md Case Synthetic condition / 合成条件 Scoped expectation / 范围内结果 Not certified / 未证 P1 完整tasks与Watch待处理子集不同 {‘item_count’: 1, ‘truncated’: False, ‘phone_all_count’: 3} Fake store/workbench/WCSession sink; no paired-device transfer P2 字段前缀已裁剪，truncated仍可false {‘item_count’: 1, ‘title_characters’: 160, ‘project_characters’: 80, ‘next_characters’: 600, ‘truncated’: False} Fake store/workbench/WCSession sink; no paired-device transfer P3 扩展字形前缀不等UTF8字节 {‘item_count’: 1, ‘title_characters’: 160, ‘project_characters’: 80, ‘next_characters’: 600, ‘title_utf8_greater_than_characters’: True, ‘truncated’: False} Fake store/workbench/WCSession sink; no paired-device transfer P4 显式空tasks不回退decisions {‘item_count’: 0, ‘phone_all_count’: 0} Fake store/workbench/WCSession sink; no paired-device transfer P5 缺tasks旧源回退decisions {‘item_count’: 1, ‘phone_all_count’: 1} Fake store/workbench/WCSession sink; no paired-device transfer P6 trim或提及Alex可手机命中但不进Watch精确状态 {‘item_count’: 0, ‘phone_attention_count’: 2} Fake store/workbench/WCSession sink; no paired-device transfer P7 nil和空id跳过，空白id不等空 {‘item_count’: 1, ‘first_task’: ’ ’} Fake store/workbench/WCSession sink; no paired-device transfer P8 201原事项并不保证200全传 {‘within_200_items’: True, ‘truncated’: True} Fake store/workbench/WCSession sink; no paired-device transfer P9 未到200也会因50000字节裁尾 {‘item_count_less_than_input’: True, ‘truncated’: True, ‘first_task’: ‘syn-0’} Fake store/workbench/WCSession sink; no paired-device transfer P10 新封包时间不补缺失来源时间 {‘item_count’: 1, ‘source_date_missing’: True, ‘stale’: True} Fake store/workbench/WCSession sink; no paired-device transfer P11 仍有缓存显示但读取失败过期 {‘item_count’: 1, ‘read_failed’: True, ‘stale’: True} Fake store/workbench/WCSession sink; no paired-device transfer D1 normal shared codec accepted=True Host JSON codec only; not a received device packet D2 bytes_exact shared codec accepted=True Host JSON codec only; not a received device packet D3 bytes_over shared codec accepted=False Host JSON codec only; not a received device packet D4 rows200 shared codec accepted=True Host JSON codec only; not a received device packet D5 rows201 shared codec accepted=False Host JSON codec only; not a received device packet D6 duplicate shared codec accepted=False Host JSON codec only; not a received device packet D7 invalid_uuid shared codec accepted=False Host JSON codec only; not a received device packet D8 uppercase_token shared codec accepted=False Host JSON codec only; not a received device packet D9 missing_next shared codec accepted=False Host JSON codec only; not a received device packet D10 long_title shared codec accepted=True Host JSON codec only; not a received device packet D11 invalid_status shared codec accepted=False Host JSON codec only; not a received device packet F1 next=‘’; priority=None label=‘下一步待补’; priority predicate=False Extracted expressions, not pixels/localization/full SwiftUI F2 next=’ ‘; priority=’ ’ label=’ ’; priority predicate=True Extracted expressions, not pixels/localization/full SwiftUI F3 next=‘SYNTHETIC_EXAMPLE: pending verification’; priority=‘P1’ label=‘SYNTHETIC_EXAMPLE: pending verification’; priority predicate=True Extracted expressions, not pixels/localization/full SwiftUI F4 next=‘’; priority=‘’ label=‘下一步待补’; priority predicate=False Extracted expressions, not pixels/localization/full SwiftUI B1 网页草稿/文字附件非台账镜像且不附原音频 source/manual review; runtime not_run No carrier sync, auth or business delivery receipt B2 queued/ready非phone草稿/网页填入/发送回执 source/manual review; runtime not_run No carrier sync, auth or business delivery receipt B3 本地指纹与canDraft标记不取代认证授权 source/manual review; runtime not_run No carrier sync, auth or business delivery receipt B4 屏幕行数/字体布局与真实配对未执行 source/manual review; runtime not_run No carrier sync, auth or business delivery receipt Watch title/project/next前缀为Swift字符160/80/600，非UTF8字节；字段已裁短但truncated仍可false，该旗标只覆盖行数/总字节裁尾。50000字节和200项是上限，不保证200全传。缺next字段拒解码，空串才用“下一步待补”，空白串不自动补；占位不写回源。capturedAt非sourceDate，queued/ready非草稿保存/网页填入/服务发送。网页草稿/附件不是全台账镜像，任何真实转交/目的地保存同步/授权另核，不盲补造缺字段或重发。真实配对/布局/ASR/交接全部not_run。 不同载体不是同一份全量副本，字段少不等于数据丢失或任务完成 一呼的手机Radar、配对Watch摘要、网页草稿和分享附件有不同的数据与权限边界。Watch拿到的是手机已有待决策/验收摘要，并可裁剪；网页和附件则是用户选择交接的文字，不是手机台账镜像。跨端核对应先确认载体、来源身份和集合，再检查时间与字段，不从外观相似推断全字段同步或独立刷新。 与批次比较、模板改版的分工 批次比较面对同源两次导出，格式兼容面对生产者契约变化；这里比较 同一工作流程里不同载体本来就不同的呈现 。缺字段可能来自子集选择、裁剪、未提供数据或尚未交接，不能直接称作同步故障，更不能填造数据让各端看起来一样。 跨端字段与范围表 载体/字段 当前实现范围 核对方法 不可推断 手机tasks/decisions 全任务与待决策/验收子集，旧源可回退 先看来源有无tasks、界面筛选范围 子集少就代表台账没任务 Watch事项集合 配对手机提供的待处理摘要 看源时间、读取失败、手机可达性和裁剪提示 手表拥有完整台账或独立刷新源 Watch title/project/next 桥接时分别取最多160/80/600个字符前缀 回手机看完整来源，不从截断句作最终判断 每个字段都完整或字节与字符相同 Watch载荷 decode大小最多50000字节、事项最多200个，桥接可继续裁剪 结合truncated与“回手机”提示 200项保证全传、截断表示业务删除 来源/采集时间 sourceDate与capturedAt含义不同 用来源时间判断数据时效，不用封包时间替换 新封包意味着刚读源成功 目标身份 workbench/task及受保护来源/事项标记 由既有手机校验原事项，不自行构造标记 标记等同账号认证或手表直写授权 网页草稿 已选择目标里的未发送文字 核工作台/页面和具体草稿内容 自动成为Radar字段或已发送回复 文字附件 托盘暂存文字/Markdown，不附原录音 核版本和后续交接/上传阶段 全量台账镜像、原音频或自动跨端更新 这些数字是固定源码的载荷/前缀边界，不是网络吞吐、响应时间或所有设备配对成功率。前缀按Swift字符串处理，不能直接等同UTF-8字节。载荷受总大小限制，可能在200项之前就裁剪。 一个合成的字段缺口走读 手机：样例tasks有三项，其中一项等待决策。 Watch：只见这一项摘要，next文字被截短。 网页：尚未选择交接，所以没有该文字草稿。 正确解释：载体范围不同；回手机核完整来源。 不能解释：其余任务已完成、手表丢数据或网页同步失败。 样例不是本轮真机传输记录，不调用Watch、工作台或服务器。核对时保留未知与来源，只使用有权读取的最少必要信息；不要公开任务正文、源地址或内部身份标记。 核对顺序 先确认是不是同一来源/事项，再看每个载体承诺的集合与权限。随后核 sourceDate 、失败和裁剪状态；不要仅比较屏幕上显示几行。若要继续到手机或真实回复，仍走已有目标校验、忙碌守卫、手机确认及服务端授权，不能因为Watch能显示就跳过。 修改网页草稿或本地整理稿不会自动改手机源JSON，也不会保证已暂存附件更新。跨端校验只描述证据差异，不提供修复同步、字段转换或跨设备写入工具。 FAQ Watch是否应该显示手机所有tasks字段？ 不是。当前伴侣传递待处理摘要而非完整源台账，字段和数量可能裁剪，应回手机看完整来源。 next变短是否证明源文本被删了？ 不能。桥接有前缀和总载荷边界；显示裁剪不等于源被删除或更改。 capturedAt较新是否代表台账已刷新？ 不代表。封包时间与来源时间不同，手表同步可重发手机已有快照，不是独立源读取。 来源/事项标记是否授予手表直接审批？ 不能。它们用于既有目标保护检查，不取代账号/服务写权限与手机确认，本页不提供构造或绕过办法。 Markdown附件是否包含原录音和全任务？ 不能这样概括。当前笔记分享是文字或Markdown，不附原录音，也不自动成为全量台账快照。 在网页修订文字会同步改回Radar源吗？ 本页不声明这种同步。网页文字、手机源JSON和附件分别核对；没有新增双向字段同步或回写功能。 相关指南与源码 多项目Radar与Watch · 格式改版兼容 · 原文与显式交接 · 跟进证据最小化 · 开始 · 隐私 依据： Watch载荷模型 、 手机桥接与裁剪 、 README 。
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Synthetic condition / 合成条件</th>
+<th>Scoped expectation / 范围内结果</th>
+<th>Not certified / 未证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>完整tasks与Watch待处理子集不同</td>
+<td>{‘item_count’: 1, ‘truncated’: False, ‘phone_all_count’: 3}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>字段前缀已裁剪，truncated仍可false</td>
+<td>{‘item_count’: 1, ‘title_characters’: 160, ‘project_characters’: 80, ‘next_characters’: 600, ‘truncated’: False}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>扩展字形前缀不等UTF8字节</td>
+<td>{‘item_count’: 1, ‘title_characters’: 160, ‘project_characters’: 80, ‘next_characters’: 600, ‘title_utf8_greater_than_characters’: True, ‘truncated’: False}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>显式空tasks不回退decisions</td>
+<td>{‘item_count’: 0, ‘phone_all_count’: 0}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P5</td>
+<td>缺tasks旧源回退decisions</td>
+<td>{‘item_count’: 1, ‘phone_all_count’: 1}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P6</td>
+<td>trim或提及Alex可手机命中但不进Watch精确状态</td>
+<td>{‘item_count’: 0, ‘phone_attention_count’: 2}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P7</td>
+<td>nil和空id跳过，空白id不等空</td>
+<td>{‘item_count’: 1, ‘first_task’: ’ ’}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P8</td>
+<td>201原事项并不保证200全传</td>
+<td>{‘within_200_items’: True, ‘truncated’: True}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P9</td>
+<td>未到200也会因50000字节裁尾</td>
+<td>{‘item_count_less_than_input’: True, ‘truncated’: True, ‘first_task’: ‘syn-0’}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P10</td>
+<td>新封包时间不补缺失来源时间</td>
+<td>{‘item_count’: 1, ‘source_date_missing’: True, ‘stale’: True}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P11</td>
+<td>仍有缓存显示但读取失败过期</td>
+<td>{‘item_count’: 1, ‘read_failed’: True, ‘stale’: True}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>D1</td>
+<td>normal</td>
+<td>shared codec accepted=True</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>bytes_exact</td>
+<td>shared codec accepted=True</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>bytes_over</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>rows200</td>
+<td>shared codec accepted=True</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>rows201</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>duplicate</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>invalid_uuid</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>uppercase_token</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D9</td>
+<td>missing_next</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D10</td>
+<td>long_title</td>
+<td>shared codec accepted=True</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>invalid_status</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>next=‘’; priority=None</td>
+<td>label=‘下一步待补’; priority predicate=False</td>
+<td>Extracted expressions, not pixels/localization/full SwiftUI</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>next=’ ‘; priority=’ ’</td>
+<td>label=’ ’; priority predicate=True</td>
+<td>Extracted expressions, not pixels/localization/full SwiftUI</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>next=‘SYNTHETIC_EXAMPLE: pending verification’; priority=‘P1’</td>
+<td>label=‘SYNTHETIC_EXAMPLE: pending verification’; priority predicate=True</td>
+<td>Extracted expressions, not pixels/localization/full SwiftUI</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>next=‘’; priority=‘’</td>
+<td>label=‘下一步待补’; priority predicate=False</td>
+<td>Extracted expressions, not pixels/localization/full SwiftUI</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>网页草稿/文字附件非台账镜像且不附原音频</td>
+<td>source/manual review; runtime not_run</td>
+<td>No carrier sync, auth or business delivery receipt</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>queued/ready非phone草稿/网页填入/发送回执</td>
+<td>source/manual review; runtime not_run</td>
+<td>No carrier sync, auth or business delivery receipt</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>本地指纹与canDraft标记不取代认证授权</td>
+<td>source/manual review; runtime not_run</td>
+<td>No carrier sync, auth or business delivery receipt</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>屏幕行数/字体布局与真实配对未执行</td>
+<td>source/manual review; runtime not_run</td>
+<td>No carrier sync, auth or business delivery receipt</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -2605,9 +2798,202 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/cross-device-field-presentation/
 
-All scenarios · Related practical guide Why fields differ across phone, Watch, web and attachments Different carriers are not full replicas; fewer fields do not prove loss or completion Phone Radar, paired Watch summaries, web drafts and share attachments have different data/permission boundaries. Watch receives the phone’s existing pending decision/acceptance summaries and may truncate them. Web drafts/attachments contain selected text, not a phone-ledger mirror. Start with carrier, source identity and collection, then compare time/fields. Similar appearance is not full synchronization or independent refresh. Separate from batches and format revisions Batch comparison inspects two exports from a source; compatibility review inspects producer changes. Here different carriers in one workflow intentionally present different scopes . Missing fields may reflect selection, truncation, absent data or no handoff, rather than sync failure. Do not fabricate values to make screens agree. Cross-device field and scope matrix Carrier/field Current scope Check Do not infer Phone tasks/decisions Ledger versus pending subset; legacy fallback Whether tasks exists and current view/filter scope Few pending items means few ledger tasks Watch items Paired-phone pending summaries Source time, read failures, reachability and truncation Full ledger or independent source refresh Watch title/project/next Bridge prefixes up to 160/80/600 characters Return to phone for full text before deciding Every field complete or characters equal bytes Watch payload Decode limit 50000 bytes and 200 items; bridge can trim further Inspect truncated/more-on-phone signals Guaranteed delivery of 200 items or deletion implied by trimming Source/capture time sourceDate differs from capturedAt Judge freshness using source time Fresh packaging proves a new successful source read Target identity workbench/task and protected source/item markers Existing phone checks resolve originals Markers are account authentication or direct Watch-write authority Web draft Selected text in an unsent destination Actual workbench/page/draft contents Automatic Radar field update or a sent reply Text attachment Tray text/Markdown, without original audio Actual version and later handoff/upload stage Full ledger/audio replica or automatic cross-device updating These are source-level payload/prefix limits, not bandwidth, latency or universal pairing-success results. Swift string prefixes are not UTF-8 byte counts. Total payload size can require trimming before 200 items. A synthetic missing-field comparison Phone: Three sample tasks; one awaits a decision. Watch: Only that pending summary appears, with shortened next text. Web: No handoff selected, so no matching draft exists. Interpretation: Carrier scopes differ; check complete source on the phone. Not established: Other tasks completed, Watch lost data or web synchronization failed. This is not an actual paired-device trace. It calls no Watch, workbench or server. Preserve unknowns/provenance and minimize private material; do not publish task text, feed addresses or protected identity markers. Review order Establish the same source/item first, then each carrier’s collection and permission scope. Inspect sourceDate , failure and truncation rather than counting display rows. Continuing on the phone or replying still requires target/busy checks, phone confirmation and server authority; Watch visibility cannot bypass them. Editing a web/local draft does not automatically update source JSON or staged attachments. This comparison adds no sync repair, field converter or cross-device write tool. FAQ Should Watch display every phone tasks field? No. It carries pending summaries rather than the full source ledger, with possible field/count truncation. Return to the phone for full context. Does shortened next prove deleted source text? No. Prefix and total-size limits can shorten presentation without deleting or changing the original. Does a recent capturedAt establish a refreshed ledger? No. Packaging and source time differ. Sync can republish an existing phone snapshot without an independent source read. Do source/item markers permit standalone Watch approval? No. They protect target checks, not account/server write authority or phone confirmation. This page offers no marker construction/bypass method. Does Markdown contain original audio and all tasks? Not as a general statement. Current note sharing is text/Markdown without original audio, not automatically a ledger snapshot. Does editing a web draft write back to Radar? No such sync is asserted. Check web text, phone source JSON and attachments separately. No bidirectional field sync/writeback is added. Guides and source Radar/Watch · Format compatibility · Originals and handoff · Follow-up evidence minimization · Start · Privacy Evidence: Watch payload model , phone bridge/trimming , README .
+All scenarios · Related practical guide Why fields differ across phone, Watch, web and attachments SYN-XDEV-38: field subsets, defaults and clipping SYNTHETIC_EXAMPLE: memory bridge/codec and source expressions, not real pairing, sync or delivery. ZH: /samples/p17-cross-device-fields/cross-device-fields-preflight.zh.json · EN: /samples/p17-cross-device-fields/cross-device-fields-preflight.en.json · Card: /samples/p17-cross-device-fields/preflight-card.md Case Synthetic condition / 合成条件 Scoped expectation / 范围内结果 Not certified / 未证 P1 Full phone tasks differ from Watch pending subset {‘item_count’: 1, ‘truncated’: False, ‘phone_all_count’: 3} Fake store/workbench/WCSession sink; no paired-device transfer P2 Field prefixes clipped while truncated flag remains false {‘item_count’: 1, ‘title_characters’: 160, ‘project_characters’: 80, ‘next_characters’: 600, ‘truncated’: False} Fake store/workbench/WCSession sink; no paired-device transfer P3 Extended-grapheme prefix is not UTF8 bytes {‘item_count’: 1, ‘title_characters’: 160, ‘project_characters’: 80, ‘next_characters’: 600, ‘title_utf8_greater_than_characters’: True, ‘truncated’: False} Fake store/workbench/WCSession sink; no paired-device transfer P4 Explicit empty tasks does not fall back to decisions {‘item_count’: 0, ‘phone_all_count’: 0} Fake store/workbench/WCSession sink; no paired-device transfer P5 Missing legacy tasks falls back to decisions {‘item_count’: 1, ‘phone_all_count’: 1} Fake store/workbench/WCSession sink; no paired-device transfer P6 Trim/mention attention differs from exact Watch status {‘item_count’: 0, ‘phone_attention_count’: 2} Fake store/workbench/WCSession sink; no paired-device transfer P7 Nil/empty IDs skipped; whitespace ID is not empty {‘item_count’: 1, ‘first_task’: ’ ’} Fake store/workbench/WCSession sink; no paired-device transfer P8 201 source rows do not guarantee200 transmitted {‘within_200_items’: True, ‘truncated’: True} Fake store/workbench/WCSession sink; no paired-device transfer P9 Byte budget trims before200 and preserves prefix order {‘item_count_less_than_input’: True, ‘truncated’: True, ‘first_task’: ‘syn-0’} Fake store/workbench/WCSession sink; no paired-device transfer P10 New capturedAt cannot fill missing sourceDate {‘item_count’: 1, ‘source_date_missing’: True, ‘stale’: True} Fake store/workbench/WCSession sink; no paired-device transfer P11 Cached display with read failure is stale {‘item_count’: 1, ‘read_failed’: True, ‘stale’: True} Fake store/workbench/WCSession sink; no paired-device transfer D1 normal shared codec accepted=True Host JSON codec only; not a received device packet D2 bytes_exact shared codec accepted=True Host JSON codec only; not a received device packet D3 bytes_over shared codec accepted=False Host JSON codec only; not a received device packet D4 rows200 shared codec accepted=True Host JSON codec only; not a received device packet D5 rows201 shared codec accepted=False Host JSON codec only; not a received device packet D6 duplicate shared codec accepted=False Host JSON codec only; not a received device packet D7 invalid_uuid shared codec accepted=False Host JSON codec only; not a received device packet D8 uppercase_token shared codec accepted=False Host JSON codec only; not a received device packet D9 missing_next shared codec accepted=False Host JSON codec only; not a received device packet D10 long_title shared codec accepted=True Host JSON codec only; not a received device packet D11 invalid_status shared codec accepted=False Host JSON codec only; not a received device packet F1 next=‘’; priority=None label=‘下一步待补’; priority predicate=False Extracted expressions, not pixels/localization/full SwiftUI F2 next=’ ‘; priority=’ ’ label=’ ’; priority predicate=True Extracted expressions, not pixels/localization/full SwiftUI F3 next=‘SYNTHETIC_EXAMPLE: pending verification’; priority=‘P1’ label=‘SYNTHETIC_EXAMPLE: pending verification’; priority predicate=True Extracted expressions, not pixels/localization/full SwiftUI F4 next=‘’; priority=‘’ label=‘下一步待补’; priority predicate=False Extracted expressions, not pixels/localization/full SwiftUI B1 Web draft/text attachment is not ledger mirror or original audio source/manual review; runtime not_run No carrier sync, auth or business delivery receipt B2 queued/ready is not phone draft/web insertion/send receipt source/manual review; runtime not_run No carrier sync, auth or business delivery receipt B3 Local fingerprints/canDraft do not replace authentication/authorization source/manual review; runtime not_run No carrier sync, auth or business delivery receipt B4 Screen line wrapping/layout and real pairing not executed source/manual review; runtime not_run No carrier sync, auth or business delivery receipt Watch title/project/next use160/80/600 Swift characters, not UTF8 bytes. Field clipping may coexist with truncated=false; that flag covers row/byte pruning, not every prefix.50000 bytes/200 items are upper bounds, not200 guaranteed transmitted. Missing required next rejects decode; empty string uses the placeholder, whitespace is not auto-filled and no source is rewritten. capturedAt is not sourceDate; queued/ready is not draft persistence/web insertion/server send. Web drafts/attachments are not full-ledger mirrors. Verify destination storage/sync and authorization separately; do not invent absent fields or blindly resend. Real pairing/layout/ASR/handoff are all not_run. Different carriers are not full replicas; fewer fields do not prove loss or completion Phone Radar, paired Watch summaries, web drafts and share attachments have different data/permission boundaries. Watch receives the phone’s existing pending decision/acceptance summaries and may truncate them. Web drafts/attachments contain selected text, not a phone-ledger mirror. Start with carrier, source identity and collection, then compare time/fields. Similar appearance is not full synchronization or independent refresh. Separate from batches and format revisions Batch comparison inspects two exports from a source; compatibility review inspects producer changes. Here different carriers in one workflow intentionally present different scopes . Missing fields may reflect selection, truncation, absent data or no handoff, rather than sync failure. Do not fabricate values to make screens agree. Cross-device field and scope matrix Carrier/field Current scope Check Do not infer Phone tasks/decisions Ledger versus pending subset; legacy fallback Whether tasks exists and current view/filter scope Few pending items means few ledger tasks Watch items Paired-phone pending summaries Source time, read failures, reachability and truncation Full ledger or independent source refresh Watch title/project/next Bridge prefixes up to 160/80/600 characters Return to phone for full text before deciding Every field complete or characters equal bytes Watch payload Decode limit 50000 bytes and 200 items; bridge can trim further Inspect truncated/more-on-phone signals Guaranteed delivery of 200 items or deletion implied by trimming Source/capture time sourceDate differs from capturedAt Judge freshness using source time Fresh packaging proves a new successful source read Target identity workbench/task and protected source/item markers Existing phone checks resolve originals Markers are account authentication or direct Watch-write authority Web draft Selected text in an unsent destination Actual workbench/page/draft contents Automatic Radar field update or a sent reply Text attachment Tray text/Markdown, without original audio Actual version and later handoff/upload stage Full ledger/audio replica or automatic cross-device updating These are source-level payload/prefix limits, not bandwidth, latency or universal pairing-success results. Swift string prefixes are not UTF-8 byte counts. Total payload size can require trimming before 200 items. A synthetic missing-field comparison Phone: Three sample tasks; one awaits a decision. Watch: Only that pending summary appears, with shortened next text. Web: No handoff selected, so no matching draft exists. Interpretation: Carrier scopes differ; check complete source on the phone. Not established: Other tasks completed, Watch lost data or web synchronization failed. This is not an actual paired-device trace. It calls no Watch, workbench or server. Preserve unknowns/provenance and minimize private material; do not publish task text, feed addresses or protected identity markers. Review order Establish the same source/item first, then each carrier’s collection and permission scope. Inspect sourceDate , failure and truncation rather than counting display rows. Continuing on the phone or replying still requires target/busy checks, phone confirmation and server authority; Watch visibility cannot bypass them. Editing a web/local draft does not automatically update source JSON or staged attachments. This comparison adds no sync repair, field converter or cross-device write tool. FAQ Should Watch display every phone tasks field? No. It carries pending summaries rather than the full source ledger, with possible field/count truncation. Return to the phone for full context. Does shortened next prove deleted source text? No. Prefix and total-size limits can shorten presentation without deleting or changing the original. Does a recent capturedAt establish a refreshed ledger? No. Packaging and source time differ. Sync can republish an existing phone snapshot without an independent source read. Do source/item markers permit standalone Watch approval? No. They protect target checks, not account/server write authority or phone confirmation. This page offers no marker construction/bypass method. Does Markdown contain original audio and all tasks? Not as a general statement. Current note sharing is text/Markdown without original audio, not automatically a ledger snapshot. Does editing a web draft write back to Radar? No such sync is asserted. Check web text, phone source JSON and attachments separately. No bidirectional field sync/writeback is added. Guides and source Radar/Watch · Format compatibility · Originals and handoff · Follow-up evidence minimization · Start · Privacy Evidence: Watch payload model , phone bridge/trimming , README .
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Synthetic condition / 合成条件</th>
+<th>Scoped expectation / 范围内结果</th>
+<th>Not certified / 未证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>Full phone tasks differ from Watch pending subset</td>
+<td>{‘item_count’: 1, ‘truncated’: False, ‘phone_all_count’: 3}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Field prefixes clipped while truncated flag remains false</td>
+<td>{‘item_count’: 1, ‘title_characters’: 160, ‘project_characters’: 80, ‘next_characters’: 600, ‘truncated’: False}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>Extended-grapheme prefix is not UTF8 bytes</td>
+<td>{‘item_count’: 1, ‘title_characters’: 160, ‘project_characters’: 80, ‘next_characters’: 600, ‘title_utf8_greater_than_characters’: True, ‘truncated’: False}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>Explicit empty tasks does not fall back to decisions</td>
+<td>{‘item_count’: 0, ‘phone_all_count’: 0}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P5</td>
+<td>Missing legacy tasks falls back to decisions</td>
+<td>{‘item_count’: 1, ‘phone_all_count’: 1}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P6</td>
+<td>Trim/mention attention differs from exact Watch status</td>
+<td>{‘item_count’: 0, ‘phone_attention_count’: 2}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P7</td>
+<td>Nil/empty IDs skipped; whitespace ID is not empty</td>
+<td>{‘item_count’: 1, ‘first_task’: ’ ’}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P8</td>
+<td>201 source rows do not guarantee200 transmitted</td>
+<td>{‘within_200_items’: True, ‘truncated’: True}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P9</td>
+<td>Byte budget trims before200 and preserves prefix order</td>
+<td>{‘item_count_less_than_input’: True, ‘truncated’: True, ‘first_task’: ‘syn-0’}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P10</td>
+<td>New capturedAt cannot fill missing sourceDate</td>
+<td>{‘item_count’: 1, ‘source_date_missing’: True, ‘stale’: True}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>P11</td>
+<td>Cached display with read failure is stale</td>
+<td>{‘item_count’: 1, ‘read_failed’: True, ‘stale’: True}</td>
+<td>Fake store/workbench/WCSession sink; no paired-device transfer</td>
+</tr>
+<tr>
+<td>D1</td>
+<td>normal</td>
+<td>shared codec accepted=True</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>bytes_exact</td>
+<td>shared codec accepted=True</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>bytes_over</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>rows200</td>
+<td>shared codec accepted=True</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>rows201</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>duplicate</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>invalid_uuid</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>uppercase_token</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D9</td>
+<td>missing_next</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D10</td>
+<td>long_title</td>
+<td>shared codec accepted=True</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>invalid_status</td>
+<td>shared codec accepted=False</td>
+<td>Host JSON codec only; not a received device packet</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>next=‘’; priority=None</td>
+<td>label=‘下一步待补’; priority predicate=False</td>
+<td>Extracted expressions, not pixels/localization/full SwiftUI</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>next=’ ‘; priority=’ ’</td>
+<td>label=’ ’; priority predicate=True</td>
+<td>Extracted expressions, not pixels/localization/full SwiftUI</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>next=‘SYNTHETIC_EXAMPLE: pending verification’; priority=‘P1’</td>
+<td>label=‘SYNTHETIC_EXAMPLE: pending verification’; priority predicate=True</td>
+<td>Extracted expressions, not pixels/localization/full SwiftUI</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>next=‘’; priority=‘’</td>
+<td>label=‘下一步待补’; priority predicate=False</td>
+<td>Extracted expressions, not pixels/localization/full SwiftUI</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>Web draft/text attachment is not ledger mirror or original audio</td>
+<td>source/manual review; runtime not_run</td>
+<td>No carrier sync, auth or business delivery receipt</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>queued/ready is not phone draft/web insertion/send receipt</td>
+<td>source/manual review; runtime not_run</td>
+<td>No carrier sync, auth or business delivery receipt</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>Local fingerprints/canDraft do not replace authentication/authorization</td>
+<td>source/manual review; runtime not_run</td>
+<td>No carrier sync, auth or business delivery receipt</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>Screen line wrapping/layout and real pairing not executed</td>
+<td>source/manual review; runtime not_run</td>
+<td>No carrier sync, auth or business delivery receipt</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>

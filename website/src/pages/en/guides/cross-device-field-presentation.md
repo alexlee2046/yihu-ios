@@ -5,6 +5,51 @@ description: "Compare phone ledgers, Watch pending summaries, web drafts and tex
 lang: en
 ---
 
+<h2 id="syn-xdev-38">SYN-XDEV-38: field subsets, defaults and clipping</h2>
+
+SYNTHETIC_EXAMPLE: memory bridge/codec and source expressions, not real pairing, sync or delivery.
+
+[ZH: /samples/p17-cross-device-fields/cross-device-fields-preflight.zh.json](/samples/p17-cross-device-fields/cross-device-fields-preflight.zh.json) · [EN: /samples/p17-cross-device-fields/cross-device-fields-preflight.en.json](/samples/p17-cross-device-fields/cross-device-fields-preflight.en.json) · [Card: /samples/p17-cross-device-fields/preflight-card.md](/samples/p17-cross-device-fields/preflight-card.md)
+
+<div role="region" aria-label="Synthetic cross-device fields, defaults and clipping table; horizontally scrollable" tabindex="0">
+
+| Case | Synthetic condition / 合成条件 | Scoped expectation / 范围内结果 | Not certified / 未证 |
+| --- | --- | --- | --- |
+| P1 | Full phone tasks differ from Watch pending subset | {'item_count': 1, 'truncated': False, 'phone_all_count': 3} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P2 | Field prefixes clipped while truncated flag remains false | {'item_count': 1, 'title_characters': 160, 'project_characters': 80, 'next_characters': 600, 'truncated': False} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P3 | Extended-grapheme prefix is not UTF8 bytes | {'item_count': 1, 'title_characters': 160, 'project_characters': 80, 'next_characters': 600, 'title_utf8_greater_than_characters': True, 'truncated': False} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P4 | Explicit empty tasks does not fall back to decisions | {'item_count': 0, 'phone_all_count': 0} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P5 | Missing legacy tasks falls back to decisions | {'item_count': 1, 'phone_all_count': 1} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P6 | Trim/mention attention differs from exact Watch status | {'item_count': 0, 'phone_attention_count': 2} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P7 | Nil/empty IDs skipped; whitespace ID is not empty | {'item_count': 1, 'first_task': ' '} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P8 | 201 source rows do not guarantee200 transmitted | {'within_200_items': True, 'truncated': True} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P9 | Byte budget trims before200 and preserves prefix order | {'item_count_less_than_input': True, 'truncated': True, 'first_task': 'syn-0'} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P10 | New capturedAt cannot fill missing sourceDate | {'item_count': 1, 'source_date_missing': True, 'stale': True} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| P11 | Cached display with read failure is stale | {'item_count': 1, 'read_failed': True, 'stale': True} | Fake store/workbench/WCSession sink; no paired-device transfer |
+| D1 | normal | shared codec accepted=True | Host JSON codec only; not a received device packet |
+| D2 | bytes_exact | shared codec accepted=True | Host JSON codec only; not a received device packet |
+| D3 | bytes_over | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D4 | rows200 | shared codec accepted=True | Host JSON codec only; not a received device packet |
+| D5 | rows201 | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D6 | duplicate | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D7 | invalid_uuid | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D8 | uppercase_token | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D9 | missing_next | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| D10 | long_title | shared codec accepted=True | Host JSON codec only; not a received device packet |
+| D11 | invalid_status | shared codec accepted=False | Host JSON codec only; not a received device packet |
+| F1 | next=''; priority=None | label='下一步待补'; priority predicate=False | Extracted expressions, not pixels/localization/full SwiftUI |
+| F2 | next=' '; priority=' ' | label=' '; priority predicate=True | Extracted expressions, not pixels/localization/full SwiftUI |
+| F3 | next='SYNTHETIC_EXAMPLE: pending verification'; priority='P1' | label='SYNTHETIC_EXAMPLE: pending verification'; priority predicate=True | Extracted expressions, not pixels/localization/full SwiftUI |
+| F4 | next=''; priority='' | label='下一步待补'; priority predicate=False | Extracted expressions, not pixels/localization/full SwiftUI |
+| B1 | Web draft/text attachment is not ledger mirror or original audio | source/manual review; runtime not_run | No carrier sync, auth or business delivery receipt |
+| B2 | queued/ready is not phone draft/web insertion/send receipt | source/manual review; runtime not_run | No carrier sync, auth or business delivery receipt |
+| B3 | Local fingerprints/canDraft do not replace authentication/authorization | source/manual review; runtime not_run | No carrier sync, auth or business delivery receipt |
+| B4 | Screen line wrapping/layout and real pairing not executed | source/manual review; runtime not_run | No carrier sync, auth or business delivery receipt |
+
+</div>
+
+Watch title/project/next use160/80/600 Swift characters, not UTF8 bytes. Field clipping may coexist with truncated=false; that flag covers row/byte pruning, not every prefix.50000 bytes/200 items are upper bounds, not200 guaranteed transmitted. Missing required next rejects decode; empty string uses the placeholder, whitespace is not auto-filled and no source is rewritten. capturedAt is not sourceDate; queued/ready is not draft persistence/web insertion/server send. Web drafts/attachments are not full-ledger mirrors. Verify destination storage/sync and authorization separately; do not invent absent fields or blindly resend. Real pairing/layout/ASR/handoff are all not_run.
+
 <h2 id="first-answer">Different carriers are not full replicas; fewer fields do not prove loss or completion</h2>
 
 Phone Radar, paired Watch summaries, web drafts and share attachments have different data/permission boundaries. Watch receives the phone's existing pending decision/acceptance summaries and may truncate them. Web drafts/attachments contain selected text, not a phone-ledger mirror. Start with carrier, source identity and collection, then compare time/fields. Similar appearance is not full synchronization or independent refresh.

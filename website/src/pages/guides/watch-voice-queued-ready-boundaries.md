@@ -66,3 +66,7 @@ receiveVoice可对新请求、同请求或缓存复用回queued；不能仅据�
 [跨端字段](/guides/cross-device-field-presentation/) · [PCM门](/guides/pcm-format-admission-review/) · [phone草稿](/guides/reply-draft-restoration-scope/) · [声纹界限](/guides/voiceprint-filter-not-authorization/) · [开始](/start/) · [隐私](/privacy/)
 
 [receiveVoice/缓存/回送](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieWatchPhoneBridge.swift) · [transcribeWatchAudio前台与回调边界](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceController.swift)
+
+## SYN-XDEV-38技术转接（仍退休）
+
+queued接纳/缓存确认、ready转写结果、phone草稿保存、网页填入和服务提交是不同阶段；展示文字或本地指纹不等认证/写授权。[同语跨端字段核查](/guides/cross-device-field-presentation/)区分集合、占位、字符前缀与字节/行数裁尾，不造全字段同步/恢复保证。此页保indexable: false/noindex,follow，不入sitemap/LLM独立section，不增下载/Store卡。SYNTHETIC_EXAMPLE非真实Watch录音/配对/转写/发送，保原失败与未知，不盲重试。
