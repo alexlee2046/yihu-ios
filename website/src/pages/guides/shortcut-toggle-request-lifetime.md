@@ -66,3 +66,7 @@ ToggleVoiceInputIntent设置pendingToggle并请求打开App，真正开始或结
 [权限样本](/guides/microphone-permission-sample-contract/) · [忙态准入](/guides/audio-busy-state-admission/) · [前台重绑](/guides/foreground-audio-rebind-preflight/) · [开始](/start/) · [隐私](/privacy/)
 
 [Intent/30秒/一次消费](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceShortcuts.swift) · [runPendingShortcut](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift) · [实际采集/交接状态](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceController.swift)
+
+## SYN-REBIND-36技术转接（仍退休）
+
+请求30秒含端点、一次消费与Bool覆盖不是响应保证、后台开麦许可或N次队列。系统意图返回不等设备采集/输入目标已成功；[同语前台切回核查](/guides/foreground-audio-rebind-preflight/)把许可弹窗inactive、真正background、当前请求/输入与缓冲不确定边界分开。此页保持indexable: false/noindex,follow，不入sitemap或LLM独立出口，不增下载/Store卡。SYNTHETIC_EXAMPLE只供自检，真实系统入口和锁屏录音未测，不抹历史副作用。

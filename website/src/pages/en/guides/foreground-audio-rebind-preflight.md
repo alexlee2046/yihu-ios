@@ -5,6 +5,49 @@ description: "Separate permission-dialog inactive, true background, short-speech
 lang: en
 ---
 
+<h2 id="syn-rebind-36">SYN-REBIND-36: foreground return, port drift and buffer review</h2>
+
+SYNTHETIC_EXAMPLE. Source methods and memory self-checks only, not device logs/import schema. Active is not seamless rebind or background recording.
+
+[ZH: /samples/p15-foreground-rebind/foreground-rebind-preflight.zh.json](/samples/p15-foreground-rebind/foreground-rebind-preflight.zh.json) · [EN: /samples/p15-foreground-rebind/foreground-rebind-preflight.en.json](/samples/p15-foreground-rebind/foreground-rebind-preflight.en.json) · [Card: /samples/p15-foreground-rebind/preflight-card.md](/samples/p15-foreground-rebind/preflight-card.md)
+
+<div role="region" aria-label="Synthetic foreground request and input checks; horizontally scrollable" tabindex="0">
+
+| Case | Synthetic condition / 合成条件 | Scoped expectation / 范围内结果 | Not certified / 未证 |
+| --- | --- | --- | --- |
+| L1 | Consent-sheet inactive retains preparing request | phase=preparing; session_changed=false; cancel/start=0/0 | Memory spy only; no real permission/capture/handoff |
+| L2 | Real background invalidates old request; late grant cannot revive it | phase=failed; session_changed=true; cancel/start=1/0 | Memory spy only; no real permission/capture/handoff |
+| L3 | Inactive without permission request cancels preparing | phase=failed; session_changed=true; cancel/start=1/0 | Memory spy only; no real permission/capture/handoff |
+| L4 | Recording is cancelled on background, not promised continuous | phase=failed; session_changed=true; cancel/start=1/0 | Memory spy only; no real permission/capture/handoff |
+| L5 | Leaving active cancels transcription, not existing side effects | phase=failed; session_changed=true; cancel/start=1/0 | Memory spy only; no real permission/capture/handoff |
+| L6 | Ready with empty-string pending retains it, no automatic handoff | phase=ready; session_changed=false; cancel/start=0/0 | Memory spy only; no real permission/capture/handoff |
+| L7 | Delivering is outside canCancel; no rollback assertion | phase=delivering; session_changed=false; cancel/start=0/0 | Memory spy only; no real permission/capture/handoff |
+| L8 | Active callback while foreground predicate false cannot start | phase=preparing; session_changed=false; cancel/start=0/0 | Memory spy only; no real permission/capture/handoff |
+| L9 | Permission plus foreground plus preparing calls memory recorder spy | phase=recording; session_changed=false; cancel/start=0/1 | Memory spy only; no real permission/capture/handoff |
+| L10 | Memory start throw fails; no forced rebind | phase=failed; session_changed=false; cancel/start=0/1 | Memory spy only; no real permission/capture/handoff |
+| S1 | request_ms=[]; consume_ms=[0] | consume=[False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
+| S2 | request_ms=[0]; consume_ms=[29999] | consume=[True]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
+| S3 | request_ms=[0]; consume_ms=[30000, 30001] | consume=[True, False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
+| S4 | request_ms=[0]; consume_ms=[30001] | consume=[False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
+| S5 | request_ms=[0, 25000]; consume_ms=[50000, 50001] | consume=[True, False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
+| S6 | request_ms=[0]; consume_ms=[31000, 31000] | consume=[False, False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
+| S7 | request_ms=[0, 1, 2]; consume_ms=[3, 4, 5] | consume=[True, False, False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
+| F1 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False}; inputs=['port-A', 'port-B'] | same format=True; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
+| F2 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False}; inputs=['port-B', 'port-A'] | same format=True; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
+| F3 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False}; inputs=['port-C'] | same format=True; same sorted UIDs=False | Fake formats/ports; no physical route or real PCM |
+| F4 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 44100, 'channels': 1, 'common_format': 1, 'interleaved': False}; inputs=['port-A', 'port-B'] | same format=False; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
+| F5 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 2, 'common_format': 1, 'interleaved': False}; inputs=['port-A', 'port-B'] | same format=False; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
+| F6 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 1, 'common_format': 3, 'interleaved': False}; inputs=['port-A', 'port-B'] | same format=False; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
+| F7 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': True}; inputs=['port-A', 'port-B'] | same format=False; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
+| B1 | foreground callback alone | startCaptureIfReady + prewarm; not direct engine recovery | Source read only; runtime not_run |
+| B2 | current-token engine-change recovery with unchanged format | source keeps converter/PCM, reinstalls tap; conditional source path, no no-loss guarantee | Source read only; runtime not_run |
+| B3 | changed native format or configure/start throw | source fails pipeline, clears recordingActive and stops engine; no padding/relabel fix | Source read only; runtime not_run |
+| B4 | input UID drift even with equal format | source route comparison is false; route notifications and expected-recovery suppression have independent guards | Source read only; runtime not_run |
+
+</div>
+
+Consent-sheet inactive is not real background. The inclusive30s request lifetime is not a response SLA; a refreshed Bool is not an N-item queue. Sorted input UIDs ignore ordering, not port drift; equal native format fields do not certify intact hardware buffers. Conditional source recovery is separate from actual samples, drafts and delivery receipts. Preserve failures, do not blindly rerecord/resend. Store0.1.0 needs no Mac/self-signing; bring your own trusted workspace and verify model/permission/destination, which may save/sync/auto-process content. Real scene/input/ASR/insertion/send/lockscreen recording are all not_run.
+
 <h2 id="first-answer">Foreground is a state event, not capture, audio-rebind or delivery confirmation</h2>
 
 The current foreground callback enters short-speech readiness checks and resumes existing note transcription. Leaving the active state follows cancellation/pause logic. A permission dialog's `inactive` differs from true `background`. Rebind preflight here means manual state/route/target review, not a promise that every audio session seamlessly resumes.

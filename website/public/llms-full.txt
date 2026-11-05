@@ -4086,9 +4086,190 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/foreground-audio-rebind-preflight/
 
-场景指南 · 相关使用指南 后台切回前台后先核什么？短语音请求失效、转写恢复与目标重检 回到前台是状态事件，不是录音、音频重绑或交接成功回执 一呼当前前台回调会进入短语音准备检查，并恢复既有笔记转写；离开活动状态会走相应取消/暂停逻辑。权限弹窗造成的 inactive 与真正 background 不能混为一谈。本页的“重绑前检”是人工重新核状态、路由和目标，不是App承诺所有音频会话自动无缝续上。 与录后音频恢复和格式前检的分工 音频恢复矩阵核路由/引擎通知，权限采样指南核授权和输入格式；这里核 生命周期切换后旧请求是否仍有效、回来后哪些工作可能继续 。它不要求改系统设置、不执行录音，也不新增后台常驻推理或强制重绑开关。 前台返回检查表 事件/状态 当前实现边界 返回前台时核什么 不可推断 准备中权限弹窗 非background且正在请求权限的preparing有特例 仍有效的请求、实际许可与当前相位 每次inactive都已取消，或每次回来都全新录音 真正background 短语音会使可取消请求失效，包括迟到许可结果 旧请求不能被当作新授权会话 迟到granted自动恢复被取消那次录音 普通离开活动状态 短语音走原取消路径，受可取消状态约束 已取消、已完成、仍有待核内容分别看 取消能撤回此前已写入或服务端动作 applicationDidBecomeActive 检查准备状态并可预热模型 UI实际阶段与是否存在有效准备请求 回调本身证明已采集或已识别 笔记转写暂停/恢复 shell离开活动态暂停转写，活动态恢复 待处理文字、错误与实际笔记状态 模型后台持续推理，或所有录音不中断 输入/音频管线 系统路由可能与离开前不同 按权限/格式与恢复指南核现状 所有外设会话已自动无缝重绑 页面/草稿目标 仍有现有插入和目标守卫 当前工作台、页面、草稿与许可 回到同一外观就自动恢复Agent记忆或可重发 既有交接结果 保留一次标记与不确定停止边界 目标内容、已尝试状态和回执 切前台清空旧副作用或允许盲重试 短语音请求在取消路径通过更新会话标识、清理待处理任务等失效；不等于抹除已发生的结果。长笔记的转写恢复与实时音频采集不是同一状态机，不能把一个回调推广成所有录音路径的锁屏连续性保证。 返回后的合成核查 离开前：短语音正在等待权限，尚无最终结果。 中间：实际进入background，旧请求失效。 回来后：即使系统显示granted，也先核当前状态，不把迟到许可接到旧请求。 下一步：沿现有入口作明确用户选择；核目标与旧内容，不自动重录或重发。 这不是实际系统弹窗或设备回归结果。另一个只产生inactive的权限弹窗分支可能保留准备请求；必须识别事件，不能凭“画面回来”判断到底走过哪条路径。 不以重绑名义跳过已有条件 当前路由、格式、模型和目标仍按既有条件核。不为了让旧录音看似继续而任意复用转换器、忽略错误或改走云服务；也不通过替换草稿/文件名消除一次标记。 若界面与内容不确定，停在原范围核现有证据。本页未做锁屏、来电、外设或系统版本矩阵测试，不给零丢失、无延迟或后台续录保证。 FAQ inactive一定等于真正进入后台吗？ 不是。权限弹窗等可能使场景inactive，准备中请求许可存在特例；应按实际事件和相位区分。 后台后迟到的granted会复活旧请求吗？ 当前短语音逻辑使真正后台的可取消请求失效，不能把迟到许可当作恢复旧次录音的依据。 resumeTranscription是否等于麦克风继续采集？ 不是。笔记转写、音频采集与目标交接是不同状态，本页不把方法名当所有路径连续录音保证。 回调进入active是否证明模型已经识别成功？ 不证明。准备检查/预热与实际最终文字不同，要核真实状态与错误，不从回调推断结果。 这里有强制无缝重绑或锁屏续录开关吗？ 没有新增。本文只是重新核状态与绑定条件，不承诺所有外设和系统版本无缝恢复。 切前台能清空旧交接，让我放心重试吗？ 不能。旧尝试和可能副作用仍需核对，一次标记与不确定停止规则不因生命周期变化取消。 相关指南与源码 录后恢复矩阵 · 权限与采样契约 · 追问目标与上下文 · 交接完成审计 · 开始 · 隐私 依据： 短语音生命周期与取消 、 shell前后台转写分支 、 原目标守卫 。
+场景指南 · 相关使用指南 后台切回前台后先核什么？短语音请求失效、转写恢复与目标重检 SYN-REBIND-36：前台切回、端口漂移与缓冲恢复核查包 SYNTHETIC_EXAMPLE。仅源方法与内存自检，不是设备日志/导入协议；前台回来不等无缝重绑或后台续录。 ZH: /samples/p15-foreground-rebind/foreground-rebind-preflight.zh.json · EN: /samples/p15-foreground-rebind/foreground-rebind-preflight.en.json · Card: /samples/p15-foreground-rebind/preflight-card.md Case Synthetic condition / 合成条件 Scoped expectation / 范围内结果 Not certified / 未证 L1 权限弹窗inactive保留准备请求 phase=preparing; session_changed=false; cancel/start=0/0 Memory spy only; no real permission/capture/handoff L2 真正background使旧请求失效；迟到许可不能复活 phase=failed; session_changed=true; cancel/start=1/0 Memory spy only; no real permission/capture/handoff L3 非许可弹窗的inactive取消准备 phase=failed; session_changed=true; cancel/start=1/0 Memory spy only; no real permission/capture/handoff L4 录音后台取消，不承诺续录 phase=failed; session_changed=true; cancel/start=1/0 Memory spy only; no real permission/capture/handoff L5 转写离活动态取消，不抹已发生副作用 phase=failed; session_changed=true; cancel/start=1/0 Memory spy only; no real permission/capture/handoff L6 ready且空字符串pending仍保留，不自动交接 phase=ready; session_changed=false; cancel/start=0/0 Memory spy only; no real permission/capture/handoff L7 delivering不在canCancel集合，不能宣已撤回 phase=delivering; session_changed=false; cancel/start=0/0 Memory spy only; no real permission/capture/handoff L8 active但尚不在foreground不启动 phase=preparing; session_changed=false; cancel/start=0/0 Memory spy only; no real permission/capture/handoff L9 许可+前台+准备才调用内存采集spy phase=recording; session_changed=false; cancel/start=0/1 Memory spy only; no real permission/capture/handoff L10 内存start抛错走失败，不强制重绑 phase=failed; session_changed=false; cancel/start=0/1 Memory spy only; no real permission/capture/handoff S1 request_ms=[]; consume_ms=[0] consume=[False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S2 request_ms=[0]; consume_ms=[29999] consume=[True]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S3 request_ms=[0]; consume_ms=[30000, 30001] consume=[True, False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S4 request_ms=[0]; consume_ms=[30001] consume=[False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S5 request_ms=[0, 25000]; consume_ms=[50000, 50001] consume=[True, False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S6 request_ms=[0]; consume_ms=[31000, 31000] consume=[False, False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S7 request_ms=[0, 1, 2]; consume_ms=[3, 4, 5] consume=[True, False, False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA F1 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’] same format=True; same sorted UIDs=True Fake formats/ports; no physical route or real PCM F2 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-B’, ‘port-A’] same format=True; same sorted UIDs=True Fake formats/ports; no physical route or real PCM F3 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-C’] same format=True; same sorted UIDs=False Fake formats/ports; no physical route or real PCM F4 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 44100, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’] same format=False; same sorted UIDs=True Fake formats/ports; no physical route or real PCM F5 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 2, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’] same format=False; same sorted UIDs=True Fake formats/ports; no physical route or real PCM F6 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 3, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’] same format=False; same sorted UIDs=True Fake formats/ports; no physical route or real PCM F7 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: True}; inputs=[‘port-A’, ‘port-B’] same format=False; same sorted UIDs=True Fake formats/ports; no physical route or real PCM B1 foreground callback alone startCaptureIfReady + prewarm; not direct engine recovery Source read only; runtime not_run B2 current-token engine-change recovery with unchanged format source keeps converter/PCM, reinstalls tap; conditional source path, no no-loss guarantee Source read only; runtime not_run B3 changed native format or configure/start throw source fails pipeline, clears recordingActive and stops engine; no padding/relabel fix Source read only; runtime not_run B4 input UID drift even with equal format source route comparison is false; route notifications and expected-recovery suppression have independent guards Source read only; runtime not_run 许可弹窗inactive特例不等真正background；30秒含端点是请求寿命而非SLA，Bool重复刷新不排N次。源输入UID排序忽略排列、仍会识别端口漂移，格式四字段须分开；格式相同也不证明硬件缓冲完整。源码条件恢复与实际帧/草稿/发送回执分账，失败原件保留，不盲重录/重发。商店0.1.0无需Mac/自签名，自有可信工作台、模型/权限与目的地另核；目的地可能保存/同步/自动处理。ASR、真实切换/麦克风/填入/发送/锁屏续录全部not_run。 回到前台是状态事件，不是录音、音频重绑或交接成功回执 一呼当前前台回调会进入短语音准备检查，并恢复既有笔记转写；离开活动状态会走相应取消/暂停逻辑。权限弹窗造成的 inactive 与真正 background 不能混为一谈。本页的“重绑前检”是人工重新核状态、路由和目标，不是App承诺所有音频会话自动无缝续上。 与录后音频恢复和格式前检的分工 音频恢复矩阵核路由/引擎通知，权限采样指南核授权和输入格式；这里核 生命周期切换后旧请求是否仍有效、回来后哪些工作可能继续 。它不要求改系统设置、不执行录音，也不新增后台常驻推理或强制重绑开关。 前台返回检查表 事件/状态 当前实现边界 返回前台时核什么 不可推断 准备中权限弹窗 非background且正在请求权限的preparing有特例 仍有效的请求、实际许可与当前相位 每次inactive都已取消，或每次回来都全新录音 真正background 短语音会使可取消请求失效，包括迟到许可结果 旧请求不能被当作新授权会话 迟到granted自动恢复被取消那次录音 普通离开活动状态 短语音走原取消路径，受可取消状态约束 已取消、已完成、仍有待核内容分别看 取消能撤回此前已写入或服务端动作 applicationDidBecomeActive 检查准备状态并可预热模型 UI实际阶段与是否存在有效准备请求 回调本身证明已采集或已识别 笔记转写暂停/恢复 shell离开活动态暂停转写，活动态恢复 待处理文字、错误与实际笔记状态 模型后台持续推理，或所有录音不中断 输入/音频管线 系统路由可能与离开前不同 按权限/格式与恢复指南核现状 所有外设会话已自动无缝重绑 页面/草稿目标 仍有现有插入和目标守卫 当前工作台、页面、草稿与许可 回到同一外观就自动恢复Agent记忆或可重发 既有交接结果 保留一次标记与不确定停止边界 目标内容、已尝试状态和回执 切前台清空旧副作用或允许盲重试 短语音请求在取消路径通过更新会话标识、清理待处理任务等失效；不等于抹除已发生的结果。长笔记的转写恢复与实时音频采集不是同一状态机，不能把一个回调推广成所有录音路径的锁屏连续性保证。 返回后的合成核查 离开前：短语音正在等待权限，尚无最终结果。 中间：实际进入background，旧请求失效。 回来后：即使系统显示granted，也先核当前状态，不把迟到许可接到旧请求。 下一步：沿现有入口作明确用户选择；核目标与旧内容，不自动重录或重发。 这不是实际系统弹窗或设备回归结果。另一个只产生inactive的权限弹窗分支可能保留准备请求；必须识别事件，不能凭“画面回来”判断到底走过哪条路径。 不以重绑名义跳过已有条件 当前路由、格式、模型和目标仍按既有条件核。不为了让旧录音看似继续而任意复用转换器、忽略错误或改走云服务；也不通过替换草稿/文件名消除一次标记。 若界面与内容不确定，停在原范围核现有证据。本页未做锁屏、来电、外设或系统版本矩阵测试，不给零丢失、无延迟或后台续录保证。 FAQ inactive一定等于真正进入后台吗？ 不是。权限弹窗等可能使场景inactive，准备中请求许可存在特例；应按实际事件和相位区分。 后台后迟到的granted会复活旧请求吗？ 当前短语音逻辑使真正后台的可取消请求失效，不能把迟到许可当作恢复旧次录音的依据。 resumeTranscription是否等于麦克风继续采集？ 不是。笔记转写、音频采集与目标交接是不同状态，本页不把方法名当所有路径连续录音保证。 回调进入active是否证明模型已经识别成功？ 不证明。准备检查/预热与实际最终文字不同，要核真实状态与错误，不从回调推断结果。 这里有强制无缝重绑或锁屏续录开关吗？ 没有新增。本文只是重新核状态与绑定条件，不承诺所有外设和系统版本无缝恢复。 切前台能清空旧交接，让我放心重试吗？ 不能。旧尝试和可能副作用仍需核对，一次标记与不确定停止规则不因生命周期变化取消。 相关指南与源码 录后恢复矩阵 · 权限与采样契约 · 追问目标与上下文 · 交接完成审计 · 开始 · 隐私 依据： 短语音生命周期与取消 、 shell前后台转写分支 、 原目标守卫 。
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Synthetic condition / 合成条件</th>
+<th>Scoped expectation / 范围内结果</th>
+<th>Not certified / 未证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1</td>
+<td>权限弹窗inactive保留准备请求</td>
+<td>phase=preparing; session_changed=false; cancel/start=0/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>真正background使旧请求失效；迟到许可不能复活</td>
+<td>phase=failed; session_changed=true; cancel/start=1/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>非许可弹窗的inactive取消准备</td>
+<td>phase=failed; session_changed=true; cancel/start=1/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L4</td>
+<td>录音后台取消，不承诺续录</td>
+<td>phase=failed; session_changed=true; cancel/start=1/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L5</td>
+<td>转写离活动态取消，不抹已发生副作用</td>
+<td>phase=failed; session_changed=true; cancel/start=1/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L6</td>
+<td>ready且空字符串pending仍保留，不自动交接</td>
+<td>phase=ready; session_changed=false; cancel/start=0/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L7</td>
+<td>delivering不在canCancel集合，不能宣已撤回</td>
+<td>phase=delivering; session_changed=false; cancel/start=0/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L8</td>
+<td>active但尚不在foreground不启动</td>
+<td>phase=preparing; session_changed=false; cancel/start=0/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L9</td>
+<td>许可+前台+准备才调用内存采集spy</td>
+<td>phase=recording; session_changed=false; cancel/start=0/1</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L10</td>
+<td>内存start抛错走失败，不强制重绑</td>
+<td>phase=failed; session_changed=false; cancel/start=0/1</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>request_ms=[]; consume_ms=[0]</td>
+<td>consume=[False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>request_ms=[0]; consume_ms=[29999]</td>
+<td>consume=[True]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>request_ms=[0]; consume_ms=[30000, 30001]</td>
+<td>consume=[True, False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>request_ms=[0]; consume_ms=[30001]</td>
+<td>consume=[False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S5</td>
+<td>request_ms=[0, 25000]; consume_ms=[50000, 50001]</td>
+<td>consume=[True, False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S6</td>
+<td>request_ms=[0]; consume_ms=[31000, 31000]</td>
+<td>consume=[False, False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S7</td>
+<td>request_ms=[0, 1, 2]; consume_ms=[3, 4, 5]</td>
+<td>consume=[True, False, False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’]</td>
+<td>same format=True; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-B’, ‘port-A’]</td>
+<td>same format=True; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-C’]</td>
+<td>same format=True; same sorted UIDs=False</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 44100, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’]</td>
+<td>same format=False; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 2, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’]</td>
+<td>same format=False; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F6</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 3, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’]</td>
+<td>same format=False; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F7</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: True}; inputs=[‘port-A’, ‘port-B’]</td>
+<td>same format=False; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>foreground callback alone</td>
+<td>startCaptureIfReady + prewarm; not direct engine recovery</td>
+<td>Source read only; runtime not_run</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>current-token engine-change recovery with unchanged format</td>
+<td>source keeps converter/PCM, reinstalls tap; conditional source path, no no-loss guarantee</td>
+<td>Source read only; runtime not_run</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>changed native format or configure/start throw</td>
+<td>source fails pipeline, clears recordingActive and stops engine; no padding/relabel fix</td>
+<td>Source read only; runtime not_run</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>input UID drift even with equal format</td>
+<td>source route comparison is false; route notifications and expected-recovery suppression have independent guards</td>
+<td>Source read only; runtime not_run</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -4155,9 +4336,190 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/foreground-audio-rebind-preflight/
 
-All scenarios · Related practical guide Returning to foreground: request invalidation, transcription resume and target review Foreground is a state event, not capture, audio-rebind or delivery confirmation The current foreground callback enters short-speech readiness checks and resumes existing note transcription. Leaving the active state follows cancellation/pause logic. A permission dialog’s inactive differs from true background . Rebind preflight here means manual state/route/target review, not a promise that every audio session seamlessly resumes. Different from audio recovery and format preflight Recovery concerns route/engine notifications; permission/sample review concerns authorization and format. Here after lifecycle changes, which request remains valid and which work can continue is the task. No setting change, recording, background inference daemon or forced-rebind switch is supplied. Foreground-return checks Event/state Current implementation boundary Review on return Does not establish Preparing permission dialog Exception when not background, preparing and requesting permission Valid request, actual consent and phase Every inactive cancels, or every return is a new recording True background Invalidates cancellable short-speech requests, including late permission responses Old request is not a newly authorized session Late granted revives the canceled capture Other inactive transition Original short-speech cancellation, subject to cancellable state Canceled, complete and unresolved content separately Cancellation recalls prior insertion/server effects applicationDidBecomeActive Readiness check and possible idle model warm-up Actual UI phase and valid pending preparation Callback establishes capture/recognition success Note transcription pause/resume Shell pauses outside active, resumes when active Pending text, errors and actual note state Background model inference or uninterrupted audio everywhere Audio input/pipeline System route may have changed Current permission/format/recovery conditions Every accessory session seamlessly rebound Page/draft target Existing insertion/target guards remain Workbench, page, draft and authority Same-looking view restores Agent memory or resend eligibility Existing handoff One-handoff and uncertain-stop boundaries remain Target content, attempted state and receipts Foreground clears prior effects or permits blind retry Cancellation invalidates short-speech work through session identity/task cleanup; it does not erase effects already committed. Note transcription and live capture are different state machines. One callback cannot establish lock-screen continuity for all paths. Synthetic return review Before: Short speech awaiting permission, no final result. Transition: True background invalidates the old request. Return: Even with system granted, inspect current state; do not attach late consent to old work. Next: Explicit choice through the existing entry point; check target/prior content, no automatic rerecord/resend. This is not a real permission dialog or device regression result. A dialog causing inactive only can preserve pending preparation. Identify the event rather than assuming a returned screen reveals the path. Rebinding cannot bypass conditions Current route, format, model and destination retain existing checks. Do not force old converters, ignore failures or adopt a cloud service to make old recording appear continuous. Renaming/replacing drafts does not erase reservations. When state/content is uncertain, stop within original scope and inspect evidence. No lock-screen/call/accessory/OS matrix was tested, and no zero-loss, latency or background-continuity guarantee is supplied. FAQ Does inactive always mean true background? No. Permission dialogs can cause inactive; preparing permission requests have an exception. Identify actual event and phase. Can late granted after background revive an old request? Current short-speech logic invalidates cancellable work on true background. Late permission is not evidence the canceled capture resumes. Does resumeTranscription mean microphone capture continues? No. Transcription, audio capture and handoff differ. A method name does not guarantee continuous recording across every path. Does active prove model recognition completed? No. Readiness/warm-up is not returned final text. Inspect actual state and errors rather than inferring results from callbacks. Is there a forced seamless-rebind or lock-screen recording switch? None is added. This is state/binding preflight, not universal device/OS recovery evidence. Does foreground clear handoff history so retry is safe? No. Prior attempts/effects still need review. Lifecycle transitions do not cancel one-handoff/uncertainty rules. Reading and source Audio recovery · Permission/sample contract · Target/context review · Handoff claim review · Start · Privacy Evidence: short-speech lifecycle/cancellation , shell transcription lifecycle , original target guards .
+All scenarios · Related practical guide Returning to foreground: request invalidation, transcription resume and target review SYN-REBIND-36: foreground return, port drift and buffer review SYNTHETIC_EXAMPLE. Source methods and memory self-checks only, not device logs/import schema. Active is not seamless rebind or background recording. ZH: /samples/p15-foreground-rebind/foreground-rebind-preflight.zh.json · EN: /samples/p15-foreground-rebind/foreground-rebind-preflight.en.json · Card: /samples/p15-foreground-rebind/preflight-card.md Case Synthetic condition / 合成条件 Scoped expectation / 范围内结果 Not certified / 未证 L1 Consent-sheet inactive retains preparing request phase=preparing; session_changed=false; cancel/start=0/0 Memory spy only; no real permission/capture/handoff L2 Real background invalidates old request; late grant cannot revive it phase=failed; session_changed=true; cancel/start=1/0 Memory spy only; no real permission/capture/handoff L3 Inactive without permission request cancels preparing phase=failed; session_changed=true; cancel/start=1/0 Memory spy only; no real permission/capture/handoff L4 Recording is cancelled on background, not promised continuous phase=failed; session_changed=true; cancel/start=1/0 Memory spy only; no real permission/capture/handoff L5 Leaving active cancels transcription, not existing side effects phase=failed; session_changed=true; cancel/start=1/0 Memory spy only; no real permission/capture/handoff L6 Ready with empty-string pending retains it, no automatic handoff phase=ready; session_changed=false; cancel/start=0/0 Memory spy only; no real permission/capture/handoff L7 Delivering is outside canCancel; no rollback assertion phase=delivering; session_changed=false; cancel/start=0/0 Memory spy only; no real permission/capture/handoff L8 Active callback while foreground predicate false cannot start phase=preparing; session_changed=false; cancel/start=0/0 Memory spy only; no real permission/capture/handoff L9 Permission plus foreground plus preparing calls memory recorder spy phase=recording; session_changed=false; cancel/start=0/1 Memory spy only; no real permission/capture/handoff L10 Memory start throw fails; no forced rebind phase=failed; session_changed=false; cancel/start=0/1 Memory spy only; no real permission/capture/handoff S1 request_ms=[]; consume_ms=[0] consume=[False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S2 request_ms=[0]; consume_ms=[29999] consume=[True]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S3 request_ms=[0]; consume_ms=[30000, 30001] consume=[True, False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S4 request_ms=[0]; consume_ms=[30001] consume=[False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S5 request_ms=[0, 25000]; consume_ms=[50000, 50001] consume=[True, False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S6 request_ms=[0]; consume_ms=[31000, 31000] consume=[False, False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA S7 request_ms=[0, 1, 2]; consume_ms=[3, 4, 5] consume=[True, False, False]; pending Bool consumed/expired, not a queue Injected monotonic instants; no Siri binding or30s SLA F1 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’] same format=True; same sorted UIDs=True Fake formats/ports; no physical route or real PCM F2 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-B’, ‘port-A’] same format=True; same sorted UIDs=True Fake formats/ports; no physical route or real PCM F3 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-C’] same format=True; same sorted UIDs=False Fake formats/ports; no physical route or real PCM F4 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 44100, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’] same format=False; same sorted UIDs=True Fake formats/ports; no physical route or real PCM F5 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 2, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’] same format=False; same sorted UIDs=True Fake formats/ports; no physical route or real PCM F6 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 3, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’] same format=False; same sorted UIDs=True Fake formats/ports; no physical route or real PCM F7 {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: True}; inputs=[‘port-A’, ‘port-B’] same format=False; same sorted UIDs=True Fake formats/ports; no physical route or real PCM B1 foreground callback alone startCaptureIfReady + prewarm; not direct engine recovery Source read only; runtime not_run B2 current-token engine-change recovery with unchanged format source keeps converter/PCM, reinstalls tap; conditional source path, no no-loss guarantee Source read only; runtime not_run B3 changed native format or configure/start throw source fails pipeline, clears recordingActive and stops engine; no padding/relabel fix Source read only; runtime not_run B4 input UID drift even with equal format source route comparison is false; route notifications and expected-recovery suppression have independent guards Source read only; runtime not_run Consent-sheet inactive is not real background. The inclusive30s request lifetime is not a response SLA; a refreshed Bool is not an N-item queue. Sorted input UIDs ignore ordering, not port drift; equal native format fields do not certify intact hardware buffers. Conditional source recovery is separate from actual samples, drafts and delivery receipts. Preserve failures, do not blindly rerecord/resend. Store0.1.0 needs no Mac/self-signing; bring your own trusted workspace and verify model/permission/destination, which may save/sync/auto-process content. Real scene/input/ASR/insertion/send/lockscreen recording are all not_run. Foreground is a state event, not capture, audio-rebind or delivery confirmation The current foreground callback enters short-speech readiness checks and resumes existing note transcription. Leaving the active state follows cancellation/pause logic. A permission dialog’s inactive differs from true background . Rebind preflight here means manual state/route/target review, not a promise that every audio session seamlessly resumes. Different from audio recovery and format preflight Recovery concerns route/engine notifications; permission/sample review concerns authorization and format. Here after lifecycle changes, which request remains valid and which work can continue is the task. No setting change, recording, background inference daemon or forced-rebind switch is supplied. Foreground-return checks Event/state Current implementation boundary Review on return Does not establish Preparing permission dialog Exception when not background, preparing and requesting permission Valid request, actual consent and phase Every inactive cancels, or every return is a new recording True background Invalidates cancellable short-speech requests, including late permission responses Old request is not a newly authorized session Late granted revives the canceled capture Other inactive transition Original short-speech cancellation, subject to cancellable state Canceled, complete and unresolved content separately Cancellation recalls prior insertion/server effects applicationDidBecomeActive Readiness check and possible idle model warm-up Actual UI phase and valid pending preparation Callback establishes capture/recognition success Note transcription pause/resume Shell pauses outside active, resumes when active Pending text, errors and actual note state Background model inference or uninterrupted audio everywhere Audio input/pipeline System route may have changed Current permission/format/recovery conditions Every accessory session seamlessly rebound Page/draft target Existing insertion/target guards remain Workbench, page, draft and authority Same-looking view restores Agent memory or resend eligibility Existing handoff One-handoff and uncertain-stop boundaries remain Target content, attempted state and receipts Foreground clears prior effects or permits blind retry Cancellation invalidates short-speech work through session identity/task cleanup; it does not erase effects already committed. Note transcription and live capture are different state machines. One callback cannot establish lock-screen continuity for all paths. Synthetic return review Before: Short speech awaiting permission, no final result. Transition: True background invalidates the old request. Return: Even with system granted, inspect current state; do not attach late consent to old work. Next: Explicit choice through the existing entry point; check target/prior content, no automatic rerecord/resend. This is not a real permission dialog or device regression result. A dialog causing inactive only can preserve pending preparation. Identify the event rather than assuming a returned screen reveals the path. Rebinding cannot bypass conditions Current route, format, model and destination retain existing checks. Do not force old converters, ignore failures or adopt a cloud service to make old recording appear continuous. Renaming/replacing drafts does not erase reservations. When state/content is uncertain, stop within original scope and inspect evidence. No lock-screen/call/accessory/OS matrix was tested, and no zero-loss, latency or background-continuity guarantee is supplied. FAQ Does inactive always mean true background? No. Permission dialogs can cause inactive; preparing permission requests have an exception. Identify actual event and phase. Can late granted after background revive an old request? Current short-speech logic invalidates cancellable work on true background. Late permission is not evidence the canceled capture resumes. Does resumeTranscription mean microphone capture continues? No. Transcription, audio capture and handoff differ. A method name does not guarantee continuous recording across every path. Does active prove model recognition completed? No. Readiness/warm-up is not returned final text. Inspect actual state and errors rather than inferring results from callbacks. Is there a forced seamless-rebind or lock-screen recording switch? None is added. This is state/binding preflight, not universal device/OS recovery evidence. Does foreground clear handoff history so retry is safe? No. Prior attempts/effects still need review. Lifecycle transitions do not cancel one-handoff/uncertainty rules. Reading and source Audio recovery · Permission/sample contract · Target/context review · Handoff claim review · Start · Privacy Evidence: short-speech lifecycle/cancellation , shell transcription lifecycle , original target guards .
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Synthetic condition / 合成条件</th>
+<th>Scoped expectation / 范围内结果</th>
+<th>Not certified / 未证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1</td>
+<td>Consent-sheet inactive retains preparing request</td>
+<td>phase=preparing; session_changed=false; cancel/start=0/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>Real background invalidates old request; late grant cannot revive it</td>
+<td>phase=failed; session_changed=true; cancel/start=1/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>Inactive without permission request cancels preparing</td>
+<td>phase=failed; session_changed=true; cancel/start=1/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L4</td>
+<td>Recording is cancelled on background, not promised continuous</td>
+<td>phase=failed; session_changed=true; cancel/start=1/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L5</td>
+<td>Leaving active cancels transcription, not existing side effects</td>
+<td>phase=failed; session_changed=true; cancel/start=1/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L6</td>
+<td>Ready with empty-string pending retains it, no automatic handoff</td>
+<td>phase=ready; session_changed=false; cancel/start=0/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L7</td>
+<td>Delivering is outside canCancel; no rollback assertion</td>
+<td>phase=delivering; session_changed=false; cancel/start=0/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L8</td>
+<td>Active callback while foreground predicate false cannot start</td>
+<td>phase=preparing; session_changed=false; cancel/start=0/0</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L9</td>
+<td>Permission plus foreground plus preparing calls memory recorder spy</td>
+<td>phase=recording; session_changed=false; cancel/start=0/1</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>L10</td>
+<td>Memory start throw fails; no forced rebind</td>
+<td>phase=failed; session_changed=false; cancel/start=0/1</td>
+<td>Memory spy only; no real permission/capture/handoff</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>request_ms=[]; consume_ms=[0]</td>
+<td>consume=[False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>request_ms=[0]; consume_ms=[29999]</td>
+<td>consume=[True]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>request_ms=[0]; consume_ms=[30000, 30001]</td>
+<td>consume=[True, False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>request_ms=[0]; consume_ms=[30001]</td>
+<td>consume=[False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S5</td>
+<td>request_ms=[0, 25000]; consume_ms=[50000, 50001]</td>
+<td>consume=[True, False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S6</td>
+<td>request_ms=[0]; consume_ms=[31000, 31000]</td>
+<td>consume=[False, False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>S7</td>
+<td>request_ms=[0, 1, 2]; consume_ms=[3, 4, 5]</td>
+<td>consume=[True, False, False]; pending Bool consumed/expired, not a queue</td>
+<td>Injected monotonic instants; no Siri binding or30s SLA</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’]</td>
+<td>same format=True; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-B’, ‘port-A’]</td>
+<td>same format=True; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-C’]</td>
+<td>same format=True; same sorted UIDs=False</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 44100, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’]</td>
+<td>same format=False; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 2, ‘common_format’: 1, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’]</td>
+<td>same format=False; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F6</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 3, ‘interleaved’: False}; inputs=[‘port-A’, ‘port-B’]</td>
+<td>same format=False; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>F7</td>
+<td>{‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: False} → {‘sample_rate’: 48000, ‘channels’: 1, ‘common_format’: 1, ‘interleaved’: True}; inputs=[‘port-A’, ‘port-B’]</td>
+<td>same format=False; same sorted UIDs=True</td>
+<td>Fake formats/ports; no physical route or real PCM</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>foreground callback alone</td>
+<td>startCaptureIfReady + prewarm; not direct engine recovery</td>
+<td>Source read only; runtime not_run</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>current-token engine-change recovery with unchanged format</td>
+<td>source keeps converter/PCM, reinstalls tap; conditional source path, no no-loss guarantee</td>
+<td>Source read only; runtime not_run</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>changed native format or configure/start throw</td>
+<td>source fails pipeline, clears recordingActive and stops engine; no padding/relabel fix</td>
+<td>Source read only; runtime not_run</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>input UID drift even with equal format</td>
+<td>source route comparison is false; route notifications and expected-recovery suppression have independent guards</td>
+<td>Source read only; runtime not_run</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
