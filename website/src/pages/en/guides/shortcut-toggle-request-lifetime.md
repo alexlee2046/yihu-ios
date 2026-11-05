@@ -66,3 +66,7 @@ No. Source entries only, without specific-device setup/tests.
 [Permission](/en/guides/microphone-permission-sample-contract/) · [Busy guards](/en/guides/audio-busy-state-admission/) · [Foreground rebind](/en/guides/foreground-audio-rebind-preflight/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Intent/lifetime/consume](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceShortcuts.swift) · [Foreground consumer](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift) · [Capture/handoff](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceController.swift)
+
+## SYN-REBIND-36 technical forwarding (still retired)
+
+The inclusive30s lifetime, one-time consumption and refreshed Bool are not a response guarantee, background-microphone permission or N-item queue. An Intent result does not certify capture/destination success. The [same-language foreground review](/en/guides/foreground-audio-rebind-preflight/) separates consent-sheet inactive, real background, current requests/ports and uncertain buffers. This page stays indexable: false/noindex,follow: no sitemap/LLM section, downloads or Store card. SYNTHETIC_EXAMPLE self-checks are not system-binding/lockscreen tests or rollback of existing side effects.

@@ -1,0 +1,572 @@
+{
+  "batch": "SYN-REBIND-36",
+  "classification": "SYNTHETIC_EXAMPLE",
+  "language": "en",
+  "is_app_import_schema": false,
+  "is_production_capture": false,
+  "source_commit": "45495e8888618fd1ec26607f7bf3d875549e68c4",
+  "source_tree": "05150cb785391a85ea8d402fb787a026553d1a7f",
+  "scope": "Foundation memory adapters around verbatim source fragments; no UIKit/AVFAudio/AppIntents execution, microphone, actual buffer or clock sleep.",
+  "lifecycle_cases": [
+    {
+      "id": "L1",
+      "initial_phase": "preparing",
+      "event": "inactive",
+      "permission_granted": false,
+      "is_requesting_permission": true,
+      "is_foreground": false,
+      "pending_transcript": null,
+      "recorder_start_throws": false,
+      "expected": {
+        "phase": "preparing",
+        "session_changed": false,
+        "permission_granted": false,
+        "requesting": true,
+        "recorder_cancel_calls": 0,
+        "recorder_start_calls": 0,
+        "prewarm_cancel_calls": 1,
+        "old_permission_guard_passes": true,
+        "pending_transcript": null
+      },
+      "label": "Consent-sheet inactive retains preparing request"
+    },
+    {
+      "id": "L2",
+      "initial_phase": "preparing",
+      "event": "background",
+      "permission_granted": false,
+      "is_requesting_permission": true,
+      "is_foreground": false,
+      "pending_transcript": null,
+      "recorder_start_throws": false,
+      "expected": {
+        "phase": "failed",
+        "session_changed": true,
+        "permission_granted": false,
+        "requesting": false,
+        "recorder_cancel_calls": 1,
+        "recorder_start_calls": 0,
+        "prewarm_cancel_calls": 1,
+        "old_permission_guard_passes": false,
+        "pending_transcript": null
+      },
+      "label": "Real background invalidates old request; late grant cannot revive it"
+    },
+    {
+      "id": "L3",
+      "initial_phase": "preparing",
+      "event": "inactive",
+      "permission_granted": false,
+      "is_requesting_permission": false,
+      "is_foreground": false,
+      "pending_transcript": null,
+      "recorder_start_throws": false,
+      "expected": {
+        "phase": "failed",
+        "session_changed": true,
+        "permission_granted": false,
+        "requesting": false,
+        "recorder_cancel_calls": 1,
+        "recorder_start_calls": 0,
+        "prewarm_cancel_calls": 1,
+        "old_permission_guard_passes": false,
+        "pending_transcript": null
+      },
+      "label": "Inactive without permission request cancels preparing"
+    },
+    {
+      "id": "L4",
+      "initial_phase": "recording",
+      "event": "background",
+      "permission_granted": true,
+      "is_requesting_permission": false,
+      "is_foreground": false,
+      "pending_transcript": null,
+      "recorder_start_throws": false,
+      "expected": {
+        "phase": "failed",
+        "session_changed": true,
+        "permission_granted": false,
+        "requesting": false,
+        "recorder_cancel_calls": 1,
+        "recorder_start_calls": 0,
+        "prewarm_cancel_calls": 1,
+        "old_permission_guard_passes": false,
+        "pending_transcript": null
+      },
+      "label": "Recording is cancelled on background, not promised continuous"
+    },
+    {
+      "id": "L5",
+      "initial_phase": "transcribing",
+      "event": "inactive",
+      "permission_granted": true,
+      "is_requesting_permission": false,
+      "is_foreground": false,
+      "pending_transcript": null,
+      "recorder_start_throws": false,
+      "expected": {
+        "phase": "failed",
+        "session_changed": true,
+        "permission_granted": false,
+        "requesting": false,
+        "recorder_cancel_calls": 1,
+        "recorder_start_calls": 0,
+        "prewarm_cancel_calls": 1,
+        "old_permission_guard_passes": false,
+        "pending_transcript": null
+      },
+      "label": "Leaving active cancels transcription, not existing side effects"
+    },
+    {
+      "id": "L6",
+      "initial_phase": "ready",
+      "event": "background",
+      "permission_granted": false,
+      "is_requesting_permission": false,
+      "is_foreground": false,
+      "pending_transcript": "",
+      "recorder_start_throws": false,
+      "expected": {
+        "phase": "ready",
+        "session_changed": false,
+        "permission_granted": false,
+        "requesting": false,
+        "recorder_cancel_calls": 0,
+        "recorder_start_calls": 0,
+        "prewarm_cancel_calls": 1,
+        "old_permission_guard_passes": false,
+        "pending_transcript": ""
+      },
+      "label": "Ready with empty-string pending retains it, no automatic handoff"
+    },
+    {
+      "id": "L7",
+      "initial_phase": "delivering",
+      "event": "background",
+      "permission_granted": true,
+      "is_requesting_permission": false,
+      "is_foreground": false,
+      "pending_transcript": null,
+      "recorder_start_throws": false,
+      "expected": {
+        "phase": "delivering",
+        "session_changed": false,
+        "permission_granted": true,
+        "requesting": false,
+        "recorder_cancel_calls": 0,
+        "recorder_start_calls": 0,
+        "prewarm_cancel_calls": 1,
+        "old_permission_guard_passes": false,
+        "pending_transcript": null
+      },
+      "label": "Delivering is outside canCancel; no rollback assertion"
+    },
+    {
+      "id": "L8",
+      "initial_phase": "preparing",
+      "event": "active",
+      "permission_granted": true,
+      "is_requesting_permission": false,
+      "is_foreground": false,
+      "pending_transcript": null,
+      "recorder_start_throws": false,
+      "expected": {
+        "phase": "preparing",
+        "session_changed": false,
+        "permission_granted": true,
+        "requesting": false,
+        "recorder_cancel_calls": 0,
+        "recorder_start_calls": 0,
+        "prewarm_cancel_calls": 0,
+        "old_permission_guard_passes": true,
+        "pending_transcript": null
+      },
+      "label": "Active callback while foreground predicate false cannot start"
+    },
+    {
+      "id": "L9",
+      "initial_phase": "preparing",
+      "event": "active",
+      "permission_granted": true,
+      "is_requesting_permission": false,
+      "is_foreground": true,
+      "pending_transcript": null,
+      "recorder_start_throws": false,
+      "expected": {
+        "phase": "recording",
+        "session_changed": false,
+        "permission_granted": true,
+        "requesting": false,
+        "recorder_cancel_calls": 0,
+        "recorder_start_calls": 1,
+        "prewarm_cancel_calls": 0,
+        "old_permission_guard_passes": false,
+        "pending_transcript": null
+      },
+      "label": "Permission plus foreground plus preparing calls memory recorder spy"
+    },
+    {
+      "id": "L10",
+      "initial_phase": "preparing",
+      "event": "active",
+      "permission_granted": true,
+      "is_requesting_permission": false,
+      "is_foreground": true,
+      "pending_transcript": null,
+      "recorder_start_throws": true,
+      "expected": {
+        "phase": "failed",
+        "session_changed": false,
+        "permission_granted": true,
+        "requesting": false,
+        "recorder_cancel_calls": 0,
+        "recorder_start_calls": 1,
+        "prewarm_cancel_calls": 0,
+        "old_permission_guard_passes": false,
+        "pending_transcript": null
+      },
+      "label": "Memory start throw fails; no forced rebind"
+    }
+  ],
+  "shortcut_cases": [
+    {
+      "id": "S1",
+      "request_at_ms": [],
+      "consume_at_ms": [
+        0
+      ],
+      "expected_results": [
+        false
+      ]
+    },
+    {
+      "id": "S2",
+      "request_at_ms": [
+        0
+      ],
+      "consume_at_ms": [
+        29999
+      ],
+      "expected_results": [
+        true
+      ]
+    },
+    {
+      "id": "S3",
+      "request_at_ms": [
+        0
+      ],
+      "consume_at_ms": [
+        30000,
+        30001
+      ],
+      "expected_results": [
+        true,
+        false
+      ]
+    },
+    {
+      "id": "S4",
+      "request_at_ms": [
+        0
+      ],
+      "consume_at_ms": [
+        30001
+      ],
+      "expected_results": [
+        false
+      ]
+    },
+    {
+      "id": "S5",
+      "request_at_ms": [
+        0,
+        25000
+      ],
+      "consume_at_ms": [
+        50000,
+        50001
+      ],
+      "expected_results": [
+        true,
+        false
+      ]
+    },
+    {
+      "id": "S6",
+      "request_at_ms": [
+        0
+      ],
+      "consume_at_ms": [
+        31000,
+        31000
+      ],
+      "expected_results": [
+        false,
+        false
+      ]
+    },
+    {
+      "id": "S7",
+      "request_at_ms": [
+        0,
+        1,
+        2
+      ],
+      "consume_at_ms": [
+        3,
+        4,
+        5
+      ],
+      "expected_results": [
+        true,
+        false,
+        false
+      ]
+    }
+  ],
+  "format_route_cases": [
+    {
+      "id": "F1",
+      "before_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "after_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "before_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "after_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "expected": {
+        "format_same": true,
+        "route_same": true
+      }
+    },
+    {
+      "id": "F2",
+      "before_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "after_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "before_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "after_input_uids": [
+        "port-B",
+        "port-A"
+      ],
+      "expected": {
+        "format_same": true,
+        "route_same": true
+      }
+    },
+    {
+      "id": "F3",
+      "before_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "after_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "before_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "after_input_uids": [
+        "port-C"
+      ],
+      "expected": {
+        "format_same": true,
+        "route_same": false
+      }
+    },
+    {
+      "id": "F4",
+      "before_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "after_format": {
+        "sample_rate": 44100,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "before_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "after_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "expected": {
+        "format_same": false,
+        "route_same": true
+      }
+    },
+    {
+      "id": "F5",
+      "before_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "after_format": {
+        "sample_rate": 48000,
+        "channels": 2,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "before_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "after_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "expected": {
+        "format_same": false,
+        "route_same": true
+      }
+    },
+    {
+      "id": "F6",
+      "before_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "after_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 3,
+        "interleaved": false
+      },
+      "before_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "after_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "expected": {
+        "format_same": false,
+        "route_same": true
+      }
+    },
+    {
+      "id": "F7",
+      "before_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": false
+      },
+      "after_format": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "common_format": 1,
+        "interleaved": true
+      },
+      "before_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "after_input_uids": [
+        "port-A",
+        "port-B"
+      ],
+      "expected": {
+        "format_same": false,
+        "route_same": true
+      }
+    }
+  ],
+  "buffer_recovery_review": [
+    {
+      "id": "B1",
+      "trigger": "foreground callback alone",
+      "source_review": "startCaptureIfReady + prewarm; not direct engine recovery",
+      "captured_buffer": "no physical buffer in fixture",
+      "runtime": "not_run"
+    },
+    {
+      "id": "B2",
+      "trigger": "current-token engine-change recovery with unchanged format",
+      "source_review": "source keeps converter/PCM, reinstalls tap; conditional source path, no no-loss guarantee",
+      "captured_buffer": "source read only",
+      "runtime": "not_run"
+    },
+    {
+      "id": "B3",
+      "trigger": "changed native format or configure/start throw",
+      "source_review": "source fails pipeline, clears recordingActive and stops engine; no padding/relabel fix",
+      "captured_buffer": "not certified recoverable",
+      "runtime": "not_run"
+    },
+    {
+      "id": "B4",
+      "trigger": "input UID drift even with equal format",
+      "source_review": "source route comparison is false; route notifications and expected-recovery suppression have independent guards",
+      "captured_buffer": "recheck current input/old evidence; no automatic retry",
+      "runtime": "not_run"
+    }
+  ],
+  "manual_go_no_go": {
+    "go": "Fresh explicit user choice only after current UI phase, permission, model, input format/UID and safe destination are verified; source-helper pass alone is not device Go.",
+    "no_go": [
+      "Unknown inactive vs background event",
+      "Old session or late permission result",
+      "Input port/format changed or buffer/error outcome unknown",
+      "Pending transcript or possible prior handoff side effect",
+      "Shortcut age expired, busy, notes open/recording or non-active workbench"
+    ],
+    "next": "Retain original receipt and uncertain content; check destination may save/sync/auto-process; do not blindly rerecord/refill/resend."
+  },
+  "runtime_checks": {
+    "real_scene_events": "not_run",
+    "real_permission_sheet": "not_run",
+    "physical_input_port_drift": "not_run",
+    "actual_buffer_recovery": "not_run",
+    "lockscreen_or_background_recording": "not_run",
+    "AppIntent_Siri_or_action_button_binding": "not_run",
+    "ASR_accuracy": "not_run",
+    "draft_insertion": "not_run",
+    "send": "not_run",
+    "hardware_performance_or_SLA": "not_run"
+  }
+}
