@@ -1,0 +1,259 @@
+{
+  "batch": "SYN-XDEV-38",
+  "classification": "SYNTHETIC_EXAMPLE",
+  "language": "en",
+  "is_app_import_schema": false,
+  "is_production_capture": false,
+  "source_commit": "e592f63af7061072d6683f89423b3abf2fee2a7c",
+  "source_tree": "a278454faf98bab436d238b5433047ef804c33a7",
+  "source_contract": {
+    "title_character_prefix": 160,
+    "project_character_prefix": 80,
+    "next_character_prefix": 600,
+    "maximum_payload_bytes": 50000,
+    "maximum_items": 200,
+    "field_clip_sets_truncated": false,
+    "empty_tasks_falls_back": false,
+    "placeholder_does_not_fill_source": true
+  },
+  "publish_cases": [
+    {
+      "id": "P1",
+      "mode": "subset",
+      "expected": {
+        "item_count": 1,
+        "truncated": false,
+        "phone_all_count": 3
+      },
+      "label": "Full phone tasks differ from Watch pending subset"
+    },
+    {
+      "id": "P2",
+      "mode": "ascii_clip",
+      "expected": {
+        "item_count": 1,
+        "title_characters": 160,
+        "project_characters": 80,
+        "next_characters": 600,
+        "truncated": false
+      },
+      "label": "Field prefixes clipped while truncated flag remains false"
+    },
+    {
+      "id": "P3",
+      "mode": "unicode_clip",
+      "expected": {
+        "item_count": 1,
+        "title_characters": 160,
+        "project_characters": 80,
+        "next_characters": 600,
+        "title_utf8_greater_than_characters": true,
+        "truncated": false
+      },
+      "label": "Extended-grapheme prefix is not UTF8 bytes"
+    },
+    {
+      "id": "P4",
+      "mode": "empty_tasks",
+      "expected": {
+        "item_count": 0,
+        "phone_all_count": 0
+      },
+      "label": "Explicit empty tasks does not fall back to decisions"
+    },
+    {
+      "id": "P5",
+      "mode": "legacy",
+      "expected": {
+        "item_count": 1,
+        "phone_all_count": 1
+      },
+      "label": "Missing legacy tasks falls back to decisions"
+    },
+    {
+      "id": "P6",
+      "mode": "exact_status",
+      "expected": {
+        "item_count": 0,
+        "phone_attention_count": 2
+      },
+      "label": "Trim/mention attention differs from exact Watch status"
+    },
+    {
+      "id": "P7",
+      "mode": "id_boundary",
+      "expected": {
+        "item_count": 1,
+        "first_task": " "
+      },
+      "label": "Nil/empty IDs skipped; whitespace ID is not empty"
+    },
+    {
+      "id": "P8",
+      "mode": "row_cap",
+      "expected": {
+        "within_200_items": true,
+        "truncated": true
+      },
+      "label": "201 source rows do not guarantee200 transmitted"
+    },
+    {
+      "id": "P9",
+      "mode": "byte_cap",
+      "expected": {
+        "item_count_less_than_input": true,
+        "truncated": true,
+        "first_task": "syn-0"
+      },
+      "label": "Byte budget trims before200 and preserves prefix order"
+    },
+    {
+      "id": "P10",
+      "mode": "missing_date",
+      "expected": {
+        "item_count": 1,
+        "source_date_missing": true,
+        "stale": true
+      },
+      "label": "New capturedAt cannot fill missing sourceDate"
+    },
+    {
+      "id": "P11",
+      "mode": "read_failed",
+      "expected": {
+        "item_count": 1,
+        "read_failed": true,
+        "stale": true
+      },
+      "label": "Cached display with read failure is stale"
+    }
+  ],
+  "codec_cases": [
+    {
+      "id": "D1",
+      "mode": "normal",
+      "accepted": true
+    },
+    {
+      "id": "D2",
+      "mode": "bytes_exact",
+      "accepted": true
+    },
+    {
+      "id": "D3",
+      "mode": "bytes_over",
+      "accepted": false
+    },
+    {
+      "id": "D4",
+      "mode": "rows200",
+      "accepted": true
+    },
+    {
+      "id": "D5",
+      "mode": "rows201",
+      "accepted": false
+    },
+    {
+      "id": "D6",
+      "mode": "duplicate",
+      "accepted": false
+    },
+    {
+      "id": "D7",
+      "mode": "invalid_uuid",
+      "accepted": false
+    },
+    {
+      "id": "D8",
+      "mode": "uppercase_token",
+      "accepted": false
+    },
+    {
+      "id": "D9",
+      "mode": "missing_next",
+      "accepted": false
+    },
+    {
+      "id": "D10",
+      "mode": "long_title",
+      "accepted": true
+    },
+    {
+      "id": "D11",
+      "mode": "invalid_status",
+      "accepted": false
+    }
+  ],
+  "presentation_cases": [
+    {
+      "id": "F1",
+      "next": "",
+      "priority": null,
+      "expected_next": "下一步待补",
+      "expected_priority_visible": false
+    },
+    {
+      "id": "F2",
+      "next": " ",
+      "priority": " ",
+      "expected_next": " ",
+      "expected_priority_visible": true
+    },
+    {
+      "id": "F3",
+      "next": "SYNTHETIC_EXAMPLE: pending verification",
+      "priority": "P1",
+      "expected_next": "SYNTHETIC_EXAMPLE: pending verification",
+      "expected_priority_visible": true
+    },
+    {
+      "id": "F4",
+      "next": "",
+      "priority": "",
+      "expected_next": "下一步待补",
+      "expected_priority_visible": false
+    }
+  ],
+  "boundary_reviews": [
+    {
+      "id": "B1",
+      "label": "Web draft/text attachment is not ledger mirror or original audio",
+      "runtime": "not_run"
+    },
+    {
+      "id": "B2",
+      "label": "queued/ready is not phone draft/web insertion/send receipt",
+      "runtime": "not_run"
+    },
+    {
+      "id": "B3",
+      "label": "Local fingerprints/canDraft do not replace authentication/authorization",
+      "runtime": "not_run"
+    },
+    {
+      "id": "B4",
+      "label": "Screen line wrapping/layout and real pairing not executed",
+      "runtime": "not_run"
+    }
+  ],
+  "scope": "Original publish/token functions + whole shared codec + Action/allTasks/generatedAt and extracted UI expressions, Foundation/CryptoKit host; fake store/workbench/WCSession memory sink, no real SwiftUI/WatchConnectivity/network/clock-edge race.",
+  "manual_no_go": [
+    "Unknown source/workbench/task identity, cached age or read failure",
+    "Field prefix/omitted row or placeholder mistaken for full source",
+    "queued/ready mistaken for saved draft, web insertion or server acknowledgement",
+    "Unknown prior target side effects; no blind refill/resend"
+  ],
+  "runtime_checks": {
+    "paired_device_transfer": "not_run",
+    "WatchConnectivity_delivery_or_refresh": "not_run",
+    "SwiftUI_layout_or_line_wrapping": "not_run",
+    "device_clock_or_stale_edge_races": "not_run",
+    "watch_voice_capture_or_ASR": "not_run",
+    "phone_reply_draft_save": "not_run",
+    "web_draft_insertion": "not_run",
+    "attachment_upload_or_sync": "not_run",
+    "server_send_or_write_authorization": "not_run",
+    "hardware_latency_or_SLA": "not_run"
+  }
+}
