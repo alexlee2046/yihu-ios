@@ -66,3 +66,7 @@ manifest核批次发布，保护核写选项，网站缓存核origin；这里核
 [批次发布](/guides/share-manifest-visibility-review/) · [保护选项](/guides/local-file-protection-scope/) · [网站缓存](/guides/source-switch-cache-isolation/) · [声明证据](/guides/privacy-declaration-evidence-scope/) · [开始](/start/) · [隐私](/privacy/)
 
 [appGroup/shared/root](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Shared/CollieShareInbox.swift) · [App Bundle键](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/Info.plist) · [Extension Bundle键](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Extensions/CollieShare/Info.plist) · [App声明](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/Collie.entitlements) · [Extension声明](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Extensions/CollieShare/CollieShare.entitlements)
+
+## SYN-CHK-40技术转接（保持退休）
+
+App Group源码声明/签名权限/运行containerURL是不同证据，不能用任意测试root替代系统授权，也不能把文件或manifest可见当成功解析导入。[同语文件分片/回执核查](/guides/file-chunk-bridge-not-upload-receipt/)区分原始块、JS暂存、页面控件、收件箱pending与远端完成，discard不是撤回服务器。此页保持indexable: false/noindex,follow，不入sitemap/LLM独立出口，不挂下载/Store卡。SYNTHETIC_EXAMPLE非真实共享容器/签名/App Store审核或远端API验收，不改权限/配置，不盲重试。
