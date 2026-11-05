@@ -66,3 +66,9 @@ indexable: false
 [格式准入](/guides/pcm-format-admission-review/) · [队列与final](/guides/capture-buffer-pressure-checklist/) · [识别分段](/guides/note-segment-join-provenance/) · [开始](/start/) · [隐私](/privacy/)
 
 [转换器/convertOnce/finish](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/ColliePCMStream.swift) · [tap与停止入口](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
+
+## SYN-PCM-36流结束帧边界补例
+
+SYNTHETIC_EXAMPLE自检区分“暂缺下一块”和“已声明结束”：PCM零值/静音帧不是EOF魔术字节，原finish排出转换器延迟样本而不自动补静音。交错声道/样本截断先保原件与缺口，不用尾部填零冒原内容完整；最多16次调用预算也不是16秒/16帧或识别SLA。
+
+[转到同语在役PCM格式准入页查看自检表](/guides/pcm-format-admission-review/#syn-pcm-36)。本页继续indexable:false/noindex,follow退休技术参考，不挂公开样例下载，也不新增导入/云转码/修复功能。

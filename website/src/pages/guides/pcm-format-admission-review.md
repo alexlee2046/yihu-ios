@@ -5,6 +5,25 @@ description: "按转换器核有限采样率、1至8声道、Float32非交错与
 lang: zh
 ---
 
+<h2 id="syn-pcm-36">SYNTHETIC_EXAMPLE · SYN-PCM-36 PCM与EOF自检</h2>
+
+<a href="/samples/p14-pcm-admission/pcm-admission-preflight.zh.json" download>/samples/p14-pcm-admission/pcm-admission-preflight.zh.json</a> · <a href="/samples/p14-pcm-admission/preflight-card.md" download>/samples/p14-pcm-admission/preflight-card.md</a>
+
+14个字节声明例、7个原格式guard例和流结束参考均为SYNTHETIC_EXAMPLE，不是App raw PCM导入器。s16le/f32le结构符合不等原生Float32非交错准入；原finish排延迟样本，不自动补静音修尾帧。真机/真实转换/ASR与SLA全部not_run。
+
+<div role="region" aria-label="合成PCM结构自检表，可左右滚动" tabindex="0">
+<table>
+<thead><tr><th>检查层</th><th>已填参考</th><th>不应推断</th></tr></thead>
+<tbody>
+<tr><td>16/24/48k声明</td><td>与独立producer声明核对；长度不自描述采样率</td><td>改header即可重采样</td></tr>
+<tr><td>s16le/f32le</td><td>16/32bit、小端与真实布局分别核</td><td>整数/交错raw可直接入原转换器</td></tr>
+<tr><td>单/双声道帧</td><td>交错帧=声道数×每样本字节；6B双声道s16le不完整</td><td>填零等原始内容已恢复</td></tr>
+<tr><td>流尾</td><td>块间noDataNow；finish才endOfStream，至多16次排空</td><td>16秒/16帧或自动静音填充SLA</td></tr>
+</tbody></table>
+</div>
+
+商店0.1.0/id6819057500安装不需Mac/Xcode/自行签名；账号/模型/权限/目标安全仍另核，源码行为不认证商店二进制同版。
+
 <h2 id="first-answer">格式在范围内只是准入前提，不是所有外设都能转换的保证</h2>
 
 现有ColliePCMStreamConverter要求有限且在8000至192000 Hz的输入采样率、1至8声道、Float32非交错格式，再尝试建立输出16k单声道转换器。满足这些检查仍可能无法创建/转换。本页审查具体输入准入，不提供用户改采样率开关、设备认证或通用音频导入器。
