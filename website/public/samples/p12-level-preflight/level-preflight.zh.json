@@ -1,0 +1,327 @@
+{
+  "case_id": "SYN-LEVEL-35",
+  "language": "zh",
+  "synthetic": true,
+  "source_commit": "a8df2f68e9cd22d520e044ca68356e43d48f5152",
+  "is_app_import_schema": false,
+  "is_recorded_audio": false,
+  "purpose": "双管线电平显示缩放/裁剪，不是声压、风噪或识别分数。",
+  "sample_domain": "手工合成有限Float样本、范围[-1,1]，没有采样率/麦克风/声学校准或真实音频含义；不外推NaN/Infinity行为。",
+  "source_formula_reference": {
+    "short": "empty ->0; min(1,max(0,sqrt(sum(sample*sample)/count)*2))",
+    "note": "append guards nonempty+file+buffer+successful write; rms=sqrt(reduce(sample*sample)/count); level=min(1,rms*12)",
+    "scope": "原源码表达式参考；长笔记路径不是简单的空数组RMS函数，未成功写入可保留旧level。"
+  },
+  "numeric_tolerance": "1e-6 is a Float assertion tolerance, not device/ASR accuracy or sound-pressure calibration.",
+  "cases": [
+    {
+      "id": "Q1-small-bipolar",
+      "short_samples": [
+        0.01,
+        -0.01
+      ],
+      "note_samples": [
+        0.01,
+        -0.01
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.02,
+      "expected_note_level": 0.12,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q2-constant-DC",
+      "short_samples": [
+        0.05,
+        0.05,
+        0.05,
+        0.05
+      ],
+      "note_samples": [
+        0.05,
+        0.05,
+        0.05,
+        0.05
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.1,
+      "expected_note_level": 0.6,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q3-long-clips-first",
+      "short_samples": [
+        0.1,
+        -0.1
+      ],
+      "note_samples": [
+        0.1,
+        -0.1
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.2,
+      "expected_note_level": 1,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q4-half-short-full-note",
+      "short_samples": [
+        0.25,
+        -0.25
+      ],
+      "note_samples": [
+        0.25,
+        -0.25
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.5,
+      "expected_note_level": 1,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q5-short-threshold",
+      "short_samples": [
+        0.5,
+        -0.5
+      ],
+      "note_samples": [
+        0.5,
+        -0.5
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 1,
+      "expected_note_level": 1,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q6-both-clipped",
+      "short_samples": [
+        1,
+        -1
+      ],
+      "note_samples": [
+        1,
+        -1
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 1,
+      "expected_note_level": 1,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q7-same-RMS-DC",
+      "short_samples": [
+        0.2,
+        0.2,
+        0.2,
+        0.2
+      ],
+      "note_samples": [
+        0.2,
+        0.2,
+        0.2,
+        0.2
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.4,
+      "expected_note_level": 1,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q8-same-RMS-alternating",
+      "short_samples": [
+        0.2,
+        -0.2,
+        0.2,
+        -0.2
+      ],
+      "note_samples": [
+        0.2,
+        -0.2,
+        0.2,
+        -0.2
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.4,
+      "expected_note_level": 1,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q9-one-impulse",
+      "short_samples": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "note_samples": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 1,
+      "expected_note_level": 1,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q10-diluted-impulse",
+      "short_samples": [
+        0.25,
+        0,
+        0,
+        0
+      ],
+      "note_samples": [
+        0.25,
+        0,
+        0,
+        0
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.25,
+      "expected_note_level": 1,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q11-silence",
+      "short_samples": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "note_samples": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0,
+      "expected_note_level": 0,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q12-no-new-note-block",
+      "short_samples": [],
+      "note_samples": [],
+      "initial_note_level": 0.7,
+      "initial_note_frames": 10,
+      "note_write_should_fail": false,
+      "expected_short_level": 0,
+      "expected_note_level": 0.7,
+      "expected_note_frames": 10,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q13-note-write-failure",
+      "short_samples": [
+        0.1,
+        -0.1
+      ],
+      "note_samples": [
+        0.1,
+        -0.1
+      ],
+      "initial_note_level": 0.6,
+      "initial_note_frames": 10,
+      "note_write_should_fail": true,
+      "expected_short_level": 0.2,
+      "expected_note_level": 0.6,
+      "expected_note_frames": 10,
+      "expected_note_failed": true,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q14-equal-bars-different-inputs",
+      "short_samples": [
+        0.25,
+        -0.25
+      ],
+      "note_samples": [
+        0.041666666666666664,
+        -0.041666666666666664
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.5,
+      "expected_note_level": 0.5,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    }
+  ],
+  "worked_counterexamples": {
+    "Q3_Q4": "同一合成输入，短条未满、长条已满；系数不同，不能比音质。",
+    "Q7_Q8": "常数/DC与正负交替同RMS/条长，不代表有可识别语音。",
+    "Q5_Q6_Q9": "不同样本/能量可能同满条，显示上限裁剪不是麦克风实际削波或每词正确。",
+    "Q12_Q13": "空新块/写失败会保旧长笔记level；当前显示不能证明有新写入或全程保存。",
+    "Q14": "不同输入RMS可因不同缩放显示同0.5，不是相同声压或50%识别率。"
+  },
+  "reference_utterance": {
+    "spoken_text": "样本三十五。先核对四号标签，不发送，也不覆盖原稿。",
+    "ideal_verbatim_text": "样本三十五。先核对四号标签，不发送，也不覆盖原稿。",
+    "observed_audio": null,
+    "observed_transcript": null
+  },
+  "buyer_decision": "仅离线公式预检可用；另获准后安全静止、同意/权限/模型/目标齐备才做短句，不从条长判Go，不加音量/反复录来追满条。",
+  "runtime_checks": {
+    "device_microphone": "not_run",
+    "wind_noise": "not_run",
+    "standard_dB_SPL": "not_run",
+    "speech_accuracy": "not_run",
+    "real_note_file_write": "not_run",
+    "device_UI_meter_refresh": "not_run",
+    "model_or_permission_readiness": "not_run",
+    "ASR_and_draft_insertion": "not_run",
+    "sending_and_delivery": "not_run"
+  }
+}

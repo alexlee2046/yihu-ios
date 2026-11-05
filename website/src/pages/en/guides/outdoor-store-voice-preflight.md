@@ -54,3 +54,11 @@ Review and edit it in the destination; repeated insertion is not automatic dedup
 [README](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md) · [Frozen implementation](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
 
 </details>
+
+<h2 id="syn-level-35">SYN-LEVEL-35: check the words, not a full meter</h2>
+
+The filled pack has fourteen synthetic two-pipeline examples: short voice scales RMS by2 and bounds it to0–1; note append scales by12 after a successful write and caps at1. The same input can show different bars, and different RMS can show the same0.5. Empty blocks or simulated write failure may retain an older note level. Display saturation is not microphone clipping, wind-noise/dB SPL measurement, accuracy or saved-audio evidence.
+
+<a href="/samples/p12-level-preflight/level-preflight.en.json" download>Download SYN-LEVEL-35 English synthetic inputs and expectations</a> · <a href="/samples/p12-level-preflight/preflight-card.md" download>Read the filled bilingual stationary preflight card</a>
+
+Only original formulas and a memory-spy adapter were checked. Device microphone/noise/pressure/accuracy, ASR/insertion/sending are not_run. Store0.1.0/id6819057500 installation needs no Mac/Xcode/self-signing, unlike source preparation above; use the saved11/05 store evidence and language-matched setup with your own workspace/account, models, permission and safe destination. Be stationary with consent; do not chase the meter, repeat insertion or listen continuously in the background.

@@ -1,0 +1,327 @@
+{
+  "case_id": "SYN-LEVEL-35",
+  "language": "en",
+  "synthetic": true,
+  "source_commit": "a8df2f68e9cd22d520e044ca68356e43d48f5152",
+  "is_app_import_schema": false,
+  "is_recorded_audio": false,
+  "purpose": "Two pipeline display scalings/clips, not pressure, wind-noise or recognition scores.",
+  "sample_domain": "Invented finite Float samples within[-1,1], no microphone/sample-rate/acoustic calibration or actual audio meaning; no NaN/Infinity contract asserted.",
+  "source_formula_reference": {
+    "short": "empty ->0; min(1,max(0,sqrt(sum(sample*sample)/count)*2))",
+    "note": "append guards nonempty+file+buffer+successful write; rms=sqrt(reduce(sample*sample)/count); level=min(1,rms*12)",
+    "scope": "Source expressions only; note append is guarded and may preserve old level without a successful write."
+  },
+  "numeric_tolerance": "1e-6 is a Float assertion tolerance, not device/ASR accuracy or sound-pressure calibration.",
+  "cases": [
+    {
+      "id": "Q1-small-bipolar",
+      "short_samples": [
+        0.01,
+        -0.01
+      ],
+      "note_samples": [
+        0.01,
+        -0.01
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.02,
+      "expected_note_level": 0.12,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q2-constant-DC",
+      "short_samples": [
+        0.05,
+        0.05,
+        0.05,
+        0.05
+      ],
+      "note_samples": [
+        0.05,
+        0.05,
+        0.05,
+        0.05
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.1,
+      "expected_note_level": 0.6,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q3-long-clips-first",
+      "short_samples": [
+        0.1,
+        -0.1
+      ],
+      "note_samples": [
+        0.1,
+        -0.1
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.2,
+      "expected_note_level": 1,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q4-half-short-full-note",
+      "short_samples": [
+        0.25,
+        -0.25
+      ],
+      "note_samples": [
+        0.25,
+        -0.25
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.5,
+      "expected_note_level": 1,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q5-short-threshold",
+      "short_samples": [
+        0.5,
+        -0.5
+      ],
+      "note_samples": [
+        0.5,
+        -0.5
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 1,
+      "expected_note_level": 1,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q6-both-clipped",
+      "short_samples": [
+        1,
+        -1
+      ],
+      "note_samples": [
+        1,
+        -1
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 1,
+      "expected_note_level": 1,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q7-same-RMS-DC",
+      "short_samples": [
+        0.2,
+        0.2,
+        0.2,
+        0.2
+      ],
+      "note_samples": [
+        0.2,
+        0.2,
+        0.2,
+        0.2
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.4,
+      "expected_note_level": 1,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q8-same-RMS-alternating",
+      "short_samples": [
+        0.2,
+        -0.2,
+        0.2,
+        -0.2
+      ],
+      "note_samples": [
+        0.2,
+        -0.2,
+        0.2,
+        -0.2
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.4,
+      "expected_note_level": 1,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q9-one-impulse",
+      "short_samples": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "note_samples": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 1,
+      "expected_note_level": 1,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q10-diluted-impulse",
+      "short_samples": [
+        0.25,
+        0,
+        0,
+        0
+      ],
+      "note_samples": [
+        0.25,
+        0,
+        0,
+        0
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.25,
+      "expected_note_level": 1,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q11-silence",
+      "short_samples": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "note_samples": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0,
+      "expected_note_level": 0,
+      "expected_note_frames": 4,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q12-no-new-note-block",
+      "short_samples": [],
+      "note_samples": [],
+      "initial_note_level": 0.7,
+      "initial_note_frames": 10,
+      "note_write_should_fail": false,
+      "expected_short_level": 0,
+      "expected_note_level": 0.7,
+      "expected_note_frames": 10,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q13-note-write-failure",
+      "short_samples": [
+        0.1,
+        -0.1
+      ],
+      "note_samples": [
+        0.1,
+        -0.1
+      ],
+      "initial_note_level": 0.6,
+      "initial_note_frames": 10,
+      "note_write_should_fail": true,
+      "expected_short_level": 0.2,
+      "expected_note_level": 0.6,
+      "expected_note_frames": 10,
+      "expected_note_failed": true,
+      "tolerance": 1e-06
+    },
+    {
+      "id": "Q14-equal-bars-different-inputs",
+      "short_samples": [
+        0.25,
+        -0.25
+      ],
+      "note_samples": [
+        0.041666666666666664,
+        -0.041666666666666664
+      ],
+      "initial_note_level": 0,
+      "initial_note_frames": 0,
+      "note_write_should_fail": false,
+      "expected_short_level": 0.5,
+      "expected_note_level": 0.5,
+      "expected_note_frames": 2,
+      "expected_note_failed": false,
+      "tolerance": 1e-06
+    }
+  ],
+  "worked_counterexamples": {
+    "Q3_Q4": "Same input, unsaturated short bar and saturated note bar; no quality comparison.",
+    "Q7_Q8": "DC and alternating samples have equal RMS/bars without establishing speech.",
+    "Q5_Q6_Q9": "Different vectors/energies can share a full bar; display clipping is not proof of microphone clipping or word accuracy.",
+    "Q12_Q13": "Empty block/write failure can retain an older note level; current display proves no new write or full persistence.",
+    "Q14": "Different RMS inputs can yield the same0.5 bar under different gains, not equal pressure or50% recognition."
+  },
+  "reference_utterance": {
+    "spoken_text": "Sample thirty-five. Check label four first; do not send or overwrite the original.",
+    "ideal_verbatim_text": "Sample thirty-five. Check label four first; do not send or overwrite the original.",
+    "observed_audio": null,
+    "observed_transcript": null
+  },
+  "buyer_decision": "Offline formula preflight is usable; separately authorized stationary practice only after consent/permission/model/destination checks. No Go from bar height; never chase a full bar with louder or repeated captures.",
+  "runtime_checks": {
+    "device_microphone": "not_run",
+    "wind_noise": "not_run",
+    "standard_dB_SPL": "not_run",
+    "speech_accuracy": "not_run",
+    "real_note_file_write": "not_run",
+    "device_UI_meter_refresh": "not_run",
+    "model_or_permission_readiness": "not_run",
+    "ASR_and_draft_insertion": "not_run",
+    "sending_and_delivery": "not_run"
+  }
+}
