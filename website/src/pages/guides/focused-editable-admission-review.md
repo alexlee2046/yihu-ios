@@ -66,3 +66,7 @@ origin核边界，桥回执核分支，键盘核输入会话；这里核**DOM候
 [页面边界](/guides/workbench-origin-page-boundaries/) · [桥回执](/guides/host-bridge-outcome-boundaries/) · [键盘确认](/guides/keyboard-acknowledgement-scope/) · [开始](/start/) · [隐私](/privacy/)
 
 [editable/usable/isSafeDraft/主框架](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieTextInsertion.swift) · [原生插入条件](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieWebView.swift)
+
+## SYN-BRG-39技术转接（保持退休）
+
+焦点/可编辑/可用/已知草稿只是适配条件，非身份或提交授权；不以解除disabled/readOnly/aria-busy或伪造桥绕门。[同语宿主桥回执核查](/guides/host-bridge-outcome-boundaries/)区分refused/unavailable/accepted、DOM值/回执和业务提交，异常/未知不盲降级或重放。此页仍indexable: false/noindex,follow，不入sitemap/LLM独立section，不挂下载/Store卡。SYNTHETIC_EXAMPLE非真实网页写入/框架兼容认证，保失败与原副作用未知。

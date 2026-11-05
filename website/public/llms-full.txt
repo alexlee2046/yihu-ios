@@ -8940,9 +8940,334 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/host-bridge-outcome-boundaries/
 
-场景指南 · 相关使用指南 桥拒绝与桥不可用能混同吗？accepted/refused/unavailable核对 refused不是unavailable，accepted也不是服务端处理回执 当前页面collieBridgeScript先核origin、完整pageURL与页面可见性，再观测事件detail的读取/accepted设置及preventDefault。结果为accepted/refused/unavailable；原生分支只有明确unavailable才继续受守卫DOM适配，拒绝、异常或其他结果不因此变成安全降级。accepted也只是协议回报，不证明已发送或业务处理。 与origin、一次交接和完成审计的区别 origin指南核页面边界，一次交接核原尝试，审计核实际结果；这里核 可选页面桥的三态观测与何时允许走下一适配分支 。不注入事件、不伪造桥或改网页全局。 检查项 已核范围 人工复核 不应推断 前置条件 origin/pageURL/hidden等检查 具体页面与当前相位 标题相同就可信 accepted detail明确设置为true时优先返回 宿主回报与实际目标内容 服务器收到/执行/审批 observed 读取text/accepted或设置accepted可被观测 是否按约定消费事件 全站能力已扫描 refused 未accepted且observed或defaultPrevented等情况 拒绝或不满足边界 可当没桥继续绕过 unavailable 未观察到协议处理的分支 仅这个结果可进入后续DOM尝试 页面绝对没有任何能力 DOM下一分支 仍核allowed和适配器条件 焦点/草稿/页面/请求 无条件写入或发送 异常/未知 不自动当unavailable 副作用和未知保留 失败就绝无写入可盲重试 不同回执层 隔离世界Bool回执与页面桥分别处理 明确哪一层实际返回 任意非Bool值都是发送成功 合成桥结果记录 结果refused：停止该路径，不把它改写成unavailable去尝试别的输入框。结果accepted：只报告宿主按协议接纳，再核真实目标内容，不填已发送/已执行。这里没有实际网页交接。 这条原生链路没有submit调用，但并不等于任意网站行为都已验收。协议观测不是安全扫描、账户认证或所有后端幂等保证；不以“兼容”为由注册假桥或改锁定/发送状态。 FAQ refused可以当没有桥吗？ 不能。原生分支不因拒绝继续DOM降级。 unavailable证明整个站点没有适配能力吗？ 不证明，只说明本协议观测路径的结果，后续尝试仍受守卫。 accepted说明业务已处理吗？ 不说明。宿主接纳、实际填入、发送、接收、业务完成分别核。 preventDefault一定压过accepted吗？ 不是这么概括，源码accepted=true优先；未accepted时取消事件可归refused。 异常后能自动换框重发吗？ 不应，保留未知与原请求/目标状态，不盲降级或重放。 本文配置或测试了新桥吗？ 没有，只核固定协议分支，不改页面或新增服务。 相关指南与源码 页面与origin · 一次交接 · 实际完成证据 · 开始 · 隐私 collieBridgeScript三态 · insertTranscript分支
+场景指南 · 相关使用指南 桥拒绝与桥不可用能混同吗？accepted/refused/unavailable核对 SYN-BRG-39：桥回执、DOM结果与业务提交边界 SYNTHETIC_EXAMPLE，原Swift/JS在内存替身运行，不是真实网页写入/发送。 ZH: /samples/p18-host-bridge-outcomes/host-bridge-outcomes-preflight.zh.json · EN: /samples/p18-host-bridge-outcomes/host-bridge-outcomes-preflight.en.json · Card: /samples/p18-host-bridge-outcomes/preflight-card.md Case Synthetic condition / 合成条件 Scoped expectation / 范围内结果 Not certified / 未证 N1 no_web; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N2 blocked; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N3 untrusted; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N4 wrong_page; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N5 wrong_request; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N6 moved_prepared; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N7 normal; scripted answers=[‘true’] {‘accepted’: True, ‘call_roles’: [‘receipt’]} Original Swift + fake WebKit replies, not real content worlds N8 normal; scripted answers=[‘false’] {‘accepted’: False, ‘call_roles’: [‘receipt’]} Original Swift + fake WebKit replies, not real content worlds N9 normal; scripted answers=[‘throw’] {‘accepted’: False, ‘call_roles’: [‘receipt’]} Original Swift + fake WebKit replies, not real content worlds N10 normal; scripted answers=[‘null’, ‘accepted’] {‘accepted’: True, ‘call_roles’: [‘receipt’, ‘bridge’]} Original Swift + fake WebKit replies, not real content worlds N11 normal; scripted answers=[‘null’, ‘refused’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]} Original Swift + fake WebKit replies, not real content worlds N12 normal; scripted answers=[‘null’, ‘unavailable’, ‘true’] {‘accepted’: True, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]} Original Swift + fake WebKit replies, not real content worlds N13 normal; scripted answers=[‘null’, ‘unknown’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]} Original Swift + fake WebKit replies, not real content worlds N14 normal; scripted answers=[‘null’, ‘throw’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]} Original Swift + fake WebKit replies, not real content worlds N15 normal; scripted answers=[‘null’, ‘unavailable’, ‘false’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]} Original Swift + fake WebKit replies, not real content worlds N16 normal; scripted answers=[‘null’, ‘unavailable’, ‘string_true’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]} Original Swift + fake WebKit replies, not real content worlds N17 normal; scripted answers=[‘null’, ‘unavailable’, ‘throw’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]} Original Swift + fake WebKit replies, not real content worlds N18 block_after_receipt; scripted answers=[‘null’] {‘accepted’: False, ‘call_roles’: [‘receipt’]} Original Swift + fake WebKit replies, not real content worlds N19 block_after_bridge; scripted answers=[‘null’, ‘unavailable’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]} Original Swift + fake WebKit replies, not real content worlds B1 absent unavailable Original emitted JS + synthetic synchronous event objects B2 read_text refused Original emitted JS + synthetic synchronous event objects B3 read_accepted refused Original emitted JS + synthetic synchronous event objects B4 accept_true accepted Original emitted JS + synthetic synchronous event objects B5 accept_false refused Original emitted JS + synthetic synchronous event objects B6 accept_string refused Original emitted JS + synthetic synchronous event objects B7 prevent refused Original emitted JS + synthetic synchronous event objects B8 accept_and_prevent accepted Original emitted JS + synthetic synchronous event objects B9 hidden refused Original emitted JS + synthetic synchronous event objects B10 wrong_origin refused Original emitted JS + synthetic synchronous event objects B11 wrong_page refused Original emitted JS + synthetic synchronous event objects B12 accept_number refused Original emitted JS + synthetic synchronous event objects B13 accept_then_refuse refused Original emitted JS + synthetic synchronous event objects D1 exec_success {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D2 cjk {‘accepted’: True, ‘value’: ‘你好世界’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D3 setter_fallback {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D4 mutated_but_false {‘accepted’: False, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D5 framework_reject {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: False} Synthetic element/execCommand/framework models, not browser compatibility D6 readonly {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D7 readonly_policy {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D8 password {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D9 collie_unknown {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D10 hidden {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D11 moved_page {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D12 focus_redirect {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D13 same_id {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D14 different_text {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D15 email_selection_throw {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D16 disconnect_after_setter {‘accepted’: False, ‘value’: ‘alpha beta’, ‘receipt’: False} Synthetic element/execCommand/framework models, not browser compatibility R1 DOM/桥接接纳不是服务提交 source/manual boundary, runtime not_run No authentication, persistence or business submission receipt R2 false/异常也可能已改变值，不盲重放 source/manual boundary, runtime not_run No authentication, persistence or business submission receipt R3 焦点/适配类型不等授权/所有iframe或shadow兼容 source/manual boundary, runtime not_run No authentication, persistence or business submission receipt R4 目的地保存/同步/自动处理另核 source/manual boundary, runtime not_run No authentication, persistence or business submission receipt refused/未知/异常不能改写为unavailable去绕路；仅明确unavailable可继续受守卫DOM。accepted=true优先于preventDefault，但仅属桥协议接纳。DOM false也可能值已改变；D4首次false后同请求receipt可true，不代表业务提交。保原请求/目标/未知副作用，不盲重填重发。焦点、readOnly策略例外或已知结构不授账户/服务写权限；真实WebKit/框架/主frame外兼容、ASR/提交全部not_run。目的地可能保存/同步/自动处理，App不代发不等全数据不离机。 refused不是unavailable，accepted也不是服务端处理回执 当前页面collieBridgeScript先核origin、完整pageURL与页面可见性，再观测事件detail的读取/accepted设置及preventDefault。结果为accepted/refused/unavailable；原生分支只有明确unavailable才继续受守卫DOM适配，拒绝、异常或其他结果不因此变成安全降级。accepted也只是协议回报，不证明已发送或业务处理。 与origin、一次交接和完成审计的区别 origin指南核页面边界，一次交接核原尝试，审计核实际结果；这里核 可选页面桥的三态观测与何时允许走下一适配分支 。不注入事件、不伪造桥或改网页全局。 检查项 已核范围 人工复核 不应推断 前置条件 origin/pageURL/hidden等检查 具体页面与当前相位 标题相同就可信 accepted detail明确设置为true时优先返回 宿主回报与实际目标内容 服务器收到/执行/审批 observed 读取text/accepted或设置accepted可被观测 是否按约定消费事件 全站能力已扫描 refused 未accepted且observed或defaultPrevented等情况 拒绝或不满足边界 可当没桥继续绕过 unavailable 未观察到协议处理的分支 仅这个结果可进入后续DOM尝试 页面绝对没有任何能力 DOM下一分支 仍核allowed和适配器条件 焦点/草稿/页面/请求 无条件写入或发送 异常/未知 不自动当unavailable 副作用和未知保留 失败就绝无写入可盲重试 不同回执层 隔离世界Bool回执与页面桥分别处理 明确哪一层实际返回 任意非Bool值都是发送成功 合成桥结果记录 结果refused：停止该路径，不把它改写成unavailable去尝试别的输入框。结果accepted：只报告宿主按协议接纳，再核真实目标内容，不填已发送/已执行。这里没有实际网页交接。 这条原生链路没有submit调用，但并不等于任意网站行为都已验收。协议观测不是安全扫描、账户认证或所有后端幂等保证；不以“兼容”为由注册假桥或改锁定/发送状态。 FAQ refused可以当没有桥吗？ 不能。原生分支不因拒绝继续DOM降级。 unavailable证明整个站点没有适配能力吗？ 不证明，只说明本协议观测路径的结果，后续尝试仍受守卫。 accepted说明业务已处理吗？ 不说明。宿主接纳、实际填入、发送、接收、业务完成分别核。 preventDefault一定压过accepted吗？ 不是这么概括，源码accepted=true优先；未accepted时取消事件可归refused。 异常后能自动换框重发吗？ 不应，保留未知与原请求/目标状态，不盲降级或重放。 本文配置或测试了新桥吗？ 没有，只核固定协议分支，不改页面或新增服务。 相关指南与源码 页面与origin · 一次交接 · 实际完成证据 · 开始 · 隐私 collieBridgeScript三态 · insertTranscript分支
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Synthetic condition / 合成条件</th>
+<th>Scoped expectation / 范围内结果</th>
+<th>Not certified / 未证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N1</td>
+<td>no_web; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N2</td>
+<td>blocked; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N3</td>
+<td>untrusted; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N4</td>
+<td>wrong_page; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N5</td>
+<td>wrong_request; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N6</td>
+<td>moved_prepared; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N7</td>
+<td>normal; scripted answers=[‘true’]</td>
+<td>{‘accepted’: True, ‘call_roles’: [‘receipt’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N8</td>
+<td>normal; scripted answers=[‘false’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N9</td>
+<td>normal; scripted answers=[‘throw’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N10</td>
+<td>normal; scripted answers=[‘null’, ‘accepted’]</td>
+<td>{‘accepted’: True, ‘call_roles’: [‘receipt’, ‘bridge’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N11</td>
+<td>normal; scripted answers=[‘null’, ‘refused’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N12</td>
+<td>normal; scripted answers=[‘null’, ‘unavailable’, ‘true’]</td>
+<td>{‘accepted’: True, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N13</td>
+<td>normal; scripted answers=[‘null’, ‘unknown’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N14</td>
+<td>normal; scripted answers=[‘null’, ‘throw’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N15</td>
+<td>normal; scripted answers=[‘null’, ‘unavailable’, ‘false’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N16</td>
+<td>normal; scripted answers=[‘null’, ‘unavailable’, ‘string_true’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N17</td>
+<td>normal; scripted answers=[‘null’, ‘unavailable’, ‘throw’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N18</td>
+<td>block_after_receipt; scripted answers=[‘null’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N19</td>
+<td>block_after_bridge; scripted answers=[‘null’, ‘unavailable’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>absent</td>
+<td>unavailable</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>read_text</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>read_accepted</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>accept_true</td>
+<td>accepted</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B5</td>
+<td>accept_false</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B6</td>
+<td>accept_string</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B7</td>
+<td>prevent</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B8</td>
+<td>accept_and_prevent</td>
+<td>accepted</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B9</td>
+<td>hidden</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B10</td>
+<td>wrong_origin</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B11</td>
+<td>wrong_page</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B12</td>
+<td>accept_number</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B13</td>
+<td>accept_then_refuse</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>D1</td>
+<td>exec_success</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>cjk</td>
+<td>{‘accepted’: True, ‘value’: ‘你好世界’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>setter_fallback</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>mutated_but_false</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>framework_reject</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: False}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>readonly</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>readonly_policy</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>password</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D9</td>
+<td>collie_unknown</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D10</td>
+<td>hidden</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>moved_page</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D12</td>
+<td>focus_redirect</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D13</td>
+<td>same_id</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D14</td>
+<td>different_text</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D15</td>
+<td>email_selection_throw</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D16</td>
+<td>disconnect_after_setter</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha beta’, ‘receipt’: False}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>R1</td>
+<td>DOM/桥接接纳不是服务提交</td>
+<td>source/manual boundary, runtime not_run</td>
+<td>No authentication, persistence or business submission receipt</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>false/异常也可能已改变值，不盲重放</td>
+<td>source/manual boundary, runtime not_run</td>
+<td>No authentication, persistence or business submission receipt</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>焦点/适配类型不等授权/所有iframe或shadow兼容</td>
+<td>source/manual boundary, runtime not_run</td>
+<td>No authentication, persistence or business submission receipt</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>目的地保存/同步/自动处理另核</td>
+<td>source/manual boundary, runtime not_run</td>
+<td>No authentication, persistence or business submission receipt</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -9009,9 +9334,334 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/host-bridge-outcome-boundaries/
 
-All scenarios · Related practical guide Refused is not unavailable: inspect accepted/refused/unavailable bridge outcomes refused differs from unavailable; accepted is not a backend handling receipt collieBridgeScript checks origin/full pageURL/visibility and observes detail reads, accepted writes and event cancellation. It returns accepted/refused/unavailable. Native handling continues to guarded DOM only for explicit unavailable, not refusals, exceptions or arbitrary results. accepted is a protocol report, not sending or business completion. Different from origin, reservations and completion review Origin concerns boundaries, reservations concern attempts, auditing concerns results. Here optional page-bridge observation and permission to try the next adapter branch matter. No event injection, fake bridge or global-page modification occurs. Check Verified scope Manual review Not established Preconditions Origin/pageURL/hidden etc. Actual page/phase Same title implies trust accepted Explicit accepted=true wins Host report versus target content Server received/executed/approved Observed Reads text/accepted or writes accepted Protocol consumption All site capabilities scanned refused Without accepted, observed/defaultPrevented etc. Refusal/boundaries Treat as absent and bypass unavailable No observed protocol handling Only this permits next DOM attempt No capability anywhere on the page DOM continuation allowed/adapter guards remain Focus/draft/page/request Unconditional writing/sending Exception/unknown Not automatically unavailable Effects/unknowns retained Definitely no write, safely replay Receipt layers Isolated Bool receipts differ from page bridge Actual layer/outcome Any non-Bool means sent Synthetic bridge note refused: stop rather than relabel unavailable to try another composer. accepted: report protocol acceptance, inspect actual content, and do not invent sent/executed. No real handoff ran. The native path makes no submit call, but arbitrary site behavior is not certified. Protocol observation is not scanning, account identity or universal idempotency. Compatibility cannot justify fake bridges or changing locks/sending state. FAQ Can refused be treated as absent bridge? No. Native refusal does not continue DOM fallback. Does unavailable prove no site capability? No. It is this observed protocol outcome; later adaptation remains guarded. Does accepted prove business handling? No. Acceptance, placement, sending, receipt and handling differ. Does preventDefault always override accepted? No. accepted=true wins; otherwise cancellation can yield refused. Can exceptions trigger another composer/replay automatically? Do not blindly downgrade/replay; retain unknown request/target state. Was a bridge configured/tested? No. Fixed protocol review only, without page changes/services. Reading and source Page/origin · One handoff · Completion evidence · Start · Privacy Three-state bridge · Insertion branches
+All scenarios · Related practical guide Refused is not unavailable: inspect accepted/refused/unavailable bridge outcomes SYN-BRG-39: host receipts, DOM results and business submission SYNTHETIC_EXAMPLE: original Swift/JS with memory doubles, not live-page edits or sends. ZH: /samples/p18-host-bridge-outcomes/host-bridge-outcomes-preflight.zh.json · EN: /samples/p18-host-bridge-outcomes/host-bridge-outcomes-preflight.en.json · Card: /samples/p18-host-bridge-outcomes/preflight-card.md Case Synthetic condition / 合成条件 Scoped expectation / 范围内结果 Not certified / 未证 N1 no_web; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N2 blocked; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N3 untrusted; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N4 wrong_page; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N5 wrong_request; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N6 moved_prepared; scripted answers=[] {‘accepted’: False, ‘call_roles’: []} Original Swift + fake WebKit replies, not real content worlds N7 normal; scripted answers=[‘true’] {‘accepted’: True, ‘call_roles’: [‘receipt’]} Original Swift + fake WebKit replies, not real content worlds N8 normal; scripted answers=[‘false’] {‘accepted’: False, ‘call_roles’: [‘receipt’]} Original Swift + fake WebKit replies, not real content worlds N9 normal; scripted answers=[‘throw’] {‘accepted’: False, ‘call_roles’: [‘receipt’]} Original Swift + fake WebKit replies, not real content worlds N10 normal; scripted answers=[‘null’, ‘accepted’] {‘accepted’: True, ‘call_roles’: [‘receipt’, ‘bridge’]} Original Swift + fake WebKit replies, not real content worlds N11 normal; scripted answers=[‘null’, ‘refused’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]} Original Swift + fake WebKit replies, not real content worlds N12 normal; scripted answers=[‘null’, ‘unavailable’, ‘true’] {‘accepted’: True, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]} Original Swift + fake WebKit replies, not real content worlds N13 normal; scripted answers=[‘null’, ‘unknown’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]} Original Swift + fake WebKit replies, not real content worlds N14 normal; scripted answers=[‘null’, ‘throw’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]} Original Swift + fake WebKit replies, not real content worlds N15 normal; scripted answers=[‘null’, ‘unavailable’, ‘false’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]} Original Swift + fake WebKit replies, not real content worlds N16 normal; scripted answers=[‘null’, ‘unavailable’, ‘string_true’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]} Original Swift + fake WebKit replies, not real content worlds N17 normal; scripted answers=[‘null’, ‘unavailable’, ‘throw’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]} Original Swift + fake WebKit replies, not real content worlds N18 block_after_receipt; scripted answers=[‘null’] {‘accepted’: False, ‘call_roles’: [‘receipt’]} Original Swift + fake WebKit replies, not real content worlds N19 block_after_bridge; scripted answers=[‘null’, ‘unavailable’] {‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]} Original Swift + fake WebKit replies, not real content worlds B1 absent unavailable Original emitted JS + synthetic synchronous event objects B2 read_text refused Original emitted JS + synthetic synchronous event objects B3 read_accepted refused Original emitted JS + synthetic synchronous event objects B4 accept_true accepted Original emitted JS + synthetic synchronous event objects B5 accept_false refused Original emitted JS + synthetic synchronous event objects B6 accept_string refused Original emitted JS + synthetic synchronous event objects B7 prevent refused Original emitted JS + synthetic synchronous event objects B8 accept_and_prevent accepted Original emitted JS + synthetic synchronous event objects B9 hidden refused Original emitted JS + synthetic synchronous event objects B10 wrong_origin refused Original emitted JS + synthetic synchronous event objects B11 wrong_page refused Original emitted JS + synthetic synchronous event objects B12 accept_number refused Original emitted JS + synthetic synchronous event objects B13 accept_then_refuse refused Original emitted JS + synthetic synchronous event objects D1 exec_success {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D2 cjk {‘accepted’: True, ‘value’: ‘你好世界’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D3 setter_fallback {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D4 mutated_but_false {‘accepted’: False, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D5 framework_reject {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: False} Synthetic element/execCommand/framework models, not browser compatibility D6 readonly {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D7 readonly_policy {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D8 password {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D9 collie_unknown {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D10 hidden {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D11 moved_page {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D12 focus_redirect {‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None} Synthetic element/execCommand/framework models, not browser compatibility D13 same_id {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D14 different_text {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D15 email_selection_throw {‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True} Synthetic element/execCommand/framework models, not browser compatibility D16 disconnect_after_setter {‘accepted’: False, ‘value’: ‘alpha beta’, ‘receipt’: False} Synthetic element/execCommand/framework models, not browser compatibility R1 DOM/bridge acceptance is not service submission source/manual boundary, runtime not_run No authentication, persistence or business submission receipt R2 False/error can coexist with changed value; no blind replay source/manual boundary, runtime not_run No authentication, persistence or business submission receipt R3 Focus/type does not authorize writes or certify all iframe/shadow layouts source/manual boundary, runtime not_run No authentication, persistence or business submission receipt R4 Destination save/sync/auto-processing requires separate evidence source/manual boundary, runtime not_run No authentication, persistence or business submission receipt Refused/unknown/exception cannot be relabelled unavailable to bypass a host. Only explicit unavailable may enter guarded DOM fallback. accepted=true precedes preventDefault but proves only protocol acceptance. DOM false may coexist with changed value; D4 first false then same-request receipt true is not business submission. Preserve request/target/unknown side effects; do not blindly refill/resend. Focus, readonly policy exceptions or known markup grant no account/server authorization. Real WebKit/framework/frame compatibility/ASR/submission are not_run. Destination may save/sync/auto-process; no global all-data-local claim. refused differs from unavailable; accepted is not a backend handling receipt collieBridgeScript checks origin/full pageURL/visibility and observes detail reads, accepted writes and event cancellation. It returns accepted/refused/unavailable. Native handling continues to guarded DOM only for explicit unavailable, not refusals, exceptions or arbitrary results. accepted is a protocol report, not sending or business completion. Different from origin, reservations and completion review Origin concerns boundaries, reservations concern attempts, auditing concerns results. Here optional page-bridge observation and permission to try the next adapter branch matter. No event injection, fake bridge or global-page modification occurs. Check Verified scope Manual review Not established Preconditions Origin/pageURL/hidden etc. Actual page/phase Same title implies trust accepted Explicit accepted=true wins Host report versus target content Server received/executed/approved Observed Reads text/accepted or writes accepted Protocol consumption All site capabilities scanned refused Without accepted, observed/defaultPrevented etc. Refusal/boundaries Treat as absent and bypass unavailable No observed protocol handling Only this permits next DOM attempt No capability anywhere on the page DOM continuation allowed/adapter guards remain Focus/draft/page/request Unconditional writing/sending Exception/unknown Not automatically unavailable Effects/unknowns retained Definitely no write, safely replay Receipt layers Isolated Bool receipts differ from page bridge Actual layer/outcome Any non-Bool means sent Synthetic bridge note refused: stop rather than relabel unavailable to try another composer. accepted: report protocol acceptance, inspect actual content, and do not invent sent/executed. No real handoff ran. The native path makes no submit call, but arbitrary site behavior is not certified. Protocol observation is not scanning, account identity or universal idempotency. Compatibility cannot justify fake bridges or changing locks/sending state. FAQ Can refused be treated as absent bridge? No. Native refusal does not continue DOM fallback. Does unavailable prove no site capability? No. It is this observed protocol outcome; later adaptation remains guarded. Does accepted prove business handling? No. Acceptance, placement, sending, receipt and handling differ. Does preventDefault always override accepted? No. accepted=true wins; otherwise cancellation can yield refused. Can exceptions trigger another composer/replay automatically? Do not blindly downgrade/replay; retain unknown request/target state. Was a bridge configured/tested? No. Fixed protocol review only, without page changes/services. Reading and source Page/origin · One handoff · Completion evidence · Start · Privacy Three-state bridge · Insertion branches
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Synthetic condition / 合成条件</th>
+<th>Scoped expectation / 范围内结果</th>
+<th>Not certified / 未证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N1</td>
+<td>no_web; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N2</td>
+<td>blocked; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N3</td>
+<td>untrusted; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N4</td>
+<td>wrong_page; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N5</td>
+<td>wrong_request; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N6</td>
+<td>moved_prepared; scripted answers=[]</td>
+<td>{‘accepted’: False, ‘call_roles’: []}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N7</td>
+<td>normal; scripted answers=[‘true’]</td>
+<td>{‘accepted’: True, ‘call_roles’: [‘receipt’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N8</td>
+<td>normal; scripted answers=[‘false’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N9</td>
+<td>normal; scripted answers=[‘throw’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N10</td>
+<td>normal; scripted answers=[‘null’, ‘accepted’]</td>
+<td>{‘accepted’: True, ‘call_roles’: [‘receipt’, ‘bridge’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N11</td>
+<td>normal; scripted answers=[‘null’, ‘refused’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N12</td>
+<td>normal; scripted answers=[‘null’, ‘unavailable’, ‘true’]</td>
+<td>{‘accepted’: True, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N13</td>
+<td>normal; scripted answers=[‘null’, ‘unknown’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N14</td>
+<td>normal; scripted answers=[‘null’, ‘throw’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N15</td>
+<td>normal; scripted answers=[‘null’, ‘unavailable’, ‘false’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N16</td>
+<td>normal; scripted answers=[‘null’, ‘unavailable’, ‘string_true’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N17</td>
+<td>normal; scripted answers=[‘null’, ‘unavailable’, ‘throw’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’, ‘dom’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N18</td>
+<td>block_after_receipt; scripted answers=[‘null’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>N19</td>
+<td>block_after_bridge; scripted answers=[‘null’, ‘unavailable’]</td>
+<td>{‘accepted’: False, ‘call_roles’: [‘receipt’, ‘bridge’]}</td>
+<td>Original Swift + fake WebKit replies, not real content worlds</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>absent</td>
+<td>unavailable</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>read_text</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>read_accepted</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>accept_true</td>
+<td>accepted</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B5</td>
+<td>accept_false</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B6</td>
+<td>accept_string</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B7</td>
+<td>prevent</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B8</td>
+<td>accept_and_prevent</td>
+<td>accepted</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B9</td>
+<td>hidden</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B10</td>
+<td>wrong_origin</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B11</td>
+<td>wrong_page</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B12</td>
+<td>accept_number</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>B13</td>
+<td>accept_then_refuse</td>
+<td>refused</td>
+<td>Original emitted JS + synthetic synchronous event objects</td>
+</tr>
+<tr>
+<td>D1</td>
+<td>exec_success</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>cjk</td>
+<td>{‘accepted’: True, ‘value’: ‘你好世界’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>setter_fallback</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>mutated_but_false</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>framework_reject</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: False}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>readonly</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>readonly_policy</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>password</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D9</td>
+<td>collie_unknown</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D10</td>
+<td>hidden</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>moved_page</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D12</td>
+<td>focus_redirect</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha’, ‘receipt’: None}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D13</td>
+<td>same_id</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D14</td>
+<td>different_text</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D15</td>
+<td>email_selection_throw</td>
+<td>{‘accepted’: True, ‘value’: ‘alpha beta’, ‘receipt’: True}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>D16</td>
+<td>disconnect_after_setter</td>
+<td>{‘accepted’: False, ‘value’: ‘alpha beta’, ‘receipt’: False}</td>
+<td>Synthetic element/execCommand/framework models, not browser compatibility</td>
+</tr>
+<tr>
+<td>R1</td>
+<td>DOM/bridge acceptance is not service submission</td>
+<td>source/manual boundary, runtime not_run</td>
+<td>No authentication, persistence or business submission receipt</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>False/error can coexist with changed value; no blind replay</td>
+<td>source/manual boundary, runtime not_run</td>
+<td>No authentication, persistence or business submission receipt</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>Focus/type does not authorize writes or certify all iframe/shadow layouts</td>
+<td>source/manual boundary, runtime not_run</td>
+<td>No authentication, persistence or business submission receipt</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Destination save/sync/auto-processing requires separate evidence</td>
+<td>source/manual boundary, runtime not_run</td>
+<td>No authentication, persistence or business submission receipt</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
