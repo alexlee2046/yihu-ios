@@ -65,3 +65,11 @@ lang: zh
 [权限与采样](/guides/microphone-permission-sample-contract/) · [前后台](/guides/foreground-audio-rebind-preflight/) · [声纹结果](/guides/voiceprint-filter-not-authorization/) · [预览与final](/guides/replaceable-voice-preview-review/) · [开始](/start/) · [隐私](/privacy/)
 
 [按钮/phase/测试保留](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceController.swift) · [笔记canRecord/canTranscribe](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift) · [笔记录制与worker入口](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceNotes.swift)
+
+<h2 id="syn-busy-36">SYN-BUSY-36：按钮、准入与通知抑制分开核</h2>
+
+已填合成包用8场景/30步核ready待处理文字/测试保留、needsModel可点但不录、delivering不可取消仍非空闲、转写与底层空pipeline不互作准入。准备还需权限与前台相交；录音中的通知无论抑制true或false，都不会由debouncer释放controller忙态，主按钮此时代表stop而非另开采集。
+
+<a href="/samples/p13-busy-debounce/busy-debounce-preflight.zh.json" download>下载SYN-BUSY-36中文离线fixture</a> · <a href="/samples/p13-busy-debounce/preflight-card.md" download>阅读已填中英忙态/防抖核对卡</a>
+
+原判断仅在Foundation内存依赖替身核过，start/预热/预览计数不代表真实麦克风或模型。真机中断/系统路由/外设恢复/ASR/填入/发送全not_run；不删pending或伪造测试flag绕门，不等2秒就宣可重录/重发。卡内商店0.1.0路径不需Mac/自行签名，但账号/模型/权限/安全目的地仍需另核。

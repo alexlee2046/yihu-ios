@@ -1,0 +1,388 @@
+{
+  "case_id": "SYN-BUSY-36",
+  "language": "en",
+  "synthetic": true,
+  "source_commit": "915523951dfc5ae7458954c6989d3664396ef558",
+  "is_app_import_schema": false,
+  "scope": "Local primary-voice admission and notification suppression are separate conditions, not global scheduling/note-concurrency proof.",
+  "scenarios": [
+    {
+      "id": "B1-ready-reservation-cycle",
+      "preset": {
+        "phase": "ready",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": true,
+            "can_cancel": false,
+            "is_recording": false
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": true,
+            "test_mic_reserved": true,
+            "enabled": false
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": false,
+            "recorder_start_calls": 0
+          }
+        },
+        {
+          "op": "release_test_mic",
+          "expect": {
+            "test_mic_reserved": false,
+            "enabled": true,
+            "recorder_start_calls": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "B2-empty-pending-is-not-nil",
+      "preset": {
+        "phase": "ready",
+        "pending_transcript": "",
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": false,
+            "can_retry_delivery": true,
+            "pending_present": true
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": true,
+            "enabled": false,
+            "pending_present": true
+          }
+        },
+        {
+          "op": "release_test_mic",
+          "expect": {
+            "enabled": false,
+            "can_retry_delivery": true,
+            "pending_present": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "B3-needs-model-enabled-is-not-recording",
+      "preset": {
+        "phase": "needsModel",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": true,
+            "can_cancel": false,
+            "is_recording": false
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": true,
+            "test_mic_reserved": true,
+            "enabled": true
+          }
+        },
+        {
+          "op": "release_test_mic",
+          "expect": {
+            "enabled": true,
+            "recorder_start_calls": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "B4-delivering-not-cancellable-not-idle",
+      "preset": {
+        "phase": "delivering",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": false,
+            "can_cancel": false,
+            "is_recording": false
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": false,
+            "recorder_start_calls": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "B5-transcribing-low-level-is-not-admission",
+      "preset": {
+        "phase": "transcribing",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": false,
+            "can_cancel": true,
+            "is_recording": false
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": false
+          }
+        },
+        {
+          "op": "start_if_ready",
+          "expect": {
+            "recorder_start_calls": 0,
+            "phase": "transcribing"
+          }
+        },
+        {
+          "op": "probe_recorder",
+          "expect": {
+            "recorder_probe": "would_reach_permission_check",
+            "phase": "transcribing",
+            "recorder_start_calls": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "B6-foreground-and-permission-intersection",
+      "preset": {
+        "phase": "preparing",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": false
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": false,
+            "can_cancel": true
+          }
+        },
+        {
+          "op": "start_if_ready",
+          "expect": {
+            "recorder_start_calls": 0,
+            "phase": "preparing"
+          }
+        },
+        {
+          "op": "set_fixture_readiness",
+          "expect": {
+            "phase": "preparing"
+          },
+          "permission": true,
+          "foreground": false
+        },
+        {
+          "op": "start_if_ready",
+          "expect": {
+            "recorder_start_calls": 0
+          }
+        },
+        {
+          "op": "set_fixture_readiness",
+          "expect": {
+            "phase": "preparing"
+          },
+          "permission": true,
+          "foreground": true
+        },
+        {
+          "op": "start_if_ready",
+          "expect": {
+            "recorder_start_calls": 1,
+            "phase": "recording",
+            "is_recording": true,
+            "prewarm_spy_calls": 1,
+            "preview_spy_calls": 1
+          }
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": false,
+            "can_cancel": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "B7-draining-pipeline-lower-gate",
+      "preset": {
+        "phase": "preparing",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": true,
+        "foreground_fixture": true,
+        "recorder_active_fixture": false,
+        "pipeline_present_fixture": true
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": false,
+            "can_cancel": true
+          }
+        },
+        {
+          "op": "probe_recorder",
+          "expect": {
+            "recorder_probe": "busy",
+            "recorder_start_calls": 0,
+            "phase": "preparing"
+          }
+        }
+      ]
+    },
+    {
+      "id": "B8-suppression-does-not-release-busy",
+      "preset": {
+        "phase": "recording",
+        "pending_transcript": null,
+        "test_mic_reserved": false,
+        "permission_granted_fixture": false,
+        "foreground_fixture": true,
+        "recorder_active_fixture": true,
+        "pipeline_present_fixture": true
+      },
+      "steps": [
+        {
+          "op": "snapshot",
+          "expect": {
+            "enabled": true,
+            "can_cancel": true,
+            "is_recording": true
+          }
+        },
+        {
+          "op": "arm_debounce",
+          "expect": {
+            "phase": "recording"
+          },
+          "token": "00000000-0000-4000-8000-000000000036",
+          "at_ms": 0
+        },
+        {
+          "op": "debounce",
+          "expect": {
+            "suppressed": true,
+            "enabled": true,
+            "can_cancel": true
+          },
+          "token": "00000000-0000-4000-8000-000000000036",
+          "at_ms": 400,
+          "engine_running": true,
+          "format_unchanged": true,
+          "route_unchanged": true
+        },
+        {
+          "op": "debounce",
+          "expect": {
+            "suppressed": false,
+            "phase": "recording",
+            "can_cancel": true
+          },
+          "token": "00000000-0000-4000-8000-000000000036",
+          "at_ms": 700,
+          "engine_running": true,
+          "format_unchanged": true,
+          "route_unchanged": false
+        },
+        {
+          "op": "claim_test_mic",
+          "expect": {
+            "claim_result": false,
+            "phase": "recording",
+            "is_recording": true
+          }
+        }
+      ]
+    }
+  ],
+  "worked_answers": {
+    "B1_B2": "Ready still checks pending text/reservation; empty text is not nil. Release neither deletes pending content nor starts capture; claim itself does not check pending.",
+    "B3_B4": "Enabled needsModel is a model action, not capture readiness; non-cancellable delivery is not idle.",
+    "B5_B7": "A free lower pipeline reaches only the permission boundary, not admission through a busy controller; a retained pipeline is busy.",
+    "B6": "Preparing needs both permission and foreground. Start/recording/prewarm/preview here are memory effects, not device outcomes.",
+    "B8": "Neither suppression result makes the controller ready or releases admission; the outer recovery method is not executed. The recording-phase button means stop in source."
+  },
+  "fixture_boundary": "Presets/readiness are manual assumptions, not UI actions, permission, background/model or full start. The lower probe uses only two original guards; debounce consumes synthetic Date/UUID/bools, not OS events.",
+  "reference_utterance": {
+    "spoken_text": "Sample thirty-six. Check record two first; do not send or overwrite pending content.",
+    "ideal_verbatim_text": "Sample thirty-six. Check record two first; do not send or overwrite pending content.",
+    "observed_audio": null,
+    "observed_transcript": null
+  },
+  "buyer_decision": "Offline checks usable; do not probe uncertain permission/model/destination/busy state, delete pending text, repeatedly start or falsify flags to bypass guards.",
+  "runtime_checks": {
+    "device_interruption": "not_run",
+    "system_audio_route": "not_run",
+    "accessory_recovery": "not_run",
+    "real_microphone_permission_or_capture": "not_run",
+    "real_model_prewarm": "not_run",
+    "real_UI_preview": "not_run",
+    "ASR_or_draft_insertion": "not_run",
+    "sending_and_delivery": "not_run",
+    "global_concurrency_or_lifecycle": "not_run"
+  }
+}
