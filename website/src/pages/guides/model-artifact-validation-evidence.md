@@ -66,3 +66,9 @@ Qwen3ModelStore.isInstalled会核固定revision标记，并对清单资产核大
 [整链试用](/guides/first-trial-go-no-go-checklist/) · [声纹区别](/guides/voiceprint-filter-not-authorization/) · [材料与版本](/guides/batch-change-record-retention/) · [预览与最终](/guides/replaceable-voice-preview-review/) · [开始](/start/) · [隐私](/privacy/)
 
 [固定清单/isInstalled/install](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/Qwen3ModelStore.swift) · [loadIfNeeded/validateInstalledModel](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/Qwen3OnDeviceTranscriber.swift) · [现有准备入口](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceController.swift)
+
+## SYN-MODEL-34清单与代际补例
+
+固定清单revision/每项大小与SHA核文件范围；installGeneration实际在Transcriber，由下载/移除入口递增。旧等待结果不能复活已移除的模型或冒充新代结果；已加载对象也可跳过新的验盘。合成小文件真实算SHA、内存CoreML替身只核守卫，不把这些结果当真实24资产、设备预热或准确率认证。
+
+[转到同语在役首次试用页的完整已填样例](/guides/first-trial-go-no-go-checklist/#syn-model-34)。本页保留noindex,follow技术参考，不进入150条索引/LLM出口，不引导修改真实marker/hash或下载/卸载模型来演示。
