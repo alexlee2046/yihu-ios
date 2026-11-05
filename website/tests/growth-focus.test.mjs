@@ -180,6 +180,43 @@ test('P11 first-trial downloads clarify store installation while retired model p
   }
   for(const file of ['model-preflight.zh.json','model-preflight.en.json','preflight-card.md']) assert.equal(read('dist/samples/p11-model-preflight/'+file),read('public/samples/p11-model-preflight/'+file));
 });
+test('P12 fixed finite level examples separate display expectations from device observations', () => {
+  const hashes={ 'level-preflight.zh.json':'f6e71256861133a65f4bee8cb6d3e407da517869c9e6e729cd1112cc955dd8ce', 'level-preflight.en.json':'e3a2989b9ee4fb46af6b5dc96a33e6c41baea27f7409f2d0ae6b10f2ea493560', 'preflight-card.md':'9c748b3c1a45424b5397e8df483040a2fbd7ce7125d5925a0c39f1ba5ba79e85' };
+  for(const [file,hash] of Object.entries(hashes)) assert.equal(createHash('sha256').update(read('public/samples/p12-level-preflight/'+file)).digest('hex'),hash);
+  for(const lang of ['zh','en']) {
+    const d=JSON.parse(read('public/samples/p12-level-preflight/level-preflight.'+lang+'.json'));
+    assert.equal(d.case_id,'SYN-LEVEL-35');assert.equal(d.language,lang);assert.equal(d.synthetic,true);
+    assert.equal(d.source_commit,'a8df2f68e9cd22d520e044ca68356e43d48f5152');assert.equal(d.is_app_import_schema,false);assert.equal(d.is_recorded_audio,false);
+    assert.equal(d.cases.length,14);assert.equal(new Set(d.cases.map(c=>c.id)).size,14);
+    for(const c of d.cases) {
+      assert.ok([...c.short_samples,...c.note_samples].every(v=>Number.isFinite(v)&&v>=-1&&v<=1));assert.equal(c.tolerance,1e-6);
+    }
+    assert.deepEqual(d.cases.map(c=>c.expected_short_level),[0.02,0.1,0.2,0.5,1,1,0.4,0.4,1,0.25,0,0,0.2,0.5]);
+    assert.deepEqual(d.cases.map(c=>c.expected_note_level),[0.12,0.6,1,1,1,1,1,1,1,1,0,0.7,0.6,0.5]);
+    assert.deepEqual(d.cases.map(c=>c.expected_note_frames),[2,4,2,2,2,2,4,4,4,4,4,10,10,2]);
+    assert.deepEqual(d.cases.filter(c=>c.expected_note_failed).map(c=>c.id),['Q13-note-write-failure']);
+    assert.equal(d.reference_utterance.spoken_text,d.reference_utterance.ideal_verbatim_text);
+    assert.equal(d.reference_utterance.observed_audio,null);assert.equal(d.reference_utterance.observed_transcript,null);
+    assert.ok(Object.values(d.runtime_checks).every(v=>v==='not_run'));
+  }
+});
+test('P12 preserves all four active routes and limits downloads to outdoor sections', {skip:!hasBuild}, () => {
+  for(const [prefix,lang] of [['','zh'],['en/','en']]) {
+    const active=prefix+'guides/outdoor-store-voice-preflight/',technical=prefix+'guides/audio-level-not-accuracy-review/';
+    for(const route of [active,technical]) {
+      const html=read('dist/'+route+'index.html');assert.ok(urls.includes('https://getyihu.com/'+route));
+      assert.ok(!html.includes('content="noindex,follow"'));assert.ok(html.includes('hreflang='));
+      for(const f of ['llms.txt','llms-full.txt']) assert.ok(read('public/'+f).includes('https://getyihu.com/'+route));
+    }
+    const html=read('dist/'+active+'index.html'),ref=read('dist/'+technical+'index.html');
+    assert.equal([...html.matchAll(/id="syn-level-35"/g)].length,1);
+    assert.ok(html.includes('<a href="/samples/p12-level-preflight/level-preflight.'+lang+'.json" download'));
+    assert.ok(html.includes('<a href="/samples/p12-level-preflight/preflight-card.md" download'));
+    assert.ok(html.includes(lang==='zh'?'安装不需Mac/Xcode/自行签名':'installation needs no Mac/Xcode/self-signing'));
+    assert.ok(ref.includes('href="/'+active+'#syn-level-35"'));assert.ok(!ref.includes('/samples/p12-level-preflight/'));
+  }
+  for(const f of ['level-preflight.zh.json','level-preflight.en.json','preflight-card.md']) assert.equal(read('dist/samples/p12-level-preflight/'+f),read('public/samples/p12-level-preflight/'+f));
+});
 test('bilingual home offers four buyer scenarios, not the old technical link wall', { skip: !hasBuild }, () => {
   const copy = JSON.parse(read('src/data/home-answers.json'));
   for (const [lang, prefix] of [['zh', ''], ['en', 'en/']]) {

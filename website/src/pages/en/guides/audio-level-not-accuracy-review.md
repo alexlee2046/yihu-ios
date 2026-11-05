@@ -65,3 +65,9 @@ No. Synthetic arithmetic is not actual device/scenario evidence.
 [Input diagnosis](/en/guides/bluetooth-audio-input-troubleshooting/) · [Voiceprint scope](/en/guides/voiceprint-filter-not-authorization/) · [Audio/text evidence](/en/guides/note-audio-text-evidence-mapping/) · [Preview/final](/en/guides/capture-buffer-pressure-checklist/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Short-speech RMS](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/ColliePCMStream.swift) · [Long-note levels](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieNoteRecorder.swift) · [Meter reads](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
+
+## SYN-LEVEL-35 two-pipeline example
+
+Fourteen synthetic inputs separate scaling/display saturation from recognized content: DC and alternating vectors can share RMS, while different RMS can share a bar under different gains. Original note append updates only after a successful write; empty/failed input can retain a previous level. An empty short-function result is not a live UI refresh guarantee. Buffer/file/lock spies are not device, storage or acoustic calibration tests.
+
+[Continue to the filled example on the same-language outdoor/store guide](/en/guides/outdoor-store-voice-preflight/#syn-level-35). No pressure/noise rating, identity, accuracy or delivery is inferred; no new scoring/diagnostic backend is supplied.

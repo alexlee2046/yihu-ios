@@ -65,3 +65,9 @@ lang: zh
 [输入排障](/guides/bluetooth-audio-input-troubleshooting/) · [声纹范围](/guides/voiceprint-filter-not-authorization/) · [音文材料](/guides/note-audio-text-evidence-mapping/) · [预览与final](/guides/capture-buffer-pressure-checklist/) · [开始](/start/) · [隐私](/privacy/)
 
 [短语音RMS](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/ColliePCMStream.swift) · [长笔记电平](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieNoteRecorder.swift) · [电平显示读取](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
+
+## SYN-LEVEL-35双管线补例
+
+14组合成输入把电平缩放/上限裁剪与识别内容分开：同RMS的DC/正负交替可同条，不同RMS也能因不同系数同条。原长append只有写成功才更新，空块/失败可留旧level；原短rms空输入0不等真实UI无新块即清零。隔离buffer/file/lock不是设备/存储/声学校准测试。
+
+[转到同语户外/门店指南查看完整已填样例](/guides/outdoor-store-voice-preflight/#syn-level-35)。不从电平推标准声压、风噪等级、身份、准确率或送达，也不提供新的评分/诊断后端。
