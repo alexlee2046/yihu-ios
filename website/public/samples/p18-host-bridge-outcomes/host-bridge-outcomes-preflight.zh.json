@@ -1,0 +1,526 @@
+{
+  "batch": "SYN-BRG-39",
+  "classification": "SYNTHETIC_EXAMPLE",
+  "language": "zh",
+  "is_app_import_schema": false,
+  "is_production_capture": false,
+  "source_commit": "b4a162d0544d6241bbc60e7949af28f0b1a7a932",
+  "source_tree": "1e75a6af4778fb52abe7db27fe5fa78dddfaf936",
+  "source_contract": {
+    "bridge_results": [
+      "accepted",
+      "refused",
+      "unavailable"
+    ],
+    "only_unavailable_allows_dom": true,
+    "accepted_true_precedes_default_prevented": true,
+    "dom_result_requires_literal_true": true,
+    "business_submission_proved": false,
+    "main_frame_only": true
+  },
+  "native_cases": [
+    {
+      "id": "N1",
+      "mode": "no_web",
+      "answers": [],
+      "expected": {
+        "accepted": false,
+        "call_roles": []
+      }
+    },
+    {
+      "id": "N2",
+      "mode": "blocked",
+      "answers": [],
+      "expected": {
+        "accepted": false,
+        "call_roles": []
+      }
+    },
+    {
+      "id": "N3",
+      "mode": "untrusted",
+      "answers": [],
+      "expected": {
+        "accepted": false,
+        "call_roles": []
+      }
+    },
+    {
+      "id": "N4",
+      "mode": "wrong_page",
+      "answers": [],
+      "expected": {
+        "accepted": false,
+        "call_roles": []
+      }
+    },
+    {
+      "id": "N5",
+      "mode": "wrong_request",
+      "answers": [],
+      "expected": {
+        "accepted": false,
+        "call_roles": []
+      }
+    },
+    {
+      "id": "N6",
+      "mode": "moved_prepared",
+      "answers": [],
+      "expected": {
+        "accepted": false,
+        "call_roles": []
+      }
+    },
+    {
+      "id": "N7",
+      "mode": "normal",
+      "answers": [
+        "true"
+      ],
+      "expected": {
+        "accepted": true,
+        "call_roles": [
+          "receipt"
+        ]
+      }
+    },
+    {
+      "id": "N8",
+      "mode": "normal",
+      "answers": [
+        "false"
+      ],
+      "expected": {
+        "accepted": false,
+        "call_roles": [
+          "receipt"
+        ]
+      }
+    },
+    {
+      "id": "N9",
+      "mode": "normal",
+      "answers": [
+        "throw"
+      ],
+      "expected": {
+        "accepted": false,
+        "call_roles": [
+          "receipt"
+        ]
+      }
+    },
+    {
+      "id": "N10",
+      "mode": "normal",
+      "answers": [
+        "null",
+        "accepted"
+      ],
+      "expected": {
+        "accepted": true,
+        "call_roles": [
+          "receipt",
+          "bridge"
+        ]
+      }
+    },
+    {
+      "id": "N11",
+      "mode": "normal",
+      "answers": [
+        "null",
+        "refused"
+      ],
+      "expected": {
+        "accepted": false,
+        "call_roles": [
+          "receipt",
+          "bridge"
+        ]
+      }
+    },
+    {
+      "id": "N12",
+      "mode": "normal",
+      "answers": [
+        "null",
+        "unavailable",
+        "true"
+      ],
+      "expected": {
+        "accepted": true,
+        "call_roles": [
+          "receipt",
+          "bridge",
+          "dom"
+        ]
+      }
+    },
+    {
+      "id": "N13",
+      "mode": "normal",
+      "answers": [
+        "null",
+        "unknown"
+      ],
+      "expected": {
+        "accepted": false,
+        "call_roles": [
+          "receipt",
+          "bridge"
+        ]
+      }
+    },
+    {
+      "id": "N14",
+      "mode": "normal",
+      "answers": [
+        "null",
+        "throw"
+      ],
+      "expected": {
+        "accepted": false,
+        "call_roles": [
+          "receipt",
+          "bridge"
+        ]
+      }
+    },
+    {
+      "id": "N15",
+      "mode": "normal",
+      "answers": [
+        "null",
+        "unavailable",
+        "false"
+      ],
+      "expected": {
+        "accepted": false,
+        "call_roles": [
+          "receipt",
+          "bridge",
+          "dom"
+        ]
+      }
+    },
+    {
+      "id": "N16",
+      "mode": "normal",
+      "answers": [
+        "null",
+        "unavailable",
+        "string_true"
+      ],
+      "expected": {
+        "accepted": false,
+        "call_roles": [
+          "receipt",
+          "bridge",
+          "dom"
+        ]
+      }
+    },
+    {
+      "id": "N17",
+      "mode": "normal",
+      "answers": [
+        "null",
+        "unavailable",
+        "throw"
+      ],
+      "expected": {
+        "accepted": false,
+        "call_roles": [
+          "receipt",
+          "bridge",
+          "dom"
+        ]
+      }
+    },
+    {
+      "id": "N18",
+      "mode": "block_after_receipt",
+      "answers": [
+        "null"
+      ],
+      "expected": {
+        "accepted": false,
+        "call_roles": [
+          "receipt"
+        ]
+      }
+    },
+    {
+      "id": "N19",
+      "mode": "block_after_bridge",
+      "answers": [
+        "null",
+        "unavailable"
+      ],
+      "expected": {
+        "accepted": false,
+        "call_roles": [
+          "receipt",
+          "bridge"
+        ]
+      }
+    }
+  ],
+  "bridge_cases": [
+    {
+      "id": "B1",
+      "mode": "absent",
+      "expected": "unavailable"
+    },
+    {
+      "id": "B2",
+      "mode": "read_text",
+      "expected": "refused"
+    },
+    {
+      "id": "B3",
+      "mode": "read_accepted",
+      "expected": "refused"
+    },
+    {
+      "id": "B4",
+      "mode": "accept_true",
+      "expected": "accepted"
+    },
+    {
+      "id": "B5",
+      "mode": "accept_false",
+      "expected": "refused"
+    },
+    {
+      "id": "B6",
+      "mode": "accept_string",
+      "expected": "refused"
+    },
+    {
+      "id": "B7",
+      "mode": "prevent",
+      "expected": "refused"
+    },
+    {
+      "id": "B8",
+      "mode": "accept_and_prevent",
+      "expected": "accepted"
+    },
+    {
+      "id": "B9",
+      "mode": "hidden",
+      "expected": "refused"
+    },
+    {
+      "id": "B10",
+      "mode": "wrong_origin",
+      "expected": "refused"
+    },
+    {
+      "id": "B11",
+      "mode": "wrong_page",
+      "expected": "refused"
+    },
+    {
+      "id": "B12",
+      "mode": "accept_number",
+      "expected": "refused"
+    },
+    {
+      "id": "B13",
+      "mode": "accept_then_refuse",
+      "expected": "refused"
+    }
+  ],
+  "dom_cases": [
+    {
+      "id": "D1",
+      "mode": "exec_success",
+      "expected": {
+        "accepted": true,
+        "value": "alpha beta",
+        "receipt": true
+      }
+    },
+    {
+      "id": "D2",
+      "mode": "cjk",
+      "expected": {
+        "accepted": true,
+        "value": "你好世界",
+        "receipt": true
+      }
+    },
+    {
+      "id": "D3",
+      "mode": "setter_fallback",
+      "expected": {
+        "accepted": true,
+        "value": "alpha beta",
+        "receipt": true
+      }
+    },
+    {
+      "id": "D4",
+      "mode": "mutated_but_false",
+      "expected": {
+        "accepted": false,
+        "value": "alpha beta",
+        "receipt": true
+      }
+    },
+    {
+      "id": "D5",
+      "mode": "framework_reject",
+      "expected": {
+        "accepted": false,
+        "value": "alpha",
+        "receipt": false
+      }
+    },
+    {
+      "id": "D6",
+      "mode": "readonly",
+      "expected": {
+        "accepted": false,
+        "value": "alpha",
+        "receipt": null
+      }
+    },
+    {
+      "id": "D7",
+      "mode": "readonly_policy",
+      "expected": {
+        "accepted": true,
+        "value": "alpha beta",
+        "receipt": true
+      }
+    },
+    {
+      "id": "D8",
+      "mode": "password",
+      "expected": {
+        "accepted": false,
+        "value": "alpha",
+        "receipt": null
+      }
+    },
+    {
+      "id": "D9",
+      "mode": "collie_unknown",
+      "expected": {
+        "accepted": false,
+        "value": "alpha",
+        "receipt": null
+      }
+    },
+    {
+      "id": "D10",
+      "mode": "hidden",
+      "expected": {
+        "accepted": false,
+        "value": "alpha",
+        "receipt": null
+      }
+    },
+    {
+      "id": "D11",
+      "mode": "moved_page",
+      "expected": {
+        "accepted": false,
+        "value": "alpha",
+        "receipt": null
+      }
+    },
+    {
+      "id": "D12",
+      "mode": "focus_redirect",
+      "expected": {
+        "accepted": false,
+        "value": "alpha",
+        "receipt": null
+      }
+    },
+    {
+      "id": "D13",
+      "mode": "same_id",
+      "expected": {
+        "accepted": true,
+        "value": "alpha beta",
+        "receipt": true
+      }
+    },
+    {
+      "id": "D14",
+      "mode": "different_text",
+      "expected": {
+        "accepted": true,
+        "value": "alpha beta",
+        "receipt": true
+      }
+    },
+    {
+      "id": "D15",
+      "mode": "email_selection_throw",
+      "expected": {
+        "accepted": true,
+        "value": "alpha beta",
+        "receipt": true
+      }
+    },
+    {
+      "id": "D16",
+      "mode": "disconnect_after_setter",
+      "expected": {
+        "accepted": false,
+        "value": "alpha beta",
+        "receipt": false
+      }
+    }
+  ],
+  "boundary_reviews": [
+    {
+      "id": "R1",
+      "label": "DOM/桥接接纳不是服务提交",
+      "runtime": "not_run"
+    },
+    {
+      "id": "R2",
+      "label": "false/异常也可能已改变值，不盲重放",
+      "runtime": "not_run"
+    },
+    {
+      "id": "R3",
+      "label": "焦点/适配类型不等授权/所有iframe或shadow兼容",
+      "runtime": "not_run"
+    },
+    {
+      "id": "R4",
+      "label": "目的地保存/同步/自动处理另核",
+      "runtime": "not_run"
+    }
+  ],
+  "scope": "Original Swift insert path and complete script-producing enum in Foundation host with fake WebKit; original emitted JavaScript in Node vm synthetic event/DOM objects, not a browser/WebKit/real page.",
+  "manual_no_go": [
+    "Refused/unknown/exception cannot be relabelled unavailable",
+    "Origin/page/request/allowed guard changed or actual target uncertain",
+    "False result with changed DOM or uncertain prior side effect",
+    "Host/DOM acceptance without independent business receipt; do not blindly refill/resend"
+  ],
+  "runtime_checks": {
+    "real_WKWebView_or_content_world_isolation": "not_run",
+    "physical_keyboard_focus_or_selection": "not_run",
+    "real_framework_controlled_inputs": "not_run",
+    "live_page_host_bridge": "not_run",
+    "real_iframe_or_shadow_compatibility": "not_run",
+    "server_submission_or_acknowledgement": "not_run",
+    "ASR_or_microphone": "not_run",
+    "account_or_write_authorization": "not_run",
+    "destination_storage_or_sync": "not_run",
+    "hardware_latency_or_SLA": "not_run"
+  }
+}
