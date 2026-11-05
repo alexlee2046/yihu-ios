@@ -10418,9 +10418,340 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/file-chunk-bridge-not-upload-receipt/
 
-场景指南 · 相关使用指南 文件分块交接代表什么？768KiB桥传输不是断点上传或服务回执 跨WK桥分块，不等于目标服务已收到完整文件 attachFiles将本地文件按最多768 KiB原始数据分块读成base64，交给页面侧helper，再请求页面自己的文件控件接纳。JS会累积parts并组装File；因此分块不证明所有端总内存恒定，也不是服务端流式/断点上传协议。attached是页面阶段结果，不是远端完成或消息发送回执。 与混合批次、manifest和文件保护的区别 批次指南核文件先行与文本后填，manifest核本地可见点，保护核写选项；这里核 原生文件到JS再到控件的跨进程阶段 。不读取或上传真实附件，不新增文件传输服务。 检查项 已核范围 人工复核 不应推断 原生读取 最多768 KiB/块，按offset继续 本地读取与实际错误 服务端断点位置 base64 转换为桥参数字符串 编码开销与传输层分开 原始字节数就是全部RAM JS暂存 incoming/parts累积后组File 页面内存与本地文件分开 全端恒定内存 chunk回报 逐块Bool结果可能失败 这层接纳不是服务确认 后端已存每一块 最终控件 原页面上传input与accept等条件 实际控件限制/接纳 支持任意网站/类型/大文件 页面边界 此路径按isTrusted等核 不要套用文字通道所有页面条件 所有通道守卫完全一样 discard 清页面helper暂存ID 本地暂存与远端副本 撤销已发生的服务上传 预算与结果 本地暂存预算/attached另核 实际阶段和剩余材料 200MiB暂存就保证网页能收 合成分块记录 已知：样例文件若干块已被helper接纳；未知：最终控件/服务状态。不能写“上传完成”，也不能从后续失败推前面都从未发生。保持目标页面稳定并核真正结果，不靠改扩展名或重复整批绕过限制。 分块避免单个巨型JS字符串是实现目的，不构成全局RAM、速度或后台续传SLA。源码没有在这条原生桥中提供通用服务端上传/恢复协议，本页也未测网络或设备。 FAQ 分块是否就是服务端流式上传？ 不是，原生到JS桥与网站到服务端是不同阶段。 768KiB是否总内存上限？ 不是，还涉及base64/parts/File等，不作全端恒定内存保证。 attached能证明对方服务保存了吗？ 不能，只报页面接纳阶段，真实远端状态另核。 discard是否能撤回远端附件？ 不能由清helper暂存推出服务撤回。 200MiB暂存预算代表所有网站兼容吗？ 不代表，页面控件/服务还有各自限制和权限。 本文执行了上传或断点测试吗？ 没有，只核固定源码，不提供新传输/转码/续传功能。 相关指南与源码 批次阶段 · 本地可见点 · 文件保护 · 开始 · 隐私 attachFiles/base64Chunk · incoming/parts/控件适配 · 本地暂存预算
+场景指南 · 相关使用指南 文件分块交接代表什么？768KiB桥传输不是断点上传或服务回执 SYN-CHK-40：文件分片、页面接纳与收件箱解析 SYNTHETIC_EXAMPLE，仅自建临时文件/假WK/VM，不是真实App Group或服务上传。 ZH: /samples/p19-file-chunk-bridge/preflight.zh.json · EN: /samples/p19-file-chunk-bridge/preflight.en.json · Card: /samples/p19-file-chunk-bridge/preflight-card.md Case Synthetic condition / 合成条件 Scoped expectation / 范围内结果 Not certified / 未证 N1 no_web {‘result’: ‘failed’, ‘roles’: []} Original Swift + fake WK replies; not server upload N2 untrusted {‘result’: ‘failed’, ‘roles’: []} Original Swift + fake WK replies; not server upload N3 normal {‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N4 no_input {‘result’: ‘noUploadControl’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N5 single_only {‘result’: ‘oneAtATime’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N6 unknown {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N7 chunk_false {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]} Original Swift + fake WK replies; not server upload N8 chunk_throw {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]} Original Swift + fake WK replies; not server upload N9 begin_throw {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘discard’]} Original Swift + fake WK replies; not server upload N10 begin_false {‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N11 attach_throw {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’, ‘discard’]} Original Swift + fake WK replies; not server upload N12 origin_drift {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]} Original Swift + fake WK replies; not server upload N13 same_origin_path_drift {‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N14 empty_file {‘result’: ‘attached’, ‘roles’: [‘begin’, ‘attach’]} Original Swift + fake WK replies; not server upload N15 empty_files {‘result’: ‘failed’, ‘roles’: [‘attach’]} Original Swift + fake WK replies; not server upload N16 two_chunks {‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload F1 synthetic file bytes=0 actual source raw chunks=[]; reassembled bytes equal Owned temp files, not network resume or total memory limit F2 synthetic file bytes=1 actual source raw chunks=[1]; reassembled bytes equal Owned temp files, not network resume or total memory limit F3 synthetic file bytes=786432 actual source raw chunks=[786432]; reassembled bytes equal Owned temp files, not network resume or total memory limit F4 synthetic file bytes=786433 actual source raw chunks=[786432, 1]; reassembled bytes equal Owned temp files, not network resume or total memory limit F5 synthetic file bytes=1572881 actual source raw chunks=[786432, 786432, 17]; reassembled bytes equal Owned temp files, not network resume or total memory limit C1 normal attached Original emitted JS with synthetic File/DataTransfer/input C2 binary_split attached Original emitted JS with synthetic File/DataTransfer/input C3 unknown_chunk false Original emitted JS with synthetic File/DataTransfer/input C4 duplicate attached Original emitted JS with synthetic File/DataTransfer/input C5 reordered attached Original emitted JS with synthetic File/DataTransfer/input C6 missing_chunk attached Original emitted JS with synthetic File/DataTransfer/input C7 invalid_base64 throws Original emitted JS with synthetic File/DataTransfer/input C8 discard false Original emitted JS with synthetic File/DataTransfer/input C9 rebegin attached Original emitted JS with synthetic File/DataTransfer/input C10 no_input no-input Original emitted JS with synthetic File/DataTransfer/input C11 single_only single-only Original emitted JS with synthetic File/DataTransfer/input C12 type_mismatch no-input Original emitted JS with synthetic File/DataTransfer/input C13 multiple attached Original emitted JS with synthetic File/DataTransfer/input C14 partial_ids attached Original emitted JS with synthetic File/DataTransfer/input C15 empty_file attached Original emitted JS with synthetic File/DataTransfer/input C16 repeat_attach failed Original emitted JS with synthetic File/DataTransfer/input C17 empty_mime attached Original emitted JS with synthetic File/DataTransfer/input I1 orphan_file pending decoded batches=0 init(root:) owned temp FS only, no shared()/AppGroup/real import I2 corrupt_json pending decoded batches=0 init(root:) owned temp FS only, no shared()/AppGroup/real import I3 invalid_schema pending decoded batches=0 init(root:) owned temp FS only, no shared()/AppGroup/real import I4 missing_payload pending decoded batches=1 init(root:) owned temp FS only, no shared()/AppGroup/real import I5 save_copy pending decoded batches=1 init(root:) owned temp FS only, no shared()/AppGroup/real import I6 empty_save_rollback pending decoded batches=0 init(root:) owned temp FS only, no shared()/AppGroup/real import I7 inline_text pending decoded batches=1 init(root:) owned temp FS only, no shared()/AppGroup/real import I8 duplicate_names pending decoded batches=1 init(root:) owned temp FS only, no shared()/AppGroup/real import I9 oldest_first pending decoded batches=2 init(root:) owned temp FS only, no shared()/AppGroup/real import I10 update_empty_items pending decoded batches=1 init(root:) owned temp FS only, no shared()/AppGroup/real import I11 missing_root pending decoded batches=0 init(root:) owned temp FS only, no shared()/AppGroup/real import R1 AppGroup入口/声明/签名/解析分别留证 source/manual boundary; runtime not_run No entitlement, signed-binary, AppStore or remote completion certification R2 attached不等远端上传或业务发送 source/manual boundary; runtime not_run No entitlement, signed-binary, AppStore or remote completion certification R3 分片无序号/校验和/断点续传保证 source/manual boundary; runtime not_run No entitlement, signed-binary, AppStore or remote completion certification R4 清JS暂存/移出批次不等撤回服务副本 source/manual boundary; runtime not_run No entitlement, signed-binary, AppStore or remote completion certification 768KiB是原始读块，不是总内存或断点上传；base64/JS parts/File另占内存。chunk true/attached只属于桥/页面阶段，没有序号/校验和/重试幂等或远端完成证明；合成重复/缺块/乱序仍可组File，缺请求ID也可能仅接纳现有子集。App Group声明、系统容器可达、manifest可见、pending解析、实际导入与远端回执分别留证。坏manifest会被pending跳过，合法manifest也可指缺文件；不造解析/导入成功。真实WK/容器权限/远端API/审核/业务发送全not_run，未知副作用不盲重发，目的地可保存/同步/自动处理。 跨WK桥分块，不等于目标服务已收到完整文件 attachFiles将本地文件按最多768 KiB原始数据分块读成base64，交给页面侧helper，再请求页面自己的文件控件接纳。JS会累积parts并组装File；因此分块不证明所有端总内存恒定，也不是服务端流式/断点上传协议。attached是页面阶段结果，不是远端完成或消息发送回执。 与混合批次、manifest和文件保护的区别 批次指南核文件先行与文本后填，manifest核本地可见点，保护核写选项；这里核 原生文件到JS再到控件的跨进程阶段 。不读取或上传真实附件，不新增文件传输服务。 检查项 已核范围 人工复核 不应推断 原生读取 最多768 KiB/块，按offset继续 本地读取与实际错误 服务端断点位置 base64 转换为桥参数字符串 编码开销与传输层分开 原始字节数就是全部RAM JS暂存 incoming/parts累积后组File 页面内存与本地文件分开 全端恒定内存 chunk回报 逐块Bool结果可能失败 这层接纳不是服务确认 后端已存每一块 最终控件 原页面上传input与accept等条件 实际控件限制/接纳 支持任意网站/类型/大文件 页面边界 此路径按isTrusted等核 不要套用文字通道所有页面条件 所有通道守卫完全一样 discard 清页面helper暂存ID 本地暂存与远端副本 撤销已发生的服务上传 预算与结果 本地暂存预算/attached另核 实际阶段和剩余材料 200MiB暂存就保证网页能收 合成分块记录 已知：样例文件若干块已被helper接纳；未知：最终控件/服务状态。不能写“上传完成”，也不能从后续失败推前面都从未发生。保持目标页面稳定并核真正结果，不靠改扩展名或重复整批绕过限制。 分块避免单个巨型JS字符串是实现目的，不构成全局RAM、速度或后台续传SLA。源码没有在这条原生桥中提供通用服务端上传/恢复协议，本页也未测网络或设备。 FAQ 分块是否就是服务端流式上传？ 不是，原生到JS桥与网站到服务端是不同阶段。 768KiB是否总内存上限？ 不是，还涉及base64/parts/File等，不作全端恒定内存保证。 attached能证明对方服务保存了吗？ 不能，只报页面接纳阶段，真实远端状态另核。 discard是否能撤回远端附件？ 不能由清helper暂存推出服务撤回。 200MiB暂存预算代表所有网站兼容吗？ 不代表，页面控件/服务还有各自限制和权限。 本文执行了上传或断点测试吗？ 没有，只核固定源码，不提供新传输/转码/续传功能。 相关指南与源码 批次阶段 · 本地可见点 · 文件保护 · 开始 · 隐私 attachFiles/base64Chunk · incoming/parts/控件适配 · 本地暂存预算
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Synthetic condition / 合成条件</th>
+<th>Scoped expectation / 范围内结果</th>
+<th>Not certified / 未证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N1</td>
+<td>no_web</td>
+<td>{‘result’: ‘failed’, ‘roles’: []}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N2</td>
+<td>untrusted</td>
+<td>{‘result’: ‘failed’, ‘roles’: []}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N3</td>
+<td>normal</td>
+<td>{‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N4</td>
+<td>no_input</td>
+<td>{‘result’: ‘noUploadControl’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N5</td>
+<td>single_only</td>
+<td>{‘result’: ‘oneAtATime’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N6</td>
+<td>unknown</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N7</td>
+<td>chunk_false</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N8</td>
+<td>chunk_throw</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N9</td>
+<td>begin_throw</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘discard’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N10</td>
+<td>begin_false</td>
+<td>{‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N11</td>
+<td>attach_throw</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’, ‘discard’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N12</td>
+<td>origin_drift</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N13</td>
+<td>same_origin_path_drift</td>
+<td>{‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N14</td>
+<td>empty_file</td>
+<td>{‘result’: ‘attached’, ‘roles’: [‘begin’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N15</td>
+<td>empty_files</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N16</td>
+<td>two_chunks</td>
+<td>{‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>synthetic file bytes=0</td>
+<td>actual source raw chunks=[]; reassembled bytes equal</td>
+<td>Owned temp files, not network resume or total memory limit</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>synthetic file bytes=1</td>
+<td>actual source raw chunks=[1]; reassembled bytes equal</td>
+<td>Owned temp files, not network resume or total memory limit</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>synthetic file bytes=786432</td>
+<td>actual source raw chunks=[786432]; reassembled bytes equal</td>
+<td>Owned temp files, not network resume or total memory limit</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>synthetic file bytes=786433</td>
+<td>actual source raw chunks=[786432, 1]; reassembled bytes equal</td>
+<td>Owned temp files, not network resume or total memory limit</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>synthetic file bytes=1572881</td>
+<td>actual source raw chunks=[786432, 786432, 17]; reassembled bytes equal</td>
+<td>Owned temp files, not network resume or total memory limit</td>
+</tr>
+<tr>
+<td>C1</td>
+<td>normal</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>binary_split</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>unknown_chunk</td>
+<td>false</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>duplicate</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>reordered</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>missing_chunk</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>invalid_base64</td>
+<td>throws</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C8</td>
+<td>discard</td>
+<td>false</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C9</td>
+<td>rebegin</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C10</td>
+<td>no_input</td>
+<td>no-input</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C11</td>
+<td>single_only</td>
+<td>single-only</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C12</td>
+<td>type_mismatch</td>
+<td>no-input</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C13</td>
+<td>multiple</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C14</td>
+<td>partial_ids</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C15</td>
+<td>empty_file</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C16</td>
+<td>repeat_attach</td>
+<td>failed</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C17</td>
+<td>empty_mime</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>I1</td>
+<td>orphan_file</td>
+<td>pending decoded batches=0</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I2</td>
+<td>corrupt_json</td>
+<td>pending decoded batches=0</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I3</td>
+<td>invalid_schema</td>
+<td>pending decoded batches=0</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I4</td>
+<td>missing_payload</td>
+<td>pending decoded batches=1</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I5</td>
+<td>save_copy</td>
+<td>pending decoded batches=1</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I6</td>
+<td>empty_save_rollback</td>
+<td>pending decoded batches=0</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I7</td>
+<td>inline_text</td>
+<td>pending decoded batches=1</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I8</td>
+<td>duplicate_names</td>
+<td>pending decoded batches=1</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I9</td>
+<td>oldest_first</td>
+<td>pending decoded batches=2</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I10</td>
+<td>update_empty_items</td>
+<td>pending decoded batches=1</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I11</td>
+<td>missing_root</td>
+<td>pending decoded batches=0</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>R1</td>
+<td>AppGroup入口/声明/签名/解析分别留证</td>
+<td>source/manual boundary; runtime not_run</td>
+<td>No entitlement, signed-binary, AppStore or remote completion certification</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>attached不等远端上传或业务发送</td>
+<td>source/manual boundary; runtime not_run</td>
+<td>No entitlement, signed-binary, AppStore or remote completion certification</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>分片无序号/校验和/断点续传保证</td>
+<td>source/manual boundary; runtime not_run</td>
+<td>No entitlement, signed-binary, AppStore or remote completion certification</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>清JS暂存/移出批次不等撤回服务副本</td>
+<td>source/manual boundary; runtime not_run</td>
+<td>No entitlement, signed-binary, AppStore or remote completion certification</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -10487,9 +10818,340 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/file-chunk-bridge-not-upload-receipt/
 
-All scenarios · Related practical guide What file chunks establish: a 768 KiB bridge is not resumable upload or a receipt Chunks crossing a WebKit bridge do not prove the destination saved a complete file attachFiles reads up to 768 KiB raw data per chunk, base64-encodes bridge arguments, then asks the page’s own file control to accept them. JS accumulates parts and constructs File objects. Chunking proves neither constant memory everywhere nor server streaming/resume. attached is a page-stage result, not remote completion or sending. Different from mixed batches, manifests and protection Batches concern placement order, manifests concern local visibility, protection concerns writes. Here native-to-JS-to-input stages matter. No real attachment is read/uploaded and no transfer service is added. Check Verified scope Manual review Not established Native reads Up to 768 KiB with offset Local read/errors Server resume offset Base64 Bridge string encoding Overhead versus transfer stage Raw bytes equal all RAM JS staging incoming/parts accumulate into File Page memory versus local file Constant memory across all sides Chunk response Per-chunk Bool can fail Local acceptance versus service Backend saved every chunk Final control Page input/accept conditions Actual control/service limits Every site/type/size supported Page boundary isTrusted etc. on this path Not all text-path conditions transfer All channels have identical guards Discard Clear helper IDs Local staging versus remote copies Recall a prior service upload Budget/result Local staging/attached separately Actual stage/remaining items 200 MiB staging guarantees site acceptance Synthetic chunk note Known: helper accepted several sample chunks. Unknown: final input/service status. Do not report upload complete or infer nothing happened from later failure. Keep the intended page stable and inspect actual results rather than renaming types/replaying batches. Avoiding one giant JS string is implementation intent, not total-memory/speed/background-resume SLA. No general server upload/recovery protocol or device/network benchmark is supplied here. FAQ Are chunks server streaming? No. Native-to-JS and site-to-service are different stages. Is 768 KiB a whole-memory limit? No. Base64/parts/File and other allocations remain. Does attached prove server storage? No. Page acceptance differs from remote evidence. Does discard recall a remote attachment? No. Clearing helper state does not establish recall. Does 200 MiB staging certify every site? No. Inputs/services retain limits and permissions. Was upload/resume tested? No. Fixed source only, without a transfer/transcoding/resume feature. Reading and source Batch stages · Local visibility · File protection · Start · Privacy Attachment/chunk flow · Parts/input adaptation · Staging budget
+All scenarios · Related practical guide What file chunks establish: a 768 KiB bridge is not resumable upload or a receipt SYN-CHK-40: chunks, page admission and inbox parsing SYNTHETIC_EXAMPLE: owned temp files/fake WK/VM only, not real AppGroup or server upload. ZH: /samples/p19-file-chunk-bridge/preflight.zh.json · EN: /samples/p19-file-chunk-bridge/preflight.en.json · Card: /samples/p19-file-chunk-bridge/preflight-card.md Case Synthetic condition / 合成条件 Scoped expectation / 范围内结果 Not certified / 未证 N1 no_web {‘result’: ‘failed’, ‘roles’: []} Original Swift + fake WK replies; not server upload N2 untrusted {‘result’: ‘failed’, ‘roles’: []} Original Swift + fake WK replies; not server upload N3 normal {‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N4 no_input {‘result’: ‘noUploadControl’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N5 single_only {‘result’: ‘oneAtATime’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N6 unknown {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N7 chunk_false {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]} Original Swift + fake WK replies; not server upload N8 chunk_throw {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]} Original Swift + fake WK replies; not server upload N9 begin_throw {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘discard’]} Original Swift + fake WK replies; not server upload N10 begin_false {‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N11 attach_throw {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’, ‘discard’]} Original Swift + fake WK replies; not server upload N12 origin_drift {‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]} Original Swift + fake WK replies; not server upload N13 same_origin_path_drift {‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload N14 empty_file {‘result’: ‘attached’, ‘roles’: [‘begin’, ‘attach’]} Original Swift + fake WK replies; not server upload N15 empty_files {‘result’: ‘failed’, ‘roles’: [‘attach’]} Original Swift + fake WK replies; not server upload N16 two_chunks {‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘chunk’, ‘attach’]} Original Swift + fake WK replies; not server upload F1 synthetic file bytes=0 actual source raw chunks=[]; reassembled bytes equal Owned temp files, not network resume or total memory limit F2 synthetic file bytes=1 actual source raw chunks=[1]; reassembled bytes equal Owned temp files, not network resume or total memory limit F3 synthetic file bytes=786432 actual source raw chunks=[786432]; reassembled bytes equal Owned temp files, not network resume or total memory limit F4 synthetic file bytes=786433 actual source raw chunks=[786432, 1]; reassembled bytes equal Owned temp files, not network resume or total memory limit F5 synthetic file bytes=1572881 actual source raw chunks=[786432, 786432, 17]; reassembled bytes equal Owned temp files, not network resume or total memory limit C1 normal attached Original emitted JS with synthetic File/DataTransfer/input C2 binary_split attached Original emitted JS with synthetic File/DataTransfer/input C3 unknown_chunk false Original emitted JS with synthetic File/DataTransfer/input C4 duplicate attached Original emitted JS with synthetic File/DataTransfer/input C5 reordered attached Original emitted JS with synthetic File/DataTransfer/input C6 missing_chunk attached Original emitted JS with synthetic File/DataTransfer/input C7 invalid_base64 throws Original emitted JS with synthetic File/DataTransfer/input C8 discard false Original emitted JS with synthetic File/DataTransfer/input C9 rebegin attached Original emitted JS with synthetic File/DataTransfer/input C10 no_input no-input Original emitted JS with synthetic File/DataTransfer/input C11 single_only single-only Original emitted JS with synthetic File/DataTransfer/input C12 type_mismatch no-input Original emitted JS with synthetic File/DataTransfer/input C13 multiple attached Original emitted JS with synthetic File/DataTransfer/input C14 partial_ids attached Original emitted JS with synthetic File/DataTransfer/input C15 empty_file attached Original emitted JS with synthetic File/DataTransfer/input C16 repeat_attach failed Original emitted JS with synthetic File/DataTransfer/input C17 empty_mime attached Original emitted JS with synthetic File/DataTransfer/input I1 orphan_file pending decoded batches=0 init(root:) owned temp FS only, no shared()/AppGroup/real import I2 corrupt_json pending decoded batches=0 init(root:) owned temp FS only, no shared()/AppGroup/real import I3 invalid_schema pending decoded batches=0 init(root:) owned temp FS only, no shared()/AppGroup/real import I4 missing_payload pending decoded batches=1 init(root:) owned temp FS only, no shared()/AppGroup/real import I5 save_copy pending decoded batches=1 init(root:) owned temp FS only, no shared()/AppGroup/real import I6 empty_save_rollback pending decoded batches=0 init(root:) owned temp FS only, no shared()/AppGroup/real import I7 inline_text pending decoded batches=1 init(root:) owned temp FS only, no shared()/AppGroup/real import I8 duplicate_names pending decoded batches=1 init(root:) owned temp FS only, no shared()/AppGroup/real import I9 oldest_first pending decoded batches=2 init(root:) owned temp FS only, no shared()/AppGroup/real import I10 update_empty_items pending decoded batches=1 init(root:) owned temp FS only, no shared()/AppGroup/real import I11 missing_root pending decoded batches=0 init(root:) owned temp FS only, no shared()/AppGroup/real import R1 AppGroup access/declarations/signature/parse need separate evidence source/manual boundary; runtime not_run No entitlement, signed-binary, AppStore or remote completion certification R2 attached is not remote upload or business send source/manual boundary; runtime not_run No entitlement, signed-binary, AppStore or remote completion certification R3 Chunks have no sequence/checksum/resume guarantee source/manual boundary; runtime not_run No entitlement, signed-binary, AppStore or remote completion certification R4 Discard/staging removal is not remote revocation source/manual boundary; runtime not_run No entitlement, signed-binary, AppStore or remote completion certification 768KiB is the raw read block, not total memory or a resumable upload protocol; base64/JS parts/File add allocations. Chunk true/attached are bridge/page-stage results, not sequence/checksum/idempotent retry or remote completion proof. Duplicate/missing/reordered parts can still form a File and missing IDs can leave an attached subset. AppGroup declaration, runtime access, manifest visibility, pending decode, actual import and server receipt require separate evidence. Corrupt manifests are skipped; decoded batches may reference missing files. Real WK/container rights/remote API/AppStore review/business send are not_run. Preserve uncertain effects, do not blindly resend; destination may save/sync/auto-process. Chunks crossing a WebKit bridge do not prove the destination saved a complete file attachFiles reads up to 768 KiB raw data per chunk, base64-encodes bridge arguments, then asks the page’s own file control to accept them. JS accumulates parts and constructs File objects. Chunking proves neither constant memory everywhere nor server streaming/resume. attached is a page-stage result, not remote completion or sending. Different from mixed batches, manifests and protection Batches concern placement order, manifests concern local visibility, protection concerns writes. Here native-to-JS-to-input stages matter. No real attachment is read/uploaded and no transfer service is added. Check Verified scope Manual review Not established Native reads Up to 768 KiB with offset Local read/errors Server resume offset Base64 Bridge string encoding Overhead versus transfer stage Raw bytes equal all RAM JS staging incoming/parts accumulate into File Page memory versus local file Constant memory across all sides Chunk response Per-chunk Bool can fail Local acceptance versus service Backend saved every chunk Final control Page input/accept conditions Actual control/service limits Every site/type/size supported Page boundary isTrusted etc. on this path Not all text-path conditions transfer All channels have identical guards Discard Clear helper IDs Local staging versus remote copies Recall a prior service upload Budget/result Local staging/attached separately Actual stage/remaining items 200 MiB staging guarantees site acceptance Synthetic chunk note Known: helper accepted several sample chunks. Unknown: final input/service status. Do not report upload complete or infer nothing happened from later failure. Keep the intended page stable and inspect actual results rather than renaming types/replaying batches. Avoiding one giant JS string is implementation intent, not total-memory/speed/background-resume SLA. No general server upload/recovery protocol or device/network benchmark is supplied here. FAQ Are chunks server streaming? No. Native-to-JS and site-to-service are different stages. Is 768 KiB a whole-memory limit? No. Base64/parts/File and other allocations remain. Does attached prove server storage? No. Page acceptance differs from remote evidence. Does discard recall a remote attachment? No. Clearing helper state does not establish recall. Does 200 MiB staging certify every site? No. Inputs/services retain limits and permissions. Was upload/resume tested? No. Fixed source only, without a transfer/transcoding/resume feature. Reading and source Batch stages · Local visibility · File protection · Start · Privacy Attachment/chunk flow · Parts/input adaptation · Staging budget
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Synthetic condition / 合成条件</th>
+<th>Scoped expectation / 范围内结果</th>
+<th>Not certified / 未证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N1</td>
+<td>no_web</td>
+<td>{‘result’: ‘failed’, ‘roles’: []}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N2</td>
+<td>untrusted</td>
+<td>{‘result’: ‘failed’, ‘roles’: []}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N3</td>
+<td>normal</td>
+<td>{‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N4</td>
+<td>no_input</td>
+<td>{‘result’: ‘noUploadControl’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N5</td>
+<td>single_only</td>
+<td>{‘result’: ‘oneAtATime’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N6</td>
+<td>unknown</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N7</td>
+<td>chunk_false</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N8</td>
+<td>chunk_throw</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N9</td>
+<td>begin_throw</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘discard’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N10</td>
+<td>begin_false</td>
+<td>{‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N11</td>
+<td>attach_throw</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’, ‘discard’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N12</td>
+<td>origin_drift</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘begin’, ‘chunk’, ‘discard’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N13</td>
+<td>same_origin_path_drift</td>
+<td>{‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N14</td>
+<td>empty_file</td>
+<td>{‘result’: ‘attached’, ‘roles’: [‘begin’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N15</td>
+<td>empty_files</td>
+<td>{‘result’: ‘failed’, ‘roles’: [‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>N16</td>
+<td>two_chunks</td>
+<td>{‘result’: ‘attached’, ‘roles’: [‘begin’, ‘chunk’, ‘chunk’, ‘attach’]}</td>
+<td>Original Swift + fake WK replies; not server upload</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>synthetic file bytes=0</td>
+<td>actual source raw chunks=[]; reassembled bytes equal</td>
+<td>Owned temp files, not network resume or total memory limit</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>synthetic file bytes=1</td>
+<td>actual source raw chunks=[1]; reassembled bytes equal</td>
+<td>Owned temp files, not network resume or total memory limit</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>synthetic file bytes=786432</td>
+<td>actual source raw chunks=[786432]; reassembled bytes equal</td>
+<td>Owned temp files, not network resume or total memory limit</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>synthetic file bytes=786433</td>
+<td>actual source raw chunks=[786432, 1]; reassembled bytes equal</td>
+<td>Owned temp files, not network resume or total memory limit</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>synthetic file bytes=1572881</td>
+<td>actual source raw chunks=[786432, 786432, 17]; reassembled bytes equal</td>
+<td>Owned temp files, not network resume or total memory limit</td>
+</tr>
+<tr>
+<td>C1</td>
+<td>normal</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>binary_split</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>unknown_chunk</td>
+<td>false</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>duplicate</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>reordered</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>missing_chunk</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>invalid_base64</td>
+<td>throws</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C8</td>
+<td>discard</td>
+<td>false</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C9</td>
+<td>rebegin</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C10</td>
+<td>no_input</td>
+<td>no-input</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C11</td>
+<td>single_only</td>
+<td>single-only</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C12</td>
+<td>type_mismatch</td>
+<td>no-input</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C13</td>
+<td>multiple</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C14</td>
+<td>partial_ids</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C15</td>
+<td>empty_file</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C16</td>
+<td>repeat_attach</td>
+<td>failed</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>C17</td>
+<td>empty_mime</td>
+<td>attached</td>
+<td>Original emitted JS with synthetic File/DataTransfer/input</td>
+</tr>
+<tr>
+<td>I1</td>
+<td>orphan_file</td>
+<td>pending decoded batches=0</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I2</td>
+<td>corrupt_json</td>
+<td>pending decoded batches=0</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I3</td>
+<td>invalid_schema</td>
+<td>pending decoded batches=0</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I4</td>
+<td>missing_payload</td>
+<td>pending decoded batches=1</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I5</td>
+<td>save_copy</td>
+<td>pending decoded batches=1</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I6</td>
+<td>empty_save_rollback</td>
+<td>pending decoded batches=0</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I7</td>
+<td>inline_text</td>
+<td>pending decoded batches=1</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I8</td>
+<td>duplicate_names</td>
+<td>pending decoded batches=1</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I9</td>
+<td>oldest_first</td>
+<td>pending decoded batches=2</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I10</td>
+<td>update_empty_items</td>
+<td>pending decoded batches=1</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>I11</td>
+<td>missing_root</td>
+<td>pending decoded batches=0</td>
+<td>init(root:) owned temp FS only, no shared()/AppGroup/real import</td>
+</tr>
+<tr>
+<td>R1</td>
+<td>AppGroup access/declarations/signature/parse need separate evidence</td>
+<td>source/manual boundary; runtime not_run</td>
+<td>No entitlement, signed-binary, AppStore or remote completion certification</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>attached is not remote upload or business send</td>
+<td>source/manual boundary; runtime not_run</td>
+<td>No entitlement, signed-binary, AppStore or remote completion certification</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>Chunks have no sequence/checksum/resume guarantee</td>
+<td>source/manual boundary; runtime not_run</td>
+<td>No entitlement, signed-binary, AppStore or remote completion certification</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Discard/staging removal is not remote revocation</td>
+<td>source/manual boundary; runtime not_run</td>
+<td>No entitlement, signed-binary, AppStore or remote completion certification</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
