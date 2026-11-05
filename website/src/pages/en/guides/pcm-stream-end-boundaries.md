@@ -66,3 +66,9 @@ No general tool is added; fixed internal PCM review only.
 [Format admission](/en/guides/pcm-format-admission-review/) · [Queue/final](/en/guides/capture-buffer-pressure-checklist/) · [Recognition segments](/en/guides/note-segment-join-provenance/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Converter/convertOnce/finish](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/ColliePCMStream.swift) · [Tap/stop entry](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
+
+## SYN-PCM-36 stream-end frame boundary example
+
+SYNTHETIC_EXAMPLE checks distinguish temporary lack of a block from declared end. Zero samples/silence are not EOF magic bytes; source finish flushes delayed converter samples without automatic silence padding. Preserve cut interleaved frames/samples and gaps rather than presenting zero fill as original content. The16-call budget is not16 seconds/frames or an ASR SLA.
+
+[Continue to the same-language active PCM admission checklist](/en/guides/pcm-format-admission-review/#syn-pcm-36). This remains an indexable:false/noindex,follow retired technical reference, without public sample links or a new import/transcode/repair feature.
