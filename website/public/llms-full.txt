@@ -2304,9 +2304,262 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/department-minutes-ownership-archive/
 
-场景指南 · 相关使用指南 跨部门纪要怎样认领与归档？责任角色、确认依据和副本清单 写下责任角色不等于对方认领，保存文档也不等于正式归档 一呼提供语音文字、笔记和工作台交接，不由本文新增跨部门任务认领或归档系统。本清单用于已有人工纪要之后：区分建议由哪个角色负责、该角色是否通过已有流程确认、被批准的范围是什么，以及文档能存在哪里。草稿可见、对方收到、责任认领、批准与执行完成需要不同证据，不能用一个“已保存”概括。 与纪要字段和待办提取的分工 纪要字段指南处理事实/提案/未决项；多笔记指南处理跨记录冲突；这里不再提取新任务，而是检查 已经拟定的交接是否得到对应角色认可，以及副本归档条件是否清楚 。不得为了表格完整而填写真实姓名、推定负责人或自行设置部门权限。 人工认领与归档检查表 检查维度 应有的已有依据 合成记录方式 缺失时怎样处理 建议角色 原文或既有流程提出的负责角色 建议角色A，尚未认领 保留“建议”，不自动分配 认领确认 对应角色在获准流程中的明确确认 确认依据未提供 不把抄送、消息已读或姓名出现当认领 批准范围 已确认的事项、约束及未批准部分 只准核对样例，不准执行 不扩展为采购、发信、变更或发布授权 未决问题 仍需哪个既有流程确认 角色与期限均待核 不补猜测负责人或日期 归档位置 团队已有且获准的文档位置与访问范围 位置未核，不上传 本地/工作台草稿不自动等于正式档案 保留规则 团队实际规则与引用，不编造保留时长 按已有规则，待维护者说明 不承诺永久保留、无备份或绝对删除 副本范围 原笔记、剪贴板、文档和工作台的实际副本 仅核本地样例，其余未知 不把删一份当撤回全部资料 交接阶段 草稿/暂存/已记录/不确定各自证据 草稿供核对，未发送 不把saved/queued当认领或完成 一个不安排真实工作的合成认领卡 事项：示例纪要中的三个待核字段（非真实任务） proposed_role：角色A，建议而非已分配 acknowledgment_evidence：未提供，不能标已认领 approved_scope：仅核样例文字；无执行授权 open_question：应由哪个已有流程确认认领？ archive_location：未核，不上传到新位置 retention_rule_reference：待团队按已有规则确认 handoff_state：本地草稿，未发送 这些字段是人工清单，不是App、Radar导入或签署API。页面不发送邀请、不更改权限、不创建共享文档，也不收集姓名/联系方式。正式确认应沿团队原有获准渠道处理，而不是把合成卡复制到真实台账来测试。 归档前的先后关系 先核原文与纪要版本，避免把尚未修订的识别错误交给别人确认。 区分“提议角色”和“已有认领确认”，只记录实际得到的依据，不推断未回应者同意。 核被确认的内容范围与权限。角色认领核对文字不等于授权自动执行任务。 再核已有归档位置、访问和保留规则；没有依据就停在获准本地草稿，不自行建账号、共享链接或公开附件。 列出必要副本和不确定交接结果。已尝试过的笔记仍按原一次标记处理，归档流程不能被用来绕过重复交接。 如果需要Radar回复，仍须符合原事项资格、服务端写授权、手机确认和回执回读。服务记录了回复也不代表负责人已经完成事项，回复历史也不是通用文档档案库。 FAQ 在纪要写上角色A就算已经认领吗？ 不算。那只是一段文字或提议，需要对应角色通过已有获准流程明确确认；不能用抄送或未回应代替。 一呼是否提供部门任务分配或电子签署？ 本页不声明或新增这些能力。清单用于人工核对，现有语音草稿和笔记交接不自动建立组织审批系统。 保存到工作台草稿就完成正式归档了吗？ 不一定。正式位置、版本、访问范围与保留规则由团队已有流程定义，草稿保存本身不足以证明满足要求。 有人认领了核对动作，就可以执行全部提案吗？ 不能。确认范围必须明确，核对、批准和执行授权是不同事实，未获准部分仍保持未决。 本文能给出统一删除或保留期限吗？ 不能。各目的地、账户、备份和团队规则不同，应引用实际规则，不编造时长或删除保证。 Radar回复历史可以当完整跨部门档案库吗？ 不可以据此推断。它是有独立权限和实现边界的原事项回复/反馈读取；不是任意文档、版本、签署或认领数据库。 相关指南与依据 人工纪要字段 · 多笔记待办核对 · 噪声后人工修订 · 手机决策与回执 · 开始 · 隐私 实现边界依据： README回复与历史说明 、 笔记一次交接模型 。认领卡和归档清单是本文人工建议，不冒充代码功能或合规认证。
+场景指南 · 相关使用指南 跨部门纪要怎样认领与归档？责任角色、确认依据和副本清单 SYN-DMO-44 · 部门纪要归属与最小归档自检 SYNTHETIC_EXAMPLE / SYN-DMO-44。真实认领/归档均pending / not_run；人工清单不是App导入、自动认领或多人说话人识别。 中文JSON： preflight.zh.json — https://getyihu.com/samples/p23-department-minutes-ownership-archive/preflight.zh.json English JSON： preflight.en.json — https://getyihu.com/samples/p23-department-minutes-ownership-archive/preflight.en.json 公开双语自检卡： README.md — https://getyihu.com/samples/p23-department-minutes-ownership-archive/README.md 先人工切分原话与拟议责任，不把角色写成已认领 S1/S2和R1/R2均是手工写出的虚构说话人/角色代号，不是原生识别结果或账户。C2把两段合成提议分别引用U1/U2，形成T1/T2待核草稿；proposed_role不同于confirmed_owner。所有confirmed_owner、期限、实际认领依据、执行批准、归档位置和保留规则仍为null。C3“他们”不推定角色；C5已读/抄送不等接受；C6只核文字不等采购、发送、变更或发布授权；C7保留相冲突版本，不自动裁定负责人。SYNTHETIC_EXAMPLE的pending/not_run指真实流程，宿主跑过的结果另在checks回执分账。 原生守卫只证该函数行为，不建立归属或正式档案 24个源函数宿主例中，Radar解析/筛选部分仅核来源范围和文本：project筛选不是部门ACL，session/next出现角色或固定Alex不是登录/负责人识别，空列表不证明没人负责。safeEvidenceURLs拒部分不合形状链接、去重复，但保留合法HTTPS的查询/片段（E9）；HTTPS不保证可公开、已脱敏、内容可信或访问授权。 原VoiceNote.reserveHandOff只在合成临时meta上执行：done、非空串、未attempted才尝试原子落标记；先保留一次标记不证明交付、对方认领或归档。写meta失败保持原值，已attempted不能因换纪要副本重发；全空白但非空串也可能过该guard，不等有效纪要或自动修复。本轮不调用真实phone note、Store.handOff、AppGroup/剪贴板/工作台或网络。 最小披露、访问和保留都回原有获准流程 公开材料全部从零合成，不用改名私有客户正文冒匿名化。私有原证据仍留原权限内，先核归档目的、获准位置/读者、版本、必要副本与真实保留规则；未知则停在获准草稿，不新建账号、共享链接、不上传。删除本地记录不等撤回文档/附件/工作台/同步/备份；不提供统一保留时长、绝对删除、合规认证或CRM归档。12人工例+10原URL+8原meta+6原筛选+4副本边界共40行，只有24例/语是源函数宿主执行，不能把其余人工规则冒App功能或真实签收。 编号 分账范围 合成输入/人工拆分 宿主期望或人工边界 C1 外部人工认领/归档例 {"mode":"proposal_not_claim","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Explicit acknowledgment missing; proposal is not assignment.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C2 外部人工认领/归档例 {"mode":"split_atomic_responsibilities","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":"R1","confirmed_owner":null,"deadline":null},{"draft_id":"T2","speech_refs":["U2"],"proposed_role":"R2","confirmed_owner":null,"deadline":null}]} {"rule":"Keep separate draft actions/evidence references, no inferred joint owner.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C3 外部人工认领/归档例 {"mode":"ambiguous_pronoun","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Leave proposed/confirmed owner and deadline null; ask existing authorized process.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C4 外部人工认领/归档例 {"mode":"quoted_role_not_consent","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"A role quoted in speech is not the role accepting responsibility.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C5 外部人工认领/归档例 {"mode":"read_receipt_not_ack","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"A synthetic read receipt or CC never establishes claim/approval.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C6 外部人工认领/归档例 {"mode":"review_scope_not_execution","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Text-review-only scope does not authorize purchase, sending, changes or release.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C7 外部人工认领/归档例 {"mode":"conflicting_versions","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Preserve both synthetic references, do not pick a winner or overwrite source.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C8 外部人工认领/归档例 {"mode":"unconfirmed_owner_stays_empty","speakers":["S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"No auto owner/deadline inferred from session/title/next or placeholder.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C9 外部人工认领/归档例 {"mode":"archive_location_unknown","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"No new account, shared location or upload; existing access/retention must be verified.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C10 外部人工认领/归档例 {"mode":"copies_not_recalled","speakers":["S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Local note deletion is not deletion of clipboard, workspace, attachments, sync or backups.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C11 外部人工认领/归档例 {"mode":"public_synthetic_not_redaction","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Entire public example is synthetic; HTTPS parsing is not redaction/publication permission.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C12 外部人工认领/归档例 {"mode":"uncertain_handoff_no_resend","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Check approved destination through existing process; never reset once-attempted marker for an archive copy.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} E1 原证据URL解析 null {"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"} E2 原证据URL解析 "" {"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"} E3 原证据URL解析 "https://example.invalid/evidence/sample" {"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"} E4 原证据URL解析 "(https://example.invalid/evidence/sample)" {"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"} E5 原证据URL解析 "https://example.invalid/evidence/sample;https://example.invalid/evidence/sample" {"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"} E6 原证据URL解析 "http://example.invalid/evidence/sample" {"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"} E7 原证据URL解析 "https://role@example.invalid/evidence/sample" {"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"} E8 原证据URL解析 "https://example.invalid:0/sample" {"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"} E9 原证据URL解析 "https://example.invalid/evidence/sample?ref=SYN-DMO-44#mock" {"host_expected_URLs":["https://example.invalid/evidence/sample?ref=SYN-DMO-44#mock"],"disclosure_permission":"pending","live":"not_run"} E10 原证据URL解析 "https://example.invalid/evidence/sample,https://example.invalid/evidence/other" {"host_expected_URLs":["https://example.invalid/evidence/sample","https://example.invalid/evidence/other"],"disclosure_permission":"pending","live":"not_run"} H1 原笔记临时meta守卫 "done_text" {"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"} H2 原笔记临时meta守卫 "repeat_after_reserve" {"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"} H3 原笔记临时meta守卫 "explicit_false" {"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"} H4 原笔记临时meta守卫 "pending_status" {"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"} H5 原笔记临时meta守卫 "empty_transcript" {"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"} H6 原笔记临时meta守卫 "whitespace_transcript" {"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"} H7 原笔记临时meta守卫 "failed_meta_write" {"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"} H8 原笔记临时meta守卫 "already_attempted" {"host_success":false,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"} S1 原范围/文本筛选 "project_scope" {"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"} S2 原范围/文本筛选 "other_project" {"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"} S3 原范围/文本筛选 "role_text_search" {"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"} S4 原范围/文本筛选 "role_not_identity" {"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"} S5 原范围/文本筛选 "fixed_code_word" {"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"} S6 原范围/文本筛选 "explicit_empty_tasks" {"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"} R1 只读副本边界 "private_original" {"rule":"Authorized original references stay in their approved private scope, no raw customer text in public.","status":"pending","live":"not_run"} R2 只读副本边界 "local_note" {"rule":"Synthetic host reservation only; actual phone note/audio not accessed or deleted.","status":"pending","live":"not_run"} R3 只读副本边界 "clipboard_workspace_attachment" {"rule":"Destination may save/sync/process separately; no remote delivery or ownership receipt.","status":"pending","live":"not_run"} R4 只读副本边界 "retention_access_backup" {"rule":"Unknown rules remain unknown, no invented retention duration/anonymization/deletion guarantee.","status":"pending","live":"not_run"} 固定源边界: RadarModel · VoiceNote 写下责任角色不等于对方认领，保存文档也不等于正式归档 一呼提供语音文字、笔记和工作台交接，不由本文新增跨部门任务认领或归档系统。本清单用于已有人工纪要之后：区分建议由哪个角色负责、该角色是否通过已有流程确认、被批准的范围是什么，以及文档能存在哪里。草稿可见、对方收到、责任认领、批准与执行完成需要不同证据，不能用一个“已保存”概括。 与纪要字段和待办提取的分工 纪要字段指南处理事实/提案/未决项；多笔记指南处理跨记录冲突；这里不再提取新任务，而是检查 已经拟定的交接是否得到对应角色认可，以及副本归档条件是否清楚 。不得为了表格完整而填写真实姓名、推定负责人或自行设置部门权限。 人工认领与归档检查表 检查维度 应有的已有依据 合成记录方式 缺失时怎样处理 建议角色 原文或既有流程提出的负责角色 建议角色A，尚未认领 保留“建议”，不自动分配 认领确认 对应角色在获准流程中的明确确认 确认依据未提供 不把抄送、消息已读或姓名出现当认领 批准范围 已确认的事项、约束及未批准部分 只准核对样例，不准执行 不扩展为采购、发信、变更或发布授权 未决问题 仍需哪个既有流程确认 角色与期限均待核 不补猜测负责人或日期 归档位置 团队已有且获准的文档位置与访问范围 位置未核，不上传 本地/工作台草稿不自动等于正式档案 保留规则 团队实际规则与引用，不编造保留时长 按已有规则，待维护者说明 不承诺永久保留、无备份或绝对删除 副本范围 原笔记、剪贴板、文档和工作台的实际副本 仅核本地样例，其余未知 不把删一份当撤回全部资料 交接阶段 草稿/暂存/已记录/不确定各自证据 草稿供核对，未发送 不把saved/queued当认领或完成 一个不安排真实工作的合成认领卡 事项：示例纪要中的三个待核字段（非真实任务） proposed_role：角色A，建议而非已分配 acknowledgment_evidence：未提供，不能标已认领 approved_scope：仅核样例文字；无执行授权 open_question：应由哪个已有流程确认认领？ archive_location：未核，不上传到新位置 retention_rule_reference：待团队按已有规则确认 handoff_state：本地草稿，未发送 这些字段是人工清单，不是App、Radar导入或签署API。页面不发送邀请、不更改权限、不创建共享文档，也不收集姓名/联系方式。正式确认应沿团队原有获准渠道处理，而不是把合成卡复制到真实台账来测试。 归档前的先后关系 先核原文与纪要版本，避免把尚未修订的识别错误交给别人确认。 区分“提议角色”和“已有认领确认”，只记录实际得到的依据，不推断未回应者同意。 核被确认的内容范围与权限。角色认领核对文字不等于授权自动执行任务。 再核已有归档位置、访问和保留规则；没有依据就停在获准本地草稿，不自行建账号、共享链接或公开附件。 列出必要副本和不确定交接结果。已尝试过的笔记仍按原一次标记处理，归档流程不能被用来绕过重复交接。 如果需要Radar回复，仍须符合原事项资格、服务端写授权、手机确认和回执回读。服务记录了回复也不代表负责人已经完成事项，回复历史也不是通用文档档案库。 FAQ 在纪要写上角色A就算已经认领吗？ 不算。那只是一段文字或提议，需要对应角色通过已有获准流程明确确认；不能用抄送或未回应代替。 一呼是否提供部门任务分配或电子签署？ 本页不声明或新增这些能力。清单用于人工核对，现有语音草稿和笔记交接不自动建立组织审批系统。 保存到工作台草稿就完成正式归档了吗？ 不一定。正式位置、版本、访问范围与保留规则由团队已有流程定义，草稿保存本身不足以证明满足要求。 有人认领了核对动作，就可以执行全部提案吗？ 不能。确认范围必须明确，核对、批准和执行授权是不同事实，未获准部分仍保持未决。 本文能给出统一删除或保留期限吗？ 不能。各目的地、账户、备份和团队规则不同，应引用实际规则，不编造时长或删除保证。 Radar回复历史可以当完整跨部门档案库吗？ 不可以据此推断。它是有独立权限和实现边界的原事项回复/反馈读取；不是任意文档、版本、签署或认领数据库。 相关指南与依据 人工纪要字段 · 多笔记待办核对 · 噪声后人工修订 · 手机决策与回执 · 开始 · 隐私 实现边界依据： README回复与历史说明 、 笔记一次交接模型 。认领卡和归档清单是本文人工建议，不冒充代码功能或合规认证。
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>分账范围</th>
+<th>合成输入/人工拆分</th>
+<th>宿主期望或人工边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"proposal_not_claim","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Explicit acknowledgment missing; proposal is not assignment.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C2</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"split_atomic_responsibilities","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":"R1","confirmed_owner":null,"deadline":null},{"draft_id":"T2","speech_refs":["U2"],"proposed_role":"R2","confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Keep separate draft actions/evidence references, no inferred joint owner.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C3</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"ambiguous_pronoun","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Leave proposed/confirmed owner and deadline null; ask existing authorized process.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C4</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"quoted_role_not_consent","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"A role quoted in speech is not the role accepting responsibility.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C5</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"read_receipt_not_ack","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"A synthetic read receipt or CC never establishes claim/approval.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C6</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"review_scope_not_execution","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Text-review-only scope does not authorize purchase, sending, changes or release.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C7</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"conflicting_versions","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Preserve both synthetic references, do not pick a winner or overwrite source.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C8</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"unconfirmed_owner_stays_empty","speakers":["S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"No auto owner/deadline inferred from session/title/next or placeholder.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C9</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"archive_location_unknown","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"No new account, shared location or upload; existing access/retention must be verified.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C10</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"copies_not_recalled","speakers":["S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Local note deletion is not deletion of clipboard, workspace, attachments, sync or backups.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C11</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"public_synthetic_not_redaction","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Entire public example is synthetic; HTTPS parsing is not redaction/publication permission.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C12</td>
+<td>外部人工认领/归档例</td>
+<td><code>{"mode":"uncertain_handoff_no_resend","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Check approved destination through existing process; never reset once-attempted marker for an archive copy.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E1</td>
+<td>原证据URL解析</td>
+<td><code>null</code></td>
+<td><code>{"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E2</td>
+<td>原证据URL解析</td>
+<td><code>""</code></td>
+<td><code>{"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E3</td>
+<td>原证据URL解析</td>
+<td><code>"https://example.invalid/evidence/sample"</code></td>
+<td><code>{"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E4</td>
+<td>原证据URL解析</td>
+<td><code>"(https://example.invalid/evidence/sample)"</code></td>
+<td><code>{"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E5</td>
+<td>原证据URL解析</td>
+<td><code>"https://example.invalid/evidence/sample;https://example.invalid/evidence/sample"</code></td>
+<td><code>{"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E6</td>
+<td>原证据URL解析</td>
+<td><code>"http://example.invalid/evidence/sample"</code></td>
+<td><code>{"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E7</td>
+<td>原证据URL解析</td>
+<td><code>"https://role@example.invalid/evidence/sample"</code></td>
+<td><code>{"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E8</td>
+<td>原证据URL解析</td>
+<td><code>"https://example.invalid:0/sample"</code></td>
+<td><code>{"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E9</td>
+<td>原证据URL解析</td>
+<td><code>"https://example.invalid/evidence/sample?ref=SYN-DMO-44#mock"</code></td>
+<td><code>{"host_expected_URLs":["https://example.invalid/evidence/sample?ref=SYN-DMO-44#mock"],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E10</td>
+<td>原证据URL解析</td>
+<td><code>"https://example.invalid/evidence/sample,https://example.invalid/evidence/other"</code></td>
+<td><code>{"host_expected_URLs":["https://example.invalid/evidence/sample","https://example.invalid/evidence/other"],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H1</td>
+<td>原笔记临时meta守卫</td>
+<td><code>"done_text"</code></td>
+<td><code>{"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H2</td>
+<td>原笔记临时meta守卫</td>
+<td><code>"repeat_after_reserve"</code></td>
+<td><code>{"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H3</td>
+<td>原笔记临时meta守卫</td>
+<td><code>"explicit_false"</code></td>
+<td><code>{"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H4</td>
+<td>原笔记临时meta守卫</td>
+<td><code>"pending_status"</code></td>
+<td><code>{"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H5</td>
+<td>原笔记临时meta守卫</td>
+<td><code>"empty_transcript"</code></td>
+<td><code>{"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H6</td>
+<td>原笔记临时meta守卫</td>
+<td><code>"whitespace_transcript"</code></td>
+<td><code>{"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H7</td>
+<td>原笔记临时meta守卫</td>
+<td><code>"failed_meta_write"</code></td>
+<td><code>{"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H8</td>
+<td>原笔记临时meta守卫</td>
+<td><code>"already_attempted"</code></td>
+<td><code>{"host_success":false,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S1</td>
+<td>原范围/文本筛选</td>
+<td><code>"project_scope"</code></td>
+<td><code>{"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S2</td>
+<td>原范围/文本筛选</td>
+<td><code>"other_project"</code></td>
+<td><code>{"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S3</td>
+<td>原范围/文本筛选</td>
+<td><code>"role_text_search"</code></td>
+<td><code>{"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S4</td>
+<td>原范围/文本筛选</td>
+<td><code>"role_not_identity"</code></td>
+<td><code>{"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S5</td>
+<td>原范围/文本筛选</td>
+<td><code>"fixed_code_word"</code></td>
+<td><code>{"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S6</td>
+<td>原范围/文本筛选</td>
+<td><code>"explicit_empty_tasks"</code></td>
+<td><code>{"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>R1</td>
+<td>只读副本边界</td>
+<td><code>"private_original"</code></td>
+<td><code>{"rule":"Authorized original references stay in their approved private scope, no raw customer text in public.","status":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>R2</td>
+<td>只读副本边界</td>
+<td><code>"local_note"</code></td>
+<td><code>{"rule":"Synthetic host reservation only; actual phone note/audio not accessed or deleted.","status":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>R3</td>
+<td>只读副本边界</td>
+<td><code>"clipboard_workspace_attachment"</code></td>
+<td><code>{"rule":"Destination may save/sync/process separately; no remote delivery or ownership receipt.","status":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>R4</td>
+<td>只读副本边界</td>
+<td><code>"retention_access_backup"</code></td>
+<td><code>{"rule":"Unknown rules remain unknown, no invented retention duration/anonymization/deletion guarantee.","status":"pending","live":"not_run"}</code></td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -2373,9 +2626,262 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/department-minutes-ownership-archive/
 
-All scenarios · Related practical guide Cross-department minutes: ownership acknowledgment and archive checks Naming a role is not acknowledgment, and saving a document is not formal archiving Yihu provides voice text, notes and workbench handoff; this article adds no cross-department assignment/archive system. After drafting minutes manually, distinguish a proposed responsible role, its explicit acknowledgment through an existing process, the approved scope and an authorized document location. Visible drafts, receipt, ownership acknowledgment, approval and completed work need separate evidence; saved does not cover them all. A different task from fields and to-do extraction The minutes-fields guide separates facts/proposals/questions; multi-note review handles conflicts across records. Here no new tasks are extracted. Check whether an already proposed handoff was acknowledged by the relevant role and whether archiving conditions are known . Do not fill real names, infer owners or alter departmental permissions just to complete a table. Manual ownership and archive checklist Dimension Existing evidence needed Synthetic record Missing-evidence action Proposed role Role proposed in original text or existing process Role A suggested, not acknowledged Keep it proposed; do not assign automatically Acknowledgment Explicit response through an authorized workflow No acknowledgment evidence supplied CC, read status or a named person is not ownership Approved scope Confirmed content, constraints and unapproved parts Review sample only; do not execute No inferred purchasing, email, change or release authority Open questions Existing process that must confirm next Owner and deadline pending No guessed person/date Archive location Existing authorized storage and access scope Location unverified; no upload A local/workbench draft is not automatically an official archive Retention rule Actual team policy/reference, not invented duration Existing rule needs maintainer clarification No permanent-retention, backup-free or deletion guarantee Copies Actual note, clipboard, document and workbench copies Local sample checked; others unknown One deletion does not recall all material Handoff stage Separate draft/staged/recorded/uncertain evidence Draft for review; not sent saved/queued are not ownership or completion A synthetic acknowledgment card that assigns no real work Item: Three sample editorial fields (not a real task) proposed_role: Role A suggested, not assigned acknowledgment_evidence: Not provided; do not mark acknowledged approved_scope: Review sample wording only; no execution authority open_question: Which existing process confirms ownership? archive_location: Unverified; do not upload to a new destination retention_rule_reference: Pending existing team policy handoff_state: Local draft, not sent These are manual checklist labels, not app/Radar imports or a signing API. This page sends no invitation, changes no permission, creates no shared document and collects no names/contact information. Confirm through the team’s existing authorized channel, not by copying the synthetic card to a live ledger as a test. Ordering before archiving Check the original and edited version before asking another role to confirm recognition errors. Separate proposed responsibility from actual acknowledgment evidence. Silence is not consent. Verify confirmed content/permission scope. Agreeing to review wording does not authorize task execution. Check existing archive location, access and retention rules. Without evidence, stop in an authorized local draft instead of provisioning accounts, share links or public attachments. List necessary copies and uncertain handoffs. Previously attempted notes retain original one-handoff state; archiving is not a bypass for repeated delivery. Radar replies, if needed, retain original eligibility, server authority, phone confirmation and receipt readback. A recorded reply is not completed ownership work, and reply history is not a general document archive. FAQ Does writing role A in minutes establish ownership? No. It is proposed text until the relevant role explicitly confirms through an existing authorized process. CC or silence cannot replace that evidence. Does Yihu provide departmental assignment or e-signatures? No such capability is asserted or added. This is manual review guidance; voice drafts and note handoff do not create an organizational approval system. Is saving a workbench draft formal archiving? Not necessarily. The existing team process defines location, version, access and retention. Saving a draft alone does not establish those requirements. Does acknowledging a review action authorize all proposals? No. Scope must be explicit. Review, approval and execution authority are distinct, and unapproved content stays open. Can this guide prescribe one retention/deletion period? No. Destinations, accounts, backups and team policies differ. Refer to actual rules without inventing periods or deletion guarantees. Can Radar reply history be a complete department archive? Not as an inference. It reads original-item replies/feedback within its permission/implementation limits, not arbitrary documents, versions, signatures or ownership records. Guides and evidence Manual minutes fields · Multiple-note/to-do review · Manual noisy-transcript correction · Phone decisions/receipts · Start · Privacy Implementation boundaries: README replies/history , note one-handoff model . Cards and archive checks are editorial suggestions, not source functionality or compliance certification.
+All scenarios · Related practical guide Cross-department minutes: ownership acknowledgment and archive checks SYN-DMO-44 · Department minutes ownership and minimal archive checks SYNTHETIC_EXAMPLE / SYN-DMO-44. Real claims/archives remain pending / not_run. Manual ledger, not App import, automatic assignment or speaker recognition. 中文 JSON: preflight.zh.json — https://getyihu.com/samples/p23-department-minutes-ownership-archive/preflight.zh.json English JSON: preflight.en.json — https://getyihu.com/samples/p23-department-minutes-ownership-archive/preflight.en.json Public bilingual check card: README.md — https://getyihu.com/samples/p23-department-minutes-ownership-archive/README.md Split proposed responsibilities manually, never silently claim them S1/S2 and R1/R2 are hand-authored fictional speaker/role labels, not native diarization or accounts. C2 keeps U1/U2 proposal references in separate T1/T2 draft actions. proposed_role is not confirmed_owner. Every real confirmed owner, deadline, claim evidence, execution approval, archive location and retention reference remains null. C3 does not resolve ambiguous pronouns; C5 read/CC is not consent; C6 wording review does not authorize purchasing, sending, changes or release; C7 preserves conflicting versions instead of choosing an owner. pending/not_run describe the real workflow; separately passed host checks do not hide behind those labels. Original source guards do not establish ownership or formal archives Source filter examples check data scope/text only: project is not a department ACL, session/next role text or fixed Alex is not login/owner identity, an empty list is not no responsible person. safeEvidenceURLs rejects some malformed shapes and deduplicates, but keeps allowed HTTPS query/fragment content (E9). HTTPS is not publication permission, redaction, trust or access authorization. Original VoiceNote.reserveHandOff runs only on synthetic owned temporary metadata. done/nonempty/not-attempted gates an atomic marker reservation, not delivery, acceptance or archive completion. Failed metadata write preserves the original; an archive copy cannot reset an attempted marker. Whitespace-only nonempty text can pass this guard, not evidence of useful minutes or automatic repair. Real phone notes, Store.handOff, AppGroup/clipboard/workspace and network are not called. Disclosure, access and retention use existing approved processes All public content is entirely synthetic, not renamed private customer material. Keep authorized original references private; verify archive purpose, approved readers/location/version, necessary copies and actual retention rules. Unknown stops at an approved draft, not a new account/share link/upload. Local deletion is not recall of attachments, workspace, sync or backups. No universal retention period, guaranteed deletion, compliance certification or CRM archive. 40 rows =12external manual+10URL+8meta+6filter+4copy boundaries; only24/language are original-source host execution, never actual acknowledgment or an App ownership engine. ID Separate scope Synthetic input/manual split Host expectation or manual boundary C1 External human claim/archive ledger {"mode":"proposal_not_claim","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Explicit acknowledgment missing; proposal is not assignment.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C2 External human claim/archive ledger {"mode":"split_atomic_responsibilities","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":"R1","confirmed_owner":null,"deadline":null},{"draft_id":"T2","speech_refs":["U2"],"proposed_role":"R2","confirmed_owner":null,"deadline":null}]} {"rule":"Keep separate draft actions/evidence references, no inferred joint owner.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C3 External human claim/archive ledger {"mode":"ambiguous_pronoun","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Leave proposed/confirmed owner and deadline null; ask existing authorized process.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C4 External human claim/archive ledger {"mode":"quoted_role_not_consent","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"A role quoted in speech is not the role accepting responsibility.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C5 External human claim/archive ledger {"mode":"read_receipt_not_ack","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"A synthetic read receipt or CC never establishes claim/approval.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C6 External human claim/archive ledger {"mode":"review_scope_not_execution","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Text-review-only scope does not authorize purchase, sending, changes or release.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C7 External human claim/archive ledger {"mode":"conflicting_versions","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Preserve both synthetic references, do not pick a winner or overwrite source.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C8 External human claim/archive ledger {"mode":"unconfirmed_owner_stays_empty","speakers":["S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"No auto owner/deadline inferred from session/title/next or placeholder.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C9 External human claim/archive ledger {"mode":"archive_location_unknown","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"No new account, shared location or upload; existing access/retention must be verified.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C10 External human claim/archive ledger {"mode":"copies_not_recalled","speakers":["S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Local note deletion is not deletion of clipboard, workspace, attachments, sync or backups.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C11 External human claim/archive ledger {"mode":"public_synthetic_not_redaction","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Entire public example is synthetic; HTTPS parsing is not redaction/publication permission.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} C12 External human claim/archive ledger {"mode":"uncertain_handoff_no_resend","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]} {"rule":"Check approved destination through existing process; never reset once-attempted marker for an archive copy.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"} E1 Original evidence URL parser null {"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"} E2 Original evidence URL parser "" {"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"} E3 Original evidence URL parser "https://example.invalid/evidence/sample" {"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"} E4 Original evidence URL parser "(https://example.invalid/evidence/sample)" {"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"} E5 Original evidence URL parser "https://example.invalid/evidence/sample;https://example.invalid/evidence/sample" {"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"} E6 Original evidence URL parser "http://example.invalid/evidence/sample" {"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"} E7 Original evidence URL parser "https://role@example.invalid/evidence/sample" {"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"} E8 Original evidence URL parser "https://example.invalid:0/sample" {"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"} E9 Original evidence URL parser "https://example.invalid/evidence/sample?ref=SYN-DMO-44#mock" {"host_expected_URLs":["https://example.invalid/evidence/sample?ref=SYN-DMO-44#mock"],"disclosure_permission":"pending","live":"not_run"} E10 Original evidence URL parser "https://example.invalid/evidence/sample,https://example.invalid/evidence/other" {"host_expected_URLs":["https://example.invalid/evidence/sample","https://example.invalid/evidence/other"],"disclosure_permission":"pending","live":"not_run"} H1 Original owned-meta reservation guard "done_text" {"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"} H2 Original owned-meta reservation guard "repeat_after_reserve" {"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"} H3 Original owned-meta reservation guard "explicit_false" {"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"} H4 Original owned-meta reservation guard "pending_status" {"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"} H5 Original owned-meta reservation guard "empty_transcript" {"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"} H6 Original owned-meta reservation guard "whitespace_transcript" {"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"} H7 Original owned-meta reservation guard "failed_meta_write" {"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"} H8 Original owned-meta reservation guard "already_attempted" {"host_success":false,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"} S1 Original scope/text filter "project_scope" {"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"} S2 Original scope/text filter "other_project" {"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"} S3 Original scope/text filter "role_text_search" {"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"} S4 Original scope/text filter "role_not_identity" {"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"} S5 Original scope/text filter "fixed_code_word" {"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"} S6 Original scope/text filter "explicit_empty_tasks" {"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"} R1 Read-only copy boundary "private_original" {"rule":"Authorized original references stay in their approved private scope, no raw customer text in public.","status":"pending","live":"not_run"} R2 Read-only copy boundary "local_note" {"rule":"Synthetic host reservation only; actual phone note/audio not accessed or deleted.","status":"pending","live":"not_run"} R3 Read-only copy boundary "clipboard_workspace_attachment" {"rule":"Destination may save/sync/process separately; no remote delivery or ownership receipt.","status":"pending","live":"not_run"} R4 Read-only copy boundary "retention_access_backup" {"rule":"Unknown rules remain unknown, no invented retention duration/anonymization/deletion guarantee.","status":"pending","live":"not_run"} Pinned source boundaries: RadarModel · VoiceNote Naming a role is not acknowledgment, and saving a document is not formal archiving Yihu provides voice text, notes and workbench handoff; this article adds no cross-department assignment/archive system. After drafting minutes manually, distinguish a proposed responsible role, its explicit acknowledgment through an existing process, the approved scope and an authorized document location. Visible drafts, receipt, ownership acknowledgment, approval and completed work need separate evidence; saved does not cover them all. A different task from fields and to-do extraction The minutes-fields guide separates facts/proposals/questions; multi-note review handles conflicts across records. Here no new tasks are extracted. Check whether an already proposed handoff was acknowledged by the relevant role and whether archiving conditions are known . Do not fill real names, infer owners or alter departmental permissions just to complete a table. Manual ownership and archive checklist Dimension Existing evidence needed Synthetic record Missing-evidence action Proposed role Role proposed in original text or existing process Role A suggested, not acknowledged Keep it proposed; do not assign automatically Acknowledgment Explicit response through an authorized workflow No acknowledgment evidence supplied CC, read status or a named person is not ownership Approved scope Confirmed content, constraints and unapproved parts Review sample only; do not execute No inferred purchasing, email, change or release authority Open questions Existing process that must confirm next Owner and deadline pending No guessed person/date Archive location Existing authorized storage and access scope Location unverified; no upload A local/workbench draft is not automatically an official archive Retention rule Actual team policy/reference, not invented duration Existing rule needs maintainer clarification No permanent-retention, backup-free or deletion guarantee Copies Actual note, clipboard, document and workbench copies Local sample checked; others unknown One deletion does not recall all material Handoff stage Separate draft/staged/recorded/uncertain evidence Draft for review; not sent saved/queued are not ownership or completion A synthetic acknowledgment card that assigns no real work Item: Three sample editorial fields (not a real task) proposed_role: Role A suggested, not assigned acknowledgment_evidence: Not provided; do not mark acknowledged approved_scope: Review sample wording only; no execution authority open_question: Which existing process confirms ownership? archive_location: Unverified; do not upload to a new destination retention_rule_reference: Pending existing team policy handoff_state: Local draft, not sent These are manual checklist labels, not app/Radar imports or a signing API. This page sends no invitation, changes no permission, creates no shared document and collects no names/contact information. Confirm through the team’s existing authorized channel, not by copying the synthetic card to a live ledger as a test. Ordering before archiving Check the original and edited version before asking another role to confirm recognition errors. Separate proposed responsibility from actual acknowledgment evidence. Silence is not consent. Verify confirmed content/permission scope. Agreeing to review wording does not authorize task execution. Check existing archive location, access and retention rules. Without evidence, stop in an authorized local draft instead of provisioning accounts, share links or public attachments. List necessary copies and uncertain handoffs. Previously attempted notes retain original one-handoff state; archiving is not a bypass for repeated delivery. Radar replies, if needed, retain original eligibility, server authority, phone confirmation and receipt readback. A recorded reply is not completed ownership work, and reply history is not a general document archive. FAQ Does writing role A in minutes establish ownership? No. It is proposed text until the relevant role explicitly confirms through an existing authorized process. CC or silence cannot replace that evidence. Does Yihu provide departmental assignment or e-signatures? No such capability is asserted or added. This is manual review guidance; voice drafts and note handoff do not create an organizational approval system. Is saving a workbench draft formal archiving? Not necessarily. The existing team process defines location, version, access and retention. Saving a draft alone does not establish those requirements. Does acknowledging a review action authorize all proposals? No. Scope must be explicit. Review, approval and execution authority are distinct, and unapproved content stays open. Can this guide prescribe one retention/deletion period? No. Destinations, accounts, backups and team policies differ. Refer to actual rules without inventing periods or deletion guarantees. Can Radar reply history be a complete department archive? Not as an inference. It reads original-item replies/feedback within its permission/implementation limits, not arbitrary documents, versions, signatures or ownership records. Guides and evidence Manual minutes fields · Multiple-note/to-do review · Manual noisy-transcript correction · Phone decisions/receipts · Start · Privacy Implementation boundaries: README replies/history , note one-handoff model . Cards and archive checks are editorial suggestions, not source functionality or compliance certification.
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Separate scope</th>
+<th>Synthetic input/manual split</th>
+<th>Host expectation or manual boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"proposal_not_claim","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Explicit acknowledgment missing; proposal is not assignment.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C2</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"split_atomic_responsibilities","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":"R1","confirmed_owner":null,"deadline":null},{"draft_id":"T2","speech_refs":["U2"],"proposed_role":"R2","confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Keep separate draft actions/evidence references, no inferred joint owner.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C3</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"ambiguous_pronoun","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Leave proposed/confirmed owner and deadline null; ask existing authorized process.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C4</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"quoted_role_not_consent","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"A role quoted in speech is not the role accepting responsibility.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C5</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"read_receipt_not_ack","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"A synthetic read receipt or CC never establishes claim/approval.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C6</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"review_scope_not_execution","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Text-review-only scope does not authorize purchase, sending, changes or release.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C7</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"conflicting_versions","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Preserve both synthetic references, do not pick a winner or overwrite source.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C8</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"unconfirmed_owner_stays_empty","speakers":["S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"No auto owner/deadline inferred from session/title/next or placeholder.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C9</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"archive_location_unknown","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"No new account, shared location or upload; existing access/retention must be verified.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C10</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"copies_not_recalled","speakers":["S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Local note deletion is not deletion of clipboard, workspace, attachments, sync or backups.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C11</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"public_synthetic_not_redaction","speakers":["S1"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Entire public example is synthetic; HTTPS parsing is not redaction/publication permission.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>C12</td>
+<td>External human claim/archive ledger</td>
+<td><code>{"mode":"uncertain_handoff_no_resend","speakers":["S1","S2"],"drafts":[{"draft_id":"T1","speech_refs":["U1"],"proposed_role":null,"confirmed_owner":null,"deadline":null}]}</code></td>
+<td><code>{"rule":"Check approved destination through existing process; never reset once-attempted marker for an archive copy.","confirmed_owner":null,"deadline":null,"claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E1</td>
+<td>Original evidence URL parser</td>
+<td><code>null</code></td>
+<td><code>{"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E2</td>
+<td>Original evidence URL parser</td>
+<td><code>""</code></td>
+<td><code>{"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E3</td>
+<td>Original evidence URL parser</td>
+<td><code>"https://example.invalid/evidence/sample"</code></td>
+<td><code>{"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E4</td>
+<td>Original evidence URL parser</td>
+<td><code>"(https://example.invalid/evidence/sample)"</code></td>
+<td><code>{"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E5</td>
+<td>Original evidence URL parser</td>
+<td><code>"https://example.invalid/evidence/sample;https://example.invalid/evidence/sample"</code></td>
+<td><code>{"host_expected_URLs":["https://example.invalid/evidence/sample"],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E6</td>
+<td>Original evidence URL parser</td>
+<td><code>"http://example.invalid/evidence/sample"</code></td>
+<td><code>{"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E7</td>
+<td>Original evidence URL parser</td>
+<td><code>"https://role@example.invalid/evidence/sample"</code></td>
+<td><code>{"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E8</td>
+<td>Original evidence URL parser</td>
+<td><code>"https://example.invalid:0/sample"</code></td>
+<td><code>{"host_expected_URLs":[],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E9</td>
+<td>Original evidence URL parser</td>
+<td><code>"https://example.invalid/evidence/sample?ref=SYN-DMO-44#mock"</code></td>
+<td><code>{"host_expected_URLs":["https://example.invalid/evidence/sample?ref=SYN-DMO-44#mock"],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>E10</td>
+<td>Original evidence URL parser</td>
+<td><code>"https://example.invalid/evidence/sample,https://example.invalid/evidence/other"</code></td>
+<td><code>{"host_expected_URLs":["https://example.invalid/evidence/sample","https://example.invalid/evidence/other"],"disclosure_permission":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H1</td>
+<td>Original owned-meta reservation guard</td>
+<td><code>"done_text"</code></td>
+<td><code>{"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H2</td>
+<td>Original owned-meta reservation guard</td>
+<td><code>"repeat_after_reserve"</code></td>
+<td><code>{"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H3</td>
+<td>Original owned-meta reservation guard</td>
+<td><code>"explicit_false"</code></td>
+<td><code>{"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H4</td>
+<td>Original owned-meta reservation guard</td>
+<td><code>"pending_status"</code></td>
+<td><code>{"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H5</td>
+<td>Original owned-meta reservation guard</td>
+<td><code>"empty_transcript"</code></td>
+<td><code>{"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H6</td>
+<td>Original owned-meta reservation guard</td>
+<td><code>"whitespace_transcript"</code></td>
+<td><code>{"host_success":true,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H7</td>
+<td>Original owned-meta reservation guard</td>
+<td><code>"failed_meta_write"</code></td>
+<td><code>{"host_success":false,"host_attempted":null,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>H8</td>
+<td>Original owned-meta reservation guard</td>
+<td><code>"already_attempted"</code></td>
+<td><code>{"host_success":false,"host_attempted":true,"delivery_or_claim":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S1</td>
+<td>Original scope/text filter</td>
+<td><code>"project_scope"</code></td>
+<td><code>{"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S2</td>
+<td>Original scope/text filter</td>
+<td><code>"other_project"</code></td>
+<td><code>{"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S3</td>
+<td>Original scope/text filter</td>
+<td><code>"role_text_search"</code></td>
+<td><code>{"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S4</td>
+<td>Original scope/text filter</td>
+<td><code>"role_not_identity"</code></td>
+<td><code>{"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S5</td>
+<td>Original scope/text filter</td>
+<td><code>"fixed_code_word"</code></td>
+<td><code>{"host_expected_ids":["a"],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>S6</td>
+<td>Original scope/text filter</td>
+<td><code>"explicit_empty_tasks"</code></td>
+<td><code>{"host_expected_ids":[],"owner_or_access":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>R1</td>
+<td>Read-only copy boundary</td>
+<td><code>"private_original"</code></td>
+<td><code>{"rule":"Authorized original references stay in their approved private scope, no raw customer text in public.","status":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>R2</td>
+<td>Read-only copy boundary</td>
+<td><code>"local_note"</code></td>
+<td><code>{"rule":"Synthetic host reservation only; actual phone note/audio not accessed or deleted.","status":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>R3</td>
+<td>Read-only copy boundary</td>
+<td><code>"clipboard_workspace_attachment"</code></td>
+<td><code>{"rule":"Destination may save/sync/process separately; no remote delivery or ownership receipt.","status":"pending","live":"not_run"}</code></td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Read-only copy boundary</td>
+<td><code>"retention_access_backup"</code></td>
+<td><code>{"rule":"Unknown rules remain unknown, no invented retention duration/anonymization/deletion guarantee.","status":"pending","live":"not_run"}</code></td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
