@@ -6,6 +6,11 @@ lang: en
 indexable: false
 ---
 
+## Same-language checks and boundaries
+
+[Empty-field/display checks](/en/guides/empty-field-display-defaults/): this retired noindex page is a same-language technical transition only, without sample downloads or Store cards. Derived attention is not identity/ownership; a trimmed status match neither changes the source nor grants reply capability/write authority. Other filters still apply.
+
+
 <h2 id="first-answer">Attention filtering is derived display, not server ownership, identity or authority</h2>
 
 Current requiresMyAttention trims status and checks the two decision/acceptance states, or tests next for the fixed source string Alex. This getter does not read the signed-in account. A match does not establish actual ownership or reply access; a miss does not prove nothing needs handling.

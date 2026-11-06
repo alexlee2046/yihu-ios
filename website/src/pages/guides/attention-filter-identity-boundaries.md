@@ -6,6 +6,11 @@ lang: zh
 indexable: false
 ---
 
+## 同语种自检入口与边界
+
+[空字段与显示默认值自检](/guides/empty-field-display-defaults/)：本页保持退休noindex，仅同语种技术转接，不挂样本下载或Store卡。派生attention不等身份/负责人识别，状态trim命中不改原值或授予reply_supported能力/写权；其他筛选仍可排除。
+
+
 <h2 id="first-answer">“提到我”是派生筛选，不是服务端认领、身份或授权结论</h2>
 
 当前requiresMyAttention在状态去首尾空白后匹配等你决策/等你验收，或检查next是否包含源码固定字样Alex。它没有在这个getter中读取当前登录账户。命中不等于任务属于某个真实用户，也不授予回复权；未命中同样不能证明没有工作需要处理。

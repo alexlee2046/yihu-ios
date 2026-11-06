@@ -1,0 +1,434 @@
+{
+  "batch": "SYN-EFD-43",
+  "classification": "SYNTHETIC_EXAMPLE",
+  "language": "en",
+  "is_app_import_schema": false,
+  "is_production_capture": false,
+  "source_commit": "521ca77e1cf5d827617ae8963c2fc4f6cc232b3f",
+  "source_tree": "6a0828bbc0d8a0abd3cdba9c9563d24ca83db21b",
+  "source_contract": {
+    "display_placeholders_do_not_mutate_source": true,
+    "unknown_priority_rank": 3,
+    "priority_fallback_does_not_assign_P2": true,
+    "missing_time_does_not_assign_now": true,
+    "reply_supported_only_true_for_UI_capability": true,
+    "attention_uses_fixed_Alex_not_current_login": true,
+    "attention_does_not_grant_reply": true
+  },
+  "field_cases": [
+    {
+      "id": "F1",
+      "status": null,
+      "priority": null,
+      "next": "",
+      "session": null,
+      "window_status": null,
+      "evidence": null,
+      "expected": {
+        "status": "任务状态未提供",
+        "priority": "优先级待补",
+        "card_next": "下一步待补",
+        "detail_next": "下一步待补",
+        "session": "待补",
+        "window_status": "未提供",
+        "evidence": "待补"
+      }
+    },
+    {
+      "id": "F2",
+      "status": " \n",
+      "priority": " ",
+      "next": " ",
+      "session": " ",
+      "window_status": " ",
+      "evidence": " ",
+      "expected": {
+        "status": "任务状态未提供",
+        "priority": " ",
+        "card_next": "下一步待补",
+        "detail_next": " ",
+        "session": " ",
+        "window_status": " ",
+        "evidence": " "
+      }
+    },
+    {
+      "id": "F3",
+      "status": "待补",
+      "priority": "优先级待补",
+      "next": "下一步待补",
+      "session": "待补",
+      "window_status": "未提供",
+      "evidence": "待补",
+      "expected": {
+        "status": "待补",
+        "priority": "优先级待补",
+        "card_next": "下一步待补",
+        "detail_next": "下一步待补",
+        "session": "待补",
+        "window_status": "未提供",
+        "evidence": "待补"
+      }
+    },
+    {
+      "id": "F4",
+      "status": "进行中",
+      "priority": "",
+      "next": "SYNTHETIC_EXAMPLE: unknown owner/deadline",
+      "session": "",
+      "window_status": "",
+      "evidence": "",
+      "expected": {
+        "status": "进行中",
+        "priority": "优先级待补",
+        "card_next": "SYNTHETIC_EXAMPLE: unknown owner/deadline",
+        "detail_next": "SYNTHETIC_EXAMPLE: unknown owner/deadline",
+        "session": "待补",
+        "window_status": "未提供",
+        "evidence": "待补"
+      }
+    }
+  ],
+  "attention_cases": [
+    {
+      "id": "A1",
+      "status": "等你决策",
+      "next": "",
+      "title": "synthetic",
+      "expected": true
+    },
+    {
+      "id": "A2",
+      "status": " 等你验收 \n",
+      "next": "",
+      "title": "synthetic",
+      "expected": true
+    },
+    {
+      "id": "A3",
+      "status": "进行中",
+      "next": "Alex please review",
+      "title": "synthetic",
+      "expected": true
+    },
+    {
+      "id": "A4",
+      "status": "进行中",
+      "next": "alex review",
+      "title": "synthetic",
+      "expected": true
+    },
+    {
+      "id": "A5",
+      "status": "进行中",
+      "next": "",
+      "title": "Alex in title only",
+      "expected": false
+    },
+    {
+      "id": "A6",
+      "status": null,
+      "next": "",
+      "title": "synthetic",
+      "expected": false
+    },
+    {
+      "id": "A7",
+      "status": "已完成",
+      "next": "Alex",
+      "title": "synthetic",
+      "expected": true
+    },
+    {
+      "id": "A8",
+      "status": "进行中",
+      "next": "someone else",
+      "title": "synthetic",
+      "expected": false
+    }
+  ],
+  "reply_gate_cases": [
+    {
+      "id": "G1",
+      "reply_supported": null,
+      "status": "等你决策",
+      "item_id": "syn-id",
+      "source": "https://synthetic.invalid/radar.json",
+      "expected": {
+        "visible": true,
+        "ui_enabled": false
+      }
+    },
+    {
+      "id": "G2",
+      "reply_supported": false,
+      "status": "等你决策",
+      "item_id": "syn-id",
+      "source": "https://synthetic.invalid/radar.json",
+      "expected": {
+        "visible": true,
+        "ui_enabled": false
+      }
+    },
+    {
+      "id": "G3",
+      "reply_supported": true,
+      "status": "等你决策",
+      "item_id": "syn-id",
+      "source": "https://synthetic.invalid/radar.json",
+      "expected": {
+        "visible": true,
+        "ui_enabled": true
+      }
+    },
+    {
+      "id": "G4",
+      "reply_supported": true,
+      "status": "等你决策",
+      "item_id": "syn-id",
+      "source": "",
+      "expected": {
+        "visible": true,
+        "ui_enabled": false
+      }
+    },
+    {
+      "id": "G5",
+      "reply_supported": true,
+      "status": " 等你决策 ",
+      "item_id": "syn-id",
+      "source": "https://synthetic.invalid/radar.json",
+      "expected": {
+        "visible": false,
+        "ui_enabled": false
+      }
+    },
+    {
+      "id": "G6",
+      "reply_supported": true,
+      "status": "等你决策",
+      "item_id": null,
+      "source": "https://synthetic.invalid/radar.json",
+      "expected": {
+        "visible": false,
+        "ui_enabled": false
+      }
+    },
+    {
+      "id": "G7",
+      "reply_supported": true,
+      "status": "等你决策",
+      "item_id": "",
+      "source": "https://synthetic.invalid/radar.json",
+      "expected": {
+        "visible": true,
+        "ui_enabled": true
+      }
+    },
+    {
+      "id": "G8",
+      "reply_supported": true,
+      "status": "等你决策",
+      "item_id": "syn-id",
+      "source": "not a URL",
+      "expected": {
+        "visible": true,
+        "ui_enabled": true
+      }
+    },
+    {
+      "id": "G9",
+      "reply_supported": true,
+      "status": "等你决策",
+      "item_id": "syn-id",
+      "source": null,
+      "expected": {
+        "visible": true,
+        "ui_enabled": false
+      }
+    }
+  ],
+  "sort_filter_cases": [
+    {
+      "id": "S1",
+      "mode": "priority_rank",
+      "expected": [
+        "zero",
+        "one",
+        "two",
+        "missing",
+        "unknown"
+      ]
+    },
+    {
+      "id": "S2",
+      "mode": "missing_time_stable",
+      "expected": [
+        "older",
+        "missing",
+        "newer"
+      ]
+    },
+    {
+      "id": "S3",
+      "mode": "complete_time",
+      "expected": [
+        "newer",
+        "older"
+      ]
+    },
+    {
+      "id": "S4",
+      "mode": "priority_off_missing_time",
+      "expected": [
+        "older",
+        "missing",
+        "newer"
+      ]
+    },
+    {
+      "id": "S5",
+      "mode": "priority_exact",
+      "expected": [
+        "exact"
+      ]
+    },
+    {
+      "id": "S6",
+      "mode": "attention_project_excludes",
+      "expected": []
+    },
+    {
+      "id": "S7",
+      "mode": "attention_alltasks",
+      "expected": [
+        "waiting"
+      ]
+    },
+    {
+      "id": "S8",
+      "mode": "explicit_empty_tasks",
+      "expected": []
+    },
+    {
+      "id": "S9",
+      "mode": "legacy_fallback",
+      "expected": [
+        "waiting"
+      ]
+    }
+  ],
+  "decode_cases": [
+    {
+      "id": "D1",
+      "mode": "normal",
+      "accepted": true
+    },
+    {
+      "id": "D2",
+      "mode": "missing_title",
+      "accepted": false
+    },
+    {
+      "id": "D3",
+      "mode": "null_title",
+      "accepted": false
+    },
+    {
+      "id": "D4",
+      "mode": "blank_title",
+      "accepted": false
+    },
+    {
+      "id": "D5",
+      "mode": "missing_next",
+      "accepted": false
+    },
+    {
+      "id": "D6",
+      "mode": "null_next",
+      "accepted": false
+    },
+    {
+      "id": "D7",
+      "mode": "empty_next",
+      "accepted": true
+    },
+    {
+      "id": "D8",
+      "mode": "missing_priority",
+      "accepted": true
+    },
+    {
+      "id": "D9",
+      "mode": "null_priority",
+      "accepted": true
+    },
+    {
+      "id": "D10",
+      "mode": "empty_priority",
+      "accepted": true
+    },
+    {
+      "id": "D11",
+      "mode": "reply_number",
+      "accepted": false
+    },
+    {
+      "id": "D12",
+      "mode": "reply_string",
+      "accepted": false
+    },
+    {
+      "id": "D13",
+      "mode": "reply_null",
+      "accepted": true
+    },
+    {
+      "id": "D14",
+      "mode": "duplicate_ids",
+      "accepted": false
+    }
+  ],
+  "boundary_reviews": [
+    {
+      "id": "R1",
+      "label": "Placeholders never backfill source or define business state",
+      "runtime": "not_run"
+    },
+    {
+      "id": "R2",
+      "label": "Rank fallback/stable missing time is not assigning P2/current time",
+      "runtime": "not_run"
+    },
+    {
+      "id": "R3",
+      "label": "UI capability/visibility is not prepare or server authorization",
+      "runtime": "not_run"
+    },
+    {
+      "id": "R4",
+      "label": "Derived attention is not current account/owner recognition",
+      "runtime": "not_run"
+    }
+  ],
+  "scope": "Whole original Radar model on Foundation/CoreFoundation/Observation host and exact UI expressions with original radarText NSLocalizedString yielding source-key fallback on host without App translation resources; tiny Record wrapper; no SwiftUI pixels/current account/source refresh/prepare/send.",
+  "manual_no_go": [
+    "Rendered placeholder mistaken for actual source facts or permission",
+    "Fallback ordering mistaken for source priority/timestamp update",
+    "reply_supported true or nonempty source/id predicate mistaken for valid source/target/authorization",
+    "Attention hit/empty filtered list mistaken for ownership/all tasks completed"
+  ],
+  "runtime_checks": {
+    "SwiftUI_pixels_or_localization": "not_run",
+    "real_account_identity_or_ownership": "not_run",
+    "live_private_feed_or_refresh": "not_run",
+    "service_reply_permission_or_prepare": "not_run",
+    "source_mutation_or_backfill": "not_run",
+    "real_draft_save_or_send": "not_run",
+    "ASR_or_microphone": "not_run",
+    "Watch_or_cross_device_sync": "not_run",
+    "backend_acceptance_or_business_completion": "not_run",
+    "hardware_performance_or_SLA": "not_run"
+  }
+}

@@ -4792,9 +4792,310 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/empty-field-display-defaults/
 
-场景指南 · 相关使用指南 空字段与默认显示怎样核？别把“待补”占位写回笔记或Radar源 “待补”可能只是界面说明，不是来源已经提供的业务值 一呼的任务卡片会在部分字段为空时显示“任务状态未提供”“优先级待补”“下一步待补”等提示。这些显示分支不表示源码把原字段改成默认业务状态、优先级或下一步。校验时先区分原值与渲染结果，不能为了让界面完整而把未知回填成已确认事实；本文不提供默认值修复器或自动补全源数据。 与JSON类型校验的区别 JSON指南核缺失、null和类型；这里进一步核 通过读取后的占位、兜底排序与权限条件有没有被误当源内容 。它不重讲完整数据契约，不自动修改字段，也不把空字符串一律等同所有空白字符。 空字段、占位与默认处理表 位置 当前消费者行为/边界 人工核查 不能回填/推断 必填身份/标题 decode另核非空project/title等条件 原字段是否存在、类型与非空条件 自动“未命名任务”就可替代有效源 status显示 任务卡片空白状态可显示未提供 显示说明与源status分开 未提供等于待办、完成或已批准 priority显示 nil/空串可显示优先级待补 真正源值与显示标签 把待补写成P2或自动默认优先级 next显示 任务卡片可对去首尾空白后的空串显示待补 原文、具体控件与已知缺口 自动生成执行动作或负责人 session/evidence等 部分缺项显示待补/未提供 源中是否真的有同样字样 占位证明负责会话/证据已存在 排序兜底 未知优先级有比较规则 排序结果不是源字段赋值 排在后面就代表来源设了低优先级 reply_supported 明确true才满足该能力条件 未知和显式false语义分开 按钮不可用就把原值统一写false 空笔记原文 handOff入口拒绝空transcript 原文与界面提示分开 用提示文字冒充转写或自动消除缺口 不同控件是否去首尾空白按各处实现判断，并不统一；不要从一个卡片分支推广成所有字段的清洗规则。界面显示相近也不证明来源层相同。 占位与真实字符串的合成例子 材料A：evidence为null，卡片用“待补”说明缺口。 材料B：evidence为字面字符串“待补”，来源真的写了这个文本。 核查：两者都不足以证明业务证据已提供，但来源值不同。 处理：保留区别，不把占位截图当原始字段，不自动改写真实数据。 这个例子不是完整Radar快照，也不调用实际解码。若要确认字段，应在已有权限范围核原材料；本页不新增原始数据查看器或让私有来源公开。 不用默认值扩大结论 人工整理时可以把“未知”作为说明，但须标明这是编辑标签，不是源字段已更新。来源身份、必填校验与回复能力失败时，不通过填当前时间、空数组或常见优先级来绕过实际条件。 “暂无文字”不等于会议没有发生，“没有匹配任务”不等于任务全部完成，“待补”也不等于后台会自动补齐。只记录实际材料与未知，不因占位或排序产生新业务判断、动作授权或重发资格。 FAQ 界面显示优先级待补，源里就保存了“待补”吗？ 不一定。可能只是显示分支，需要核原字段；不能把截图标签当源数据值。 缺标题可以补个未命名让快照通过吗？ 不应擅自造值。当前消费者有非空身份/标题等要求，应回真实来源维护流程，不用默认名冒充有效原件。 空串、空白字符和缺失在所有位置都相同吗？ 不是。具体解析/控件的条件可能不同，本页不提供统一清洗或把所有空白自动归一的保证。 按钮不可用是否证明reply_supported显式为false？ 不能。未知能力、其他权限/来源条件也会影响可用性。原值和界面结论应分账，不自动回写false。 按默认顺序排后面就能填低优先级吗？ 不能。兜底比较规则不是修改来源优先级，更不是业务紧急程度结论。 空笔记能把“暂无文字”当转写交接吗？ 不应这样做。提示不是原文，既有入口与一次交接守卫不因填占位而取消；真实内容缺口须保留。 相关指南与源码 JSON类型与空值 · 摘要句子溯源 · 跨端显示范围 · 笔记一次交接 · 开始 · 隐私 依据： 任务卡片占位 、 解码与排序 、 笔记空原文守卫 。
+场景指南 · 相关使用指南 空字段与默认显示怎样核？别把“待补”占位写回笔记或Radar源 SYN-EFD-43 · 空字段、占位和派生筛选只读自检 SYNTHETIC_EXAMPLE / SYN-EFD-43，只读自检，不是App导入协议或真实客户记录。44例/语只核原模型和显示表达式，不截图、不回填源、不发回复。 中文JSON： preflight.zh.json — https://getyihu.com/samples/p22-empty-field-display-defaults/preflight.zh.json English JSON： preflight.en.json — https://getyihu.com/samples/p22-empty-field-display-defaults/preflight.en.json 双语自检卡： preflight-card.md — https://getyihu.com/samples/p22-empty-field-display-defaults/preflight-card.md 先分清源值、显示、排序与权限 status 与任务卡片 next 只在判断空白时trim，返回非空文本仍保留原文；priority/session/window_status/evidence只判 isEmpty ，空格可能原样显示。接续详情的 next.isEmpty 又不同于任务卡片。null证据与字面“待补”可显示相同，但原值不同；这里记录源码中文文案key，不验证英语译文或SwiftUI像素。 P0/P1/P2的rank为0/1/2，其他为3，不把未知设成P2。启用最近修改排序时，同一rank只要有缺时间，原模型会保留该组原顺序；不是补0或当前时间后排序。 tasks: [] 仍是空列表，不等 tasks: null/缺失 回退decisions；匹配后被项目/状态/搜索/历史排除，不等后台没有待办。 reply_supported == true 只通过这一UI能力条件。原卡片精确匹配两个未trim的状态且id非nil；空id甚至非URL但非空source可通过所测UI谓词，不证明有效条目/来源或服务写权，不新增绕过。prepare、current-source、目标版本/eligible、文本、服务授权及发送结果另核且本轮not_run。派生attention会trim状态或在next用固定Alex做localizedStandardContains；不读当前账号，不扫描标题，不认领/授权。例A2可命中attention却不满足原始状态UI门；例A7已完成仍可命中getter，但默认历史过滤可再排除。 44宿主例=4显示+8attention+9回复门+9排序/筛选+14decode；另4条只读边界。缺标题/next等不能靠占位修复；JSON布尔类型门与上波APNs的NSNumber桥接不混用。所有源值保留，不创建默认值修复器/身份服务/原生reason API。 编号 范围 合成输入/模式 宿主期望/只读边界 F1 字段显示表达式 {"status":null,"priority":null,"next":"","session":null,"window_status":null,"evidence":null} {"status":"任务状态未提供","priority":"优先级待补","card_next":"下一步待补","detail_next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"} F2 字段显示表达式 {"status":" \n","priority":" ","next":" ","session":" ","window_status":" ","evidence":" "} {"status":"任务状态未提供","priority":" ","card_next":"下一步待补","detail_next":" ","session":" ","window_status":" ","evidence":" "} F3 字段显示表达式 {"status":"待补","priority":"优先级待补","next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"} {"status":"待补","priority":"优先级待补","card_next":"下一步待补","detail_next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"} F4 字段显示表达式 {"status":"进行中","priority":"","next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","session":"","window_status":"","evidence":""} {"status":"进行中","priority":"优先级待补","card_next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","detail_next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","session":"待补","window_status":"未提供","evidence":"待补"} A1 派生attention {"status":"等你决策","next":"","title":"synthetic"} true A2 派生attention {"status":" 等你验收 \n","next":"","title":"synthetic"} true A3 派生attention {"status":"进行中","next":"Alex please review","title":"synthetic"} true A4 派生attention {"status":"进行中","next":"alex review","title":"synthetic"} true A5 派生attention {"status":"进行中","next":"","title":"Alex in title only"} false A6 派生attention {"status":null,"next":"","title":"synthetic"} false A7 派生attention {"status":"已完成","next":"Alex","title":"synthetic"} true A8 派生attention {"status":"进行中","next":"someone else","title":"synthetic"} false G1 UI回复门表达式 {"reply_supported":null,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"} {"visible":true,"ui_enabled":false} G2 UI回复门表达式 {"reply_supported":false,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"} {"visible":true,"ui_enabled":false} G3 UI回复门表达式 {"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"} {"visible":true,"ui_enabled":true} G4 UI回复门表达式 {"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":""} {"visible":true,"ui_enabled":false} G5 UI回复门表达式 {"reply_supported":true,"status":" 等你决策 ","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"} {"visible":false,"ui_enabled":false} G6 UI回复门表达式 {"reply_supported":true,"status":"等你决策","item_id":null,"source":"https://synthetic.invalid/radar.json"} {"visible":false,"ui_enabled":false} G7 UI回复门表达式 {"reply_supported":true,"status":"等你决策","item_id":"","source":"https://synthetic.invalid/radar.json"} {"visible":true,"ui_enabled":true} G8 UI回复门表达式 {"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":"not a URL"} {"visible":true,"ui_enabled":true} G9 UI回复门表达式 {"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":null} {"visible":true,"ui_enabled":false} S1 排序/筛选 {"mode":"priority_rank"} ["zero","one","two","missing","unknown"] S2 排序/筛选 {"mode":"missing_time_stable"} ["older","missing","newer"] S3 排序/筛选 {"mode":"complete_time"} ["newer","older"] S4 排序/筛选 {"mode":"priority_off_missing_time"} ["older","missing","newer"] S5 排序/筛选 {"mode":"priority_exact"} ["exact"] S6 排序/筛选 {"mode":"attention_project_excludes"} [] S7 排序/筛选 {"mode":"attention_alltasks"} ["waiting"] S8 排序/筛选 {"mode":"explicit_empty_tasks"} [] S9 排序/筛选 {"mode":"legacy_fallback"} ["waiting"] D1 原始decode {"mode":"normal"} true D2 原始decode {"mode":"missing_title"} false D3 原始decode {"mode":"null_title"} false D4 原始decode {"mode":"blank_title"} false D5 原始decode {"mode":"missing_next"} false D6 原始decode {"mode":"null_next"} false D7 原始decode {"mode":"empty_next"} true D8 原始decode {"mode":"missing_priority"} true D9 原始decode {"mode":"null_priority"} true D10 原始decode {"mode":"empty_priority"} true D11 原始decode {"mode":"reply_number"} false D12 原始decode {"mode":"reply_string"} false D13 原始decode {"mode":"reply_null"} true D14 原始decode {"mode":"duplicate_ids"} false R1 只读人工边界 {"review":"占位标签不回填源/未知不等业务状态"} "not_run" R2 只读人工边界 {"review":"rank兜底/缺时间稳定序不是赋默认P2或当前时间"} "not_run" R3 只读人工边界 {"review":"UI回复能力位/显示不等prepare或服务写授权"} "not_run" R4 只读人工边界 {"review":"attention是派生筛选非当前账号/负责人识别"} "not_run" 固定源码: Radar model · UI expressions · reply follow-on boundaries “待补”可能只是界面说明，不是来源已经提供的业务值 一呼的任务卡片会在部分字段为空时显示“任务状态未提供”“优先级待补”“下一步待补”等提示。这些显示分支不表示源码把原字段改成默认业务状态、优先级或下一步。校验时先区分原值与渲染结果，不能为了让界面完整而把未知回填成已确认事实；本文不提供默认值修复器或自动补全源数据。 与JSON类型校验的区别 JSON指南核缺失、null和类型；这里进一步核 通过读取后的占位、兜底排序与权限条件有没有被误当源内容 。它不重讲完整数据契约，不自动修改字段，也不把空字符串一律等同所有空白字符。 空字段、占位与默认处理表 位置 当前消费者行为/边界 人工核查 不能回填/推断 必填身份/标题 decode另核非空project/title等条件 原字段是否存在、类型与非空条件 自动“未命名任务”就可替代有效源 status显示 任务卡片空白状态可显示未提供 显示说明与源status分开 未提供等于待办、完成或已批准 priority显示 nil/空串可显示优先级待补 真正源值与显示标签 把待补写成P2或自动默认优先级 next显示 任务卡片可对去首尾空白后的空串显示待补 原文、具体控件与已知缺口 自动生成执行动作或负责人 session/evidence等 部分缺项显示待补/未提供 源中是否真的有同样字样 占位证明负责会话/证据已存在 排序兜底 未知优先级有比较规则 排序结果不是源字段赋值 排在后面就代表来源设了低优先级 reply_supported 明确true才满足该能力条件 未知和显式false语义分开 按钮不可用就把原值统一写false 空笔记原文 handOff入口拒绝空transcript 原文与界面提示分开 用提示文字冒充转写或自动消除缺口 不同控件是否去首尾空白按各处实现判断，并不统一；不要从一个卡片分支推广成所有字段的清洗规则。界面显示相近也不证明来源层相同。 占位与真实字符串的合成例子 材料A：evidence为null，卡片用“待补”说明缺口。 材料B：evidence为字面字符串“待补”，来源真的写了这个文本。 核查：两者都不足以证明业务证据已提供，但来源值不同。 处理：保留区别，不把占位截图当原始字段，不自动改写真实数据。 这个例子不是完整Radar快照，也不调用实际解码。若要确认字段，应在已有权限范围核原材料；本页不新增原始数据查看器或让私有来源公开。 不用默认值扩大结论 人工整理时可以把“未知”作为说明，但须标明这是编辑标签，不是源字段已更新。来源身份、必填校验与回复能力失败时，不通过填当前时间、空数组或常见优先级来绕过实际条件。 “暂无文字”不等于会议没有发生，“没有匹配任务”不等于任务全部完成，“待补”也不等于后台会自动补齐。只记录实际材料与未知，不因占位或排序产生新业务判断、动作授权或重发资格。 FAQ 界面显示优先级待补，源里就保存了“待补”吗？ 不一定。可能只是显示分支，需要核原字段；不能把截图标签当源数据值。 缺标题可以补个未命名让快照通过吗？ 不应擅自造值。当前消费者有非空身份/标题等要求，应回真实来源维护流程，不用默认名冒充有效原件。 空串、空白字符和缺失在所有位置都相同吗？ 不是。具体解析/控件的条件可能不同，本页不提供统一清洗或把所有空白自动归一的保证。 按钮不可用是否证明reply_supported显式为false？ 不能。未知能力、其他权限/来源条件也会影响可用性。原值和界面结论应分账，不自动回写false。 按默认顺序排后面就能填低优先级吗？ 不能。兜底比较规则不是修改来源优先级，更不是业务紧急程度结论。 空笔记能把“暂无文字”当转写交接吗？ 不应这样做。提示不是原文，既有入口与一次交接守卫不因填占位而取消；真实内容缺口须保留。 相关指南与源码 JSON类型与空值 · 摘要句子溯源 · 跨端显示范围 · 笔记一次交接 · 开始 · 隐私 依据： 任务卡片占位 、 解码与排序 、 笔记空原文守卫 。
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>范围</th>
+<th>合成输入/模式</th>
+<th>宿主期望/只读边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1</td>
+<td>字段显示表达式</td>
+<td><code>{"status":null,"priority":null,"next":"","session":null,"window_status":null,"evidence":null}</code></td>
+<td><code>{"status":"任务状态未提供","priority":"优先级待补","card_next":"下一步待补","detail_next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"}</code></td>
+</tr>
+<tr>
+<td>F2</td>
+<td>字段显示表达式</td>
+<td><code>{"status":" \n","priority":" ","next":" ","session":" ","window_status":" ","evidence":" "}</code></td>
+<td><code>{"status":"任务状态未提供","priority":" ","card_next":"下一步待补","detail_next":" ","session":" ","window_status":" ","evidence":" "}</code></td>
+</tr>
+<tr>
+<td>F3</td>
+<td>字段显示表达式</td>
+<td><code>{"status":"待补","priority":"优先级待补","next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"}</code></td>
+<td><code>{"status":"待补","priority":"优先级待补","card_next":"下一步待补","detail_next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"}</code></td>
+</tr>
+<tr>
+<td>F4</td>
+<td>字段显示表达式</td>
+<td><code>{"status":"进行中","priority":"","next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","session":"","window_status":"","evidence":""}</code></td>
+<td><code>{"status":"进行中","priority":"优先级待补","card_next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","detail_next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","session":"待补","window_status":"未提供","evidence":"待补"}</code></td>
+</tr>
+<tr>
+<td>A1</td>
+<td>派生attention</td>
+<td><code>{"status":"等你决策","next":"","title":"synthetic"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>A2</td>
+<td>派生attention</td>
+<td><code>{"status":" 等你验收 \n","next":"","title":"synthetic"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>A3</td>
+<td>派生attention</td>
+<td><code>{"status":"进行中","next":"Alex please review","title":"synthetic"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>A4</td>
+<td>派生attention</td>
+<td><code>{"status":"进行中","next":"alex review","title":"synthetic"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>A5</td>
+<td>派生attention</td>
+<td><code>{"status":"进行中","next":"","title":"Alex in title only"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>A6</td>
+<td>派生attention</td>
+<td><code>{"status":null,"next":"","title":"synthetic"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>A7</td>
+<td>派生attention</td>
+<td><code>{"status":"已完成","next":"Alex","title":"synthetic"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>A8</td>
+<td>派生attention</td>
+<td><code>{"status":"进行中","next":"someone else","title":"synthetic"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>G1</td>
+<td>UI回复门表达式</td>
+<td><code>{"reply_supported":null,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":true,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>G2</td>
+<td>UI回复门表达式</td>
+<td><code>{"reply_supported":false,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":true,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>G3</td>
+<td>UI回复门表达式</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":true,"ui_enabled":true}</code></td>
+</tr>
+<tr>
+<td>G4</td>
+<td>UI回复门表达式</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":""}</code></td>
+<td><code>{"visible":true,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>G5</td>
+<td>UI回复门表达式</td>
+<td><code>{"reply_supported":true,"status":" 等你决策 ","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":false,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>G6</td>
+<td>UI回复门表达式</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":null,"source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":false,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>G7</td>
+<td>UI回复门表达式</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":"","source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":true,"ui_enabled":true}</code></td>
+</tr>
+<tr>
+<td>G8</td>
+<td>UI回复门表达式</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":"not a URL"}</code></td>
+<td><code>{"visible":true,"ui_enabled":true}</code></td>
+</tr>
+<tr>
+<td>G9</td>
+<td>UI回复门表达式</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":null}</code></td>
+<td><code>{"visible":true,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>S1</td>
+<td>排序/筛选</td>
+<td><code>{"mode":"priority_rank"}</code></td>
+<td><code>["zero","one","two","missing","unknown"]</code></td>
+</tr>
+<tr>
+<td>S2</td>
+<td>排序/筛选</td>
+<td><code>{"mode":"missing_time_stable"}</code></td>
+<td><code>["older","missing","newer"]</code></td>
+</tr>
+<tr>
+<td>S3</td>
+<td>排序/筛选</td>
+<td><code>{"mode":"complete_time"}</code></td>
+<td><code>["newer","older"]</code></td>
+</tr>
+<tr>
+<td>S4</td>
+<td>排序/筛选</td>
+<td><code>{"mode":"priority_off_missing_time"}</code></td>
+<td><code>["older","missing","newer"]</code></td>
+</tr>
+<tr>
+<td>S5</td>
+<td>排序/筛选</td>
+<td><code>{"mode":"priority_exact"}</code></td>
+<td><code>["exact"]</code></td>
+</tr>
+<tr>
+<td>S6</td>
+<td>排序/筛选</td>
+<td><code>{"mode":"attention_project_excludes"}</code></td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td>S7</td>
+<td>排序/筛选</td>
+<td><code>{"mode":"attention_alltasks"}</code></td>
+<td><code>["waiting"]</code></td>
+</tr>
+<tr>
+<td>S8</td>
+<td>排序/筛选</td>
+<td><code>{"mode":"explicit_empty_tasks"}</code></td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td>S9</td>
+<td>排序/筛选</td>
+<td><code>{"mode":"legacy_fallback"}</code></td>
+<td><code>["waiting"]</code></td>
+</tr>
+<tr>
+<td>D1</td>
+<td>原始decode</td>
+<td><code>{"mode":"normal"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D2</td>
+<td>原始decode</td>
+<td><code>{"mode":"missing_title"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D3</td>
+<td>原始decode</td>
+<td><code>{"mode":"null_title"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D4</td>
+<td>原始decode</td>
+<td><code>{"mode":"blank_title"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D5</td>
+<td>原始decode</td>
+<td><code>{"mode":"missing_next"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D6</td>
+<td>原始decode</td>
+<td><code>{"mode":"null_next"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D7</td>
+<td>原始decode</td>
+<td><code>{"mode":"empty_next"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D8</td>
+<td>原始decode</td>
+<td><code>{"mode":"missing_priority"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D9</td>
+<td>原始decode</td>
+<td><code>{"mode":"null_priority"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D10</td>
+<td>原始decode</td>
+<td><code>{"mode":"empty_priority"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D11</td>
+<td>原始decode</td>
+<td><code>{"mode":"reply_number"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D12</td>
+<td>原始decode</td>
+<td><code>{"mode":"reply_string"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D13</td>
+<td>原始decode</td>
+<td><code>{"mode":"reply_null"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D14</td>
+<td>原始decode</td>
+<td><code>{"mode":"duplicate_ids"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>R1</td>
+<td>只读人工边界</td>
+<td><code>{"review":"占位标签不回填源/未知不等业务状态"}</code></td>
+<td><code>"not_run"</code></td>
+</tr>
+<tr>
+<td>R2</td>
+<td>只读人工边界</td>
+<td><code>{"review":"rank兜底/缺时间稳定序不是赋默认P2或当前时间"}</code></td>
+<td><code>"not_run"</code></td>
+</tr>
+<tr>
+<td>R3</td>
+<td>只读人工边界</td>
+<td><code>{"review":"UI回复能力位/显示不等prepare或服务写授权"}</code></td>
+<td><code>"not_run"</code></td>
+</tr>
+<tr>
+<td>R4</td>
+<td>只读人工边界</td>
+<td><code>{"review":"attention是派生筛选非当前账号/负责人识别"}</code></td>
+<td><code>"not_run"</code></td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -4861,9 +5162,310 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/empty-field-display-defaults/
 
-All scenarios · Related practical guide Empty fields and display defaults: placeholders must not become source values A missing-value label may be UI explanation, not supplied business data Some task-card branches display status not provided, priority pending or next step pending when fields are empty. These branches do not mean source fields were assigned a default business state, priority or action. Separate raw values from rendering. Do not fill unknowns with confirmed facts to complete a screen. No default-value fixer or source autocompletion is added. Different from JSON type validation JSON guidance checks missing/null/types. Here rendering, fallback ordering and capability conditions can be mistaken for source contents . This is not another full schema guide, field editor or blanket equivalence between empty strings and all whitespace. Empty values, placeholders and fallbacks Location Existing consumer behavior/boundary Review Do not fill/infer Required identity/title Decode checks nonempty project/title and other conditions Presence, type and nonempty rules Untitled automatically replaces valid source data status rendering Blank task-card state can display not provided Label versus raw status Missing means planned, done or approved priority rendering nil/empty can display pending priority Actual value versus label Replace with P2/default business priority next rendering Task card can show pending after trimming empty text Original, specific control and known gap Invent action or owner session/evidence Some missing values display pending/not provided Whether the source supplied those words literally Label establishes an owner session or evidence Sort fallback Unknown priorities have ordering rules Order is not a field assignment Low position means source assigned low urgency reply_supported Explicit true required for this capability condition Unknown differs from explicit false Disabled UI means rewrite all missing values as false Empty note transcript handOff rejects an empty transcript Original versus UI message Pass a placeholder as transcription or silently remove gaps Trimming depends on each implementation/control; it is not uniform. Do not generalize one card’s condition into universal cleansing. Similar displays do not establish identical raw values. Synthetic placeholder versus literal text A: evidence is null; the card displays a pending label. B: evidence is literally the pending-label string supplied by the source. Review: Neither establishes actual business evidence, but source values differ. Decision: Preserve the distinction; a placeholder screenshot is not the original field. Rewrite no live data. This is not a complete snapshot or actual decoder run. Inspect originals only with existing authorization; no raw-data viewer or public private-source access is added. Defaults must not expand conclusions An editor can label unknowns but must not claim source updates. Identity/required-field/capability failures cannot be bypassed by filling now, empty arrays or familiar priorities. No text does not prove no meeting occurred. No matching tasks does not prove all tasks completed. A pending label does not promise automatic completion. Retain actual facts/unknowns without deriving business status, authority or resend eligibility from placeholders/order. FAQ Does priority pending mean the source saved that string? Not necessarily. Inspect the original field rather than treating screenshot labels as raw values. Can an untitled default make a missing title valid? Do not fabricate values. The consumer has nonempty identity/title conditions; use the real source-maintenance process. Are empty, whitespace and missing identical everywhere? No. Parser/control conditions differ. No universal normalization or cleansing guarantee is supplied. Does disabled UI prove reply_supported is explicitly false? No. Unknown capability and other permission/source conditions affect availability. Preserve raw value versus UI outcome without writing false. Can fallback ordering justify filling low priority? No. Ordering does not modify source priority or establish business urgency. Can no-text placeholder text be handed off as transcription? Do not do so. Messages are not originals; entry/one-handoff guards remain. Preserve the actual content gap. Reading and source JSON types/nulls · Summary provenance · Cross-device display · One note handoff · Start · Privacy Evidence: task-card placeholders , decode/sorting , empty-transcript guard .
+All scenarios · Related practical guide Empty fields and display defaults: placeholders must not become source values SYN-EFD-43 · Empty fields, placeholders and derived-filter checks SYNTHETIC_EXAMPLE / SYN-EFD-43: read-only checks, not an App import schema or real customer records. 44 host cases per language test original model/display expressions, not UI pixels, backfill or replies. 中文 JSON: preflight.zh.json — https://getyihu.com/samples/p22-empty-field-display-defaults/preflight.zh.json English JSON: preflight.en.json — https://getyihu.com/samples/p22-empty-field-display-defaults/preflight.en.json Bilingual card: preflight-card.md — https://getyihu.com/samples/p22-empty-field-display-defaults/preflight-card.md Source values, display, ordering and permission are different Status and action-card next test trimmed emptiness but preserve nonempty original text. Priority/session/window_status/evidence only test isEmpty: whitespace can remain visible. The continuation detail next uses isEmpty instead of the card’s trim predicate. Null evidence and literal 待补 can share a label but are different source values. Chinese source label keys are checked, not English localization or SwiftUI pixels. P0/P1/P2 rank 0/1/2; all other priorities rank 3, never a source assignment to P2. With newest-first, a missing timestamp preserves original order across its rank group, not a fabricated zero/current time. Explicit tasks: [] remains empty; missing/null tasks can fall back to decisions. Project/status/search/history filters can hide attention hits without proving there are no tasks. reply_supported == true satisfies only that UI capability condition. The card checks two exact untrimmed statuses and a non-nil id. Even an empty id or nonempty invalid-URL source can satisfy the tested UI predicates: this is not a valid target, source, prepare or server-write authorization, and no bypass is added. Current source, target version/eligible, text and service authorization/send remain separate and not_run. requiresMyAttention trims status or uses localizedStandardContains on next for fixed Alex, not current-login identity or title scanning. A2 can hit attention but fail raw-status button visibility; A7 can hit the getter while default history filtering excludes it. 44 host cases =4 display+8 attention+9 reply gate+9 ordering/filter+14 decode, plus4 read-only boundaries. Missing required title/next are not repaired by labels. JSON Bool decoding is not last wave’s APNs NSNumber bridge. No source backfill, identity service or native reason API is added. ID Scope Synthetic input/mode Host expectation/read-only boundary F1 Field display expressions {"status":null,"priority":null,"next":"","session":null,"window_status":null,"evidence":null} {"status":"任务状态未提供","priority":"优先级待补","card_next":"下一步待补","detail_next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"} F2 Field display expressions {"status":" \n","priority":" ","next":" ","session":" ","window_status":" ","evidence":" "} {"status":"任务状态未提供","priority":" ","card_next":"下一步待补","detail_next":" ","session":" ","window_status":" ","evidence":" "} F3 Field display expressions {"status":"待补","priority":"优先级待补","next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"} {"status":"待补","priority":"优先级待补","card_next":"下一步待补","detail_next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"} F4 Field display expressions {"status":"进行中","priority":"","next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","session":"","window_status":"","evidence":""} {"status":"进行中","priority":"优先级待补","card_next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","detail_next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","session":"待补","window_status":"未提供","evidence":"待补"} A1 Derived attention {"status":"等你决策","next":"","title":"synthetic"} true A2 Derived attention {"status":" 等你验收 \n","next":"","title":"synthetic"} true A3 Derived attention {"status":"进行中","next":"Alex please review","title":"synthetic"} true A4 Derived attention {"status":"进行中","next":"alex review","title":"synthetic"} true A5 Derived attention {"status":"进行中","next":"","title":"Alex in title only"} false A6 Derived attention {"status":null,"next":"","title":"synthetic"} false A7 Derived attention {"status":"已完成","next":"Alex","title":"synthetic"} true A8 Derived attention {"status":"进行中","next":"someone else","title":"synthetic"} false G1 UI reply gate expressions {"reply_supported":null,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"} {"visible":true,"ui_enabled":false} G2 UI reply gate expressions {"reply_supported":false,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"} {"visible":true,"ui_enabled":false} G3 UI reply gate expressions {"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"} {"visible":true,"ui_enabled":true} G4 UI reply gate expressions {"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":""} {"visible":true,"ui_enabled":false} G5 UI reply gate expressions {"reply_supported":true,"status":" 等你决策 ","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"} {"visible":false,"ui_enabled":false} G6 UI reply gate expressions {"reply_supported":true,"status":"等你决策","item_id":null,"source":"https://synthetic.invalid/radar.json"} {"visible":false,"ui_enabled":false} G7 UI reply gate expressions {"reply_supported":true,"status":"等你决策","item_id":"","source":"https://synthetic.invalid/radar.json"} {"visible":true,"ui_enabled":true} G8 UI reply gate expressions {"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":"not a URL"} {"visible":true,"ui_enabled":true} G9 UI reply gate expressions {"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":null} {"visible":true,"ui_enabled":false} S1 Ordering/filtering {"mode":"priority_rank"} ["zero","one","two","missing","unknown"] S2 Ordering/filtering {"mode":"missing_time_stable"} ["older","missing","newer"] S3 Ordering/filtering {"mode":"complete_time"} ["newer","older"] S4 Ordering/filtering {"mode":"priority_off_missing_time"} ["older","missing","newer"] S5 Ordering/filtering {"mode":"priority_exact"} ["exact"] S6 Ordering/filtering {"mode":"attention_project_excludes"} [] S7 Ordering/filtering {"mode":"attention_alltasks"} ["waiting"] S8 Ordering/filtering {"mode":"explicit_empty_tasks"} [] S9 Ordering/filtering {"mode":"legacy_fallback"} ["waiting"] D1 Original decode {"mode":"normal"} true D2 Original decode {"mode":"missing_title"} false D3 Original decode {"mode":"null_title"} false D4 Original decode {"mode":"blank_title"} false D5 Original decode {"mode":"missing_next"} false D6 Original decode {"mode":"null_next"} false D7 Original decode {"mode":"empty_next"} true D8 Original decode {"mode":"missing_priority"} true D9 Original decode {"mode":"null_priority"} true D10 Original decode {"mode":"empty_priority"} true D11 Original decode {"mode":"reply_number"} false D12 Original decode {"mode":"reply_string"} false D13 Original decode {"mode":"reply_null"} true D14 Original decode {"mode":"duplicate_ids"} false R1 Read-only manual boundary {"review":"Placeholders never backfill source or define business state"} "not_run" R2 Read-only manual boundary {"review":"Rank fallback/stable missing time is not assigning P2/current time"} "not_run" R3 Read-only manual boundary {"review":"UI capability/visibility is not prepare or server authorization"} "not_run" R4 Read-only manual boundary {"review":"Derived attention is not current account/owner recognition"} "not_run" Pinned source: Radar model · UI expressions · reply follow-on boundaries A missing-value label may be UI explanation, not supplied business data Some task-card branches display status not provided, priority pending or next step pending when fields are empty. These branches do not mean source fields were assigned a default business state, priority or action. Separate raw values from rendering. Do not fill unknowns with confirmed facts to complete a screen. No default-value fixer or source autocompletion is added. Different from JSON type validation JSON guidance checks missing/null/types. Here rendering, fallback ordering and capability conditions can be mistaken for source contents . This is not another full schema guide, field editor or blanket equivalence between empty strings and all whitespace. Empty values, placeholders and fallbacks Location Existing consumer behavior/boundary Review Do not fill/infer Required identity/title Decode checks nonempty project/title and other conditions Presence, type and nonempty rules Untitled automatically replaces valid source data status rendering Blank task-card state can display not provided Label versus raw status Missing means planned, done or approved priority rendering nil/empty can display pending priority Actual value versus label Replace with P2/default business priority next rendering Task card can show pending after trimming empty text Original, specific control and known gap Invent action or owner session/evidence Some missing values display pending/not provided Whether the source supplied those words literally Label establishes an owner session or evidence Sort fallback Unknown priorities have ordering rules Order is not a field assignment Low position means source assigned low urgency reply_supported Explicit true required for this capability condition Unknown differs from explicit false Disabled UI means rewrite all missing values as false Empty note transcript handOff rejects an empty transcript Original versus UI message Pass a placeholder as transcription or silently remove gaps Trimming depends on each implementation/control; it is not uniform. Do not generalize one card’s condition into universal cleansing. Similar displays do not establish identical raw values. Synthetic placeholder versus literal text A: evidence is null; the card displays a pending label. B: evidence is literally the pending-label string supplied by the source. Review: Neither establishes actual business evidence, but source values differ. Decision: Preserve the distinction; a placeholder screenshot is not the original field. Rewrite no live data. This is not a complete snapshot or actual decoder run. Inspect originals only with existing authorization; no raw-data viewer or public private-source access is added. Defaults must not expand conclusions An editor can label unknowns but must not claim source updates. Identity/required-field/capability failures cannot be bypassed by filling now, empty arrays or familiar priorities. No text does not prove no meeting occurred. No matching tasks does not prove all tasks completed. A pending label does not promise automatic completion. Retain actual facts/unknowns without deriving business status, authority or resend eligibility from placeholders/order. FAQ Does priority pending mean the source saved that string? Not necessarily. Inspect the original field rather than treating screenshot labels as raw values. Can an untitled default make a missing title valid? Do not fabricate values. The consumer has nonempty identity/title conditions; use the real source-maintenance process. Are empty, whitespace and missing identical everywhere? No. Parser/control conditions differ. No universal normalization or cleansing guarantee is supplied. Does disabled UI prove reply_supported is explicitly false? No. Unknown capability and other permission/source conditions affect availability. Preserve raw value versus UI outcome without writing false. Can fallback ordering justify filling low priority? No. Ordering does not modify source priority or establish business urgency. Can no-text placeholder text be handed off as transcription? Do not do so. Messages are not originals; entry/one-handoff guards remain. Preserve the actual content gap. Reading and source JSON types/nulls · Summary provenance · Cross-device display · One note handoff · Start · Privacy Evidence: task-card placeholders , decode/sorting , empty-transcript guard .
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Scope</th>
+<th>Synthetic input/mode</th>
+<th>Host expectation/read-only boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1</td>
+<td>Field display expressions</td>
+<td><code>{"status":null,"priority":null,"next":"","session":null,"window_status":null,"evidence":null}</code></td>
+<td><code>{"status":"任务状态未提供","priority":"优先级待补","card_next":"下一步待补","detail_next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"}</code></td>
+</tr>
+<tr>
+<td>F2</td>
+<td>Field display expressions</td>
+<td><code>{"status":" \n","priority":" ","next":" ","session":" ","window_status":" ","evidence":" "}</code></td>
+<td><code>{"status":"任务状态未提供","priority":" ","card_next":"下一步待补","detail_next":" ","session":" ","window_status":" ","evidence":" "}</code></td>
+</tr>
+<tr>
+<td>F3</td>
+<td>Field display expressions</td>
+<td><code>{"status":"待补","priority":"优先级待补","next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"}</code></td>
+<td><code>{"status":"待补","priority":"优先级待补","card_next":"下一步待补","detail_next":"下一步待补","session":"待补","window_status":"未提供","evidence":"待补"}</code></td>
+</tr>
+<tr>
+<td>F4</td>
+<td>Field display expressions</td>
+<td><code>{"status":"进行中","priority":"","next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","session":"","window_status":"","evidence":""}</code></td>
+<td><code>{"status":"进行中","priority":"优先级待补","card_next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","detail_next":"SYNTHETIC_EXAMPLE: unknown owner/deadline","session":"待补","window_status":"未提供","evidence":"待补"}</code></td>
+</tr>
+<tr>
+<td>A1</td>
+<td>Derived attention</td>
+<td><code>{"status":"等你决策","next":"","title":"synthetic"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>A2</td>
+<td>Derived attention</td>
+<td><code>{"status":" 等你验收 \n","next":"","title":"synthetic"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>A3</td>
+<td>Derived attention</td>
+<td><code>{"status":"进行中","next":"Alex please review","title":"synthetic"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>A4</td>
+<td>Derived attention</td>
+<td><code>{"status":"进行中","next":"alex review","title":"synthetic"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>A5</td>
+<td>Derived attention</td>
+<td><code>{"status":"进行中","next":"","title":"Alex in title only"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>A6</td>
+<td>Derived attention</td>
+<td><code>{"status":null,"next":"","title":"synthetic"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>A7</td>
+<td>Derived attention</td>
+<td><code>{"status":"已完成","next":"Alex","title":"synthetic"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>A8</td>
+<td>Derived attention</td>
+<td><code>{"status":"进行中","next":"someone else","title":"synthetic"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>G1</td>
+<td>UI reply gate expressions</td>
+<td><code>{"reply_supported":null,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":true,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>G2</td>
+<td>UI reply gate expressions</td>
+<td><code>{"reply_supported":false,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":true,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>G3</td>
+<td>UI reply gate expressions</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":true,"ui_enabled":true}</code></td>
+</tr>
+<tr>
+<td>G4</td>
+<td>UI reply gate expressions</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":""}</code></td>
+<td><code>{"visible":true,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>G5</td>
+<td>UI reply gate expressions</td>
+<td><code>{"reply_supported":true,"status":" 等你决策 ","item_id":"syn-id","source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":false,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>G6</td>
+<td>UI reply gate expressions</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":null,"source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":false,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>G7</td>
+<td>UI reply gate expressions</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":"","source":"https://synthetic.invalid/radar.json"}</code></td>
+<td><code>{"visible":true,"ui_enabled":true}</code></td>
+</tr>
+<tr>
+<td>G8</td>
+<td>UI reply gate expressions</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":"not a URL"}</code></td>
+<td><code>{"visible":true,"ui_enabled":true}</code></td>
+</tr>
+<tr>
+<td>G9</td>
+<td>UI reply gate expressions</td>
+<td><code>{"reply_supported":true,"status":"等你决策","item_id":"syn-id","source":null}</code></td>
+<td><code>{"visible":true,"ui_enabled":false}</code></td>
+</tr>
+<tr>
+<td>S1</td>
+<td>Ordering/filtering</td>
+<td><code>{"mode":"priority_rank"}</code></td>
+<td><code>["zero","one","two","missing","unknown"]</code></td>
+</tr>
+<tr>
+<td>S2</td>
+<td>Ordering/filtering</td>
+<td><code>{"mode":"missing_time_stable"}</code></td>
+<td><code>["older","missing","newer"]</code></td>
+</tr>
+<tr>
+<td>S3</td>
+<td>Ordering/filtering</td>
+<td><code>{"mode":"complete_time"}</code></td>
+<td><code>["newer","older"]</code></td>
+</tr>
+<tr>
+<td>S4</td>
+<td>Ordering/filtering</td>
+<td><code>{"mode":"priority_off_missing_time"}</code></td>
+<td><code>["older","missing","newer"]</code></td>
+</tr>
+<tr>
+<td>S5</td>
+<td>Ordering/filtering</td>
+<td><code>{"mode":"priority_exact"}</code></td>
+<td><code>["exact"]</code></td>
+</tr>
+<tr>
+<td>S6</td>
+<td>Ordering/filtering</td>
+<td><code>{"mode":"attention_project_excludes"}</code></td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td>S7</td>
+<td>Ordering/filtering</td>
+<td><code>{"mode":"attention_alltasks"}</code></td>
+<td><code>["waiting"]</code></td>
+</tr>
+<tr>
+<td>S8</td>
+<td>Ordering/filtering</td>
+<td><code>{"mode":"explicit_empty_tasks"}</code></td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td>S9</td>
+<td>Ordering/filtering</td>
+<td><code>{"mode":"legacy_fallback"}</code></td>
+<td><code>["waiting"]</code></td>
+</tr>
+<tr>
+<td>D1</td>
+<td>Original decode</td>
+<td><code>{"mode":"normal"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Original decode</td>
+<td><code>{"mode":"missing_title"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D3</td>
+<td>Original decode</td>
+<td><code>{"mode":"null_title"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D4</td>
+<td>Original decode</td>
+<td><code>{"mode":"blank_title"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D5</td>
+<td>Original decode</td>
+<td><code>{"mode":"missing_next"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D6</td>
+<td>Original decode</td>
+<td><code>{"mode":"null_next"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D7</td>
+<td>Original decode</td>
+<td><code>{"mode":"empty_next"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D8</td>
+<td>Original decode</td>
+<td><code>{"mode":"missing_priority"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D9</td>
+<td>Original decode</td>
+<td><code>{"mode":"null_priority"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D10</td>
+<td>Original decode</td>
+<td><code>{"mode":"empty_priority"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D11</td>
+<td>Original decode</td>
+<td><code>{"mode":"reply_number"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D12</td>
+<td>Original decode</td>
+<td><code>{"mode":"reply_string"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>D13</td>
+<td>Original decode</td>
+<td><code>{"mode":"reply_null"}</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>D14</td>
+<td>Original decode</td>
+<td><code>{"mode":"duplicate_ids"}</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>R1</td>
+<td>Read-only manual boundary</td>
+<td><code>{"review":"Placeholders never backfill source or define business state"}</code></td>
+<td><code>"not_run"</code></td>
+</tr>
+<tr>
+<td>R2</td>
+<td>Read-only manual boundary</td>
+<td><code>{"review":"Rank fallback/stable missing time is not assigning P2/current time"}</code></td>
+<td><code>"not_run"</code></td>
+</tr>
+<tr>
+<td>R3</td>
+<td>Read-only manual boundary</td>
+<td><code>{"review":"UI capability/visibility is not prepare or server authorization"}</code></td>
+<td><code>"not_run"</code></td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Read-only manual boundary</td>
+<td><code>{"review":"Derived attention is not current account/owner recognition"}</code></td>
+<td><code>"not_run"</code></td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
