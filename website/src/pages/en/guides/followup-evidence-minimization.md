@@ -6,6 +6,11 @@ lang: en
 indexable: false
 ---
 
+## Same-language ownership and minimum-disclosure boundary
+
+[Department minutes ownership/archive checks](/en/guides/department-minutes-ownership-archive/): this retired noindex page is a same-language technical transition only, without sample downloads/Store cards. Authorized originals stay private; public content must be entirely synthetic. HTTPS/renaming does not grant disclosure or anonymity. Copies/retention/deletion follow actual destination rules, not universal archive or recall guarantees.
+
+
 <h2 id="first-answer">Sufficient evidence is not maximum collection; check retention and disclosure scope first</h2>
 
 Teams exporting existing follow-up tasks to Radar JSON keep the source's permissions. Yihu is not a CRM, customer collector or trade-data archive. This guide checks unnecessary text, identities and URL parameters in material being retained/shared, separating private originals from public synthetic examples. It is not an automatic redactor, compliance certification or delete-all-copies feature.
