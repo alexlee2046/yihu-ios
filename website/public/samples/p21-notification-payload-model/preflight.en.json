@@ -1,0 +1,555 @@
+{
+  "batch": "SYN-NTF-42",
+  "classification": "SYNTHETIC_EXAMPLE",
+  "language": "en",
+  "is_app_import_schema": false,
+  "is_production_capture": false,
+  "source_commit": "c5387fa57bf996f8c0a4121bddbf9c7801321e57",
+  "source_tree": "64615872797aae8252e2c7e10efe94e4a326871c",
+  "source_contract": {
+    "radar_envelope": "yihuRadar",
+    "native_envelope": "collie",
+    "radar_exact_inner_keys": [
+      "version",
+      "subscriptionId",
+      "eventKey"
+    ],
+    "native_extra_inner_keys_not_excluded": true,
+    "native_path_utf8_max": 2048,
+    "registration_lookup_not_authentication": true,
+    "pending_seconds_exclusive": 300,
+    "remote_delivery_proved": false
+  },
+  "radar_cases": [
+    {
+      "id": "A1",
+      "inner": {
+        "version": 1,
+        "subscriptionId": "11111111-1111-1111-1111-111111111111",
+        "eventKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "accepted": true
+    },
+    {
+      "id": "A2",
+      "inner": {
+        "version": true,
+        "subscriptionId": "11111111-1111-1111-1111-111111111111",
+        "eventKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "accepted": false
+    },
+    {
+      "id": "A3",
+      "inner": {
+        "version": "1",
+        "subscriptionId": "11111111-1111-1111-1111-111111111111",
+        "eventKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "accepted": false
+    },
+    {
+      "id": "A4",
+      "inner": {
+        "version": 2,
+        "subscriptionId": "11111111-1111-1111-1111-111111111111",
+        "eventKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "accepted": false
+    },
+    {
+      "id": "A5",
+      "inner": {
+        "version": 1.0,
+        "subscriptionId": "11111111-1111-1111-1111-111111111111",
+        "eventKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "accepted": true
+    },
+    {
+      "id": "A6",
+      "inner": {
+        "version": 1,
+        "subscriptionId": "invalid",
+        "eventKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "accepted": false
+    },
+    {
+      "id": "A7",
+      "inner": {
+        "version": 1,
+        "subscriptionId": "11111111-1111-1111-1111-111111111111",
+        "eventKey": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "accepted": false
+    },
+    {
+      "id": "A8",
+      "inner": {
+        "version": 1,
+        "subscriptionId": "11111111-1111-1111-1111-111111111111",
+        "eventKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "accepted": false
+    },
+    {
+      "id": "A9",
+      "inner": {
+        "version": 1,
+        "subscriptionId": "11111111-1111-1111-1111-111111111111",
+        "eventKey": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
+      },
+      "accepted": false
+    },
+    {
+      "id": "A10",
+      "inner": {
+        "version": 1,
+        "subscriptionId": "11111111-1111-1111-1111-111111111111",
+        "eventKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "url": "https://synthetic.invalid"
+      },
+      "accepted": false
+    },
+    {
+      "id": "A11",
+      "inner": {
+        "version": 1,
+        "subscriptionId": "11111111-1111-1111-1111-111111111111"
+      },
+      "accepted": false
+    },
+    {
+      "id": "A12",
+      "inner": {
+        "version": 1,
+        "subscriptionId": "11111111-1111-1111-1111-111111111111",
+        "eventKey": ""
+      },
+      "accepted": false
+    }
+  ],
+  "native_payload_cases": [
+    {
+      "id": "P1",
+      "inner": {
+        "version": 1,
+        "registrationId": "synthetic-registration",
+        "path": "/tasks/42"
+      },
+      "accepted": true
+    },
+    {
+      "id": "P2",
+      "inner": {
+        "version": true,
+        "registrationId": "synthetic-registration",
+        "path": "/tasks/42"
+      },
+      "accepted": true
+    },
+    {
+      "id": "P3",
+      "inner": {
+        "version": "1",
+        "registrationId": "synthetic-registration",
+        "path": "/tasks/42"
+      },
+      "accepted": false
+    },
+    {
+      "id": "P4",
+      "inner": {
+        "version": 1,
+        "registrationId": "",
+        "path": "/tasks/42"
+      },
+      "accepted": false
+    },
+    {
+      "id": "P5",
+      "inner": {
+        "version": 1,
+        "registrationId": "synthetic-registration",
+        "path": ""
+      },
+      "accepted": true
+    },
+    {
+      "id": "P6",
+      "inner": {
+        "version": 1,
+        "registrationId": "synthetic-registration",
+        "path": "https://other.invalid/x"
+      },
+      "accepted": true
+    },
+    {
+      "id": "P7",
+      "inner": {
+        "version": 1,
+        "registrationId": "synthetic-registration",
+        "path": "/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "accepted": true
+    },
+    {
+      "id": "P8",
+      "inner": {
+        "version": 1,
+        "registrationId": "synthetic-registration",
+        "path": "/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "accepted": false
+    },
+    {
+      "id": "P9",
+      "inner": {
+        "version": 1,
+        "registrationId": "synthetic-registration",
+        "path": "/界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界"
+      },
+      "accepted": true
+    },
+    {
+      "id": "P10",
+      "inner": {
+        "version": 1,
+        "registrationId": "synthetic-registration",
+        "path": "/界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界"
+      },
+      "accepted": false
+    },
+    {
+      "id": "P11",
+      "inner": {
+        "version": 1,
+        "registrationId": "synthetic-registration",
+        "path": "/tasks/42",
+        "extra": "synthetic"
+      },
+      "accepted": true
+    },
+    {
+      "id": "P12",
+      "inner": {
+        "version": 2,
+        "registrationId": "synthetic-registration",
+        "path": "/tasks/42"
+      },
+      "accepted": false
+    }
+  ],
+  "route_cases": [
+    {
+      "id": "R1",
+      "path": "/",
+      "origin": "https://alpha.invalid",
+      "accepted": true
+    },
+    {
+      "id": "R2",
+      "path": "/tasks/42?from=push#check",
+      "origin": "https://alpha.invalid",
+      "accepted": true
+    },
+    {
+      "id": "R3",
+      "path": "relative",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R4",
+      "path": "https://other.invalid/x",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R5",
+      "path": "//other.invalid/x",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R6",
+      "path": "/../x",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R7",
+      "path": "/%2e%2e/x",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R8",
+      "path": "/%2f%2fevil.invalid",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R9",
+      "path": "/a\\b",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R10",
+      "path": "/a%5cb",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R11",
+      "path": "/bad%ZZ",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R12",
+      "path": "/a\nb",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R13",
+      "path": "",
+      "origin": "https://alpha.invalid",
+      "accepted": false
+    },
+    {
+      "id": "R14",
+      "path": "/%252e%252e/x",
+      "origin": "https://alpha.invalid",
+      "accepted": true
+    },
+    {
+      "id": "R15",
+      "path": "/tasks/42",
+      "origin": "http://alpha.invalid",
+      "accepted": false
+    }
+  ],
+  "navigation_cases": [
+    {
+      "id": "Q1",
+      "mode": "normal",
+      "expected": {
+        "open_calls": 1,
+        "pending": false,
+        "callbacks": 1,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q2",
+      "mode": "loading",
+      "expected": {
+        "open_calls": 0,
+        "pending": true,
+        "callbacks": 0,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q3",
+      "mode": "age299999",
+      "expected": {
+        "open_calls": 1,
+        "pending": false,
+        "callbacks": 1,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q4",
+      "mode": "age300000",
+      "expected": {
+        "open_calls": 0,
+        "pending": false,
+        "callbacks": 0,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q5",
+      "mode": "no_active",
+      "expected": {
+        "open_calls": 0,
+        "pending": true,
+        "callbacks": 0,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q6",
+      "mode": "unregistered",
+      "expected": {
+        "open_calls": 0,
+        "pending": false,
+        "callbacks": 0,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q7",
+      "mode": "blocked",
+      "expected": {
+        "open_calls": 0,
+        "pending": false,
+        "callbacks": 0,
+        "blocks": 1,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q8",
+      "mode": "open_false",
+      "expected": {
+        "open_calls": 1,
+        "pending": false,
+        "callbacks": 0,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q9",
+      "mode": "other_no_switch",
+      "expected": {
+        "open_calls": 0,
+        "pending": false,
+        "callbacks": 0,
+        "blocks": 1,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q10",
+      "mode": "switch_loading",
+      "expected": {
+        "open_calls": 0,
+        "pending": true,
+        "callbacks": 0,
+        "blocks": 0,
+        "switches": 1
+      }
+    },
+    {
+      "id": "Q11",
+      "mode": "switch_ready",
+      "expected": {
+        "open_calls": 1,
+        "pending": false,
+        "callbacks": 1,
+        "blocks": 0,
+        "switches": 1
+      }
+    },
+    {
+      "id": "Q12",
+      "mode": "ambiguous",
+      "expected": {
+        "open_calls": 0,
+        "pending": false,
+        "callbacks": 0,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q13",
+      "mode": "active_wins",
+      "expected": {
+        "open_calls": 1,
+        "pending": false,
+        "callbacks": 1,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q14",
+      "mode": "disabled",
+      "expected": {
+        "open_calls": 0,
+        "pending": false,
+        "callbacks": 0,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q15",
+      "mode": "invalid_route",
+      "expected": {
+        "open_calls": 0,
+        "pending": false,
+        "callbacks": 0,
+        "blocks": 0,
+        "switches": 0
+      }
+    },
+    {
+      "id": "Q16",
+      "mode": "no_web",
+      "expected": {
+        "open_calls": 0,
+        "pending": true,
+        "callbacks": 0,
+        "blocks": 0,
+        "switches": 0
+      }
+    }
+  ],
+  "boundary_reviews": [
+    {
+      "id": "E1",
+      "label": "Parse/local navigation attempt is not APNs delivery/user view",
+      "runtime": "not_run"
+    },
+    {
+      "id": "E2",
+      "label": "yihuRadar and collie schemas have different key/type gates",
+      "runtime": "not_run"
+    },
+    {
+      "id": "E3",
+      "label": "Local disable/pending unregister is not remote unbind or system revocation",
+      "runtime": "not_run"
+    },
+    {
+      "id": "E4",
+      "label": "Synthetic registration shape is not credentials or service write authorization",
+      "runtime": "not_run"
+    }
+  ],
+  "scope": "Original Foundation/CoreFoundation payload decoders, origin/route validators and pending resolver with synthetic in-memory binding/default/session/navigation doubles; no real Keychain/UserDefaults/APNs/permissions/network/browser or unregister.",
+  "manual_no_go": [
+    "Parsed payload/hash-like eventKey mistaken for active subscription/auth or delivery",
+    "Known binding/route conditions unknown, pending/loading/blocked/expired",
+    "Local open Bool or onOpen callback without visible page/server evidence",
+    "Disable/unregister timeout or unknown prior remote effect; do not claim stopped or replay blindly"
+  ],
+  "runtime_checks": {
+    "APNs_registration_or_device_token": "not_run",
+    "remote_push_or_delivery_receipt": "not_run",
+    "system_notification_permission": "not_run",
+    "real_Keychain_or_binding_storage": "not_run",
+    "native_notification_click_or_visible_UI": "not_run",
+    "real_WebKit_page_or_auth_session": "not_run",
+    "remote_unregister_or_revocation": "not_run",
+    "business_action_or_write_authorization": "not_run",
+    "customer_payload_or_private_source_read": "not_run",
+    "hardware_latency_or_SLA": "not_run"
+  }
+}

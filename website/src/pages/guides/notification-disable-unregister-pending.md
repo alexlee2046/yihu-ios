@@ -66,3 +66,7 @@ disable先把本地启用决定设false，再尝试保留unregisterPending并请
 [通知模型](/guides/notification-payload-model-preflight/) · [来源分账](/guides/source-switch-cache-isolation/) · [删除范围](/guides/note-removal-retention-boundaries/) · [提醒导航](/guides/reminder-link-pending-origin-routing/) · [开始](/start/) · [隐私](/privacy/)
 
 [disable/rotate/Keychain/页面认证边界](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieNativeNotifications.swift)
+
+## SYN-NTF-42技术转接（仍退休）
+
+本地disable、尝试保存unregisterPending、远端响应和旧installationId匹配轮换是不同回执；超时/本地false不证明服务未执行、已解绑或系统通知权限撤回，标记写入也非必成功。[同语通知载荷/路由核查](/guides/notification-payload-model-preflight/)区分两种解析协议、内存路由与远端送达，不以UUID/hash形状授账户/业务权限。此页保持indexable: false/noindex,follow，不入sitemap/LLM独立section，不挂下载/Store卡。SYNTHETIC_EXAMPLE非真实Keychain/注销/APNs调用，保原待定/未知不盲重发。
