@@ -66,3 +66,7 @@ nonce和筛选更新不代表服务动作、来源真实性或新审批。本文
 [跨端字段](/guides/cross-device-field-presentation/) · [语音回报](/guides/watch-voice-queued-ready-boundaries/) · [草稿恢复](/guides/reply-draft-restoration-scope/) · [开始](/start/) · [隐私](/privacy/)
 
 [open接纳](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieWatchPhoneBridge.swift) · [openWatchTask路由](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift)
+
+## SYN-REC-41技术转接（仍退休）
+
+Watch open的queued仅接纳阶段，非手机UI已打开、源已刷新或业务完成；sourceToken不授审批/医嘱权限，也不把voice/draft的taskToken门套到open。[同语录音纪要交接核查](/guides/recording-notes-handoff/)区分原文/外部时间工作表/整理提示/持久交接标记与真实目标回执，排除诊断医嘱决策，不造医疗过滤能力。此页保持indexable: false/noindex,follow，不入sitemap/LLM独立section，不挂下载/Store卡。SYNTHETIC_EXAMPLE非真实Watch跳转、ASR或医疗验收，未知副作用不盲重发。
