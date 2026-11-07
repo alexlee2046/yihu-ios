@@ -66,3 +66,8 @@ Hermes提醒先经既有HTTPS/host解析门并设置pendingURL。界面路由还
 [通知载荷](/guides/notification-payload-model-preflight/) · [Watch另一条路由](/guides/watch-open-request-ui-boundaries/) · [origin边界](/guides/workbench-origin-page-boundaries/) · [待定材料](/guides/degraded-handoff-go-no-go/) · [开始](/start/) · [隐私](/privacy/)
 
 [提醒解析/pendingURL](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieHermesPush.swift) · [openPendingHermesURL](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift) · [连接/导航范围](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieWebView.swift)
+
+
+## SYN-ELA-46 证据候选与提醒导航分账（保持退休）
+
+[同语证据链接准入核对](/guides/evidence-link-admission-preflight/)只核证据文本的分词/HTTPS/凭据/端口/去重形态，不是提醒relay-host门、来源白名单、安全扫描、真实性或脱敏认证。不要把safeEvidenceURLs准入当handleTap或已保存origin授权。pendingURL、笔记/语音保护、connected后消费、实际导航/登录与业务回执分别留证；未知源消费丢弃而非新增服务器，不为导航丢弃原文、不绕门或盲重试。全部合成，真实通知/设备/网页/网络均not_run。此页保持indexable: false/noindex,follow，不入sitemap或LLM独立section，不新增下载/Store卡或转换块，不改既有退页结构、权限或配置。

@@ -8256,9 +8256,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/evidence-link-admission-preflight/
 
-场景指南 · 相关使用指南 证据文本为什么没变可点链接？分隔、HTTPS与去重准入核对 能点只代表通过当前形态筛选，不代表证据可信或已脱敏 Radar保留evidence文字，再从中筛选可点URL。当前解析按空白/换行与列出的分隔符拆项，去边界标点，只接纳HTTPS、非空host、无内嵌用户名密码及有效端口，再按absoluteString去重。它不是完整Markdown解析器、安全扫描或业务证据认证。 与引用溯源、异常证据二查的区别 溯源指南核句子依据、二查核真实性；这里先解释 为什么一段证据文字可能没有生成链接、哪些URL形态被接纳 。源码分隔符为分号、逗号、中文逗号/分号和竖线等；本页不访问示例链接、不改源数据。 检查项 已核范围 人工复核 不应推断 空值/空串 返回空链接列表 真实evidence与显示占位 任务没有任何证据 分词 空白/换行及指定标点 逗号可能切开合法URL文本 自动理解所有引用语法 边界标点 去两端括号/引号等 候选串实际结果 完整解析标签式Markdown scheme/host HTTPS且host非空 协议和实际目的地 安全域名白名单或权限已核 内嵌凭据 user/password必须为空 不在URL放真实凭据 路径/查询里的敏感信息也自动消失 端口 显式端口限1…65535 形态与目标访问权限分开 所有端口服务已验证 去重 按absoluteString首次保留 不同拼法与实际引用关系 语义同址全面归一 结果 只输出可点候选 正文、证据质量与目的地 无风险/真实/已读或已处理 合成链接核查 单独的 https://example.com/review可作为形态示意，不表示真实项目证据；带标签的Markdown链接不保证按完整语法展开。遇到未提取项，先核原文和分词，不删除证据或补造安全结论。 链接里的路径、查询和片段仍可能泄露信息，即使没有user/password。访问前遵守已有权限与目的地范围，不把解析器名称中的safe当恶意内容扫描或所有网络访问安全保证。 FAQ 没有可点链接是否表示没有证据？ 不表示。原文可能不是符合该分词/URL规则的链接，须核原材料。 Markdown标签链接一定提取吗？ 不保证。这里不是完整Markdown解析器，不应假定所有嵌套标记都支持。 HTTPS就证明可信和获准访问吗？ 不是。这里只核形态；来源真伪、内容、身份与访问权限另核。 无用户名密码是否已经脱敏？ 不等于。路径/查询/片段仍可能含敏感信息，需人工核范围。 去重会把所有等价地址合为一条吗？ 不声明语义归一，只按absoluteString去重。 本页是否打开过示例URL？ 没有，未作网站安全或业务证据验收。 相关指南与源码 证据二查 · 句子溯源 · 载体敏感层 · 开始 · 隐私 parseSafeEvidenceURLs · 链接展示
+场景指南 · 相关使用指南 证据文本为什么没变可点链接？分隔、HTTPS与去重准入核对 SYN-ELA-46 证据链接准入自检 SYNTHETIC_EXAMPLE · pending · not_run。形态准入不是安全、真实性、脱敏或访问授权。 /samples/p25-evidence-link-admission-preflight/README.md · /samples/p25-evidence-link-admission-preflight/preflight.zh.json · /samples/p25-evidence-link-admission-preflight/preflight.en.json ID 检查项 不应推断 E01 空值 原文为空不等业务证据不存在。 E02 空串 不补造证据或URL。 E03 空白换行 空链接列表不是删除源记录指令。 E04 独立HTTPS 只证明形态准入，不是可信或获准访问。 E05 边界标点 仅trim列出的边界字符，不是完整语法解析。 E06 换行分项 保留首次顺序，不证明引用关系。 E07 指定分隔符 分号逗号中文标点竖线拆词，不是全部引用语法。 E08 相同串去重 按absoluteString去重，不代表内容去重。 E09 HTTP拒绝 拒绝形态不证明目的地不存在或恶意。 E10 其他协议 不改写为HTTPS伪造准入。 E11 缺host 不补造主机名。 E12 内嵌用户 SYN-user是虚构占位；无user不等路径查询已脱敏。 E13 端口0 端口门不是所有端点可用性检查。 E14 超范围端口 不修写端口掩盖原文。 E15 端口上界 形态准入不是端口安全认证或网络测试。 E16 显式443 不宣称与省略端口的拼法语义全面归一。 E17 Markdown标签 此例不提取；不是完整Markdown解析器。 E18 逗号切URL 逗号切出前段，候选可能不等原意；保留原文人工核。 E19 查询片段保留 全部虚构标记；筛选不脱敏、不授权公开路径查询片段。 E20 句点不是trim字符 末尾句点仍在，不能假定自动纠正文案。 E21 非域名白名单 localhost也可过形态门；不打开、不绕内网授权。 E22 编码逗号 不按解码后语义全面归一。 E23 片段不同 不同absoluteString可并存，不证明不同内容或已读。 E24 斜线拼法 不同串不自动语义合并，也不执行跳转解析。 R01 证据链接与提醒解析不可互授准入 证据仅形态；提醒另核relay HTTPS/host，不是同一白名单。 R02 待定槽不是打开回执 handleTap设pendingURL，consume后清空，不是全量审计队列。 R03 保留录文和笔记 notesPresented、canCancel、delivering、canRetryDelivery及onWillSaveConnection门不能为导航绕过。 R04 当前源连接 connected后才消费，不证明登录/会话/内容可信或业务成功。 R05 已保存与未知源 其他源须已保存；未知源消费丢弃，不新增服务器，不放宽权限。 R06 目的地与原材料 不访问例子，不抹原文/副作用；目的地可保存同步处理，未知不盲重试。 能点只代表通过当前形态筛选，不代表证据可信或已脱敏 Radar保留evidence文字，再从中筛选可点URL。当前解析按空白/换行与列出的分隔符拆项，去边界标点，只接纳HTTPS、非空host、无内嵌用户名密码及有效端口，再按absoluteString去重。它不是完整Markdown解析器、安全扫描或业务证据认证。 与引用溯源、异常证据二查的区别 溯源指南核句子依据、二查核真实性；这里先解释 为什么一段证据文字可能没有生成链接、哪些URL形态被接纳 。源码分隔符为分号、逗号、中文逗号/分号和竖线等；本页不访问示例链接、不改源数据。 检查项 已核范围 人工复核 不应推断 空值/空串 返回空链接列表 真实evidence与显示占位 任务没有任何证据 分词 空白/换行及指定标点 逗号可能切开合法URL文本 自动理解所有引用语法 边界标点 去两端括号/引号等 候选串实际结果 完整解析标签式Markdown scheme/host HTTPS且host非空 协议和实际目的地 安全域名白名单或权限已核 内嵌凭据 user/password必须为空 不在URL放真实凭据 路径/查询里的敏感信息也自动消失 端口 显式端口限1…65535 形态与目标访问权限分开 所有端口服务已验证 去重 按absoluteString首次保留 不同拼法与实际引用关系 语义同址全面归一 结果 只输出可点候选 正文、证据质量与目的地 无风险/真实/已读或已处理 合成链接核查 单独的 https://example.com/review可作为形态示意，不表示真实项目证据；带标签的Markdown链接不保证按完整语法展开。遇到未提取项，先核原文和分词，不删除证据或补造安全结论。 链接里的路径、查询和片段仍可能泄露信息，即使没有user/password。访问前遵守已有权限与目的地范围，不把解析器名称中的safe当恶意内容扫描或所有网络访问安全保证。 FAQ 没有可点链接是否表示没有证据？ 不表示。原文可能不是符合该分词/URL规则的链接，须核原材料。 Markdown标签链接一定提取吗？ 不保证。这里不是完整Markdown解析器，不应假定所有嵌套标记都支持。 HTTPS就证明可信和获准访问吗？ 不是。这里只核形态；来源真伪、内容、身份与访问权限另核。 无用户名密码是否已经脱敏？ 不等于。路径/查询/片段仍可能含敏感信息，需人工核范围。 去重会把所有等价地址合为一条吗？ 不声明语义归一，只按absoluteString去重。 本页是否打开过示例URL？ 没有，未作网站安全或业务证据验收。 相关指南与源码 证据二查 · 句子溯源 · 载体敏感层 · 开始 · 隐私 parseSafeEvidenceURLs · 链接展示
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>检查项</th>
+<th>不应推断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E01</td>
+<td>空值</td>
+<td>原文为空不等业务证据不存在。</td>
+</tr>
+<tr>
+<td>E02</td>
+<td>空串</td>
+<td>不补造证据或URL。</td>
+</tr>
+<tr>
+<td>E03</td>
+<td>空白换行</td>
+<td>空链接列表不是删除源记录指令。</td>
+</tr>
+<tr>
+<td>E04</td>
+<td>独立HTTPS</td>
+<td>只证明形态准入，不是可信或获准访问。</td>
+</tr>
+<tr>
+<td>E05</td>
+<td>边界标点</td>
+<td>仅trim列出的边界字符，不是完整语法解析。</td>
+</tr>
+<tr>
+<td>E06</td>
+<td>换行分项</td>
+<td>保留首次顺序，不证明引用关系。</td>
+</tr>
+<tr>
+<td>E07</td>
+<td>指定分隔符</td>
+<td>分号逗号中文标点竖线拆词，不是全部引用语法。</td>
+</tr>
+<tr>
+<td>E08</td>
+<td>相同串去重</td>
+<td>按absoluteString去重，不代表内容去重。</td>
+</tr>
+<tr>
+<td>E09</td>
+<td>HTTP拒绝</td>
+<td>拒绝形态不证明目的地不存在或恶意。</td>
+</tr>
+<tr>
+<td>E10</td>
+<td>其他协议</td>
+<td>不改写为HTTPS伪造准入。</td>
+</tr>
+<tr>
+<td>E11</td>
+<td>缺host</td>
+<td>不补造主机名。</td>
+</tr>
+<tr>
+<td>E12</td>
+<td>内嵌用户</td>
+<td>SYN-user是虚构占位；无user不等路径查询已脱敏。</td>
+</tr>
+<tr>
+<td>E13</td>
+<td>端口0</td>
+<td>端口门不是所有端点可用性检查。</td>
+</tr>
+<tr>
+<td>E14</td>
+<td>超范围端口</td>
+<td>不修写端口掩盖原文。</td>
+</tr>
+<tr>
+<td>E15</td>
+<td>端口上界</td>
+<td>形态准入不是端口安全认证或网络测试。</td>
+</tr>
+<tr>
+<td>E16</td>
+<td>显式443</td>
+<td>不宣称与省略端口的拼法语义全面归一。</td>
+</tr>
+<tr>
+<td>E17</td>
+<td>Markdown标签</td>
+<td>此例不提取；不是完整Markdown解析器。</td>
+</tr>
+<tr>
+<td>E18</td>
+<td>逗号切URL</td>
+<td>逗号切出前段，候选可能不等原意；保留原文人工核。</td>
+</tr>
+<tr>
+<td>E19</td>
+<td>查询片段保留</td>
+<td>全部虚构标记；筛选不脱敏、不授权公开路径查询片段。</td>
+</tr>
+<tr>
+<td>E20</td>
+<td>句点不是trim字符</td>
+<td>末尾句点仍在，不能假定自动纠正文案。</td>
+</tr>
+<tr>
+<td>E21</td>
+<td>非域名白名单</td>
+<td>localhost也可过形态门；不打开、不绕内网授权。</td>
+</tr>
+<tr>
+<td>E22</td>
+<td>编码逗号</td>
+<td>不按解码后语义全面归一。</td>
+</tr>
+<tr>
+<td>E23</td>
+<td>片段不同</td>
+<td>不同absoluteString可并存，不证明不同内容或已读。</td>
+</tr>
+<tr>
+<td>E24</td>
+<td>斜线拼法</td>
+<td>不同串不自动语义合并，也不执行跳转解析。</td>
+</tr>
+<tr>
+<td>R01</td>
+<td>证据链接与提醒解析不可互授准入</td>
+<td>证据仅形态；提醒另核relay HTTPS/host，不是同一白名单。</td>
+</tr>
+<tr>
+<td>R02</td>
+<td>待定槽不是打开回执</td>
+<td>handleTap设pendingURL，consume后清空，不是全量审计队列。</td>
+</tr>
+<tr>
+<td>R03</td>
+<td>保留录文和笔记</td>
+<td>notesPresented、canCancel、delivering、canRetryDelivery及onWillSaveConnection门不能为导航绕过。</td>
+</tr>
+<tr>
+<td>R04</td>
+<td>当前源连接</td>
+<td>connected后才消费，不证明登录/会话/内容可信或业务成功。</td>
+</tr>
+<tr>
+<td>R05</td>
+<td>已保存与未知源</td>
+<td>其他源须已保存；未知源消费丢弃，不新增服务器，不放宽权限。</td>
+</tr>
+<tr>
+<td>R06</td>
+<td>目的地与原材料</td>
+<td>不访问例子，不抹原文/副作用；目的地可保存同步处理，未知不盲重试。</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -8325,9 +8487,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/evidence-link-admission-preflight/
 
-All scenarios · Related practical guide Why evidence text has no clickable link: tokenization, HTTPS and URL admission Clickable means admitted shape, not trusted, redacted evidence Radar retains evidence text and extracts clickable URLs. Parsing splits whitespace/newlines and listed delimiters, trims edge punctuation, requires HTTPS/nonempty host/no embedded user-password/valid port, then deduplicates by absoluteString. This is not full Markdown parsing, security scanning or business-evidence certification. Different from provenance and evidence truth checks Provenance maps claims; second checks assess truth. Here why text does not produce a link and which URL shapes are admitted matters. Delimiters include Latin/Chinese comma/semicolon and vertical bar. No example URL is fetched or source rewritten. Check Verified scope Manual review Not established Null/empty Empty URL list Original evidence versus placeholder No business evidence exists Tokenization Whitespace/newlines/listed punctuation Comma can split valid URL text All reference syntax understood Edge punctuation Trims brackets/quotes etc. Actual candidate Full labeled Markdown parsing Scheme/host HTTPS, nonempty host Protocol/destination Safe-domain allowlist or authority Embedded credentials No user/password Keep credentials out of URLs Paths/queries automatically redacted Port Explicit 1…65535 Shape versus access permission Every endpoint tested Deduplication First absoluteString retained Spellings/reference relationships Universal semantic normalization Result Clickable candidates only Body/evidence quality/destination Harmless, true, read or handled Synthetic URL review Standalone https://example.com/review illustrates shape, not real project evidence. Labeled Markdown need not expand through a full grammar. Inspect original/tokenization rather than deleting evidence or inventing safety conclusions. Paths, queries and fragments can disclose information despite no user/password. Existing access/destination permission applies; safe in a method name is neither a malware scan nor universal network safety. FAQ Does no link mean no evidence? No. Text may not meet tokenization/URL rules. Inspect originals. Are labeled Markdown links always extracted? No guarantee. This is not a full Markdown parser supporting all nesting. Does HTTPS prove trust and access permission? No. Shape differs from origin, content, identity and authority. Is no embedded user/password equivalent to redaction? No. Paths/query/fragments can remain sensitive. Are all equivalent URLs merged? No semantic-normalization guarantee; deduplication uses absoluteString. Were example URLs opened? No. No site-security or business-evidence acceptance was performed. Reading and source Evidence review · Claim provenance · Sensitive layers · Start · Privacy parseSafeEvidenceURLs · Link presentation
+All scenarios · Related practical guide Why evidence text has no clickable link: tokenization, HTTPS and URL admission SYN-ELA-46 evidence link admission preflight SYNTHETIC_EXAMPLE · pending · not_run. Shape is not safety, truth, redaction or authority. /samples/p25-evidence-link-admission-preflight/README.md · /samples/p25-evidence-link-admission-preflight/preflight.zh.json · /samples/p25-evidence-link-admission-preflight/preflight.en.json ID Check Boundary E01 Null Null input does not prove absent business evidence. E02 Empty string Do not fabricate evidence or URLs. E03 Whitespace An empty list is not an instruction to delete source records. E04 Standalone HTTPS Shape admission only, not trust or access authority. E05 Edge punctuation Only trims listed edge characters, not full grammar parsing. E06 Newline tokens First-seen ordering is not a provenance relationship. E07 Listed separators Listed punctuation splits tokens; not all reference syntax. E08 Exact duplicate absoluteString deduplication is not content deduplication. E09 Reject HTTP Rejection proves neither a missing nor malicious destination. E10 Other scheme Do not rewrite a scheme to fabricate admission. E11 Missing host Do not invent a host. E12 Embedded user SYN-user is synthetic; absent user info does not redact paths or queries. E13 Port zero The port gate is not endpoint availability testing. E14 Out-of-range port Do not rewrite the port and conceal the original. E15 Port upper bound Admission is not port security certification or a network test. E16 Explicit 443 Do not claim semantic normalization with omitted ports. E17 Labeled Markdown This case is not extracted; not a full Markdown parser. E18 Comma inside URL Comma splits off a prefix that may differ from intent; retain the original for review. E19 Query and fragment retained All markers are synthetic; filtering neither redacts nor authorizes disclosure of paths, queries or fragments. E20 Period is not trimmed A final period remains; do not assume prose is automatically corrected. E21 No domain allowlist localhost may pass shape checks; no fetching or bypassing local-network authority. E22 Encoded comma No universal normalization of decoded semantics. E23 Different fragments Different absoluteStrings may coexist; not proof of distinct contents or reading. E24 Trailing slash spelling Distinct strings are not automatically merged semantically; no redirects are resolved. R01 Evidence and reminder parsers do not grant each other admission Evidence uses shape filtering; reminders separately check relay HTTPS/host, not the same allowlist. R02 Pending slot is not an open receipt handleTap sets pendingURL; consumption clears it, not a complete audit queue. R03 Preserve speech and notes Do not bypass notesPresented, canCancel, delivering, canRetryDelivery or onWillSaveConnection for navigation. R04 Current-origin connection Consume only once connected; not proof of login, session, trusted content or business success. R05 Saved versus unknown origin Other origins must be saved; consume/drop unknown origins without adding a server or widening authority. R06 Destination and originals No fetching examples or erasing originals/effects; destinations may save/sync/process, no blind retry when unknown. Clickable means admitted shape, not trusted, redacted evidence Radar retains evidence text and extracts clickable URLs. Parsing splits whitespace/newlines and listed delimiters, trims edge punctuation, requires HTTPS/nonempty host/no embedded user-password/valid port, then deduplicates by absoluteString. This is not full Markdown parsing, security scanning or business-evidence certification. Different from provenance and evidence truth checks Provenance maps claims; second checks assess truth. Here why text does not produce a link and which URL shapes are admitted matters. Delimiters include Latin/Chinese comma/semicolon and vertical bar. No example URL is fetched or source rewritten. Check Verified scope Manual review Not established Null/empty Empty URL list Original evidence versus placeholder No business evidence exists Tokenization Whitespace/newlines/listed punctuation Comma can split valid URL text All reference syntax understood Edge punctuation Trims brackets/quotes etc. Actual candidate Full labeled Markdown parsing Scheme/host HTTPS, nonempty host Protocol/destination Safe-domain allowlist or authority Embedded credentials No user/password Keep credentials out of URLs Paths/queries automatically redacted Port Explicit 1…65535 Shape versus access permission Every endpoint tested Deduplication First absoluteString retained Spellings/reference relationships Universal semantic normalization Result Clickable candidates only Body/evidence quality/destination Harmless, true, read or handled Synthetic URL review Standalone https://example.com/review illustrates shape, not real project evidence. Labeled Markdown need not expand through a full grammar. Inspect original/tokenization rather than deleting evidence or inventing safety conclusions. Paths, queries and fragments can disclose information despite no user/password. Existing access/destination permission applies; safe in a method name is neither a malware scan nor universal network safety. FAQ Does no link mean no evidence? No. Text may not meet tokenization/URL rules. Inspect originals. Are labeled Markdown links always extracted? No guarantee. This is not a full Markdown parser supporting all nesting. Does HTTPS prove trust and access permission? No. Shape differs from origin, content, identity and authority. Is no embedded user/password equivalent to redaction? No. Paths/query/fragments can remain sensitive. Are all equivalent URLs merged? No semantic-normalization guarantee; deduplication uses absoluteString. Were example URLs opened? No. No site-security or business-evidence acceptance was performed. Reading and source Evidence review · Claim provenance · Sensitive layers · Start · Privacy parseSafeEvidenceURLs · Link presentation
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Check</th>
+<th>Boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E01</td>
+<td>Null</td>
+<td>Null input does not prove absent business evidence.</td>
+</tr>
+<tr>
+<td>E02</td>
+<td>Empty string</td>
+<td>Do not fabricate evidence or URLs.</td>
+</tr>
+<tr>
+<td>E03</td>
+<td>Whitespace</td>
+<td>An empty list is not an instruction to delete source records.</td>
+</tr>
+<tr>
+<td>E04</td>
+<td>Standalone HTTPS</td>
+<td>Shape admission only, not trust or access authority.</td>
+</tr>
+<tr>
+<td>E05</td>
+<td>Edge punctuation</td>
+<td>Only trims listed edge characters, not full grammar parsing.</td>
+</tr>
+<tr>
+<td>E06</td>
+<td>Newline tokens</td>
+<td>First-seen ordering is not a provenance relationship.</td>
+</tr>
+<tr>
+<td>E07</td>
+<td>Listed separators</td>
+<td>Listed punctuation splits tokens; not all reference syntax.</td>
+</tr>
+<tr>
+<td>E08</td>
+<td>Exact duplicate</td>
+<td>absoluteString deduplication is not content deduplication.</td>
+</tr>
+<tr>
+<td>E09</td>
+<td>Reject HTTP</td>
+<td>Rejection proves neither a missing nor malicious destination.</td>
+</tr>
+<tr>
+<td>E10</td>
+<td>Other scheme</td>
+<td>Do not rewrite a scheme to fabricate admission.</td>
+</tr>
+<tr>
+<td>E11</td>
+<td>Missing host</td>
+<td>Do not invent a host.</td>
+</tr>
+<tr>
+<td>E12</td>
+<td>Embedded user</td>
+<td>SYN-user is synthetic; absent user info does not redact paths or queries.</td>
+</tr>
+<tr>
+<td>E13</td>
+<td>Port zero</td>
+<td>The port gate is not endpoint availability testing.</td>
+</tr>
+<tr>
+<td>E14</td>
+<td>Out-of-range port</td>
+<td>Do not rewrite the port and conceal the original.</td>
+</tr>
+<tr>
+<td>E15</td>
+<td>Port upper bound</td>
+<td>Admission is not port security certification or a network test.</td>
+</tr>
+<tr>
+<td>E16</td>
+<td>Explicit 443</td>
+<td>Do not claim semantic normalization with omitted ports.</td>
+</tr>
+<tr>
+<td>E17</td>
+<td>Labeled Markdown</td>
+<td>This case is not extracted; not a full Markdown parser.</td>
+</tr>
+<tr>
+<td>E18</td>
+<td>Comma inside URL</td>
+<td>Comma splits off a prefix that may differ from intent; retain the original for review.</td>
+</tr>
+<tr>
+<td>E19</td>
+<td>Query and fragment retained</td>
+<td>All markers are synthetic; filtering neither redacts nor authorizes disclosure of paths, queries or fragments.</td>
+</tr>
+<tr>
+<td>E20</td>
+<td>Period is not trimmed</td>
+<td>A final period remains; do not assume prose is automatically corrected.</td>
+</tr>
+<tr>
+<td>E21</td>
+<td>No domain allowlist</td>
+<td>localhost may pass shape checks; no fetching or bypassing local-network authority.</td>
+</tr>
+<tr>
+<td>E22</td>
+<td>Encoded comma</td>
+<td>No universal normalization of decoded semantics.</td>
+</tr>
+<tr>
+<td>E23</td>
+<td>Different fragments</td>
+<td>Different absoluteStrings may coexist; not proof of distinct contents or reading.</td>
+</tr>
+<tr>
+<td>E24</td>
+<td>Trailing slash spelling</td>
+<td>Distinct strings are not automatically merged semantically; no redirects are resolved.</td>
+</tr>
+<tr>
+<td>R01</td>
+<td>Evidence and reminder parsers do not grant each other admission</td>
+<td>Evidence uses shape filtering; reminders separately check relay HTTPS/host, not the same allowlist.</td>
+</tr>
+<tr>
+<td>R02</td>
+<td>Pending slot is not an open receipt</td>
+<td>handleTap sets pendingURL; consumption clears it, not a complete audit queue.</td>
+</tr>
+<tr>
+<td>R03</td>
+<td>Preserve speech and notes</td>
+<td>Do not bypass notesPresented, canCancel, delivering, canRetryDelivery or onWillSaveConnection for navigation.</td>
+</tr>
+<tr>
+<td>R04</td>
+<td>Current-origin connection</td>
+<td>Consume only once connected; not proof of login, session, trusted content or business success.</td>
+</tr>
+<tr>
+<td>R05</td>
+<td>Saved versus unknown origin</td>
+<td>Other origins must be saved; consume/drop unknown origins without adding a server or widening authority.</td>
+</tr>
+<tr>
+<td>R06</td>
+<td>Destination and originals</td>
+<td>No fetching examples or erasing originals/effects; destinations may save/sync/process, no blind retry when unknown.</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
