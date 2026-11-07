@@ -13518,9 +13518,118 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/attachment-name-metadata-provenance/
 
-场景指南 · 相关使用指南 同名附件加2是新版本吗？批次命名、MIME与大小元数据核对 暂存重命名只是区分文件，不是版本、去重或内容认证 收件箱save为每个批次新建usedNames，uniqueName不区分大小写检测命名冲突，保留文件并加数字区分；不是丢弃或合并同名内容。contentType由扩展名推断，byteCount为来源大小统计。它们都不能证明业务版本、真实格式、字节一致或已脱敏，本页不新增档案去重/鉴定服务。 与批次逐项、编码和变更档案的区别 逐项指南核内容/阶段，编码指南核序列化，变更档案核前后关系；这里核 原文件名到暂存名的对应及元数据能证明什么 。不复制真实文件，不改名或公开附件。 检查项 已核范围 人工复核 不应推断 局部命名 usedNames在本批次内使用 批次/条目ID与原引用 全收件箱或全账户去重 大小写 候选lowercased后检测冲突 原名与暂存名保留对应 仅大小写不同可当同内容 数字后缀 冲突时保留文件并编号 编号由命名占用产生 版本2/最新批准稿 路径清理 uniqueName处理名称字符 显示名与实际材料区别 安全扫描/内容鉴定 类型提示 UTType按扩展名取MIME 真实格式/目的地另核 扩展名正确就内容可信 byteCount 文件/目录包大小统计，读取失败需另核 大小测量与实际副本 同大小就是相同SHA 暂存预算 按测得文件大小累计200MiB门 非全部文字/网页限制 任意网页都能上传200MiB 归档身份 batch/item/id/原引用分账 实际版本/内容证据 名字、数字和MIME就是业务身份 合成命名示意 同一批次先有sample.txt，再来SAMPLE.TXT，后者可暂存为SAMPLE 2.TXT。只是命名冲突处理，两份仍不同条目，不能称第二份为业务v2，也不能据此认定两份内容相同或已合并。 不同批次可重复使用同名，类型和大小元数据也不是密码学摘要。若需要版本比对，沿已有获准原引用和实际字节/内容核；不要改扩展名伪装格式或用命名绕过交接/权限。 FAQ 文件名2是不是版本v2？ 不是，数字是局部冲突编号，不是业务版本或批准顺序。 大小写不同会保留两个未改名的同名项吗？ 当前uniqueName按小写检测冲突，会给冲突候选编号；并不合并内容。 是否全局删除重复内容？ 没有，这里是每批次命名唯一性，不是内容去重。 MIME能证明文件真实格式吗？ 不能，它由扩展名推断，真实内容和目的地条件另核。 byteCount相同是否字节一致？ 不能，只是大小，非SHA或原件真实性证据。 本文执行了复制/改名/鉴定吗？ 没有，只核合成例子和源码，不操作实际附件或新增服务。 相关指南与源码 逐项检查 · 编码与文件名 · 版本材料 · 文件桥阶段 · 开始 · 隐私 uniqueName/byteCount/save · 附件条目与后续放置
+场景指南 · 相关使用指南 同名附件加2是新版本吗？批次命名、MIME与大小元数据核对 SYN-ANM-45 附件名称与元数据自检卡 SYNTHETIC_EXAMPLE · pending · not_run。仅合成附件对应核对，不是版本批准、内容去重、脱敏或权限授予。 /samples/p24-attachment-name-metadata-provenance/README.md · /samples/p24-attachment-name-metadata-provenance/preflight.zh.json · /samples/p24-attachment-name-metadata-provenance/preflight.en.json 编号不等业务版本、大小不等hash、MIME不等真实格式；原引用、实际版本与回执未知即停。测试目录不证明App Group系统访问；真实附件、跨进程与远端全部not_run。 ID 检查项 合成观察 不应推断 C01 批次局部命名 sample.txt → sample.txt；新批次可重用。 不是全账户去重。 C02 大小写冲突 sample.txt 后 SAMPLE.TXT → SAMPLE 2.TXT。 不合并内容；2不是业务版本。 C03 已有编号占位 report.txt/report 2.txt占用时 → report 3.txt。 不是批准顺序。 C04 空名称后备 空名 → file，再次空名 → file 2。 非原件身份恢复。 C05 斜线替换 a/b.txt → a_b.txt。 不是任意路径安全认证或恶意软件扫描。 C06 多段扩展名 a.tar.gz冲突 → a.tar 2.gz。 不解包、不验证格式。 C07 扩展名类型 合成sample.txt推断text/plain。 MIME不是内容嗅探、信任或脱敏证明。 C08 同大小异内容 alpha与bravo各5字节。 大小相同不是相同SHA或真实性。 C09 缺失来源大小 byteCount读取不到大小可回0。 0不证明真实空文件或复制成功。 C10 目录统计 受控目录两份5字节文件合计10。 非全链内存、冻结快照或完整性承诺。 C11 暂存预算 文件测量累计门200MiB=209715200字节。 不是全部文字URL限制或网页上传额度。 C12 复制与原引用 save复制而非移动文件；合成原文件仍在。 没有自动记录原路径/内容hash/批准版本；外部对应表另核。 C13 manifest最后写 先复制文件，最后原子写manifest。 不是跨进程锁、所有文件事务或真实Extension取证。 C14 pending解析边界 坏JSON被跳过；合法manifest即使缺副本也可返回。 可见不等文件齐全、已导入或已交付。 C15 App Group三层证据 源码声明、最终签名、系统containerURL分别留证。 测试root可写不等系统共享权限；nil非唯一网络故障。 C16 目的地与副本 按获准原引用核版本与必要副本，未知即停。 填入/attached非远端完成；目的地可保存同步处理，discard非服务器撤回。 暂存重命名只是区分文件，不是版本、去重或内容认证 收件箱save为每个批次新建usedNames，uniqueName不区分大小写检测命名冲突，保留文件并加数字区分；不是丢弃或合并同名内容。contentType由扩展名推断，byteCount为来源大小统计。它们都不能证明业务版本、真实格式、字节一致或已脱敏，本页不新增档案去重/鉴定服务。 与批次逐项、编码和变更档案的区别 逐项指南核内容/阶段，编码指南核序列化，变更档案核前后关系；这里核 原文件名到暂存名的对应及元数据能证明什么 。不复制真实文件，不改名或公开附件。 检查项 已核范围 人工复核 不应推断 局部命名 usedNames在本批次内使用 批次/条目ID与原引用 全收件箱或全账户去重 大小写 候选lowercased后检测冲突 原名与暂存名保留对应 仅大小写不同可当同内容 数字后缀 冲突时保留文件并编号 编号由命名占用产生 版本2/最新批准稿 路径清理 uniqueName处理名称字符 显示名与实际材料区别 安全扫描/内容鉴定 类型提示 UTType按扩展名取MIME 真实格式/目的地另核 扩展名正确就内容可信 byteCount 文件/目录包大小统计，读取失败需另核 大小测量与实际副本 同大小就是相同SHA 暂存预算 按测得文件大小累计200MiB门 非全部文字/网页限制 任意网页都能上传200MiB 归档身份 batch/item/id/原引用分账 实际版本/内容证据 名字、数字和MIME就是业务身份 合成命名示意 同一批次先有sample.txt，再来SAMPLE.TXT，后者可暂存为SAMPLE 2.TXT。只是命名冲突处理，两份仍不同条目，不能称第二份为业务v2，也不能据此认定两份内容相同或已合并。 不同批次可重复使用同名，类型和大小元数据也不是密码学摘要。若需要版本比对，沿已有获准原引用和实际字节/内容核；不要改扩展名伪装格式或用命名绕过交接/权限。 FAQ 文件名2是不是版本v2？ 不是，数字是局部冲突编号，不是业务版本或批准顺序。 大小写不同会保留两个未改名的同名项吗？ 当前uniqueName按小写检测冲突，会给冲突候选编号；并不合并内容。 是否全局删除重复内容？ 没有，这里是每批次命名唯一性，不是内容去重。 MIME能证明文件真实格式吗？ 不能，它由扩展名推断，真实内容和目的地条件另核。 byteCount相同是否字节一致？ 不能，只是大小，非SHA或原件真实性证据。 本文执行了复制/改名/鉴定吗？ 没有，只核合成例子和源码，不操作实际附件或新增服务。 相关指南与源码 逐项检查 · 编码与文件名 · 版本材料 · 文件桥阶段 · 开始 · 隐私 uniqueName/byteCount/save · 附件条目与后续放置
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>检查项</th>
+<th>合成观察</th>
+<th>不应推断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C01</td>
+<td>批次局部命名</td>
+<td>sample.txt → sample.txt；新批次可重用。</td>
+<td>不是全账户去重。</td>
+</tr>
+<tr>
+<td>C02</td>
+<td>大小写冲突</td>
+<td>sample.txt 后 SAMPLE.TXT → SAMPLE 2.TXT。</td>
+<td>不合并内容；2不是业务版本。</td>
+</tr>
+<tr>
+<td>C03</td>
+<td>已有编号占位</td>
+<td>report.txt/report 2.txt占用时 → report 3.txt。</td>
+<td>不是批准顺序。</td>
+</tr>
+<tr>
+<td>C04</td>
+<td>空名称后备</td>
+<td>空名 → file，再次空名 → file 2。</td>
+<td>非原件身份恢复。</td>
+</tr>
+<tr>
+<td>C05</td>
+<td>斜线替换</td>
+<td>a/b.txt → a_b.txt。</td>
+<td>不是任意路径安全认证或恶意软件扫描。</td>
+</tr>
+<tr>
+<td>C06</td>
+<td>多段扩展名</td>
+<td>a.tar.gz冲突 → a.tar 2.gz。</td>
+<td>不解包、不验证格式。</td>
+</tr>
+<tr>
+<td>C07</td>
+<td>扩展名类型</td>
+<td>合成sample.txt推断text/plain。</td>
+<td>MIME不是内容嗅探、信任或脱敏证明。</td>
+</tr>
+<tr>
+<td>C08</td>
+<td>同大小异内容</td>
+<td>alpha与bravo各5字节。</td>
+<td>大小相同不是相同SHA或真实性。</td>
+</tr>
+<tr>
+<td>C09</td>
+<td>缺失来源大小</td>
+<td>byteCount读取不到大小可回0。</td>
+<td>0不证明真实空文件或复制成功。</td>
+</tr>
+<tr>
+<td>C10</td>
+<td>目录统计</td>
+<td>受控目录两份5字节文件合计10。</td>
+<td>非全链内存、冻结快照或完整性承诺。</td>
+</tr>
+<tr>
+<td>C11</td>
+<td>暂存预算</td>
+<td>文件测量累计门200MiB=209715200字节。</td>
+<td>不是全部文字URL限制或网页上传额度。</td>
+</tr>
+<tr>
+<td>C12</td>
+<td>复制与原引用</td>
+<td>save复制而非移动文件；合成原文件仍在。</td>
+<td>没有自动记录原路径/内容hash/批准版本；外部对应表另核。</td>
+</tr>
+<tr>
+<td>C13</td>
+<td>manifest最后写</td>
+<td>先复制文件，最后原子写manifest。</td>
+<td>不是跨进程锁、所有文件事务或真实Extension取证。</td>
+</tr>
+<tr>
+<td>C14</td>
+<td>pending解析边界</td>
+<td>坏JSON被跳过；合法manifest即使缺副本也可返回。</td>
+<td>可见不等文件齐全、已导入或已交付。</td>
+</tr>
+<tr>
+<td>C15</td>
+<td>App Group三层证据</td>
+<td>源码声明、最终签名、系统containerURL分别留证。</td>
+<td>测试root可写不等系统共享权限；nil非唯一网络故障。</td>
+</tr>
+<tr>
+<td>C16</td>
+<td>目的地与副本</td>
+<td>按获准原引用核版本与必要副本，未知即停。</td>
+<td>填入/attached非远端完成；目的地可保存同步处理，discard非服务器撤回。</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -13587,9 +13696,118 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/attachment-name-metadata-provenance/
 
-All scenarios · Related practical guide Does attachment 2 mean version two? Batch names, MIME and byte-count evidence A staged rename distinguishes files; it does not certify versions, deduplication or contents Each save creates batch-local usedNames. uniqueName detects conflicts case-insensitively and preserves files under numbered names instead of merging/dropping contents. contentType comes from the extension; byteCount estimates source size. None establishes business version, actual format, byte identity or redaction. No archive deduplication/inspection service is added. Different from item review, encoding and revision retention Items concern content/stages, encoding concerns serialization, retention relates revisions. Here original-to-staged names and metadata evidence matter. No real file is copied, renamed or disclosed. Check Verified scope Manual review Not established Local names usedNames for one batch Batch/item IDs/original reference Whole-inbox/account deduplication Case lowercased collision checks Original/staged mapping Case variants prove identical content Suffix Preserve/number conflicting files Name occupancy Version 2/latest approval Name cleanup Name-character processing Label versus actual material Security scan/content identification Type hint Extension-derived UTType/MIME Actual format/destination Suffix proves trusted contents byteCount File/package size estimate; read failures separately Measured size/actual copy Same size means same SHA Staging budget 200 MiB measured-file accumulation Not every text/page limit Every site accepts 200 MiB Retention identity Batch/item/id/reference separately Real version/content evidence Name/number/MIME are business identity Synthetic naming illustration One batch contains sample.txt followed by SAMPLE.TXT; the latter can become SAMPLE 2.TXT. This is a collision suffix, not business v2, equal contents or automatic merging. Other batches can reuse names. Type/size are not cryptographic digests. Use authorized originals/actual bytes/content for revision review instead of disguising formats or bypassing handoff/access through renaming. FAQ Does suffix 2 mean business v2? No. Local naming occupancy is not approval/version order. Are case variants retained without renaming? Current checks lowercase conflicts and number candidates, without merging contents. Does this globally remove duplicate contents? No. Batch-local name uniqueness is not content deduplication. Does MIME prove real format? No. Extension inference differs from content/destination evidence. Does equal byteCount prove equal bytes? No. Size is neither SHA nor authenticity. Were files copied/renamed/inspected? No. Synthetic/source review only, without attachment operations/services. Reading and source Per-item checks · Encoding/names · Version material · File bridge stages · Start · Privacy Naming/sizes/save · Files/later placement
+All scenarios · Related practical guide Does attachment 2 mean version two? Batch names, MIME and byte-count evidence SYN-ANM-45 attachment name and metadata preflight SYNTHETIC_EXAMPLE · pending · not_run. Synthetic correspondence review, not revision approval, deduplication, redaction or authority. /samples/p24-attachment-name-metadata-provenance/README.md · /samples/p24-attachment-name-metadata-provenance/preflight.zh.json · /samples/p24-attachment-name-metadata-provenance/preflight.en.json Suffix is not revision, size is not hash, MIME is not real format. Stop when original reference, actual version or receipt is unknown. Test roots do not prove system App Group access; real attachments, cross-process operations and remote receipt remain not_run. ID Check Synthetic observation Boundary C01 Batch-local naming sample.txt stays sample.txt; a fresh batch may reuse it. Not account-wide deduplication. C02 Case collision After sample.txt, SAMPLE.TXT becomes SAMPLE 2.TXT. No content merge; 2 is not a business revision. C03 Occupied suffix Occupied report.txt/report 2.txt yields report 3.txt. Not approval order. C04 Empty-name fallback Empty name becomes file, then file 2. Not recovery of original identity. C05 Slash replacement a/b.txt becomes a_b.txt. Not arbitrary-path security certification or malware scanning. C06 Multiple suffixes Conflicting a.tar.gz becomes a.tar 2.gz. No unpacking or format verification. C07 Extension-derived type Synthetic sample.txt infers text/plain. MIME is not content sniffing, trust or redaction. C08 Equal size, different contents alpha and bravo are each 5 bytes. Equal size is not equal SHA or authenticity. C09 Missing-source size byteCount may return 0 when size cannot be read. 0 does not prove an empty file or successful copy. C10 Directory estimate Two controlled 5-byte files total 10 in a directory. Not total memory, a frozen snapshot or integrity guarantee. C11 Staging budget Measured file accumulation gate is 200 MiB = 209715200 bytes. Not a combined text/URL bound or website upload allowance. C12 Copy and original reference save copies rather than moves; synthetic original remains. No automatic original-path/content-hash/approved-version ledger; review the external mapping separately. C13 Manifest written last Copy files first; atomically write manifest last. Not a cross-process lock, whole-file transaction or real Extension evidence. C14 pending decode boundary Bad JSON is skipped; a valid manifest may return even with a missing copy. Visibility does not prove files complete, import or delivery. C15 Three App Group evidence layers Record source declaration, final signature and system containerURL separately. Writable test root is not system authority; nil is not a unique network diagnosis. C16 Destination and copies Review revisions and necessary copies against authorized originals; stop when unknown. Insertion/attached is not remote completion; destination may save/sync/process; discard is not server revocation. A staged rename distinguishes files; it does not certify versions, deduplication or contents Each save creates batch-local usedNames. uniqueName detects conflicts case-insensitively and preserves files under numbered names instead of merging/dropping contents. contentType comes from the extension; byteCount estimates source size. None establishes business version, actual format, byte identity or redaction. No archive deduplication/inspection service is added. Different from item review, encoding and revision retention Items concern content/stages, encoding concerns serialization, retention relates revisions. Here original-to-staged names and metadata evidence matter. No real file is copied, renamed or disclosed. Check Verified scope Manual review Not established Local names usedNames for one batch Batch/item IDs/original reference Whole-inbox/account deduplication Case lowercased collision checks Original/staged mapping Case variants prove identical content Suffix Preserve/number conflicting files Name occupancy Version 2/latest approval Name cleanup Name-character processing Label versus actual material Security scan/content identification Type hint Extension-derived UTType/MIME Actual format/destination Suffix proves trusted contents byteCount File/package size estimate; read failures separately Measured size/actual copy Same size means same SHA Staging budget 200 MiB measured-file accumulation Not every text/page limit Every site accepts 200 MiB Retention identity Batch/item/id/reference separately Real version/content evidence Name/number/MIME are business identity Synthetic naming illustration One batch contains sample.txt followed by SAMPLE.TXT; the latter can become SAMPLE 2.TXT. This is a collision suffix, not business v2, equal contents or automatic merging. Other batches can reuse names. Type/size are not cryptographic digests. Use authorized originals/actual bytes/content for revision review instead of disguising formats or bypassing handoff/access through renaming. FAQ Does suffix 2 mean business v2? No. Local naming occupancy is not approval/version order. Are case variants retained without renaming? Current checks lowercase conflicts and number candidates, without merging contents. Does this globally remove duplicate contents? No. Batch-local name uniqueness is not content deduplication. Does MIME prove real format? No. Extension inference differs from content/destination evidence. Does equal byteCount prove equal bytes? No. Size is neither SHA nor authenticity. Were files copied/renamed/inspected? No. Synthetic/source review only, without attachment operations/services. Reading and source Per-item checks · Encoding/names · Version material · File bridge stages · Start · Privacy Naming/sizes/save · Files/later placement
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Check</th>
+<th>Synthetic observation</th>
+<th>Boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C01</td>
+<td>Batch-local naming</td>
+<td>sample.txt stays sample.txt; a fresh batch may reuse it.</td>
+<td>Not account-wide deduplication.</td>
+</tr>
+<tr>
+<td>C02</td>
+<td>Case collision</td>
+<td>After sample.txt, SAMPLE.TXT becomes SAMPLE 2.TXT.</td>
+<td>No content merge; 2 is not a business revision.</td>
+</tr>
+<tr>
+<td>C03</td>
+<td>Occupied suffix</td>
+<td>Occupied report.txt/report 2.txt yields report 3.txt.</td>
+<td>Not approval order.</td>
+</tr>
+<tr>
+<td>C04</td>
+<td>Empty-name fallback</td>
+<td>Empty name becomes file, then file 2.</td>
+<td>Not recovery of original identity.</td>
+</tr>
+<tr>
+<td>C05</td>
+<td>Slash replacement</td>
+<td>a/b.txt becomes a_b.txt.</td>
+<td>Not arbitrary-path security certification or malware scanning.</td>
+</tr>
+<tr>
+<td>C06</td>
+<td>Multiple suffixes</td>
+<td>Conflicting a.tar.gz becomes a.tar 2.gz.</td>
+<td>No unpacking or format verification.</td>
+</tr>
+<tr>
+<td>C07</td>
+<td>Extension-derived type</td>
+<td>Synthetic sample.txt infers text/plain.</td>
+<td>MIME is not content sniffing, trust or redaction.</td>
+</tr>
+<tr>
+<td>C08</td>
+<td>Equal size, different contents</td>
+<td>alpha and bravo are each 5 bytes.</td>
+<td>Equal size is not equal SHA or authenticity.</td>
+</tr>
+<tr>
+<td>C09</td>
+<td>Missing-source size</td>
+<td>byteCount may return 0 when size cannot be read.</td>
+<td>0 does not prove an empty file or successful copy.</td>
+</tr>
+<tr>
+<td>C10</td>
+<td>Directory estimate</td>
+<td>Two controlled 5-byte files total 10 in a directory.</td>
+<td>Not total memory, a frozen snapshot or integrity guarantee.</td>
+</tr>
+<tr>
+<td>C11</td>
+<td>Staging budget</td>
+<td>Measured file accumulation gate is 200 MiB = 209715200 bytes.</td>
+<td>Not a combined text/URL bound or website upload allowance.</td>
+</tr>
+<tr>
+<td>C12</td>
+<td>Copy and original reference</td>
+<td>save copies rather than moves; synthetic original remains.</td>
+<td>No automatic original-path/content-hash/approved-version ledger; review the external mapping separately.</td>
+</tr>
+<tr>
+<td>C13</td>
+<td>Manifest written last</td>
+<td>Copy files first; atomically write manifest last.</td>
+<td>Not a cross-process lock, whole-file transaction or real Extension evidence.</td>
+</tr>
+<tr>
+<td>C14</td>
+<td>pending decode boundary</td>
+<td>Bad JSON is skipped; a valid manifest may return even with a missing copy.</td>
+<td>Visibility does not prove files complete, import or delivery.</td>
+</tr>
+<tr>
+<td>C15</td>
+<td>Three App Group evidence layers</td>
+<td>Record source declaration, final signature and system containerURL separately.</td>
+<td>Writable test root is not system authority; nil is not a unique network diagnosis.</td>
+</tr>
+<tr>
+<td>C16</td>
+<td>Destination and copies</td>
+<td>Review revisions and necessary copies against authorized originals; stop when unknown.</td>
+<td>Insertion/attached is not remote completion; destination may save/sync/process; discard is not server revocation.</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>

@@ -70,3 +70,8 @@ manifest核批次发布，保护核写选项，网站缓存核origin；这里核
 ## SYN-CHK-40技术转接（保持退休）
 
 App Group源码声明/签名权限/运行containerURL是不同证据，不能用任意测试root替代系统授权，也不能把文件或manifest可见当成功解析导入。[同语文件分片/回执核查](/guides/file-chunk-bridge-not-upload-receipt/)区分原始块、JS暂存、页面控件、收件箱pending与远端完成，discard不是撤回服务器。此页保持indexable: false/noindex,follow，不入sitemap/LLM独立出口，不挂下载/Store卡。SYNTHETIC_EXAMPLE非真实共享容器/签名/App Store审核或远端API验收，不改权限/配置，不盲重试。
+
+
+## SYN-ANM-45 元数据来源边界同步（保持退休）
+
+源码声明、最终签名、系统containerURL、manifest发布、pending解析、页面放置和远端回执分别留证。可注入root不证明跨进程系统授权；编号、MIME、byteCount不证明版本/内容/来源真实性。[同语附件名称与元数据指南](/guides/attachment-name-metadata-provenance/)仅提供从零合成自检，非真实附件鉴定、共享容器或并发写入验收。真实签名/Extension/网络均not_run，未知副作用不盲重发。保持indexable: false/noindex,follow，不入sitemap或LLM独立section，不挂下载/Store卡，不改权限、签名或配置。
