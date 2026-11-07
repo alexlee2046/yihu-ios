@@ -72,6 +72,22 @@ targets:
         INFOPLIST_FILE: Extensions/CollieWidgets/Info.plist
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
+  YihuWatchWidgets:
+    type: app-extension
+    platform: watchOS
+    deploymentTarget: "11.0"
+    sources:
+      - Extensions/YihuWatchWidgets
+      - Shared/YihuWatchSnapshot.swift
+      - Shared/YihuWatchWidgetSnapshot.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).watch.widgets
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_FILE: Extensions/YihuWatchWidgets/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Apps/YihuWatch/YihuWatch.entitlements
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
   YihuWatch:
     type: application
     platform: watchOS
@@ -81,10 +97,17 @@ targets:
       - Shared/YihuWatchSnapshot.swift
       - Shared/YihuWatchDraft.swift
       - Shared/YihuWatchVoice.swift
+      - Shared/YihuWatchWidgetSnapshot.swift
+    dependencies:
+      - target: YihuWatchWidgets
+        embed: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).watch
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_FILE: Apps/YihuWatch/Info.plist
         GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_ENTITLEMENTS: Apps/YihuWatch/YihuWatch.entitlements
         INFOPLIST_KEY_WKApplication: YES
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: $(YIHU_BUNDLE_ID)
         INFOPLIST_KEY_CFBundleDisplayName: 一呼
