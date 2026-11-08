@@ -72,3 +72,8 @@ indexable: false
 原完成方法在任何导出/清理前先比activeToken；stop后本次完成可继续，cancel后旧完成不能代表新采集。匹配失败也须转发failure，不从同一阶段或相同文字推会话归属、授权或通用exactly-once。隔离夹具的内存success/export计数不等录音成功或已写音频。
 
 [在同语在役重采指南查看完整已填样例](/guides/interruption-recapture-preflight/#syn-token-33)。本页保留noindex,follow技术参考属性，不加入150条索引/LLM出口；不提供自动重录、回调注入或重发功能。
+
+
+## SYN-ALR-48 电平与完成归属分账（保持退休）
+
+[同语电平非准确率核对](/guides/audio-level-not-accuracy-review/)仅用合成数值与自有临时CAF核电平/写入状态，不将满条、旧level或相同文字当当前activeToken、final、身份/写授权或送达。captureCompleted先核令牌再导出/清理；stop等待排空与cancel失效仍分开，不拼接迟到结果到新采集。保原SYN-TOKEN-33转接，真实录音/回调/并发/UI/ASR/网络全not_run，未知副作用不盲重录重发。保持indexable: false/noindex,follow，不入sitemap或LLM独立section，不新增下载/Store/转换卡；中文原P4转换块原样保留，不改既有守卫、音频实现、权限或退页结构。

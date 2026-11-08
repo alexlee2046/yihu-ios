@@ -5,6 +5,51 @@ description: "Review different short-speech/long-note RMS scaling and clipping. 
 lang: en
 ---
 
+## SYN-ALR-48 audio level versus accuracy preflight
+
+SYNTHETIC_EXAMPLE · pending · not_run. Levels, real content, capture tokens and receipts differ.
+
+[/samples/p27-audio-level-not-accuracy-review/README.md](/samples/p27-audio-level-not-accuracy-review/README.md) · [/samples/p27-audio-level-not-accuracy-review/preflight.zh.json](/samples/p27-audio-level-not-accuracy-review/preflight.zh.json) · [/samples/p27-audio-level-not-accuracy-review/preflight.en.json](/samples/p27-audio-level-not-accuracy-review/preflight.en.json)
+
+<div role="region" aria-label="SYN-ALR-48" tabindex="0">
+
+| ID | Check | Expectation/boundary |
+| --- | --- | --- |
+| L01 | Empty vector | short≈0.000000; note≈0.000000; synthetic only |
+| L02 | Zeros | short≈0.000000; note≈0.000000; synthetic only |
+| L03 | Positive DC | short≈0.020000; note≈0.120000; synthetic only |
+| L04 | Negative DC | short≈0.020000; note≈0.120000; synthetic only |
+| L05 | Alternating signs | short≈0.020000; note≈0.120000; synthetic only |
+| L06 | Two unsaturated gains | short≈0.100000; note≈0.600000; synthetic only |
+| L07 | Long meter saturated | short≈0.200000; note≈1.000000; synthetic only |
+| L08 | Half short, full long | short≈0.500000; note≈1.000000; synthetic only |
+| L09 | Both full | short≈1.000000; note≈1.000000; synthetic only |
+| L10 | Full-scale samples | short≈1.000000; note≈1.000000; synthetic only |
+| L11 | Finite out-of-range values | short≈1.000000; note≈1.000000; synthetic only |
+| L12 | Sparse high value | short≈1.000000; note≈1.000000; synthetic only |
+| L13 | Sparse low value | short≈0.141421; note≈0.848528; synthetic only |
+| L14 | Unequal amplitudes | short≈0.632456; note≈1.000000; synthetic only |
+| L15 | Equal-energy DC | short≈0.200000; note≈1.000000; synthetic only |
+| L16 | Equal-energy negative DC | short≈0.200000; note≈1.000000; synthetic only |
+| L17 | Four-point sparse vector | short≈0.200000; note≈1.000000; synthetic only |
+| L18 | Low mixed amplitude | short≈0.070711; note≈0.424264; synthetic only |
+| L19 | Saturated DC | short≈1.000000; note≈1.000000; synthetic only |
+| L20 | Small finite values | short≈0.010000; note≈0.060000; synthetic only |
+| S01 | Empty input retains meter | empty_retains: note≈0.600000; frames=2 |
+| S02 | Zero samples update | zero_updates: note≈0.000000; frames=4 |
+| S03 | Closed file retains prior meter | closed_after_seed: note≈0.600000; frames=2 |
+| S04 | No file means no update | closed_initial: note≈0.000000; frames=0 |
+| M01 | Meter is not ASR or identity | DC, alternating and sparse vectors can share RMS/meters without the same words or speaker; no ASR/voiceprint run. |
+| M02 | Gain is not calibration | Gains 2/12 are not dB SPL, wind ratings or probabilities; clipping loses display distinction, not a hardware-gain recommendation. |
+| M03 | Display versus writing | Long append updates after successful writes; empty input/no file can retain level. Closed-file guard is not injected storage failure; timer reads do not promise zero UI latency. |
+| M04 | Token before completion | captureCompleted compares activeToken before export/cleanup; token is capture association, not identity, write authority or universal exactly-once. |
+| M05 | Separate stop and cancel | Stop may await this drain; cancel clears activeToken. Old full meters or late callbacks prove neither a new final nor delivery. |
+| M06 | Review real content and authority separately | No customer audio, upload or recapture. Check authority, originals, gaps, saved/remote receipts separately; no blind retry when unknown. |
+
+</div>
+
+
+
 <h2 id="first-answer">A moving meter is not correct speech, and full scale is not 100% recognition</h2>
 
 Short-speech PCM scales sample RMS into a 0–1 range; long-note writes use another multiplier. These are level displays, not recognition confidence, voiceprint identity, wind rating or delivery receipts. Matching bar lengths across paths do not directly compare sound quality. No acoustic scoring/calibration tool is added.
