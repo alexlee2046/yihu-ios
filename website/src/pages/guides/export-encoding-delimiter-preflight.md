@@ -5,6 +5,51 @@ description: "区分UTF-8 Markdown、共享收件箱清单和源JSON，检查字
 lang: zh
 ---
 
+## SYN-ECD-47 编码与分隔符自检
+
+SYNTHETIC_EXAMPLE · pending · not_run。字符/字节、载体/消费者与交接回执分账。
+
+[/samples/p26-export-encoding-delimiter-preflight/README.md](/samples/p26-export-encoding-delimiter-preflight/README.md) · [/samples/p26-export-encoding-delimiter-preflight/preflight.zh.json](/samples/p26-export-encoding-delimiter-preflight/preflight.zh.json) · [/samples/p26-export-encoding-delimiter-preflight/preflight.en.json](/samples/p26-export-encoding-delimiter-preflight/preflight.en.json)
+
+<div role="region" aria-label="SYN-ECD-47" tabindex="0">
+
+| ID | 检查项 | 预期/边界 |
+| --- | --- | --- |
+| T01 | 中文混合 | Swift Character 3; UTF-8 bytes 7. |
+| T02 | 组合字符 | Swift Character 1; UTF-8 bytes 3. |
+| T03 | 预组字符 | Swift Character 1; UTF-8 bytes 2. |
+| T04 | 组合emoji | Swift Character 1; UTF-8 bytes 25. |
+| T05 | 真实换行 | Swift Character 11; UTF-8 bytes 11. |
+| T06 | 字面反斜线n | Swift Character 12; UTF-8 bytes 12. |
+| T07 | 引号逗号反斜线 | Swift Character 9; UTF-8 bytes 9. |
+| T08 | CRLF | Swift Character 3; UTF-8 bytes 4. |
+| T09 | 3000字符 | Swift Character 3000; UTF-8 bytes 9000. |
+| T10 | 3001字符 | Swift Character 3001; UTF-8 bytes 9003. |
+| D01 | 完整最小模型 | Radar decode true; utf8; not real import/authority. |
+| D02 | 字符串分隔与转义 | Radar decode true; utf8; not real import/authority. |
+| D03 | 片段非快照 | Radar decode false; utf8; not real import/authority. |
+| D04 | 日期类型错误 | Radar decode false; utf8; not real import/authority. |
+| D05 | 无效日期 | Radar decode false; utf8; not real import/authority. |
+| D06 | JSON裸换行 | Radar decode false; raw_unescaped_newline; not real import/authority. |
+| D07 | 消费者编码实测 | Radar decode true; utf16le_bom; not real import/authority. |
+| D08 | 模型字节上限 | Radar decode false; oversize; not real import/authority. |
+| C01 | 内部manifest往返 | batch_roundtrip: true; synthetic temporary data only. |
+| C02 | manifest非Radar | batch_as_radar: false; synthetic temporary data only. |
+| C03 | Radar非manifest | radar_as_batch: false; synthetic temporary data only. |
+| C04 | items类型错误 | wrong_items_type: false; synthetic temporary data only. |
+| H01 | 一次标记持久保留 | normal: true; synthetic temporary data only. |
+| H02 | 不重置已尝试 | already_attempted: false; synthetic temporary data only. |
+| H03 | 空录文不交接 | empty: false; synthetic temporary data only. |
+| H04 | 写失败不冒成功 | write_failure: false; synthetic temporary data only. |
+| M01 | 长笔记分支只核源码 | handOff按body.count<=3000走文本，否则写带标题和换行的UTF-8 Markdown；宿主不运行Store.handOff，不新增CSV或通用转码器。 |
+| M02 | 分隔规则分账 | 词表拆项不是JSON/CSV语法，逗号可属于字符串数据；不拆真实正文，不改字段/时间或修复原件。 |
+| M03 | PCM流结束非文本编码 | noDataNow保块间状态，finish才endOfStream、最多16次可早停；不是字符/字节/时长或语义断句，不跑音频转换。 |
+| M04 | 保留原件与交接状态 | 显示正常/文件写出/尾部有输出不证明原件完整、导入或远端完成；改编码/文件名不抹标记、不授重发权，未知即停。 |
+
+</div>
+
+
+
 <h2 id="first-answer">先确认导出载体和消费者，不能把所有逗号都当作字段分隔</h2>
 
 一呼较长笔记的现有暂存路径写UTF-8 Markdown；共享收件箱也有自己的内部JSON清单，而Radar读另一套快照模型。三者不能因“都是文字文件”而互换。编码、换行、引号转义、字符数和字段契约须分别核对；本文不提供CSV导出、转码器或自动修复真实文件功能。

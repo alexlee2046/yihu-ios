@@ -5,6 +5,51 @@ description: "Separate UTF-8 Markdown, internal share manifests and source JSON.
 lang: en
 ---
 
+## SYN-ECD-47 encoding and delimiter preflight
+
+SYNTHETIC_EXAMPLE · pending · not_run. Characters/bytes, carriers/consumers and receipts are separate.
+
+[/samples/p26-export-encoding-delimiter-preflight/README.md](/samples/p26-export-encoding-delimiter-preflight/README.md) · [/samples/p26-export-encoding-delimiter-preflight/preflight.zh.json](/samples/p26-export-encoding-delimiter-preflight/preflight.zh.json) · [/samples/p26-export-encoding-delimiter-preflight/preflight.en.json](/samples/p26-export-encoding-delimiter-preflight/preflight.en.json)
+
+<div role="region" aria-label="SYN-ECD-47" tabindex="0">
+
+| ID | Check | Expectation/boundary |
+| --- | --- | --- |
+| T01 | CJK mixed | Swift Character 3; UTF-8 bytes 7. |
+| T02 | Combining character | Swift Character 1; UTF-8 bytes 3. |
+| T03 | Precomposed character | Swift Character 1; UTF-8 bytes 2. |
+| T04 | Joined emoji | Swift Character 1; UTF-8 bytes 25. |
+| T05 | Actual newline | Swift Character 11; UTF-8 bytes 11. |
+| T06 | Literal backslash-n | Swift Character 12; UTF-8 bytes 12. |
+| T07 | Quotes comma backslash | Swift Character 9; UTF-8 bytes 9. |
+| T08 | CRLF | Swift Character 3; UTF-8 bytes 4. |
+| T09 | 3000 characters | Swift Character 3000; UTF-8 bytes 9000. |
+| T10 | 3001 characters | Swift Character 3001; UTF-8 bytes 9003. |
+| D01 | Complete minimal model | Radar decode true; utf8; not real import/authority. |
+| D02 | String delimiters and escaping | Radar decode true; utf8; not real import/authority. |
+| D03 | Fragment is not snapshot | Radar decode false; utf8; not real import/authority. |
+| D04 | Wrong date type | Radar decode false; utf8; not real import/authority. |
+| D05 | Invalid calendar date | Radar decode false; utf8; not real import/authority. |
+| D06 | Unescaped JSON newline | Radar decode false; raw_unescaped_newline; not real import/authority. |
+| D07 | Consumer-specific encoding observation | Radar decode true; utf16le_bom; not real import/authority. |
+| D08 | Model byte bound | Radar decode false; oversize; not real import/authority. |
+| C01 | Internal manifest roundtrip | batch_roundtrip: true; synthetic temporary data only. |
+| C02 | Manifest is not Radar | batch_as_radar: false; synthetic temporary data only. |
+| C03 | Radar is not manifest | radar_as_batch: false; synthetic temporary data only. |
+| C04 | Wrong items type | wrong_items_type: false; synthetic temporary data only. |
+| H01 | Durable reservation | normal: true; synthetic temporary data only. |
+| H02 | Do not reset attempted | already_attempted: false; synthetic temporary data only. |
+| H03 | No empty-text reservation | empty: false; synthetic temporary data only. |
+| H04 | Write failure is not success | write_failure: false; synthetic temporary data only. |
+| M01 | Long-note branch is source-reviewed | handOff uses body.count<=3000 for text, otherwise UTF-8 Markdown with heading/newlines. Host does not run Store.handOff; no CSV or universal transcoder. |
+| M02 | Separate delimiter contracts | Vocabulary splitting is not JSON/CSV grammar; commas may be string data. Do not split real bodies, rewrite fields/dates or repair originals. |
+| M03 | PCM end is not text encoding | noDataNow preserves block state; finish uses endOfStream, up to 16 calls with early exits. Not characters/bytes/duration/semantic segmentation; no audio conversion run. |
+| M04 | Preserve originals and handoff state | Readable display/file write/tail output does not prove completeness, import or remote completion. Re-encoding/renaming never resets reservations or grants resend authority; stop when unknown. |
+
+</div>
+
+
+
 <h2 id="first-answer">Identify carrier and consumer first; commas are not universally field separators</h2>
 
 The existing longer-note staging path writes UTF-8 Markdown. The share inbox also has an internal JSON manifest, while Radar consumes another snapshot model. Being text files does not make them interchangeable. Encoding, newlines, escaping, character counts and field contracts need separate review. No CSV exporter, transcoder or automatic repair of live files is added.
