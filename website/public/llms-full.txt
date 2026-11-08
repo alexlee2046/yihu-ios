@@ -4884,9 +4884,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/export-encoding-delimiter-preflight/
 
-场景指南 · 相关使用指南 笔记和Radar简报导出前：编码、换行、引号与分隔符核对 先确认导出载体和消费者，不能把所有逗号都当作字段分隔 一呼较长笔记的现有暂存路径写UTF-8 Markdown；共享收件箱也有自己的内部JSON清单，而Radar读另一套快照模型。三者不能因“都是文字文件”而互换。编码、换行、引号转义、字符数和字段契约须分别核对；本文不提供CSV导出、转码器或自动修复真实文件功能。 与术语解析、JSON类型和改版评审的分工 术语前检解释词表按哪些符号拆项，JSON类型检查关注字段形态，改版评审关注契约变化。这里核的是 已经选定载体中的文字怎样序列化与被读取 ，不是改变术语含义、模型设置或来源字段。 编码与分隔检查表 对象 已核实现/语义 应核对的边界 不应推断 笔记短文字 当前按transcript的Swift Character计数决定文字/附件路径 3000门槛不是UTF-8字节或录音时长 汉字、组合字符都按单字节计算 较长笔记附件 现有路径写Markdown，encoding为utf8 文件正文、标题、换行与实际消费者 任意文件都是同编码，或有CSV/通用转码支持 收件箱manifest JSONEncoder编码内部共享批次 内部清单不是Radar快照契约 改名.json就能导入Radar 源Radar JSON 按实际消费者JSONDecoder与模型读取 语法、类型、大小、日期和身份分别核 本文宣称所有输入只接受一种编码或自动纠错 逗号/分号 在JSON字符串内可以只是数据 引号内外语义，不能套词表拆项规则 逗号必然代表新的任务或字段 换行/引号 JSON字符串须遵守转义语法 \n、双引号和反斜线的实际内容 把字面反斜线n和换行混为同一字节序列 Unicode文字 字符、UTF-8字节与语言语义不同 先核实际编码与保留原文 看起来相同就证明字节完全相同 文件名/副本 扩展名、保存时间和正文契约分开 目的地与已有交接状态 换后缀/文件名可以绕过一次交接或权限 一个JSON字符串语法片段 下例只示意字符串， 不是完整Radar快照 ，缺少真实导入所需的其他模型字段，也不是App生成的样例输出。 { "title" : "Sample, A" , "next" : "Line1 \n Line2" } 解析后逗号仍属于title，转义换行属于next内容。若想保留字面上的反斜线和n，序列化方式又不同；不要用简单的“按逗号切开”处理JSON。词表解析会拆某些标点，不意味着导出正文也适用该规则。 合成文本“样例A”由三个简单字符组成，UTF-8为七字节；这个例子说明计数不同，不提供通用字符计数器，更不能把JavaScript字符串长度直接当Swift Character门槛。 导出前后的保留检查 先用不含真实数据的样例确认目标工具按什么类型读取，再核原文与已读回内容，不为修复显示异常重写真实来源。不要在不了解编码/消费者时直接删字节、去掉引号或把错误字段补为当前时间。 字符显示正常只证明可见结果，不证明来源身份、模型校验或送达；文件写出也只是本地/暂存阶段。笔记原有交接标记、目标许可与不确定停止边界不变，修订编码或改文件名不授予重发权。 FAQ 一呼长笔记导出就是CSV吗？ 不是。引用的现有路径写UTF-8 Markdown，并通过已有收件箱暂存；本文不新增CSV导出或字段转换。 收件箱manifest.json可以当Radar任务源吗？ 不能。内部批次清单和Radar快照有不同模型，扩展名相同不等于契约相同。 JSON里的逗号都能按词表规则拆吗？ 不能。引号内可能是数据，JSON有自己的语法；词表分隔规则不属于JSON/CSV通用解析器。 3000字门槛是不是3000个UTF-8字节？ 不是。当前笔记门槛用Swift Character计数，不能与编码字节、Unicode标量或录音时长混用。 中文显示异常时可以随便重编码再交接吗？ 不要盲目修复。先核来源编码、目标契约和原结果，保留原文；改编码不抹去已尝试交接或重复风险。 语法片段能证明实际App导入通过吗？ 不能。这里只核字符串示意，不替代完整模型、实际版本解码、权限和设备验收。 相关指南与源码 术语分隔与长度 · JSON类型/空值 · 格式改版 · 笔记一次交接 · 开始 · 隐私 依据： 笔记Markdown写出与门槛 、 内部共享清单 、 Radar模型 。
+场景指南 · 相关使用指南 笔记和Radar简报导出前：编码、换行、引号与分隔符核对 SYN-ECD-47 编码与分隔符自检 SYNTHETIC_EXAMPLE · pending · not_run。字符/字节、载体/消费者与交接回执分账。 /samples/p26-export-encoding-delimiter-preflight/README.md · /samples/p26-export-encoding-delimiter-preflight/preflight.zh.json · /samples/p26-export-encoding-delimiter-preflight/preflight.en.json ID 检查项 预期/边界 T01 中文混合 Swift Character 3; UTF-8 bytes 7. T02 组合字符 Swift Character 1; UTF-8 bytes 3. T03 预组字符 Swift Character 1; UTF-8 bytes 2. T04 组合emoji Swift Character 1; UTF-8 bytes 25. T05 真实换行 Swift Character 11; UTF-8 bytes 11. T06 字面反斜线n Swift Character 12; UTF-8 bytes 12. T07 引号逗号反斜线 Swift Character 9; UTF-8 bytes 9. T08 CRLF Swift Character 3; UTF-8 bytes 4. T09 3000字符 Swift Character 3000; UTF-8 bytes 9000. T10 3001字符 Swift Character 3001; UTF-8 bytes 9003. D01 完整最小模型 Radar decode true; utf8; not real import/authority. D02 字符串分隔与转义 Radar decode true; utf8; not real import/authority. D03 片段非快照 Radar decode false; utf8; not real import/authority. D04 日期类型错误 Radar decode false; utf8; not real import/authority. D05 无效日期 Radar decode false; utf8; not real import/authority. D06 JSON裸换行 Radar decode false; raw_unescaped_newline; not real import/authority. D07 消费者编码实测 Radar decode true; utf16le_bom; not real import/authority. D08 模型字节上限 Radar decode false; oversize; not real import/authority. C01 内部manifest往返 batch_roundtrip: true; synthetic temporary data only. C02 manifest非Radar batch_as_radar: false; synthetic temporary data only. C03 Radar非manifest radar_as_batch: false; synthetic temporary data only. C04 items类型错误 wrong_items_type: false; synthetic temporary data only. H01 一次标记持久保留 normal: true; synthetic temporary data only. H02 不重置已尝试 already_attempted: false; synthetic temporary data only. H03 空录文不交接 empty: false; synthetic temporary data only. H04 写失败不冒成功 write_failure: false; synthetic temporary data only. M01 长笔记分支只核源码 handOff按body.count<=3000走文本，否则写带标题和换行的UTF-8 Markdown；宿主不运行Store.handOff，不新增CSV或通用转码器。 M02 分隔规则分账 词表拆项不是JSON/CSV语法，逗号可属于字符串数据；不拆真实正文，不改字段/时间或修复原件。 M03 PCM流结束非文本编码 noDataNow保块间状态，finish才endOfStream、最多16次可早停；不是字符/字节/时长或语义断句，不跑音频转换。 M04 保留原件与交接状态 显示正常/文件写出/尾部有输出不证明原件完整、导入或远端完成；改编码/文件名不抹标记、不授重发权，未知即停。 先确认导出载体和消费者，不能把所有逗号都当作字段分隔 一呼较长笔记的现有暂存路径写UTF-8 Markdown；共享收件箱也有自己的内部JSON清单，而Radar读另一套快照模型。三者不能因“都是文字文件”而互换。编码、换行、引号转义、字符数和字段契约须分别核对；本文不提供CSV导出、转码器或自动修复真实文件功能。 与术语解析、JSON类型和改版评审的分工 术语前检解释词表按哪些符号拆项，JSON类型检查关注字段形态，改版评审关注契约变化。这里核的是 已经选定载体中的文字怎样序列化与被读取 ，不是改变术语含义、模型设置或来源字段。 编码与分隔检查表 对象 已核实现/语义 应核对的边界 不应推断 笔记短文字 当前按transcript的Swift Character计数决定文字/附件路径 3000门槛不是UTF-8字节或录音时长 汉字、组合字符都按单字节计算 较长笔记附件 现有路径写Markdown，encoding为utf8 文件正文、标题、换行与实际消费者 任意文件都是同编码，或有CSV/通用转码支持 收件箱manifest JSONEncoder编码内部共享批次 内部清单不是Radar快照契约 改名.json就能导入Radar 源Radar JSON 按实际消费者JSONDecoder与模型读取 语法、类型、大小、日期和身份分别核 本文宣称所有输入只接受一种编码或自动纠错 逗号/分号 在JSON字符串内可以只是数据 引号内外语义，不能套词表拆项规则 逗号必然代表新的任务或字段 换行/引号 JSON字符串须遵守转义语法 \n、双引号和反斜线的实际内容 把字面反斜线n和换行混为同一字节序列 Unicode文字 字符、UTF-8字节与语言语义不同 先核实际编码与保留原文 看起来相同就证明字节完全相同 文件名/副本 扩展名、保存时间和正文契约分开 目的地与已有交接状态 换后缀/文件名可以绕过一次交接或权限 一个JSON字符串语法片段 下例只示意字符串， 不是完整Radar快照 ，缺少真实导入所需的其他模型字段，也不是App生成的样例输出。 { "title" : "Sample, A" , "next" : "Line1 \n Line2" } 解析后逗号仍属于title，转义换行属于next内容。若想保留字面上的反斜线和n，序列化方式又不同；不要用简单的“按逗号切开”处理JSON。词表解析会拆某些标点，不意味着导出正文也适用该规则。 合成文本“样例A”由三个简单字符组成，UTF-8为七字节；这个例子说明计数不同，不提供通用字符计数器，更不能把JavaScript字符串长度直接当Swift Character门槛。 导出前后的保留检查 先用不含真实数据的样例确认目标工具按什么类型读取，再核原文与已读回内容，不为修复显示异常重写真实来源。不要在不了解编码/消费者时直接删字节、去掉引号或把错误字段补为当前时间。 字符显示正常只证明可见结果，不证明来源身份、模型校验或送达；文件写出也只是本地/暂存阶段。笔记原有交接标记、目标许可与不确定停止边界不变，修订编码或改文件名不授予重发权。 FAQ 一呼长笔记导出就是CSV吗？ 不是。引用的现有路径写UTF-8 Markdown，并通过已有收件箱暂存；本文不新增CSV导出或字段转换。 收件箱manifest.json可以当Radar任务源吗？ 不能。内部批次清单和Radar快照有不同模型，扩展名相同不等于契约相同。 JSON里的逗号都能按词表规则拆吗？ 不能。引号内可能是数据，JSON有自己的语法；词表分隔规则不属于JSON/CSV通用解析器。 3000字门槛是不是3000个UTF-8字节？ 不是。当前笔记门槛用Swift Character计数，不能与编码字节、Unicode标量或录音时长混用。 中文显示异常时可以随便重编码再交接吗？ 不要盲目修复。先核来源编码、目标契约和原结果，保留原文；改编码不抹去已尝试交接或重复风险。 语法片段能证明实际App导入通过吗？ 不能。这里只核字符串示意，不替代完整模型、实际版本解码、权限和设备验收。 相关指南与源码 术语分隔与长度 · JSON类型/空值 · 格式改版 · 笔记一次交接 · 开始 · 隐私 依据： 笔记Markdown写出与门槛 、 内部共享清单 、 Radar模型 。
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>检查项</th>
+<th>预期/边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T01</td>
+<td>中文混合</td>
+<td>Swift Character 3; UTF-8 bytes 7.</td>
+</tr>
+<tr>
+<td>T02</td>
+<td>组合字符</td>
+<td>Swift Character 1; UTF-8 bytes 3.</td>
+</tr>
+<tr>
+<td>T03</td>
+<td>预组字符</td>
+<td>Swift Character 1; UTF-8 bytes 2.</td>
+</tr>
+<tr>
+<td>T04</td>
+<td>组合emoji</td>
+<td>Swift Character 1; UTF-8 bytes 25.</td>
+</tr>
+<tr>
+<td>T05</td>
+<td>真实换行</td>
+<td>Swift Character 11; UTF-8 bytes 11.</td>
+</tr>
+<tr>
+<td>T06</td>
+<td>字面反斜线n</td>
+<td>Swift Character 12; UTF-8 bytes 12.</td>
+</tr>
+<tr>
+<td>T07</td>
+<td>引号逗号反斜线</td>
+<td>Swift Character 9; UTF-8 bytes 9.</td>
+</tr>
+<tr>
+<td>T08</td>
+<td>CRLF</td>
+<td>Swift Character 3; UTF-8 bytes 4.</td>
+</tr>
+<tr>
+<td>T09</td>
+<td>3000字符</td>
+<td>Swift Character 3000; UTF-8 bytes 9000.</td>
+</tr>
+<tr>
+<td>T10</td>
+<td>3001字符</td>
+<td>Swift Character 3001; UTF-8 bytes 9003.</td>
+</tr>
+<tr>
+<td>D01</td>
+<td>完整最小模型</td>
+<td>Radar decode true; utf8; not real import/authority.</td>
+</tr>
+<tr>
+<td>D02</td>
+<td>字符串分隔与转义</td>
+<td>Radar decode true; utf8; not real import/authority.</td>
+</tr>
+<tr>
+<td>D03</td>
+<td>片段非快照</td>
+<td>Radar decode false; utf8; not real import/authority.</td>
+</tr>
+<tr>
+<td>D04</td>
+<td>日期类型错误</td>
+<td>Radar decode false; utf8; not real import/authority.</td>
+</tr>
+<tr>
+<td>D05</td>
+<td>无效日期</td>
+<td>Radar decode false; utf8; not real import/authority.</td>
+</tr>
+<tr>
+<td>D06</td>
+<td>JSON裸换行</td>
+<td>Radar decode false; raw_unescaped_newline; not real import/authority.</td>
+</tr>
+<tr>
+<td>D07</td>
+<td>消费者编码实测</td>
+<td>Radar decode true; utf16le_bom; not real import/authority.</td>
+</tr>
+<tr>
+<td>D08</td>
+<td>模型字节上限</td>
+<td>Radar decode false; oversize; not real import/authority.</td>
+</tr>
+<tr>
+<td>C01</td>
+<td>内部manifest往返</td>
+<td>batch_roundtrip: true; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>C02</td>
+<td>manifest非Radar</td>
+<td>batch_as_radar: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>C03</td>
+<td>Radar非manifest</td>
+<td>radar_as_batch: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>C04</td>
+<td>items类型错误</td>
+<td>wrong_items_type: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>H01</td>
+<td>一次标记持久保留</td>
+<td>normal: true; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>H02</td>
+<td>不重置已尝试</td>
+<td>already_attempted: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>H03</td>
+<td>空录文不交接</td>
+<td>empty: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>H04</td>
+<td>写失败不冒成功</td>
+<td>write_failure: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>长笔记分支只核源码</td>
+<td>handOff按body.count&lt;=3000走文本，否则写带标题和换行的UTF-8 Markdown；宿主不运行Store.handOff，不新增CSV或通用转码器。</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>分隔规则分账</td>
+<td>词表拆项不是JSON/CSV语法，逗号可属于字符串数据；不拆真实正文，不改字段/时间或修复原件。</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>PCM流结束非文本编码</td>
+<td>noDataNow保块间状态，finish才endOfStream、最多16次可早停；不是字符/字节/时长或语义断句，不跑音频转换。</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>保留原件与交接状态</td>
+<td>显示正常/文件写出/尾部有输出不证明原件完整、导入或远端完成；改编码/文件名不抹标记、不授重发权，未知即停。</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -4953,9 +5115,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/export-encoding-delimiter-preflight/
 
-All scenarios · Related practical guide Before exporting notes or Radar briefs: encoding, line breaks and delimiters Identify carrier and consumer first; commas are not universally field separators The existing longer-note staging path writes UTF-8 Markdown. The share inbox also has an internal JSON manifest, while Radar consumes another snapshot model. Being text files does not make them interchangeable. Encoding, newlines, escaping, character counts and field contracts need separate review. No CSV exporter, transcoder or automatic repair of live files is added. Different from terms, types and format revisions Vocabulary preflight concerns term splitting, JSON validation concerns field shapes, and revision review concerns contract changes. Here text serialization/readback within a chosen carrier is the task, not changing term meaning, model settings or source fields. Encoding and delimiter checks Object Existing implementation/meaning Check Do not infer Short note text Transcript Swift Character count selects text/attachment path 3000 is not bytes or audio duration CJK/combined characters each use one byte Longer note attachment Existing path writes Markdown with utf8 encoding Body, heading, newlines and actual consumer Every file has identical encoding or CSV/transcoding support Inbox manifest JSONEncoder writes an internal shared batch Not the Radar snapshot contract Renaming .json makes it Radar-compatible Radar source JSON Actual JSONDecoder and model contract Syntax, types, size, dates and identities separately This guide restricts every decoder input to one encoding or repairs it Comma/semicolon Can be data inside JSON strings Quoted/unquoted semantics, not vocabulary splitting Every comma creates a task/field Newline/quotes JSON strings need valid escaping \n, quotes and backslashes as actual content Literal backslash-n and newline have identical bytes Unicode Characters, UTF-8 bytes and meaning differ Actual encoding and retained original Similar display proves identical bytes Filename/copies Suffix/save time differ from body contract Destination and prior handoff state Rename/extension changes bypass reservation/permission A JSON string syntax fragment This demonstrates strings only: not a complete Radar snapshot , missing other required model fields and not an example app-generated export. { "title" : "Sample, A" , "next" : "Line1 \n Line2" } After parsing, the comma remains title data and the escaped newline belongs to next. Preserving literal backslash/n needs a different serialization. Do not split JSON by commas. Vocabulary punctuation splitting does not define exported-body parsing. The synthetic text 样例A has three simple characters and seven UTF-8 bytes. This illustrates different counts, not a universal counter; JavaScript string length must not substitute for Swift Character limits. Retain evidence before and after export Use non-sensitive fixtures to identify how the destination reads the carrier, then compare original/readback without rewriting real source data to hide display errors. Do not remove bytes/quotes or fill now without knowing the encoding/consumer contract. Correct display does not establish source identity, model validation or delivery. Writing a file is a local/staging step only. Original note reservations, destination permission and uncertain-stop states remain. Re-encoding/renaming does not authorize resending. FAQ Are long-note exports CSV? No. The cited path writes UTF-8 Markdown through existing inbox staging. No CSV exporter or field converter is added. Can manifest.json be used as a Radar source? No. The internal share-batch manifest and Radar snapshot have different models. A shared suffix is not a shared contract. Can every JSON comma use vocabulary splitting rules? No. Inside quotes it can be data. JSON has its own grammar; vocabulary splitting is not a general JSON/CSV parser. Is the 3000 threshold 3000 UTF-8 bytes? No. It counts Swift Characters, not encoded bytes, Unicode scalars or recording duration. Can unreadable CJK simply be re-encoded and handed off again? Do not repair blindly. Verify original encoding, destination contract and prior result. Re-encoding does not erase an attempt or duplicate risk. Does the fragment establish app import acceptance? No. It demonstrates strings, not a complete model, actual-version decoding, permission or device acceptance. Reading and source Term splitting/limits · JSON types/nulls · Format revision · One note handoff · Start · Privacy Evidence: Markdown writing/threshold , internal share manifest , Radar model .
+All scenarios · Related practical guide Before exporting notes or Radar briefs: encoding, line breaks and delimiters SYN-ECD-47 encoding and delimiter preflight SYNTHETIC_EXAMPLE · pending · not_run. Characters/bytes, carriers/consumers and receipts are separate. /samples/p26-export-encoding-delimiter-preflight/README.md · /samples/p26-export-encoding-delimiter-preflight/preflight.zh.json · /samples/p26-export-encoding-delimiter-preflight/preflight.en.json ID Check Expectation/boundary T01 CJK mixed Swift Character 3; UTF-8 bytes 7. T02 Combining character Swift Character 1; UTF-8 bytes 3. T03 Precomposed character Swift Character 1; UTF-8 bytes 2. T04 Joined emoji Swift Character 1; UTF-8 bytes 25. T05 Actual newline Swift Character 11; UTF-8 bytes 11. T06 Literal backslash-n Swift Character 12; UTF-8 bytes 12. T07 Quotes comma backslash Swift Character 9; UTF-8 bytes 9. T08 CRLF Swift Character 3; UTF-8 bytes 4. T09 3000 characters Swift Character 3000; UTF-8 bytes 9000. T10 3001 characters Swift Character 3001; UTF-8 bytes 9003. D01 Complete minimal model Radar decode true; utf8; not real import/authority. D02 String delimiters and escaping Radar decode true; utf8; not real import/authority. D03 Fragment is not snapshot Radar decode false; utf8; not real import/authority. D04 Wrong date type Radar decode false; utf8; not real import/authority. D05 Invalid calendar date Radar decode false; utf8; not real import/authority. D06 Unescaped JSON newline Radar decode false; raw_unescaped_newline; not real import/authority. D07 Consumer-specific encoding observation Radar decode true; utf16le_bom; not real import/authority. D08 Model byte bound Radar decode false; oversize; not real import/authority. C01 Internal manifest roundtrip batch_roundtrip: true; synthetic temporary data only. C02 Manifest is not Radar batch_as_radar: false; synthetic temporary data only. C03 Radar is not manifest radar_as_batch: false; synthetic temporary data only. C04 Wrong items type wrong_items_type: false; synthetic temporary data only. H01 Durable reservation normal: true; synthetic temporary data only. H02 Do not reset attempted already_attempted: false; synthetic temporary data only. H03 No empty-text reservation empty: false; synthetic temporary data only. H04 Write failure is not success write_failure: false; synthetic temporary data only. M01 Long-note branch is source-reviewed handOff uses body.count<=3000 for text, otherwise UTF-8 Markdown with heading/newlines. Host does not run Store.handOff; no CSV or universal transcoder. M02 Separate delimiter contracts Vocabulary splitting is not JSON/CSV grammar; commas may be string data. Do not split real bodies, rewrite fields/dates or repair originals. M03 PCM end is not text encoding noDataNow preserves block state; finish uses endOfStream, up to 16 calls with early exits. Not characters/bytes/duration/semantic segmentation; no audio conversion run. M04 Preserve originals and handoff state Readable display/file write/tail output does not prove completeness, import or remote completion. Re-encoding/renaming never resets reservations or grants resend authority; stop when unknown. Identify carrier and consumer first; commas are not universally field separators The existing longer-note staging path writes UTF-8 Markdown. The share inbox also has an internal JSON manifest, while Radar consumes another snapshot model. Being text files does not make them interchangeable. Encoding, newlines, escaping, character counts and field contracts need separate review. No CSV exporter, transcoder or automatic repair of live files is added. Different from terms, types and format revisions Vocabulary preflight concerns term splitting, JSON validation concerns field shapes, and revision review concerns contract changes. Here text serialization/readback within a chosen carrier is the task, not changing term meaning, model settings or source fields. Encoding and delimiter checks Object Existing implementation/meaning Check Do not infer Short note text Transcript Swift Character count selects text/attachment path 3000 is not bytes or audio duration CJK/combined characters each use one byte Longer note attachment Existing path writes Markdown with utf8 encoding Body, heading, newlines and actual consumer Every file has identical encoding or CSV/transcoding support Inbox manifest JSONEncoder writes an internal shared batch Not the Radar snapshot contract Renaming .json makes it Radar-compatible Radar source JSON Actual JSONDecoder and model contract Syntax, types, size, dates and identities separately This guide restricts every decoder input to one encoding or repairs it Comma/semicolon Can be data inside JSON strings Quoted/unquoted semantics, not vocabulary splitting Every comma creates a task/field Newline/quotes JSON strings need valid escaping \n, quotes and backslashes as actual content Literal backslash-n and newline have identical bytes Unicode Characters, UTF-8 bytes and meaning differ Actual encoding and retained original Similar display proves identical bytes Filename/copies Suffix/save time differ from body contract Destination and prior handoff state Rename/extension changes bypass reservation/permission A JSON string syntax fragment This demonstrates strings only: not a complete Radar snapshot , missing other required model fields and not an example app-generated export. { "title" : "Sample, A" , "next" : "Line1 \n Line2" } After parsing, the comma remains title data and the escaped newline belongs to next. Preserving literal backslash/n needs a different serialization. Do not split JSON by commas. Vocabulary punctuation splitting does not define exported-body parsing. The synthetic text 样例A has three simple characters and seven UTF-8 bytes. This illustrates different counts, not a universal counter; JavaScript string length must not substitute for Swift Character limits. Retain evidence before and after export Use non-sensitive fixtures to identify how the destination reads the carrier, then compare original/readback without rewriting real source data to hide display errors. Do not remove bytes/quotes or fill now without knowing the encoding/consumer contract. Correct display does not establish source identity, model validation or delivery. Writing a file is a local/staging step only. Original note reservations, destination permission and uncertain-stop states remain. Re-encoding/renaming does not authorize resending. FAQ Are long-note exports CSV? No. The cited path writes UTF-8 Markdown through existing inbox staging. No CSV exporter or field converter is added. Can manifest.json be used as a Radar source? No. The internal share-batch manifest and Radar snapshot have different models. A shared suffix is not a shared contract. Can every JSON comma use vocabulary splitting rules? No. Inside quotes it can be data. JSON has its own grammar; vocabulary splitting is not a general JSON/CSV parser. Is the 3000 threshold 3000 UTF-8 bytes? No. It counts Swift Characters, not encoded bytes, Unicode scalars or recording duration. Can unreadable CJK simply be re-encoded and handed off again? Do not repair blindly. Verify original encoding, destination contract and prior result. Re-encoding does not erase an attempt or duplicate risk. Does the fragment establish app import acceptance? No. It demonstrates strings, not a complete model, actual-version decoding, permission or device acceptance. Reading and source Term splitting/limits · JSON types/nulls · Format revision · One note handoff · Start · Privacy Evidence: Markdown writing/threshold , internal share manifest , Radar model .
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Check</th>
+<th>Expectation/boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T01</td>
+<td>CJK mixed</td>
+<td>Swift Character 3; UTF-8 bytes 7.</td>
+</tr>
+<tr>
+<td>T02</td>
+<td>Combining character</td>
+<td>Swift Character 1; UTF-8 bytes 3.</td>
+</tr>
+<tr>
+<td>T03</td>
+<td>Precomposed character</td>
+<td>Swift Character 1; UTF-8 bytes 2.</td>
+</tr>
+<tr>
+<td>T04</td>
+<td>Joined emoji</td>
+<td>Swift Character 1; UTF-8 bytes 25.</td>
+</tr>
+<tr>
+<td>T05</td>
+<td>Actual newline</td>
+<td>Swift Character 11; UTF-8 bytes 11.</td>
+</tr>
+<tr>
+<td>T06</td>
+<td>Literal backslash-n</td>
+<td>Swift Character 12; UTF-8 bytes 12.</td>
+</tr>
+<tr>
+<td>T07</td>
+<td>Quotes comma backslash</td>
+<td>Swift Character 9; UTF-8 bytes 9.</td>
+</tr>
+<tr>
+<td>T08</td>
+<td>CRLF</td>
+<td>Swift Character 3; UTF-8 bytes 4.</td>
+</tr>
+<tr>
+<td>T09</td>
+<td>3000 characters</td>
+<td>Swift Character 3000; UTF-8 bytes 9000.</td>
+</tr>
+<tr>
+<td>T10</td>
+<td>3001 characters</td>
+<td>Swift Character 3001; UTF-8 bytes 9003.</td>
+</tr>
+<tr>
+<td>D01</td>
+<td>Complete minimal model</td>
+<td>Radar decode true; utf8; not real import/authority.</td>
+</tr>
+<tr>
+<td>D02</td>
+<td>String delimiters and escaping</td>
+<td>Radar decode true; utf8; not real import/authority.</td>
+</tr>
+<tr>
+<td>D03</td>
+<td>Fragment is not snapshot</td>
+<td>Radar decode false; utf8; not real import/authority.</td>
+</tr>
+<tr>
+<td>D04</td>
+<td>Wrong date type</td>
+<td>Radar decode false; utf8; not real import/authority.</td>
+</tr>
+<tr>
+<td>D05</td>
+<td>Invalid calendar date</td>
+<td>Radar decode false; utf8; not real import/authority.</td>
+</tr>
+<tr>
+<td>D06</td>
+<td>Unescaped JSON newline</td>
+<td>Radar decode false; raw_unescaped_newline; not real import/authority.</td>
+</tr>
+<tr>
+<td>D07</td>
+<td>Consumer-specific encoding observation</td>
+<td>Radar decode true; utf16le_bom; not real import/authority.</td>
+</tr>
+<tr>
+<td>D08</td>
+<td>Model byte bound</td>
+<td>Radar decode false; oversize; not real import/authority.</td>
+</tr>
+<tr>
+<td>C01</td>
+<td>Internal manifest roundtrip</td>
+<td>batch_roundtrip: true; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>C02</td>
+<td>Manifest is not Radar</td>
+<td>batch_as_radar: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>C03</td>
+<td>Radar is not manifest</td>
+<td>radar_as_batch: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>C04</td>
+<td>Wrong items type</td>
+<td>wrong_items_type: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>H01</td>
+<td>Durable reservation</td>
+<td>normal: true; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>H02</td>
+<td>Do not reset attempted</td>
+<td>already_attempted: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>H03</td>
+<td>No empty-text reservation</td>
+<td>empty: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>H04</td>
+<td>Write failure is not success</td>
+<td>write_failure: false; synthetic temporary data only.</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>Long-note branch is source-reviewed</td>
+<td>handOff uses body.count&lt;=3000 for text, otherwise UTF-8 Markdown with heading/newlines. Host does not run Store.handOff; no CSV or universal transcoder.</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>Separate delimiter contracts</td>
+<td>Vocabulary splitting is not JSON/CSV grammar; commas may be string data. Do not split real bodies, rewrite fields/dates or repair originals.</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>PCM end is not text encoding</td>
+<td>noDataNow preserves block state; finish uses endOfStream, up to 16 calls with early exits. Not characters/bytes/duration/semantic segmentation; no audio conversion run.</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>Preserve originals and handoff state</td>
+<td>Readable display/file write/tail output does not prove completeness, import or remote completion. Re-encoding/renaming never resets reservations or grants resend authority; stop when unknown.</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
