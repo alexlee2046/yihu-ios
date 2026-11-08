@@ -72,3 +72,8 @@ No device/concurrency test or recovery feature is supplied; fixed guards only.
 The original completion method checks activeToken before export or cleanup. A stopped capture can still complete, while cancellation invalidates an old result. Matching failure also forwards failure; identical phase/text proves neither capture ownership nor authority or universal exactly-once. Memory success/export counts are not recording or file results.
 
 [See the filled example on the same-language active recapture guide](/en/guides/interruption-recapture-preflight/#syn-token-33). This remains a noindex,follow technical reference outside the150-URL reading export, without automatic recapture, callback injection or resend features.
+
+
+## SYN-ALR-48 meter versus completion ownership (still retired)
+
+The [same-language meter review](/en/guides/audio-level-not-accuracy-review/) uses synthetic values/owned temporary CAF only for level/write-state checks. Full meters, stale levels or identical words prove neither the current activeToken, final, identity/write authority nor delivery. captureCompleted checks ownership before export/cleanup; stop draining and cancel invalidation remain distinct. Do not join late results to a new capture. Preserve original SYN-TOKEN-33 forwarding; real capture/callbacks/concurrency/UI/ASR/network remain not_run, with no blind recapture/resend under uncertainty. Keep indexable: false/noindex,follow, no sitemap/standalone LLM section, no new download/Store/conversion card or changes to guards, audio code, authority or retired-page structure. The historical Chinese P4 conversion block stays unchanged; the English page has no such block.

@@ -5,6 +5,51 @@ description: "核短语音与长笔记不同RMS缩放、裁剪及显示范围；
 lang: zh
 ---
 
+## SYN-ALR-48 电平非准确率自检
+
+SYNTHETIC_EXAMPLE · pending · not_run。电平、真实内容、采集令牌与回执分账。
+
+[/samples/p27-audio-level-not-accuracy-review/README.md](/samples/p27-audio-level-not-accuracy-review/README.md) · [/samples/p27-audio-level-not-accuracy-review/preflight.zh.json](/samples/p27-audio-level-not-accuracy-review/preflight.zh.json) · [/samples/p27-audio-level-not-accuracy-review/preflight.en.json](/samples/p27-audio-level-not-accuracy-review/preflight.en.json)
+
+<div role="region" aria-label="SYN-ALR-48" tabindex="0">
+
+| ID | 检查 | 预期/边界 |
+| --- | --- | --- |
+| L01 | 空数组 | short≈0.000000; note≈0.000000; synthetic only |
+| L02 | 零值 | short≈0.000000; note≈0.000000; synthetic only |
+| L03 | 正DC | short≈0.020000; note≈0.120000; synthetic only |
+| L04 | 负DC | short≈0.020000; note≈0.120000; synthetic only |
+| L05 | 交替符号 | short≈0.020000; note≈0.120000; synthetic only |
+| L06 | 未饱和双缩放 | short≈0.100000; note≈0.600000; synthetic only |
+| L07 | 长条饱和 | short≈0.200000; note≈1.000000; synthetic only |
+| L08 | 半短满长 | short≈0.500000; note≈1.000000; synthetic only |
+| L09 | 双条满 | short≈1.000000; note≈1.000000; synthetic only |
+| L10 | 满幅样本 | short≈1.000000; note≈1.000000; synthetic only |
+| L11 | 有限越界值 | short≈1.000000; note≈1.000000; synthetic only |
+| L12 | 稀疏高值 | short≈1.000000; note≈1.000000; synthetic only |
+| L13 | 稀疏低值 | short≈0.141421; note≈0.848528; synthetic only |
+| L14 | 不同幅度 | short≈0.632456; note≈1.000000; synthetic only |
+| L15 | 同能量DC | short≈0.200000; note≈1.000000; synthetic only |
+| L16 | 同能量负DC | short≈0.200000; note≈1.000000; synthetic only |
+| L17 | 四点稀疏 | short≈0.200000; note≈1.000000; synthetic only |
+| L18 | 低幅混合 | short≈0.070711; note≈0.424264; synthetic only |
+| L19 | 饱和DC | short≈1.000000; note≈1.000000; synthetic only |
+| L20 | 极低有限值 | short≈0.010000; note≈0.060000; synthetic only |
+| S01 | 空输入保留旧条 | empty_retains: note≈0.600000; frames=2 |
+| S02 | 真零样本更新 | zero_updates: note≈0.000000; frames=4 |
+| S03 | 关闭后保留旧条 | closed_after_seed: note≈0.600000; frames=2 |
+| S04 | 无文件不更新 | closed_initial: note≈0.000000; frames=0 |
+| M01 | 电平不是识别/声纹 | 同RMS的DC、交替、稀疏向量可同条，不说明同一句话或本人；未跑ASR/声纹。 |
+| M02 | 缩放不校准 | 2与12不是dB SPL、风噪等级或概率；饱和会丢显示区分，不推荐硬件增益。 |
+| M03 | 显示与写入分账 | 长append仅写成功更新；空输入/无file可保旧level，关闭file守卫不等存储失败注入。计时读取不承诺UI无延迟。 |
+| M04 | 令牌先于完成 | captureCompleted先比activeToken再导出/清理；token只是本次关联，不是身份、写权或通用exactly-once。 |
+| M05 | stop与cancel分开 | stop可等待本次排空，cancel清activeToken；旧满条或迟到回调不证明新会话final或已送达。 |
+| M06 | 真实内容和许可另核 | 本包不收客户音频，不上传或重录；许可、原文、缺口、已保存/远端回执另核，未知不盲重试。 |
+
+</div>
+
+
+
 <h2 id="first-answer">电平有变化不等于说对了，条满也不是100%识别成功</h2>
 
 短语音PCM管线从样本RMS缩放并限制到0至1，长笔记写入路径用另一缩放系数。它们是电平显示，不是识别置信度、声纹身份、风噪等级或送达回执。不同路径同一条长也不能直接比较音质；本页不新增声学评分或校准工具。

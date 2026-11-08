@@ -10922,9 +10922,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/audio-level-not-accuracy-review/
 
-场景指南 · 相关使用指南 音量条能证明什么？RMS电平不是识别概率、风噪评分或送达 本页是源码/排障参考，示例不证明商店版已包含本页全部能力。若你需要已有工作台的语音草稿入口，可查看已核 0.1.0 商店版。 先做蓝牙四问预览 在 App Store 查看 · 0.1.0 已核美区商店，当前地区是否可获取以商店为准。安装不需 Mac 或自行签名；需你已有的工作台地址与账号，语音模型约 950 MB、按需下载。 电平有变化不等于说对了，条满也不是100%识别成功 短语音PCM管线从样本RMS缩放并限制到0至1，长笔记写入路径用另一缩放系数。它们是电平显示，不是识别置信度、声纹身份、风噪等级或送达回执。不同路径同一条长也不能直接比较音质；本页不新增声学评分或校准工具。 与无声排障、声纹和原话核对的区别 排障核哪里无声，声纹核便捷过滤范围，听核核实际内容；这里核 电平公式与UI显示最多能支持什么结论 。不采集真实音频或设置系统音量。 检查项 已核范围 人工复核 不应推断 短语音电平 RMS乘2后限制范围 显示比例与原始样本 0.5就是50%识别概率 长笔记电平 RMS乘12并上限1 不同路径缩放不同 同条长代表同音压/音质 上限裁剪 较大值可都显示满 信号与显示饱和区别 100%就每词正确 接近0 可能安静/尚无新样本等 实际状态、输入和错误 必定没权限/没录到任何内容 定时显示 读当前管线电平 显示时点与final分开 实时无延迟或全程已保存 RMS度量 样本能量统计 未校准设备/环境 标准dB SPL或噪声认证 文字与身份 ASR/声纹另有路径 实际结果和原文 有电平就识别/本人确认通过 交接证据 目标/回执仍另核 已保存与已送达分别看 电平截图代替业务完成 合成数值示意 用两个合成样本0.1与-0.1，RMS为0.1。短语音公式示意约0.2；长笔记缩放到1.2后裁剪为1。只是数学示意，不是麦克风实测、物理音压或路径对比成绩。 看到满条应继续核实际内容与错误，不从显示推导权限、模型就绪或目标选择。声音是敏感材料，公开检查不需要客户录音；本文未做设备、风噪或识别准确率验收。 FAQ 满条是否100%识别成功？ 不是。它是电平显示裁剪，不是ASR置信度。 两条路径同样长度可比较音质吗？ 不能直接比，缩放不同且未校准声学量。 零电平就能证明没授权吗？ 不能单独证明，应核实际授权、路由、采集和错误。 RMS是否标准分贝读数？ 不是本文提供的校准dB SPL测量，不推标准声学认证。 电平正常是否证明说话人正确或内容完整？ 不证明。声纹、原词、保存和转写结果分别核。 本文运行过噪声/麦克风测试吗？ 没有。合成数学示意不冒设备或真实场景成绩。 相关指南与源码 输入排障 · 声纹范围 · 音文材料 · 预览与final · 开始 · 隐私 短语音RMS · 长笔记电平 · 电平显示读取 SYN-LEVEL-35双管线补例 14组合成输入把电平缩放/上限裁剪与识别内容分开：同RMS的DC/正负交替可同条，不同RMS也能因不同系数同条。原长append只有写成功才更新，空块/失败可留旧level；原短rms空输入0不等真实UI无新块即清零。隔离buffer/file/lock不是设备/存储/声学校准测试。 转到同语户外/门店指南查看完整已填样例 。不从电平推标准声压、风噪等级、身份、准确率或送达，也不提供新的评分/诊断后端。
+场景指南 · 相关使用指南 音量条能证明什么？RMS电平不是识别概率、风噪评分或送达 本页是源码/排障参考，示例不证明商店版已包含本页全部能力。若你需要已有工作台的语音草稿入口，可查看已核 0.1.0 商店版。 先做蓝牙四问预览 在 App Store 查看 · 0.1.0 已核美区商店，当前地区是否可获取以商店为准。安装不需 Mac 或自行签名；需你已有的工作台地址与账号，语音模型约 950 MB、按需下载。 SYN-ALR-48 电平非准确率自检 SYNTHETIC_EXAMPLE · pending · not_run。电平、真实内容、采集令牌与回执分账。 /samples/p27-audio-level-not-accuracy-review/README.md · /samples/p27-audio-level-not-accuracy-review/preflight.zh.json · /samples/p27-audio-level-not-accuracy-review/preflight.en.json ID 检查 预期/边界 L01 空数组 short≈0.000000; note≈0.000000; synthetic only L02 零值 short≈0.000000; note≈0.000000; synthetic only L03 正DC short≈0.020000; note≈0.120000; synthetic only L04 负DC short≈0.020000; note≈0.120000; synthetic only L05 交替符号 short≈0.020000; note≈0.120000; synthetic only L06 未饱和双缩放 short≈0.100000; note≈0.600000; synthetic only L07 长条饱和 short≈0.200000; note≈1.000000; synthetic only L08 半短满长 short≈0.500000; note≈1.000000; synthetic only L09 双条满 short≈1.000000; note≈1.000000; synthetic only L10 满幅样本 short≈1.000000; note≈1.000000; synthetic only L11 有限越界值 short≈1.000000; note≈1.000000; synthetic only L12 稀疏高值 short≈1.000000; note≈1.000000; synthetic only L13 稀疏低值 short≈0.141421; note≈0.848528; synthetic only L14 不同幅度 short≈0.632456; note≈1.000000; synthetic only L15 同能量DC short≈0.200000; note≈1.000000; synthetic only L16 同能量负DC short≈0.200000; note≈1.000000; synthetic only L17 四点稀疏 short≈0.200000; note≈1.000000; synthetic only L18 低幅混合 short≈0.070711; note≈0.424264; synthetic only L19 饱和DC short≈1.000000; note≈1.000000; synthetic only L20 极低有限值 short≈0.010000; note≈0.060000; synthetic only S01 空输入保留旧条 empty_retains: note≈0.600000; frames=2 S02 真零样本更新 zero_updates: note≈0.000000; frames=4 S03 关闭后保留旧条 closed_after_seed: note≈0.600000; frames=2 S04 无文件不更新 closed_initial: note≈0.000000; frames=0 M01 电平不是识别/声纹 同RMS的DC、交替、稀疏向量可同条，不说明同一句话或本人；未跑ASR/声纹。 M02 缩放不校准 2与12不是dB SPL、风噪等级或概率；饱和会丢显示区分，不推荐硬件增益。 M03 显示与写入分账 长append仅写成功更新；空输入/无file可保旧level，关闭file守卫不等存储失败注入。计时读取不承诺UI无延迟。 M04 令牌先于完成 captureCompleted先比activeToken再导出/清理；token只是本次关联，不是身份、写权或通用exactly-once。 M05 stop与cancel分开 stop可等待本次排空，cancel清activeToken；旧满条或迟到回调不证明新会话final或已送达。 M06 真实内容和许可另核 本包不收客户音频，不上传或重录；许可、原文、缺口、已保存/远端回执另核，未知不盲重试。 电平有变化不等于说对了，条满也不是100%识别成功 短语音PCM管线从样本RMS缩放并限制到0至1，长笔记写入路径用另一缩放系数。它们是电平显示，不是识别置信度、声纹身份、风噪等级或送达回执。不同路径同一条长也不能直接比较音质；本页不新增声学评分或校准工具。 与无声排障、声纹和原话核对的区别 排障核哪里无声，声纹核便捷过滤范围，听核核实际内容；这里核 电平公式与UI显示最多能支持什么结论 。不采集真实音频或设置系统音量。 检查项 已核范围 人工复核 不应推断 短语音电平 RMS乘2后限制范围 显示比例与原始样本 0.5就是50%识别概率 长笔记电平 RMS乘12并上限1 不同路径缩放不同 同条长代表同音压/音质 上限裁剪 较大值可都显示满 信号与显示饱和区别 100%就每词正确 接近0 可能安静/尚无新样本等 实际状态、输入和错误 必定没权限/没录到任何内容 定时显示 读当前管线电平 显示时点与final分开 实时无延迟或全程已保存 RMS度量 样本能量统计 未校准设备/环境 标准dB SPL或噪声认证 文字与身份 ASR/声纹另有路径 实际结果和原文 有电平就识别/本人确认通过 交接证据 目标/回执仍另核 已保存与已送达分别看 电平截图代替业务完成 合成数值示意 用两个合成样本0.1与-0.1，RMS为0.1。短语音公式示意约0.2；长笔记缩放到1.2后裁剪为1。只是数学示意，不是麦克风实测、物理音压或路径对比成绩。 看到满条应继续核实际内容与错误，不从显示推导权限、模型就绪或目标选择。声音是敏感材料，公开检查不需要客户录音；本文未做设备、风噪或识别准确率验收。 FAQ 满条是否100%识别成功？ 不是。它是电平显示裁剪，不是ASR置信度。 两条路径同样长度可比较音质吗？ 不能直接比，缩放不同且未校准声学量。 零电平就能证明没授权吗？ 不能单独证明，应核实际授权、路由、采集和错误。 RMS是否标准分贝读数？ 不是本文提供的校准dB SPL测量，不推标准声学认证。 电平正常是否证明说话人正确或内容完整？ 不证明。声纹、原词、保存和转写结果分别核。 本文运行过噪声/麦克风测试吗？ 没有。合成数学示意不冒设备或真实场景成绩。 相关指南与源码 输入排障 · 声纹范围 · 音文材料 · 预览与final · 开始 · 隐私 短语音RMS · 长笔记电平 · 电平显示读取 SYN-LEVEL-35双管线补例 14组合成输入把电平缩放/上限裁剪与识别内容分开：同RMS的DC/正负交替可同条，不同RMS也能因不同系数同条。原长append只有写成功才更新，空块/失败可留旧level；原短rms空输入0不等真实UI无新块即清零。隔离buffer/file/lock不是设备/存储/声学校准测试。 转到同语户外/门店指南查看完整已填样例 。不从电平推标准声压、风噪等级、身份、准确率或送达，也不提供新的评分/诊断后端。
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>检查</th>
+<th>预期/边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L01</td>
+<td>空数组</td>
+<td>short≈0.000000; note≈0.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L02</td>
+<td>零值</td>
+<td>short≈0.000000; note≈0.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L03</td>
+<td>正DC</td>
+<td>short≈0.020000; note≈0.120000; synthetic only</td>
+</tr>
+<tr>
+<td>L04</td>
+<td>负DC</td>
+<td>short≈0.020000; note≈0.120000; synthetic only</td>
+</tr>
+<tr>
+<td>L05</td>
+<td>交替符号</td>
+<td>short≈0.020000; note≈0.120000; synthetic only</td>
+</tr>
+<tr>
+<td>L06</td>
+<td>未饱和双缩放</td>
+<td>short≈0.100000; note≈0.600000; synthetic only</td>
+</tr>
+<tr>
+<td>L07</td>
+<td>长条饱和</td>
+<td>short≈0.200000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L08</td>
+<td>半短满长</td>
+<td>short≈0.500000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L09</td>
+<td>双条满</td>
+<td>short≈1.000000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L10</td>
+<td>满幅样本</td>
+<td>short≈1.000000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L11</td>
+<td>有限越界值</td>
+<td>short≈1.000000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L12</td>
+<td>稀疏高值</td>
+<td>short≈1.000000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L13</td>
+<td>稀疏低值</td>
+<td>short≈0.141421; note≈0.848528; synthetic only</td>
+</tr>
+<tr>
+<td>L14</td>
+<td>不同幅度</td>
+<td>short≈0.632456; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L15</td>
+<td>同能量DC</td>
+<td>short≈0.200000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L16</td>
+<td>同能量负DC</td>
+<td>short≈0.200000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L17</td>
+<td>四点稀疏</td>
+<td>short≈0.200000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L18</td>
+<td>低幅混合</td>
+<td>short≈0.070711; note≈0.424264; synthetic only</td>
+</tr>
+<tr>
+<td>L19</td>
+<td>饱和DC</td>
+<td>short≈1.000000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L20</td>
+<td>极低有限值</td>
+<td>short≈0.010000; note≈0.060000; synthetic only</td>
+</tr>
+<tr>
+<td>S01</td>
+<td>空输入保留旧条</td>
+<td>empty_retains: note≈0.600000; frames=2</td>
+</tr>
+<tr>
+<td>S02</td>
+<td>真零样本更新</td>
+<td>zero_updates: note≈0.000000; frames=4</td>
+</tr>
+<tr>
+<td>S03</td>
+<td>关闭后保留旧条</td>
+<td>closed_after_seed: note≈0.600000; frames=2</td>
+</tr>
+<tr>
+<td>S04</td>
+<td>无文件不更新</td>
+<td>closed_initial: note≈0.000000; frames=0</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>电平不是识别/声纹</td>
+<td>同RMS的DC、交替、稀疏向量可同条，不说明同一句话或本人；未跑ASR/声纹。</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>缩放不校准</td>
+<td>2与12不是dB SPL、风噪等级或概率；饱和会丢显示区分，不推荐硬件增益。</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>显示与写入分账</td>
+<td>长append仅写成功更新；空输入/无file可保旧level，关闭file守卫不等存储失败注入。计时读取不承诺UI无延迟。</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>令牌先于完成</td>
+<td>captureCompleted先比activeToken再导出/清理；token只是本次关联，不是身份、写权或通用exactly-once。</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>stop与cancel分开</td>
+<td>stop可等待本次排空，cancel清activeToken；旧满条或迟到回调不证明新会话final或已送达。</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>真实内容和许可另核</td>
+<td>本包不收客户音频，不上传或重录；许可、原文、缺口、已保存/远端回执另核，未知不盲重试。</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -10991,9 +11153,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/audio-level-not-accuracy-review/
 
-All scenarios · Related practical guide What an audio meter proves: RMS is not accuracy, wind score or delivery A moving meter is not correct speech, and full scale is not 100% recognition Short-speech PCM scales sample RMS into a 0–1 range; long-note writes use another multiplier. These are level displays, not recognition confidence, voiceprint identity, wind rating or delivery receipts. Matching bar lengths across paths do not directly compare sound quality. No acoustic scoring/calibration tool is added. Different from silence, voiceprint and original-word review Diagnosis checks missing audio, voiceprint review checks filtering scope, listening checks content. Here what meter formulas/displays establish matters. No real capture or system-volume change occurs. Check Verified scope Manual review Not established Short speech RMS multiplied by 2, bounded Display scale/raw samples 0.5 means 50% recognition confidence Long note RMS multiplied by 12, capped at 1 Different path scaling Same length means same pressure/quality Clipping Many large values look full Signal versus display saturation Full means every word correct Near zero Can be quiet/no new samples etc. Actual state/input/errors Permission absent or nothing captured Timer display Reads current pipeline level Display time versus final Zero latency/all audio saved RMS Sample-energy statistic No device/environment calibration Standard dB SPL/noise certification Text/identity Separate ASR/voiceprint paths Actual results/originals Energy proves recognition/speaker match Handoff Target/receipt separately checked Saved versus delivered Screenshot proves business completion Synthetic arithmetic Two synthetic samples 0.1 and -0.1 have RMS 0.1. The short-speech illustration is about 0.2; long-note scaling gives 1.2 capped to 1. This is math, not microphone measurement, physical pressure or comparative performance. Inspect real content/errors even with a full meter. Display does not establish permission, model readiness or selected target. Public checks need no customer recordings; no device/wind/accuracy test ran. FAQ Does full scale mean 100% recognition? No. Display clipping is not ASR confidence. Can equal bars compare path quality? Not directly; scaling differs and no acoustic calibration is supplied. Does zero prove no permission? Not independently. Review permission, route, capture and errors. Is RMS a standard decibel reading? No calibrated dB SPL measurement/certification is provided here. Does a normal meter prove identity or complete content? No. Filtering, original words, saving and transcription differ. Were noise/microphone tests run? No. Synthetic arithmetic is not actual device/scenario evidence. Reading and source Input diagnosis · Voiceprint scope · Audio/text evidence · Preview/final · Start · Privacy Short-speech RMS · Long-note levels · Meter reads SYN-LEVEL-35 two-pipeline example Fourteen synthetic inputs separate scaling/display saturation from recognized content: DC and alternating vectors can share RMS, while different RMS can share a bar under different gains. Original note append updates only after a successful write; empty/failed input can retain a previous level. An empty short-function result is not a live UI refresh guarantee. Buffer/file/lock spies are not device, storage or acoustic calibration tests. Continue to the filled example on the same-language outdoor/store guide . No pressure/noise rating, identity, accuracy or delivery is inferred; no new scoring/diagnostic backend is supplied.
+All scenarios · Related practical guide What an audio meter proves: RMS is not accuracy, wind score or delivery SYN-ALR-48 audio level versus accuracy preflight SYNTHETIC_EXAMPLE · pending · not_run. Levels, real content, capture tokens and receipts differ. /samples/p27-audio-level-not-accuracy-review/README.md · /samples/p27-audio-level-not-accuracy-review/preflight.zh.json · /samples/p27-audio-level-not-accuracy-review/preflight.en.json ID Check Expectation/boundary L01 Empty vector short≈0.000000; note≈0.000000; synthetic only L02 Zeros short≈0.000000; note≈0.000000; synthetic only L03 Positive DC short≈0.020000; note≈0.120000; synthetic only L04 Negative DC short≈0.020000; note≈0.120000; synthetic only L05 Alternating signs short≈0.020000; note≈0.120000; synthetic only L06 Two unsaturated gains short≈0.100000; note≈0.600000; synthetic only L07 Long meter saturated short≈0.200000; note≈1.000000; synthetic only L08 Half short, full long short≈0.500000; note≈1.000000; synthetic only L09 Both full short≈1.000000; note≈1.000000; synthetic only L10 Full-scale samples short≈1.000000; note≈1.000000; synthetic only L11 Finite out-of-range values short≈1.000000; note≈1.000000; synthetic only L12 Sparse high value short≈1.000000; note≈1.000000; synthetic only L13 Sparse low value short≈0.141421; note≈0.848528; synthetic only L14 Unequal amplitudes short≈0.632456; note≈1.000000; synthetic only L15 Equal-energy DC short≈0.200000; note≈1.000000; synthetic only L16 Equal-energy negative DC short≈0.200000; note≈1.000000; synthetic only L17 Four-point sparse vector short≈0.200000; note≈1.000000; synthetic only L18 Low mixed amplitude short≈0.070711; note≈0.424264; synthetic only L19 Saturated DC short≈1.000000; note≈1.000000; synthetic only L20 Small finite values short≈0.010000; note≈0.060000; synthetic only S01 Empty input retains meter empty_retains: note≈0.600000; frames=2 S02 Zero samples update zero_updates: note≈0.000000; frames=4 S03 Closed file retains prior meter closed_after_seed: note≈0.600000; frames=2 S04 No file means no update closed_initial: note≈0.000000; frames=0 M01 Meter is not ASR or identity DC, alternating and sparse vectors can share RMS/meters without the same words or speaker; no ASR/voiceprint run. M02 Gain is not calibration Gains 2/12 are not dB SPL, wind ratings or probabilities; clipping loses display distinction, not a hardware-gain recommendation. M03 Display versus writing Long append updates after successful writes; empty input/no file can retain level. Closed-file guard is not injected storage failure; timer reads do not promise zero UI latency. M04 Token before completion captureCompleted compares activeToken before export/cleanup; token is capture association, not identity, write authority or universal exactly-once. M05 Separate stop and cancel Stop may await this drain; cancel clears activeToken. Old full meters or late callbacks prove neither a new final nor delivery. M06 Review real content and authority separately No customer audio, upload or recapture. Check authority, originals, gaps, saved/remote receipts separately; no blind retry when unknown. A moving meter is not correct speech, and full scale is not 100% recognition Short-speech PCM scales sample RMS into a 0–1 range; long-note writes use another multiplier. These are level displays, not recognition confidence, voiceprint identity, wind rating or delivery receipts. Matching bar lengths across paths do not directly compare sound quality. No acoustic scoring/calibration tool is added. Different from silence, voiceprint and original-word review Diagnosis checks missing audio, voiceprint review checks filtering scope, listening checks content. Here what meter formulas/displays establish matters. No real capture or system-volume change occurs. Check Verified scope Manual review Not established Short speech RMS multiplied by 2, bounded Display scale/raw samples 0.5 means 50% recognition confidence Long note RMS multiplied by 12, capped at 1 Different path scaling Same length means same pressure/quality Clipping Many large values look full Signal versus display saturation Full means every word correct Near zero Can be quiet/no new samples etc. Actual state/input/errors Permission absent or nothing captured Timer display Reads current pipeline level Display time versus final Zero latency/all audio saved RMS Sample-energy statistic No device/environment calibration Standard dB SPL/noise certification Text/identity Separate ASR/voiceprint paths Actual results/originals Energy proves recognition/speaker match Handoff Target/receipt separately checked Saved versus delivered Screenshot proves business completion Synthetic arithmetic Two synthetic samples 0.1 and -0.1 have RMS 0.1. The short-speech illustration is about 0.2; long-note scaling gives 1.2 capped to 1. This is math, not microphone measurement, physical pressure or comparative performance. Inspect real content/errors even with a full meter. Display does not establish permission, model readiness or selected target. Public checks need no customer recordings; no device/wind/accuracy test ran. FAQ Does full scale mean 100% recognition? No. Display clipping is not ASR confidence. Can equal bars compare path quality? Not directly; scaling differs and no acoustic calibration is supplied. Does zero prove no permission? Not independently. Review permission, route, capture and errors. Is RMS a standard decibel reading? No calibrated dB SPL measurement/certification is provided here. Does a normal meter prove identity or complete content? No. Filtering, original words, saving and transcription differ. Were noise/microphone tests run? No. Synthetic arithmetic is not actual device/scenario evidence. Reading and source Input diagnosis · Voiceprint scope · Audio/text evidence · Preview/final · Start · Privacy Short-speech RMS · Long-note levels · Meter reads SYN-LEVEL-35 two-pipeline example Fourteen synthetic inputs separate scaling/display saturation from recognized content: DC and alternating vectors can share RMS, while different RMS can share a bar under different gains. Original note append updates only after a successful write; empty/failed input can retain a previous level. An empty short-function result is not a live UI refresh guarantee. Buffer/file/lock spies are not device, storage or acoustic calibration tests. Continue to the filled example on the same-language outdoor/store guide . No pressure/noise rating, identity, accuracy or delivery is inferred; no new scoring/diagnostic backend is supplied.
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Check</th>
+<th>Expectation/boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L01</td>
+<td>Empty vector</td>
+<td>short≈0.000000; note≈0.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L02</td>
+<td>Zeros</td>
+<td>short≈0.000000; note≈0.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L03</td>
+<td>Positive DC</td>
+<td>short≈0.020000; note≈0.120000; synthetic only</td>
+</tr>
+<tr>
+<td>L04</td>
+<td>Negative DC</td>
+<td>short≈0.020000; note≈0.120000; synthetic only</td>
+</tr>
+<tr>
+<td>L05</td>
+<td>Alternating signs</td>
+<td>short≈0.020000; note≈0.120000; synthetic only</td>
+</tr>
+<tr>
+<td>L06</td>
+<td>Two unsaturated gains</td>
+<td>short≈0.100000; note≈0.600000; synthetic only</td>
+</tr>
+<tr>
+<td>L07</td>
+<td>Long meter saturated</td>
+<td>short≈0.200000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L08</td>
+<td>Half short, full long</td>
+<td>short≈0.500000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L09</td>
+<td>Both full</td>
+<td>short≈1.000000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L10</td>
+<td>Full-scale samples</td>
+<td>short≈1.000000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L11</td>
+<td>Finite out-of-range values</td>
+<td>short≈1.000000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L12</td>
+<td>Sparse high value</td>
+<td>short≈1.000000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L13</td>
+<td>Sparse low value</td>
+<td>short≈0.141421; note≈0.848528; synthetic only</td>
+</tr>
+<tr>
+<td>L14</td>
+<td>Unequal amplitudes</td>
+<td>short≈0.632456; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L15</td>
+<td>Equal-energy DC</td>
+<td>short≈0.200000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L16</td>
+<td>Equal-energy negative DC</td>
+<td>short≈0.200000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L17</td>
+<td>Four-point sparse vector</td>
+<td>short≈0.200000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L18</td>
+<td>Low mixed amplitude</td>
+<td>short≈0.070711; note≈0.424264; synthetic only</td>
+</tr>
+<tr>
+<td>L19</td>
+<td>Saturated DC</td>
+<td>short≈1.000000; note≈1.000000; synthetic only</td>
+</tr>
+<tr>
+<td>L20</td>
+<td>Small finite values</td>
+<td>short≈0.010000; note≈0.060000; synthetic only</td>
+</tr>
+<tr>
+<td>S01</td>
+<td>Empty input retains meter</td>
+<td>empty_retains: note≈0.600000; frames=2</td>
+</tr>
+<tr>
+<td>S02</td>
+<td>Zero samples update</td>
+<td>zero_updates: note≈0.000000; frames=4</td>
+</tr>
+<tr>
+<td>S03</td>
+<td>Closed file retains prior meter</td>
+<td>closed_after_seed: note≈0.600000; frames=2</td>
+</tr>
+<tr>
+<td>S04</td>
+<td>No file means no update</td>
+<td>closed_initial: note≈0.000000; frames=0</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>Meter is not ASR or identity</td>
+<td>DC, alternating and sparse vectors can share RMS/meters without the same words or speaker; no ASR/voiceprint run.</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>Gain is not calibration</td>
+<td>Gains 2/12 are not dB SPL, wind ratings or probabilities; clipping loses display distinction, not a hardware-gain recommendation.</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>Display versus writing</td>
+<td>Long append updates after successful writes; empty input/no file can retain level. Closed-file guard is not injected storage failure; timer reads do not promise zero UI latency.</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>Token before completion</td>
+<td>captureCompleted compares activeToken before export/cleanup; token is capture association, not identity, write authority or universal exactly-once.</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>Separate stop and cancel</td>
+<td>Stop may await this drain; cancel clears activeToken. Old full meters or late callbacks prove neither a new final nor delivery.</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>Review real content and authority separately</td>
+<td>No customer audio, upload or recapture. Check authority, originals, gaps, saved/remote receipts separately; no blind retry when unknown.</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
