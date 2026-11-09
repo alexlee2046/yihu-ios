@@ -20,4 +20,24 @@ enum BenchsideStyle {
     static let onAccent = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark ? .black : .white
     })
+    static let accentSoft = accent.opacity(0.12)
+    static let accentBorder = accent.opacity(0.28)
+
+    @ViewBuilder
+    static func chromeIcon(_ systemName: String, active: Bool = false) -> some View {
+        Image(systemName: systemName)
+            .font(.system(size: 14, weight: .semibold))
+            .foregroundStyle(active ? accent : ink)
+            .frame(width: 32, height: 32)
+            .background(
+                Circle()
+                    .fill(active ? accentSoft : surfaceRaised)
+            )
+            .overlay(
+                Circle()
+                    .strokeBorder(active ? accentBorder : border.opacity(0.45), lineWidth: 0.5)
+            )
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
+    }
 }

@@ -191,7 +191,10 @@ private struct CollieRootView: View {
                 }
             }
         } label: {
-            Image(systemName: shareTray.isImportingImage ? "hourglass" : "camera").frame(width: 44, height: 44)
+            BenchsideStyle.chromeIcon(
+                shareTray.isImportingImage ? "hourglass" : "camera",
+                active: shareTray.isImportingImage
+            )
         }
         .accessibilityLabel(radarText("图片暂存"))
         .accessibilityIdentifier("collie-diagnostic-photo")
@@ -218,34 +221,49 @@ private struct CollieRootView: View {
     }
 
     private var workbenchHeader: some View {
-        VStack(spacing: 4) {
-            HStack(spacing: 8) {
-                Text(selectedRadar.flatMap { id in radar.workbenches.first { $0.id == id }?.name } ?? radarText("一呼"))
-                    .font(.headline.weight(.bold))
-                    .lineLimit(1)
+        VStack(spacing: 0) {
+            HStack(spacing: 4) {
+                HStack(spacing: 7) {
+                    Circle()
+                        .fill(BenchsideStyle.accent)
+                        .frame(width: 7, height: 7)
+                        .accessibilityHidden(true)
+                    Text(selectedRadar.flatMap { id in radar.workbenches.first { $0.id == id }?.name } ?? radarText("一呼"))
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(BenchsideStyle.ink)
+                        .lineLimit(1)
+                }
+                .padding(.leading, 4)
                 Spacer(minLength: 8)
                 if let id = selectedRadar, let item = radar.workbenches.first(where: { $0.id == id }) {
                     CollieRadarActions(store: radar, item: item, presentation: radarPresentation)
                 } else if webSession != nil {
                     diagnosticPhotoMenu
                     Button { if let webSession { shellPresentation.openNotes(in: webSession, voice: voice) } } label: {
-                        Image(systemName: "waveform").frame(width: 44, height: 44)
+                        BenchsideStyle.chromeIcon("waveform")
                     }
+                    .buttonStyle(.plain)
                     .accessibilityLabel(radarText("语音记录"))
                     .accessibilityIdentifier("collie-voice-notes")
                     Button { shellPresentation.settingsPresented = true } label: {
-                        Image(systemName: "gearshape").frame(width: 44, height: 44)
+                        BenchsideStyle.chromeIcon("gearshape")
                     }
+                    .buttonStyle(.plain)
                     .accessibilityLabel(radarText("一呼设置"))
                     .accessibilityIdentifier("collie-connection-settings")
                 }
             }
             shortcutBar
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 4)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 2)
         .background(BenchsideStyle.surface)
-        .overlay(alignment: .bottom) { Divider().accessibilityHidden(true) }
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .fill(BenchsideStyle.border.opacity(0.45))
+                .frame(height: 0.5)
+                .accessibilityHidden(true)
+        }
         .tint(BenchsideStyle.accent)
     }
 
@@ -1187,32 +1205,35 @@ struct CollieVoiceBar: View {
                 if voice.isRecording {
                     Circle()
                         .fill(BenchsideStyle.accent.opacity(0.18))
-                        .frame(width: 76, height: 76)
+                        .frame(width: 72, height: 72)
                         .scaleEffect(reduceMotion ? 1 : 1 + CGFloat(voice.level) * 0.12)
                     Circle()
                         .fill(BenchsideStyle.accent)
-                        .frame(width: 58, height: 58)
+                        .frame(width: 54, height: 54)
+                        .overlay(Circle().strokeBorder(.white.opacity(0.28), lineWidth: 1))
                     Image(systemName: "waveform")
-                        .font(.title2.weight(.semibold))
+                        .font(.title3.weight(.semibold))
                         .foregroundStyle(BenchsideStyle.onAccent)
                 } else if voice.showsProgressIndicator {
                     Circle()
                         .fill(BenchsideStyle.surfaceRaised)
-                        .frame(width: 58, height: 58)
+                        .frame(width: 52, height: 52)
                         .overlay { Circle().stroke(BenchsideStyle.border, lineWidth: 1) }
                     ProgressView()
                         .tint(BenchsideStyle.accent)
                 } else {
                     Circle()
                         .fill(BenchsideStyle.accent)
-                        .frame(width: 58, height: 58)
+                        .frame(width: 52, height: 52)
+                        .overlay(Circle().strokeBorder(.white.opacity(0.28), lineWidth: 1))
+                        .overlay(Circle().stroke(BenchsideStyle.surface.opacity(0.85), lineWidth: 1.5))
                     Image(systemName: "mic.fill")
-                        .font(.title2.weight(.semibold))
+                        .font(.title3.weight(.semibold))
                         .foregroundStyle(BenchsideStyle.onAccent)
                 }
             }
-            .frame(width: 76, height: 76)
-            .shadow(color: .black.opacity(voice.phase == .ready ? 0.18 : 0), radius: 12, y: 5)
+            .frame(width: voice.isRecording ? 72 : 60, height: voice.isRecording ? 72 : 60)
+            .shadow(color: .black.opacity(voice.phase == .ready ? 0.16 : 0), radius: 10, y: 4)
             .contentShape(Circle())
             .gesture(holdGesture)
             .allowsHitTesting(voice.phase == .ready || voice.phase == .preparing || voice.isRecording)
@@ -1592,11 +1613,20 @@ struct CollieConnectionErrorView: View {
                         .accessibilityIdentifier("collie-web-change-workbench")
                 }
             }
-            .padding(28)
+            .padding(24)
             .frame(maxWidth: 420)
+            .background(
+                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                    .fill(BenchsideStyle.surfaceRaised)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                    .strokeBorder(BenchsideStyle.border.opacity(0.45), lineWidth: 0.5)
+            )
+            .padding(.horizontal, 16)
             .frame(maxWidth: .infinity)
         }
-        .contentMargins(.vertical, 56, for: .scrollContent)
+        .contentMargins(.vertical, 40, for: .scrollContent)
         .background(BenchsideStyle.canvas)
         .tint(BenchsideStyle.accent)
     }

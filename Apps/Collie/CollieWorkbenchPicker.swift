@@ -22,38 +22,44 @@ struct CollieWorkbenchShortcutBar: View {
         HStack(spacing: 0) {
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 4) {
+                    HStack(spacing: 6) {
                         if !visible.contains(where: { $0.id == selected }),
                            let current = items.first(where: { $0.id == selected }) {
                             Text(current.name)
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(BenchsideStyle.ink)
                                 .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(Capsule().fill(BenchsideStyle.surfaceRaised))
+                                .overlay(Capsule().strokeBorder(BenchsideStyle.border.opacity(0.45), lineWidth: 0.5))
                                 .frame(maxWidth: 180, minHeight: 44)
-                                .padding(.horizontal, 8)
                         }
                         ForEach(visible) { item in
+                            let isSelected = selected == item.id
                             Button { select(item.id) } label: {
                                 Text(item.name)
-                                    .font(.subheadline.weight(selected == item.id ? .semibold : .regular))
-                                    .foregroundStyle(selected == item.id ? BenchsideStyle.accent : BenchsideStyle.secondary)
+                                    .font(.subheadline.weight(isSelected ? .semibold : .medium))
+                                    .foregroundStyle(isSelected ? BenchsideStyle.accent : BenchsideStyle.secondary)
                                     .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
                                     .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? 240 : 200)
-                                    .padding(.horizontal, 10)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(
+                                        Capsule()
+                                            .fill(isSelected ? BenchsideStyle.accentSoft : BenchsideStyle.surfaceRaised.opacity(0.72))
+                                    )
+                                    .overlay(
+                                        Capsule()
+                                            .strokeBorder(isSelected ? BenchsideStyle.accentBorder : BenchsideStyle.border.opacity(0.35), lineWidth: isSelected ? 0.8 : 0.5)
+                                    )
                                     .frame(minHeight: 44)
                                     .contentShape(Rectangle())
-                                    .overlay(alignment: .bottom) {
-                                        if selected == item.id {
-                                            Capsule().fill(BenchsideStyle.accent).frame(height: 2)
-                                                .padding(.horizontal, 10)
-                                                .accessibilityHidden(true)
-                                        }
-                                    }
                             }
                             .buttonStyle(.plain)
                             .id(item.id)
                             .accessibilityIdentifier("collie-shortcut-" + item.id)
-                            .accessibilityAddTraits(selected == item.id ? .isSelected : [])
+                            .accessibilityAddTraits(isSelected ? .isSelected : [])
                         }
                     }
                 }
@@ -67,11 +73,7 @@ struct CollieWorkbenchShortcutBar: View {
             // rather than scrolling with the outgoing label measurements.
             .id(selected)
             Button(action: openAll) {
-                Image(systemName: "square.grid.2x2")
-                    .font(.subheadline)
-                    .foregroundStyle(BenchsideStyle.secondary)
-                    .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
+                BenchsideStyle.chromeIcon("square.grid.2x2")
             }
             .buttonStyle(.plain)
             .accessibilityLabel(radarText("全部工作台"))

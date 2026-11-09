@@ -24,9 +24,17 @@ struct CollieRadarActions: View {
             Button(radarText("显示与数据源"), systemImage: "slider.horizontal.3") { presentation.configuring = true }
         } label: {
             Group {
-                if store.refreshing.contains(item.id) { ProgressView() }
-                else { Image(systemName: "ellipsis") }
-            }.frame(width: 44, height: 44)
+                if store.refreshing.contains(item.id) {
+                    ProgressView()
+                        .controlSize(.small)
+                        .frame(width: 32, height: 32)
+                        .background(Circle().fill(BenchsideStyle.surfaceRaised))
+                        .overlay(Circle().strokeBorder(BenchsideStyle.border.opacity(0.45), lineWidth: 0.5))
+                        .frame(width: 44, height: 44)
+                } else {
+                    BenchsideStyle.chromeIcon("ellipsis")
+                }
+            }
         }
         .accessibilityLabel(radarText("工作台操作"))
         .accessibilityIdentifier("collie-radar-actions")
@@ -49,25 +57,34 @@ struct CollieRadarView: View {
             if let record {
                 VStack(spacing: 0) {
                     HStack(spacing: 8) {
-                        Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
+                        Image(systemName: "magnifyingglass")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(.secondary)
                         TextField(radarText("搜索项目与待办"), text: searchBinding)
+                            .font(.subheadline)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                             .accessibilityIdentifier("collie-radar-search")
                         if !(record.display.searchText ?? "").isEmpty {
                             Button { searchBinding.wrappedValue = "" } label: {
                                 Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.secondary)
                                     .frame(minWidth: 44, minHeight: 44)
                             }
                             .accessibilityLabel(radarText("清空搜索"))
                         }
                     }
-                    .padding(12)
-                    .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 12))
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, 12)
                     .padding(.vertical, 8)
+                    .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .strokeBorder(BenchsideStyle.border.opacity(0.45), lineWidth: 0.5)
+                    )
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 6)
                     ScrollView {
-                        VStack(alignment: .leading, spacing: record.display.compact ? 12 : 20) {
+                        VStack(alignment: .leading, spacing: record.display.compact ? 10 : 14) {
                             Picker(radarText("视图"), selection: pageBinding) {
                                 Text(radarText("管理总览")).tag(CollieRadarDisplay.Page.overview)
                                 Text(radarText("项目")).tag(CollieRadarDisplay.Page.projects)
@@ -271,31 +288,110 @@ struct CollieRadarView: View {
 
     @ViewBuilder
     private func snapshotContent(_ snapshot: CollieRadarSnapshot, display: CollieRadarDisplay) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            if snapshot.source_refreshing == true, store.refreshing.contains(id) {
-                Text(radarText("已显示上次读取结果，数据源更新完成后会自动更新。"))
-                    .font(.footnote).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 4) {
+                if snapshot.source_refreshing == true, store.refreshing.contains(id) {
+                    Text(radarText("已显示上次读取结果，数据源更新完成后会自动更新。"))
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
+                Label(snapshot.date_str, systemImage: snapshot.isOutdated || snapshot.isFutureDated ? "clock.badge.exclamationmark" : "clock")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(snapshot.isOutdated || snapshot.isFutureDated ? Color.orange : BenchsideStyle.secondary)
+                if snapshot.isFutureDated {
+                    Text(radarText("快照时间在未来，请检查数据源的时间和时区。"))
+                        .font(.footnote).foregroundStyle(.orange)
+                }
+                if snapshot.isOutdated {
+                    Text(radarText("快照已过期，请刷新或重新导入。"))
+                        .font(.footnote).foregroundStyle(.orange)
+                }
+                if snapshot.tasks != nil {
+                    Text(radarText("任务状态来自台账原文；刷新重新读取配置的数据源。"))
+                        .font(.caption2).foregroundStyle(.secondary)
+                } else {
+                    Text(radarText("此快照未提供完整台账，只包含来源提供的待处理项。"))
+                        .font(.caption2).foregroundStyle(.secondary)
+                }
+                Text(radarText("代码更新时间仅供参考，不代表任务停工或完成。"))
+                    .font(.caption2).foregroundStyle(.secondary)
             }
-            Label(snapshot.date_str, systemImage: snapshot.isOutdated || snapshot.isFutureDated ? "clock.badge.exclamationmark" : "clock")
-                .font(.caption).foregroundStyle(snapshot.isOutdated || snapshot.isFutureDated ? Color.orange : BenchsideStyle.secondary)
-            if snapshot.isFutureDated {
-                Text(radarText("快照时间在未来，请检查数据源的时间和时区。"))
-                    .font(.footnote).foregroundStyle(.orange)
+            Divider()
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    Picker(radarText("筛选项目"), selection: projectBinding) {
+                        Text(radarText("所有项目")).tag("")
+                        ForEach(snapshot.projectNames, id: \.self) { key in
+                            Text(snapshot.projectName(key)).tag(key)
+                        }
+                        if !display.project.isEmpty, !snapshot.projectNames.contains(display.project) {
+                            Text(display.project).tag(display.project)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .frame(minHeight: 44)
+                    .padding(.horizontal, 6)
+                    .background(Capsule().fill(display.project.isEmpty ? BenchsideStyle.surfaceMuted : BenchsideStyle.accentSoft))
+                    Picker(radarText("筛选状态"), selection: statusBinding) {
+                        Text(radarText("所有状态")).tag("")
+                        ForEach(snapshot.allTaskStatuses, id: \.self) { status in
+                            Text(status).tag(status)
+                        }
+                        if let status = display.status, !status.isEmpty, !snapshot.allTaskStatuses.contains(status) {
+                            Text(status).tag(status)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .frame(minHeight: 44)
+                    .padding(.horizontal, 6)
+                    .background(Capsule().fill((display.status ?? "").isEmpty ? BenchsideStyle.surfaceMuted : BenchsideStyle.accentSoft))
+                    .accessibilityIdentifier("collie-radar-status-filter")
+                    Picker(radarText("筛选优先级"), selection: priorityBinding) {
+                        Text(radarText("所有优先级")).tag("")
+                        ForEach(snapshot.allPriorities, id: \.self) { Text($0).tag($0) }
+                        if let priority = display.priority, !priority.isEmpty, !snapshot.allPriorities.contains(priority) {
+                            Text(priority).tag(priority)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .frame(minHeight: 44)
+                    .padding(.horizontal, 6)
+                    .background(Capsule().fill((display.priority ?? "").isEmpty ? BenchsideStyle.surfaceMuted : BenchsideStyle.accentSoft))
+                    .accessibilityIdentifier("collie-radar-priority-filter")
+                    if !display.project.isEmpty || !(display.status ?? "").isEmpty || !(display.priority ?? "").isEmpty ||
+                       !(display.searchText ?? "").isEmpty || display.showHistory == true || display.onlyMentioningMe == true {
+                        Button(radarText("清空筛选")) {
+                            guard var item = record else { return }
+                            item.display.project = ""
+                            item.display.status = nil
+                            item.display.priority = nil
+                            item.display.showHistory = false
+                            item.display.onlyMentioningMe = false
+                            item.display.searchText = nil
+                            store.update(item)
+                        }
+                        .font(.subheadline.weight(.medium))
+                        .padding(.horizontal, 12)
+                        .frame(minHeight: 44)
+                        .background(Capsule().fill(BenchsideStyle.surfaceMuted))
+                        .accessibilityIdentifier("collie-radar-clear-filters")
+                    }
+                }
             }
-            if snapshot.isOutdated {
-                Text(radarText("快照已过期，请刷新或重新导入。"))
-                    .font(.footnote).foregroundStyle(.orange)
+            VStack(spacing: 6) {
+                Toggle(radarText("包含已完成／搁置"), isOn: historyBinding)
+                    .font(.subheadline)
+                    .accessibilityIdentifier("collie-radar-history")
+                Toggle(radarText("仅看需我处理（含提及 Alex）"), isOn: mentioningMeBinding)
+                    .font(.subheadline)
+                    .accessibilityIdentifier("collie-radar-mentioning-me")
             }
-            if snapshot.tasks != nil {
-                Text(radarText("任务状态来自台账原文；刷新重新读取配置的数据源。"))
-                    .font(.caption).foregroundStyle(.secondary)
-            } else {
-                Text(radarText("此快照未提供完整台账，只包含来源提供的待处理项。"))
-                    .font(.caption).foregroundStyle(.secondary)
-            }
-            Text(radarText("代码更新时间仅供参考，不代表任务停工或完成。"))
-                .font(.caption).foregroundStyle(.secondary)
         }
+        .padding(12)
+        .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .strokeBorder(BenchsideStyle.border.opacity(0.4), lineWidth: 0.5)
+        )
         if display.page == .overview {
             if snapshot.colab_unavailable == true {
                 Label("Colab 数据读取失败；台账仍可查看，请刷新重试。", systemImage: "exclamationmark.triangle")
@@ -303,55 +399,6 @@ struct CollieRadarView: View {
             } else if let colab = snapshot.colab {
                 colabContent(colab)
             }
-        }
-        Picker(radarText("筛选项目"), selection: projectBinding) {
-            Text(radarText("所有项目")).tag("")
-            ForEach(snapshot.projectNames, id: \.self) { key in
-                Text(snapshot.projectName(key)).tag(key)
-            }
-            if !display.project.isEmpty, !snapshot.projectNames.contains(display.project) {
-                Text(display.project).tag(display.project)
-            }
-        }
-        .pickerStyle(.menu)
-        Picker(radarText("筛选状态"), selection: statusBinding) {
-            Text(radarText("所有状态")).tag("")
-            ForEach(snapshot.allTaskStatuses, id: \.self) { status in
-                Text(status).tag(status)
-            }
-            if let status = display.status, !status.isEmpty, !snapshot.allTaskStatuses.contains(status) {
-                Text(status).tag(status)
-            }
-        }
-        .pickerStyle(.menu)
-        .accessibilityIdentifier("collie-radar-status-filter")
-        Picker(radarText("筛选优先级"), selection: priorityBinding) {
-            Text(radarText("所有优先级")).tag("")
-            ForEach(snapshot.allPriorities, id: \.self) { Text($0).tag($0) }
-            if let priority = display.priority, !priority.isEmpty, !snapshot.allPriorities.contains(priority) {
-                Text(priority).tag(priority)
-            }
-        }
-        .pickerStyle(.menu)
-        .accessibilityIdentifier("collie-radar-priority-filter")
-        Toggle(radarText("包含已完成／搁置"), isOn: historyBinding)
-            .accessibilityIdentifier("collie-radar-history")
-        Toggle(radarText("仅看需我处理（含提及 Alex）"), isOn: mentioningMeBinding)
-            .accessibilityIdentifier("collie-radar-mentioning-me")
-        if !display.project.isEmpty || !(display.status ?? "").isEmpty || !(display.priority ?? "").isEmpty ||
-           !(display.searchText ?? "").isEmpty || display.showHistory == true || display.onlyMentioningMe == true {
-            Button(radarText("清空筛选")) {
-                guard var item = record else { return }
-                item.display.project = ""
-                item.display.status = nil
-                item.display.priority = nil
-                item.display.showHistory = false
-                item.display.onlyMentioningMe = false
-                item.display.searchText = nil
-                store.update(item)
-            }
-            .frame(minHeight: 44)
-            .accessibilityIdentifier("collie-radar-clear-filters")
         }
 
         let tasks = snapshot.matchingActions(display: display, includeAllTasks: true)
@@ -448,8 +495,12 @@ struct CollieRadarView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(12)
-                .background(BenchsideStyle.accent.opacity(0.05), in: RoundedRectangle(cornerRadius: 20))
+                .padding(14)
+                .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .strokeBorder(BenchsideStyle.accentBorder, lineWidth: 0.75)
+                )
             }
         }
     }
@@ -457,7 +508,11 @@ struct CollieRadarView: View {
     private func taskSection(_ title: String, actions: [CollieRadarSnapshot.Action],
                              snapshot: CollieRadarSnapshot, display: CollieRadarDisplay) -> some View {
         LazyVStack(alignment: .leading, spacing: display.compact ? 8 : 12) {
-            Text(title + " · " + String(actions.count)).font(.headline)
+            HStack(spacing: 6) {
+                Text(title + " · " + String(actions.count))
+                    .font(.headline)
+                Spacer()
+            }
             if actions.isEmpty { Text(radarText("这份快照中没有匹配的任务。")).foregroundStyle(.secondary) }
             ForEach(Array(actions.enumerated()), id: \.offset) { _, action in
                 actionCard(action, snapshot: snapshot, display: display)
@@ -526,12 +581,30 @@ struct CollieRadarView: View {
     }
 
     private func metric(_ title: String, count: Int, icon: String) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Label(title, systemImage: icon).font(.caption).foregroundStyle(.secondary)
-            Text(count, format: .number).font(.title.bold())
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 4) {
+                Label(title, systemImage: icon)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                Spacer(minLength: 4)
+                Image(systemName: "chevron.right")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+                    .accessibilityHidden(true)
+            }
+            Text(count, format: .number)
+                .font(.title2.weight(.bold).monospacedDigit())
+                .foregroundStyle(count > 0 ? BenchsideStyle.ink : BenchsideStyle.secondary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading).padding(16)
-        .background(BenchsideStyle.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
+        .frame(maxWidth: .infinity, minHeight: 54, alignment: .leading)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .strokeBorder(count > 0 ? BenchsideStyle.accentBorder : BenchsideStyle.border.opacity(0.45), lineWidth: count > 0 ? 0.8 : 0.5)
+        )
     }
 
     @ViewBuilder
@@ -545,41 +618,65 @@ struct CollieRadarView: View {
         let text = status.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             ? radarText("任务状态未提供") : status
         return Label(text, systemImage: state.icon)
-            .font(.caption)
+            .font(.caption.weight(.medium))
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(
+                Capsule()
+                    .fill(state == .blocked ? Color.orange.opacity(0.12) : state == .progressing ? BenchsideStyle.accentSoft : BenchsideStyle.surfaceMuted)
+            )
             .foregroundStyle(state == .blocked ? Color.orange : state == .progressing ? BenchsideStyle.accent : BenchsideStyle.secondary)
     }
 
     private func actionCard(_ action: CollieRadarSnapshot.Action, snapshot: CollieRadarSnapshot,
                             display: CollieRadarDisplay) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(snapshot.projectName(action.project)).font(.caption).foregroundStyle(.secondary)
+            HStack(spacing: 8) {
+                Text(snapshot.projectName(action.project))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(BenchsideStyle.accent)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(Capsule().fill(BenchsideStyle.accentSoft))
+                Text(action.priority.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("优先级待补"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                 Spacer()
                 if display.showStatus { taskStatus(action.status ?? "") }
             }
-            Text(action.title).font(.headline)
-            Text(action.priority.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("优先级待补"))
-                .font(.caption).foregroundStyle(.secondary)
+            Text(action.title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(BenchsideStyle.ink)
             if display.showNext {
                 if action.next.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    Text(radarText("下一步待补")).font(.subheadline).foregroundStyle(.orange)
-                } else { Text(action.next).font(.subheadline).foregroundStyle(.secondary) }
-            }
-            if ["等你决策", "等你验收"].contains(action.status ?? ""), action.id != nil {
-                Button(radarText(action.status == "等你决策" ? "回复决策" : "提交验收反馈")) { replying = action }
-                    .disabled(snapshot.reply_supported != true || record?.source.isEmpty != false)
-                if snapshot.reply_supported != true {
-                    Text(radarText("当前数据源或身份未开放回复权限。"))
-                        .font(.caption).foregroundStyle(.secondary)
+                    Text(radarText("下一步待补")).font(.footnote).foregroundStyle(.orange)
+                } else {
+                    Text(action.next).font(.footnote).foregroundStyle(.secondary)
                 }
             }
-            if let id = action.id, !id.isEmpty {
-                Button(radarText("历史记录与反馈")) { replying = action }
-                    .disabled(record?.source.isEmpty != false)
+            HStack(spacing: 10) {
+                if ["等你决策", "等你验收"].contains(action.status ?? ""), action.id != nil {
+                    Button(radarText(action.status == "等你决策" ? "回复决策" : "提交验收反馈")) { replying = action }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.small)
+                        .frame(minHeight: 44)
+                        .disabled(snapshot.reply_supported != true || record?.source.isEmpty != false)
+                }
+                if let id = action.id, !id.isEmpty {
+                    Button(radarText("历史记录与反馈")) { replying = action }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        .frame(minHeight: 44)
+                        .disabled(record?.source.isEmpty != false)
+                }
+            }
+            if ["等你决策", "等你验收"].contains(action.status ?? ""), action.id != nil, snapshot.reply_supported != true {
+                Text(radarText("当前数据源或身份未开放回复权限。"))
+                    .font(.caption).foregroundStyle(.secondary)
             }
             ForEach(Array(action.safeEvidenceURLs.enumerated()), id: \.offset) { index, url in
                 Link(radarText("查看证据") + (action.safeEvidenceURLs.count > 1 ? " #\(index + 1)" : ""), destination: url)
-                    .font(.subheadline)
+                    .font(.footnote.weight(.medium))
             }
             DisclosureGroup(radarText("详情")) {
                 VStack(alignment: .leading, spacing: 8) {
@@ -587,6 +684,7 @@ struct CollieRadarView: View {
                     if let openWebWorkbench, !(action.session ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         Button(radarText("切到网页工作台")) { openWebWorkbench() }
                             .font(.subheadline)
+                            .frame(minHeight: 44)
                             .accessibilityIdentifier("collie-radar-open-web")
                     }
                     Text(radarText("窗口状态") + "：" + (action.window_status.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("未提供")))
@@ -599,15 +697,21 @@ struct CollieRadarView: View {
                 }.font(.caption).foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .font(.footnote)
             if let parts = URLComponents(string: action.url), parts.scheme?.lowercased() == "https",
                parts.host?.isEmpty == false, parts.user == nil, parts.password == nil,
                let url = parts.url {
-                Link(radarText("查看原条目"), destination: url).font(.subheadline)
+                Link(radarText("查看原条目"), destination: url)
+                    .font(.footnote.weight(.medium))
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(display.compact ? 12 : 16)
-        .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 16))
+        .padding(display.compact ? 12 : 14)
+        .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .strokeBorder(BenchsideStyle.border.opacity(0.45), lineWidth: 0.5)
+        )
     }
 }
 
