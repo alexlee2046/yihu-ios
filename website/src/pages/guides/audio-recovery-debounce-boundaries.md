@@ -6,6 +6,12 @@ lang: zh
 indexable: false
 ---
 
+<aside aria-label="录音中断后的陪诊安排核对">
+
+整理老人复诊陪诊安排时，录音中断或恢复通知被抑制都不能证明草稿完整、接送已确认。先查原预约与原消息，按[复诊陪诊交接清单](/guides/degraded-handoff-go-no-go/)核非患者行政范围，不重录重发来证明旧结果。诊疗与紧急事项走医院规定渠道。
+
+</aside>
+
 <h2 id="first-answer">2秒是通知抑制策略，不是两秒内必恢复或必须等待两秒</h2>
 
 CollieAudioRecoveryChangeDebouncer默认窗口2秒。匹配expectedToken、未过deadline、引擎运行且格式/路由未变时可抑制通知，并保留整个窗口的预期。源码也说明窗口内真实同路由/格式变化可能被忽略。这是策略权衡，不是零漏报、零延迟或所有音频恢复成功证明。

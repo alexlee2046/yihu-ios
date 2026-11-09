@@ -6,6 +6,12 @@ lang: en
 indexable: false
 ---
 
+<aside aria-label="Companion arrangements after interrupted recording">
+
+For an older adult's follow-up companion arrangements, an interrupted recording or a suppressed recovery notice does not prove the draft is complete or the ride accepted. First check the original booking and prior message; use the [follow-up companion handover checklist](/en/guides/degraded-handoff-go-no-go/) for non-patient administrative scope. Do not re-record or resend to prove an earlier result. Clinical and urgent matters use hospital-required channels.
+
+</aside>
+
 <h2 id="first-answer">Two seconds is notification policy, not guaranteed recovery or a mandatory wait</h2>
 
 CollieAudioRecoveryChangeDebouncer defaults to two seconds. Matching expectedToken, unexpired deadline, running engine and unchanged format/route permit suppression while retaining expectation for the window. Source also acknowledges genuine same-route/format changes can be ignored then. This tradeoff is not zero-miss, zero-latency or universal recovery evidence.

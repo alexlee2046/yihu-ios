@@ -1,0 +1,106 @@
+{
+  "worksheet": "older-adult-follow-up-appointment-companion-admin-handover",
+  "language": "zh",
+  "is_app_import_schema": false,
+  "is_approval_record": false,
+  "contains_patient_information": false,
+  "instructions": "仅人工整理获准的非患者行政核对。空白是未填写，不是通过；不填身份、病情、检查结果或联系方式，不用于诊疗、用药或转运安全判断。",
+  "items": [
+    {
+      "key": "appointment_version",
+      "label": "当前预约依据",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "visit_date_and_site",
+      "label": "复诊日期与院区",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "arrival_instructions",
+      "label": "报到要求",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "document_categories",
+      "label": "资料类别",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "document_custody",
+      "label": "资料保管交接",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "outbound_transport",
+      "label": "去程接送",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "return_transport",
+      "label": "返程接送",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "companion_roles",
+      "label": "陪诊分工",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "accessibility_request",
+      "label": "协助需求确认",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "unresolved_questions",
+      "label": "待问事项",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "draft_destination",
+      "label": "草稿目的地",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "acknowledgement_and_duplicates",
+      "label": "确认与重复",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    }
+  ]
+}
