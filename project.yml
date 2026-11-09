@@ -118,6 +118,7 @@ targets:
     platform: iOS
     sources:
       - Tests/CollieUI
+      - Apps/Collie/BenchsideStyle.swift
       - Apps/Collie/CollieVoiceNote.swift
       - Apps/Collie/CollieDiagnosticImage.swift
       - Apps/Collie/CollieRadarModel.swift
