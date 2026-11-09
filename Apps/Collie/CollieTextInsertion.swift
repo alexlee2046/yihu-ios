@@ -32,31 +32,36 @@ enum CollieTextInsertion {
             !el.matches(':disabled') && (!el.readOnly || window.collieNativeKeyboard?.canInsert(el) === true) &&
             !el.closest('[inert], [aria-disabled="true"], [aria-busy="true"]') &&
             el.getClientRects().length > 0 && getComputedStyle(el).visibility === 'visible';
-          // Stock v1.19.2 keeps its primary Mic/Send/Type action in composer-box;
-          // older layouts expose composer-controls. Both must prove draft mode.
+          // Stock Collie composers expose composer-box around textarea[data-slot="chat-input"].
+          // Newer releases add toggle controls (Screen, mic-draft) and durable-composer without
+          // a Type toggle; reject only active live-typing/recording or in-flight sends.
           const isSafeDraft = el => {
-            const collieFields = document.querySelectorAll('textarea[data-slot="chat-input"]');
+            const allCollieFields = document.querySelectorAll('textarea[data-slot="chat-input"]');
+            const collieFields = Array.from(allCollieFields).filter(usable);
             const colliePage = document.querySelector('meta[name="apple-mobile-web-app-title"]')?.content === 'Collie' ||
-              document.querySelector('[data-slot="composer-box"], [data-slot="composer-controls"]') !== null;
-            if (!collieFields.length) return !colliePage;
+              document.querySelector('[data-slot="composer-box"], [data-slot="composer-controls"], [data-slot="durable-composer"]') !== null;
+            if (!allCollieFields.length) return !colliePage;
             if (collieFields.length !== 1 || collieFields[0] !== el ||
-                el.enterKeyHint !== 'enter') return false;
-            const box = el.closest('[data-slot="composer-box"]');
+                (el.enterKeyHint && el.enterKeyHint !== 'enter')) return false;
+            const box = el.closest('[data-slot="composer-box"], [data-slot="durable-composer"]') ?? el.parentElement;
             if (!box) return false;
-            let scope = box.parentElement;
-            while (scope && !scope.querySelector('[data-slot="composer-controls"]')) {
-              scope = scope.parentElement;
+            if (box.classList.contains('border-primary') ||
+                box.querySelector('[data-slot="composer-primary"] .animate-spin, [data-slot="composer-mic-draft"][aria-pressed="true"]')) {
+              return false;
             }
-            const controls = scope ? scope.querySelectorAll('[data-slot="composer-controls"]') : [];
-            if (scope && (scope.querySelectorAll('textarea[data-slot="chat-input"]').length !== 1 ||
-                          controls.length !== 1)) return false;
-            const modes = (scope ? controls[0] : box).querySelectorAll('button[aria-pressed]');
-            return modes.length === 1 && modes[0].getAttribute('aria-pressed') === 'false' &&
-              !modes[0].matches(':disabled') && modes[0].getAttribute('aria-disabled') !== 'true';
+            const primary = box.querySelector('[data-slot="composer-primary"]');
+            if (primary) return primary.getAttribute('aria-pressed') !== 'true';
+            const boxModes = box.querySelectorAll('button[aria-pressed]');
+            if (boxModes.length) {
+              return Array.from(boxModes).every(b =>
+                b.getAttribute('aria-pressed') === 'false' &&
+                !b.matches(':disabled') && b.getAttribute('aria-disabled') !== 'true');
+            }
+            return box.querySelector('button') !== null;
           };
           window.collieNativePrepareInsert = id => {
             if (window.location.origin !== \(literal) || document.hidden) return false;
-            const fields = document.querySelectorAll('textarea[data-slot="chat-input"]');
+            const fields = Array.from(document.querySelectorAll('textarea[data-slot="chat-input"]')).filter(usable);
             const el = fields.length === 1 ? fields[0] : last?.deref();
             prepared = { id, url: window.location.href,
               target: usable(el) && isSafeDraft(el) ? new WeakRef(el) : null };

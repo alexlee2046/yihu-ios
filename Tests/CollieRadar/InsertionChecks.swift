@@ -87,6 +87,36 @@ final class Checks: NSObject, WKNavigationDelegate {
         if (await window.collieNativeInsertText('wrong route', 'route-change')) throw Error('route change accepted');
         if (other.value !== '') throw Error('route change mutated target');
         history.replaceState({}, '', 'about:blank');
+        // Collie 1.25+/1.26+ layout: Screen + Type toggles in composer-controls and mic-draft + primary in composer-box.
+        const box = document.querySelector('[data-slot="composer-box"]');
+        const controls = document.createElement('div');
+        controls.setAttribute('data-slot', 'composer-controls');
+        controls.innerHTML = '<button type="button" aria-pressed="true">Screen</button><button type="button" aria-pressed="false">Type</button>';
+        document.body.prepend(controls);
+        primary.setAttribute('data-slot', 'composer-primary');
+        const micDraft = document.createElement('button');
+        micDraft.setAttribute('data-slot', 'composer-mic-draft');
+        micDraft.setAttribute('aria-pressed', 'false');
+        box.insertBefore(micDraft, primary);
+        await new Promise(resolve => setTimeout(resolve, 0));
+        if (!window.collieNativePrepareInsert('v126-multi-toggle')) throw Error('v1.26 multi-toggle draft rejected');
+        if (!(await window.collieNativeInsertText('v126 draft', 'v126-multi-toggle')) || other.value !== 'v126 draft') {
+          throw Error('v1.26 multi-toggle insert failed');
+        }
+        // Durable composer layout: no aria-pressed buttons, primary Send disabled while empty.
+        other.value = '';
+        controls.innerHTML = '<button type="button" aria-expanded="false">Display</button>';
+        micDraft.remove();
+        primary.removeAttribute('aria-pressed');
+        primary.disabled = true;
+        if (!window.collieNativePrepareInsert('v126-durable')) throw Error('durable composer draft rejected');
+        if (!(await window.collieNativeInsertText('durable draft', 'v126-durable')) || other.value !== 'durable draft') {
+          throw Error('durable composer insert failed');
+        }
+        // In-flight send spinner blocks insertion even without aria-pressed.
+        primary.innerHTML = '<span class="animate-spin"></span>';
+        if (window.collieNativePrepareInsert('v126-sending')) throw Error('in-flight send accepted');
+        primary.innerHTML = 'Send';
         window.addEventListener('collie:native-transcript', event => { void event.detail.text; });
         return true;
         """)
@@ -97,7 +127,20 @@ final class Checks: NSObject, WKNavigationDelegate {
             arguments: ["origin": "null", "pageURL": "about:blank#different", "text": "synthetic"],
             in: nil, contentWorld: .defaultClient)
         guard wrongPage as? String == "refused" else { throw NSError(domain: "PageBinding", code: 1) }
-        print("Synthetic WKWebView insertion checks passed: route binding and changed retry; focus redirection zero edits; native readonly, receipts, detached/background/refusal, disabled and host readonly guards; zero submit")
+
+        // BLE Hotspot Wake protocol & proximity/cooldown checks.
+        let offlineStatus = CollieHotspotMacStatus(state: .offline, host: "dev-macbook", ssid: "AL IPower", ts: 1_780_000_000)
+        let onlineStatus = CollieHotspotMacStatus(state: .online, host: "dev-macbook", ssid: "AL IPower", ts: 1_780_000_010)
+        let now = Date(timeIntervalSince1970: 1_780_000_020)
+        precondition(CollieHotspotBLEProtocol.shouldAutoTriggerWake(status: offlineStatus, rssi: -65, lastWakeAt: nil, now: now))
+        precondition(!CollieHotspotBLEProtocol.shouldAutoTriggerWake(status: offlineStatus, rssi: -88, lastWakeAt: nil, now: now))
+        precondition(!CollieHotspotBLEProtocol.shouldAutoTriggerWake(status: onlineStatus, rssi: -55, lastWakeAt: nil, now: now))
+        precondition(!CollieHotspotBLEProtocol.shouldAutoTriggerWake(status: offlineStatus, rssi: -65, lastWakeAt: now.addingTimeInterval(-10), now: now))
+        precondition(CollieHotspotBLEProtocol.shouldAutoTriggerWake(status: offlineStatus, rssi: -65, lastWakeAt: now.addingTimeInterval(-30), now: now))
+        precondition(CollieHotspotBLEProtocol.shortcutURL(named: "WakeHotspot")?.absoluteString == "shortcuts://run-shortcut?name=WakeHotspot")
+        precondition(CollieHotspotBLEProtocol.shortcutURL(named: "  ") == nil)
+
+        print("Synthetic WKWebView insertion checks passed: route binding and changed retry; focus redirection zero edits; native readonly, receipts, detached/background/refusal, disabled and host readonly guards; v1.26 multi-toggle/durable composer compatibility; BLE hotspot wake protocol; zero submit")
     }
     func js(_ source: String) async throws -> Any {
         try await web.callAsyncJavaScript(source, arguments: [:], in: nil, contentWorld: .defaultClient) ?? NSNull()
