@@ -1,3 +1,4 @@
+@preconcurrency import AVFoundation
 import CryptoKit
 import Foundation
 import Observation
@@ -395,6 +396,12 @@ struct CollieWebView: UIViewRepresentable {
             configuration.userContentController.addUserScript(policy)
         }
 
+        if let live = CollieDotLive.userScript(origin: session.trustedOrigin) {
+            configuration.mediaTypesRequiringUserActionForPlayback = []
+            configuration.userContentController.addUserScript(live)
+            configuration.userContentController.add(context.coordinator, contentWorld: .page, name: "collieDotVoiceCall")
+        }
+
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
@@ -422,11 +429,13 @@ struct CollieWebView: UIViewRepresentable {
     static func dismantleUIView(_ container: Container, coordinator: Coordinator) {
         let webView = container.webView
         webView.stopLoading()
+        coordinator.endDotAudio()
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
         webView.configuration.userContentController.removeScriptMessageHandler(forName: "collieKeyboardRequested", contentWorld: .defaultClient)
         webView.configuration.userContentController.removeScriptMessageHandler(forName: "collieNativeNotifications", contentWorld: .page)
         webView.configuration.userContentController.removeScriptMessageHandler(forName: "collieNativePushCapability", contentWorld: .page)
+        webView.configuration.userContentController.removeScriptMessageHandler(forName: "collieDotVoiceCall", contentWorld: .page)
     }
 
     @MainActor
@@ -438,6 +447,13 @@ struct CollieWebView: UIViewRepresentable {
         var openNotificationSettings: @MainActor () -> Void
         private var urlObservation: NSKeyValueObservation?
         private var titleObservation: NSKeyValueObservation?
+        private var dotAudioActive = false
+
+        func endDotAudio() {
+            guard dotAudioActive else { return }
+            dotAudioActive = false
+            try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        }
 
         func observeURL(of webView: WKWebView) {
             // URL KVO also sees same-document pushState/popstate navigation.
@@ -469,6 +485,22 @@ struct CollieWebView: UIViewRepresentable {
             } else if message.name == "collieNativeNotifications",
                       let body = message.body as? [String: String], body["action"] == "open-settings" {
                 openNotificationSettings()
+            } else if message.name == "collieDotVoiceCall",
+                      CollieDotLive.supports(session.baseURL),
+                      let body = message.body as? [String: String] {
+                if body["action"] == "stop" {
+                    endDotAudio()
+                } else if body["action"] == "start" {
+                    do {
+                        let audio = AVAudioSession.sharedInstance()
+                        try audio.setCategory(.playAndRecord, mode: .voiceChat,
+                                              options: [.defaultToSpeaker, .allowBluetoothHFP])
+                        try audio.setActive(true)
+                        dotAudioActive = true
+                    } catch {
+                        endDotAudio()
+                    }
+                }
             } else if message.name == "collieNativePushCapability" {
                 // Handler presence is the native-only capability signal. The page retains
                 // its random token; no command or credential crosses this handler.
@@ -491,6 +523,7 @@ struct CollieWebView: UIViewRepresentable {
         }
 
         func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
+            endDotAudio()
             session.dismissKeyboard()
             session.isLoading = true
             session.errorMessage = nil
@@ -540,6 +573,7 @@ struct CollieWebView: UIViewRepresentable {
         /// iOS may reclaim the web process while the app is in the background, which
         /// otherwise leaves a blank page with no error. Reload the workbench instead.
         func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+            endDotAudio()
             let now = ContinuousClock.now
             defer { lastProcessTermination = now }
             // A page that keeps crashing must not reload forever; let the user decide.
@@ -557,7 +591,14 @@ struct CollieWebView: UIViewRepresentable {
             initiatedBy frame: WKFrameInfo,
             type: WKMediaCaptureType
         ) async -> WKPermissionDecision {
-            .deny
+            guard CollieDotLive.supports(session.baseURL),
+                  frame.isMainFrame, type == .microphone,
+                  session.isTrusted(frame.request.url), session.isTrusted(webView.url),
+                  origin.protocol == "https",
+                  origin.host == session.baseURL.host,
+                  origin.port == 10000 else { return .deny }
+            // Keep the user's WebKit permission decision; never silently grant capture.
+            return .prompt
         }
     }
 }
