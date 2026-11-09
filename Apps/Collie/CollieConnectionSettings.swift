@@ -273,6 +273,52 @@ struct CollieConnectionSettingsView: View {
                     .accessibilityIdentifier("collie-connection-save")
                 }
                 .listRowBackground(Color.clear)
+
+                Section {
+                    NavigationLink {
+                        CollieWorkbenchGuideView { template in
+                            settings.draft = template
+                        }
+                    } label: {
+                        Label(String(localized: "查看 OpenClaw / Hermes / Dot Live 接入指南", table: "Yihu"),
+                              systemImage: "book.pages")
+                            .frame(minHeight: 44)
+                    }
+                    .accessibilityIdentifier("collie-workbench-guide-link")
+
+                    ForEach(CollieWorkbenchCatalog.platforms) { platform in
+                        Button {
+                            settings.draft = platform.templateOrigin
+                        } label: {
+                            HStack(spacing: 10) {
+                                Image(systemName: platform.icon)
+                                    .foregroundStyle(BenchsideStyle.accent)
+                                    .frame(width: 22)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(platform.title)
+                                        .font(.subheadline.weight(.semibold))
+                                        .foregroundStyle(BenchsideStyle.ink)
+                                    Text(platform.badge)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                Text(platform.templateOrigin)
+                                    .font(.caption2.monospaced())
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                            }
+                            .frame(minHeight: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(isSaving)
+                        .accessibilityIdentifier("collie-template-\(platform.id)")
+                    }
+                } header: {
+                    Text("原生支持的工作台与接入指南", tableName: "Yihu")
+                } footer: {
+                    Text("点击工作台可填入地址格式示例（请将 example.com 替换为你的实际主机名），或打开接入指南复制服务端映射命令。", tableName: "Yihu")
+                }
             }
             .scrollContentBackground(.hidden)
             .background(BenchsideStyle.canvas)

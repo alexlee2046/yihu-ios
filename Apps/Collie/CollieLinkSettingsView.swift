@@ -93,6 +93,12 @@ struct CollieLinkSettingsView: View {
             }
 
             Section {
+                NavigationLink { CollieWorkbenchGuideView() } label: {
+                    Label(settingsText("使用说明与工作台接入"), systemImage: "book.pages")
+                        .frame(minHeight: 44)
+                }
+                .accessibilityIdentifier("collie-usage-guide")
+
                 NavigationLink { CollieCreditsView() } label: {
                     Label(settingsText("关于与开源许可"), systemImage: "info.circle")
                         .frame(minHeight: 44)

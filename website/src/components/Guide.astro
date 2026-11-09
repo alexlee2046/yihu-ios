@@ -512,6 +512,53 @@ const failureTarget = (id: string) => id === 'origin' ? 'address' : ['editor', '
     <p><a href="#reschedule-practice">{en ? 'Review the synthetic reschedule exercise offline first' : '先离线核对合成改期练习'}</a></p>
     <p>{en ? 'The source guides below describe additional implementation paths, not a promise that every source capability is in store edition 0.1.0.' : '下方源码指南说明更多实现路径，不代表商店版 0.1.0 已包含全部源码能力。'}</p>
   </section>
+
+  <section id="workbench-integrations" aria-labelledby="workbench-integrations-title">
+    <h2 id="workbench-integrations-title">{en ? 'Native Workbench Integrations: OpenClaw, Hermes, Dot / Dot Live & Collie' : '原生工作台接入指南：OpenClaw、Hermes、Dot / Dot Live 与 Collie'}</h2>
+    <p>{en ? 'Yihu connects your iPhone, iPad, and Apple Watch to OpenClaw, Hermes, Dot / Dot Live, and Collie HTTPS workbenches. You can also access this quick-start guide inside the app under Yihu Settings → Usage & Workbench Setup Guide.' : '一呼支持在 iPhone、iPad 与 Apple Watch 上原生连接 OpenClaw、Hermes、Dot / Dot Live 与 Collie 工作台。你也可以在 App 内「一呼设置 → 使用说明与工作台接入」中查看本指南并一键复制命令。'}</p>
+    <div class="guide-table" role="region" aria-label={en ? 'Workbench integration matrix' : '四大工作台接入对照表'} tabindex="0" style="overflow-x:auto">
+      <table style="width:100%; min-width:900px; table-layout:fixed; border-collapse:collapse; text-align:start">
+        <caption>{en ? 'Workbench integration matrix' : '四大工作台接入对照表'}</caption>
+        <thead>
+          <tr>
+            <th scope="col" style={cellStyle}>{en ? 'Workbench & HTTPS Origin' : '工作台与 HTTPS 地址示例'}</th>
+            <th scope="col" style={cellStyle}>{en ? 'Server HTTPS Mapping Command' : '服务端 HTTPS 映射命令'}</th>
+            <th scope="col" style={cellStyle}>{en ? 'Native iPhone Capabilities' : 'iPhone 原生协同能力'}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="integration-openclaw">
+            <th scope="row" style={cellStyle}><strong>OpenClaw</strong><br /><code>https://openclaw.example.com</code></th>
+            <td style={cellStyle}><code>tailscale serve --bg 18789</code></td>
+            <td style={cellStyle}>{en ? 'On-device Qwen3 offline speech-to-draft insertion, lock-screen multi-segment voice notes handoff, and iOS Share Sheet screenshot/log staging into file upload inputs.' : '端侧 Qwen3 离线语音直填聊天输入框、锁屏长录音分段转写交接、iOS 系统分享面板暂存截图与日志并挂入上传框。'}</td>
+          </tr>
+          <tr id="integration-hermes">
+            <th scope="row" style={cellStyle}><strong>Hermes</strong><br /><code>https://hermes.example.com:9444</code></th>
+            <td style={cellStyle}><code>tailscale serve --bg --https=9444 9444</code></td>
+            <td style={cellStyle}>{en ? 'Native :9444 WebUI session, iPhone Lock Screen & Dynamic Island Live Activities for long-running task steps, APNs completion notifications, and voice draft insertion.' : ':9444 管理台原生会话、iPhone 锁屏与灵动岛实时活动任务进度、任务完成 APNs 推送直达会话、离线语音草稿。'}</td>
+          </tr>
+          <tr id="integration-dot-live">
+            <th scope="row" style={cellStyle}><strong>Dot &amp; Dot Live</strong><br /><code>https://dot.example.com:10000</code></th>
+            <td style={cellStyle}><code>tailscale serve --bg --https=10000 10000</code></td>
+            <td style={cellStyle}>{en ? 'Floating Dot Live WebRTC voice bar (Live Call / Mute / Hangup) on :10000 workbenches with iOS hardware echo cancellation and Bluetooth headset routing. Contact us via the site footer or GitHub to integrate the Dot Live voice gateway with your team.' : ':10000 工作台右下角自动挂载 Dot Live「Live 通话 / 静音 / 挂断」悬浮条，支持 WebRTC 全双工实时语音对讲、iOS 硬件回声消除与蓝牙耳机路由。如需为团队接入 Dot Live 服务端网关，可通过页脚联系入口或 GitHub 与我们对接。'}</td>
+          </tr>
+          <tr id="integration-collie">
+            <th scope="row" style={cellStyle}><strong>Collie &amp; PM Radar</strong><br /><code>https://collie.example.com</code></th>
+            <td style={cellStyle}><code>python3 tools/serve-radar.py --port 8787 --tailnet-host host:8443</code></td>
+            <td style={cellStyle}>{en ? 'Automatic chat-input / collie:native-transcript draft bridge, APNs push notifications, multi-project PM Radar brief, Apple Watch companion, and BLE proximity MacBook hotspot auto-wake.' : '自动识别 chat-input 与 collie:native-transcript 草稿桥、APNs 原生通知、PM Radar 多项目待决策简报、Apple Watch 抬腕速览与 BLE 靠近唤醒断网 Mac 热点。'}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>{en ? 'In-App Quick Usage Guide (README)' : 'App 内高频使用速查（README）'}</h3>
+    <ol>
+      <li>{en ? 'On-Device Voice Drafts: Tap the bottom microphone to download the ~950 MB local model on demand. Spoken words are transcribed on your iPhone and placed into the current draft box for your review before sending.' : '端侧离线语音草稿：首次点击底部麦克风按需下载约 950 MB 本地语音模型；说话结束后文字填入当前草稿框，由你核对确认后再发送。'}</li>
+      <li>{en ? 'Lock-Screen Voice Notes: Tap the top waveform icon to record multi-segment audio even while your iPhone is locked, then hand off structured transcripts to your active workbench.' : '锁屏长录音与分段交接：点击顶部波形图标进入「语音记录」，手机锁屏后仍可后台长录音，支持多段追加与一键交接至工作台。'}</li>
+      <li>{en ? 'Voiceprint Filter & BLE Hotspot Wake: Enroll your voiceprint in Yihu Settings to isolate your voice in noisy environments, and enable Mac Hotspot Wake to automatically reconnect a nearby offline MacBook.' : '声纹过滤与蓝牙唤醒热点：在「一呼设置 → 只认我的声音」录入个人声纹过滤嘈杂人声；开启「Mac 热点唤醒」可在附近 MacBook 断网时通过蓝牙自动唤醒手机热点重连。'}</li>
+      <li>{en ? 'Dot Live Real-Time Voice Integration: Connect a :10000 HTTPS workbench to use the floating Live Call bar, or reach out via our contact channel to integrate Dot Live signaling (/dot-voice/call · /attach · /stop) into your own Agent workspace.' : 'Dot Live 实时语音对接：连接 :10000 HTTPS 工作台即可使用右下角「Live 通话」悬浮条；团队如需定制或接入 Dot Live 实时语音信令服务（/dot-voice/call · /attach · /stop），欢迎通过本站联系入口或 GitHub 仓库与我们对接。'}</li>
+    </ol>
+  </section>
+
   <details id="source-setup"><summary>{en ? 'Source developers: build, signing and advanced setup' : '源码开发者：构建、签名与高级接入'}</summary>
   <nav class="guide-nav" aria-label={copy.nav}>
     <a href="#preflight">{copy.preflightTitle}</a><a href="#build-connect">{copy.buildTitle}</a><a href="#first-draft">{copy.flowTitle}</a><a href="#troubleshooting">{copy.failureTitle}</a>

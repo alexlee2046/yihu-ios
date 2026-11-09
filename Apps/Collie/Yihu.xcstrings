@@ -8126,6 +8126,720 @@
           }
         }
       }
+    },
+    "原生支持的工作台与接入指南": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supported Workbenches & Setup Guide"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原生支持的工作台与接入指南"
+          }
+        }
+      }
+    },
+    "查看 OpenClaw / Hermes / Dot Live 接入指南": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenClaw / Hermes / Dot Live Setup Guide"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看 OpenClaw / Hermes / Dot Live 接入指南"
+          }
+        }
+      }
+    },
+    "点击工作台可填入地址格式示例（请将 example.com 替换为你的实际主机名），或打开接入指南复制服务端映射命令。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a workbench to fill its example HTTPS format (replace example.com with your actual host), or open the setup guide to copy server HTTPS mapping commands."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击工作台可填入地址格式示例（请将 example.com 替换为你的实际主机名），或打开接入指南复制服务端映射命令。"
+          }
+        }
+      }
+    },
+    "使用说明与工作台接入": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usage & Workbench Setup Guide"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用说明与工作台接入"
+          }
+        }
+      }
+    },
+    "语音草稿 · 附件暂存": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice Drafts · Share Inbox"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "语音草稿 · 附件暂存"
+          }
+        }
+      }
+    },
+    "原生连接 OpenClaw 网页控制台，用端侧离线语音代替手机小屏敲字，支持锁屏长录音转写与系统分享截图上传。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect your OpenClaw web console natively. Dictate into your chat input with on-device speech, hand off lock-screen voice notes, and attach screenshots from the iOS Share Sheet."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原生连接 OpenClaw 网页控制台，用端侧离线语音代替手机小屏敲字，支持锁屏长录音转写与系统分享截图上传。"
+          }
+        }
+      }
+    },
+    "在运行 OpenClaw 的主机开启 HTTPS 访问（例如运行 tailscale serve --bg 18789，或使用 Caddy / Cloudflare Tunnel 映射 HTTPS 域名）。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expose your OpenClaw host over HTTPS (for example `tailscale serve --bg 18789`, or map an HTTPS domain via Caddy / Cloudflare Tunnel)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在运行 OpenClaw 的主机开启 HTTPS 访问（例如运行 tailscale serve --bg 18789，或使用 Caddy / Cloudflare Tunnel 映射 HTTPS 域名）。"
+          }
+        }
+      }
+    },
+    "在一呼填入 https:// 主机地址并连接，登录后聚焦聊天输入框即可点按底部麦克风口述草稿。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the `https://` origin in Yihu and connect. Focus the chat input and tap the bottom microphone to dictate a draft."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在一呼填入 https:// 主机地址并连接，登录后聚焦聊天输入框即可点按底部麦克风口述草稿。"
+          }
+        }
+      }
+    },
+    "在任意 App 通过系统分享面板选择「一呼」，可将截图、日志与代码片段暂存并一键挂入页面上传框。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share screenshots, logs, or snippets from any app to Yihu via the iOS Share Sheet, then attach them to the page's file input with one tap."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在任意 App 通过系统分享面板选择「一呼」，可将截图、日志与代码片段暂存并一键挂入页面上传框。"
+          }
+        }
+      }
+    },
+    ":9444 · 灵动岛实时活动": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ":9444 · Dynamic Island Live Activities"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ":9444 · 灵动岛实时活动"
+          }
+        }
+      }
+    },
+    "原生接入 Hermes :9444 管理台，在 iPhone 锁屏与灵动岛实时显示长耗时任务进度，任务完成即刻推送提醒。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect your Hermes :9444 WebUI natively with Lock Screen & Dynamic Island Live Activities for long-running tasks and APNs completion alerts."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原生接入 Hermes :9444 管理台，在 iPhone 锁屏与灵动岛实时显示长耗时任务进度，任务完成即刻推送提醒。"
+          }
+        }
+      }
+    },
+    "在 Hermes 所在主机映射 :9444 HTTPS 端口（例如运行 tailscale serve --bg --https=9444 9444）。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Map HTTPS port :9444 on your Hermes host (for example `tailscale serve --bg --https=9444 9444`)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Hermes 所在主机映射 :9444 HTTPS 端口（例如运行 tailscale serve --bg --https=9444 9444）。"
+          }
+        }
+      }
+    },
+    "在一呼填入 https://<你的主机>:9444 连接 Hermes WebUI。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter `https://<your-host>:9444` in Yihu to connect to Hermes WebUI."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在一呼填入 https://<你的主机>:9444 连接 Hermes WebUI。"
+          }
+        }
+      }
+    },
+    "进入「一呼设置 → 任务提醒」开启「Hermes 任务提醒」，即可在锁屏与灵动岛查看任务步骤进度，点击通知直达对应会话。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable 'Hermes Task Reminders' in Yihu Settings to track live step progress on the Lock Screen and Dynamic Island, and tap notifications to jump straight to the session."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "进入「一呼设置 → 任务提醒」开启「Hermes 任务提醒」，即可在锁屏与灵动岛查看任务步骤进度，点击通知直达对应会话。"
+          }
+        }
+      }
+    },
+    ":10000 · WebRTC 实时通话": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ":10000 · WebRTC Live Voice"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ":10000 · WebRTC 实时通话"
+          }
+        }
+      }
+    },
+    "连接 :10000 HTTPS Dot 工作台后自动挂载「Live 通话」悬浮条，通过 WebRTC 与 Agent 全双工实时语音对讲。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect your :10000 HTTPS Dot workbench to mount the floating 'Live Call' bar for full-duplex WebRTC voice conversations with your Agent."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "连接 :10000 HTTPS Dot 工作台后自动挂载「Live 通话」悬浮条，通过 WebRTC 与 Agent 全双工实时语音对讲。"
+          }
+        }
+      }
+    },
+    "在一呼填入 https://<你的主机>:10000 连接 Dot 工作台，右下角会自动出现「Live 通话」控制条。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter `https://<your-host>:10000` in Yihu to connect your Dot workbench; the 'Live Call' bar appears automatically in the bottom-right corner."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在一呼填入 https://<你的主机>:10000 连接 Dot 工作台，右下角会自动出现「Live 通话」控制条。"
+          }
+        }
+      }
+    },
+    "点击「Live 通话」开启 WebRTC 双向实时语音（/dot-voice/call · /attach · /stop），自动启用 iOS 硬件回声消除与蓝牙耳机路由，支持随时静音或挂断。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap 'Live Call' to start two-way WebRTC voice (`/dot-voice/call` · `/attach` · `/stop`) with iOS hardware echo cancellation, Bluetooth headset routing, mute, and hangup controls."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击「Live 通话」开启 WebRTC 双向实时语音（/dot-voice/call · /attach · /stop），自动启用 iOS 硬件回声消除与蓝牙耳机路由，支持随时静音或挂断。"
+          }
+        }
+      }
+    },
+    "如需为你的团队工作台接入 Dot Live 实时语音网关，可通过下方「打开在线接入文档」联系我们对接。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To integrate the Dot Live real-time voice gateway with your team's workbench, reach out via the online integration guide link below."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "如需为你的团队工作台接入 Dot Live 实时语音网关，可通过下方「打开在线接入文档」联系我们对接。"
+          }
+        }
+      }
+    },
+    "原生草稿桥 · 多项目简报": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Native Draft Bridge · Multi-Project Radar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原生草稿桥 · 多项目简报"
+          }
+        }
+      }
+    },
+    "深度适配 Collie 网页工作台与 PM Radar 多项目简报，支持免弹键盘语音直填草稿、APNs 推送、Apple Watch 速览与靠近唤醒断网 Mac 热点。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deep integration with Collie web workbenches and PM Radar briefs, featuring keyboard-free voice draft insertion, APNs push, Apple Watch companion, and BLE MacBook hotspot auto-wake."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "深度适配 Collie 网页工作台与 PM Radar 多项目简报，支持免弹键盘语音直填草稿、APNs 推送、Apple Watch 速览与靠近唤醒断网 Mac 热点。"
+          }
+        }
+      }
+    },
+    "在一呼填入 https://<你的主机> 连接 Collie 工作台，自动启用 collie:native-transcript 草稿桥与原生通知。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter `https://<your-host>` in Yihu to connect your Collie workbench with `collie:native-transcript` draft insertion and native push notifications."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在一呼填入 https://<你的主机> 连接 Collie 工作台，自动启用 collie:native-transcript 草稿桥与原生通知。"
+          }
+        }
+      }
+    },
+    "点击顶部网格按钮「全部工作台 → 添加 PM Radar」，填入简报源即可在一屏汇总多个项目的「等你决策 / 等你验收」事项。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the top grid icon ('All Workbenches → Add PM Radar') to aggregate 'Waiting for Decision / Acceptance' items across projects."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击顶部网格按钮「全部工作台 → 添加 PM Radar」，填入简报源即可在一屏汇总多个项目的「等你决策 / 等你验收」事项。"
+          }
+        }
+      }
+    },
+    "在「一呼设置 → Mac 热点唤醒」开启蓝牙唤醒，外出时附近断网的 MacBook 会自动连回这台 iPhone 的个人热点。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable 'Mac Hotspot Wake' in Yihu Settings so a nearby offline MacBook automatically reconnects to this iPhone's Personal Hotspot over BLE."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在「一呼设置 → Mac 热点唤醒」开启蓝牙唤醒，外出时附近断网的 MacBook 会自动连回这台 iPhone 的个人热点。"
+          }
+        }
+      }
+    },
+    "1. 端侧离线语音草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. On-Device Offline Voice Drafts"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. 端侧离线语音草稿"
+          }
+        }
+      }
+    },
+    "首次点击底部麦克风按需下载约 950 MB 本地语音模型。口述内容在本机离线转写并填入当前输入框，由你核对确认后再点发送。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the bottom microphone to download the ~950 MB local speech model on demand. Speech is transcribed offline on your iPhone and placed into the active draft box for your review before sending."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "首次点击底部麦克风按需下载约 950 MB 本地语音模型。口述内容在本机离线转写并填入当前输入框，由你核对确认后再点发送。"
+          }
+        }
+      }
+    },
+    "2. 锁屏长录音与分段交接": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Lock-Screen Voice Notes & Segmented Handoff"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. 锁屏长录音与分段交接"
+          }
+        }
+      }
+    },
+    "点击顶部波形按钮打开「语音记录」，手机锁屏后仍可持续后台录音，支持多段追加录音、分段转写与一键交接至工作台。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the top waveform button to open Voice Notes. Keep recording in the background while locked, append multiple segments, and hand off clean transcripts to your workbench."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击顶部波形按钮打开「语音记录」，手机锁屏后仍可持续后台录音，支持多段追加录音、分段转写与一键交接至工作台。"
+          }
+        }
+      }
+    },
+    "3. 声纹过滤与近场收音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Voiceprint Filter & Near-Field Capture"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. 声纹过滤与近场收音"
+          }
+        }
+      }
+    },
+    "在「一呼设置 → 只认我的声音」录入个人声纹，配合近场收音减弱环境杂音，在嘈杂场所优先识别你本人的声音。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enroll your local voiceprint under 'Yihu Settings → Recognize Only My Voice' and combine with near-field capture to isolate your voice in noisy environments."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在「一呼设置 → 只认我的声音」录入个人声纹，配合近场收音减弱环境杂音，在嘈杂场所优先识别你本人的声音。"
+          }
+        }
+      }
+    },
+    "4. Apple Watch 腕上协同": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4. Apple Watch Wrist Companion"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4. Apple Watch 腕上协同"
+          }
+        }
+      }
+    },
+    "在 Apple Watch 上抬腕查看待决策事项摘要、使用快捷回复模板或恢复未发语音草稿，回到手机即可核对确认。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check pending decision summaries, apply quick-reply templates, or recover unsent voice drafts on Apple Watch, then review and confirm on your iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Apple Watch 上抬腕查看待决策事项摘要、使用快捷回复模板或恢复未发语音草稿，回到手机即可核对确认。"
+          }
+        }
+      }
+    },
+    "一呼（Yihu）专为 OpenClaw、Hermes、Dot / Dot Live 与 Collie 等 Agent 工作台打造 iPhone 原生体验。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yihu brings a native iPhone experience to OpenClaw, Hermes, Dot / Dot Live, and Collie Agent workbenches."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一呼（Yihu）专为 OpenClaw、Hermes、Dot / Dot Live 与 Collie 等 Agent 工作台打造 iPhone 原生体验。"
+          }
+        }
+      }
+    },
+    "选择下方工作台可一键填入地址模板或复制服务端 HTTPS 映射命令。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a workbench below to fill its HTTPS origin template or copy the server HTTPS mapping command."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择下方工作台可一键填入地址模板或复制服务端 HTTPS 映射命令。"
+          }
+        }
+      }
+    },
+    "已复制": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已复制"
+          }
+        }
+      }
+    },
+    "复制命令": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Command"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "复制命令"
+          }
+        }
+      }
+    },
+    "填入 %@ 地址模板": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use %@ Origin Template"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "填入 %@ 地址模板"
+          }
+        }
+      }
+    },
+    "日常高频功能速查": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily Capabilities Quick Reference"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日常高频功能速查"
+          }
+        }
+      }
+    },
+    "打开在线接入文档与 Dot Live 对接说明": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Online Setup Guide & Dot Live Integration"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开在线接入文档与 Dot Live 对接说明"
+          }
+        }
+      }
+    },
+    "查看 GitHub 开源仓库与完整 README": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View GitHub Repository & Full README"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看 GitHub 开源仓库与完整 README"
+          }
+        }
+      }
+    },
+    "在线文档与合作接入": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Online Docs & Dot Live Integration"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在线文档与合作接入"
+          }
+        }
+      }
+    },
+    "如需为团队工作台定制或接入 Dot Live 实时语音服务，可通过在线接入文档中的联系入口与我们对接。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To customize or integrate Dot Live real-time voice signaling for your team's workbench, contact us via the online setup guide."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "如需为团队工作台定制或接入 Dot Live 实时语音服务，可通过在线接入文档中的联系入口与我们对接。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

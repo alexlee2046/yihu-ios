@@ -8,7 +8,42 @@ Yihu is an independent native iOS browser shell optimized for Agent workbenches,
 
 一呼是**针对 Agent 场景优化的原生 iOS 浏览器壳**，用于访问自有 Collie、OpenClaw、Hermes 等网页工作台，并提供端侧语音、录音笔记与系统分享。基础 HTTPS 浏览不等于原生增强已适配；通知、实时活动等需兼容接口与服务。它不是通用 Agent 平台，不托管 Agent、不提供后端，也不承诺任意工作台原生兼容。已上架 [App Store（已核美区页面）](https://apps.apple.com/us/app/yihu/id6819057500)，当前公开版本 **0.1.0**，发布于 **2026-10-19**，需 iOS/iPadOS **18.0+**（2026-10-24 核对 Apple 公开数据，地区供应以商店为准）。商店安装无需 Mac 或自行签名；工作台由用户自备，语音模型按需另行下载，商店说明约 950 MB。仓库包含可能领先商店版的源码开发，合入不等于商店更新或全部功能已在该版发布。仓库不提供预配置服务器，也不是上述服务的官方客户端。
 
-[Build / 构建](#build-locally) · [Connection / 连接](#connect-to-your-own-workbench) · [Limitations / 限制](#models-and-limitations) · [Contributing / 贡献](CONTRIBUTING.md) · [Security / 安全](SECURITY.md)
+[Quick Start / 快速接入](#native-workbench-integrations--四大工作台原生接入与快速上手) · [Build / 构建](#build-locally) · [Connection / 连接](#connect-to-your-own-workbench) · [Limitations / 限制](#models-and-limitations) · [Contributing / 贡献](CONTRIBUTING.md) · [Security / 安全](SECURITY.md)
+
+## Native Workbench Integrations / 四大工作台原生接入与快速上手
+
+Yihu provides native iPhone, iPad, and Apple Watch capabilities around **OpenClaw**, **Hermes**, **Dot / Dot Live**, and **Collie** web workbenches. You can also view this guide directly inside the app under **Yihu Settings → Usage & Workbench Setup Guide (`使用说明与工作台接入`)** or on the web at [https://getyihu.com/start/#workbench-integrations](https://getyihu.com/start/#workbench-integrations).
+
+一呼为 **OpenClaw**、**Hermes**、**Dot / Dot Live** 与 **Collie** 四类 Agent 网页工作台提供开箱即用的 iPhone、iPad 与 Apple Watch 原生协同能力。你也可以在 App 内的 **「一呼设置 → 使用说明与工作台接入」** 或在线文档 [https://getyihu.com/start/#workbench-integrations](https://getyihu.com/start/#workbench-integrations) 中随时查看并一键复制接入命令。
+
+| Workbench / 工作台 | HTTPS Origin Example / 地址示例 | Server HTTPS Mapping / 服务端映射命令 | Native iOS Capabilities / iPhone 原生增强能力 |
+| --- | --- | --- | --- |
+| **OpenClaw** | `https://openclaw.example.com` | `tailscale serve --bg 18789` | On-device Qwen3 offline speech-to-draft insertion, lock-screen multi-segment voice notes handoff, and iOS Share Sheet screenshot/log staging into `input[type="file"]`.<br>端侧离线语音直填聊天草稿、锁屏长录音分段转写交接、系统分享面板暂存截图与日志并挂入上传框。 |
+| **Hermes** | `https://hermes.example.com:9444` | `tailscale serve --bg --https=9444 9444` | Native `:9444` WebUI session, iPhone Lock Screen & Dynamic Island Live Activities (`HermesTaskAttributes`), APNs completion alerts, and voice draft insertion.<br>`:9444` 管理台原生会话、锁屏与灵动岛实时活动任务进度、任务完成 APNs 推送直达会话、离线语音草稿。 |
+| **Dot & Dot Live** | `https://dot.example.com:10000` | `tailscale serve --bg --https=10000 10000` | Native `:10000` workbench with floating **Dot Live** WebRTC voice bar (`Live 通话` / Mute / Hangup), `.voiceChat` hardware echo cancellation, and Bluetooth HFP headset routing.<br>`:10000` 工作台自动挂载 **Dot Live** 悬浮通话条，支持 WebRTC 全双工实时语音对讲、iOS 硬件回声消除与蓝牙耳机路由。 |
+| **Collie & PM Radar** | `https://collie.example.com` | `python3 tools/serve-radar.py --port 8787 --tailnet-host host:8443` | Automatic `chat-input` / `collie:native-transcript` draft bridge, `window.collieNativePush` APNs notifications, multi-project PM Radar brief, Apple Watch companion, and BLE MacBook hotspot auto-wake.<br>`collie:native-transcript` 免弹键盘语音草稿桥、原生推送、PM Radar 多项目待决策简报、Apple Watch 抬腕速览与靠近唤醒断网 Mac 热点。 |
+
+### Step-by-Step Setup / 分平台接入步骤
+
+1. **OpenClaw Console / OpenClaw 控制台接入**
+   - Expose your OpenClaw web gateway over HTTPS (for example `tailscale serve --bg 18789` on your tailnet, or via Caddy / Cloudflare Tunnel).
+   - Open Yihu, tap the **OpenClaw** preset (or enter your `https://` origin), sign in, focus the chat input box, and tap the bottom microphone button to dictate offline into your draft.
+   - 在运行 OpenClaw 的主机开启 HTTPS 映射（如 `tailscale serve --bg 18789`），在一呼填入 `https://` 地址连接；聚焦聊天输入框即可点按底部麦克风离线口述草稿，或通过系统分享面板暂存截图一键挂入页面上传框。
+
+2. **Hermes WebUI & Dynamic Island Live Activities / Hermes 管理台与灵动岛实时活动接入**
+   - Expose Hermes WebUI on HTTPS port `:9444` (for example `tailscale serve --bg --https=9444 9444`).
+   - Connect `https://<your-host>:9444` in Yihu, then enable **Hermes Task Reminders (`Hermes 任务提醒`)** in Yihu Settings to track long-running task steps on the iPhone Lock Screen and Dynamic Island, and jump back to the session from completion notifications.
+   - 在 Hermes 主机映射 `:9444` HTTPS 端口（如 `tailscale serve --bg --https=9444 9444`），在一呼连接 `https://<你的主机>:9444`，并在「一呼设置 → 任务提醒」开启「Hermes 任务提醒」，即可在锁屏与灵动岛实时查看任务步骤进度。
+
+3. **Dot Workbench & Dot Live Real-Time Voice / Dot 工作台与 Dot Live 实时语音接入**
+   - Connect `https://<your-host>:10000` in Yihu. Yihu automatically mounts the native **Dot Live (`Live 通话` / `静音` / `挂断`)** control bar in the bottom-right corner.
+   - Tapping `Live 通话` starts a full-duplex WebRTC audio session (`oai-events` data channel + `/dot-voice/call`, `/attach`, `/stop`) with iOS `.playAndRecord` + `.voiceChat` echo cancellation and Bluetooth headset routing.
+   - **Integrate Dot Live with your team's workbench:** To connect your workbench to the Dot Live real-time voice signaling gateway, reach out via [https://getyihu.com/start/#workbench-integrations](https://getyihu.com/start/#workbench-integrations) or open an issue in this repository.
+   - 在一呼连接 `https://<你的主机>:10000`，右下角自动出现「Live 通话」悬浮条，点击即可发起 WebRTC 双向实时语音通话。如需为你的团队工作台接入 Dot Live `/dot-voice` 实时语音网关，欢迎通过 [https://getyihu.com/start/#workbench-integrations](https://getyihu.com/start/#workbench-integrations) 或本仓库 Issues 联系我们对接。
+
+4. **Collie Workbench, PM Radar & BLE Hotspot Wake / Collie 工作台、多项目雷达与蓝牙热点唤醒**
+   - Connect your Collie HTTPS origin for instant `collie:native-transcript` voice draft insertion and APNs notifications.
+   - Add one or more PM Radar feeds (`tools/serve-radar.py`) from the top-right workbench grid (`All Workbenches → Add PM Radar`) to triage `Waiting for Decision` and `Waiting for Acceptance` items across iPhone and Apple Watch, and enable **Mac Hotspot Wake (`Mac 热点唤醒`)** in Settings to wake a nearby offline MacBook's Personal Hotspot connection over Bluetooth Low Energy (BLE).
 
 ## Feature overview / 功能概览
 
