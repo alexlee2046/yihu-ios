@@ -85,3 +85,8 @@ Only actual authorized evidence supports a limited conclusion. A synthetic publi
 [Ownership/archive planning](/en/guides/department-minutes-ownership-archive/) · [Handoff evidence audit](/en/guides/handoff-evidence-audit-checklist/) · [Second-check claims](/en/guides/radar-evidence-second-check/) · [Cross-device presentation](/en/guides/cross-device-field-presentation/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 Evidence: [Radar source fields/link parsing](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieRadarModel.swift), [README sharing/history/permissions](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md).
+
+
+## SYN-ESC-53 evidence parsing is neither redaction nor claim proof (still retired)
+
+The [same-language second-check guide](/en/guides/radar-evidence-second-check/) reviews Action `safeEvidenceURLs`, display classification, `CollieRadarAuthorization` confirmation structure and `CollieColabSnapshot` read-only telemetry gates. HTTPS candidates retain raw query/fragment parameters without auto-redaction, and P0/urgent titles or state labels prove neither factual truth, public disclosure authority nor write permission. Keep private originals within authorized scope and use synthetic `example.invalid` publicly; real reads/external sites/approvals/replies/network remain not_run, with no new-ID blind resend under uncertainty. Preserve P23 ownership forwarding and `indexable: false`/noindex,follow, no sitemap/standalone LLM section, no new download/Store/conversion card, and no changes to existing Store boundaries, config or body text.

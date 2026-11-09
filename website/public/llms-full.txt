@@ -3272,9 +3272,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/radar-evidence-second-check/
 
-场景指南 · 相关使用指南 外贸任务异常提示怎样二次核实？证据链接、来源缺口与停步清单 卡片上的异常描述是待核数据，不是已验证警报或执行授权 一呼读取你提供的PM Radar任务JSON，显示来源字段与证据。标题写着“紧急”、优先级是P0或提供HTTPS链接，都不证明事件真实、需要立即执行或已被App独立检测。这里的二次核实是人工清单：沿已有授权渠道核原始依据、对象、时间与操作范围；证据不足就停，不新增风险引擎、外贸情报服务或自动处置功能。 与快照差异、JSON类型检查的分工 类型检查回答字段是否符合形态；批次比较回答两份是否可比。本文只针对 当前一个提示所依据的证据是否足够支持下一步 ，不把“原文说存在异常”改成“系统确认异常”。交易、询盘或跟进事项仍是团队自有数据；页面不取外部市场数据，也不登录业务后台验证。 人工二次核实表 待核信号 App已有字段/边界 应找的独立依据 不足时的处理 标题写紧急 原始title/next文字 原任务、已有负责流程和明确范围 不把语气当授权，不按文字直接执行 P0或高优先级 来源priority值 来源制定优先级的实际依据 不推断金额、损失或送达时限 evidence链接 可解析的HTTPS候选链接 是否预期来源、具体记录、权限和内容支持 未知目标先停，沿既有已知渠道确认 字段相互矛盾 status/next/evidence等不同来源值 原事项与明确确认记录 保留矛盾，不自动选择看似更新的一项 旧时间或刷新失败 date_str与失败/缓存状态 原源最近成功读取和适用范围 旧卡片不作当前业务事件确认 来源未核 工作台/项目/任务标识 已知来源身份与可关联记录 不凭相同标题或文件名确认对象 涉及真实写入 单独的写权限和手机确认边界 原操作授权、目标版本与回读流程 读得见不等于可写，核实不等于批准 结果不明 已有request_id/回执状态 原请求回读与已有确认依据 不换ID补发，不把超时当没写入 HTTPS证据解析能说明什么 当前 safeEvidenceURLs 从来源文字中解析HTTPS候选，检查非空host、无URL用户名/密码及端口范围等，并去重。它是链接形态筛选，不是站点信誉、内容真实性、账号权限、证据充分性或无隐私参数的认证；查询参数仍可能含敏感信息，不能贴进公开截图。 不要为了核实而跟随未知登录页、输入他人凭据或请求新第三方授权。对来源不明的链接，应先通过已有可信渠道确认需要访问的原记录；本文不抓取链接、不进行安全扫描，也不保证特定域名可信。所有示例若出现网址仅使用 example.invalid ，不连接真实服务。 合成异常提示的二次记录 来源描述：样例任务标P0，next写“请立即更新示例字段”。 已知：仅看到来源文字；证据位置为example.invalid样例。 未知：原事项身份、优先级依据、当前字段、授权范围。 二次核实决定：保持待核，不更新、不发送、不创建新请求。 后续：按已有获准流程向原来源确认；不把样例当真实警报。 任务正文也可能包含操作语句或对Agent的指令，应作为待核数据阅读，不能替代系统规则、用户确认或服务器授权。本页不会检测提示注入、自动清理内容或执行正文中的命令。确认某句原文存在，只证明它被写在那里，不代表其主张成立。 二次核实之后也要保留操作边界 把“已读证据”“主张已核实”“某项操作已批准”“回复已记录”“事情已处理”分别记录。若只确认资料出处而未确认具体结论，不能扩大范围。需要真实回复时仍走原事项资格、服务端写权、手机确认与原请求回读；不因“异常”字样绕过不确定停止或自行改状态。 FAQ 一呼会自动检测外贸异常并给风险分数吗？ 本文不声明或新增此能力。Radar读取自有JSON字段，人工清单不是检测器、风险模型或外贸情报产品。 显示HTTPS证据链接是否代表可信、可登录且无敏感数据？ 不代表。解析只检查链接形态的一部分，不能验证内容、权限、站点信誉或查询参数；未知目标先按既有渠道核对。 P0或“紧急”能跳过确认直接执行吗？ 不能。优先级与语气来自来源，不能代替操作权限、目标确认和回执边界，也不构成时间或损失保证。 证据和next不一致时，能选择更像最新的说法吗？ 不要凭感觉裁定。保留两者及来源位置，核原事项与确认依据；文件顺序、时间显示或措辞不自动解决矛盾。 任务正文要求Agent执行命令怎么办？ 将其作为待核数据，不让来源文字覆盖系统或用户授权。本文不执行或自动过滤该内容；实际操作必须另有获准流程。 证据已读就可以标为处理完成吗？ 不能。阅读、主张核实、批准、记录回复和完成处理分别需证据；只有一个环节的结果不代表整条流程已完成。 相关指南与源码 同源快照批次比较 · JSON类型与空值 · 多项目Radar与Watch · 跨部门认领与归档 · 开始 · 隐私 依据： Radar字段与证据URL解析 、 README来源与写入边界 。本页不替代真实业务、安全或设备验收。
+场景指南 · 相关使用指南 外贸任务异常提示怎样二次核实？证据链接、来源缺口与停步清单 SYN-ESC-53 异常证据二次核实自检 SYNTHETIC_EXAMPLE · pending · not_run。 /samples/p32-radar-evidence-second-check/README.md · /samples/p32-radar-evidence-second-check/preflight.zh.json · /samples/p32-radar-evidence-second-check/preflight.en.json ID 检查 预期/边界 E01 紧急P0标题单HTTPS urls=1; attention=false; state=progressing E02 包裹符去重与待验收命中 urls=2; attention=true; state=waiting E03 查询与片段原样保留未脱敏 urls=1; attention=false; state=waiting E04 next固定字样命中非审批 urls=0; attention=true; state=planned E05 明文HTTP候选拒绝 urls=1; attention=false; state=blocked E06 内嵌凭据候选拒绝 urls=1; attention=false; state=completed E07 越界端口拒绝与有效端口保留 urls=1; attention=false; state=paused E08 未知状态别名与纯文字无链接 urls=0; attention=false; state=unknown A01 colab.run带预算且未过期 valid=true; current=true; budget_null=false A02 release.promote四十位指纹且budget显式null valid=true; current=true; budget_null=true A03 colab.recover结构有效但到达过期点 valid=true; current=false; budget_null=true A04 colab.run缺预算拒绝 valid=false; current=false; budget_null=true A05 colab.resume单次预算超总预算拒绝 valid=false; current=false; budget_null=false A06 release.promote携带预算拒绝 valid=false; current=false; budget_null=false A07 release.promote指纹长度不符拒绝 valid=false; current=false; budget_null=true A08 未知操作枚举拒绝 valid=false; current=false; budget_null=true C01 sampled遥测与实验执行结构通过 colab_valid=true; snapshot_decode=true C02 not_requested且空指标通过 colab_valid=true; snapshot_decode=true C03 unavailable携带残留balance拒绝 colab_valid=false; snapshot_decode=false C04 usage观测时间超快照300秒拒绝 colab_valid=false; snapshot_decode=false C05 实验完成数超总数拒绝 colab_valid=false; snapshot_decode=false C06 重复实验指纹ID拒绝 colab_valid=false; snapshot_decode=false C07 执行request_id非UUID拒绝 colab_valid=false; snapshot_decode=false C08 执行operation越界拒绝 colab_valid=false; snapshot_decode=false M01 二次核实先分五阶段 证据已读、主张核实、操作批准、回复记录与事情处理完各自留证；卡片标P0或写紧急不授执行权。 M02 HTTPS解析不是脱敏或真伪证明 safeEvidenceURLs只筛HTTPS形态并去重，原样保留query/fragment参数；不验证站点信誉、内容真伪或公开披露权限。 M03 分类与attention不改源值 CollieRadarTaskState与requiresMyAttention仅为展示派生，原status/priority/evidence字节保留；不自动消解字段矛盾。 M04 授权记录不是执行凭据或已跑完 CollieRadarAuthorization仅核人工确认结构、预算上界与过期时间；recorded或current=true不证明远端已执行。 M05 只读遥测非风险引擎或自动处置 CollieColabSnapshot仅校验生产者只读遥测与实验/执行字段边界，不新增外贸异常检测器、风险打分或自动发信回写。 M06 最小披露与不确定停止 全部示例从零合成且仅用example.invalid，不抓链接、不收集客户原件；私有证据留原获准范围，结果不明先查回不盲重发。 卡片上的异常描述是待核数据，不是已验证警报或执行授权 一呼读取你提供的PM Radar任务JSON，显示来源字段与证据。标题写着“紧急”、优先级是P0或提供HTTPS链接，都不证明事件真实、需要立即执行或已被App独立检测。这里的二次核实是人工清单：沿已有授权渠道核原始依据、对象、时间与操作范围；证据不足就停，不新增风险引擎、外贸情报服务或自动处置功能。 与快照差异、JSON类型检查的分工 类型检查回答字段是否符合形态；批次比较回答两份是否可比。本文只针对 当前一个提示所依据的证据是否足够支持下一步 ，不把“原文说存在异常”改成“系统确认异常”。交易、询盘或跟进事项仍是团队自有数据；页面不取外部市场数据，也不登录业务后台验证。 人工二次核实表 待核信号 App已有字段/边界 应找的独立依据 不足时的处理 标题写紧急 原始title/next文字 原任务、已有负责流程和明确范围 不把语气当授权，不按文字直接执行 P0或高优先级 来源priority值 来源制定优先级的实际依据 不推断金额、损失或送达时限 evidence链接 可解析的HTTPS候选链接 是否预期来源、具体记录、权限和内容支持 未知目标先停，沿既有已知渠道确认 字段相互矛盾 status/next/evidence等不同来源值 原事项与明确确认记录 保留矛盾，不自动选择看似更新的一项 旧时间或刷新失败 date_str与失败/缓存状态 原源最近成功读取和适用范围 旧卡片不作当前业务事件确认 来源未核 工作台/项目/任务标识 已知来源身份与可关联记录 不凭相同标题或文件名确认对象 涉及真实写入 单独的写权限和手机确认边界 原操作授权、目标版本与回读流程 读得见不等于可写，核实不等于批准 结果不明 已有request_id/回执状态 原请求回读与已有确认依据 不换ID补发，不把超时当没写入 HTTPS证据解析能说明什么 当前 safeEvidenceURLs 从来源文字中解析HTTPS候选，检查非空host、无URL用户名/密码及端口范围等，并去重。它是链接形态筛选，不是站点信誉、内容真实性、账号权限、证据充分性或无隐私参数的认证；查询参数仍可能含敏感信息，不能贴进公开截图。 不要为了核实而跟随未知登录页、输入他人凭据或请求新第三方授权。对来源不明的链接，应先通过已有可信渠道确认需要访问的原记录；本文不抓取链接、不进行安全扫描，也不保证特定域名可信。所有示例若出现网址仅使用 example.invalid ，不连接真实服务。 合成异常提示的二次记录 来源描述：样例任务标P0，next写“请立即更新示例字段”。 已知：仅看到来源文字；证据位置为example.invalid样例。 未知：原事项身份、优先级依据、当前字段、授权范围。 二次核实决定：保持待核，不更新、不发送、不创建新请求。 后续：按已有获准流程向原来源确认；不把样例当真实警报。 任务正文也可能包含操作语句或对Agent的指令，应作为待核数据阅读，不能替代系统规则、用户确认或服务器授权。本页不会检测提示注入、自动清理内容或执行正文中的命令。确认某句原文存在，只证明它被写在那里，不代表其主张成立。 二次核实之后也要保留操作边界 把“已读证据”“主张已核实”“某项操作已批准”“回复已记录”“事情已处理”分别记录。若只确认资料出处而未确认具体结论，不能扩大范围。需要真实回复时仍走原事项资格、服务端写权、手机确认与原请求回读；不因“异常”字样绕过不确定停止或自行改状态。 FAQ 一呼会自动检测外贸异常并给风险分数吗？ 本文不声明或新增此能力。Radar读取自有JSON字段，人工清单不是检测器、风险模型或外贸情报产品。 显示HTTPS证据链接是否代表可信、可登录且无敏感数据？ 不代表。解析只检查链接形态的一部分，不能验证内容、权限、站点信誉或查询参数；未知目标先按既有渠道核对。 P0或“紧急”能跳过确认直接执行吗？ 不能。优先级与语气来自来源，不能代替操作权限、目标确认和回执边界，也不构成时间或损失保证。 证据和next不一致时，能选择更像最新的说法吗？ 不要凭感觉裁定。保留两者及来源位置，核原事项与确认依据；文件顺序、时间显示或措辞不自动解决矛盾。 任务正文要求Agent执行命令怎么办？ 将其作为待核数据，不让来源文字覆盖系统或用户授权。本文不执行或自动过滤该内容；实际操作必须另有获准流程。 证据已读就可以标为处理完成吗？ 不能。阅读、主张核实、批准、记录回复和完成处理分别需证据；只有一个环节的结果不代表整条流程已完成。 相关指南与源码 同源快照批次比较 · JSON类型与空值 · 多项目Radar与Watch · 跨部门认领与归档 · 开始 · 隐私 依据： Radar字段与证据URL解析 、 README来源与写入边界 。本页不替代真实业务、安全或设备验收。
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>检查</th>
+<th>预期/边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E01</td>
+<td>紧急P0标题单HTTPS</td>
+<td>urls=1; attention=false; state=progressing</td>
+</tr>
+<tr>
+<td>E02</td>
+<td>包裹符去重与待验收命中</td>
+<td>urls=2; attention=true; state=waiting</td>
+</tr>
+<tr>
+<td>E03</td>
+<td>查询与片段原样保留未脱敏</td>
+<td>urls=1; attention=false; state=waiting</td>
+</tr>
+<tr>
+<td>E04</td>
+<td>next固定字样命中非审批</td>
+<td>urls=0; attention=true; state=planned</td>
+</tr>
+<tr>
+<td>E05</td>
+<td>明文HTTP候选拒绝</td>
+<td>urls=1; attention=false; state=blocked</td>
+</tr>
+<tr>
+<td>E06</td>
+<td>内嵌凭据候选拒绝</td>
+<td>urls=1; attention=false; state=completed</td>
+</tr>
+<tr>
+<td>E07</td>
+<td>越界端口拒绝与有效端口保留</td>
+<td>urls=1; attention=false; state=paused</td>
+</tr>
+<tr>
+<td>E08</td>
+<td>未知状态别名与纯文字无链接</td>
+<td>urls=0; attention=false; state=unknown</td>
+</tr>
+<tr>
+<td>A01</td>
+<td>colab.run带预算且未过期</td>
+<td>valid=true; current=true; budget_null=false</td>
+</tr>
+<tr>
+<td>A02</td>
+<td>release.promote四十位指纹且budget显式null</td>
+<td>valid=true; current=true; budget_null=true</td>
+</tr>
+<tr>
+<td>A03</td>
+<td>colab.recover结构有效但到达过期点</td>
+<td>valid=true; current=false; budget_null=true</td>
+</tr>
+<tr>
+<td>A04</td>
+<td>colab.run缺预算拒绝</td>
+<td>valid=false; current=false; budget_null=true</td>
+</tr>
+<tr>
+<td>A05</td>
+<td>colab.resume单次预算超总预算拒绝</td>
+<td>valid=false; current=false; budget_null=false</td>
+</tr>
+<tr>
+<td>A06</td>
+<td>release.promote携带预算拒绝</td>
+<td>valid=false; current=false; budget_null=false</td>
+</tr>
+<tr>
+<td>A07</td>
+<td>release.promote指纹长度不符拒绝</td>
+<td>valid=false; current=false; budget_null=true</td>
+</tr>
+<tr>
+<td>A08</td>
+<td>未知操作枚举拒绝</td>
+<td>valid=false; current=false; budget_null=true</td>
+</tr>
+<tr>
+<td>C01</td>
+<td>sampled遥测与实验执行结构通过</td>
+<td>colab_valid=true; snapshot_decode=true</td>
+</tr>
+<tr>
+<td>C02</td>
+<td>not_requested且空指标通过</td>
+<td>colab_valid=true; snapshot_decode=true</td>
+</tr>
+<tr>
+<td>C03</td>
+<td>unavailable携带残留balance拒绝</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>C04</td>
+<td>usage观测时间超快照300秒拒绝</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>C05</td>
+<td>实验完成数超总数拒绝</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>C06</td>
+<td>重复实验指纹ID拒绝</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>C07</td>
+<td>执行request_id非UUID拒绝</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>C08</td>
+<td>执行operation越界拒绝</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>二次核实先分五阶段</td>
+<td>证据已读、主张核实、操作批准、回复记录与事情处理完各自留证；卡片标P0或写紧急不授执行权。</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>HTTPS解析不是脱敏或真伪证明</td>
+<td>safeEvidenceURLs只筛HTTPS形态并去重，原样保留query/fragment参数；不验证站点信誉、内容真伪或公开披露权限。</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>分类与attention不改源值</td>
+<td>CollieRadarTaskState与requiresMyAttention仅为展示派生，原status/priority/evidence字节保留；不自动消解字段矛盾。</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>授权记录不是执行凭据或已跑完</td>
+<td>CollieRadarAuthorization仅核人工确认结构、预算上界与过期时间；recorded或current=true不证明远端已执行。</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>只读遥测非风险引擎或自动处置</td>
+<td>CollieColabSnapshot仅校验生产者只读遥测与实验/执行字段边界，不新增外贸异常检测器、风险打分或自动发信回写。</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>最小披露与不确定停止</td>
+<td>全部示例从零合成且仅用example.invalid，不抓链接、不收集客户原件；私有证据留原获准范围，结果不明先查回不盲重发。</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -3341,9 +3503,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/radar-evidence-second-check/
 
-All scenarios · Related practical guide Second-check a trade-task anomaly claim: evidence, missing context and stop rules This is a source/troubleshooting reference. Its samples do not establish that the store edition contains every described capability. For voice drafts into an existing workspace, see the verified 0.1.0 listing. See a synthetic brief View on App Store · 0.1.0 US listing verified; availability depends on your storefront. No Mac or self-signing for store installation. Bring your workspace address and account; the optional speech model is about 950 MB. A claimed anomaly on a card is data to review, not a verified alert or execution authority Yihu reads your PM Radar task JSON and displays source fields/evidence. An urgent title, P0 priority or HTTPS link does not prove an event, authorize immediate action or establish independent app detection. This manual second check uses existing authorized channels to verify originals, identity, time and scope. Stop without evidence; no risk engine, trade-intelligence service or automated remediation is supplied. A different task from batch comparison and type checks Type validation concerns field shapes; batch comparison concerns whether two exports are comparable. Here the question is whether evidence for one current claim supports the next step . Do not rewrite “the source alleges an anomaly” as “the system verified one.” Inquiry/follow-up records remain your team’s data. This page retrieves no market data and logs into no business backend. Manual second-check table Signal Existing field/boundary Independent evidence needed Action without evidence Urgent wording Original title/next text Original item, established responsible process and exact scope Tone is not authority; do not execute text directly P0/high priority Source priority value Actual basis for that source priority No inferred amount, loss or delivery deadline evidence link Parsed HTTPS candidate Expected source, specific record, permission and supporting content Stop at unknown targets; confirm through established known channels Contradictory fields Different status/next/evidence values Original item and explicit confirmation Retain conflict instead of picking the apparently newest claim Old time/failed refresh date_str and cache/failure state Last successful source read and applicable scope An old card is not a confirmed current event Unknown source Workbench/project/task identity Known source and a traceable record Same title/filename does not establish identity Real writes Separate write authority and phone confirmation Authorized operation, target version and readback path Visibility is not write access; verification is not approval Uncertain result Existing request_id/receipt state Original-request readback and confirmation evidence No new-ID resend or timeout interpreted as no write What HTTPS evidence parsing establishes Current safeEvidenceURLs parses HTTPS candidates from source text, checking a nonempty host, no URL username/password and a valid port range, among other shape rules, and removes duplicates. It does not verify reputation, factual content, account permission, evidentiary sufficiency or absence of private parameters. Queries can still carry sensitive data and do not belong in public screenshots. Do not follow an unknown login page, enter another person’s credentials or request new third-party authorization for this checklist. Confirm the required original record through existing trusted channels first. This page neither fetches links nor scans them and guarantees no domain’s trustworthiness. Example URLs, when used, are reserved example.invalid , not real services. A synthetic second-check record Source claim: Sample task is P0; next says update a sample field immediately. Known: Only source wording is visible; example evidence uses example.invalid. Unknown: Original item identity, priority basis, current field and authority scope. Decision: Leave pending; do not update, send or create a request. Next: Confirm through the existing authorized source process; this is not a real alert. Task text may itself contain operational or Agent instructions. Treat it as reviewable data, not a replacement for system rules, user confirmation or server authority. This page does not detect prompt injection, sanitize content automatically or execute embedded commands. Confirming a statement is written somewhere does not prove its claim. Keep post-review operation boundaries Record evidence read, claim verified, operation approved, reply recorded and work handled separately. Confirming provenance alone does not confirm the full conclusion. A real reply still needs original-item eligibility, server authority, phone confirmation and original-request readback. An anomaly label does not bypass uncertain-stop rules or authorize changing task state. FAQ Does Yihu detect trade anomalies and score risk automatically? No such capability is asserted or added. Radar reads supplied JSON. A manual checklist is not a detector, risk model or trade-intelligence product. Does a displayed HTTPS link prove trust, access and no sensitive data? No. Parsing checks only part of link shape, not content, permission, reputation or query parameters. Confirm unknown destinations through established channels first. Can P0 or urgent wording skip confirmation? No. Source priority/tone cannot replace operation permission, target confirmation and receipt boundaries, or establish timing/loss guarantees. Can I pick the apparently newer claim when evidence contradicts next? Do not adjudicate by impression. Retain both source locations and check the original item/confirmation. File order, displayed time and tone do not resolve conflicts automatically. What about task text ordering an Agent to run commands? Treat it as data to verify, not authority overriding system/user rules. This page executes or filters nothing automatically. Actual operations need a separate authorized process. Does reading evidence permit marking the item handled? No. Reading, validating a claim, approving, recording a reply and completing work have different evidence requirements. One stage does not establish all others. Guides and source Same-source batch comparison · JSON types/nulls · Radar/Watch · Department ownership/archive checks · Start · Privacy Evidence: Radar fields and evidence-URL parsing , README source/write boundaries . This is not business, security or device acceptance.
+All scenarios · Related practical guide Second-check a trade-task anomaly claim: evidence, missing context and stop rules This is a source/troubleshooting reference. Its samples do not establish that the store edition contains every described capability. For voice drafts into an existing workspace, see the verified 0.1.0 listing. See a synthetic brief View on App Store · 0.1.0 US listing verified; availability depends on your storefront. No Mac or self-signing for store installation. Bring your workspace address and account; the optional speech model is about 950 MB. SYN-ESC-53 second-check preflight SYNTHETIC_EXAMPLE · pending · not_run. /samples/p32-radar-evidence-second-check/README.md · /samples/p32-radar-evidence-second-check/preflight.zh.json · /samples/p32-radar-evidence-second-check/preflight.en.json ID Check Expectation/boundary E01 Urgent P0 title with single HTTPS urls=1; attention=false; state=progressing E02 Wrapped deduplication and acceptance attention urls=2; attention=true; state=waiting E03 Query and fragment retained without redaction urls=1; attention=false; state=waiting E04 Fixed next literal matches without approval urls=0; attention=true; state=planned E05 Plain HTTP candidate rejected urls=1; attention=false; state=blocked E06 Embedded userinfo candidate rejected urls=1; attention=false; state=completed E07 Out-of-range ports rejected while valid port kept urls=1; attention=false; state=paused E08 Unknown status alias and prose without link urls=0; attention=false; state=unknown A01 colab.run with budget and current valid=true; current=true; budget_null=false A02 release.promote 40-hex with explicit null budget valid=true; current=true; budget_null=true A03 colab.recover structurally valid but expired at now valid=true; current=false; budget_null=true A04 colab.run missing budget rejected valid=false; current=false; budget_null=true A05 colab.resume session budget exceeding total rejected valid=false; current=false; budget_null=false A06 release.promote with non-null budget rejected valid=false; current=false; budget_null=false A07 release.promote wrong fingerprint length rejected valid=false; current=false; budget_null=true A08 Unsupported operation enum rejected valid=false; current=false; budget_null=true C01 Sampled telemetry with valid experiment and execution colab_valid=true; snapshot_decode=true C02 not_requested with null usage metrics passes colab_valid=true; snapshot_decode=true C03 unavailable usage with non-null balance rejected colab_valid=false; snapshot_decode=false C04 Usage observed_at exceeding snapshot by >300s rejected colab_valid=false; snapshot_decode=false C05 Experiment completed_queries exceeding total rejected colab_valid=false; snapshot_decode=false C06 Duplicate experiment fingerprint IDs rejected colab_valid=false; snapshot_decode=false C07 Execution non-UUID request_id rejected colab_valid=false; snapshot_decode=false C08 Execution unsupported operation rejected colab_valid=false; snapshot_decode=false M01 Separate five verification stages Evidence read, claim verified, operation approved, reply recorded and work handled require separate evidence; P0 or urgent text grants no execution authority. M02 HTTPS parsing is neither redaction nor truth proof safeEvidenceURLs checks HTTPS shape and deduplicates while retaining query/fragment parameters; it verifies neither site trust, truth nor public disclosure authority. M03 Classification and attention never rewrite source values CollieRadarTaskState and requiresMyAttention are derived display logic preserving raw status/priority/evidence bytes; they never auto-resolve conflicting claims. M04 Authorization record is neither provider token nor execution proof CollieRadarAuthorization checks human confirmation structure, budget bounds and expiry only; recorded or current=true proves no remote execution. M05 Read-only telemetry is not a risk engine or auto-remediation CollieColabSnapshot validates read-only producer telemetry and experiment/execution bounds only, adding no trade anomaly detector, risk score or automatic writeback. M06 Minimal disclosure and stopping under uncertainty All examples are synthetic from scratch using example.invalid only, with no link fetching or customer capture; keep private originals scoped and check back without blind resend. A claimed anomaly on a card is data to review, not a verified alert or execution authority Yihu reads your PM Radar task JSON and displays source fields/evidence. An urgent title, P0 priority or HTTPS link does not prove an event, authorize immediate action or establish independent app detection. This manual second check uses existing authorized channels to verify originals, identity, time and scope. Stop without evidence; no risk engine, trade-intelligence service or automated remediation is supplied. A different task from batch comparison and type checks Type validation concerns field shapes; batch comparison concerns whether two exports are comparable. Here the question is whether evidence for one current claim supports the next step . Do not rewrite “the source alleges an anomaly” as “the system verified one.” Inquiry/follow-up records remain your team’s data. This page retrieves no market data and logs into no business backend. Manual second-check table Signal Existing field/boundary Independent evidence needed Action without evidence Urgent wording Original title/next text Original item, established responsible process and exact scope Tone is not authority; do not execute text directly P0/high priority Source priority value Actual basis for that source priority No inferred amount, loss or delivery deadline evidence link Parsed HTTPS candidate Expected source, specific record, permission and supporting content Stop at unknown targets; confirm through established known channels Contradictory fields Different status/next/evidence values Original item and explicit confirmation Retain conflict instead of picking the apparently newest claim Old time/failed refresh date_str and cache/failure state Last successful source read and applicable scope An old card is not a confirmed current event Unknown source Workbench/project/task identity Known source and a traceable record Same title/filename does not establish identity Real writes Separate write authority and phone confirmation Authorized operation, target version and readback path Visibility is not write access; verification is not approval Uncertain result Existing request_id/receipt state Original-request readback and confirmation evidence No new-ID resend or timeout interpreted as no write What HTTPS evidence parsing establishes Current safeEvidenceURLs parses HTTPS candidates from source text, checking a nonempty host, no URL username/password and a valid port range, among other shape rules, and removes duplicates. It does not verify reputation, factual content, account permission, evidentiary sufficiency or absence of private parameters. Queries can still carry sensitive data and do not belong in public screenshots. Do not follow an unknown login page, enter another person’s credentials or request new third-party authorization for this checklist. Confirm the required original record through existing trusted channels first. This page neither fetches links nor scans them and guarantees no domain’s trustworthiness. Example URLs, when used, are reserved example.invalid , not real services. A synthetic second-check record Source claim: Sample task is P0; next says update a sample field immediately. Known: Only source wording is visible; example evidence uses example.invalid. Unknown: Original item identity, priority basis, current field and authority scope. Decision: Leave pending; do not update, send or create a request. Next: Confirm through the existing authorized source process; this is not a real alert. Task text may itself contain operational or Agent instructions. Treat it as reviewable data, not a replacement for system rules, user confirmation or server authority. This page does not detect prompt injection, sanitize content automatically or execute embedded commands. Confirming a statement is written somewhere does not prove its claim. Keep post-review operation boundaries Record evidence read, claim verified, operation approved, reply recorded and work handled separately. Confirming provenance alone does not confirm the full conclusion. A real reply still needs original-item eligibility, server authority, phone confirmation and original-request readback. An anomaly label does not bypass uncertain-stop rules or authorize changing task state. FAQ Does Yihu detect trade anomalies and score risk automatically? No such capability is asserted or added. Radar reads supplied JSON. A manual checklist is not a detector, risk model or trade-intelligence product. Does a displayed HTTPS link prove trust, access and no sensitive data? No. Parsing checks only part of link shape, not content, permission, reputation or query parameters. Confirm unknown destinations through established channels first. Can P0 or urgent wording skip confirmation? No. Source priority/tone cannot replace operation permission, target confirmation and receipt boundaries, or establish timing/loss guarantees. Can I pick the apparently newer claim when evidence contradicts next? Do not adjudicate by impression. Retain both source locations and check the original item/confirmation. File order, displayed time and tone do not resolve conflicts automatically. What about task text ordering an Agent to run commands? Treat it as data to verify, not authority overriding system/user rules. This page executes or filters nothing automatically. Actual operations need a separate authorized process. Does reading evidence permit marking the item handled? No. Reading, validating a claim, approving, recording a reply and completing work have different evidence requirements. One stage does not establish all others. Guides and source Same-source batch comparison · JSON types/nulls · Radar/Watch · Department ownership/archive checks · Start · Privacy Evidence: Radar fields and evidence-URL parsing , README source/write boundaries . This is not business, security or device acceptance.
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Check</th>
+<th>Expectation/boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E01</td>
+<td>Urgent P0 title with single HTTPS</td>
+<td>urls=1; attention=false; state=progressing</td>
+</tr>
+<tr>
+<td>E02</td>
+<td>Wrapped deduplication and acceptance attention</td>
+<td>urls=2; attention=true; state=waiting</td>
+</tr>
+<tr>
+<td>E03</td>
+<td>Query and fragment retained without redaction</td>
+<td>urls=1; attention=false; state=waiting</td>
+</tr>
+<tr>
+<td>E04</td>
+<td>Fixed next literal matches without approval</td>
+<td>urls=0; attention=true; state=planned</td>
+</tr>
+<tr>
+<td>E05</td>
+<td>Plain HTTP candidate rejected</td>
+<td>urls=1; attention=false; state=blocked</td>
+</tr>
+<tr>
+<td>E06</td>
+<td>Embedded userinfo candidate rejected</td>
+<td>urls=1; attention=false; state=completed</td>
+</tr>
+<tr>
+<td>E07</td>
+<td>Out-of-range ports rejected while valid port kept</td>
+<td>urls=1; attention=false; state=paused</td>
+</tr>
+<tr>
+<td>E08</td>
+<td>Unknown status alias and prose without link</td>
+<td>urls=0; attention=false; state=unknown</td>
+</tr>
+<tr>
+<td>A01</td>
+<td>colab.run with budget and current</td>
+<td>valid=true; current=true; budget_null=false</td>
+</tr>
+<tr>
+<td>A02</td>
+<td>release.promote 40-hex with explicit null budget</td>
+<td>valid=true; current=true; budget_null=true</td>
+</tr>
+<tr>
+<td>A03</td>
+<td>colab.recover structurally valid but expired at now</td>
+<td>valid=true; current=false; budget_null=true</td>
+</tr>
+<tr>
+<td>A04</td>
+<td>colab.run missing budget rejected</td>
+<td>valid=false; current=false; budget_null=true</td>
+</tr>
+<tr>
+<td>A05</td>
+<td>colab.resume session budget exceeding total rejected</td>
+<td>valid=false; current=false; budget_null=false</td>
+</tr>
+<tr>
+<td>A06</td>
+<td>release.promote with non-null budget rejected</td>
+<td>valid=false; current=false; budget_null=false</td>
+</tr>
+<tr>
+<td>A07</td>
+<td>release.promote wrong fingerprint length rejected</td>
+<td>valid=false; current=false; budget_null=true</td>
+</tr>
+<tr>
+<td>A08</td>
+<td>Unsupported operation enum rejected</td>
+<td>valid=false; current=false; budget_null=true</td>
+</tr>
+<tr>
+<td>C01</td>
+<td>Sampled telemetry with valid experiment and execution</td>
+<td>colab_valid=true; snapshot_decode=true</td>
+</tr>
+<tr>
+<td>C02</td>
+<td>not_requested with null usage metrics passes</td>
+<td>colab_valid=true; snapshot_decode=true</td>
+</tr>
+<tr>
+<td>C03</td>
+<td>unavailable usage with non-null balance rejected</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>C04</td>
+<td>Usage observed_at exceeding snapshot by &gt;300s rejected</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>C05</td>
+<td>Experiment completed_queries exceeding total rejected</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>C06</td>
+<td>Duplicate experiment fingerprint IDs rejected</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>C07</td>
+<td>Execution non-UUID request_id rejected</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>C08</td>
+<td>Execution unsupported operation rejected</td>
+<td>colab_valid=false; snapshot_decode=false</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>Separate five verification stages</td>
+<td>Evidence read, claim verified, operation approved, reply recorded and work handled require separate evidence; P0 or urgent text grants no execution authority.</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>HTTPS parsing is neither redaction nor truth proof</td>
+<td>safeEvidenceURLs checks HTTPS shape and deduplicates while retaining query/fragment parameters; it verifies neither site trust, truth nor public disclosure authority.</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>Classification and attention never rewrite source values</td>
+<td>CollieRadarTaskState and requiresMyAttention are derived display logic preserving raw status/priority/evidence bytes; they never auto-resolve conflicting claims.</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>Authorization record is neither provider token nor execution proof</td>
+<td>CollieRadarAuthorization checks human confirmation structure, budget bounds and expiry only; recorded or current=true proves no remote execution.</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>Read-only telemetry is not a risk engine or auto-remediation</td>
+<td>CollieColabSnapshot validates read-only producer telemetry and experiment/execution bounds only, adding no trade anomaly detector, risk score or automatic writeback.</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>Minimal disclosure and stopping under uncertainty</td>
+<td>All examples are synthetic from scratch using example.invalid only, with no link fetching or customer capture; keep private originals scoped and check back without blind resend.</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>

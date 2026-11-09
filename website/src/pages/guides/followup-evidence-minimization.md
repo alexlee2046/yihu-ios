@@ -85,3 +85,8 @@ indexable: false
 [部门认领与归档](/guides/department-minutes-ownership-archive/) · [交接证据审计](/guides/handoff-evidence-audit-checklist/) · [异常证据二次核实](/guides/radar-evidence-second-check/) · [跨端字段呈现](/guides/cross-device-field-presentation/) · [开始](/start/) · [隐私](/privacy/)
 
 依据：[Radar原文字段与证据解析](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieRadarModel.swift)、[README分享/历史/权限边界](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md)。
+
+
+## SYN-ESC-53 证据解析不等已脱敏或主张成立（保持退休）
+
+[同语异常证据二次核实](/guides/radar-evidence-second-check/)核对Action `safeEvidenceURLs`、展示分类、`CollieRadarAuthorization`人工确认结构与`CollieColabSnapshot`只读遥测门。HTTPS候选保留原始query/fragment而不自动脱敏，P0/紧急标题或状态分类也不证明主张属实、可公开披露或已获写授权。私有原记录留在原获准范围，公开样例仅用合成`example.invalid`；真实读取/外部站点/审批/回复/网络全not_run，结果不明不换ID盲重发。保原P23同语认领转接与`indexable: false`/noindex,follow，不入sitemap或LLM独立section，不新增下载/Store/转换卡，不改全站既有Store边界、配置或正文。
