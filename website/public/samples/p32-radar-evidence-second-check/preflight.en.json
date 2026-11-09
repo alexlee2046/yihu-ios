@@ -1,0 +1,1108 @@
+{
+  "schema_version": 1,
+  "batch": "SYN-ESC-53",
+  "wave": "Yihu P32 / global P36",
+  "language": "en",
+  "is_app_import_schema": false,
+  "classification": "SYNTHETIC_EXAMPLE",
+  "state": "pending",
+  "real_runtime": "not_run",
+  "source": {
+    "commit": "402a7f828c47d41c8ebebf9f06f1f4615d5e3ddd",
+    "tree": "572ec6be5841eec57d3f0034fbb0b9551591f233"
+  },
+  "cases": [
+    {
+      "id": "E01",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Urgent P0 title with single HTTPS",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "action_evidence",
+      "action": {
+        "project": "SYN-project",
+        "status": "进行中",
+        "title": "SYN-urgent P0 claim",
+        "next": "SYN review",
+        "url": "https://example.invalid/SYN/1",
+        "priority": "P0",
+        "evidence": "https://example.invalid/evidence/1"
+      },
+      "expected_safe_evidence_urls": [
+        "https://example.invalid/evidence/1"
+      ],
+      "expected_requires_attention": false,
+      "expected_classified_state": "progressing",
+      "boundary": "Original Action evidence URL parsing, attention and state classification on host only, proving neither claim truth, redaction nor public disclosure permission."
+    },
+    {
+      "id": "E02",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Wrapped deduplication and acceptance attention",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "action_evidence",
+      "action": {
+        "project": "SYN-project",
+        "status": " 等你验收 ",
+        "title": "SYN-claim",
+        "next": "SYN review",
+        "url": "https://example.invalid/SYN/2",
+        "priority": "P1",
+        "evidence": "(https://example.invalid/a); [https://example.invalid/a] | <https://example.invalid/b>"
+      },
+      "expected_safe_evidence_urls": [
+        "https://example.invalid/a",
+        "https://example.invalid/b"
+      ],
+      "expected_requires_attention": true,
+      "expected_classified_state": "waiting",
+      "boundary": "Original Action evidence URL parsing, attention and state classification on host only, proving neither claim truth, redaction nor public disclosure permission."
+    },
+    {
+      "id": "E03",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Query and fragment retained without redaction",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "action_evidence",
+      "action": {
+        "project": "SYN-project",
+        "status": "pending",
+        "title": "SYN-claim",
+        "next": "SYN review",
+        "url": "https://example.invalid/SYN/3",
+        "priority": "P1",
+        "evidence": "https://example.invalid/item?token=SYN-KEEP#sec1"
+      },
+      "expected_safe_evidence_urls": [
+        "https://example.invalid/item?token=SYN-KEEP#sec1"
+      ],
+      "expected_requires_attention": false,
+      "expected_classified_state": "waiting",
+      "boundary": "Original Action evidence URL parsing, attention and state classification on host only, proving neither claim truth, redaction nor public disclosure permission."
+    },
+    {
+      "id": "E04",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Fixed next literal matches without approval",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "action_evidence",
+      "action": {
+        "project": "SYN-project",
+        "status": "待做",
+        "title": "SYN-claim",
+        "next": "SYN Alex second-check",
+        "url": "https://example.invalid/SYN/4",
+        "priority": "P2",
+        "evidence": null
+      },
+      "expected_safe_evidence_urls": [],
+      "expected_requires_attention": true,
+      "expected_classified_state": "planned",
+      "boundary": "Original Action evidence URL parsing, attention and state classification on host only, proving neither claim truth, redaction nor public disclosure permission."
+    },
+    {
+      "id": "E05",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Plain HTTP candidate rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "action_evidence",
+      "action": {
+        "project": "SYN-project",
+        "status": "阻塞",
+        "title": "SYN-claim",
+        "next": "SYN review",
+        "url": "https://example.invalid/SYN/5",
+        "priority": null,
+        "evidence": "http://example.invalid/plain; https://example.invalid/tls"
+      },
+      "expected_safe_evidence_urls": [
+        "https://example.invalid/tls"
+      ],
+      "expected_requires_attention": false,
+      "expected_classified_state": "blocked",
+      "boundary": "Original Action evidence URL parsing, attention and state classification on host only, proving neither claim truth, redaction nor public disclosure permission."
+    },
+    {
+      "id": "E06",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Embedded userinfo candidate rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "action_evidence",
+      "action": {
+        "project": "SYN-project",
+        "status": "已完成",
+        "title": "SYN-claim",
+        "next": "SYN review",
+        "url": "https://example.invalid/SYN/6",
+        "priority": null,
+        "evidence": "https://user:pass@example.invalid/private, https://example.invalid/clean"
+      },
+      "expected_safe_evidence_urls": [
+        "https://example.invalid/clean"
+      ],
+      "expected_requires_attention": false,
+      "expected_classified_state": "completed",
+      "boundary": "Original Action evidence URL parsing, attention and state classification on host only, proving neither claim truth, redaction nor public disclosure permission."
+    },
+    {
+      "id": "E07",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Out-of-range ports rejected while valid port kept",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "action_evidence",
+      "action": {
+        "project": "SYN-project",
+        "status": "已搁置",
+        "title": "SYN-claim",
+        "next": "SYN review",
+        "url": "https://example.invalid/SYN/7",
+        "priority": null,
+        "evidence": "https://example.invalid:0/a，https://example.invalid:65536/b；https://example.invalid:8443/ok"
+      },
+      "expected_safe_evidence_urls": [
+        "https://example.invalid:8443/ok"
+      ],
+      "expected_requires_attention": false,
+      "expected_classified_state": "paused",
+      "boundary": "Original Action evidence URL parsing, attention and state classification on host only, proving neither claim truth, redaction nor public disclosure permission."
+    },
+    {
+      "id": "E08",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Unknown status alias and prose without link",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "action_evidence",
+      "action": {
+        "project": "SYN-project",
+        "status": "异常待核",
+        "title": "SYN-claim",
+        "next": "SYN review",
+        "url": "https://example.invalid/SYN/8",
+        "priority": "P0",
+        "evidence": "urgent P0 claim without https link"
+      },
+      "expected_safe_evidence_urls": [],
+      "expected_requires_attention": false,
+      "expected_classified_state": "unknown",
+      "boundary": "Original Action evidence URL parsing, attention and state classification on host only, proving neither claim truth, redaction nor public disclosure permission."
+    },
+    {
+      "id": "A01",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "colab.run with budget and current",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "authorization_record",
+      "now_unix": 10000,
+      "authorization": {
+        "version": 1,
+        "operation": "colab.run",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "SYN-operator",
+        "scope": "SYN-scope",
+        "expires_at": 10600,
+        "budget": {
+          "session_cu": 2.0,
+          "total_cu": 10.0,
+          "minutes": 30.0
+        },
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expected_valid": true,
+      "expected_current": true,
+      "expected_operation_label": "运行实验",
+      "expected_encoded_budget_null": false,
+      "boundary": "Original CollieRadarAuthorization structure, budget and expiry check only, not a provider credential, real approval or execution receipt."
+    },
+    {
+      "id": "A02",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "release.promote 40-hex with explicit null budget",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "authorization_record",
+      "now_unix": 10000,
+      "authorization": {
+        "version": 1,
+        "operation": "release.promote",
+        "fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "subject": "SYN-operator",
+        "scope": "SYN-release",
+        "expires_at": 10600,
+        "budget": null,
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expected_valid": true,
+      "expected_current": true,
+      "expected_operation_label": "申请发布固定版本",
+      "expected_encoded_budget_null": true,
+      "boundary": "Original CollieRadarAuthorization structure, budget and expiry check only, not a provider credential, real approval or execution receipt."
+    },
+    {
+      "id": "A03",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "colab.recover structurally valid but expired at now",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "authorization_record",
+      "now_unix": 10000,
+      "authorization": {
+        "version": 1,
+        "operation": "colab.recover",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "SYN-operator",
+        "scope": "SYN-recover",
+        "expires_at": 10000,
+        "budget": null,
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expected_valid": true,
+      "expected_current": false,
+      "expected_operation_label": "核对并释放实验资源",
+      "expected_encoded_budget_null": true,
+      "boundary": "Original CollieRadarAuthorization structure, budget and expiry check only, not a provider credential, real approval or execution receipt."
+    },
+    {
+      "id": "A04",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "colab.run missing budget rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "authorization_record",
+      "now_unix": 10000,
+      "authorization": {
+        "version": 1,
+        "operation": "colab.run",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "SYN-operator",
+        "scope": "SYN-scope",
+        "expires_at": 10600,
+        "budget": null,
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expected_valid": false,
+      "expected_current": false,
+      "expected_operation_label": "运行实验",
+      "expected_encoded_budget_null": true,
+      "boundary": "Original CollieRadarAuthorization structure, budget and expiry check only, not a provider credential, real approval or execution receipt."
+    },
+    {
+      "id": "A05",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "colab.resume session budget exceeding total rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "authorization_record",
+      "now_unix": 10000,
+      "authorization": {
+        "version": 1,
+        "operation": "colab.resume",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "SYN-operator",
+        "scope": "SYN-scope",
+        "expires_at": 10600,
+        "budget": {
+          "session_cu": 12.0,
+          "total_cu": 10.0,
+          "minutes": 30.0
+        },
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expected_valid": false,
+      "expected_current": false,
+      "expected_operation_label": "续跑实验",
+      "expected_encoded_budget_null": false,
+      "boundary": "Original CollieRadarAuthorization structure, budget and expiry check only, not a provider credential, real approval or execution receipt."
+    },
+    {
+      "id": "A06",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "release.promote with non-null budget rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "authorization_record",
+      "now_unix": 10000,
+      "authorization": {
+        "version": 1,
+        "operation": "release.promote",
+        "fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "subject": "SYN-operator",
+        "scope": "SYN-release",
+        "expires_at": 10600,
+        "budget": {
+          "session_cu": 1.0,
+          "total_cu": 2.0,
+          "minutes": 5.0
+        },
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expected_valid": false,
+      "expected_current": false,
+      "expected_operation_label": "申请发布固定版本",
+      "expected_encoded_budget_null": false,
+      "boundary": "Original CollieRadarAuthorization structure, budget and expiry check only, not a provider credential, real approval or execution receipt."
+    },
+    {
+      "id": "A07",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "release.promote wrong fingerprint length rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "authorization_record",
+      "now_unix": 10000,
+      "authorization": {
+        "version": 1,
+        "operation": "release.promote",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "SYN-operator",
+        "scope": "SYN-release",
+        "expires_at": 10600,
+        "budget": null,
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expected_valid": false,
+      "expected_current": false,
+      "expected_operation_label": "申请发布固定版本",
+      "expected_encoded_budget_null": true,
+      "boundary": "Original CollieRadarAuthorization structure, budget and expiry check only, not a provider credential, real approval or execution receipt."
+    },
+    {
+      "id": "A08",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Unsupported operation enum rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "authorization_record",
+      "now_unix": 10000,
+      "authorization": {
+        "version": 1,
+        "operation": "trade.execute",
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "subject": "SYN-operator",
+        "scope": "SYN-scope",
+        "expires_at": 10600,
+        "budget": null,
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expected_valid": false,
+      "expected_current": false,
+      "expected_operation_label": "未知操作",
+      "expected_encoded_budget_null": true,
+      "boundary": "Original CollieRadarAuthorization structure, budget and expiry check only, not a provider credential, real approval or execution receipt."
+    },
+    {
+      "id": "C01",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Sampled telemetry with valid experiment and execution",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "colab_snapshot",
+      "now_unix": 10000,
+      "colab": {
+        "version": 1,
+        "observed_at": 10000,
+        "usage": {
+          "status": "sampled",
+          "balance": 50.0,
+          "rate": 1.5,
+          "assignments": 1,
+          "observed_at": 9950.0
+        },
+        "budget": {
+          "measured_cu": 4.5,
+          "unmeasured_runs": 0
+        },
+        "experiments": [
+          {
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running",
+            "completed_queries": 5,
+            "total_queries": 10,
+            "completed_batches": 1,
+            "total_batches": 2,
+            "measured_cu": 2.0,
+            "release_confirmed": false,
+            "baseline": {
+              "top1": 0.8,
+              "top5": 0.9,
+              "top10": 0.95,
+              "false_same_rate": 0.01,
+              "negative_rejection_rate": 0.99,
+              "acceptance_status": "SYN-baseline"
+            },
+            "candidate": null
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "11111111-1111-4111-8111-111111111111",
+            "item_id": "SYN-item",
+            "operation": "colab.run",
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running"
+          }
+        ]
+      },
+      "expected_colab_valid": true,
+      "expected_snapshot_decode": true,
+      "boundary": "Original CollieColabSnapshot and Snapshot.decode structural gate on host only, not risk scoring, live experiment execution or business acceptance."
+    },
+    {
+      "id": "C02",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "not_requested with null usage metrics passes",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "colab_snapshot",
+      "now_unix": 10000,
+      "colab": {
+        "version": 1,
+        "observed_at": 10000,
+        "usage": {
+          "status": "not_requested",
+          "balance": null,
+          "rate": null,
+          "assignments": null,
+          "observed_at": null
+        },
+        "budget": {
+          "measured_cu": 4.5,
+          "unmeasured_runs": 0
+        },
+        "experiments": [],
+        "executions": []
+      },
+      "expected_colab_valid": true,
+      "expected_snapshot_decode": true,
+      "boundary": "Original CollieColabSnapshot and Snapshot.decode structural gate on host only, not risk scoring, live experiment execution or business acceptance."
+    },
+    {
+      "id": "C03",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "unavailable usage with non-null balance rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "colab_snapshot",
+      "now_unix": 10000,
+      "colab": {
+        "version": 1,
+        "observed_at": 10000,
+        "usage": {
+          "status": "unavailable",
+          "balance": 10.0,
+          "rate": null,
+          "assignments": null,
+          "observed_at": null
+        },
+        "budget": {
+          "measured_cu": 4.5,
+          "unmeasured_runs": 0
+        },
+        "experiments": [
+          {
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running",
+            "completed_queries": 5,
+            "total_queries": 10,
+            "completed_batches": 1,
+            "total_batches": 2,
+            "measured_cu": 2.0,
+            "release_confirmed": false,
+            "baseline": {
+              "top1": 0.8,
+              "top5": 0.9,
+              "top10": 0.95,
+              "false_same_rate": 0.01,
+              "negative_rejection_rate": 0.99,
+              "acceptance_status": "SYN-baseline"
+            },
+            "candidate": null
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "11111111-1111-4111-8111-111111111111",
+            "item_id": "SYN-item",
+            "operation": "colab.run",
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running"
+          }
+        ]
+      },
+      "expected_colab_valid": false,
+      "expected_snapshot_decode": false,
+      "boundary": "Original CollieColabSnapshot and Snapshot.decode structural gate on host only, not risk scoring, live experiment execution or business acceptance."
+    },
+    {
+      "id": "C04",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Usage observed_at exceeding snapshot by >300s rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "colab_snapshot",
+      "now_unix": 10000,
+      "colab": {
+        "version": 1,
+        "observed_at": 10000,
+        "usage": {
+          "status": "sampled",
+          "balance": 50.0,
+          "rate": 1.5,
+          "assignments": 1,
+          "observed_at": 10301.0
+        },
+        "budget": {
+          "measured_cu": 4.5,
+          "unmeasured_runs": 0
+        },
+        "experiments": [
+          {
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running",
+            "completed_queries": 5,
+            "total_queries": 10,
+            "completed_batches": 1,
+            "total_batches": 2,
+            "measured_cu": 2.0,
+            "release_confirmed": false,
+            "baseline": {
+              "top1": 0.8,
+              "top5": 0.9,
+              "top10": 0.95,
+              "false_same_rate": 0.01,
+              "negative_rejection_rate": 0.99,
+              "acceptance_status": "SYN-baseline"
+            },
+            "candidate": null
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "11111111-1111-4111-8111-111111111111",
+            "item_id": "SYN-item",
+            "operation": "colab.run",
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running"
+          }
+        ]
+      },
+      "expected_colab_valid": false,
+      "expected_snapshot_decode": false,
+      "boundary": "Original CollieColabSnapshot and Snapshot.decode structural gate on host only, not risk scoring, live experiment execution or business acceptance."
+    },
+    {
+      "id": "C05",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Experiment completed_queries exceeding total rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "colab_snapshot",
+      "now_unix": 10000,
+      "colab": {
+        "version": 1,
+        "observed_at": 10000,
+        "usage": {
+          "status": "sampled",
+          "balance": 50.0,
+          "rate": 1.5,
+          "assignments": 1,
+          "observed_at": 9950.0
+        },
+        "budget": {
+          "measured_cu": 4.5,
+          "unmeasured_runs": 0
+        },
+        "experiments": [
+          {
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running",
+            "completed_queries": 11,
+            "total_queries": 10,
+            "completed_batches": 1,
+            "total_batches": 2,
+            "measured_cu": 2.0,
+            "release_confirmed": false,
+            "baseline": {
+              "top1": 0.8,
+              "top5": 0.9,
+              "top10": 0.95,
+              "false_same_rate": 0.01,
+              "negative_rejection_rate": 0.99,
+              "acceptance_status": "SYN-baseline"
+            },
+            "candidate": null
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "11111111-1111-4111-8111-111111111111",
+            "item_id": "SYN-item",
+            "operation": "colab.run",
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running"
+          }
+        ]
+      },
+      "expected_colab_valid": false,
+      "expected_snapshot_decode": false,
+      "boundary": "Original CollieColabSnapshot and Snapshot.decode structural gate on host only, not risk scoring, live experiment execution or business acceptance."
+    },
+    {
+      "id": "C06",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Duplicate experiment fingerprint IDs rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "colab_snapshot",
+      "now_unix": 10000,
+      "colab": {
+        "version": 1,
+        "observed_at": 10000,
+        "usage": {
+          "status": "sampled",
+          "balance": 50.0,
+          "rate": 1.5,
+          "assignments": 1,
+          "observed_at": 9950.0
+        },
+        "budget": {
+          "measured_cu": 4.5,
+          "unmeasured_runs": 0
+        },
+        "experiments": [
+          {
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running",
+            "completed_queries": 5,
+            "total_queries": 10,
+            "completed_batches": 1,
+            "total_batches": 2,
+            "measured_cu": 2.0,
+            "release_confirmed": false,
+            "baseline": {
+              "top1": 0.8,
+              "top5": 0.9,
+              "top10": 0.95,
+              "false_same_rate": 0.01,
+              "negative_rejection_rate": 0.99,
+              "acceptance_status": "SYN-baseline"
+            },
+            "candidate": null
+          },
+          {
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running",
+            "completed_queries": 5,
+            "total_queries": 10,
+            "completed_batches": 1,
+            "total_batches": 2,
+            "measured_cu": 2.0,
+            "release_confirmed": false,
+            "baseline": {
+              "top1": 0.8,
+              "top5": 0.9,
+              "top10": 0.95,
+              "false_same_rate": 0.01,
+              "negative_rejection_rate": 0.99,
+              "acceptance_status": "SYN-baseline"
+            },
+            "candidate": null
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "11111111-1111-4111-8111-111111111111",
+            "item_id": "SYN-item",
+            "operation": "colab.run",
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running"
+          }
+        ]
+      },
+      "expected_colab_valid": false,
+      "expected_snapshot_decode": false,
+      "boundary": "Original CollieColabSnapshot and Snapshot.decode structural gate on host only, not risk scoring, live experiment execution or business acceptance."
+    },
+    {
+      "id": "C07",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Execution non-UUID request_id rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "colab_snapshot",
+      "now_unix": 10000,
+      "colab": {
+        "version": 1,
+        "observed_at": 10000,
+        "usage": {
+          "status": "sampled",
+          "balance": 50.0,
+          "rate": 1.5,
+          "assignments": 1,
+          "observed_at": 9950.0
+        },
+        "budget": {
+          "measured_cu": 4.5,
+          "unmeasured_runs": 0
+        },
+        "experiments": [
+          {
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running",
+            "completed_queries": 5,
+            "total_queries": 10,
+            "completed_batches": 1,
+            "total_batches": 2,
+            "measured_cu": 2.0,
+            "release_confirmed": false,
+            "baseline": {
+              "top1": 0.8,
+              "top5": 0.9,
+              "top10": 0.95,
+              "false_same_rate": 0.01,
+              "negative_rejection_rate": 0.99,
+              "acceptance_status": "SYN-baseline"
+            },
+            "candidate": null
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "SYN-not-a-uuid",
+            "item_id": "SYN-item",
+            "operation": "colab.run",
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running"
+          }
+        ]
+      },
+      "expected_colab_valid": false,
+      "expected_snapshot_decode": false,
+      "boundary": "Original CollieColabSnapshot and Snapshot.decode structural gate on host only, not risk scoring, live experiment execution or business acceptance."
+    },
+    {
+      "id": "C08",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Execution unsupported operation rejected",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "kind": "colab_snapshot",
+      "now_unix": 10000,
+      "colab": {
+        "version": 1,
+        "observed_at": 10000,
+        "usage": {
+          "status": "sampled",
+          "balance": 50.0,
+          "rate": 1.5,
+          "assignments": 1,
+          "observed_at": 9950.0
+        },
+        "budget": {
+          "measured_cu": 4.5,
+          "unmeasured_runs": 0
+        },
+        "experiments": [
+          {
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "status": "running",
+            "completed_queries": 5,
+            "total_queries": 10,
+            "completed_batches": 1,
+            "total_batches": 2,
+            "measured_cu": 2.0,
+            "release_confirmed": false,
+            "baseline": {
+              "top1": 0.8,
+              "top5": 0.9,
+              "top10": 0.95,
+              "false_same_rate": 0.01,
+              "negative_rejection_rate": 0.99,
+              "acceptance_status": "SYN-baseline"
+            },
+            "candidate": null
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "11111111-1111-4111-8111-111111111111",
+            "item_id": "SYN-item",
+            "operation": "colab.delete",
+            "fingerprint": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "status": "running"
+          }
+        ]
+      },
+      "expected_colab_valid": false,
+      "expected_snapshot_decode": false,
+      "boundary": "Original CollieColabSnapshot and Snapshot.decode structural gate on host only, not risk scoring, live experiment execution or business acceptance."
+    }
+  ],
+  "manual_boundary_reviews": [
+    {
+      "id": "M01",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Separate five verification stages",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "Evidence read, claim verified, operation approved, reply recorded and work handled require separate evidence; P0 or urgent text grants no execution authority."
+    },
+    {
+      "id": "M02",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "HTTPS parsing is neither redaction nor truth proof",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "safeEvidenceURLs checks HTTPS shape and deduplicates while retaining query/fragment parameters; it verifies neither site trust, truth nor public disclosure authority."
+    },
+    {
+      "id": "M03",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Classification and attention never rewrite source values",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "CollieRadarTaskState and requiresMyAttention are derived display logic preserving raw status/priority/evidence bytes; they never auto-resolve conflicting claims."
+    },
+    {
+      "id": "M04",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Authorization record is neither provider token nor execution proof",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "CollieRadarAuthorization checks human confirmation structure, budget bounds and expiry only; recorded or current=true proves no remote execution."
+    },
+    {
+      "id": "M05",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Read-only telemetry is not a risk engine or auto-remediation",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "CollieColabSnapshot validates read-only producer telemetry and experiment/execution bounds only, adding no trade anomaly detector, risk score or automatic writeback."
+    },
+    {
+      "id": "M06",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Minimal disclosure and stopping under uncertainty",
+      "actual_claim_truth": null,
+      "actual_source_authority": null,
+      "actual_redaction_review": null,
+      "actual_human_approval": null,
+      "actual_remote_execution": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "All examples are synthetic from scratch using example.invalid only, with no link fetching or customer capture; keep private originals scoped and check back without blind resend."
+    }
+  ]
+}

@@ -5,6 +5,51 @@ description: "Verify source, evidence and authority behind urgent or conflicting
 lang: en
 ---
 
+## SYN-ESC-53 second-check preflight
+
+SYNTHETIC_EXAMPLE · pending · not_run.
+
+[/samples/p32-radar-evidence-second-check/README.md](/samples/p32-radar-evidence-second-check/README.md) · [/samples/p32-radar-evidence-second-check/preflight.zh.json](/samples/p32-radar-evidence-second-check/preflight.zh.json) · [/samples/p32-radar-evidence-second-check/preflight.en.json](/samples/p32-radar-evidence-second-check/preflight.en.json)
+
+<div role="region" aria-label="SYN-ESC-53" tabindex="0">
+
+| ID | Check | Expectation/boundary |
+| --- | --- | --- |
+| E01 | Urgent P0 title with single HTTPS | urls=1; attention=false; state=progressing |
+| E02 | Wrapped deduplication and acceptance attention | urls=2; attention=true; state=waiting |
+| E03 | Query and fragment retained without redaction | urls=1; attention=false; state=waiting |
+| E04 | Fixed next literal matches without approval | urls=0; attention=true; state=planned |
+| E05 | Plain HTTP candidate rejected | urls=1; attention=false; state=blocked |
+| E06 | Embedded userinfo candidate rejected | urls=1; attention=false; state=completed |
+| E07 | Out-of-range ports rejected while valid port kept | urls=1; attention=false; state=paused |
+| E08 | Unknown status alias and prose without link | urls=0; attention=false; state=unknown |
+| A01 | colab.run with budget and current | valid=true; current=true; budget_null=false |
+| A02 | release.promote 40-hex with explicit null budget | valid=true; current=true; budget_null=true |
+| A03 | colab.recover structurally valid but expired at now | valid=true; current=false; budget_null=true |
+| A04 | colab.run missing budget rejected | valid=false; current=false; budget_null=true |
+| A05 | colab.resume session budget exceeding total rejected | valid=false; current=false; budget_null=false |
+| A06 | release.promote with non-null budget rejected | valid=false; current=false; budget_null=false |
+| A07 | release.promote wrong fingerprint length rejected | valid=false; current=false; budget_null=true |
+| A08 | Unsupported operation enum rejected | valid=false; current=false; budget_null=true |
+| C01 | Sampled telemetry with valid experiment and execution | colab_valid=true; snapshot_decode=true |
+| C02 | not_requested with null usage metrics passes | colab_valid=true; snapshot_decode=true |
+| C03 | unavailable usage with non-null balance rejected | colab_valid=false; snapshot_decode=false |
+| C04 | Usage observed_at exceeding snapshot by >300s rejected | colab_valid=false; snapshot_decode=false |
+| C05 | Experiment completed_queries exceeding total rejected | colab_valid=false; snapshot_decode=false |
+| C06 | Duplicate experiment fingerprint IDs rejected | colab_valid=false; snapshot_decode=false |
+| C07 | Execution non-UUID request_id rejected | colab_valid=false; snapshot_decode=false |
+| C08 | Execution unsupported operation rejected | colab_valid=false; snapshot_decode=false |
+| M01 | Separate five verification stages | Evidence read, claim verified, operation approved, reply recorded and work handled require separate evidence; P0 or urgent text grants no execution authority. |
+| M02 | HTTPS parsing is neither redaction nor truth proof | safeEvidenceURLs checks HTTPS shape and deduplicates while retaining query/fragment parameters; it verifies neither site trust, truth nor public disclosure authority. |
+| M03 | Classification and attention never rewrite source values | CollieRadarTaskState and requiresMyAttention are derived display logic preserving raw status/priority/evidence bytes; they never auto-resolve conflicting claims. |
+| M04 | Authorization record is neither provider token nor execution proof | CollieRadarAuthorization checks human confirmation structure, budget bounds and expiry only; recorded or current=true proves no remote execution. |
+| M05 | Read-only telemetry is not a risk engine or auto-remediation | CollieColabSnapshot validates read-only producer telemetry and experiment/execution bounds only, adding no trade anomaly detector, risk score or automatic writeback. |
+| M06 | Minimal disclosure and stopping under uncertainty | All examples are synthetic from scratch using example.invalid only, with no link fetching or customer capture; keep private originals scoped and check back without blind resend. |
+
+</div>
+
+
+
 <h2 id="first-answer">A claimed anomaly on a card is data to review, not a verified alert or execution authority</h2>
 
 Yihu reads your PM Radar task JSON and displays source fields/evidence. An urgent title, P0 priority or HTTPS link does not prove an event, authorize immediate action or establish independent app detection. This manual second check uses existing authorized channels to verify originals, identity, time and scope. Stop without evidence; no risk engine, trade-intelligence service or automated remediation is supplied.

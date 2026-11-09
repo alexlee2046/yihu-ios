@@ -5,6 +5,51 @@ description: "对Radar里看似紧急或矛盾的任务提示先核来源、证�
 lang: zh
 ---
 
+## SYN-ESC-53 异常证据二次核实自检
+
+SYNTHETIC_EXAMPLE · pending · not_run。
+
+[/samples/p32-radar-evidence-second-check/README.md](/samples/p32-radar-evidence-second-check/README.md) · [/samples/p32-radar-evidence-second-check/preflight.zh.json](/samples/p32-radar-evidence-second-check/preflight.zh.json) · [/samples/p32-radar-evidence-second-check/preflight.en.json](/samples/p32-radar-evidence-second-check/preflight.en.json)
+
+<div role="region" aria-label="SYN-ESC-53" tabindex="0">
+
+| ID | 检查 | 预期/边界 |
+| --- | --- | --- |
+| E01 | 紧急P0标题单HTTPS | urls=1; attention=false; state=progressing |
+| E02 | 包裹符去重与待验收命中 | urls=2; attention=true; state=waiting |
+| E03 | 查询与片段原样保留未脱敏 | urls=1; attention=false; state=waiting |
+| E04 | next固定字样命中非审批 | urls=0; attention=true; state=planned |
+| E05 | 明文HTTP候选拒绝 | urls=1; attention=false; state=blocked |
+| E06 | 内嵌凭据候选拒绝 | urls=1; attention=false; state=completed |
+| E07 | 越界端口拒绝与有效端口保留 | urls=1; attention=false; state=paused |
+| E08 | 未知状态别名与纯文字无链接 | urls=0; attention=false; state=unknown |
+| A01 | colab.run带预算且未过期 | valid=true; current=true; budget_null=false |
+| A02 | release.promote四十位指纹且budget显式null | valid=true; current=true; budget_null=true |
+| A03 | colab.recover结构有效但到达过期点 | valid=true; current=false; budget_null=true |
+| A04 | colab.run缺预算拒绝 | valid=false; current=false; budget_null=true |
+| A05 | colab.resume单次预算超总预算拒绝 | valid=false; current=false; budget_null=false |
+| A06 | release.promote携带预算拒绝 | valid=false; current=false; budget_null=false |
+| A07 | release.promote指纹长度不符拒绝 | valid=false; current=false; budget_null=true |
+| A08 | 未知操作枚举拒绝 | valid=false; current=false; budget_null=true |
+| C01 | sampled遥测与实验执行结构通过 | colab_valid=true; snapshot_decode=true |
+| C02 | not_requested且空指标通过 | colab_valid=true; snapshot_decode=true |
+| C03 | unavailable携带残留balance拒绝 | colab_valid=false; snapshot_decode=false |
+| C04 | usage观测时间超快照300秒拒绝 | colab_valid=false; snapshot_decode=false |
+| C05 | 实验完成数超总数拒绝 | colab_valid=false; snapshot_decode=false |
+| C06 | 重复实验指纹ID拒绝 | colab_valid=false; snapshot_decode=false |
+| C07 | 执行request_id非UUID拒绝 | colab_valid=false; snapshot_decode=false |
+| C08 | 执行operation越界拒绝 | colab_valid=false; snapshot_decode=false |
+| M01 | 二次核实先分五阶段 | 证据已读、主张核实、操作批准、回复记录与事情处理完各自留证；卡片标P0或写紧急不授执行权。 |
+| M02 | HTTPS解析不是脱敏或真伪证明 | safeEvidenceURLs只筛HTTPS形态并去重，原样保留query/fragment参数；不验证站点信誉、内容真伪或公开披露权限。 |
+| M03 | 分类与attention不改源值 | CollieRadarTaskState与requiresMyAttention仅为展示派生，原status/priority/evidence字节保留；不自动消解字段矛盾。 |
+| M04 | 授权记录不是执行凭据或已跑完 | CollieRadarAuthorization仅核人工确认结构、预算上界与过期时间；recorded或current=true不证明远端已执行。 |
+| M05 | 只读遥测非风险引擎或自动处置 | CollieColabSnapshot仅校验生产者只读遥测与实验/执行字段边界，不新增外贸异常检测器、风险打分或自动发信回写。 |
+| M06 | 最小披露与不确定停止 | 全部示例从零合成且仅用example.invalid，不抓链接、不收集客户原件；私有证据留原获准范围，结果不明先查回不盲重发。 |
+
+</div>
+
+
+
 <h2 id="first-answer">卡片上的异常描述是待核数据，不是已验证警报或执行授权</h2>
 
 一呼读取你提供的PM Radar任务JSON，显示来源字段与证据。标题写着“紧急”、优先级是P0或提供HTTPS链接，都不证明事件真实、需要立即执行或已被App独立检测。这里的二次核实是人工清单：沿已有授权渠道核原始依据、对象、时间与操作范围；证据不足就停，不新增风险引擎、外贸情报服务或自动处置功能。
