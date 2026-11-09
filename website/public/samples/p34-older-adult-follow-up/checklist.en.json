@@ -1,0 +1,106 @@
+{
+  "worksheet": "older-adult-follow-up-appointment-companion-admin-handover",
+  "language": "en",
+  "is_app_import_schema": false,
+  "is_approval_record": false,
+  "contains_patient_information": false,
+  "instructions": "Manually organize authorized non-patient administrative checks only. Blank means unfilled, not passed. No identity details, conditions, test results or contacts; not for clinical, medication or transport-safety decisions.",
+  "items": [
+    {
+      "key": "appointment_version",
+      "label": "Current appointment reference",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "visit_date_and_site",
+      "label": "Visit date and site",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "arrival_instructions",
+      "label": "Check-in instructions",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "document_categories",
+      "label": "Document categories",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "document_custody",
+      "label": "Document custody",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "outbound_transport",
+      "label": "Outbound transport",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "return_transport",
+      "label": "Return transport",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "companion_roles",
+      "label": "Companion roles",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "accessibility_request",
+      "label": "Assistance request",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "unresolved_questions",
+      "label": "Open questions",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "draft_destination",
+      "label": "Draft destination",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "acknowledgement_and_duplicates",
+      "label": "Acknowledgement and duplication",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    }
+  ]
+}

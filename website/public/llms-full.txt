@@ -3868,140 +3868,188 @@ Parameter/comparison tables (HTML) / 参数对照表：
 </tbody>
 </table>
 
-### 弱网时改用复制或附件前：降级交接许可与重复风险核对
+### 老人复诊陪诊交接清单：预约资料、接送分工与确认事项
 
 Canonical: https://getyihu.com/guides/degraded-handoff-go-no-go/
 
-场景指南 · 相关使用指南 弱网时改用复制或附件前：降级交接许可与重复风险核对 网络不好不是换路径的许可，先核原结果和目标权限 当本地文字已保留、网页或服务不可达时，可以先停止在本地；不能因此把同一内容自动改走剪贴板、附件或另一个来源。本文在弱网故障定位之后，检查是否允许改变交接方式，以及旧尝试是否可能已产生副本。它不新增自动降级、重试或可靠送达队列，也不能用人工路径绕过宿主拒绝和一次交接边界。 与弱网排障的分工 弱网指南定位模型、网页、缓存和真实回复各层故障；这里假定已知道受影响层，专门作 继续保留还是采用另一个已获准人工动作 的决定。最安全的结果可能是“不再交接，待核”，而不是必须找一条能发出去的路线。 改交接方式前的决定表 当前情形 先核证据 可保留的安全状态 不允许借此做什么 本地有字，尚未交接 原文、拟用目标、是否确实未尝试 原文留本地待用户选择 自动上传或选定新来源 目标明确拒绝 宿主拒绝/未知响应 保留文字并停止该路径 换编辑器强塞或用另一附件路径绕过 笔记已有尝试 一次交接标记、目标已有内容 不确定停止，保留原文 清标记、改名或复制后自动再交付 附件已暂存 实际版本及是否有后续上传 核托盘与目标阶段 把未发送解释为没有上传 想手动复制 获准目的地、已有内容与其处理规则 用户明确选择且已核范围的人工动作 声称复制绝不重复或所有内容仍本地 想换数据源 来源身份、缓存清理与未决回复 按既有换源条件检查，失败就停 为规避冻结或权限失败切源 真实回复超时 原request_id、待处理与回读状态 沿原身份核结果 生成新ID补发或把超时当没写入 必须立即联络 团队既有经验证的通信流程 退出本试用，按已有安全流程处理 把草稿、暂存或queued当紧急送达 一个合成的“保留而不转送”决定 已知：样例文字在本地；网页交接结果不确定。 未知：目标是否已经出现同一段文字。 拟改方式：复制到另一个草稿。 决定：先不复制/转送，保留原文并核目标已有内容。 原因：新副本不能证明旧尝试未发生，也没有去重保证。 这不是强制所有情况下都禁用人工复制；它要求复制前先核授权、已有内容与不确定性。不存在由本页提供的跨目标统一去重或自动撤回机制，也不要求为测试断网、清缓存或重置任务。 降级前先问四个问题 改变的是什么？ 本地保留、复制、托盘暂存、附件上传和真正发送不是同一步，不把它们都叫“降级发送”。 旧结果是否明确？ 先看原笔记或真实请求状态及目的地，不能从没有回执推断未写入。 新目标是否独立获准？ 读取网页、下载模型或蓝牙连接都不等于可向任意服务交接资料。 哪些副本会留下？ 剪贴板、文档同步、工作台附件可能扩大处理范围；如果无法确认，就继续保留而不交付。 恢复网络后也不应自动把待核材料全部重发。原目标、来源身份、权限与当前内容可能已变化，应继续原守卫与确认流程。本页没有新增离线待发箱、后台补偿或跨源迁移。 FAQ 一呼会在弱网时自动把笔记改走附件吗？ 本页不声明这种能力。现有显式交接与一次标记保留，弱网不自动授予换路由重试或上传权限。 目标拒绝文字，能用文件上传达到同一目标吗？ 不能把附件路径当绕过拒绝的方法。先保留原文并停止受影响路径，按实际宿主许可处理，而不是寻找能强行进入的编辑器。 手动复制是否一定安全且不会重复？ 不一定。复制会产生副本，目的地可能同步、保存或已有同样内容。需用户明确选择并先核范围，本文不给绝不重复保证。 旧请求不确定时可以换工作台重发吗？ 不应为绕过不确定状态而切源或重发。保留原请求身份和待处理状态，按既有回读/确认边界处理。 网络恢复后是否应自动发出全部本地记录？ 不是。网络恢复不等于权限、目标与内容仍适用，必须重新核对相关状态；本文不实现自动待发队列。 只保留本地算工作流失败吗？ 不应混为一谈。本地保留可以是明确的安全停止结果；它既不是远端交付成功，也不抹去已完成的本地处理。 继续阅读与依据 弱网分层排障 · 一次交接与附件边界 · 人工修订副本 · 交接证据审计 · 开始 · 隐私 依据： 笔记一次交接模型 、 来源读取与变更条件 、 README不确定回复 。
+场景指南 · 相关使用指南 老人复诊陪诊交接清单：预约资料、接送分工与确认事项 先核医院原预约，再核资料由谁带、谁接谁送；发出清单不等陪诊安排已确认 家人轮流陪老人复诊，容易漏掉的不是再写一份病情摘要，而是预约是否有变、到哪个院区、资料谁保管、去程返程谁负责。先经本人同意，在医院认可的原渠道核这些安排，再把非敏感的待确认事项交给实际负责的人。不要把群里“看到了”、工作台草稿或服务回执当作挂号成功、接送落实或本人授权。病情、检查结果、用药和临床交接留在医院规定的渠道；突发不适或紧急情况不等这份清单和消息回执。 适用范围：复诊陪同的行政分工，不是医疗交班 这份清单面向家庭成员轮流陪诊时的安排核对，不替代医院就诊须知。陪同不自动授予查看记录、代签、代领资料或替本人决定的权利；需要代理时，向医院确认实际手续与授权。不要在这张表、未经批准的设备或工作台中填写姓名、证件号、预约码、联系方式、病史、检验结果或用药内容。实际证件与医疗资料仅在本人同意且医院认可的原渠道流转。 一呼可在模型、权限和兼容工作台满足条件时整理语音文字和录音笔记、准备草稿；它不是挂号、医疗记录、家庭成员授权或接送调度系统，不会联系医院、预约车辆、评估老人是否适合某种交通方式。录音另核本人许可与医院规则；不能获准时不用录音。本机识别不等于目标不保存或不同步，另存前核设备、位置、账号及访问范围。 陪诊交接先核十二项 核对项 到哪里核 最小可记录结论 不确定时怎么办 当前预约依据 医院原预约渠道 当前安排已核或仍待核，不抄预约码 转发截图与旧消息冲突时回原渠道确认 日期与院区 当前预约和医院通知 已核日期、院区及地点范围 不从手机接收时间猜就诊日，不混淆同名院区 报到要求 对应门诊官方须知 哪项要求已核、哪项仍待问 不把家庭经验当医院规则，不自行给禁食用药建议 资料类别 医院所列材料要求 所需类别已核；不录内容或证件号 缺哪类先问医院，不代为解释检查结果 资料保管 本人同意的原交接渠道 谁按授权核保管、交还步骤是否明确 不把“带了”当已交还，不上传原件来补证 去程接送 实际接送方原确认渠道 接送范围与会合安排是否确认 消息发出不等对方接受，不自行认定交通安全 返程接送 实际负责人与原安排 谁核返程、是否仍待确认 不根据预计就诊结束时间保证接回时间 陪诊分工 本人意愿与相关家人明确反馈 谁核报到、谁核资料；只记获准分工 没回复就待确认，不替他人接任务或代签 协助需求 本人意愿与医院服务渠道 是否需进一步询问、是否获确认 轮椅等服务需求不等已预订；不作行动能力评估 待问事项 本人同意的原问题列表 行政疑问类别及由谁向医院问 诊疗问题直接找专业人员，不让转写补答案 草稿目的地 当前账号、页面及原尝试 仅含必要行政事项且目标获准 目标变化或宿主拒绝就停止，不换附件绕过 确认与重复 原发送记录和明确对应的反馈 草稿、发送、接送接受分别核 结果不明先查原目标，不重发制造“已确认” 用一呼整理时按这个顺序做 先征得同意并核原安排。 没有读取权限就由本人或获授权人员在原渠道核，不借账号、不导出完整预约或医疗档案。 只留行政范围。 草稿分“已核安排、待确认项、下一步由谁核”。未确认的分工明确保留，不把意向写成承诺。 逐字核关键项。 比对日期、院区、到达要求、去返程分工与否定词。“尚未确认接送”不能被转写或整理成“已确认”。录音顺序不是事件顺序。 核目标和原尝试。 显式填入绑定打开笔记时的工作台与页面，目标变了先停；不是所有网页都支持填入。草稿出现不代表已发送，更不代表医院已登记。 分别取得对应反馈。 由实际负责的人在原获准渠道确认其范围；发送回执不等接送人接受，资料类别已核不等资料真实齐全。没有反馈就保留待确认。 不确定就停并查原记录。 笔记一次交接标记涵盖直接填入与暂存，失败或未知不能清标记、改名或换目标盲重发。新操作不能证明旧操作，复制也可能留下重复副本。 直接填入有 3,000 个 Swift Character 长度门槛，长笔记沿用 Markdown 附件暂存路径；暂存、上传、发送与人员接受是不同阶段。不能把附件路径当绕过拒绝的方法。本页没有新增离线待发箱、自动通知、自动重试、跨目标去重或撤回所有副本的能力。网络恢复不等于预约与接送安排仍适用。 下载空白人工表 使用说明： /samples/p34-older-adult-follow-up/README.md · 中文： /samples/p34-older-adult-follow-up/checklist.zh.json · English: /samples/p34-older-adult-follow-up/checklist.en.json 十二项双语对应，null / unfilled 是未填写，不是通过、不适用或已完成。这不是App导入格式、预约单、医院接收证明或授权书，页面和文件不接收填写内容。另存填写先核存储和访问范围；只写最小非敏感引用、已核范围及未解问题，不附患者或家人资料。 常见问题 把清单发给家人就算预约确认了吗？ 不算。预约以医院原渠道为准，家庭分工以对应人员的明确反馈为准；发送成功不能替代这两项。 可以把病历、证件和预约码都放进下载表吗？ 不要。此表只核资料类别和行政交接范围；原件与医疗内容留在本人同意且医院认可的渠道，不通过本页或未经批准的工作台处理。 复诊前要停药或禁食吗？ 本页不提供此类建议。按医院和专业人员针对本人的要求核实，不能从别人的经历或语音草稿推断。 陪诊人能代签或自动获得看病历权限吗？ 不能由陪同关系推断。按本人意愿、医院实际规则和相应授权手续处理，本表不是授权或身份核验凭据。 接送人没回消息，一呼会自动催促或安排车辆吗？ 不会由本页作此承诺。未回仍是待确认，沿原联络方式核实；需要专业协助或安全判断时找相关服务人员，不由清单评估。 填入后网页重载，可以再交接一次吗？ 先查原目标。重载、无回执或网络恢复都不能证明原操作没发生。不绕过一次交接标记，不用新操作替旧操作补证；急事按已有可靠渠道处理。 继续阅读与依据 录音笔记 · 弱网排障 · 修订副本 · 开始 · 隐私 能力依据： 当前源码说明 、 一次交接及长度边界 。 早期交接说明 仅供历史对照，不证明当前商店能力。源码合入不等于已安装版本可用，安装前另核商店信息与实际版本。本页不是医院指南、临床建议或法律/合规认证。
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
 <table>
 <thead>
 <tr>
-<th>当前情形</th>
-<th>先核证据</th>
-<th>可保留的安全状态</th>
-<th>不允许借此做什么</th>
+<th>核对项</th>
+<th>到哪里核</th>
+<th>最小可记录结论</th>
+<th>不确定时怎么办</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>本地有字，尚未交接</td>
-<td>原文、拟用目标、是否确实未尝试</td>
-<td>原文留本地待用户选择</td>
-<td>自动上传或选定新来源</td>
+<td>当前预约依据</td>
+<td>医院原预约渠道</td>
+<td>当前安排已核或仍待核，不抄预约码</td>
+<td>转发截图与旧消息冲突时回原渠道确认</td>
 </tr>
 <tr>
-<td>目标明确拒绝</td>
-<td>宿主拒绝/未知响应</td>
-<td>保留文字并停止该路径</td>
-<td>换编辑器强塞或用另一附件路径绕过</td>
+<td>日期与院区</td>
+<td>当前预约和医院通知</td>
+<td>已核日期、院区及地点范围</td>
+<td>不从手机接收时间猜就诊日，不混淆同名院区</td>
 </tr>
 <tr>
-<td>笔记已有尝试</td>
-<td>一次交接标记、目标已有内容</td>
-<td>不确定停止，保留原文</td>
-<td>清标记、改名或复制后自动再交付</td>
+<td>报到要求</td>
+<td>对应门诊官方须知</td>
+<td>哪项要求已核、哪项仍待问</td>
+<td>不把家庭经验当医院规则，不自行给禁食用药建议</td>
 </tr>
 <tr>
-<td>附件已暂存</td>
-<td>实际版本及是否有后续上传</td>
-<td>核托盘与目标阶段</td>
-<td>把未发送解释为没有上传</td>
+<td>资料类别</td>
+<td>医院所列材料要求</td>
+<td>所需类别已核；不录内容或证件号</td>
+<td>缺哪类先问医院，不代为解释检查结果</td>
 </tr>
 <tr>
-<td>想手动复制</td>
-<td>获准目的地、已有内容与其处理规则</td>
-<td>用户明确选择且已核范围的人工动作</td>
-<td>声称复制绝不重复或所有内容仍本地</td>
+<td>资料保管</td>
+<td>本人同意的原交接渠道</td>
+<td>谁按授权核保管、交还步骤是否明确</td>
+<td>不把“带了”当已交还，不上传原件来补证</td>
 </tr>
 <tr>
-<td>想换数据源</td>
-<td>来源身份、缓存清理与未决回复</td>
-<td>按既有换源条件检查，失败就停</td>
-<td>为规避冻结或权限失败切源</td>
+<td>去程接送</td>
+<td>实际接送方原确认渠道</td>
+<td>接送范围与会合安排是否确认</td>
+<td>消息发出不等对方接受，不自行认定交通安全</td>
 </tr>
 <tr>
-<td>真实回复超时</td>
-<td>原request_id、待处理与回读状态</td>
-<td>沿原身份核结果</td>
-<td>生成新ID补发或把超时当没写入</td>
+<td>返程接送</td>
+<td>实际负责人与原安排</td>
+<td>谁核返程、是否仍待确认</td>
+<td>不根据预计就诊结束时间保证接回时间</td>
 </tr>
 <tr>
-<td>必须立即联络</td>
-<td>团队既有经验证的通信流程</td>
-<td>退出本试用，按已有安全流程处理</td>
-<td>把草稿、暂存或queued当紧急送达</td>
+<td>陪诊分工</td>
+<td>本人意愿与相关家人明确反馈</td>
+<td>谁核报到、谁核资料；只记获准分工</td>
+<td>没回复就待确认，不替他人接任务或代签</td>
+</tr>
+<tr>
+<td>协助需求</td>
+<td>本人意愿与医院服务渠道</td>
+<td>是否需进一步询问、是否获确认</td>
+<td>轮椅等服务需求不等已预订；不作行动能力评估</td>
+</tr>
+<tr>
+<td>待问事项</td>
+<td>本人同意的原问题列表</td>
+<td>行政疑问类别及由谁向医院问</td>
+<td>诊疗问题直接找专业人员，不让转写补答案</td>
+</tr>
+<tr>
+<td>草稿目的地</td>
+<td>当前账号、页面及原尝试</td>
+<td>仅含必要行政事项且目标获准</td>
+<td>目标变化或宿主拒绝就停止，不换附件绕过</td>
+</tr>
+<tr>
+<td>确认与重复</td>
+<td>原发送记录和明确对应的反馈</td>
+<td>草稿、发送、接送接受分别核</td>
+<td>结果不明先查原目标，不重发制造“已确认”</td>
 </tr>
 </tbody>
 </table>
 
-### Before copying or staging under weak coverage: degraded-handoff permission checks
+### Older-adult follow-up appointment handover checklist: documents, rides and companion roles
 
 Canonical: https://getyihu.com/en/guides/degraded-handoff-go-no-go/
 
-All scenarios · Related practical guide Before copying or staging under weak coverage: degraded-handoff permission checks Weak coverage is not permission to change paths; inspect the original result and authority With local text retained and a page/service unreachable, stopping locally is an option. Do not automatically move the same content to clipboard, attachments or another source. After diagnosis, this checklist evaluates permission to change the handoff and whether a prior attempt already created a copy. It adds no automatic fallback, retry or reliable-delivery queue, and manual actions do not bypass host refusal or one-handoff guards. A decision after, not another weak-network diagnosis The troubleshooting guide locates model, web, cache and real-reply failures. Here the affected layer is known; decide whether to keep waiting or perform a separately authorized manual action . A valid outcome may be retain pending review, not a requirement to find any path that sends. Go/no-go before changing handoff Situation Evidence first Safe retained state Not authorized by it Text local, no handoff yet Original, intended target and actual absence of an attempt Retain pending user choice Automatic upload or a newly selected source Explicit host refusal Refusal/unknown response Retain text and stop the path Force another editor or bypass through attachments Note already attempted One-handoff marker and destination content Uncertain-stop with originals Clear markers, rename or copy then redeliver automatically Attachment staged Actual version and any later upload Inspect tray and destination stage Unsent interpreted as not uploaded Manual copying proposed Authorized destination, existing text and handling rules Explicit user choice within reviewed scope Duplicate-free copying or local-only retention claims Source change proposed Identity, cache-clear conditions and unresolved replies Follow existing conditions; stop on failure Bypass a frozen/unauthorized result by changing sources Real reply timeout Original request_id, pending state and readback Inspect through original identity New-ID resend or timeout treated as no write Urgent contact needed Existing validated communication/safety process Leave this trial for that process Treat draft, staging or queued as urgent delivery A synthetic retain-without-forwarding decision Known: Sample text is local; web handoff result is uncertain. Unknown: Whether the destination already contains it. Proposed alternative: Copy to a different draft. Decision: Do not copy/forward yet; retain originals and inspect destination content. Reason: A new copy cannot prove the earlier attempt did not happen or prevent duplicates. This does not ban all manual copying. It requires permission, destination-content and uncertainty checks first. No cross-target deduplication/recall is supplied, and no network disconnection, cache deletion or task reset is required for a test. Four questions before fallback What changes? Local retention, copying, staging, attachment upload and sending are different actions, not one fallback-send operation. Is the old result known? Inspect original note/request state and destination content. An absent receipt is not proof of no write. Is the new destination independently authorized? Web read access, model download and Bluetooth pairing do not authorize sharing data to any service. Which copies remain? Clipboard, document sync and workbench attachments can expand processing. Retain without handoff if the scope is unclear. Connectivity returning does not authorize automatically resending everything pending. Target, source identity, permission and content may have changed. Keep existing guards/confirmation; no offline outbox, background compensation or cross-source migration is added. FAQ Does Yihu automatically turn notes into attachments on weak coverage? No such capability is asserted here. Explicit handoff and reservation remain; weak coverage grants no path-switch, retry or upload authority. Can a file upload bypass a refused text target? Do not use attachments to bypass refusal. Retain originals and stop the affected path, following actual host permission rather than searching for a permissive editor. Is manual copying always safe and duplicate-free? No. It creates a copy and the destination can sync, save or already contain the same text. Explicit user choice and scope checks are needed, without a duplicate-free guarantee. Can I switch workbenches and resend an uncertain request? Do not change sources to bypass uncertainty. Preserve the original identity/pending state and existing readback/confirmation boundary. Should all local notes send automatically when connectivity returns? No. Connectivity does not establish unchanged permission, destination or relevance. Recheck state; this page implements no automatic outbox. Is retaining locally simply a failed workflow? Not as a blanket label. It can be an explicit safe-stop result. It is not remote delivery and does not negate completed local processing. Reading and evidence Layered weak-network diagnosis · One-handoff/attachment boundaries · Correction and copies · Handoff evidence review · Start · Privacy Evidence: one-handoff model , source-read/change conditions , README uncertain replies .
+All scenarios · Related practical guide Older-adult follow-up appointment handover checklist: documents, rides and companion roles Check the hospital booking first, then who brings documents and handles each ride; a sent checklist is not an accepted arrangement When relatives take turns accompanying an older adult to a follow-up appointment, the gap may be a changed booking, a different hospital site, document custody or an unconfirmed return ride—not a missing medical summary. With the person’s consent, verify these arrangements in the hospital-accepted original channels, then share only necessary non-sensitive administrative questions with the actual responsible people. A chat acknowledgement, workbench draft or service receipt does not prove registration, a confirmed ride or the person’s authorization. Conditions, test results, medication and clinical handover stay in hospital-required channels. Do not wait for this checklist or a message receipt during sudden illness or an emergency. Scope: companion logistics, not clinical handover This checklist helps family members verify administrative roles when taking turns accompanying someone; it does not replace hospital visit instructions. Accompanying a person does not automatically grant record access, signing rights, document collection rights or decision-making authority. Ask the hospital about the actual procedure and authorization for any representation. Do not put names, identity numbers, booking codes, contacts, medical history, test results or medication into this worksheet or an unapproved device or workbench. Actual documents and medical content remain in the person’s consented, hospital-accepted channels. With the required model, permissions and compatible workbench, Yihu can organize voice text and recording notes and prepare drafts. It is not a booking, medical-record, family-authorization or transport-dispatch system. It does not contact hospitals, book vehicles or assess fitness for a transport mode. Recording separately requires the person’s permission and compliance with hospital rules; omit it when not permitted. Local recognition does not mean the destination will not store or sync content. Check the device, location, account and access scope before saving. Twelve checks before handing over companion arrangements Check Where to verify Minimum conclusion to retain If uncertain Current appointment reference Hospital’s original booking channel Whether the current arrangement was checked; no booking code Resolve conflicts with forwarded screenshots or old messages at the original channel Date and hospital site Current booking and hospital notice Verified date, site and location scope Do not infer the visit date from message receipt time or confuse similarly named sites Check-in instructions Official instructions for that clinic Which requirement was checked and which needs a question Family experience is not hospital policy; give no fasting or medication advice Document categories Hospital’s required-material list Required categories checked; no contents or identity numbers Ask the hospital about missing categories; do not interpret test results Document custody Original channel consented to by the person Who checks custody within authorization, and whether return steps are clear “Brought” does not mean returned; do not upload originals as proof Outbound transport Actual driver’s or provider’s original confirmation channel Whether ride scope and meeting arrangements are confirmed Sending is not acceptance; make no transport-safety assessment Return transport Actual responsible person and original arrangement Who checks the return ride and whether it remains open An estimated visit end does not guarantee pickup time Companion roles Person’s wishes and explicit family feedback Who checks registration and materials, within authorized roles No reply means unconfirmed; do not accept tasks or sign for others Assistance request Person’s wishes and hospital service channel Whether a request needs clarification or has been confirmed A wheelchair request is not a reservation; make no mobility assessment Open questions Original question list consented to by the person Administrative question categories and who asks the hospital Clinical questions go to qualified staff; transcription must not invent answers Draft destination Current account, page and original attempt Only necessary administrative items, at an authorized destination Stop on target change or host refusal; do not bypass with attachments Acknowledgement and duplication Original sending record and explicitly linked feedback Draft, sending and ride acceptance checked separately Check the original destination on uncertainty; do not resend to manufacture confirmation Use Yihu in this order Obtain consent and check the original arrangement. Without access rights, let the person or an authorized representative check in the original channel. Do not borrow accounts or export complete bookings or medical files. Keep only administrative scope. Separate verified arrangements, open items and who checks next. Preserve unconfirmed roles rather than turning intentions into commitments. Review key terms word by word. Compare dates, hospital site, arrival requirements, outbound and return roles, and negation. “Ride not yet confirmed” must not become “confirmed.” Recording order is not event order. Check the target and earlier attempt. Explicit insertion binds to the workbench and page present when the note was opened; stop if the target changes. Not every page supports insertion. A visible draft is neither sent nor registered with the hospital. Obtain feedback for each separate scope. The actual responsible person confirms in the original authorized channel. A sending receipt is not driver acceptance; checked document categories do not prove the actual documents are complete. Without feedback, retain the open state. Stop on uncertainty and inspect original records. The note’s single handoff reservation covers direct insertion and staging. Do not clear markers, rename notes or switch targets to blindly resend after failure or uncertainty. New operations do not prove old ones; copying can leave duplicates too. Direct insertion has a 3,000 Swift Character limit; longer notes use the existing Markdown attachment-staging path. Staging, uploading, sending and human acceptance are different stages. Do not use attachments to bypass refusal. There is no offline outbox, automatic notification, automatic retry, cross-target deduplication or recall of every copy added by this page. Restored connectivity does not prove the booking and ride arrangements still apply. Download the blank manual worksheet Instructions: /samples/p34-older-adult-follow-up/README.md · 中文： /samples/p34-older-adult-follow-up/checklist.zh.json · English: /samples/p34-older-adult-follow-up/checklist.en.json The twelve checks are bilingual equivalents. null / unfilled means unfilled, not passed, not applicable or complete. This is not an app import, booking slip, hospital acceptance record or authorization form. The page and files do not receive entries. Before saving a filled copy, check storage and access. Include only minimal non-sensitive references, verified scope and unresolved questions, not patient or family data. Frequently asked questions Does sending the checklist to family confirm the appointment? No. The hospital’s original channel establishes the booking; explicit feedback from the relevant people establishes family roles. A successful send replaces neither. Can I put medical records, identity documents and booking codes in the download? No. It checks document categories and administrative custody scope only. Originals and medical content stay in the person’s consented, hospital-accepted channels, not this page or an unapproved workbench. Should the person stop medication or fast before the follow-up? This page provides no such advice. Verify the hospital’s and qualified professionals’ instructions for the individual. Do not infer requirements from someone else’s experience or a voice draft. Does a companion automatically get signing or medical-record access rights? No. Follow the person’s wishes, the hospital’s actual rules and the relevant authorization process. This worksheet is not authorization or identity-verification evidence. Will Yihu chase a driver who has not replied or arrange a vehicle? This page promises neither. No reply remains unconfirmed; check through the original contact method. Ask the relevant service professionals about assistance or safety rather than having this checklist assess it. The page reloaded after insertion. Can I hand off the note again? Check the original destination first. Reload, a missing receipt or restored connectivity does not prove the original operation did not happen. Do not bypass the single handoff reservation or use new operations to prove old ones. Use existing reliable channels for urgent matters. Continue reading and source boundaries Recording notes · Connectivity troubleshooting · Revised copies · Start · Privacy Capability evidence: current source README , single handoff and length boundaries . Earlier handoff notes are historical only, not evidence of current Store capabilities. A source merge does not establish installed-version availability; check Store information and the actual version separately. This page is not hospital guidance, clinical advice or legal/compliance certification.
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
 <table>
 <thead>
 <tr>
-<th>Situation</th>
-<th>Evidence first</th>
-<th>Safe retained state</th>
-<th>Not authorized by it</th>
+<th>Check</th>
+<th>Where to verify</th>
+<th>Minimum conclusion to retain</th>
+<th>If uncertain</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Text local, no handoff yet</td>
-<td>Original, intended target and actual absence of an attempt</td>
-<td>Retain pending user choice</td>
-<td>Automatic upload or a newly selected source</td>
+<td>Current appointment reference</td>
+<td>Hospital’s original booking channel</td>
+<td>Whether the current arrangement was checked; no booking code</td>
+<td>Resolve conflicts with forwarded screenshots or old messages at the original channel</td>
 </tr>
 <tr>
-<td>Explicit host refusal</td>
-<td>Refusal/unknown response</td>
-<td>Retain text and stop the path</td>
-<td>Force another editor or bypass through attachments</td>
+<td>Date and hospital site</td>
+<td>Current booking and hospital notice</td>
+<td>Verified date, site and location scope</td>
+<td>Do not infer the visit date from message receipt time or confuse similarly named sites</td>
 </tr>
 <tr>
-<td>Note already attempted</td>
-<td>One-handoff marker and destination content</td>
-<td>Uncertain-stop with originals</td>
-<td>Clear markers, rename or copy then redeliver automatically</td>
+<td>Check-in instructions</td>
+<td>Official instructions for that clinic</td>
+<td>Which requirement was checked and which needs a question</td>
+<td>Family experience is not hospital policy; give no fasting or medication advice</td>
 </tr>
 <tr>
-<td>Attachment staged</td>
-<td>Actual version and any later upload</td>
-<td>Inspect tray and destination stage</td>
-<td>Unsent interpreted as not uploaded</td>
+<td>Document categories</td>
+<td>Hospital’s required-material list</td>
+<td>Required categories checked; no contents or identity numbers</td>
+<td>Ask the hospital about missing categories; do not interpret test results</td>
 </tr>
 <tr>
-<td>Manual copying proposed</td>
-<td>Authorized destination, existing text and handling rules</td>
-<td>Explicit user choice within reviewed scope</td>
-<td>Duplicate-free copying or local-only retention claims</td>
+<td>Document custody</td>
+<td>Original channel consented to by the person</td>
+<td>Who checks custody within authorization, and whether return steps are clear</td>
+<td>“Brought” does not mean returned; do not upload originals as proof</td>
 </tr>
 <tr>
-<td>Source change proposed</td>
-<td>Identity, cache-clear conditions and unresolved replies</td>
-<td>Follow existing conditions; stop on failure</td>
-<td>Bypass a frozen/unauthorized result by changing sources</td>
+<td>Outbound transport</td>
+<td>Actual driver’s or provider’s original confirmation channel</td>
+<td>Whether ride scope and meeting arrangements are confirmed</td>
+<td>Sending is not acceptance; make no transport-safety assessment</td>
 </tr>
 <tr>
-<td>Real reply timeout</td>
-<td>Original request_id, pending state and readback</td>
-<td>Inspect through original identity</td>
-<td>New-ID resend or timeout treated as no write</td>
+<td>Return transport</td>
+<td>Actual responsible person and original arrangement</td>
+<td>Who checks the return ride and whether it remains open</td>
+<td>An estimated visit end does not guarantee pickup time</td>
 </tr>
 <tr>
-<td>Urgent contact needed</td>
-<td>Existing validated communication/safety process</td>
-<td>Leave this trial for that process</td>
-<td>Treat draft, staging or queued as urgent delivery</td>
+<td>Companion roles</td>
+<td>Person’s wishes and explicit family feedback</td>
+<td>Who checks registration and materials, within authorized roles</td>
+<td>No reply means unconfirmed; do not accept tasks or sign for others</td>
+</tr>
+<tr>
+<td>Assistance request</td>
+<td>Person’s wishes and hospital service channel</td>
+<td>Whether a request needs clarification or has been confirmed</td>
+<td>A wheelchair request is not a reservation; make no mobility assessment</td>
+</tr>
+<tr>
+<td>Open questions</td>
+<td>Original question list consented to by the person</td>
+<td>Administrative question categories and who asks the hospital</td>
+<td>Clinical questions go to qualified staff; transcription must not invent answers</td>
+</tr>
+<tr>
+<td>Draft destination</td>
+<td>Current account, page and original attempt</td>
+<td>Only necessary administrative items, at an authorized destination</td>
+<td>Stop on target change or host refusal; do not bypass with attachments</td>
+</tr>
+<tr>
+<td>Acknowledgement and duplication</td>
+<td>Original sending record and explicitly linked feedback</td>
+<td>Draft, sending and ride acceptance checked separately</td>
+<td>Check the original destination on uncertainty; do not resend to manufacture confirmation</td>
 </tr>
 </tbody>
 </table>
