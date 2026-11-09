@@ -4006,80 +4006,104 @@ Parameter/comparison tables (HTML) / 参数对照表：
 </tbody>
 </table>
 
-### 团队交接真的完成了吗？最小证据包与完成主张人工审计
+### 医院夜班换班交接核对清单：排班版本、跨午夜时段与接班确认
 
 Canonical: https://getyihu.com/guides/handoff-evidence-audit-checklist/
 
-场景指南 · 相关使用指南 团队交接真的完成了吗？最小证据包与完成主张人工审计 审计先判断证据能支持什么，不为了补证重做一次操作 一呼的本地文字、草稿交付、附件暂存、Radar回复记录与后续处理有不同结果。团队复核时应比较“声称完成了什么”和“实际已有哪一层证据”，不能为了拿到回执而重新发送、换请求ID或执行真实任务。本页是最小人工证据检查表，不是App新增审计日志、跨账号追踪器、不可篡改存证或合规认证。 与责任认领、归档清单的分工 责任清单确定谁按已有流程认领、资料存哪里；这里由另一个获准复核角色，对 已经声称完成的一次交接 作证据范围判断。不分配新任务、不更改档案规则，也不要求收集原始录音、个人信息或顾客正文。 最小人工证据包 检查项 可接受的既有依据 能支持的有限结论 不能扩大为 来源/版本 已知版本、原记录引用与已核范围 复核针对哪一份材料 任意设备或未来版本都有效 目标绑定 原工作台/页面/任务的可核身份 已核的交接对象 任意相似标题或另一个来源 内容范围 获准的必要文字与人工核对记录 这些字段/片段已核 全文或全部副本已核 本地状态 原文、完成/失败及交接尝试状态 本地处理或尝试的相应阶段 远端未收到或必然已收到 草稿/附件 目标未发送草稿或托盘版本 草稿可见或内容已暂存 已发送、已上传或对方已处理 原请求/回执 既有请求身份与服务记录证据 原服务确认记录了相应回复 任务自动完成、状态改变或执行成功 后续处理 原来源独立确认/反馈及其范围 该项已证实的处理步骤 所有动作与下游系统都完成 缺口/未知 缺失的依据、权限或不确定状态 保持待核或不确定 用新请求补发、编写新日志或推测结论 一份合成的主张—证据记录 被复核主张：样例事项“已发送并处理”。 已有依据：仅能看到目的地未发送草稿；没有服务回执。 支持结论：草稿可见；发送和处理未获证实。 保留缺口：原请求/回执未提供，不能推断没有写入。 复核决定：保持待核；不重发、不生成ID、不执行。 这些是人工编辑字段，不是App导入或审计API。不能为了让证据包完整而制造新事件，或把事后写下的说明当作操作时的原始记录。若需引用私有依据，应在原有获准范围中复核，而不是复制到公开评论或未授权文档。 复核顺序与最小披露 明确被复核的主张：是转写完成、草稿可见、回复已记录，还是人已处理？先拆分，避免一个“完成”混合多层。 核来源与目标，确认复核者有权限读取对应材料。网页可读、历史可读与写权限不同，不为审计索要他人凭据。 对照已有证据，只记录可公开或已获准的引用位置、字段和缺口。不要上传真实录音、客户正文、工作台参数或设备标识。 有超时或回执未知时，保留原请求身份和既有不确定边界，不能用新动作来补做“原操作”的证明。 报告最窄结论，说明哪些层未核；复核结果本身不授权合并、发布、下单或发信。 不能由这个清单认证的事 本页不证明第三方日志保留、时间戳可信度、端到端绝对一次、数据删除或法律合规。源码、静态网页、样例和服务回执分别有范围；即使服务记录了回复，也不等于被提及的Agent执行了动作。读取回复历史也不建立任意资料的完整追踪链。 FAQ 一呼是否自带完整不可篡改审计日志？ 本文不作此声明或新增日志功能。只比较已获准的现有证据；缺失就保留缺口，不把人工清单当原生存证系统。 有草稿截图就能说明消息已发出吗？ 不能。草稿截图最多支持相应可见状态，也可能缺版本和目标上下文；发送、服务记录和处理另需证据。 服务回执能证明Agent已经执行吗？ 不能一概而论。现有回复回执证明相应服务记录边界，不自动改任务状态或提供下游执行结果。 为补审计证据可以重新发送一次吗？ 不应这样补证。新操作不能证明旧操作，且可能重复；不确定结果应沿原请求与回读边界处理。 没有权限读某份依据，能让别人导出全部材料吗？ 不以审计名义放宽权限或收集不必要数据。按已有授权流程核最小范围，无法取得的部分明确未核。 清单填满就算满足合规或绝对一次认证吗？ 不算。人工复核不提供法律认证、不可篡改证据链或端到端送达保证，必须保留范围和未知项。 继续复核与依据 责任认领与归档 · 手机回复与回执 · 降级前许可 · 证据主张二次核实 · 开始 · 隐私 依据： README交接、回复与历史边界 、 笔记一次标记 。
+场景指南 · 相关使用指南 医院夜班换班交接核对清单：排班版本、跨午夜时段与接班确认 先回获准排班表核实换班，再整理交班草稿；消息发出不代表接班已确认 夜班临时换班后，先在医院已有获准系统中核对当前排班版本、起止日期时间、岗位覆盖和审批范围。再把需要核对的非患者事项整理成草稿，由有权限的人员按原流程确认。不要仅凭群聊里一句“收到”、一段转写或手机上的草稿，宣布调班生效或交班完成。涉及患者病情、医嘱、用药或紧急处置时，直接使用医院规定的临床交班与升级渠道，不依赖本页或一呼。 适用范围：排班变更后的行政交接，不是临床交班工具 这份清单适合核查“换班是否获批、谁覆盖哪个时段、哪些行政事项仍待确认”。一呼可以在具备所需权限和模型的情况下整理语音文字、保留录音笔记，并在兼容的自有工作台中准备草稿；它不提供医院排班、电子病历、医嘱核对、身份认证或电子签名系统，也不会自动寻找替班人、审批换班或通知接班人员。 录音前须确认医院规则与相关人员许可；不能获准录音时，改用已有获准记录方式。不要把患者姓名、床号、住院号、病情、医疗影像、员工联系方式或完整排班表录入未经医院批准的设备或工作台。即使本机识别，交给目标工作台后的保存、同步和可读范围仍须另核。 临时调班后先核这十二项 核对项 到哪里核对 需要保留的最小结论 尚未确定时怎么办 当前排班版本 医院指定的获准排班来源 已核版本与适用日期 群聊截图不能代替当前表；回原来源确认 原班与调整班 原排班记录及获准变更记录 哪个岗位、哪个时段发生变化 不按最新一条口头消息覆盖原安排 跨午夜起止 原表的完整日期、时间及适用时区 开始日与结束日分别明确 只写“今晚”或“明早”时先补确认，不自行换算 提前或延后到岗 获准安排与原交班窗口 覆盖区间及未确认的空档 不默认相邻班次会代为覆盖 岗位覆盖 原有岗位与人员配置规则 必要岗位是否已有获准安排 不由清单判断人员资质或安全配比；交负责人处理 换班审批 既有审批渠道中的明确决定 允许变更的版本与范围 提议、转发和“看过”都不等于批准 交出方与接班方 获准渠道中的实际身份和反馈 各自确认了哪些行政事项 不替他人确认，不用声纹或姓名文字代替身份核验 未结行政事项 原记录与可读的事项引用 待办内容、已有负责人和约定时间 未约定就保留待确认，不推断负责人或期限 冲突与否定词 获准原文与当前草稿 “尚未批准”“不换班”等限制完整保留 有矛盾先列出两版，不能挑语气最肯定的一版 草稿与目的地 当前获准工作台、账户及预览 本次草稿的目标与内容范围 目标不明或被拒绝时停止，不换路径绕过 发送与接班反馈 原发送记录及明确关联的接班反馈 分开记录草稿、已发送、已确认的范围 无反馈就写待确认，不把服务回执当作人已接班 不确定与重复 原记录、原请求及已有交接尝试 哪一步已知、哪一步仍未知 先查原目标，不重发来“补证”，不重复安排人员 用一呼整理草稿时，按这个顺序做 先查获准记录。 仅在允许范围内核排班版本和变更依据；没有权限就让原负责人处理，不索取他人账户或导出完整名单。 只整理必要行政文字。 草稿分为“已核安排、待确认事项、下一步核对人/渠道”；已有负责人和时间才记录，没有就明确待确认。不把建议改成批准。 逐字核关键字段。 比对日期、起止时间、岗位、数量和否定词。录音顺序不等于事件顺序，转写完成也不等于事实正确。 检查目标和旧尝试。 一呼的笔记显式填入绑定打开笔记时的工作台/页面；目标变化时停止核实。不是每个网页都支持填入，草稿可见也不是已发送。 按原流程发送和签收。 在医院允许的工具里由获准人员完成操作，接班方仅确认自己实际核过的范围。未完成的确认继续保留，不把清单勾满当作法定签收。 有不确定结果先停。 每条笔记保留一次交接标记；失败或不确定时不自动重试或转成另一份暂存。先核目标已有内容，再由有权限的人决定下一步。新操作不能证明旧操作，也可能造成重复。 直接填入有 3,000 个 Swift Character 的长度门槛，较长笔记沿用既有 Markdown 附件暂存路径；这不是拆分或改名绕过一次交接的许可。附件暂存不等于上传、发送、审批或接班确认。复制粘贴也可能产生副本和重复记录，不能承诺所有内容始终不离机或删除后全部撤回。 下载空白核对表 使用说明： /samples/p33-clinical-shift-handover/README.md · 中文： /samples/p33-clinical-shift-handover/checklist.zh.json · English: /samples/p33-clinical-shift-handover/checklist.en.json 这是供人工核对的空白表，不含真实人员或患者资料，不是排班导入文件，也不会提交审批、调用医院系统或保存你填的内容。若要另存填写，先确认存储位置和访问权限，只引用获准记录，不复制敏感正文。空白项表示未填写，不能当作通过、不适用或已完成。 常见问题 群里回复“收到”就算换班获批吗？ 不算。先看既有审批决定是否覆盖当前版本、岗位和时段，再分别核发送结果和接班反馈。“收到”不能自动代替审批或实际到岗。 夜班跨午夜，只写班次名称够吗？ 不够清楚时应回原排班来源核实开始日、结束日、起止时间及适用时区；不要让一呼猜“今晚”对应哪一天，也不要根据手机接收时间改写排班日期。 能直接录下患者交班再交给工作台吗？ 本页不建议这种用法。患者病情、医嘱和用药交班按医院规定的临床系统与人员流程处理；本页仅用于不含患者信息且获准的行政整理，不提供临床核对或合规认证。 一呼能自动调班、补齐缺岗或核验人员资质吗？ 不能由本页作此声明。一呼不是排班或人员资质系统，不自动改变班表、批准替班或保证岗位覆盖。未解决的覆盖问题交给医院指定负责人。 草稿或服务回执能证明交班完成吗？ 草稿只能说明相应内容可见；服务回执仅支持相应服务记录边界。实际发送、人员接班与后续处理需要各自的明确依据。这份清单不是App新增审计日志，不提供法律认证。 交接时页面重载了，可以再发一次吗？ 先停下核原目标与既有记录。重载或网络错误不能证明原操作未发生；不要清除标记、换摘要或新建请求来制造旧操作的证明，紧急事项走医院规定的升级渠道。 继续阅读 录音笔记与显式交接 · 多人确认范围 · 时间与时区核对 · 开始使用 · 隐私 产品能力依据： 当前源码说明 、 笔记交接边界 。 早期交接说明 仅供历史对照，不证明当前商店版功能。安装前以商店信息及实际版本为准；源码合入不代表已安装版本具备同样能力。
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
 <table>
 <thead>
 <tr>
-<th>检查项</th>
-<th>可接受的既有依据</th>
-<th>能支持的有限结论</th>
-<th>不能扩大为</th>
+<th>核对项</th>
+<th>到哪里核对</th>
+<th>需要保留的最小结论</th>
+<th>尚未确定时怎么办</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>来源/版本</td>
-<td>已知版本、原记录引用与已核范围</td>
-<td>复核针对哪一份材料</td>
-<td>任意设备或未来版本都有效</td>
+<td>当前排班版本</td>
+<td>医院指定的获准排班来源</td>
+<td>已核版本与适用日期</td>
+<td>群聊截图不能代替当前表；回原来源确认</td>
 </tr>
 <tr>
-<td>目标绑定</td>
-<td>原工作台/页面/任务的可核身份</td>
-<td>已核的交接对象</td>
-<td>任意相似标题或另一个来源</td>
+<td>原班与调整班</td>
+<td>原排班记录及获准变更记录</td>
+<td>哪个岗位、哪个时段发生变化</td>
+<td>不按最新一条口头消息覆盖原安排</td>
 </tr>
 <tr>
-<td>内容范围</td>
-<td>获准的必要文字与人工核对记录</td>
-<td>这些字段/片段已核</td>
-<td>全文或全部副本已核</td>
+<td>跨午夜起止</td>
+<td>原表的完整日期、时间及适用时区</td>
+<td>开始日与结束日分别明确</td>
+<td>只写“今晚”或“明早”时先补确认，不自行换算</td>
 </tr>
 <tr>
-<td>本地状态</td>
-<td>原文、完成/失败及交接尝试状态</td>
-<td>本地处理或尝试的相应阶段</td>
-<td>远端未收到或必然已收到</td>
+<td>提前或延后到岗</td>
+<td>获准安排与原交班窗口</td>
+<td>覆盖区间及未确认的空档</td>
+<td>不默认相邻班次会代为覆盖</td>
 </tr>
 <tr>
-<td>草稿/附件</td>
-<td>目标未发送草稿或托盘版本</td>
-<td>草稿可见或内容已暂存</td>
-<td>已发送、已上传或对方已处理</td>
+<td>岗位覆盖</td>
+<td>原有岗位与人员配置规则</td>
+<td>必要岗位是否已有获准安排</td>
+<td>不由清单判断人员资质或安全配比；交负责人处理</td>
 </tr>
 <tr>
-<td>原请求/回执</td>
-<td>既有请求身份与服务记录证据</td>
-<td>原服务确认记录了相应回复</td>
-<td>任务自动完成、状态改变或执行成功</td>
+<td>换班审批</td>
+<td>既有审批渠道中的明确决定</td>
+<td>允许变更的版本与范围</td>
+<td>提议、转发和“看过”都不等于批准</td>
 </tr>
 <tr>
-<td>后续处理</td>
-<td>原来源独立确认/反馈及其范围</td>
-<td>该项已证实的处理步骤</td>
-<td>所有动作与下游系统都完成</td>
+<td>交出方与接班方</td>
+<td>获准渠道中的实际身份和反馈</td>
+<td>各自确认了哪些行政事项</td>
+<td>不替他人确认，不用声纹或姓名文字代替身份核验</td>
 </tr>
 <tr>
-<td>缺口/未知</td>
-<td>缺失的依据、权限或不确定状态</td>
-<td>保持待核或不确定</td>
-<td>用新请求补发、编写新日志或推测结论</td>
+<td>未结行政事项</td>
+<td>原记录与可读的事项引用</td>
+<td>待办内容、已有负责人和约定时间</td>
+<td>未约定就保留待确认，不推断负责人或期限</td>
+</tr>
+<tr>
+<td>冲突与否定词</td>
+<td>获准原文与当前草稿</td>
+<td>“尚未批准”“不换班”等限制完整保留</td>
+<td>有矛盾先列出两版，不能挑语气最肯定的一版</td>
+</tr>
+<tr>
+<td>草稿与目的地</td>
+<td>当前获准工作台、账户及预览</td>
+<td>本次草稿的目标与内容范围</td>
+<td>目标不明或被拒绝时停止，不换路径绕过</td>
+</tr>
+<tr>
+<td>发送与接班反馈</td>
+<td>原发送记录及明确关联的接班反馈</td>
+<td>分开记录草稿、已发送、已确认的范围</td>
+<td>无反馈就写待确认，不把服务回执当作人已接班</td>
+</tr>
+<tr>
+<td>不确定与重复</td>
+<td>原记录、原请求及已有交接尝试</td>
+<td>哪一步已知、哪一步仍未知</td>
+<td>先查原目标，不重发来“补证”，不重复安排人员</td>
 </tr>
 </tbody>
 </table>
 
-### Was a team handoff complete? Minimal evidence and manual claim review
+### Hospital night-shift swap handover checklist: roster version, midnight boundaries and acknowledgement
 
 Canonical: https://getyihu.com/en/guides/handoff-evidence-audit-checklist/
 
-All scenarios · Related practical guide Was a team handoff complete? Minimal evidence and manual claim review Review what evidence supports; do not repeat an operation to create proof Local text, draft delivery, attachment staging, a recorded Radar reply and later handling have different outcomes. Compare the completion claim against the actual evidence stage. Do not resend, change request IDs or execute work merely to obtain a receipt. This is a minimal manual review checklist, not a new app audit log, cross-account tracker, tamper-proof record or compliance certification. Different from responsibility and archive planning The ownership guide checks who acknowledges work and where material belongs. Here another authorized reviewer evaluates evidence for a handoff already claimed complete . It assigns no new task, changes no retention rule and requires no collection of original audio, personal information or customer text. Minimal manual evidence package Check Existing evidence Limited conclusion supported Not established Source/version Known version, original reference and reviewed scope Which material was reviewed Every device or future version works Target identity Verifiable workbench/page/item identity The checked destination Similar title or another source is equivalent Content scope Necessary authorized text and review record These fields/passages were checked Full text and every copy checked Local state Original, complete/failed and handoff-attempt state The corresponding local/attempt stage Remote receipt or absence of receipt Draft/attachment Actual unsent destination draft or tray version Visible draft or staged content Sent/uploaded/handled status Original request/receipt Existing request identity and service record The service recorded that reply Automatic task completion, state change or execution Later handling Independent source confirmation/feedback with scope The evidenced handling step Every action/downstream system completed Gaps/unknowns Missing evidence, permission or uncertain state Pending or uncertain remains New-ID resend, invented logs or guessed conclusions A synthetic claim-evidence record Claim under review: Sample item was sent and handled. Available evidence: Only an unsent destination draft is visible; no service receipt. Supported conclusion: Draft visible; sending/handling unverified. Gap: Original request/receipt not supplied; do not infer no write. Decision: Keep pending; do not resend, create an ID or execute. These are editorial labels, not app imports or an audit API. Do not manufacture new events to complete a package, or represent a retrospective note as an original operation-time record. Review private references in their existing authorized scope, not copied to public comments or unapproved documents. Review order and minimal disclosure Split the claim: transcription complete, draft visible, reply recorded or person handled? One done label should not conflate stages. Check provenance/target and the reviewer’s read permission. Web/history readability is not write authority; do not request another person’s credentials. Record only necessary authorized references, fields and gaps. No real audio, customer text, workbench parameters or device identifiers in public artifacts. Preserve original request identity and uncertain-stop state after timeouts/missing receipts. A new action cannot supply proof of the old action. Report the narrowest conclusion and unreviewed stages. A review finding does not authorize merging, deployment, purchasing or email. What this checklist cannot certify It does not establish third-party log retention, trustworthy timestamps, end-to-end exactly-once behavior, deletion or legal compliance. Source code, static pages, examples and service receipts each have scope. Recording a reply does not establish execution by the named Agent. Reading reply history is not complete tracing of arbitrary material. FAQ Does Yihu provide a complete tamper-proof audit log? No such feature is asserted or added. Compare authorized existing evidence; retain missing-evidence gaps rather than treating this checklist as native recordkeeping. Does a draft screenshot establish sending? No. It supports at most the visible stage and may lack target/version context. Sending, service recording and handling need separate evidence. Does a service receipt establish Agent execution? Not as a blanket claim. Existing reply receipts establish the relevant service-record boundary, not automatic task-state changes or downstream outcomes. Can I send again to obtain audit proof? Do not manufacture evidence that way. New operations do not prove old ones and can duplicate. Use original-request/readback boundaries on uncertainty. Can I request a complete export when lacking access to evidence? Do not expand access or collect unnecessary data under an audit label. Use existing authorization and minimal scope, marking inaccessible material unreviewed. Does a completed checklist certify compliance or exactly-once delivery? No. Manual review supplies neither legal certification, a tamper-proof chain nor end-to-end delivery guarantees. Preserve scope and unknowns. Reading and evidence Ownership/archive checks · Phone replies/receipts · Fallback permission · Second-check evidence claims · Start · Privacy Evidence: README handoff/reply/history limits , one-handoff reservation .
+All scenarios · Related practical guide Hospital night-shift swap handover checklist: roster version, midnight boundaries and acknowledgement Verify the swap against the approved roster before drafting the handover; a sent message does not confirm acceptance After a last-minute night-shift swap, use the hospital’s existing approved system to check the current roster version, full start and end dates and times, role coverage and approval scope. Then prepare only necessary non-patient administrative notes for authorized staff to check through the established process. A chat acknowledgement, transcript or visible phone draft alone cannot establish that the swap took effect or the handover finished. For patient condition, orders, medication or urgent care, use the hospital’s required clinical handover and escalation channels, not this page or Yihu. Scope: administrative checks after a roster change, not clinical handover Use this checklist to ask whether the swap was approved, who covers which interval, and which administrative items still need confirmation. With the required permissions and models, Yihu can help prepare speech text, retain voice notes and prepare drafts in compatible workbenches you provide. It is not a hospital rostering, electronic health record, medication-checking, identity-verification or e-signature system. It does not find cover, approve swaps or notify receiving staff automatically. Check hospital rules and the relevant people’s permission before recording. If recording is not authorized, use an existing approved recording method instead. Do not put patient names, bed numbers, record numbers, conditions, medical images, staff contact details or full rosters into unapproved devices or workbenches. Even with on-device recognition, the destination’s storage, synchronization and access remain separate checks. Twelve checks after a last-minute shift swap Check Where to verify Minimum conclusion to retain If still uncertain Current roster version The hospital’s designated approved roster source Checked version and applicable dates A chat screenshot does not replace the current roster; confirm at the source Original and revised shifts Original roster and authorized change record Which role and interval changed Do not overwrite the arrangement with the latest spoken message Midnight boundaries Complete dates, times and applicable time zone in the source Separate start and end dates Clarify “tonight” or “tomorrow morning”; do not infer or convert them yourself Early or late arrival Approved arrangement and original handover window Coverage interval and any unresolved gap Do not assume the adjacent shift will cover it Role coverage Existing staffing and role rules Whether required roles have authorized coverage Do not use this checklist to assess credentials or safe staffing ratios; refer to the responsible lead Swap approval Explicit decision in the established approval channel Authorized version and scope A proposal, forwarded message or “seen” is not approval Outgoing and receiving staff Actual identity and feedback in an approved channel What each person confirmed administratively Do not confirm for someone else or use voiceprint/name text as identity verification Open administrative items Original record and accessible item references Item, already agreed owner and agreed time Leave unagreed fields awaiting confirmation; do not infer owners or deadlines Conflicts and negation Authorized original text and current draft Retain “not yet approved” and “do not swap” restrictions Keep conflicting versions visible rather than choosing the more confident wording Draft and destination Current approved workbench, account and preview Intended destination and content scope Stop if the destination is unclear or refuses insertion; do not bypass it Sending and acknowledgement Original sending record and explicitly associated receiving feedback Separate visible draft, sent message and confirmed scope No feedback means awaiting confirmation; a service receipt is not a person taking over Uncertainty and duplication Original record, request and existing handoff attempt Known step and remaining uncertainty Check the original destination first; do not resend to “complete evidence” or duplicate staffing arrangements Preparing a draft with Yihu Check approved records first. Verify the roster version and change reference only within your authorized scope. Ask the responsible person if access is missing; do not borrow accounts or export the full staff list. Prepare only necessary administrative text. Separate checked arrangements, items awaiting confirmation and the next checking person/channel. Record owners and times only when already agreed. Do not rewrite a suggestion as approval. Review critical wording. Compare dates, start/end times, roles, quantities and negation. Recording order is not event order, and completed transcription does not establish factual accuracy. Check the destination and previous attempts. Explicit note insertion is bound to the workbench/page captured when notes opened. Stop and verify if the destination changes. Not every page supports insertion; a visible draft is not a sent message. Send and acknowledge through the original process. Authorized staff act in hospital-approved tools. Receiving staff confirm only what they actually checked. Leave missing confirmations open; completing a checklist does not create legal acknowledgement. Stop on uncertain outcomes. Each note retains a one-handoff marker. Failed or uncertain handoffs do not automatically retry or become another staged copy. Check existing destination content before an authorized person chooses the next step. New operations do not prove old ones and may create duplicates. Direct insertion has a 3,000 Swift Character limit; longer notes use the existing Markdown attachment-staging path. This is not permission to split or rename content to bypass the one-handoff boundary. Staging is not upload, sending, approval or acceptance. Copy and paste can also create copies and duplicates; do not assume everything stays on-device or that deleting one copy retracts all others. Download the blank checklist Instructions: /samples/p33-clinical-shift-handover/README.md · English: /samples/p33-clinical-shift-handover/checklist.en.json · 中文： /samples/p33-clinical-shift-handover/checklist.zh.json This is a blank manual worksheet with no real staff or patient information. It is not a roster import file and does not submit approvals, call hospital systems or save your entries. Before saving a completed copy, check its storage location and access permissions. Reference authorized records without copying sensitive content. Blank fields mean unfilled, not passed, not applicable or complete. Frequently asked questions Does a chat reply saying “received” approve a swap? No. Check whether the established approval covers the current version, role and interval. Sending and receiving feedback are separate. “Received” does not automatically establish approval or actual attendance. Is a shift name enough when the night shift crosses midnight? If the interval is unclear, verify the start date, end date, exact times and applicable time zone in the original roster. Do not ask Yihu to guess which date “tonight” means or change roster dates using the phone’s message-receipt time. Can I record patient handover and pass it to a workbench? This page does not recommend that use. Patient condition, orders and medication handover belong in the hospital’s required clinical systems and staff processes. This page covers authorized non-patient administrative preparation only, not clinical checking or compliance certification. Can Yihu swap shifts, fill coverage gaps or verify staff credentials? This page claims none of those capabilities. Yihu is not a roster or credentialing system; it does not automatically change schedules, approve cover or guarantee staffing. Refer unresolved coverage to the hospital’s designated lead. Does a draft or service receipt prove the handover finished? A draft supports only the corresponding visible state. A service receipt supports only its service-record boundary. Actual sending, staff acceptance and subsequent handling each require their own evidence. This checklist is not a new app audit log and provides neither legal certification nor a substitute for actual acknowledgement. The page reloaded during handover. Should I send again? Stop and check the original destination and existing records. Reloads or network errors do not prove that the original action never happened. Do not clear markers, change summaries or create requests to manufacture proof of the old action. Urgent matters use the hospital’s established escalation channel. Continue reading Voice notes and explicit handoff · Scope of multi-person confirmation · Dates and time zones · Get started · Privacy Product capability references: current source overview , note handoff boundaries . The earlier handoff description is historical context, not proof of current store-edition features. Check the store and installed version before use; a source merge does not establish installed-version parity.
 
 Parameter/comparison tables (HTML) / 参数对照表：
 
@@ -4087,59 +4111,83 @@ Parameter/comparison tables (HTML) / 参数对照表：
 <thead>
 <tr>
 <th>Check</th>
-<th>Existing evidence</th>
-<th>Limited conclusion supported</th>
-<th>Not established</th>
+<th>Where to verify</th>
+<th>Minimum conclusion to retain</th>
+<th>If still uncertain</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Source/version</td>
-<td>Known version, original reference and reviewed scope</td>
-<td>Which material was reviewed</td>
-<td>Every device or future version works</td>
+<td>Current roster version</td>
+<td>The hospital’s designated approved roster source</td>
+<td>Checked version and applicable dates</td>
+<td>A chat screenshot does not replace the current roster; confirm at the source</td>
 </tr>
 <tr>
-<td>Target identity</td>
-<td>Verifiable workbench/page/item identity</td>
-<td>The checked destination</td>
-<td>Similar title or another source is equivalent</td>
+<td>Original and revised shifts</td>
+<td>Original roster and authorized change record</td>
+<td>Which role and interval changed</td>
+<td>Do not overwrite the arrangement with the latest spoken message</td>
 </tr>
 <tr>
-<td>Content scope</td>
-<td>Necessary authorized text and review record</td>
-<td>These fields/passages were checked</td>
-<td>Full text and every copy checked</td>
+<td>Midnight boundaries</td>
+<td>Complete dates, times and applicable time zone in the source</td>
+<td>Separate start and end dates</td>
+<td>Clarify “tonight” or “tomorrow morning”; do not infer or convert them yourself</td>
 </tr>
 <tr>
-<td>Local state</td>
-<td>Original, complete/failed and handoff-attempt state</td>
-<td>The corresponding local/attempt stage</td>
-<td>Remote receipt or absence of receipt</td>
+<td>Early or late arrival</td>
+<td>Approved arrangement and original handover window</td>
+<td>Coverage interval and any unresolved gap</td>
+<td>Do not assume the adjacent shift will cover it</td>
 </tr>
 <tr>
-<td>Draft/attachment</td>
-<td>Actual unsent destination draft or tray version</td>
-<td>Visible draft or staged content</td>
-<td>Sent/uploaded/handled status</td>
+<td>Role coverage</td>
+<td>Existing staffing and role rules</td>
+<td>Whether required roles have authorized coverage</td>
+<td>Do not use this checklist to assess credentials or safe staffing ratios; refer to the responsible lead</td>
 </tr>
 <tr>
-<td>Original request/receipt</td>
-<td>Existing request identity and service record</td>
-<td>The service recorded that reply</td>
-<td>Automatic task completion, state change or execution</td>
+<td>Swap approval</td>
+<td>Explicit decision in the established approval channel</td>
+<td>Authorized version and scope</td>
+<td>A proposal, forwarded message or “seen” is not approval</td>
 </tr>
 <tr>
-<td>Later handling</td>
-<td>Independent source confirmation/feedback with scope</td>
-<td>The evidenced handling step</td>
-<td>Every action/downstream system completed</td>
+<td>Outgoing and receiving staff</td>
+<td>Actual identity and feedback in an approved channel</td>
+<td>What each person confirmed administratively</td>
+<td>Do not confirm for someone else or use voiceprint/name text as identity verification</td>
 </tr>
 <tr>
-<td>Gaps/unknowns</td>
-<td>Missing evidence, permission or uncertain state</td>
-<td>Pending or uncertain remains</td>
-<td>New-ID resend, invented logs or guessed conclusions</td>
+<td>Open administrative items</td>
+<td>Original record and accessible item references</td>
+<td>Item, already agreed owner and agreed time</td>
+<td>Leave unagreed fields awaiting confirmation; do not infer owners or deadlines</td>
+</tr>
+<tr>
+<td>Conflicts and negation</td>
+<td>Authorized original text and current draft</td>
+<td>Retain “not yet approved” and “do not swap” restrictions</td>
+<td>Keep conflicting versions visible rather than choosing the more confident wording</td>
+</tr>
+<tr>
+<td>Draft and destination</td>
+<td>Current approved workbench, account and preview</td>
+<td>Intended destination and content scope</td>
+<td>Stop if the destination is unclear or refuses insertion; do not bypass it</td>
+</tr>
+<tr>
+<td>Sending and acknowledgement</td>
+<td>Original sending record and explicitly associated receiving feedback</td>
+<td>Separate visible draft, sent message and confirmed scope</td>
+<td>No feedback means awaiting confirmation; a service receipt is not a person taking over</td>
+</tr>
+<tr>
+<td>Uncertainty and duplication</td>
+<td>Original record, request and existing handoff attempt</td>
+<td>Known step and remaining uncertainty</td>
+<td>Check the original destination first; do not resend to “complete evidence” or duplicate staffing arrangements</td>
 </tr>
 </tbody>
 </table>
