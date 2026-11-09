@@ -71,3 +71,8 @@ Hermes提醒先经既有HTTPS/host解析门并设置pendingURL。界面路由还
 ## SYN-ELA-46 证据候选与提醒导航分账（保持退休）
 
 [同语证据链接准入核对](/guides/evidence-link-admission-preflight/)只核证据文本的分词/HTTPS/凭据/端口/去重形态，不是提醒relay-host门、来源白名单、安全扫描、真实性或脱敏认证。不要把safeEvidenceURLs准入当handleTap或已保存origin授权。pendingURL、笔记/语音保护、connected后消费、实际导航/登录与业务回执分别留证；未知源消费丢弃而非新增服务器，不为导航丢弃原文、不绕门或盲重试。全部合成，真实通知/设备/网页/网络均not_run。此页保持indexable: false/noindex,follow，不入sitemap或LLM独立section，不新增下载/Store卡或转换块，不改既有退页结构、权限或配置。
+
+
+## SYN-RFU-49 源URL不授提醒路由权（保持退休）
+
+[同语Radar源URL核对](/guides/radar-feed-url-boundary-preflight/)区分feed的path/query/fragment门、证据分词与origin根路径规范；任一通过都不能代替提醒HTTPS/relay-host、已保存origin或账户许可。保留pending单槽、笔记/语音保护、connected后消费与未知源丢弃，不删真实认证条件或放宽源门来促成跳转。真实通知/导航/认证/读取/网络全not_run，形态不是回执，未知副作用不盲重试。保原SYN-ELA-46转接，保持indexable: false/noindex,follow，不入sitemap或LLM独立section，不新增下载/Store/转换卡，原ZH Store边界、布局/配置和守卫不改。
