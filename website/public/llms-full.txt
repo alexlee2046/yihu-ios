@@ -4932,9 +4932,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/timezone-timestamp-review/
 
-场景指南 · 相关使用指南 跨时区简报时间怎样核对？来源日期、Unix任务时间与载体时间分账 先问这个时间描述哪件事，再比较时区、单位与先后 一呼当前Radar把 date_str 按固定 yyyy-MM-dd HH:mm 、UTC+08:00解析，来源最后成功读取时间不能用手机请求、缓存命中或文件修改时间替换。任务 timestamp 是另外的可选Unix时间字段；Watch的 sourceDate 与 capturedAt 又有各自含义。跨时区核对应先分事件与契约，不把所有“时间”都当同一种数字。 与缓存排障、批次比较的分工 缓存指南定位旧数据和读取失败，批次比较核两份数据是否可比；这里专门检查 不同口径的日期时间如何被错误比较 。本页不实现自动时区转换、时钟修正、预约调度或跨时区同步，也不写回真实来源时间。 时间字段口径表 时间/位置 当前含义或契约 应核对什么 不能替代什么 date_str 来源最后成功读取；固定UTC+08格式 完整字符串、来源与实际读取状态 手机点刷新或导出文件保存时间 任务timestamp 可选Double，Unix任务更新时间 来源提供的单位、缺失/null与排序范围 整份源读取时间、批准/处理时间 手机请求时间 发起读取的本地事件 是否成功拿到新源，而非仅缓存 来源已更新或任务已变更 Watch sourceDate 手机摘要对应来源时间 来源范围、失败与裁剪信息 手表封包或独立刷新时间 Watch capturedAt 摘要封包时间 与sourceDate分别看待 最新业务状态或最新源读取 文件/编辑时间 保存、复制、整理文档的事件 是否只是副本或人工编辑 原业务事件或来源身份 Unix秒与毫秒 不同数值单位，不可混用 按生产者/消费者契约核单位 仅凭位数猜测后自动改值 其他时区呈现 对同一时刻的人工显示 明确偏移、跨日与适用规则 把本地时区直接写回date_str Watch日期是该载体的Date编码契约，不能把随手看到的底层序列化数字直接与任务Unix字段相减。必须先核双方格式/单位；本页不提供通用时间字段识别器。 两个固定历史示例 示例A：2026-10-18 09:00（按当前date_str契约为UTC+08） 同一时刻的UTC显示：2026-10-18 01:00 UTC 示例B：2026-10-18 00:30（UTC+08） 同一时刻的UTC显示：2026-10-17 16:30 UTC，日期跨到前一天 这是明确偏移下的人工示意，不是真实来源或当前新鲜数据。不要因为文中给出UTC显示，就把 Z 、偏移或ISO分隔符直接加回 date_str ；当前严格格式与回读校验不等于任意ISO8601接受器。 检查顺序 先给每个时间标明事件：源读取、任务更新、请求、封包还是文件编辑。再确认来源身份与范围，随后核格式、时区/偏移和单位。如果出现排序矛盾，先看缺失值、优先级与来源顺序规则，不把它自动解释成时钟错误或任务状态改变。 当前源码把超过24小时的来源标旧，超前超过5分钟提示时钟问题；它们是来源时效判断，不是响应时间、刷新频率、服务SLA或业务逾期判定。未知日期应保持未知/失败，不能填“现在”让警告消失。任何修正应回原来源维护流程，不绕过解析或写授权。 FAQ 手机在另一个时区，date_str会改按手机时区解析吗？ 当前模型使用固定UTC+08解析，不应按手机所在地反推。实际显示与来源语义仍须分开核对。 给date_str加Z或+08:00会更标准吗？ 不能因此假定当前消费者接受。它有固定格式与严格回读检查，改源格式属于兼容性变更，需另核目标版本。 13位数字可以自动除1000当Unix秒吗？ 不应靠位数自动修源。先核生产者契约与实际字段，错误单位可能无效或表示完全不同时间；本页不提供自动强转。 刚刷新或刚封包为什么还显示旧来源？ 请求/封包与源成功读取不同，缓存可继续显示旧值；不能把新请求时间冒充来源更新。 24小时和5分钟是刷新SLA吗？ 不是。它们是当前来源旧值/未来时钟判断阈值，不承诺服务按某周期更新或任务必须何时处理。 时间缺失时填当前时间能帮助比较吗？ 会伪造含义，不应这样做。保留未知及缺口，回来源确认；否则会把旧数据或编辑副本误当新事实。 相关指南与源码 JSON类型与空值 · 批次比较 · 跨端呈现 · 改版兼容 · 开始 · 隐私 依据： 来源日期解析、时效与排序 、 Watch日期模型 。
+场景指南 · 相关使用指南 跨时区简报时间怎样核对？来源日期、Unix任务时间与载体时间分账 SYN-TZR-52 时间口径/请求寿命自检 SYNTHETIC_EXAMPLE · pending · not_run。日期、事件、纪元与有效窗口分账。 /samples/p31-timezone-timestamp-review/README.md · /samples/p31-timezone-timestamp-review/preflight.zh.json · /samples/p31-timezone-timestamp-review/preflight.en.json ID 检查 预期/边界 D01 固定UTC+08 parse=true; 2026-10-18T01:00:00Z D02 跨到UTC前日 parse=true; 2026-10-17T16:30:00Z D03 有效闰日 parse=true; 2024-02-28T16:00:00Z D04 无效闰日 parse=false; reject, no repair D05 ISO非原格式 parse=false; reject, no repair D06 偏移后缀不符 parse=false; reject, no repair D07 非补零格式 parse=false; reject, no repair D08 多出秒字段 parse=false; reject, no repair D09 分钟越界 parse=false; reject, no repair D10 24点回读不符 parse=false; reject, no repair D11 首尾空白不补救 parse=false; reject, no repair D12 固定偏移非手机DST parse=true; 2026-03-07T18:30:00Z W01 来源与封包不同 Date JSON source=813978000; captured=813978060; reference2001 seconds W02 跨日同一时刻 Date JSON source=813947400; captured=813947520; reference2001 seconds W03 新封包不刷新来源 Date JSON source=813978000; captured=814064400; reference2001 seconds W04 Unix零非Date零 Date JSON source=-978307200; captured=813978000; reference2001 seconds W05 Date零在2001 Date JSON source=0; captured=813978000; reference2001 seconds W06 未知来源不补封包 Date JSON source=unknown/omitted; captured=813978000; reference2001 seconds S01 无请求 consume=[false]; pending=false S02 即时一次消费 consume=[true, false]; pending=false S03 端点前1毫秒 consume=[true]; pending=false S04 30秒含端点 consume=[true]; pending=false S05 超过端点失效 consume=[false, false]; pending=false S06 重复刷新不排N队 consume=[true, false]; pending=false M01 先分事件口径 source成功读取、task更新、手机请求、Watch封包、文件编辑不是同一事件；不以now替源日期。 M02 显式偏移与格式 原date_str固定Gregorian/POSIX UTC+08且回读相等，不随手机时区或DST；UTC显示不授权改写源为ISO。 M03 秒毫秒与Date纪元 任务Unix秒、JSONEncoder默认Date参考2001、ContinuousClock相对Duration分账，不凭位数除1000或互减。 M04 时效阈值非SLA 24小时旧/超前5分钟只核源码，未跑isOutdated/isFutureDated/stale；不是刷新/响应或业务逾期承诺。 M05 请求消费非开麦 30秒含端点只属原请求中心，Intent返回/Bool消费不证明前台、系统绑定、权限、实际开麦/填入/发送。 M06 保原件与停止 全部合成不访问来源，不填当前时间掩旧值、不改名/单位绕门；保未知和一次标记，目标可同步，未知不盲重试。 先问这个时间描述哪件事，再比较时区、单位与先后 一呼当前Radar把 date_str 按固定 yyyy-MM-dd HH:mm 、UTC+08:00解析，来源最后成功读取时间不能用手机请求、缓存命中或文件修改时间替换。任务 timestamp 是另外的可选Unix时间字段；Watch的 sourceDate 与 capturedAt 又有各自含义。跨时区核对应先分事件与契约，不把所有“时间”都当同一种数字。 与缓存排障、批次比较的分工 缓存指南定位旧数据和读取失败，批次比较核两份数据是否可比；这里专门检查 不同口径的日期时间如何被错误比较 。本页不实现自动时区转换、时钟修正、预约调度或跨时区同步，也不写回真实来源时间。 时间字段口径表 时间/位置 当前含义或契约 应核对什么 不能替代什么 date_str 来源最后成功读取；固定UTC+08格式 完整字符串、来源与实际读取状态 手机点刷新或导出文件保存时间 任务timestamp 可选Double，Unix任务更新时间 来源提供的单位、缺失/null与排序范围 整份源读取时间、批准/处理时间 手机请求时间 发起读取的本地事件 是否成功拿到新源，而非仅缓存 来源已更新或任务已变更 Watch sourceDate 手机摘要对应来源时间 来源范围、失败与裁剪信息 手表封包或独立刷新时间 Watch capturedAt 摘要封包时间 与sourceDate分别看待 最新业务状态或最新源读取 文件/编辑时间 保存、复制、整理文档的事件 是否只是副本或人工编辑 原业务事件或来源身份 Unix秒与毫秒 不同数值单位，不可混用 按生产者/消费者契约核单位 仅凭位数猜测后自动改值 其他时区呈现 对同一时刻的人工显示 明确偏移、跨日与适用规则 把本地时区直接写回date_str Watch日期是该载体的Date编码契约，不能把随手看到的底层序列化数字直接与任务Unix字段相减。必须先核双方格式/单位；本页不提供通用时间字段识别器。 两个固定历史示例 示例A：2026-10-18 09:00（按当前date_str契约为UTC+08） 同一时刻的UTC显示：2026-10-18 01:00 UTC 示例B：2026-10-18 00:30（UTC+08） 同一时刻的UTC显示：2026-10-17 16:30 UTC，日期跨到前一天 这是明确偏移下的人工示意，不是真实来源或当前新鲜数据。不要因为文中给出UTC显示，就把 Z 、偏移或ISO分隔符直接加回 date_str ；当前严格格式与回读校验不等于任意ISO8601接受器。 检查顺序 先给每个时间标明事件：源读取、任务更新、请求、封包还是文件编辑。再确认来源身份与范围，随后核格式、时区/偏移和单位。如果出现排序矛盾，先看缺失值、优先级与来源顺序规则，不把它自动解释成时钟错误或任务状态改变。 当前源码把超过24小时的来源标旧，超前超过5分钟提示时钟问题；它们是来源时效判断，不是响应时间、刷新频率、服务SLA或业务逾期判定。未知日期应保持未知/失败，不能填“现在”让警告消失。任何修正应回原来源维护流程，不绕过解析或写授权。 FAQ 手机在另一个时区，date_str会改按手机时区解析吗？ 当前模型使用固定UTC+08解析，不应按手机所在地反推。实际显示与来源语义仍须分开核对。 给date_str加Z或+08:00会更标准吗？ 不能因此假定当前消费者接受。它有固定格式与严格回读检查，改源格式属于兼容性变更，需另核目标版本。 13位数字可以自动除1000当Unix秒吗？ 不应靠位数自动修源。先核生产者契约与实际字段，错误单位可能无效或表示完全不同时间；本页不提供自动强转。 刚刷新或刚封包为什么还显示旧来源？ 请求/封包与源成功读取不同，缓存可继续显示旧值；不能把新请求时间冒充来源更新。 24小时和5分钟是刷新SLA吗？ 不是。它们是当前来源旧值/未来时钟判断阈值，不承诺服务按某周期更新或任务必须何时处理。 时间缺失时填当前时间能帮助比较吗？ 会伪造含义，不应这样做。保留未知及缺口，回来源确认；否则会把旧数据或编辑副本误当新事实。 相关指南与源码 JSON类型与空值 · 批次比较 · 跨端呈现 · 改版兼容 · 开始 · 隐私 依据： 来源日期解析、时效与排序 、 Watch日期模型 。
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>检查</th>
+<th>预期/边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D01</td>
+<td>固定UTC+08</td>
+<td>parse=true; 2026-10-18T01:00:00Z</td>
+</tr>
+<tr>
+<td>D02</td>
+<td>跨到UTC前日</td>
+<td>parse=true; 2026-10-17T16:30:00Z</td>
+</tr>
+<tr>
+<td>D03</td>
+<td>有效闰日</td>
+<td>parse=true; 2024-02-28T16:00:00Z</td>
+</tr>
+<tr>
+<td>D04</td>
+<td>无效闰日</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D05</td>
+<td>ISO非原格式</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D06</td>
+<td>偏移后缀不符</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D07</td>
+<td>非补零格式</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D08</td>
+<td>多出秒字段</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D09</td>
+<td>分钟越界</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D10</td>
+<td>24点回读不符</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>首尾空白不补救</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D12</td>
+<td>固定偏移非手机DST</td>
+<td>parse=true; 2026-03-07T18:30:00Z</td>
+</tr>
+<tr>
+<td>W01</td>
+<td>来源与封包不同</td>
+<td>Date JSON source=813978000; captured=813978060; reference2001 seconds</td>
+</tr>
+<tr>
+<td>W02</td>
+<td>跨日同一时刻</td>
+<td>Date JSON source=813947400; captured=813947520; reference2001 seconds</td>
+</tr>
+<tr>
+<td>W03</td>
+<td>新封包不刷新来源</td>
+<td>Date JSON source=813978000; captured=814064400; reference2001 seconds</td>
+</tr>
+<tr>
+<td>W04</td>
+<td>Unix零非Date零</td>
+<td>Date JSON source=-978307200; captured=813978000; reference2001 seconds</td>
+</tr>
+<tr>
+<td>W05</td>
+<td>Date零在2001</td>
+<td>Date JSON source=0; captured=813978000; reference2001 seconds</td>
+</tr>
+<tr>
+<td>W06</td>
+<td>未知来源不补封包</td>
+<td>Date JSON source=unknown/omitted; captured=813978000; reference2001 seconds</td>
+</tr>
+<tr>
+<td>S01</td>
+<td>无请求</td>
+<td>consume=[false]; pending=false</td>
+</tr>
+<tr>
+<td>S02</td>
+<td>即时一次消费</td>
+<td>consume=[true, false]; pending=false</td>
+</tr>
+<tr>
+<td>S03</td>
+<td>端点前1毫秒</td>
+<td>consume=[true]; pending=false</td>
+</tr>
+<tr>
+<td>S04</td>
+<td>30秒含端点</td>
+<td>consume=[true]; pending=false</td>
+</tr>
+<tr>
+<td>S05</td>
+<td>超过端点失效</td>
+<td>consume=[false, false]; pending=false</td>
+</tr>
+<tr>
+<td>S06</td>
+<td>重复刷新不排N队</td>
+<td>consume=[true, false]; pending=false</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>先分事件口径</td>
+<td>source成功读取、task更新、手机请求、Watch封包、文件编辑不是同一事件；不以now替源日期。</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>显式偏移与格式</td>
+<td>原date_str固定Gregorian/POSIX UTC+08且回读相等，不随手机时区或DST；UTC显示不授权改写源为ISO。</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>秒毫秒与Date纪元</td>
+<td>任务Unix秒、JSONEncoder默认Date参考2001、ContinuousClock相对Duration分账，不凭位数除1000或互减。</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>时效阈值非SLA</td>
+<td>24小时旧/超前5分钟只核源码，未跑isOutdated/isFutureDated/stale；不是刷新/响应或业务逾期承诺。</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>请求消费非开麦</td>
+<td>30秒含端点只属原请求中心，Intent返回/Bool消费不证明前台、系统绑定、权限、实际开麦/填入/发送。</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>保原件与停止</td>
+<td>全部合成不访问来源，不填当前时间掩旧值、不改名/单位绕门；保未知和一次标记，目标可同步，未知不盲重试。</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -5001,9 +5163,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/timezone-timestamp-review/
 
-All scenarios · Related practical guide Review brief timestamps across timezones: source, task and carrier clocks Identify the event before comparing timezone, units and ordering Current Radar parses date_str using fixed yyyy-MM-dd HH:mm in UTC+08:00. Last successful source read cannot be replaced with a phone request, cache hit or file modification. Optional task timestamp is a separate Unix-time field; Watch sourceDate and capturedAt also differ. Establish event/contract first instead of treating all times as equivalent numbers. Different from cache diagnosis and batch comparison Cache review locates old data/read failures; batch review establishes comparable exports. Here different time meanings can be compared incorrectly . No automatic timezone converter, clock repair, scheduling or cross-zone sync is added, and no live source time is rewritten. Time meanings and units Time/location Current meaning/contract Check Does not replace date_str Last successful source read, fixed UTC+08 format Exact string, source and successful read state Refresh tap or exported-file save time Task timestamp Optional Double, Unix task-update time Producer units, absence/null and ordering scope Whole-source read, approval or handling time Phone request Local event starting a read New successful source response versus cache Source update or task modification Watch sourceDate Source represented by the phone summary Scope, failures and truncation Watch packaging or independent refresh Watch capturedAt Summary packaging time Inspect separately from sourceDate New business state or successful source read File/editorial time Save/copy/edit event Whether only a copy/document changed Original business event or source identity Unix seconds/milliseconds Different units, not interchangeable Producer/consumer contract Automatic conversion based on digit count Other-zone presentation Another display of one instant Explicit offset, date boundary and applicable rules Writing local-zone text back as date_str Watch dates use that carrier’s Date encoding contract. Do not subtract arbitrary serialized values directly from task Unix fields without verifying format/units. This page supplies no universal timestamp detector. Two fixed historical illustrations A: 2026-10-18 09:00 under date_str's UTC+08 contract Same instant in UTC: 2026-10-18 01:00 UTC B: 2026-10-18 00:30 at UTC+08 Same instant in UTC: 2026-10-17 16:30 UTC, on the preceding date These are explicit-offset illustrations, not real/current source data. A UTC display does not authorize appending Z , offsets or ISO separators to date_str . Its strict round-trip format is not arbitrary ISO8601 acceptance. Review sequence Label the event first: source read, task update, request, packaging or editing. Confirm identity/scope, then format, timezone/offset and unit. If ordering conflicts, inspect absent timestamps, priorities and source-order rules before assuming clock failure or changed task state. Current source marks source age over 24 hours stale and flags time more than five minutes ahead. These are freshness signals, not response latency, refresh frequency, service SLA or a business deadline. Keep unknown/failed times rather than filling now to hide a warning. Corrections belong to the original maintenance process without bypassing parsing/write authority. FAQ Does another phone timezone change date_str parsing? The current model fixes UTC+08 rather than inferring from device location. Keep displayed time and source meaning separate. Is adding Z or +08:00 automatically more compatible? No. The consumer has an exact format/round-trip check. A source-format change needs actual-version compatibility review. Can a 13-digit value automatically be divided by 1000? Do not repair by digit count. Confirm producer contract/field first. Wrong units can be invalid or mean another instant; no automatic coercion is offered. Why is source time old after refresh or packaging? Request/packaging events differ from successful source reads. Cache can retain an old source time; do not substitute now. Are 24 hours and five minutes refresh SLAs? No. They are current stale/future-source thresholds, not promised update schedules or task-handling deadlines. Can missing time be filled with now to help comparison? That fabricates meaning. Keep the gap and confirm at the source instead of presenting old data/edited copies as new facts. Reading and source JSON types/nulls · Batch comparison · Cross-device presentation · Format compatibility · Start · Privacy Evidence: source-date parsing/freshness/sorting , Watch date model .
+All scenarios · Related practical guide Review brief timestamps across timezones: source, task and carrier clocks SYN-TZR-52 time and request lifetime preflight SYNTHETIC_EXAMPLE · pending · not_run. Dates, events, epochs and lifetimes differ. /samples/p31-timezone-timestamp-review/README.md · /samples/p31-timezone-timestamp-review/preflight.zh.json · /samples/p31-timezone-timestamp-review/preflight.en.json ID Check Expectation/boundary D01 Fixed UTC+08 parse=true; 2026-10-18T01:00:00Z D02 Previous UTC date parse=true; 2026-10-17T16:30:00Z D03 Valid leap day parse=true; 2024-02-28T16:00:00Z D04 Invalid leap day parse=false; reject, no repair D05 ISO is not source format parse=false; reject, no repair D06 Offset suffix differs parse=false; reject, no repair D07 Non-padded format parse=false; reject, no repair D08 Extra seconds parse=false; reject, no repair D09 Minute out of range parse=false; reject, no repair D10 Hour24 roundtrip differs parse=false; reject, no repair D11 No whitespace repair parse=false; reject, no repair D12 Fixed offset not device DST parse=true; 2026-03-07T18:30:00Z W01 Source versus packaging Date JSON source=813978000; captured=813978060; reference2001 seconds W02 Date boundary same instant Date JSON source=813947400; captured=813947520; reference2001 seconds W03 New package not new source Date JSON source=813978000; captured=814064400; reference2001 seconds W04 Unix zero is not Date zero Date JSON source=-978307200; captured=813978000; reference2001 seconds W05 Date zero is2001 Date JSON source=0; captured=813978000; reference2001 seconds W06 Unknown source not package time Date JSON source=unknown/omitted; captured=813978000; reference2001 seconds S01 No request consume=[false]; pending=false S02 Immediate one-time consume consume=[true, false]; pending=false S03 One ms before endpoint consume=[true]; pending=false S04 Inclusive30s endpoint consume=[true]; pending=false S05 After endpoint expires consume=[false, false]; pending=false S06 Repeat refresh not N-queue consume=[true, false]; pending=false M01 Identify the event first Source read, task update, phone request, Watch packaging and file edit are distinct; never replace source time with now. M02 Explicit offset and format Original date_str uses fixed Gregorian/POSIX UTC+08 with exact roundtrip, not phone zone/DST; UTC display does not authorize ISO source rewrites. M03 Seconds milliseconds and Date epoch Task Unix seconds, default JSONEncoder Date reference2001 and ContinuousClock relative Duration differ; no digit-count /1000 repair or cross-domain subtraction. M04 Freshness thresholds are not SLA 24h stale/>5m future are source-only here; isOutdated/isFutureDated/stale are not run, not refresh/response/business-deadline promises. M05 Consumption is not capture Inclusive30s belongs to original request center; Intent return/Bool consume proves no foreground/system binding/permission/capture/insertion/send. M06 Preserve originals and stop Synthetic only, no source fetch/current-time masking/rename-or-unit bypass. Preserve unknowns/reservations; destinations may sync, no blind retry. Identify the event before comparing timezone, units and ordering Current Radar parses date_str using fixed yyyy-MM-dd HH:mm in UTC+08:00. Last successful source read cannot be replaced with a phone request, cache hit or file modification. Optional task timestamp is a separate Unix-time field; Watch sourceDate and capturedAt also differ. Establish event/contract first instead of treating all times as equivalent numbers. Different from cache diagnosis and batch comparison Cache review locates old data/read failures; batch review establishes comparable exports. Here different time meanings can be compared incorrectly . No automatic timezone converter, clock repair, scheduling or cross-zone sync is added, and no live source time is rewritten. Time meanings and units Time/location Current meaning/contract Check Does not replace date_str Last successful source read, fixed UTC+08 format Exact string, source and successful read state Refresh tap or exported-file save time Task timestamp Optional Double, Unix task-update time Producer units, absence/null and ordering scope Whole-source read, approval or handling time Phone request Local event starting a read New successful source response versus cache Source update or task modification Watch sourceDate Source represented by the phone summary Scope, failures and truncation Watch packaging or independent refresh Watch capturedAt Summary packaging time Inspect separately from sourceDate New business state or successful source read File/editorial time Save/copy/edit event Whether only a copy/document changed Original business event or source identity Unix seconds/milliseconds Different units, not interchangeable Producer/consumer contract Automatic conversion based on digit count Other-zone presentation Another display of one instant Explicit offset, date boundary and applicable rules Writing local-zone text back as date_str Watch dates use that carrier’s Date encoding contract. Do not subtract arbitrary serialized values directly from task Unix fields without verifying format/units. This page supplies no universal timestamp detector. Two fixed historical illustrations A: 2026-10-18 09:00 under date_str's UTC+08 contract Same instant in UTC: 2026-10-18 01:00 UTC B: 2026-10-18 00:30 at UTC+08 Same instant in UTC: 2026-10-17 16:30 UTC, on the preceding date These are explicit-offset illustrations, not real/current source data. A UTC display does not authorize appending Z , offsets or ISO separators to date_str . Its strict round-trip format is not arbitrary ISO8601 acceptance. Review sequence Label the event first: source read, task update, request, packaging or editing. Confirm identity/scope, then format, timezone/offset and unit. If ordering conflicts, inspect absent timestamps, priorities and source-order rules before assuming clock failure or changed task state. Current source marks source age over 24 hours stale and flags time more than five minutes ahead. These are freshness signals, not response latency, refresh frequency, service SLA or a business deadline. Keep unknown/failed times rather than filling now to hide a warning. Corrections belong to the original maintenance process without bypassing parsing/write authority. FAQ Does another phone timezone change date_str parsing? The current model fixes UTC+08 rather than inferring from device location. Keep displayed time and source meaning separate. Is adding Z or +08:00 automatically more compatible? No. The consumer has an exact format/round-trip check. A source-format change needs actual-version compatibility review. Can a 13-digit value automatically be divided by 1000? Do not repair by digit count. Confirm producer contract/field first. Wrong units can be invalid or mean another instant; no automatic coercion is offered. Why is source time old after refresh or packaging? Request/packaging events differ from successful source reads. Cache can retain an old source time; do not substitute now. Are 24 hours and five minutes refresh SLAs? No. They are current stale/future-source thresholds, not promised update schedules or task-handling deadlines. Can missing time be filled with now to help comparison? That fabricates meaning. Keep the gap and confirm at the source instead of presenting old data/edited copies as new facts. Reading and source JSON types/nulls · Batch comparison · Cross-device presentation · Format compatibility · Start · Privacy Evidence: source-date parsing/freshness/sorting , Watch date model .
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Check</th>
+<th>Expectation/boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D01</td>
+<td>Fixed UTC+08</td>
+<td>parse=true; 2026-10-18T01:00:00Z</td>
+</tr>
+<tr>
+<td>D02</td>
+<td>Previous UTC date</td>
+<td>parse=true; 2026-10-17T16:30:00Z</td>
+</tr>
+<tr>
+<td>D03</td>
+<td>Valid leap day</td>
+<td>parse=true; 2024-02-28T16:00:00Z</td>
+</tr>
+<tr>
+<td>D04</td>
+<td>Invalid leap day</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D05</td>
+<td>ISO is not source format</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D06</td>
+<td>Offset suffix differs</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D07</td>
+<td>Non-padded format</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D08</td>
+<td>Extra seconds</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D09</td>
+<td>Minute out of range</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D10</td>
+<td>Hour24 roundtrip differs</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>No whitespace repair</td>
+<td>parse=false; reject, no repair</td>
+</tr>
+<tr>
+<td>D12</td>
+<td>Fixed offset not device DST</td>
+<td>parse=true; 2026-03-07T18:30:00Z</td>
+</tr>
+<tr>
+<td>W01</td>
+<td>Source versus packaging</td>
+<td>Date JSON source=813978000; captured=813978060; reference2001 seconds</td>
+</tr>
+<tr>
+<td>W02</td>
+<td>Date boundary same instant</td>
+<td>Date JSON source=813947400; captured=813947520; reference2001 seconds</td>
+</tr>
+<tr>
+<td>W03</td>
+<td>New package not new source</td>
+<td>Date JSON source=813978000; captured=814064400; reference2001 seconds</td>
+</tr>
+<tr>
+<td>W04</td>
+<td>Unix zero is not Date zero</td>
+<td>Date JSON source=-978307200; captured=813978000; reference2001 seconds</td>
+</tr>
+<tr>
+<td>W05</td>
+<td>Date zero is2001</td>
+<td>Date JSON source=0; captured=813978000; reference2001 seconds</td>
+</tr>
+<tr>
+<td>W06</td>
+<td>Unknown source not package time</td>
+<td>Date JSON source=unknown/omitted; captured=813978000; reference2001 seconds</td>
+</tr>
+<tr>
+<td>S01</td>
+<td>No request</td>
+<td>consume=[false]; pending=false</td>
+</tr>
+<tr>
+<td>S02</td>
+<td>Immediate one-time consume</td>
+<td>consume=[true, false]; pending=false</td>
+</tr>
+<tr>
+<td>S03</td>
+<td>One ms before endpoint</td>
+<td>consume=[true]; pending=false</td>
+</tr>
+<tr>
+<td>S04</td>
+<td>Inclusive30s endpoint</td>
+<td>consume=[true]; pending=false</td>
+</tr>
+<tr>
+<td>S05</td>
+<td>After endpoint expires</td>
+<td>consume=[false, false]; pending=false</td>
+</tr>
+<tr>
+<td>S06</td>
+<td>Repeat refresh not N-queue</td>
+<td>consume=[true, false]; pending=false</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>Identify the event first</td>
+<td>Source read, task update, phone request, Watch packaging and file edit are distinct; never replace source time with now.</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>Explicit offset and format</td>
+<td>Original date_str uses fixed Gregorian/POSIX UTC+08 with exact roundtrip, not phone zone/DST; UTC display does not authorize ISO source rewrites.</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>Seconds milliseconds and Date epoch</td>
+<td>Task Unix seconds, default JSONEncoder Date reference2001 and ContinuousClock relative Duration differ; no digit-count /1000 repair or cross-domain subtraction.</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>Freshness thresholds are not SLA</td>
+<td>24h stale/&gt;5m future are source-only here; isOutdated/isFutureDated/stale are not run, not refresh/response/business-deadline promises.</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>Consumption is not capture</td>
+<td>Inclusive30s belongs to original request center; Intent return/Bool consume proves no foreground/system binding/permission/capture/insertion/send.</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>Preserve originals and stop</td>
+<td>Synthetic only, no source fetch/current-time masking/rename-or-unit bypass. Preserve unknowns/reservations; destinations may sync, no blind retry.</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
