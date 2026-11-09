@@ -213,7 +213,7 @@ struct CollieConnectionSettingsView: View {
                     }
                 }
                 Section {
-                    TextField("https://collie.example.com", text: $settings.draft)
+                    TextField("https://workbench.example.com", text: $settings.draft)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .keyboardType(.URL)
