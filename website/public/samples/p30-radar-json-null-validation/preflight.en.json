@@ -1,0 +1,1226 @@
+{
+  "schema_version": 1,
+  "batch": "SYN-RJN-51",
+  "wave": "Yihu P30 / global P34",
+  "language": "en",
+  "classification": "SYNTHETIC_EXAMPLE",
+  "state": "pending",
+  "real_runtime": "not_run",
+  "source": {
+    "commit": "0162ec5d7d98865b4b720d4a90f18287f955fc70",
+    "tree": "9d4ade40785418bb06e06a8c384e22a2ffc2001c"
+  },
+  "cases": [
+    {
+      "id": "J01",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Missing tasks falls back",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [
+        "SYN-decision"
+      ],
+      "expected_attention_titles": [],
+      "expected_visible_titles": [],
+      "expected_raw_statuses": [
+        "pending"
+      ],
+      "expected_reply_supported": false,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J02",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Null tasks falls back",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false,
+        "tasks": null
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [
+        "SYN-decision"
+      ],
+      "expected_attention_titles": [],
+      "expected_visible_titles": [],
+      "expected_raw_statuses": [
+        "pending"
+      ],
+      "expected_reply_supported": false,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J03",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Empty tasks does not fall back",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false,
+        "tasks": []
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [],
+      "expected_attention_titles": [],
+      "expected_visible_titles": [],
+      "expected_raw_statuses": [],
+      "expected_reply_supported": false,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J04",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Explicit tasks replaces fallback",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false,
+        "tasks": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-task",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-T",
+            "status": "pending"
+          }
+        ]
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [
+        "SYN-task"
+      ],
+      "expected_attention_titles": [],
+      "expected_visible_titles": [],
+      "expected_raw_statuses": [
+        "pending"
+      ],
+      "expected_reply_supported": false,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J05",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Optional null stays unknown",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": null,
+        "tasks": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-task",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": null,
+            "status": null,
+            "priority": null,
+            "timestamp": null,
+            "evidence": null,
+            "session": null,
+            "window_status": null
+          }
+        ],
+        "source_refreshing": null,
+        "source_refresh_failed": null
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [
+        "SYN-task"
+      ],
+      "expected_attention_titles": [],
+      "expected_visible_titles": [],
+      "expected_raw_statuses": [
+        null
+      ],
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J06",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "True and attention are not authority",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": true,
+        "tasks": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-task",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-T",
+            "status": " 等你验收 "
+          }
+        ]
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [
+        "SYN-task"
+      ],
+      "expected_attention_titles": [
+        "SYN-task"
+      ],
+      "expected_visible_titles": [
+        "SYN-task"
+      ],
+      "expected_raw_statuses": [
+        " 等你验收 "
+      ],
+      "expected_reply_supported": true,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J07",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Fixed next literal matches",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false,
+        "tasks": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-task",
+            "next": "SYN Alex review",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-T",
+            "status": null
+          }
+        ]
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [
+        "SYN-task"
+      ],
+      "expected_attention_titles": [
+        "SYN-task"
+      ],
+      "expected_visible_titles": [
+        "SYN-task"
+      ],
+      "expected_raw_statuses": [
+        null
+      ],
+      "expected_reply_supported": false,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J08",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Title literal is not next",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false,
+        "tasks": [
+          {
+            "project": "SYN-project",
+            "title": "SYN Alex title",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-T",
+            "status": null
+          }
+        ]
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [
+        "SYN Alex title"
+      ],
+      "expected_attention_titles": [],
+      "expected_visible_titles": [],
+      "expected_raw_statuses": [
+        null
+      ],
+      "expected_reply_supported": false,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J09",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Unknown key does not grant contract",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false,
+        "tasks": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-task",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-T",
+            "status": "pending"
+          }
+        ],
+        "SYN_extra_unknown": {
+          "not_authority": true
+        }
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [
+        "SYN-task"
+      ],
+      "expected_attention_titles": [],
+      "expected_visible_titles": [],
+      "expected_raw_statuses": [
+        "pending"
+      ],
+      "expected_reply_supported": false,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J10",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Explicit empty required arrays",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [],
+      "expected_attention_titles": [],
+      "expected_visible_titles": [],
+      "expected_raw_statuses": [],
+      "expected_reply_supported": false,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J11",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Project filter may exclude",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false,
+        "tasks": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-task",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-T",
+            "status": "等你验收"
+          }
+        ]
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [
+        "SYN-task"
+      ],
+      "expected_attention_titles": [
+        "SYN-task"
+      ],
+      "expected_visible_titles": [],
+      "expected_raw_statuses": [
+        "等你验收"
+      ],
+      "expected_reply_supported": false,
+      "display_project_filter": "SYN-other",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J12",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Status filter may exclude",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false,
+        "tasks": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-task",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-T",
+            "status": "等你验收"
+          }
+        ]
+      },
+      "input_recipe": "json",
+      "expected_accept": true,
+      "expected_all_task_titles": [
+        "SYN-task"
+      ],
+      "expected_attention_titles": [
+        "SYN-task"
+      ],
+      "expected_visible_titles": [],
+      "expected_raw_statuses": [
+        "等你验收"
+      ],
+      "expected_reply_supported": false,
+      "display_project_filter": "",
+      "display_status_filter": "pending",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J13",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Required date missing",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J14",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Required array null",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": null,
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J15",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "projects cannot replace active",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false,
+        "projects": []
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J16",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Required title null",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": null,
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J17",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Wrong optional numeric type",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending",
+            "timestamp": "10000"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J18",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "String true is not Bool",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": "true"
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J19",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Blank project",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": " \n ",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J20",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Blank title",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": " \t ",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J21",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Invalid source date",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-02-30 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J22",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Duplicate supplied task IDs",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false,
+        "tasks": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-task",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-T",
+            "status": "pending"
+          },
+          {
+            "project": "SYN-project",
+            "title": "SYN-task",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-T",
+            "status": "pending"
+          }
+        ]
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J23",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Project timestamp out of range",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": {
+        "date_str": "2026-11-08 12:00",
+        "decisions": [
+          {
+            "project": "SYN-project",
+            "title": "SYN-decision",
+            "next": "SYN-review-only",
+            "url": "https://example.invalid/SYN",
+            "id": "SYN-D",
+            "status": "pending"
+          }
+        ],
+        "active": [
+          {
+            "name": "SYN",
+            "path": "SYN-project",
+            "timestamp": -1,
+            "message": "SYN-only"
+          }
+        ],
+        "stale": [],
+        "cold": [],
+        "reply_supported": false
+      },
+      "input_recipe": "json",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    },
+    {
+      "id": "J24",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "2MiB plus one byte",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "snapshot": null,
+      "input_recipe": "oversize_2mib_plus_1",
+      "expected_accept": false,
+      "expected_all_task_titles": null,
+      "expected_attention_titles": null,
+      "expected_visible_titles": null,
+      "expected_raw_statuses": null,
+      "expected_reply_supported": null,
+      "display_project_filter": "",
+      "display_status_filter": "",
+      "boundary": "Original-model decoding/display conditions on host, not real source reads, a complete ledger, user identity or write authority."
+    }
+  ],
+  "manual_boundary_reviews": [
+    {
+      "id": "M01",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Four separate acceptance layers",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "Separate JSON syntax, model types, post-decode validation and business source/authority; decoded true is not write authority."
+    },
+    {
+      "id": "M02",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Missing null and empty differ",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "Missing/null tasks fall back to decisions for compatibility; [] does not. Empty views never prove the whole ledger cleared."
+    },
+    {
+      "id": "M03",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Attention is not account identity",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "Trimmed status/fixed Alex in next are derived source conditions, not signed-in identity, raw-status edits, ownership or approval."
+    },
+    {
+      "id": "M04",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Filters and capability are separate",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "onlyMentioningMe uses allTasks; project/status can still exclude. reply_supported and matching do not replace prepare/target/account authority."
+    },
+    {
+      "id": "M05",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Do not manufacture acceptance",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "No invented current times, null-to-zero/false fills, relabeled stale records or fabricated IDs; no minutes converter, lead scraping or new trade feed."
+    },
+    {
+      "id": "M06",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Minimal disclosure and stopping",
+      "actual_source_identity": null,
+      "actual_ledger_completeness": null,
+      "actual_owner": null,
+      "actual_approval": null,
+      "actual_write_authorization": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "Synthetic only, no customer text/link fetch. Preserve originals/gaps/reservations; destinations may save/sync, no blind replay when unknown."
+    }
+  ]
+}

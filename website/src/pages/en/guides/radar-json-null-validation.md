@@ -5,6 +5,51 @@ description: "Check required strings/arrays, optional nulls, tasks fallback and 
 lang: en
 ---
 
+## SYN-RJN-51 JSON type and null preflight
+
+SYNTHETIC_EXAMPLE · pending · not_run. Models, empty views and real write authority differ.
+
+[/samples/p30-radar-json-null-validation/README.md](/samples/p30-radar-json-null-validation/README.md) · [/samples/p30-radar-json-null-validation/preflight.zh.json](/samples/p30-radar-json-null-validation/preflight.zh.json) · [/samples/p30-radar-json-null-validation/preflight.en.json](/samples/p30-radar-json-null-validation/preflight.en.json)
+
+<div role="region" aria-label="SYN-RJN-51" tabindex="0">
+
+| ID | Check | Expectation/boundary |
+| --- | --- | --- |
+| J01 | Missing tasks falls back | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
+| J02 | Null tasks falls back | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
+| J03 | Empty tasks does not fall back | decode=true; allTasks=0; attention=0; visible=0; synthetic only |
+| J04 | Explicit tasks replaces fallback | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
+| J05 | Optional null stays unknown | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
+| J06 | True and attention are not authority | decode=true; allTasks=1; attention=1; visible=1; synthetic only |
+| J07 | Fixed next literal matches | decode=true; allTasks=1; attention=1; visible=1; synthetic only |
+| J08 | Title literal is not next | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
+| J09 | Unknown key does not grant contract | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
+| J10 | Explicit empty required arrays | decode=true; allTasks=0; attention=0; visible=0; synthetic only |
+| J11 | Project filter may exclude | decode=true; allTasks=1; attention=1; visible=0; synthetic only |
+| J12 | Status filter may exclude | decode=true; allTasks=1; attention=1; visible=0; synthetic only |
+| J13 | Required date missing | decode=false; views not_run; synthetic only |
+| J14 | Required array null | decode=false; views not_run; synthetic only |
+| J15 | projects cannot replace active | decode=false; views not_run; synthetic only |
+| J16 | Required title null | decode=false; views not_run; synthetic only |
+| J17 | Wrong optional numeric type | decode=false; views not_run; synthetic only |
+| J18 | String true is not Bool | decode=false; views not_run; synthetic only |
+| J19 | Blank project | decode=false; views not_run; synthetic only |
+| J20 | Blank title | decode=false; views not_run; synthetic only |
+| J21 | Invalid source date | decode=false; views not_run; synthetic only |
+| J22 | Duplicate supplied task IDs | decode=false; views not_run; synthetic only |
+| J23 | Project timestamp out of range | decode=false; views not_run; synthetic only |
+| J24 | 2MiB plus one byte | decode=false; views not_run; synthetic only |
+| M01 | Four separate acceptance layers | Separate JSON syntax, model types, post-decode validation and business source/authority; decoded true is not write authority. |
+| M02 | Missing null and empty differ | Missing/null tasks fall back to decisions for compatibility; [] does not. Empty views never prove the whole ledger cleared. |
+| M03 | Attention is not account identity | Trimmed status/fixed Alex in next are derived source conditions, not signed-in identity, raw-status edits, ownership or approval. |
+| M04 | Filters and capability are separate | onlyMentioningMe uses allTasks; project/status can still exclude. reply_supported and matching do not replace prepare/target/account authority. |
+| M05 | Do not manufacture acceptance | No invented current times, null-to-zero/false fills, relabeled stale records or fabricated IDs; no minutes converter, lead scraping or new trade feed. |
+| M06 | Minimal disclosure and stopping | Synthetic only, no customer text/link fetch. Preserve originals/gaps/reservations; destinations may save/sync, no blind replay when unknown. |
+
+</div>
+
+
+
 <h2 id="first-answer">Valid JSON syntax does not establish model decoding or complete business data</h2>
 
 First verify that a file is an authorized export from your own ledger, then check syntax, model types, post-decode validation and business meaning. Yihu reads the existing PM Radar snapshot contract, not arbitrary trade briefs. Missing fields, explicit `null`, empty strings and empty arrays are not interchangeable. This synthetic example explains the contract without connecting to a real source, converting minutes or enabling replies.
