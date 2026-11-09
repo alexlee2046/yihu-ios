@@ -658,9 +658,9 @@ struct CollieShellView: View {
             placement = CollieVoicePlacement.load(for: webSession.baseURL)
             connectionSettings?.rememberPageTitle(webSession.pageTitle, for: webSession.baseURL)
             shareTray.refresh()
-            hotspotBridge.onMacBecameOnline = { [weak webSession] in
-                guard let webSession, webSession.errorMessage != nil || !webSession.isConnected else { return }
-                webSession.reload()
+            hotspotBridge.onMacBecameOnline = { [weak session = webSession] in
+                guard let session, session.errorMessage != nil || !session.isConnected else { return }
+                session.reload()
             }
             runPendingShortcut()
         }

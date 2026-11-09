@@ -31,7 +31,7 @@ jobs:
           swiftc -swift-version 6 Shared/YihuWatchSnapshot.swift Shared/YihuWatchDraft.swift Shared/YihuWatchWidgetSnapshot.swift Tests/CollieRadar/WatchExperienceChecks.swift -o "$RUNNER_TEMP/watch-experience-checks"
           "$RUNNER_TEMP/watch-experience-checks"
           node Tests/CollieRadar/DotLiveChecks.mjs
-          swiftc -swift-version 6 -parse-as-library Apps/Collie/CollieTextInsertion.swift Apps/Collie/CollieKeyboardPolicy.swift Tests/CollieRadar/InsertionChecks.swift -o "$RUNNER_TEMP/insertion-checks"
+          swiftc -swift-version 6 -parse-as-library Apps/Collie/CollieTextInsertion.swift Apps/Collie/CollieKeyboardPolicy.swift Apps/Collie/CollieHotspotBridge.swift Tests/CollieRadar/InsertionChecks.swift -o "$RUNNER_TEMP/insertion-checks"
           "$RUNNER_TEMP/insertion-checks"
           swiftc -swift-version 6 Shared/YihuWatchVoice.swift Tests/CollieRadar/WatchVoiceChecks.swift -o "$RUNNER_TEMP/watch-voice-checks"
           "$RUNNER_TEMP/watch-voice-checks"
@@ -93,7 +93,7 @@ jobs:
           swiftc -swift-version 6 Shared/YihuWatchSnapshot.swift Shared/YihuWatchDraft.swift Shared/YihuWatchWidgetSnapshot.swift Tests/CollieRadar/WatchExperienceChecks.swift -o "$RUNNER_TEMP/watch-experience-checks"
           "$RUNNER_TEMP/watch-experience-checks"
           node Tests/CollieRadar/DotLiveChecks.mjs
-          swiftc -swift-version 6 -parse-as-library Apps/Collie/CollieTextInsertion.swift Apps/Collie/CollieKeyboardPolicy.swift Tests/CollieRadar/InsertionChecks.swift -o "$RUNNER_TEMP/insertion-checks"
+          swiftc -swift-version 6 -parse-as-library Apps/Collie/CollieTextInsertion.swift Apps/Collie/CollieKeyboardPolicy.swift Apps/Collie/CollieHotspotBridge.swift Tests/CollieRadar/InsertionChecks.swift -o "$RUNNER_TEMP/insertion-checks"
           "$RUNNER_TEMP/insertion-checks"
           swiftc -swift-version 6 Shared/YihuWatchVoice.swift Tests/CollieRadar/WatchVoiceChecks.swift -o "$RUNNER_TEMP/watch-voice-checks"
           "$RUNNER_TEMP/watch-voice-checks"
