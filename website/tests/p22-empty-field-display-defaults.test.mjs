@@ -29,18 +29,18 @@ const sourceFragments = {
   },
   "ui_status": {
     "path": "Apps/Collie/CollieRadarView.swift",
-    "text": "status.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty\n            ? radarText(\"任务状态未提供\") : status",
-    "sha256": "16e600e6dc589544aa49e540effe9c3c353388e795ef9805fae3b5f1529f8613"
+    "text": "if display.showStatus, let status = action.status?.trimmingCharacters(in: .whitespacesAndNewlines), !status.isEmpty",
+    "sha256": "fb27bb5f75c8986b934864310504ed38c2772ae5b1c053d9e7e0115288757c5e"
   },
   "ui_priority": {
     "path": "Apps/Collie/CollieRadarView.swift",
-    "text": "action.priority.flatMap { $0.isEmpty ? nil : $0 } ?? radarText(\"优先级待补\")",
-    "sha256": "8eb3e0ca3a2cf921ff0ec6f0a9cfd55723b1fc519f77449b712e50b86bb6c8f9"
+    "text": "if let priority = action.priority?.trimmingCharacters(in: .whitespacesAndNewlines), !priority.isEmpty",
+    "sha256": "f0e6f38a1de942a0bd6fbdd3fc139ac95d1c43c3011eb1f140592e2fca43b91c"
   },
   "ui_card_next": {
     "path": "Apps/Collie/CollieRadarView.swift",
-    "text": "action.next.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty",
-    "sha256": "0942de20e5f76f3a525c26b96409962d09c76467536c33cce0e011b8da8a6b11"
+    "text": "let nextText = action.next.trimmingCharacters(in: .whitespacesAndNewlines)",
+    "sha256": "1ac11c6fce5c7f40ed833c194675d3339a2323ccbd4f2d95458cca110efb1839"
   },
   "ui_detail_next": {
     "path": "Apps/Collie/CollieRadarView.swift",
@@ -49,18 +49,18 @@ const sourceFragments = {
   },
   "ui_session": {
     "path": "Apps/Collie/CollieRadarView.swift",
-    "text": "action.session.flatMap { $0.isEmpty ? nil : $0 } ?? radarText(\"待补\")",
-    "sha256": "a6dcd672eedcb089865f2d4d3d78ce4b0667e48d81ef70b25282be42263d809e"
+    "text": "if let session = action.session?.trimmingCharacters(in: .whitespacesAndNewlines), !session.isEmpty",
+    "sha256": "3a9c55247b69db13b6876c2d7a2deea8ef5ba29e9248b1f832addb12faca1b02"
   },
   "ui_window_status": {
     "path": "Apps/Collie/CollieRadarView.swift",
-    "text": "action.window_status.flatMap { $0.isEmpty ? nil : $0 } ?? radarText(\"未提供\")",
-    "sha256": "48924de581a77e81e9e6d856a95c2cdec02fc4b4a221abb0f1b7fe80a6960f8e"
+    "text": "if let windowStatus = action.window_status?.trimmingCharacters(in: .whitespacesAndNewlines), !windowStatus.isEmpty",
+    "sha256": "163417f735abc98c9d148d5a8bb90dca7841015d3c68360d652962ffdbe9b160"
   },
   "ui_evidence": {
     "path": "Apps/Collie/CollieRadarView.swift",
-    "text": "action.evidence.flatMap { $0.isEmpty ? nil : $0 } ?? radarText(\"待补\")",
-    "sha256": "28708a79ef8493fd2f7109a48b8e21a2344a655082a9f3d5d77b2e1001025a9b"
+    "text": "if let evidence = action.evidence?.trimmingCharacters(in: .whitespacesAndNewlines), !evidence.isEmpty",
+    "sha256": "0816dd4e295b8d28cc57d9db0bc1a8e5b7bd3ce17f8e2b271a58cfef626d6def"
   },
   "ui_reply_visible": {
     "path": "Apps/Collie/CollieRadarView.swift",
