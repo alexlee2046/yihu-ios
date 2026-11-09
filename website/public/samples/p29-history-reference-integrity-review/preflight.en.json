@@ -1,0 +1,1859 @@
+{
+  "schema_version": 1,
+  "batch": "SYN-HRI-50",
+  "wave": "Yihu P29 / global P33",
+  "language": "en",
+  "classification": "SYNTHETIC_EXAMPLE",
+  "state": "pending",
+  "real_runtime": "not_run",
+  "source": {
+    "commit": "3f5a931472f2397cba5c2ee043dd9a16957fdda3",
+    "tree": "38479771ea33ebaa0a949e9b41498611603a1eac"
+  },
+  "cases": [
+    {
+      "id": "H01",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Explicit UUID reference",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": true,
+      "expected_feedback_ids": [
+        "SYN-update"
+      ],
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H02",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Explicit comment URL reference",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": true,
+      "expected_feedback_ids": [
+        "SYN-update"
+      ],
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H03",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Seen prose alone is not association",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYN seen: prose is not an explicit reference",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": true,
+      "expected_feedback_ids": [],
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H04",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Reference another request",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": true,
+      "expected_feedback_ids": [],
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H05",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Earlier update is not feedback",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-reply",
+            "position": 2,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          },
+          {
+            "id": "SYN-update",
+            "position": 1,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": true,
+      "expected_feedback_ids": [],
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H06",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Draft UUID association",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+            "created_at": null,
+            "updated_at": null,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+            "created_at": null,
+            "updated_at": null,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": true
+      },
+      "expected_accept": true,
+      "expected_feedback_ids": [
+        "SYN-update"
+      ],
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H07",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Draft rejects comment reference",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+            "created_at": null,
+            "updated_at": null,
+            "text_omitted": false,
+            "references": [
+              "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+            "created_at": null,
+            "updated_at": null,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": true
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H08",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Draft rejects formal timestamp",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+            "created_at": 9000,
+            "updated_at": null,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+            "created_at": null,
+            "updated_at": null,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": true
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H09",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Draft URL not identical",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": null,
+            "updated_at": null,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+            "created_at": null,
+            "updated_at": null,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": true
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H10",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Target ID mismatch",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-other",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H11",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Duplicate entry ID",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-reply",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H12",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Previously loaded ID collision",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [
+        "SYN-update"
+      ],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H13",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Unsupported kind",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "comment",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H14",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Invalid reply UUID",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "SYN-not-a-UUID",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H15",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Reference UUID not canonical lowercase",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H16",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Duplicate reference",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H17",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Cross-task comment reference",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "https://example.invalid/SYN/tasks/2?view=SYN#issuecomment-1"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H18",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Entry host mismatch",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://other.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H19",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Explicit port differs",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid:443/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H20",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Entry path mismatch",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/2?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H21",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Entry query mismatch",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 2,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=OTHER#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H22",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Wrong position order",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update",
+            "position": 1,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 1,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 2,
+        "start": 1,
+        "end": 2,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H23",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Missing cursor on incomplete page",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update-6",
+            "position": 6,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-update-5",
+            "position": 5,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-update-4",
+            "position": 4,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-update-3",
+            "position": 3,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 2,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 6,
+        "start": 1,
+        "end": 5,
+        "before": null,
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": false,
+      "expected_feedback_ids": null,
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    },
+    {
+      "id": "H24",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Five-entry page retains remaining gap",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "history": {
+        "history_version": 1,
+        "target": {
+          "eligible": false,
+          "epoch": "SYN-epoch",
+          "id": "SYN-target",
+          "title": "SYNTHETIC_EXAMPLE",
+          "url": "https://example.invalid/SYN/tasks/1?view=SYN",
+          "status": "pending",
+          "next": "SYN-review-only",
+          "version": "SYN-version"
+        },
+        "entries": [
+          {
+            "id": "SYN-update-6",
+            "position": 6,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-update-5",
+            "position": 5,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-update-4",
+            "position": 4,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-update-3",
+            "position": 3,
+            "kind": "update",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": null,
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-2",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": [
+              "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+            ]
+          },
+          {
+            "id": "SYN-reply",
+            "position": 2,
+            "kind": "reply",
+            "text": "SYNTHETIC_EXAMPLE only; not a real seen/handled receipt",
+            "request_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "url": "https://example.invalid/SYN/tasks/1?view=SYN#issuecomment-1",
+            "created_at": 8000,
+            "updated_at": 9000,
+            "text_omitted": false,
+            "references": []
+          }
+        ],
+        "total": 6,
+        "start": 1,
+        "end": 5,
+        "before": "SYN-opaque-cursor",
+        "read_at": 10000,
+        "draft": false
+      },
+      "expected_accept": true,
+      "expected_feedback_ids": [
+        "SYN-update-6",
+        "SYN-update-5",
+        "SYN-update-4",
+        "SYN-update-3"
+      ],
+      "reply_entry_id": "SYN-reply",
+      "call_target_id": "SYN-target",
+      "loaded": 0,
+      "existing_ids": [],
+      "now_unix": 10000,
+      "boundary": "Original-model structure/association on host, not real history reads, authority, reading or approval receipts."
+    }
+  ],
+  "manual_boundary_reviews": [
+    {
+      "id": "M01",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Association is not read/handled",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "Valid structure/explicit references establish association only, not identity, approval, truth or completion."
+    },
+    {
+      "id": "M02",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Web reload is not successful history read",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "Spinner, cancellation filtering or reload do not prove native history loaded, current-target completeness or service completion."
+    },
+    {
+      "id": "M03",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Cancellation paths are distinct",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "Web navigation cancellation differs from native history generation/request receipts; never merge stale text into a new target or erase receipts on cancel."
+    },
+    {
+      "id": "M04",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Scheduling is not recovery SLA",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "Match cancellation domains/codes; WebKitErrorDomain/102, 500ms recheck and 15s loop guard are not recovery/non-execution guarantees."
+    },
+    {
+      "id": "M05",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Never fabricate missing references",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "Preserve target, positions, references and gaps; no guessed references, rewritten timestamps/URLs or cross-account index."
+    },
+    {
+      "id": "M06",
+      "classification": "SYNTHETIC_EXAMPLE",
+      "state": "pending",
+      "real_runtime": "not_run",
+      "check": "Minimal disclosure and stopping",
+      "actual_source_identity": null,
+      "actual_read_status": null,
+      "actual_handled_status": null,
+      "actual_approver": null,
+      "actual_permission": null,
+      "remote_receipt": null,
+      "network_fetch": false,
+      "boundary": "All synthetic, no link fetch; stop when real authority/read/handled/remote receipts are unknown. Destinations may save/sync; no blind replay."
+    }
+  ]
+}

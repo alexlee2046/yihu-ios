@@ -10832,9 +10832,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/history-reference-integrity-review/
 
-场景指南 · 相关使用指南 历史反馈怎样关联原回复？目标、位置与references结构核查 有后续文字不等于关联反馈，明确引用也不代表已处理 CollieRadarReplyHistory只把位置晚于原reply、kind为update且references明确指向request_id或非draft回复URL的记录关联为反馈。历史还校验目标、条目身份、位置与URL组件。它是只读来源结构，不是已读、业务完成或真实性认证；本文不新建历史库或关联引擎。 与历史检索和请求回执的分工 检索核覆盖范围，请求回执核提交结果；这里核 取到的历史结构是否属于同一目标、哪些后续记录可关联到原回复 。不访问原条目或手改私有记录。 检查项 已核范围 人工复核 不应推断 entry身份 id非空且不能重复，kind限reply/update 真实记录与已加载集合 同文就是同条 目标URL 核host/port/path/query等组件 不是只看域名外观 任意跨任务评论都可拼入 position 有序位置与加载计数一致 前后记录关系 时间相近就证明关联 request_id reply带合法UUID 与明确引用分别核 UUID形状就是审批/签名 references 数量/唯一性与合法引用形态校验 合法小写UUID或允许评论引用 从正文自动猜关联 feedback 后续update明确引用原reply 关联存在和内容含义分开 已读/已完成/已批准 draft历史 URL/时间字段有专门条件 草稿与非draft模式 两种材料可无条件混拼 人工归档 保留目标、原引用和未知 只记录获准范围 新建跨账户索引或不可篡改日志 合成关联核对 后续记录写“已看”，但references没有指向样例原回复：不能仅凭文字认定该reply已有反馈。反过来，有合法关联也需看实际内容，不能自动标业务处理完成。 相同目标组件不是来源可信认证；结构失败应保留缺口并回原入口核，不补造references让结果看似完整。本文未运行真实历史读取、账号授权或跨目标拼接。 FAQ 后面有人提任务就等于对本次回复反馈吗？ 不等于。当前关联需要明确引用与位置/kind条件，不能靠语义猜。 references合法就表示已处理吗？ 不表示。关联与反馈实际含义、已读和完成不同。 同域名的评论都能合进同一历史吗？ 不能这样推断。还核端口、路径、查询、目标与条目规则。 UUID形状可证明谁批准吗？ 不能。身份、权限与批准依据不是引用形状提供的。 draft与正式历史能直接混拼吗？ 不能无条件混用。两类URL/时间字段和翻页一致性要分别核。 可以补写引用来消除错误吗？ 不应伪造关联。保留原材料与缺口，沿真实来源维护流程处理。 相关指南与源码 历史检索范围 · 请求回执 · 确认范围 · 开始 · 隐私 History.validate/feedback · 只读历史加载
+场景指南 · 相关使用指南 历史反馈怎样关联原回复？目标、位置与references结构核查 SYN-HRI-50 历史引用完整性自检 SYNTHETIC_EXAMPLE · pending · not_run。结构/关联不等身份、已读、审批或完成。 /samples/p29-history-reference-integrity-review/README.md · /samples/p29-history-reference-integrity-review/preflight.zh.json · /samples/p29-history-reference-integrity-review/preflight.en.json ID 检查 预期/边界 H01 UUID明确引用 validate=true; feedback=1 associated update(s); synthetic only H02 评论URL明确引用 validate=true; feedback=1 associated update(s); synthetic only H03 仅说已看不关联 validate=true; feedback=0 associated update(s); synthetic only H04 引用其他请求 validate=true; feedback=0 associated update(s); synthetic only H05 较早update不关联 validate=true; feedback=0 associated update(s); synthetic only H06 draft UUID关联 validate=true; feedback=1 associated update(s); synthetic only H07 draft拒绝评论引用 validate=false; feedback=not_run; synthetic only H08 draft拒绝正式时间 validate=false; feedback=not_run; synthetic only H09 draft URL不完全相同 validate=false; feedback=not_run; synthetic only H10 目标ID不符 validate=false; feedback=not_run; synthetic only H11 重复entry ID validate=false; feedback=not_run; synthetic only H12 已加载ID冲突 validate=false; feedback=not_run; synthetic only H13 kind越界 validate=false; feedback=not_run; synthetic only H14 reply UUID无效 validate=false; feedback=not_run; synthetic only H15 引用UUID非规范小写 validate=false; feedback=not_run; synthetic only H16 重复reference validate=false; feedback=not_run; synthetic only H17 跨任务评论引用 validate=false; feedback=not_run; synthetic only H18 entry host不符 validate=false; feedback=not_run; synthetic only H19 显式端口组件不同 validate=false; feedback=not_run; synthetic only H20 entry path不符 validate=false; feedback=not_run; synthetic only H21 entry query不符 validate=false; feedback=not_run; synthetic only H22 position次序错误 validate=false; feedback=not_run; synthetic only H23 未完页缺cursor validate=false; feedback=not_run; synthetic only H24 5条页保未读缺口 validate=true; feedback=4 associated update(s); synthetic only M01 关联不等已读/处理 结构通过/明确references只给原关联，不授身份、审批、真实性或业务完成。 M02 Web重载不等历史读成 spinner、取消过滤或reload不是原生历史已加载/当前目标完整/服务动作完成的证据。 M03 不同取消路径不互代 网页导航取消与原生历史generation/请求回执不同；不把旧结果或迟到正文自动拼入新目标，不以取消抹回执。 M04 调度非恢复SLA NSURLErrorDomain取消与WebKitErrorDomain/102按域代码合核，500ms复核和15秒防环不是恢复/未执行保证。 M05 缺口不补造引用 保原目标、位置、引用与缺口，不从正文猜reference、不改时间/URL修出通过，不跨账户建索引。 M06 最小披露与停止 全部合成不访问链接；真实授权、已读、处理与远端回执未知即停，目的地可保存同步，不盲重放。 有后续文字不等于关联反馈，明确引用也不代表已处理 CollieRadarReplyHistory只把位置晚于原reply、kind为update且references明确指向request_id或非draft回复URL的记录关联为反馈。历史还校验目标、条目身份、位置与URL组件。它是只读来源结构，不是已读、业务完成或真实性认证；本文不新建历史库或关联引擎。 与历史检索和请求回执的分工 检索核覆盖范围，请求回执核提交结果；这里核 取到的历史结构是否属于同一目标、哪些后续记录可关联到原回复 。不访问原条目或手改私有记录。 检查项 已核范围 人工复核 不应推断 entry身份 id非空且不能重复，kind限reply/update 真实记录与已加载集合 同文就是同条 目标URL 核host/port/path/query等组件 不是只看域名外观 任意跨任务评论都可拼入 position 有序位置与加载计数一致 前后记录关系 时间相近就证明关联 request_id reply带合法UUID 与明确引用分别核 UUID形状就是审批/签名 references 数量/唯一性与合法引用形态校验 合法小写UUID或允许评论引用 从正文自动猜关联 feedback 后续update明确引用原reply 关联存在和内容含义分开 已读/已完成/已批准 draft历史 URL/时间字段有专门条件 草稿与非draft模式 两种材料可无条件混拼 人工归档 保留目标、原引用和未知 只记录获准范围 新建跨账户索引或不可篡改日志 合成关联核对 后续记录写“已看”，但references没有指向样例原回复：不能仅凭文字认定该reply已有反馈。反过来，有合法关联也需看实际内容，不能自动标业务处理完成。 相同目标组件不是来源可信认证；结构失败应保留缺口并回原入口核，不补造references让结果看似完整。本文未运行真实历史读取、账号授权或跨目标拼接。 FAQ 后面有人提任务就等于对本次回复反馈吗？ 不等于。当前关联需要明确引用与位置/kind条件，不能靠语义猜。 references合法就表示已处理吗？ 不表示。关联与反馈实际含义、已读和完成不同。 同域名的评论都能合进同一历史吗？ 不能这样推断。还核端口、路径、查询、目标与条目规则。 UUID形状可证明谁批准吗？ 不能。身份、权限与批准依据不是引用形状提供的。 draft与正式历史能直接混拼吗？ 不能无条件混用。两类URL/时间字段和翻页一致性要分别核。 可以补写引用来消除错误吗？ 不应伪造关联。保留原材料与缺口，沿真实来源维护流程处理。 相关指南与源码 历史检索范围 · 请求回执 · 确认范围 · 开始 · 隐私 History.validate/feedback · 只读历史加载
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>检查</th>
+<th>预期/边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H01</td>
+<td>UUID明确引用</td>
+<td>validate=true; feedback=1 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H02</td>
+<td>评论URL明确引用</td>
+<td>validate=true; feedback=1 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H03</td>
+<td>仅说已看不关联</td>
+<td>validate=true; feedback=0 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H04</td>
+<td>引用其他请求</td>
+<td>validate=true; feedback=0 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H05</td>
+<td>较早update不关联</td>
+<td>validate=true; feedback=0 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H06</td>
+<td>draft UUID关联</td>
+<td>validate=true; feedback=1 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H07</td>
+<td>draft拒绝评论引用</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H08</td>
+<td>draft拒绝正式时间</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H09</td>
+<td>draft URL不完全相同</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H10</td>
+<td>目标ID不符</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H11</td>
+<td>重复entry ID</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H12</td>
+<td>已加载ID冲突</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H13</td>
+<td>kind越界</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H14</td>
+<td>reply UUID无效</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H15</td>
+<td>引用UUID非规范小写</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H16</td>
+<td>重复reference</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H17</td>
+<td>跨任务评论引用</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H18</td>
+<td>entry host不符</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H19</td>
+<td>显式端口组件不同</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H20</td>
+<td>entry path不符</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H21</td>
+<td>entry query不符</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H22</td>
+<td>position次序错误</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H23</td>
+<td>未完页缺cursor</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H24</td>
+<td>5条页保未读缺口</td>
+<td>validate=true; feedback=4 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>关联不等已读/处理</td>
+<td>结构通过/明确references只给原关联，不授身份、审批、真实性或业务完成。</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>Web重载不等历史读成</td>
+<td>spinner、取消过滤或reload不是原生历史已加载/当前目标完整/服务动作完成的证据。</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>不同取消路径不互代</td>
+<td>网页导航取消与原生历史generation/请求回执不同；不把旧结果或迟到正文自动拼入新目标，不以取消抹回执。</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>调度非恢复SLA</td>
+<td>NSURLErrorDomain取消与WebKitErrorDomain/102按域代码合核，500ms复核和15秒防环不是恢复/未执行保证。</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>缺口不补造引用</td>
+<td>保原目标、位置、引用与缺口，不从正文猜reference、不改时间/URL修出通过，不跨账户建索引。</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>最小披露与停止</td>
+<td>全部合成不访问链接；真实授权、已读、处理与远端回执未知即停，目的地可保存同步，不盲重放。</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -10901,9 +11063,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/history-reference-integrity-review/
 
-All scenarios · Related practical guide Associate history feedback: target, position and references checks Later text is not necessarily feedback; an explicit link is not completion CollieRadarReplyHistory associates only later-position updates whose references explicitly identify the reply’s request_id or, outside draft mode, its URL. History also checks target, entry identity, positions and URL components. This read-only structure is not reading, completion or truth certification. No history database/association engine is added. Different from retrieval and request receipts Retrieval checks coverage; receipts check submission. Here whether fetched history belongs to the target and which records associate with a reply matters. No original is fetched or private record edited. Check Verified scope Manual review Not established Entry identity Nonempty unique id, reply/update kinds Actual entries/loaded IDs Identical text means same record Target URL Host/port/path/query checks More than domain appearance Any cross-task comment can be merged Position Order/loading counts consistent Earlier/later relationship Nearby times establish association request_id Reply has valid UUID Actual explicit reference UUID proves approval/signature references Count/uniqueness/reference shape Canonical lowercase UUID or permitted comment reference Body semantics guessed Feedback Later update explicitly references reply Association versus meaning Read/done/approved Draft history Specific URL/time-field conditions Draft versus non-draft Unconditional mixed history Editorial retention Target/original links/unknowns Authorized scope only Cross-account index/immutable log Synthetic association review A later entry says seen but references do not identify the original sample reply. Prose alone does not establish feedback for that reply. Conversely, valid association still needs content review instead of automatic handled status. Matching target components does not authenticate origin. Keep structural gaps instead of fabricating references. No real history read, account authorization or cross-target merge ran. FAQ Does any later mention establish feedback? No. Explicit references, position and kind matter; no semantic guessing. Do valid references mean handled? No. Association differs from actual feedback, reading and completion. Can all same-domain comments form one history? No. Port/path/query, target and entry rules also apply. Does UUID shape prove an approver? No. Reference shape provides neither identity nor authority. Can draft and formal history be freely combined? No. URL/time and paging consistency need separate review. Can invented references repair a failure? Do not fabricate associations. Preserve originals/gaps and use real source maintenance. Reading and source Retrieval scope · Request receipts · Confirmation scope · Start · Privacy History validation/feedback · Read-only loading
+All scenarios · Related practical guide Associate history feedback: target, position and references checks SYN-HRI-50 history reference integrity preflight SYNTHETIC_EXAMPLE · pending · not_run. Structure/association is not identity, reading, approval or completion. /samples/p29-history-reference-integrity-review/README.md · /samples/p29-history-reference-integrity-review/preflight.zh.json · /samples/p29-history-reference-integrity-review/preflight.en.json ID Check Expectation/boundary H01 Explicit UUID reference validate=true; feedback=1 associated update(s); synthetic only H02 Explicit comment URL reference validate=true; feedback=1 associated update(s); synthetic only H03 Seen prose alone is not association validate=true; feedback=0 associated update(s); synthetic only H04 Reference another request validate=true; feedback=0 associated update(s); synthetic only H05 Earlier update is not feedback validate=true; feedback=0 associated update(s); synthetic only H06 Draft UUID association validate=true; feedback=1 associated update(s); synthetic only H07 Draft rejects comment reference validate=false; feedback=not_run; synthetic only H08 Draft rejects formal timestamp validate=false; feedback=not_run; synthetic only H09 Draft URL not identical validate=false; feedback=not_run; synthetic only H10 Target ID mismatch validate=false; feedback=not_run; synthetic only H11 Duplicate entry ID validate=false; feedback=not_run; synthetic only H12 Previously loaded ID collision validate=false; feedback=not_run; synthetic only H13 Unsupported kind validate=false; feedback=not_run; synthetic only H14 Invalid reply UUID validate=false; feedback=not_run; synthetic only H15 Reference UUID not canonical lowercase validate=false; feedback=not_run; synthetic only H16 Duplicate reference validate=false; feedback=not_run; synthetic only H17 Cross-task comment reference validate=false; feedback=not_run; synthetic only H18 Entry host mismatch validate=false; feedback=not_run; synthetic only H19 Explicit port differs validate=false; feedback=not_run; synthetic only H20 Entry path mismatch validate=false; feedback=not_run; synthetic only H21 Entry query mismatch validate=false; feedback=not_run; synthetic only H22 Wrong position order validate=false; feedback=not_run; synthetic only H23 Missing cursor on incomplete page validate=false; feedback=not_run; synthetic only H24 Five-entry page retains remaining gap validate=true; feedback=4 associated update(s); synthetic only M01 Association is not read/handled Valid structure/explicit references establish association only, not identity, approval, truth or completion. M02 Web reload is not successful history read Spinner, cancellation filtering or reload do not prove native history loaded, current-target completeness or service completion. M03 Cancellation paths are distinct Web navigation cancellation differs from native history generation/request receipts; never merge stale text into a new target or erase receipts on cancel. M04 Scheduling is not recovery SLA Match cancellation domains/codes; WebKitErrorDomain/102, 500ms recheck and 15s loop guard are not recovery/non-execution guarantees. M05 Never fabricate missing references Preserve target, positions, references and gaps; no guessed references, rewritten timestamps/URLs or cross-account index. M06 Minimal disclosure and stopping All synthetic, no link fetch; stop when real authority/read/handled/remote receipts are unknown. Destinations may save/sync; no blind replay. Later text is not necessarily feedback; an explicit link is not completion CollieRadarReplyHistory associates only later-position updates whose references explicitly identify the reply’s request_id or, outside draft mode, its URL. History also checks target, entry identity, positions and URL components. This read-only structure is not reading, completion or truth certification. No history database/association engine is added. Different from retrieval and request receipts Retrieval checks coverage; receipts check submission. Here whether fetched history belongs to the target and which records associate with a reply matters. No original is fetched or private record edited. Check Verified scope Manual review Not established Entry identity Nonempty unique id, reply/update kinds Actual entries/loaded IDs Identical text means same record Target URL Host/port/path/query checks More than domain appearance Any cross-task comment can be merged Position Order/loading counts consistent Earlier/later relationship Nearby times establish association request_id Reply has valid UUID Actual explicit reference UUID proves approval/signature references Count/uniqueness/reference shape Canonical lowercase UUID or permitted comment reference Body semantics guessed Feedback Later update explicitly references reply Association versus meaning Read/done/approved Draft history Specific URL/time-field conditions Draft versus non-draft Unconditional mixed history Editorial retention Target/original links/unknowns Authorized scope only Cross-account index/immutable log Synthetic association review A later entry says seen but references do not identify the original sample reply. Prose alone does not establish feedback for that reply. Conversely, valid association still needs content review instead of automatic handled status. Matching target components does not authenticate origin. Keep structural gaps instead of fabricating references. No real history read, account authorization or cross-target merge ran. FAQ Does any later mention establish feedback? No. Explicit references, position and kind matter; no semantic guessing. Do valid references mean handled? No. Association differs from actual feedback, reading and completion. Can all same-domain comments form one history? No. Port/path/query, target and entry rules also apply. Does UUID shape prove an approver? No. Reference shape provides neither identity nor authority. Can draft and formal history be freely combined? No. URL/time and paging consistency need separate review. Can invented references repair a failure? Do not fabricate associations. Preserve originals/gaps and use real source maintenance. Reading and source Retrieval scope · Request receipts · Confirmation scope · Start · Privacy History validation/feedback · Read-only loading
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Check</th>
+<th>Expectation/boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H01</td>
+<td>Explicit UUID reference</td>
+<td>validate=true; feedback=1 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H02</td>
+<td>Explicit comment URL reference</td>
+<td>validate=true; feedback=1 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H03</td>
+<td>Seen prose alone is not association</td>
+<td>validate=true; feedback=0 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H04</td>
+<td>Reference another request</td>
+<td>validate=true; feedback=0 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H05</td>
+<td>Earlier update is not feedback</td>
+<td>validate=true; feedback=0 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H06</td>
+<td>Draft UUID association</td>
+<td>validate=true; feedback=1 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>H07</td>
+<td>Draft rejects comment reference</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H08</td>
+<td>Draft rejects formal timestamp</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H09</td>
+<td>Draft URL not identical</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H10</td>
+<td>Target ID mismatch</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H11</td>
+<td>Duplicate entry ID</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H12</td>
+<td>Previously loaded ID collision</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H13</td>
+<td>Unsupported kind</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H14</td>
+<td>Invalid reply UUID</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H15</td>
+<td>Reference UUID not canonical lowercase</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H16</td>
+<td>Duplicate reference</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H17</td>
+<td>Cross-task comment reference</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H18</td>
+<td>Entry host mismatch</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H19</td>
+<td>Explicit port differs</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H20</td>
+<td>Entry path mismatch</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H21</td>
+<td>Entry query mismatch</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H22</td>
+<td>Wrong position order</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H23</td>
+<td>Missing cursor on incomplete page</td>
+<td>validate=false; feedback=not_run; synthetic only</td>
+</tr>
+<tr>
+<td>H24</td>
+<td>Five-entry page retains remaining gap</td>
+<td>validate=true; feedback=4 associated update(s); synthetic only</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>Association is not read/handled</td>
+<td>Valid structure/explicit references establish association only, not identity, approval, truth or completion.</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>Web reload is not successful history read</td>
+<td>Spinner, cancellation filtering or reload do not prove native history loaded, current-target completeness or service completion.</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>Cancellation paths are distinct</td>
+<td>Web navigation cancellation differs from native history generation/request receipts; never merge stale text into a new target or erase receipts on cancel.</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>Scheduling is not recovery SLA</td>
+<td>Match cancellation domains/codes; WebKitErrorDomain/102, 500ms recheck and 15s loop guard are not recovery/non-execution guarantees.</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>Never fabricate missing references</td>
+<td>Preserve target, positions, references and gaps; no guessed references, rewritten timestamps/URLs or cross-account index.</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>Minimal disclosure and stopping</td>
+<td>All synthetic, no link fetch; stop when real authority/read/handled/remote receipts are unknown. Destinations may save/sync; no blind replay.</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
