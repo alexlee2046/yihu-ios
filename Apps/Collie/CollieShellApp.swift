@@ -537,6 +537,7 @@ struct CollieShellView: View {
     private let shortcuts = CollieVoiceShortcutCenter.shared
     private let shareTray = CollieShareTrayModel.shared
     private let hermesPush = CollieHermesPush.shared
+    private let hotspotBridge = CollieHotspotBridge.shared
 
     init(
         webSession: CollieWebSession,
@@ -657,6 +658,10 @@ struct CollieShellView: View {
             placement = CollieVoicePlacement.load(for: webSession.baseURL)
             connectionSettings?.rememberPageTitle(webSession.pageTitle, for: webSession.baseURL)
             shareTray.refresh()
+            hotspotBridge.onMacBecameOnline = { [weak webSession] in
+                guard let webSession, webSession.errorMessage != nil || !webSession.isConnected else { return }
+                webSession.reload()
+            }
             runPendingShortcut()
         }
     }
@@ -692,6 +697,7 @@ struct CollieShellView: View {
                 shareTray.refresh()
                 voiceNotes?.resumeTranscription()
                 hermesPush.retryIfNeeded()
+                hotspotBridge.applicationDidBecomeActive()
                 runPendingShortcut()
                 if !webSession.isLoading { notifications?.applicationDidBecomeActive(session: webSession) }
             } else {
@@ -1532,6 +1538,7 @@ struct CollieConnectionErrorView: View {
     let message: String
     var reload: () -> Void
     var changeConnection: (() -> Void)? = nil
+    private let hotspotBridge = CollieHotspotBridge.shared
 
     var body: some View {
         ScrollView {
@@ -1562,6 +1569,23 @@ struct CollieConnectionErrorView: View {
                 .foregroundStyle(BenchsideStyle.onAccent)
                 .background(BenchsideStyle.accent, in: Capsule())
                 .accessibilityIdentifier("collie-web-reload")
+                Button {
+                    hotspotBridge.triggerManualWake(runShortcut: hotspotBridge.autoRunShortcutInForeground)
+                } label: {
+                    Label(shellText("蓝牙唤醒附近 Mac 热点"), systemImage: "personalhotspot")
+                        .font(.body.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 48)
+                }
+                .buttonStyle(.bordered)
+                .accessibilityIdentifier("collie-ble-wake-mac")
+                if hotspotBridge.isEnabled {
+                    Text(hotspotBridge.statusSummary)
+                        .font(.caption)
+                        .foregroundStyle(BenchsideStyle.secondary)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("collie-ble-wake-status")
+                }
                 if let changeConnection {
                     Button(shellText("更换工作台"), action: changeConnection)
                         .frame(maxWidth: .infinity, minHeight: 44)

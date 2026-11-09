@@ -61,6 +61,8 @@ struct CollieLinkSettingsView: View {
                 CollieHermesPushSection(push: .shared)
             }
 
+            CollieHotspotBridgeSection(bridge: .shared)
+
             Section {
                 NavigationLink {
                     CollieConnectionSettingsView(
@@ -304,6 +306,52 @@ struct CollieHermesPushSection: View {
             Text(settingsText("任务提醒"))
         } footer: {
             Text(settingsText("在 Hermes WebUI 里交代的任务，会在锁屏和灵动岛显示进度，完成后提醒你。只包含工具名和状态，不含对话内容。需要开启 Tailscale。"))
+        }
+    }
+}
+
+/// BLE proximity hotspot wake: detects when the paired MacBook is nearby and offline,
+/// then wakes its Bluetooth/Wi-Fi hotspot connection and optionally triggers the iOS Hotspot Shortcut.
+struct CollieHotspotBridgeSection: View {
+    @Bindable var bridge: CollieHotspotBridge
+
+    var body: some View {
+        Section {
+            Toggle(settingsText("附近 Mac 断网自动唤醒热点"), isOn: $bridge.isEnabled)
+                .accessibilityIdentifier("collie-hotspot-ble-toggle")
+            Text(bridge.statusSummary)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .accessibilityIdentifier("collie-hotspot-ble-status")
+            Toggle(settingsText("前台唤醒时联动快捷指令广播热点"), isOn: $bridge.autoRunShortcutInForeground)
+                .accessibilityIdentifier("collie-hotspot-shortcut-toggle")
+            LabeledContent(settingsText("手机热点名称")) {
+                TextField(CollieHotspotBLEProtocol.defaultHotspotSSID, text: $bridge.hotspotSSID)
+                    .multilineTextAlignment(.trailing)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .accessibilityIdentifier("collie-hotspot-ssid")
+            }
+            if bridge.autoRunShortcutInForeground {
+                LabeledContent(settingsText("快捷指令名称")) {
+                    TextField(CollieHotspotBLEProtocol.defaultShortcutName, text: $bridge.shortcutName)
+                        .multilineTextAlignment(.trailing)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .accessibilityIdentifier("collie-hotspot-shortcut-name")
+                }
+            }
+            Button {
+                bridge.triggerManualWake(runShortcut: bridge.autoRunShortcutInForeground)
+            } label: {
+                Label(settingsText("立即通过蓝牙唤醒 Mac 热点"), systemImage: "personalhotspot")
+                    .frame(minHeight: 44)
+            }
+            .accessibilityIdentifier("collie-hotspot-wake-now")
+        } header: {
+            Text(settingsText("Mac 蓝牙热点唤醒"))
+        } footer: {
+            Text(settingsText("配合 Mac 端蓝牙守护进程使用。当手机靠近断网的 MacBook 时，通过 BLE 自动唤醒 Mac 的蓝牙与手机热点连接；若开启快捷指令联动，前台唤醒时会调用同名快捷指令刷新个人热点 Wi‑Fi 广播。"))
         }
     }
 }
