@@ -61,6 +61,10 @@ isSupersededNavigation过滤NSURLErrorDomain的取消和WebKitErrorDomain的102�
 
 没有，只核固定导航策略，无网络/视觉/设备验收。
 
+## 夜班交接时页面重载，先核原记录再决定下一步
+
+如果你正在整理医院临时换班的行政交接，页面重载不能证明消息未发送，也不能证明接班方已经确认。请先核原目标和获准排班来源，按[夜班换班交接核对清单](/guides/handoff-evidence-audit-checklist/)分别检查排班版本、跨午夜时段和接班反馈；涉及患者或紧急处置，直接走医院规定渠道，不在此补发。
+
 ## 相关指南与源码
 
 [离线链路](/guides/offline-workbench-handoff-troubleshooting/) · [页面边界](/guides/workbench-origin-page-boundaries/) · [语音错误层](/guides/recognition-error-layer-review/) · [开始](/start/) · [隐私](/privacy/)

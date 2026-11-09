@@ -1,0 +1,106 @@
+{
+  "worksheet": "hospital-night-shift-swap-administrative-handover",
+  "language": "zh",
+  "is_app_import_schema": false,
+  "is_approval_record": false,
+  "contains_patient_information": false,
+  "instructions": "仅在医院获准流程中人工填写非患者行政核对结果。空白表示未填写，不等于通过。不复制敏感正文，不用于临床交班、医嘱或排班审批。",
+  "items": [
+    {
+      "key": "roster_version",
+      "label": "当前排班版本",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "original_and_revised_shift",
+      "label": "原班与调整班",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "midnight_boundaries",
+      "label": "跨午夜起止",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "arrival_and_overlap",
+      "label": "提前或延后到岗",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "role_coverage",
+      "label": "岗位覆盖",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "swap_approval",
+      "label": "换班审批",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "staff_acknowledgements",
+      "label": "交出方与接班方",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "open_admin_items",
+      "label": "未结行政事项",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "conflicts_and_negation",
+      "label": "冲突与否定词",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "draft_destination",
+      "label": "草稿与目的地",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "sending_and_acceptance",
+      "label": "发送与接班反馈",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "uncertainty_and_duplicates",
+      "label": "不确定与重复",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    }
+  ]
+}

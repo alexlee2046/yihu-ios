@@ -1,0 +1,106 @@
+{
+  "worksheet": "hospital-night-shift-swap-administrative-handover",
+  "language": "en",
+  "is_app_import_schema": false,
+  "is_approval_record": false,
+  "contains_patient_information": false,
+  "instructions": "Manually record non-patient administrative checks only within the hospital-approved process. Blank means unfilled, not passed. Do not copy sensitive content or use this for clinical handover, orders or roster approval.",
+  "items": [
+    {
+      "key": "roster_version",
+      "label": "Current roster version",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "original_and_revised_shift",
+      "label": "Original and revised shifts",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "midnight_boundaries",
+      "label": "Midnight boundaries",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "arrival_and_overlap",
+      "label": "Early or late arrival",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "role_coverage",
+      "label": "Role coverage",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "swap_approval",
+      "label": "Swap approval",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "staff_acknowledgements",
+      "label": "Outgoing and receiving staff",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "open_admin_items",
+      "label": "Open administrative items",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "conflicts_and_negation",
+      "label": "Conflicts and negation",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "draft_destination",
+      "label": "Draft and destination",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "sending_and_acceptance",
+      "label": "Sending and acknowledgement",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    },
+    {
+      "key": "uncertainty_and_duplicates",
+      "label": "Uncertainty and duplication",
+      "checked_reference": null,
+      "checked_scope": null,
+      "unresolved": null,
+      "review_state": "unfilled"
+    }
+  ]
+}

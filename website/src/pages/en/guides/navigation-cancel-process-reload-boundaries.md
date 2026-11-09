@@ -61,6 +61,10 @@ Not guaranteed; review actual material/service state instead of replaying.
 
 No. Fixed navigation policy only, without network/visual/device acceptance.
 
+## A reload during night-shift handover: check the original record first
+
+If you are preparing administrative notes after a hospital shift swap, a page reload proves neither that a message was never sent nor that receiving staff confirmed it. Check the original destination and approved roster source. Use the [night-shift swap handover checklist](/en/guides/handoff-evidence-audit-checklist/) to separate roster version, midnight boundaries and receiving feedback. Patient or urgent-care matters use the hospital’s required channels, not a resend here.
+
 ## Reading and source
 
 [Offline chain](/en/guides/offline-workbench-handoff-troubleshooting/) · [Page boundary](/en/guides/workbench-origin-page-boundaries/) · [Recognition errors](/en/guides/recognition-error-layer-review/) · [Start](/en/start/) · [Privacy](/en/privacy/)
