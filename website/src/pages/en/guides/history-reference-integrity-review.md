@@ -5,6 +5,51 @@ description: "Review target components, entry identity and explicit references. 
 lang: en
 ---
 
+## SYN-HRI-50 history reference integrity preflight
+
+SYNTHETIC_EXAMPLE · pending · not_run. Structure/association is not identity, reading, approval or completion.
+
+[/samples/p29-history-reference-integrity-review/README.md](/samples/p29-history-reference-integrity-review/README.md) · [/samples/p29-history-reference-integrity-review/preflight.zh.json](/samples/p29-history-reference-integrity-review/preflight.zh.json) · [/samples/p29-history-reference-integrity-review/preflight.en.json](/samples/p29-history-reference-integrity-review/preflight.en.json)
+
+<div role="region" aria-label="SYN-HRI-50" tabindex="0">
+
+| ID | Check | Expectation/boundary |
+| --- | --- | --- |
+| H01 | Explicit UUID reference | validate=true; feedback=1 associated update(s); synthetic only |
+| H02 | Explicit comment URL reference | validate=true; feedback=1 associated update(s); synthetic only |
+| H03 | Seen prose alone is not association | validate=true; feedback=0 associated update(s); synthetic only |
+| H04 | Reference another request | validate=true; feedback=0 associated update(s); synthetic only |
+| H05 | Earlier update is not feedback | validate=true; feedback=0 associated update(s); synthetic only |
+| H06 | Draft UUID association | validate=true; feedback=1 associated update(s); synthetic only |
+| H07 | Draft rejects comment reference | validate=false; feedback=not_run; synthetic only |
+| H08 | Draft rejects formal timestamp | validate=false; feedback=not_run; synthetic only |
+| H09 | Draft URL not identical | validate=false; feedback=not_run; synthetic only |
+| H10 | Target ID mismatch | validate=false; feedback=not_run; synthetic only |
+| H11 | Duplicate entry ID | validate=false; feedback=not_run; synthetic only |
+| H12 | Previously loaded ID collision | validate=false; feedback=not_run; synthetic only |
+| H13 | Unsupported kind | validate=false; feedback=not_run; synthetic only |
+| H14 | Invalid reply UUID | validate=false; feedback=not_run; synthetic only |
+| H15 | Reference UUID not canonical lowercase | validate=false; feedback=not_run; synthetic only |
+| H16 | Duplicate reference | validate=false; feedback=not_run; synthetic only |
+| H17 | Cross-task comment reference | validate=false; feedback=not_run; synthetic only |
+| H18 | Entry host mismatch | validate=false; feedback=not_run; synthetic only |
+| H19 | Explicit port differs | validate=false; feedback=not_run; synthetic only |
+| H20 | Entry path mismatch | validate=false; feedback=not_run; synthetic only |
+| H21 | Entry query mismatch | validate=false; feedback=not_run; synthetic only |
+| H22 | Wrong position order | validate=false; feedback=not_run; synthetic only |
+| H23 | Missing cursor on incomplete page | validate=false; feedback=not_run; synthetic only |
+| H24 | Five-entry page retains remaining gap | validate=true; feedback=4 associated update(s); synthetic only |
+| M01 | Association is not read/handled | Valid structure/explicit references establish association only, not identity, approval, truth or completion. |
+| M02 | Web reload is not successful history read | Spinner, cancellation filtering or reload do not prove native history loaded, current-target completeness or service completion. |
+| M03 | Cancellation paths are distinct | Web navigation cancellation differs from native history generation/request receipts; never merge stale text into a new target or erase receipts on cancel. |
+| M04 | Scheduling is not recovery SLA | Match cancellation domains/codes; WebKitErrorDomain/102, 500ms recheck and 15s loop guard are not recovery/non-execution guarantees. |
+| M05 | Never fabricate missing references | Preserve target, positions, references and gaps; no guessed references, rewritten timestamps/URLs or cross-account index. |
+| M06 | Minimal disclosure and stopping | All synthetic, no link fetch; stop when real authority/read/handled/remote receipts are unknown. Destinations may save/sync; no blind replay. |
+
+</div>
+
+
+
 <h2 id="first-answer">Later text is not necessarily feedback; an explicit link is not completion</h2>
 
 CollieRadarReplyHistory associates only later-position updates whose references explicitly identify the reply's request_id or, outside draft mode, its URL. History also checks target, entry identity, positions and URL components. This read-only structure is not reading, completion or truth certification. No history database/association engine is added.
