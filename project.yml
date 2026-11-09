@@ -85,6 +85,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: $(YIHU_BUNDLE_ID).watch.widgets
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: Extensions/YihuWatchWidgets/Info.plist
+        INFOPLIST_KEY_CFBundleDisplayName: 一呼
         CODE_SIGN_ENTITLEMENTS: Apps/YihuWatch/YihuWatch.entitlements
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
