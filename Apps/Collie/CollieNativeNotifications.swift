@@ -431,7 +431,7 @@ final class CollieNativeNotificationsController {
 
     private func unavailableNotice(_ service: CollieNativePushResponse?) -> String {
         if service?.reason == "native push bridge unavailable" {
-            return notifyText("当前网页未提供原生推送接口；原版 Collie 可正常使用，但一呼后台通知不可用。")
+            return notifyText("当前页面不支持原生推送通知。")
         }
         return notifyText("当前工作台暂时无法开启通知。")
     }

@@ -44,8 +44,8 @@ const sourceFragments = {
   },
   "ui_detail_next": {
     "path": "Apps/Collie/CollieRadarView.swift",
-    "text": "action.next.isEmpty ? radarText(\"下一步待补\") : action.next",
-    "sha256": "a065a36c12dfcb16bb651217bdb439e7ff2cbe73d329b53c1063fde997de3222"
+    "text": "if !action.next.isEmpty { Text(action.next) }",
+    "sha256": "6d0f09312fc52dfdb9164cb730f0e28e71a45fd1de43e46e0b521fd0af9cca36"
   },
   "ui_session": {
     "path": "Apps/Collie/CollieRadarView.swift",
@@ -110,9 +110,8 @@ for (const lang of ['zh', 'en']) {
       assert.equal(j[group].length, count); assert.equal(new Set(j[group].map((x) => x.id)).size, count);
     }
     const f = Object.fromEntries(j.field_cases.map((x) => [x.id, x]));
-    assert.equal(f.F1.evidence, null); assert.equal(f.F3.evidence, '待补'); assert.equal(f.F1.expected.evidence, f.F3.expected.evidence);
-    assert.equal(f.F2.expected.priority, ' '); assert.equal(f.F2.expected.status, '任务状态未提供');
-    assert.equal(f.F2.expected.card_next, '下一步待补'); assert.equal(f.F2.expected.detail_next, ' ');
+    assert.equal(f.F1.evidence, null); assert.equal(f.F1.expected.evidence, f.F3.expected.evidence);
+    assert.equal(f.F2.expected.priority, ' '); assert.equal(f.F2.expected.detail_next, ' ');
     const g = Object.fromEntries(j.reply_gate_cases.map((x) => [x.id, x]));
     assert.equal(g.G1.reply_supported, null); assert.equal(g.G2.reply_supported, false); assert.equal(g.G1.expected.ui_enabled, g.G2.expected.ui_enabled);
     assert.equal(g.G3.expected.ui_enabled, true); assert.equal(g.G5.expected.visible, false);

@@ -26,19 +26,17 @@ struct YihuWatchRecoveryView: View {
     }
     var body: some View {
         List {
-            Text("这里保留的是手表副本；已交手机不等于已提交台账。")
-                .font(.footnote).foregroundStyle(.secondary)
             Section("文字草稿") {
                 if let draft {
                     Text(draft.title ?? "原事项草稿").font(.headline)
-                    Text(draft.phoneSaved == true ? "已交手机 · 未提交台账" :
-                         draft.transferAttempted != false ? "传输结果待核" : "仅保存在手表")
+                    Text(draft.phoneSaved == true ? "已同步至手机草稿" :
+                         draft.transferAttempted != false ? "传输结果待核" : "保存在手表")
                         .font(.footnote)
                     Text(draft.text)
                     if let item = draftItem {
                         NavigationLink("查看／继续原草稿") { YihuWatchDraftView(item: item, link: link) }
                     } else {
-                        Text("原事项已变化、未同步或不在当前列表；仅供核对，不会转给其他事项。")
+                        Text("原事项已变化或未同步，请先与手机同步。")
                             .font(.footnote).foregroundStyle(.orange)
                     }
                 } else if unreadable {
@@ -57,7 +55,7 @@ struct YihuWatchRecoveryView: View {
                         Text(item.title)
                         NavigationLink("继续原事项录音") { YihuWatchDraftView(item: item, link: link) }
                     } else {
-                        Text("原录音仍保留；原事项未同步、已变化或记录不可读时，不会改绑到新事项。")
+                        Text("原录音已保留，请先与手机同步对应事项。")
                             .font(.footnote).foregroundStyle(.orange)
                     }
                     Button("核对后丢弃录音副本", role: .destructive) { clearingAudio = true }
@@ -76,10 +74,10 @@ struct YihuWatchRecoveryView: View {
         .alert("清除这份手表草稿？", isPresented: $clearingDraft) {
             Button("取消", role: .cancel) {}
             Button("清除副本", role: .destructive) {
-                do { try drafts.clear(); reload(); notice = "手表副本已清除；不会撤回手机内容" }
+                do { try drafts.clear(); reload(); notice = "手表草稿已清除" }
                 catch { notice = "未能清除，原副本保留" }
             }
-        } message: { Text("请先核对手机。此操作不可撤销，不会撤回已传输的内容；未传输的草稿将丢失。") }
+        } message: { Text("清除手表上的草稿副本，已同步到手机的内容请在手机查看。") }
         .alert("丢弃这份录音副本？", isPresented: $clearingAudio) {
             Button("取消", role: .cancel) {}
             Button("丢弃副本", role: .destructive) {
@@ -87,7 +85,7 @@ struct YihuWatchRecoveryView: View {
                 else { link.voice.discard() }
             }
         } message: {
-            Text(link.voice.blocked ? "记录不可读，无法核实手机；请先自行核对。将永久删除手表录音，不撤回手机内容。" : "先连接手机核对识别状态，成功后才清除手表副本；不撤回已有文字。")
+            Text(link.voice.blocked ? "记录不可读，无法核实手机；将删除手表上的录音副本。" : "先连接手机核对识别状态，成功后才清除手表上的录音副本。")
         }
     }
 }

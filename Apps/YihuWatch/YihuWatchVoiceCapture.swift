@@ -161,13 +161,13 @@ final class YihuWatchVoiceCapture: NSObject, AVAudioRecorderDelegate {
                 let previous = result
                 result = value
                 do { try persist() } catch { result = previous; throw error }
-                notice = "手机本地识别完成，尚未提交台账"
+                notice = "手机本地识别完成"
             } else {
                 switch value.outcome {
                 case .busy: notice = "手机忙碌或有待回传结果；录音保留，稍后重试"
                 case .changed: notice = "事项或来源已变化；录音保留，请在手机核对"
                 case .modelUnavailable: notice = "请先在手机准备好端侧语音模型；录音保留"
-                case .voiceprintBlocked: notice = "手机声纹校验未通过；录音保留，未填入文字"
+                case .voiceprintBlocked: notice = "手机声纹校验未通过，录音已保留"
                 default: notice = "手机识别未完成；录音保留，可重试"
                 }
             }
@@ -194,7 +194,7 @@ final class YihuWatchVoiceCapture: NSObject, AVAudioRecorderDelegate {
             Task { @MainActor in
                 guard let self, self.pending == pending else { return }
                 self.sending = false
-                if discarded { self.clearLocal(); self.notice = "录音副本已丢弃；不撤回已有文字草稿" }
+                if discarded { self.clearLocal(); self.notice = "录音副本已丢弃" }
                 else { self.notice = "手机仍在识别，请等待结果后再丢弃" }
             }
         }, errorHandler: { [weak self] _ in

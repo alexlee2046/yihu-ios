@@ -53,7 +53,7 @@ struct YihuWatchDraftView: View {
                 switch state {
                 case "saved":
                     phoneSaved = true
-                    if save() { notice = "手机草稿已保存；请在手机编辑并二次确认。未提交台账" }
+                    if save() { notice = "手机草稿已保存；请在手机继续确认" }
                     else { notice = "手机已确认保存，但手表回执未能落盘；请在手机核对" }
                 case "changed": notice = "事项或来源已变化，草稿保留；请在手机核对"
                 case "busy": notice = "手机正在处理其他内容，草稿保留；请结束后重试"
@@ -63,7 +63,7 @@ struct YihuWatchDraftView: View {
         }, errorHandler: { _ in
             Task { @MainActor in
                 busy = false
-                notice = "传输结果待核，草稿及编号保留；重试不会覆盖其他手机草稿"
+                notice = "传输未确认，草稿已保留，可重试"
             }
         })
     }
@@ -72,11 +72,11 @@ struct YihuWatchDraftView: View {
         guard let result = voice.result, result.outcome == .ready, voice.matches(item),
               result.request.requestID == requestID, !busy, !frozen, !blocked else { return }
         guard text.isEmpty || text == result.text else {
-            notice = "已有文字，识别结果保留；不会自动覆盖草稿"; return
+            notice = "草稿已有内容，识别结果已保留"; return
         }
         let previous = text
         text = result.text
-        if save() { voice.consumed(); notice = "手机端侧识别已填入手表草稿；尚未提交台账" }
+        if save() { voice.consumed(); notice = "手机端侧识别已填入手表草稿" }
         else { text = previous }
     }
 
@@ -84,14 +84,14 @@ struct YihuWatchDraftView: View {
         List {
             Text(item.title).font(.headline)
             Text(item.status)
-            if phoneSaved { Label("已交手机 · 未提交台账", systemImage: "checkmark.circle") }
+            if phoneSaved { Label("已同步至手机草稿", systemImage: "checkmark.circle") }
             TextField("语音或文字草稿", text: $text).disabled(inputLocked)
             Section("快捷草稿") {
                 ForEach(YihuWatchQuickDraft.templates, id: \.self) { template in
                     Button(template) {
                         guard YihuWatchQuickDraft.canApply(text: text, locked: inputLocked) else { return }
                         text = template
-                        if save() { notice = "已填入草稿；可编辑，不会自动传输或发送" }
+                        if save() { notice = "已填入草稿" }
                     }
                     .disabled(!YihuWatchQuickDraft.canApply(text: text, locked: inputLocked))
                 }
@@ -110,7 +110,6 @@ struct YihuWatchDraftView: View {
                     .disabled(busy || frozen || blocked || voice.sending || !text.isEmpty)
             }
             if let message = voice.notice { Text(message).font(.footnote).foregroundStyle(.orange) }
-            Text("端侧识别最多10秒，需手机一呼前台且模型就绪；音频不上传云端。文字最多4000字符，不自动发送意见").font(.footnote)
             if let notice { Text(notice).font(.footnote).foregroundStyle(.orange) }
             if phoneSaved {
                 Button("转手机继续确认") { link.request(item) }
@@ -123,16 +122,12 @@ struct YihuWatchDraftView: View {
             }
             Button("清除手表草稿副本", role: .destructive) { discarding = true }
                 .disabled(busy || voice.recording || voice.hasAudio || voice.sending)
-            Text("断连时先保存草稿；传输过的输入锁定，避免同编号不同内容").font(.footnote).foregroundStyle(.secondary)
         }
         .navigationTitle("输入草稿")
         .task {
             voice.foreground = scenePhase == .active
             voice.attach(item)
             if let pending = voice.pending, voice.matches(item) { requestID = pending.requestID }
-            #if DEBUG
-            if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO"] == "1" { notice = "模拟数据 · 不代表真实听写或配对传输" }
-            #endif
             guard FileManager.default.fileExists(atPath: file.path) else { applyVoiceResult(); return }
             do {
                 let handle = try FileHandle(forReadingFrom: file); defer { try? handle.close() }
@@ -145,7 +140,7 @@ struct YihuWatchDraftView: View {
                 text = saved.text; requestID = saved.requestID
                 frozen = saved.transferAttempted != false
                 phoneSaved = saved.phoneSaved == true
-                notice = phoneSaved ? "已交手机，尚未提交台账；请在手机继续" : "已恢复草稿，可用原编号核实／重试传输"
+                notice = phoneSaved ? "已同步至手机草稿，请在手机继续" : "已恢复草稿，可用原编号核实／重试传输"
             } catch { blocked = true; notice = "原草稿无法读取，记录已保留" }
             applyVoiceResult()
         }
@@ -167,24 +162,24 @@ struct YihuWatchDraftView: View {
         .alert("丢弃这段录音？", isPresented: $discardingAudio) {
             Button("取消", role: .cancel) {}
             Button("丢弃录音", role: .destructive) { voice.discard() }
-        } message: { Text("核对手机后丢弃录音副本；不会撤回已保存的文字或台账内容。") }
+        } message: { Text("核对手机后可丢弃手表上的录音副本。") }
         .alert("清除手表副本？", isPresented: $discarding) {
             Button("取消", role: .cancel) {}
             Button("清除副本", role: .destructive) {
                 do {
                     try drafts.clear()
                     text = ""; requestID = UUID(); blocked = false; frozen = false; phoneSaved = false
-                    notice = "手表副本已清除；不会撤回手机草稿，请先在手机核对"
+                    notice = "手表草稿已清除"
                 } catch { notice = "副本未能清除，原记录保留" }
             }
-        } message: { Text("不会撤回已传到手机的草稿。结果待核时请先在手机核对，避免误写第二份意见。") }
+        } message: { Text("清除手表上的草稿副本，已传到手机的草稿请在手机查看。") }
         .sheet(isPresented: $confirming) {
             List {
                 Text(item.title)
                 Text(item.status)
-                Text(item.next)
+                if !item.next.isEmpty { Text(item.next) }
                 Text(text)
-                Text("只保存到手机草稿；台账发送须在手机再次确认").font(.footnote)
+                Text("保存到手机草稿后可在手机上继续编辑并确认发送").font(.footnote).foregroundStyle(.secondary)
                 Button("确认传输草稿") { confirming = false; transfer() }
                 Button("取消") { confirming = false }
             }

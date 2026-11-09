@@ -338,7 +338,7 @@ final class CollieRadarReplySession {
             ]
         case "等你验收":
             return [
-                radarText("验收通过，可按现有门禁合入。"),
+                radarText("验收通过，可以合入。"),
                 radarText("工程阶段通过，生产发布暂缓。"),
                 radarText("请补充实机或预览证据后再验。")
             ]
@@ -426,7 +426,7 @@ final class CollieRadarReplySession {
                 historyNotice = radarText("来源或分页范围已变化，请重新读取历史。")
             default:
                 if let network = error as? URLError, [.notConnectedToInternet, .networkConnectionLost].contains(network.code) {
-                    historyNotice = radarText("当前离线，历史暂不可用；这不表示回复没有发送。")
+                    historyNotice = radarText("当前离线，历史记录暂不可用。")
                 } else { historyNotice = radarText("历史读取失败，已显示的记录和输入保留；请重试或查看原条目。") }
             }
         }
@@ -439,11 +439,11 @@ final class CollieRadarReplySession {
         switch failure.code {
         case "forbidden": return radarText("当前身份没有回复权限。")
         case "target_unavailable": return radarText("目标已不在当前台账或不可见，输入已保留。")
-        case "target_changed": return radarText("条目状态或下一步已变化，请重新核对；当前不一定仍可回复。")
+        case "target_changed": return radarText("条目状态或下一步已变化，请重新核对。")
         case "request_reused": return radarText("这次请求已用于另一份回复，请核实原条目。")
         case "invalid_request": return radarText("回复无效或过长，请修改后重新确认。")
-        case "invalid_authorization": return radarText("授权申请格式无效，请负责人修正原条目；未授权、未执行。")
-        case "authorization_expired": return radarText("授权申请已过期或范围已变化，请重新读取并核对；未授权、未执行。")
+        case "invalid_authorization": return radarText("授权申请格式无效，请联系负责人修正原条目。")
+        case "authorization_expired": return radarText("授权申请已过期或范围已变化，请刷新后重试。")
         case "write_rejected": return radarText("回复被安全规则拒绝，或写入口暂不可用；请修改或稍后重试。")
         default: return radarText("无法核实条目或回复结果，请稍后重试。")
         }
@@ -738,14 +738,14 @@ struct CollieRadarReplyView: View {
                                 Text(target.title)
                                 Text(target.url).font(.caption)
                                 Text(target.status)
-                                Text(target.next.isEmpty ? radarText("下一步待补") : target.next)
+                                if !target.next.isEmpty { Text(target.next) }
                             }
                         }
                         if authorizing, let authorization = session.target?.authorization {
                             authorizationSection(authorization)
                         }
                         Section(radarText("回复原文")) { Text(session.text).textSelection(.enabled) }
-                        Button(radarText(authorizing ? "仅确认上述范围并记录授权" : "发送回复")) {
+                        Button(radarText(authorizing ? "确认授权" : "发送回复")) {
                             confirming = false
                             Task {
                                 await session.submit(authorizing: authorizing)
@@ -777,14 +777,10 @@ struct CollieRadarReplyView: View {
                 Text("\(radarText("单次 CU 上限"))：\(budget.session_cu.formatted())")
                 Text("\(radarText("累计 CU 上限"))：\(budget.total_cu.formatted())")
                 Text("\(radarText("分钟上限"))：\(budget.minutes.formatted())")
-                Text(radarText("预算是停止目标，不是云平台硬限额；不允许自动扩额或购买。"))
-                    .font(.caption).foregroundStyle(.secondary)
             }
             LabeledContent(radarText("授权申请到期")) {
                 Text(Date(timeIntervalSince1970: request.expires_at), format: .dateTime)
             }
-            Text(radarText("只记录这一次、上述范围的确认；不会自动执行。原工具须核验精确指纹和预算，生产发布仍需独立签名授权。"))
-                .font(.caption).foregroundStyle(.secondary)
         }
     }
 }

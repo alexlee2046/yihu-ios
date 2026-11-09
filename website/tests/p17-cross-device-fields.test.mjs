@@ -47,7 +47,6 @@ for (const lang of ['zh', 'en']) {
     const d = Object.fromEntries(j.codec_cases.map((x) => [x.id, x]));
     for (const id of ['D1', 'D2', 'D4', 'D10']) assert.equal(d[id].accepted, true);
     for (const id of ['D3', 'D5', 'D6', 'D7', 'D8', 'D9', 'D11']) assert.equal(d[id].accepted, false);
-    assert.equal(j.presentation_cases[0].expected_next, '下一步待补');
     assert.equal(j.presentation_cases[1].expected_next, ' ');
     assert.equal(j.presentation_cases[1].expected_priority_visible, true);
     for (const [group, count] of [['publish_cases', 11], ['codec_cases', 11], ['presentation_cases', 4], ['boundary_reviews', 4]]) {

@@ -132,7 +132,7 @@ struct CollieRadarView: View {
                         Form {
                             Text(action.title).font(.headline)
                             Text(action.project + " · " + (action.status ?? ""))
-                            Text(action.next.isEmpty ? radarText("下一步待补") : action.next)
+                            if !action.next.isEmpty { Text(action.next) }
                             if let url = URL(string: action.url), url.scheme == "https" {
                                 Link(radarText("原条目"), destination: url)
                             }
@@ -214,12 +214,12 @@ struct CollieRadarView: View {
     @ViewBuilder
     private func colabContent(_ data: CollieColabSnapshot) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Colab 受控工作台 · 只读", systemImage: "chart.bar")
+            Label("Colab 实验看板", systemImage: "chart.bar")
                 .font(.headline)
             Text("读取时间：\(Date(timeIntervalSince1970: data.observed_at).formatted())")
                 .font(.caption).foregroundStyle(.secondary)
             if data.outdated {
-                Label("实验快照已过期，请刷新；不代表当前资源状态。", systemImage: "clock.badge.exclamationmark")
+                Label("实验快照已过期，建议刷新。", systemImage: "clock.badge.exclamationmark")
                     .font(.footnote).foregroundStyle(.orange)
             }
             Text("余额 CU：\(metric(data.usage.balance)) · 速率：\(metric(data.usage.rate)) · 分配数：\(count(data.usage.assignments))")
