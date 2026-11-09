@@ -1620,9 +1620,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/radar-json-null-validation/
 
-场景指南 · 相关使用指南 外贸简报接入PM Radar前：JSON类型、空值与缺失字段核对 语法正确的JSON不一定能被Radar解码，更不代表业务数据完整 先确认文件来自有权使用的自有台账，再核JSON语法、模型字段类型、解码后的验证和业务含义。一呼使用现有PM Radar模型读取快照，不把任意外贸简报当作任务数据。缺字段、显式 null 、空字符串和空数组不能混为一谈；本文的合成样例只帮助解释契约，不连接真实源、转换纪要或启用回复。 四层检查，不用“JSON有效”代替全部验收 语法 ：括号、引号和数据字面值能解析，只是第一层。 模型类型 ：必需字符串/数组及可选字段要符合Swift Codable声明；字符串数字或空对象不能随意代替原类型。 解码后验证 ：来源日期须能解析、大小不超过2 MiB；非空项目/标题、项目记录、标识与时间戳还有源码校验。 业务范围 ：数据源是否完整、是否旧缓存、筛选是否遮蔽任务、字段有没有权限与来源依据，需要另行核对。解析通过不等于信息真实、可写或最新。 字段、null与空集合对照 字段位置 模型形态 缺失/null/空值的区别 核对建议 date_str 必需String，另需可解析来源时间 缺失或null不满足必需类型；空/无效日期不满足后续验证 使用来源最后成功读取时间，不填手机点刷新时间 decisions 必需Action数组 []是已提供的空子集；缺失/null不是空数组 不把空待处理子集当完整台账无任务 active/stale/cold 三个必需Project数组 []表示该集合为空；不能用projects数组替代三个键 合并projects是模型计算属性，不是导入替代键 tasks 可选Action数组 缺失或null会回退decisions；[]是明确提供的空全任务集合，不触发回退 区分旧源范围不完整与明确的空全量集合 Action.project/title 必需String并验证非空白 null/缺失/数字不符合类型；空白值不满足验证 project应对应来源项目标识，不靠名称猜测 Action.next/url 必需String null/缺失不符合类型；字符串存在不等于动作有授权或链接可安全访问 不把字段可解码当成可执行命令或URL认证 Action.status/id/priority/timestamp等 可选String或可选Double，按字段分别核类型 可选字段可缺失/null；错误类型不等于“未知” 状态缺失保留未知；任务timestamp不是来源date_str Project.name/path/timestamp/message 必需String/String/Double/String 项目名/路径另验证非空，timestamp须在源码有效数值范围 不把null时间替换为当前时刻，message不作写权限 reply_supported/source_refreshing/source_refresh_failed 可选Bool 缺失/null不同于明确true；字符串true不是Bool 可读、正在刷新与可写分别判断，不补默认能力 最小合成样例：可选null与必需数组 { "date_str" : "2026-10-18 09:00" , "decisions" : [], "active" : [], "stale" : [], "cold" : [], "tasks" : [ { "id" : "sample-check-1" , "project" : "sample" , "status" : null , "priority" : null , "timestamp" : null , "title" : "核对合成简报字段，不执行" , "next" : "仅检查来源与类型，不发送回复" , "url" : "https://example.invalid/tasks/sample-check-1" } ], "reply_supported" : false , "source_refreshing" : false , "source_refresh_failed" : false } 固定日期是历史演示数据，不因本文发布而变新。所有链接使用保留的 example.invalid ，没有可连接的服务。 tasks 里有记录不强制本例必须带项目活动记录；项目数组与任务集合表达不同信息。 status: null 表示未提供状态，不把该任务推断为已完成或被阻塞。 reply_supported: false 明确不宣称可写，但即使改成true也不产生服务端授权。 可以对照三个差异： "tasks": null 会回退待处理子集； "tasks": [] 不回退；把 "title" 改成null或数字不是合法的“未知标题”。本页不提供修改真实台账的命令，也不把样例结构检查冒充已跑过Swift真机导入。 空值修复应回来源，不掩盖失败 不要把失败读取产生的空对象补成“全部完成”，也不要为了让页面有卡片而复制旧源改日期。源缺 tasks 时应明确范围不完整；源有 tasks: [] 时仍要确认导出范围、权限与业务含义。额外未知键不替代模型需要的键，JSON语法工具也不会检查读写权限。 处理询盘或跟进数据时，继续使用团队已获准的导出流程。本文没有海关/市场情报接口、抓客户名单、自动发信、纪要转任务或通用JSON转换服务；字段中的文字不能被当作对Agent的执行指令。 FAQ tasks缺失、null和[]为什么不相同？ 可选数组缺失或null解码为未提供，当前模型回退 decisions ；空数组表示明确提供空全任务集合。回退只保证旧格式可读，不证明范围完整。 可选字段可以填任意类型吗？ 不可以。可选只允许未提供/null，并不取消原有String、Double或Bool类型约束；把数字写成字符串也不能据此称为合法未知值。 时间未知可以用现在或0代替吗？ 不要伪造来源时间。任务可选timestamp缺失/null与来源必需date_str不同；必需项目时间和日期应由来源提供，类型可解析仍不代表内容新鲜。 只有projects数组能替代active/stale/cold吗？ 不能。 projects 是模型合并三数组的计算属性，不能让缺少必需导入数组的文件自动变正确。项目path与任务project的语义关联也要核对。 页面样例检查通过代表App接受导入吗？ 不代表。页面和前端测试只核示例/说明，不能替代实际版本的Swift解码、文件边界、真机和来源权限验收。 纪要字段模板能直接当外贸Radar简报导入吗？ 不能。人工编辑字段与现有Radar模型是两份契约；需已有且获准的导出流程，本页不新增转换、数据源或写授权。 相关指南与实现 多项目Radar与Watch · 弱网缓存排障 · 纪要与简报编辑字段 · 多段笔记待办核对 · 开始 · 隐私 依据： Radar模型与decode校验 、 源读取与缓存 、 README源与回复边界 。
+场景指南 · 相关使用指南 外贸简报接入PM Radar前：JSON类型、空值与缺失字段核对 SYN-RJN-51 JSON类型与null自检 SYNTHETIC_EXAMPLE · pending · not_run。模型/空集合、展示与真实写权分账。 /samples/p30-radar-json-null-validation/README.md · /samples/p30-radar-json-null-validation/preflight.zh.json · /samples/p30-radar-json-null-validation/preflight.en.json ID 检查 预期/边界 J01 tasks缺失回退 decode=true; allTasks=1; attention=0; visible=0; synthetic only J02 tasks null回退 decode=true; allTasks=1; attention=0; visible=0; synthetic only J03 空tasks不回退 decode=true; allTasks=0; attention=0; visible=0; synthetic only J04 显式tasks覆盖回退 decode=true; allTasks=1; attention=0; visible=0; synthetic only J05 可选null保未知 decode=true; allTasks=1; attention=0; visible=0; synthetic only J06 true和attention非写权 decode=true; allTasks=1; attention=1; visible=1; synthetic only J07 next固定字样命中 decode=true; allTasks=1; attention=1; visible=1; synthetic only J08 标题字样不代next decode=true; allTasks=1; attention=0; visible=0; synthetic only J09 未知键不补契约 decode=true; allTasks=1; attention=0; visible=0; synthetic only J10 必需数组显式空 decode=true; allTasks=0; attention=0; visible=0; synthetic only J11 项目过滤仍可排除 decode=true; allTasks=1; attention=1; visible=0; synthetic only J12 状态过滤仍可排除 decode=true; allTasks=1; attention=1; visible=0; synthetic only J13 必需日期缺失 decode=false; views not_run; synthetic only J14 必需数组null decode=false; views not_run; synthetic only J15 projects不能补active decode=false; views not_run; synthetic only J16 必需title null decode=false; views not_run; synthetic only J17 可选数字错类型 decode=false; views not_run; synthetic only J18 字符串true非Bool decode=false; views not_run; synthetic only J19 空白project decode=false; views not_run; synthetic only J20 空白title decode=false; views not_run; synthetic only J21 无效来源日期 decode=false; views not_run; synthetic only J22 tasks非空ID重复 decode=false; views not_run; synthetic only J23 项目时间越界 decode=false; views not_run; synthetic only J24 2MiB加1超限 decode=false; views not_run; synthetic only M01 四层验收分账 JSON语法、模型类型、decode后校验、业务来源/权限各自留证；true可解码不等可写。 M02 缺失null空集合不同 tasks缺失/null只兼容回退decisions，[]不回退；任一空列表都不证明全台账已清空。 M03 attention非账户 状态trim或next固定Alex仅为源码派生条件；不读当前登录者，不改原status，不自动认领/审批。 M04 多重过滤与能力分开 onlyMentioningMe使用allTasks，项目/状态仍可排除；reply_supported、匹配与真实prepare/目标/账户写权分账。 M05 不修出通过 不补当前时间、把null改0/false、复制旧记录改日期或伪造ID以消错；不转换纪要/抓线索或新建外贸源。 M06 最小披露与停止 仅合成不读顾客正文或请求链接，保原件/缺口/既有一次标记；目标可保存同步，未知不盲重放。 语法正确的JSON不一定能被Radar解码，更不代表业务数据完整 先确认文件来自有权使用的自有台账，再核JSON语法、模型字段类型、解码后的验证和业务含义。一呼使用现有PM Radar模型读取快照，不把任意外贸简报当作任务数据。缺字段、显式 null 、空字符串和空数组不能混为一谈；本文的合成样例只帮助解释契约，不连接真实源、转换纪要或启用回复。 四层检查，不用“JSON有效”代替全部验收 语法 ：括号、引号和数据字面值能解析，只是第一层。 模型类型 ：必需字符串/数组及可选字段要符合Swift Codable声明；字符串数字或空对象不能随意代替原类型。 解码后验证 ：来源日期须能解析、大小不超过2 MiB；非空项目/标题、项目记录、标识与时间戳还有源码校验。 业务范围 ：数据源是否完整、是否旧缓存、筛选是否遮蔽任务、字段有没有权限与来源依据，需要另行核对。解析通过不等于信息真实、可写或最新。 字段、null与空集合对照 字段位置 模型形态 缺失/null/空值的区别 核对建议 date_str 必需String，另需可解析来源时间 缺失或null不满足必需类型；空/无效日期不满足后续验证 使用来源最后成功读取时间，不填手机点刷新时间 decisions 必需Action数组 []是已提供的空子集；缺失/null不是空数组 不把空待处理子集当完整台账无任务 active/stale/cold 三个必需Project数组 []表示该集合为空；不能用projects数组替代三个键 合并projects是模型计算属性，不是导入替代键 tasks 可选Action数组 缺失或null会回退decisions；[]是明确提供的空全任务集合，不触发回退 区分旧源范围不完整与明确的空全量集合 Action.project/title 必需String并验证非空白 null/缺失/数字不符合类型；空白值不满足验证 project应对应来源项目标识，不靠名称猜测 Action.next/url 必需String null/缺失不符合类型；字符串存在不等于动作有授权或链接可安全访问 不把字段可解码当成可执行命令或URL认证 Action.status/id/priority/timestamp等 可选String或可选Double，按字段分别核类型 可选字段可缺失/null；错误类型不等于“未知” 状态缺失保留未知；任务timestamp不是来源date_str Project.name/path/timestamp/message 必需String/String/Double/String 项目名/路径另验证非空，timestamp须在源码有效数值范围 不把null时间替换为当前时刻，message不作写权限 reply_supported/source_refreshing/source_refresh_failed 可选Bool 缺失/null不同于明确true；字符串true不是Bool 可读、正在刷新与可写分别判断，不补默认能力 最小合成样例：可选null与必需数组 { "date_str" : "2026-10-18 09:00" , "decisions" : [], "active" : [], "stale" : [], "cold" : [], "tasks" : [ { "id" : "sample-check-1" , "project" : "sample" , "status" : null , "priority" : null , "timestamp" : null , "title" : "核对合成简报字段，不执行" , "next" : "仅检查来源与类型，不发送回复" , "url" : "https://example.invalid/tasks/sample-check-1" } ], "reply_supported" : false , "source_refreshing" : false , "source_refresh_failed" : false } 固定日期是历史演示数据，不因本文发布而变新。所有链接使用保留的 example.invalid ，没有可连接的服务。 tasks 里有记录不强制本例必须带项目活动记录；项目数组与任务集合表达不同信息。 status: null 表示未提供状态，不把该任务推断为已完成或被阻塞。 reply_supported: false 明确不宣称可写，但即使改成true也不产生服务端授权。 可以对照三个差异： "tasks": null 会回退待处理子集； "tasks": [] 不回退；把 "title" 改成null或数字不是合法的“未知标题”。本页不提供修改真实台账的命令，也不把样例结构检查冒充已跑过Swift真机导入。 空值修复应回来源，不掩盖失败 不要把失败读取产生的空对象补成“全部完成”，也不要为了让页面有卡片而复制旧源改日期。源缺 tasks 时应明确范围不完整；源有 tasks: [] 时仍要确认导出范围、权限与业务含义。额外未知键不替代模型需要的键，JSON语法工具也不会检查读写权限。 处理询盘或跟进数据时，继续使用团队已获准的导出流程。本文没有海关/市场情报接口、抓客户名单、自动发信、纪要转任务或通用JSON转换服务；字段中的文字不能被当作对Agent的执行指令。 FAQ tasks缺失、null和[]为什么不相同？ 可选数组缺失或null解码为未提供，当前模型回退 decisions ；空数组表示明确提供空全任务集合。回退只保证旧格式可读，不证明范围完整。 可选字段可以填任意类型吗？ 不可以。可选只允许未提供/null，并不取消原有String、Double或Bool类型约束；把数字写成字符串也不能据此称为合法未知值。 时间未知可以用现在或0代替吗？ 不要伪造来源时间。任务可选timestamp缺失/null与来源必需date_str不同；必需项目时间和日期应由来源提供，类型可解析仍不代表内容新鲜。 只有projects数组能替代active/stale/cold吗？ 不能。 projects 是模型合并三数组的计算属性，不能让缺少必需导入数组的文件自动变正确。项目path与任务project的语义关联也要核对。 页面样例检查通过代表App接受导入吗？ 不代表。页面和前端测试只核示例/说明，不能替代实际版本的Swift解码、文件边界、真机和来源权限验收。 纪要字段模板能直接当外贸Radar简报导入吗？ 不能。人工编辑字段与现有Radar模型是两份契约；需已有且获准的导出流程，本页不新增转换、数据源或写授权。 相关指南与实现 多项目Radar与Watch · 弱网缓存排障 · 纪要与简报编辑字段 · 多段笔记待办核对 · 开始 · 隐私 依据： Radar模型与decode校验 、 源读取与缓存 、 README源与回复边界 。
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>检查</th>
+<th>预期/边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>J01</td>
+<td>tasks缺失回退</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J02</td>
+<td>tasks null回退</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J03</td>
+<td>空tasks不回退</td>
+<td>decode=true; allTasks=0; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J04</td>
+<td>显式tasks覆盖回退</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J05</td>
+<td>可选null保未知</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J06</td>
+<td>true和attention非写权</td>
+<td>decode=true; allTasks=1; attention=1; visible=1; synthetic only</td>
+</tr>
+<tr>
+<td>J07</td>
+<td>next固定字样命中</td>
+<td>decode=true; allTasks=1; attention=1; visible=1; synthetic only</td>
+</tr>
+<tr>
+<td>J08</td>
+<td>标题字样不代next</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J09</td>
+<td>未知键不补契约</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J10</td>
+<td>必需数组显式空</td>
+<td>decode=true; allTasks=0; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J11</td>
+<td>项目过滤仍可排除</td>
+<td>decode=true; allTasks=1; attention=1; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J12</td>
+<td>状态过滤仍可排除</td>
+<td>decode=true; allTasks=1; attention=1; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J13</td>
+<td>必需日期缺失</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J14</td>
+<td>必需数组null</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J15</td>
+<td>projects不能补active</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J16</td>
+<td>必需title null</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J17</td>
+<td>可选数字错类型</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J18</td>
+<td>字符串true非Bool</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J19</td>
+<td>空白project</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J20</td>
+<td>空白title</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J21</td>
+<td>无效来源日期</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J22</td>
+<td>tasks非空ID重复</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J23</td>
+<td>项目时间越界</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J24</td>
+<td>2MiB加1超限</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>四层验收分账</td>
+<td>JSON语法、模型类型、decode后校验、业务来源/权限各自留证；true可解码不等可写。</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>缺失null空集合不同</td>
+<td>tasks缺失/null只兼容回退decisions，[]不回退；任一空列表都不证明全台账已清空。</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>attention非账户</td>
+<td>状态trim或next固定Alex仅为源码派生条件；不读当前登录者，不改原status，不自动认领/审批。</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>多重过滤与能力分开</td>
+<td>onlyMentioningMe使用allTasks，项目/状态仍可排除；reply_supported、匹配与真实prepare/目标/账户写权分账。</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>不修出通过</td>
+<td>不补当前时间、把null改0/false、复制旧记录改日期或伪造ID以消错；不转换纪要/抓线索或新建外贸源。</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>最小披露与停止</td>
+<td>仅合成不读顾客正文或请求链接，保原件/缺口/既有一次标记；目标可保存同步，未知不盲重放。</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -1695,9 +1857,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/radar-json-null-validation/
 
-All scenarios · Related practical guide Before a trade brief reaches PM Radar: JSON types, nulls and missing fields Valid JSON syntax does not establish model decoding or complete business data First verify that a file is an authorized export from your own ledger, then check syntax, model types, post-decode validation and business meaning. Yihu reads the existing PM Radar snapshot contract, not arbitrary trade briefs. Missing fields, explicit null , empty strings and empty arrays are not interchangeable. This synthetic example explains the contract without connecting to a real source, converting minutes or enabling replies. Four checks, not one valid-JSON label Syntax : parsable brackets, quotes and literals are only the first layer. Model types : required strings/arrays and optional fields must match Swift Codable declarations. Stringified numbers and empty objects cannot substitute freely. Post-decode validation : source date must parse and input is bounded to 2 MiB. Nonempty project/title values, project records, identities and timestamps have additional source checks. Business scope : completeness, old cache, filtering, permission and evidence still need review. Parsing does not prove truth, freshness or write authority. Fields, nulls and empty collections Location Model shape Missing/null/empty distinction Review rule date_str Required String, then a parsable source time Missing/null fail required type; empty/invalid date fails later validation Use the last successful source read, not a refresh-tap time decisions Required Action array [] is a supplied empty subset; missing/null are not empty arrays Empty pending scope is not proof of no ledger tasks active/stale/cold Three required Project arrays [] means that collection is empty; projects cannot replace the three keys Combined projects is a computed property, not an alternate import key tasks Optional Action array Missing/null fall back to decisions; [] is an explicitly empty ledger and does not fall back Distinguish incomplete legacy scope from supplied empty full scope Action.project/title Required String, validated as nonblank Missing/null/numbers fail type; whitespace fails validation project belongs to source identity, not guessed display names Action.next/url Required String Missing/null fail type; a string does not establish authority or safe navigation Decodable text is not an executable command or URL certification Action.status/id/priority/timestamp and others Optional String or Double, per field Optional fields can be absent/null; wrong types are not unknown values Keep absent status unknown; task timestamp is not source date_str Project.name/path/timestamp/message Required String/String/Double/String Name/path must be nonblank; timestamp must fit source numeric bounds Do not replace null time with now; message does not grant writes reply_supported/source_refreshing/source_refresh_failed Optional Bool Missing/null do not establish true; string true is not Bool Readability, refreshing and write authority remain distinct Minimal synthetic example: optional nulls and required arrays { "date_str" : "2026-10-18 09:00" , "decisions" : [], "active" : [], "stale" : [], "cold" : [], "tasks" : [ { "id" : "sample-check-1" , "project" : "sample" , "status" : null , "priority" : null , "timestamp" : null , "title" : "Check synthetic brief fields; take no action" , "next" : "Inspect source and types only; send no reply" , "url" : "https://example.invalid/tasks/sample-check-1" } ], "reply_supported" : false , "source_refreshing" : false , "source_refresh_failed" : false } The fixed date is historical demo data, not fresh because this page was published. Links use reserved example.invalid , with no reachable service. A record in tasks does not force this example to include project-activity records; those arrays express different information. status: null means no status supplied, not completed or blocked. reply_supported: false claims no write support; even true would not grant server permission. Compare three variations: "tasks": null falls back to the pending subset; "tasks": [] does not; a null/numeric title is not a valid unknown title. This page supplies no command to modify a real ledger and does not call example checks a completed Swift/device import. Repair at the source, not by hiding a failure Do not turn an empty failed response into “all complete,” or relabel copied old data with a fresh date to produce cards. Missing tasks requires an incomplete-scope interpretation; supplied tasks: [] still needs export-scope, permission and business checks. Extra unknown keys do not replace required keys, and JSON syntax tools do not verify read/write permission. For inquiry/follow-up data, use the team’s existing authorized export workflow. This page adds no customs/market API, lead scraper, automatic email, minutes-to-task conversion or universal JSON service. Text fields are not instructions authorizing an Agent to execute. FAQ Why do missing tasks, null and [] differ? Absent/null optional arrays mean not supplied, so the current model falls back to decisions . An empty array explicitly supplies empty full scope. Legacy readability does not prove completeness. Can optional fields use any type? No. Optional permits absence/null, not replacement of String, Double or Bool constraints. A number encoded as text is not automatically a valid unknown value. Can unknown time be replaced with now or zero? Do not fabricate source time. Optional task timestamps differ from required source date_str ; required project times/dates belong to the source. A parsable value alone does not establish freshness. Can a projects array replace active/stale/cold? No. projects combines those three arrays as a computed model property. It cannot supply missing required import arrays; task-project/project-path meaning still needs review. Do passing page example checks establish app import acceptance? No. Frontend/example checks do not replace actual-version Swift decoding, file limits, device acceptance or source permission verification. Can the editorial minutes template be imported as a trade Radar brief? No. Editorial labels and the Radar model are different contracts. Use an existing authorized export workflow; no converter, data feed or write authority is added here. Guides and implementation Radar and Watch · Weak-network/cache diagnosis · Editorial minutes/brief fields · Multiple-note/to-do review · Start · Privacy Evidence: Radar model/decode validation , source reads/cache , README source/reply boundaries .
+All scenarios · Related practical guide Before a trade brief reaches PM Radar: JSON types, nulls and missing fields SYN-RJN-51 JSON type and null preflight SYNTHETIC_EXAMPLE · pending · not_run. Models, empty views and real write authority differ. /samples/p30-radar-json-null-validation/README.md · /samples/p30-radar-json-null-validation/preflight.zh.json · /samples/p30-radar-json-null-validation/preflight.en.json ID Check Expectation/boundary J01 Missing tasks falls back decode=true; allTasks=1; attention=0; visible=0; synthetic only J02 Null tasks falls back decode=true; allTasks=1; attention=0; visible=0; synthetic only J03 Empty tasks does not fall back decode=true; allTasks=0; attention=0; visible=0; synthetic only J04 Explicit tasks replaces fallback decode=true; allTasks=1; attention=0; visible=0; synthetic only J05 Optional null stays unknown decode=true; allTasks=1; attention=0; visible=0; synthetic only J06 True and attention are not authority decode=true; allTasks=1; attention=1; visible=1; synthetic only J07 Fixed next literal matches decode=true; allTasks=1; attention=1; visible=1; synthetic only J08 Title literal is not next decode=true; allTasks=1; attention=0; visible=0; synthetic only J09 Unknown key does not grant contract decode=true; allTasks=1; attention=0; visible=0; synthetic only J10 Explicit empty required arrays decode=true; allTasks=0; attention=0; visible=0; synthetic only J11 Project filter may exclude decode=true; allTasks=1; attention=1; visible=0; synthetic only J12 Status filter may exclude decode=true; allTasks=1; attention=1; visible=0; synthetic only J13 Required date missing decode=false; views not_run; synthetic only J14 Required array null decode=false; views not_run; synthetic only J15 projects cannot replace active decode=false; views not_run; synthetic only J16 Required title null decode=false; views not_run; synthetic only J17 Wrong optional numeric type decode=false; views not_run; synthetic only J18 String true is not Bool decode=false; views not_run; synthetic only J19 Blank project decode=false; views not_run; synthetic only J20 Blank title decode=false; views not_run; synthetic only J21 Invalid source date decode=false; views not_run; synthetic only J22 Duplicate supplied task IDs decode=false; views not_run; synthetic only J23 Project timestamp out of range decode=false; views not_run; synthetic only J24 2MiB plus one byte decode=false; views not_run; synthetic only M01 Four separate acceptance layers Separate JSON syntax, model types, post-decode validation and business source/authority; decoded true is not write authority. M02 Missing null and empty differ Missing/null tasks fall back to decisions for compatibility; [] does not. Empty views never prove the whole ledger cleared. M03 Attention is not account identity Trimmed status/fixed Alex in next are derived source conditions, not signed-in identity, raw-status edits, ownership or approval. M04 Filters and capability are separate onlyMentioningMe uses allTasks; project/status can still exclude. reply_supported and matching do not replace prepare/target/account authority. M05 Do not manufacture acceptance No invented current times, null-to-zero/false fills, relabeled stale records or fabricated IDs; no minutes converter, lead scraping or new trade feed. M06 Minimal disclosure and stopping Synthetic only, no customer text/link fetch. Preserve originals/gaps/reservations; destinations may save/sync, no blind replay when unknown. Valid JSON syntax does not establish model decoding or complete business data First verify that a file is an authorized export from your own ledger, then check syntax, model types, post-decode validation and business meaning. Yihu reads the existing PM Radar snapshot contract, not arbitrary trade briefs. Missing fields, explicit null , empty strings and empty arrays are not interchangeable. This synthetic example explains the contract without connecting to a real source, converting minutes or enabling replies. Four checks, not one valid-JSON label Syntax : parsable brackets, quotes and literals are only the first layer. Model types : required strings/arrays and optional fields must match Swift Codable declarations. Stringified numbers and empty objects cannot substitute freely. Post-decode validation : source date must parse and input is bounded to 2 MiB. Nonempty project/title values, project records, identities and timestamps have additional source checks. Business scope : completeness, old cache, filtering, permission and evidence still need review. Parsing does not prove truth, freshness or write authority. Fields, nulls and empty collections Location Model shape Missing/null/empty distinction Review rule date_str Required String, then a parsable source time Missing/null fail required type; empty/invalid date fails later validation Use the last successful source read, not a refresh-tap time decisions Required Action array [] is a supplied empty subset; missing/null are not empty arrays Empty pending scope is not proof of no ledger tasks active/stale/cold Three required Project arrays [] means that collection is empty; projects cannot replace the three keys Combined projects is a computed property, not an alternate import key tasks Optional Action array Missing/null fall back to decisions; [] is an explicitly empty ledger and does not fall back Distinguish incomplete legacy scope from supplied empty full scope Action.project/title Required String, validated as nonblank Missing/null/numbers fail type; whitespace fails validation project belongs to source identity, not guessed display names Action.next/url Required String Missing/null fail type; a string does not establish authority or safe navigation Decodable text is not an executable command or URL certification Action.status/id/priority/timestamp and others Optional String or Double, per field Optional fields can be absent/null; wrong types are not unknown values Keep absent status unknown; task timestamp is not source date_str Project.name/path/timestamp/message Required String/String/Double/String Name/path must be nonblank; timestamp must fit source numeric bounds Do not replace null time with now; message does not grant writes reply_supported/source_refreshing/source_refresh_failed Optional Bool Missing/null do not establish true; string true is not Bool Readability, refreshing and write authority remain distinct Minimal synthetic example: optional nulls and required arrays { "date_str" : "2026-10-18 09:00" , "decisions" : [], "active" : [], "stale" : [], "cold" : [], "tasks" : [ { "id" : "sample-check-1" , "project" : "sample" , "status" : null , "priority" : null , "timestamp" : null , "title" : "Check synthetic brief fields; take no action" , "next" : "Inspect source and types only; send no reply" , "url" : "https://example.invalid/tasks/sample-check-1" } ], "reply_supported" : false , "source_refreshing" : false , "source_refresh_failed" : false } The fixed date is historical demo data, not fresh because this page was published. Links use reserved example.invalid , with no reachable service. A record in tasks does not force this example to include project-activity records; those arrays express different information. status: null means no status supplied, not completed or blocked. reply_supported: false claims no write support; even true would not grant server permission. Compare three variations: "tasks": null falls back to the pending subset; "tasks": [] does not; a null/numeric title is not a valid unknown title. This page supplies no command to modify a real ledger and does not call example checks a completed Swift/device import. Repair at the source, not by hiding a failure Do not turn an empty failed response into “all complete,” or relabel copied old data with a fresh date to produce cards. Missing tasks requires an incomplete-scope interpretation; supplied tasks: [] still needs export-scope, permission and business checks. Extra unknown keys do not replace required keys, and JSON syntax tools do not verify read/write permission. For inquiry/follow-up data, use the team’s existing authorized export workflow. This page adds no customs/market API, lead scraper, automatic email, minutes-to-task conversion or universal JSON service. Text fields are not instructions authorizing an Agent to execute. FAQ Why do missing tasks, null and [] differ? Absent/null optional arrays mean not supplied, so the current model falls back to decisions . An empty array explicitly supplies empty full scope. Legacy readability does not prove completeness. Can optional fields use any type? No. Optional permits absence/null, not replacement of String, Double or Bool constraints. A number encoded as text is not automatically a valid unknown value. Can unknown time be replaced with now or zero? Do not fabricate source time. Optional task timestamps differ from required source date_str ; required project times/dates belong to the source. A parsable value alone does not establish freshness. Can a projects array replace active/stale/cold? No. projects combines those three arrays as a computed model property. It cannot supply missing required import arrays; task-project/project-path meaning still needs review. Do passing page example checks establish app import acceptance? No. Frontend/example checks do not replace actual-version Swift decoding, file limits, device acceptance or source permission verification. Can the editorial minutes template be imported as a trade Radar brief? No. Editorial labels and the Radar model are different contracts. Use an existing authorized export workflow; no converter, data feed or write authority is added here. Guides and implementation Radar and Watch · Weak-network/cache diagnosis · Editorial minutes/brief fields · Multiple-note/to-do review · Start · Privacy Evidence: Radar model/decode validation , source reads/cache , README source/reply boundaries .
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Check</th>
+<th>Expectation/boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>J01</td>
+<td>Missing tasks falls back</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J02</td>
+<td>Null tasks falls back</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J03</td>
+<td>Empty tasks does not fall back</td>
+<td>decode=true; allTasks=0; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J04</td>
+<td>Explicit tasks replaces fallback</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J05</td>
+<td>Optional null stays unknown</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J06</td>
+<td>True and attention are not authority</td>
+<td>decode=true; allTasks=1; attention=1; visible=1; synthetic only</td>
+</tr>
+<tr>
+<td>J07</td>
+<td>Fixed next literal matches</td>
+<td>decode=true; allTasks=1; attention=1; visible=1; synthetic only</td>
+</tr>
+<tr>
+<td>J08</td>
+<td>Title literal is not next</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J09</td>
+<td>Unknown key does not grant contract</td>
+<td>decode=true; allTasks=1; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J10</td>
+<td>Explicit empty required arrays</td>
+<td>decode=true; allTasks=0; attention=0; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J11</td>
+<td>Project filter may exclude</td>
+<td>decode=true; allTasks=1; attention=1; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J12</td>
+<td>Status filter may exclude</td>
+<td>decode=true; allTasks=1; attention=1; visible=0; synthetic only</td>
+</tr>
+<tr>
+<td>J13</td>
+<td>Required date missing</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J14</td>
+<td>Required array null</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J15</td>
+<td>projects cannot replace active</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J16</td>
+<td>Required title null</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J17</td>
+<td>Wrong optional numeric type</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J18</td>
+<td>String true is not Bool</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J19</td>
+<td>Blank project</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J20</td>
+<td>Blank title</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J21</td>
+<td>Invalid source date</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J22</td>
+<td>Duplicate supplied task IDs</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J23</td>
+<td>Project timestamp out of range</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>J24</td>
+<td>2MiB plus one byte</td>
+<td>decode=false; views not_run; synthetic only</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>Four separate acceptance layers</td>
+<td>Separate JSON syntax, model types, post-decode validation and business source/authority; decoded true is not write authority.</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>Missing null and empty differ</td>
+<td>Missing/null tasks fall back to decisions for compatibility; [] does not. Empty views never prove the whole ledger cleared.</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>Attention is not account identity</td>
+<td>Trimmed status/fixed Alex in next are derived source conditions, not signed-in identity, raw-status edits, ownership or approval.</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>Filters and capability are separate</td>
+<td>onlyMentioningMe uses allTasks; project/status can still exclude. reply_supported and matching do not replace prepare/target/account authority.</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>Do not manufacture acceptance</td>
+<td>No invented current times, null-to-zero/false fills, relabeled stale records or fabricated IDs; no minutes converter, lead scraping or new trade feed.</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>Minimal disclosure and stopping</td>
+<td>Synthetic only, no customer text/link fetch. Preserve originals/gaps/reservations; destinations may save/sync, no blind replay when unknown.</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
