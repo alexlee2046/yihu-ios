@@ -26,17 +26,8 @@ enum BenchsideStyle {
     @ViewBuilder
     static func chromeIcon(_ systemName: String, active: Bool = false) -> some View {
         Image(systemName: systemName)
-            .font(.system(size: 14, weight: .semibold))
+            .font(.system(size: 16, weight: .medium))
             .foregroundStyle(active ? accent : ink)
-            .frame(width: 32, height: 32)
-            .background(
-                Circle()
-                    .fill(active ? accentSoft : surfaceRaised)
-            )
-            .overlay(
-                Circle()
-                    .strokeBorder(active ? accentBorder : border.opacity(0.45), lineWidth: 0.5)
-            )
             .frame(width: 44, height: 44)
             .contentShape(Rectangle())
     }

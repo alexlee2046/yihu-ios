@@ -22,39 +22,36 @@ struct CollieWorkbenchShortcutBar: View {
         HStack(spacing: 0) {
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 4) {
                         if !visible.contains(where: { $0.id == selected }),
                            let current = items.first(where: { $0.id == selected }) {
                             Text(current.name)
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(BenchsideStyle.ink)
                                 .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(Capsule().fill(BenchsideStyle.surfaceRaised))
-                                .overlay(Capsule().strokeBorder(BenchsideStyle.border.opacity(0.45), lineWidth: 0.5))
                                 .frame(maxWidth: 180, minHeight: 44)
+                                .padding(.horizontal, 8)
                         }
                         ForEach(visible) { item in
                             let isSelected = selected == item.id
                             Button { select(item.id) } label: {
                                 Text(item.name)
-                                    .font(.subheadline.weight(isSelected ? .semibold : .medium))
-                                    .foregroundStyle(isSelected ? BenchsideStyle.accent : BenchsideStyle.secondary)
+                                    .font(.subheadline.weight(isSelected ? .semibold : .regular))
+                                    .foregroundStyle(isSelected ? BenchsideStyle.ink : BenchsideStyle.secondary)
                                     .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
                                     .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? 240 : 200)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(
-                                        Capsule()
-                                            .fill(isSelected ? BenchsideStyle.accentSoft : BenchsideStyle.surfaceRaised.opacity(0.72))
-                                    )
-                                    .overlay(
-                                        Capsule()
-                                            .strokeBorder(isSelected ? BenchsideStyle.accentBorder : BenchsideStyle.border.opacity(0.35), lineWidth: isSelected ? 0.8 : 0.5)
-                                    )
+                                    .padding(.horizontal, 10)
                                     .frame(minHeight: 44)
                                     .contentShape(Rectangle())
+                                    .overlay(alignment: .bottom) {
+                                        if isSelected {
+                                            Capsule()
+                                                .fill(BenchsideStyle.accent)
+                                                .frame(height: 2)
+                                                .padding(.horizontal, 10)
+                                                .accessibilityHidden(true)
+                                        }
+                                    }
                             }
                             .buttonStyle(.plain)
                             .id(item.id)
@@ -222,7 +219,7 @@ struct CollieWorkbenchPicker: View {
                         if let id = radar.add(), selectRadar(id) { dismiss() }
                     }.disabled(radar.configurationError != nil)
                 } header: { Text("PM Radar") } footer: {
-                    Text(radarText("每个雷达工作台独立保存数据源、筛选和显示配置。"))
+                    Text(radarText("可添加多个雷达源，各自独立保存筛选视图。"))
                 }
             }
             .accessibilityIdentifier("collie-workbench-list")
@@ -250,7 +247,7 @@ struct CollieWorkbenchPicker: View {
                     pendingDelete = nil
                 }
             } message: {
-                Text(radarText("只删除本机配置和快照，不改变服务器台账。"))
+                Text(radarText("仅从本机移除，不影响远端数据。"))
             }
         }
         .tint(BenchsideStyle.accent)

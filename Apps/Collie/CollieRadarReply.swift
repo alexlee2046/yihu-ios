@@ -497,16 +497,11 @@ struct CollieRadarReplyView: View {
     }
 
     private var historySection: some View {
-        Section(radarText("已发送记录与条目备注")) {
-            Text(radarText("仅按明确引用关联后续备注，不表示已读、已处理或已执行。"))
-                .font(.caption).foregroundStyle(.secondary)
+        Section(radarText("往来记录")) {
             if let history = session.history {
-                Text(radarText("已读取记录数") + "：\(history.entries.count) / \(history.total)")
-                    .font(.caption).foregroundStyle(.secondary)
-                Text(radarText("本轮读取始于") + "：" + Date(timeIntervalSince1970: history.read_at).formatted())
-                    .font(.caption).foregroundStyle(.secondary)
-                if history.draft { Text(radarText("草稿备注没有独立评论时间或评论链接，入口指向原草稿。")) }
-                if history.entries.isEmpty { Text(radarText("来源当前没有可显示的记录。")) }
+                if history.entries.isEmpty {
+                    Text(radarText("暂无记录。")).foregroundStyle(.secondary)
+                }
                 ForEach(history.entries) { entry in
                     DisclosureGroup {
                         Text(entry.text_omitted ? radarText("原文较长，请在原条目查看完整内容。") : entry.text)
@@ -514,28 +509,25 @@ struct CollieRadarReplyView: View {
                         if let request = entry.request_id {
                             Text("request_id: " + request).font(.caption2).textSelection(.enabled)
                         }
-                        if let url = URL(string: entry.url) { Link(radarText("查看来源原文"), destination: url) }
+                        if let url = URL(string: entry.url) { Link(radarText("查看原文"), destination: url) }
                         if entry.kind == "reply" {
                             let feedback = history.feedback(for: entry)
-                            if feedback.isEmpty {
-                                Text(radarText("已读取范围内暂无对应处理反馈。"))
-                                    .font(.caption).foregroundStyle(.secondary)
-                            } else {
-                                DisclosureGroup(radarText("明确引用此回复的后续备注")) {
+                            if !feedback.isEmpty {
+                                DisclosureGroup(radarText("后续跟进")) {
                                     ForEach(feedback) { note in
                                         Text(note.text_omitted ? radarText("原文较长，请在原条目查看完整内容。") : note.text)
                                             .textSelection(.enabled)
                                         if let stamp = note.created_at {
                                             Text(Date(timeIntervalSince1970: stamp), format: .dateTime).font(.caption)
                                         }
-                                        if let url = URL(string: note.url) { Link(radarText("查看来源原文"), destination: url) }
+                                        if let url = URL(string: note.url) { Link(radarText("查看原文"), destination: url) }
                                     }
                                 }
                             }
                         }
                     } label: {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(radarText(entry.kind == "reply" ? "手机已发送（回执已核实）" : "条目备注"))
+                            Text(radarText(entry.kind == "reply" ? "已发送" : "备注"))
                                 .font(.subheadline.bold())
                             if let stamp = entry.created_at {
                                 Text(Date(timeIntervalSince1970: stamp), format: .dateTime).font(.caption)
@@ -547,15 +539,14 @@ struct CollieRadarReplyView: View {
                     if history.entries.count < 100 {
                         Button(radarText("加载更早记录")) { Task { await session.loadHistory(more: true) } }
                             .disabled(session.historyBusy)
-                    } else { Text(radarText("已达本次显示上限，请在原条目查看更早记录。")) }
+                    } else { Text(radarText("已达显示上限，请在原条目查看更早记录。")) }
                 }
             }
             if let notice = session.historyNotice {
                 Text(notice).foregroundStyle(.orange)
-                if session.history != nil { Text(radarText("以上为此前读取的记录，不代表当前最新结果。")) }
             }
-            if session.historyBusy { ProgressView(radarText("正在读取历史")) }
-            Button(radarText("重新读取历史")) { Task { await session.loadHistory() } }.disabled(session.historyBusy)
+            if session.historyBusy { ProgressView(radarText("正在读取…")) }
+            Button(radarText("刷新记录")) { Task { await session.loadHistory() } }.disabled(session.historyBusy)
             if let url = session.originalURL { Link(radarText("查看原条目"), destination: url) }
         }
     }
@@ -564,27 +555,28 @@ struct CollieRadarReplyView: View {
         NavigationStack {
             Form {
                 if !session.isCurrent {
-                    Section { Text(radarText("来源已变化，请关闭后重新打开；原输入仍保留。")) }
+                    Section { Text(radarText("数据源已变更，请关闭后重新打开。")) }
                 } else {
                     if let target = session.history?.target ?? session.target {
-                        Section(radarText("原条目")) {
+                        Section(radarText("当前事项")) {
                             Text(target.title).font(.headline)
-                            Text(target.url).font(.caption).textSelection(.enabled)
-                            Text(target.status)
-                            Text(target.next.isEmpty ? radarText("下一步待补") : target.next)
-                            Text(radarText("负责会话") + "：" + (target.owner_session.flatMap { $0.isEmpty ? nil : $0 } ?? radarText("待补")))
-                                .font(.caption)
+                            Text(target.status).font(.subheadline).foregroundStyle(.secondary)
+                            if !target.next.isEmpty {
+                                Text(target.next).font(.subheadline)
+                            }
+                            if let ownerSession = target.owner_session, !ownerSession.isEmpty {
+                                Text(radarText("会话") + "：" + ownerSession)
+                                    .font(.caption).foregroundStyle(.secondary)
+                            }
                             ForEach(Array(session.evidenceURLs.enumerated()), id: \.offset) { index, url in
                                 Link(radarText("查看证据") + (session.evidenceURLs.count > 1 ? " #\(index + 1)" : ""), destination: url)
                                     .font(.caption)
                             }
-                            Text(radarText("条目当前状态不代表某次回复已读或已处理。"))
-                                .font(.caption).foregroundStyle(.secondary)
                         }
                     }
                     historySection
                     if session.showsComposer {
-                        Section(radarText(session.recorded ? "本次已记录原文" : "写新回复")) {
+                        Section(radarText(session.recorded ? "已提交内容" : "回复内容")) {
                             if !session.recorded, !session.pending, !session.blocked, !session.quickReplies.isEmpty {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 8) {
@@ -642,8 +634,6 @@ struct CollieRadarReplyView: View {
                             }
                             TextEditor(text: $session.text).frame(minHeight: 160)
                                 .disabled(session.busy || session.pending || session.recorded || session.blocked)
-                            Text(radarText("最多 4000 字符；仅记录回复，不自动改状态或执行操作。"))
-                                .font(.footnote).foregroundStyle(.secondary)
                         }
                         if let notice = session.notice {
                             Section { Text(notice).foregroundStyle(session.recorded ? Color.secondary : Color.orange) }
@@ -654,40 +644,40 @@ struct CollieRadarReplyView: View {
                         Section {
                             if session.busy { ProgressView() }
                             if session.canSelectNext, let nextAction, let onSelectNext {
-                                Button(radarText("处理下一条待办") + "：" + nextAction.title) {
+                                Button(radarText("下一条") + "：" + nextAction.title) {
                                     onSelectNext(nextAction)
                                 }
                                 .disabled(session.busy)
                                 .accessibilityIdentifier("collie-radar-reply-next")
                             }
                             if session.pending {
-                                Button(radarText("查回回复结果")) { Task {
+                                Button(radarText("查回发送结果")) { Task {
                                     await session.check()
                                     if session.recorded { await session.loadHistory() }
                                 } }.disabled(session.busy)
                             } else if !session.recorded && !session.blocked {
-                                Button(radarText("重新读取条目")) { Task { await session.prepare() } }.disabled(session.busy)
-                                Button(radarText("确认并发送回复")) {
+                                Button(radarText("发送回复")) {
                                     authorizing = false
                                     confirming = true
                                 }.disabled(!session.canSend || voiceBusy)
+                                Button(radarText("刷新事项状态")) { Task { await session.prepare() } }.disabled(session.busy)
                                 if session.target?.authorization != nil {
-                                    Button(radarText("核对并记录本次授权")) {
+                                    Button(radarText("确认并记录本次授权")) {
                                         authorizing = true
                                         confirming = true
                                     }
                                     .disabled(!session.canAuthorize || voiceBusy)
                                     .accessibilityIdentifier("collie-radar-authorize")
-                                    Text(radarText("授权须填写备注并再次确认；普通回复不构成操作授权。"))
-                                        .font(.caption).foregroundStyle(.secondary)
                                 }
-                                Button(radarText("丢弃未发送草稿"), role: .destructive) { discarding = true }.disabled(session.busy || voiceBusy)
+                                if !session.text.isEmpty {
+                                    Button(radarText("清空草稿"), role: .destructive) { discarding = true }.disabled(session.busy || voiceBusy)
+                                }
                             }
                         }
                     }
                 }
             }
-            .navigationTitle(radarText("回复记录与反馈"))
+            .navigationTitle(radarText("回复与记录"))
             .toolbar { ToolbarItem(placement: .cancellationAction) {
                 Button(radarText(session.recorded ? "完成" : "关闭")) {
                     if session.preserveDraft() { dismiss() }

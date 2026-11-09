@@ -20,7 +20,7 @@ struct CollieVoiceNotesView: View {
             Section {
                 recordCard
             } footer: {
-                Text(notesText("录音在这台 iPhone 上转写。锁屏后会继续录音；转写在一呼打开时进行。交给工作台时分享转写文字，不包含录音文件。"))
+                Text(notesText("本机离线转写，锁屏后仍可继续录音。"))
             }
             if let notice = store.notice {
                 Section { Text(notice).font(.footnote).foregroundStyle(.orange) }
@@ -150,12 +150,12 @@ struct CollieVoiceNoteDetail: View {
             Section {
                 Picker(notesText("整理方式"), selection: $instruction) {
                     Text(notesText("会议纪要")).tag(Self.instructions[0])
-                    Text(notesText("要点和待办")).tag(Self.instructions[1])
-                    Text(notesText("整理成文字")).tag(Self.instructions[2])
+                    Text(notesText("要点与待办")).tag(Self.instructions[1])
+                    Text(notesText("润色成文")).tag(Self.instructions[2])
                 }
                 .disabled(isHandingOff || current.handOffAttempted == true)
                 if let onDirectInsert {
-                    Button(notesText("直接填入当前输入框")) {
+                    Button(notesText("填入当前输入框")) {
                         guard !isHandingOff, current.handOffAttempted != true else { return }
                         let text = instruction.isEmpty ? current.transcript : "\(instruction)\n\n\(current.transcript)"
                         let id = current.id
@@ -164,7 +164,7 @@ struct CollieVoiceNoteDetail: View {
                             defer { isHandingOff = false }
                             if await onDirectInsert(text, id) { onHandedOff() }
                             else {
-                                handOffError = notesText("未确认填入，请核对原输入框；原笔记保留，不自动重试或转存。")
+                                handOffError = notesText("未能填入，请先点选输入框或直接复制。")
                             }
                         }
                     }
@@ -173,7 +173,7 @@ struct CollieVoiceNoteDetail: View {
                     .accessibilityIdentifier("collie-note-direct-insert")
                 }
                 if let onSaveRadarDraft, !radarCandidates.isEmpty {
-                    Menu(notesText("存为雷达事项草稿")) {
+                    Menu(notesText("存为雷达草稿")) {
                         ForEach(radarCandidates) { candidate in
                             Button("\(candidate.workbenchName) · \(candidate.action.title)") {
                                 guard !isHandingOff, current.handOffAttempted != true else { return }
@@ -182,7 +182,7 @@ struct CollieVoiceNoteDetail: View {
                                 if onSaveRadarDraft(current.transcript, current.id, candidate) {
                                     onHandedOff()
                                 } else {
-                                    handOffError = notesText("无法存为雷达事项草稿，请确认目标事项仍在待处理且无未决回复。")
+                                    handOffError = notesText("无法保存草稿，请确认该事项仍在待处理列表。")
                                 }
                             }
                         }
@@ -191,7 +191,7 @@ struct CollieVoiceNoteDetail: View {
                               current.handOffAttempted == true || isHandingOff)
                     .accessibilityIdentifier("collie-note-radar-draft")
                 }
-                Button(notesText("存入工作台分享托盘")) {
+                Button(notesText("暂存到分享托盘")) {
                     guard !isHandingOff, current.handOffAttempted != true else { return }
                     isHandingOff = true
                     defer { isHandingOff = false }
@@ -203,14 +203,14 @@ struct CollieVoiceNoteDetail: View {
                 Button(notesText("复制全文")) { UIPasteboard.general.string = current.transcript }
                     .disabled(current.transcript.isEmpty)
                 if current.handOffAttempted == true {
-                    Text(notesText("这条记录已尝试交接或无法保存回执，请先核对目标内容；原文仍可复制。"))
-                        .font(.footnote).foregroundStyle(.orange)
+                    Text(notesText("已交接过一次，如需再次使用请直接复制全文。"))
+                        .font(.footnote).foregroundStyle(.secondary)
                 }
                 if let handOffError {
                     Text(handOffError).font(.footnote).foregroundStyle(.orange)
                 }
             } footer: {
-                Text(notesText("短笔记可显式填入打开记录时的工作台；超过3000字请存入分享托盘作为附件。每条记录只交接一次，结果不确定时先核对再手动复制。不会自动发送。"))
+                Text(notesText("填入或暂存后不会自动发送，可在工作台确认后再提交。"))
             }
         }
         .navigationTitle(current.createdAt.formatted(.dateTime.month().day().hour().minute()))

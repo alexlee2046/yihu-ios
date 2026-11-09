@@ -41,10 +41,10 @@ struct CollieVoiceprintSettingsView: View {
                         .accessibilityIdentifier("collie-voiceprint-capture-mode-warning")
                 }
             } header: { Text(voiceprintText("语音输入")) } footer: {
-                Text(voiceprintText("仅在语音填入前比对，不影响语音记录；有效语音不足约 1 秒才保留文字供手动确认，1–2 秒照常比对。声纹只保存在本机、不上传、不备份；可能误判，不可用于身份验证。"))
+                Text(voiceprintText("开启后，语音填入前会比对你的声音，减少旁人说话误触。声纹仅保存在本机。"))
             }
             Section {
-                Text(voiceprintText("按顺序念 6 句，每句约 5–10 秒。前 3 句在安静环境，后 3 句请换到不同的日常环境（例如窗边或室外），正常音量说话。旧声纹保留至六句全部录完。"))
+                Text(voiceprintText("按顺序朗读 6 句话（每句 5–10 秒）。前 3 句在安静室内录，后 3 句换到日常环境录。"))
                 if vectors.count < CollieVoiceprint.enrollmentPhraseCount {
                     Text(String(format: voiceprintText("第 %lld 句 · %@：%@"), Int64(vectors.count + 1), vectors.count < 3 ? voiceprintText("安静环境") : voiceprintText("另一日常环境"), CollieVoiceprint.prompts[vectors.count]))
                         .font(.headline)
@@ -61,18 +61,17 @@ struct CollieVoiceprintSettingsView: View {
                     Button(voiceprintText("重新录制六句")) { vectors = []; camVectors = []; status = nil }
                         .disabled(processing || requestingPermission)
                 }
-            } header: { Text(enrolled ? voiceprintText("重录声纹") : voiceprintText("录制声纹")) } footer: {
-                Text(voiceprintText("WeSpeaker 暂继续用于填入前确认；CAM++ 仅作本机对照候选。两模型的实际得分可在下方测试页查看，不能直接比较分数高低。"))
-            }
+            } header: { Text(enrolled ? voiceprintText("重录声纹") : voiceprintText("录制声纹")) }
             Section {
-                NavigationLink(voiceprintText("声纹测试（两模型得分）")) {
+                NavigationLink(voiceprintText("声纹匹配测试")) {
                     CollieVoiceprintTestView(voice: voice)
                 }
                 .disabled(recording || processing || requestingPermission || !vectors.isEmpty)
                 .accessibilityIdentifier("collie-voiceprint-test-link")
             } footer: {
-                Text(voiceprintText("使用本机麦克风录制不同环境的多句短语。显示每句与本人基准的余弦得分；不同模型没有统一阈值，需用真实本人及他人声音数据校准。"))
-                if !vectors.isEmpty { Text(voiceprintText("请先录完六句或重新开始，本轮未完成时不可进入测试页。")) }
+                if !vectors.isEmpty {
+                    Text(voiceprintText("请先录完 6 句或重新开始。"))
+                }
             }
             if enrolled || enabled {
                 Section {

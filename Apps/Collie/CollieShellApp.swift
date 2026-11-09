@@ -223,17 +223,11 @@ private struct CollieRootView: View {
     private var workbenchHeader: some View {
         VStack(spacing: 0) {
             HStack(spacing: 4) {
-                HStack(spacing: 7) {
-                    Circle()
-                        .fill(BenchsideStyle.accent)
-                        .frame(width: 7, height: 7)
-                        .accessibilityHidden(true)
-                    Text(selectedRadar.flatMap { id in radar.workbenches.first { $0.id == id }?.name } ?? radarText("一呼"))
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(BenchsideStyle.ink)
-                        .lineLimit(1)
-                }
-                .padding(.leading, 4)
+                Text(selectedRadar.flatMap { id in radar.workbenches.first { $0.id == id }?.name } ?? radarText("一呼"))
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(BenchsideStyle.ink)
+                    .lineLimit(1)
+                    .padding(.leading, 4)
                 Spacer(minLength: 8)
                 if let id = selectedRadar, let item = radar.workbenches.first(where: { $0.id == id }) {
                     CollieRadarActions(store: radar, item: item, presentation: radarPresentation)
@@ -258,12 +252,7 @@ private struct CollieRootView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 2)
         .background(BenchsideStyle.surface)
-        .overlay(alignment: .bottom) {
-            Rectangle()
-                .fill(BenchsideStyle.border.opacity(0.45))
-                .frame(height: 0.5)
-                .accessibilityHidden(true)
-        }
+        .overlay(alignment: .bottom) { Divider().accessibilityHidden(true) }
         .tint(BenchsideStyle.accent)
     }
 
@@ -1225,15 +1214,13 @@ struct CollieVoiceBar: View {
                     Circle()
                         .fill(BenchsideStyle.accent)
                         .frame(width: 52, height: 52)
-                        .overlay(Circle().strokeBorder(.white.opacity(0.28), lineWidth: 1))
-                        .overlay(Circle().stroke(BenchsideStyle.surface.opacity(0.85), lineWidth: 1.5))
                     Image(systemName: "mic.fill")
                         .font(.title3.weight(.semibold))
                         .foregroundStyle(BenchsideStyle.onAccent)
                 }
             }
             .frame(width: voice.isRecording ? 72 : 60, height: voice.isRecording ? 72 : 60)
-            .shadow(color: .black.opacity(voice.phase == .ready ? 0.16 : 0), radius: 10, y: 4)
+            .shadow(color: .black.opacity(voice.phase == .ready ? 0.14 : 0), radius: 8, y: 3)
             .contentShape(Circle())
             .gesture(holdGesture)
             .allowsHitTesting(voice.phase == .ready || voice.phase == .preparing || voice.isRecording)

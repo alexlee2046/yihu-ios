@@ -1207,13 +1207,13 @@ struct CollieNativeNotificationsSection: View {
     private var guidance: String {
         switch controller.status {
         case .disabled:
-            return notifyText("开启后，在当前工作台接收通用提醒。\n不会自动发送消息。")
+            return notifyText("开启后接收当前工作台的消息与进度提醒。")
         case .checkingService, .requestingPermission, .waitingForDeviceToken, .registering:
             return notifyText("正在准备本机通知，请稍候。")
         case .refreshing:
             return notifyText("正在确认当前工作台的通知设置。")
         case .enabled:
-            return notifyText("当前工作台会发送通用提醒。\n不会自动发送消息。")
+            return notifyText("接收当前工作台的消息与进度提醒。")
         case .authorizationDenied:
             return notifyText("请在 iPhone“设置”中允许一呼发送通知。")
         case .serviceUnavailable:

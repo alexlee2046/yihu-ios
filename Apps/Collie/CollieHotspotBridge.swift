@@ -166,27 +166,26 @@ final class CollieHotspotBridge: NSObject {
     var statusSummary: String {
         switch phase {
         case .disabled:
-            return hotspotText("未启用（开启后可在 Mac 断网且靠近时自动蓝牙唤醒热点）")
+            return hotspotText("未开启")
         case .bluetoothUnavailable(let reason):
             return reason
         case .scanning:
-            return hotspotText("正在通过蓝牙寻找附近的 Mac…")
+            return hotspotText("正在寻找附近的 Mac…")
         case .connecting(let host):
-            return String(format: hotspotText("正在蓝牙连接 %@…"), host)
-        case .monitoring(let host, let state, let rssi):
-            let rssiLabel = rssi.map { " (\($0) dBm)" } ?? ""
+            return String(format: hotspotText("正在连接 %@…"), host)
+        case .monitoring(let host, let state, _):
             switch state {
             case .online:
-                return String(format: hotspotText("%@ 已在线%@"), host, rssiLabel)
+                return String(format: hotspotText("%@ 已在线"), host)
             case .connecting:
-                return String(format: hotspotText("%@ 正在连接手机热点%@…"), host, rssiLabel)
+                return String(format: hotspotText("%@ 正在连接热点…"), host)
             case .offline:
-                return String(format: hotspotText("检测到 %@ 离线%@，准备唤醒热点"), host, rssiLabel)
+                return String(format: hotspotText("%@ 离线，准备唤醒热点"), host)
             }
         case .waking(let host):
-            return String(format: hotspotText("已向 %@ 发送蓝牙热点唤醒指令…"), host)
+            return String(format: hotspotText("正在唤醒 %@ 的热点连接…"), host)
         case .recovered(let host):
-            return String(format: hotspotText("%@ 已连上热点并恢复网络"), host)
+            return String(format: hotspotText("%@ 已连上热点"), host)
         }
     }
 

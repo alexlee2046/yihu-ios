@@ -109,18 +109,15 @@ struct CollieNearFieldCaptureSection: View {
                 .disabled(isBusy)
             CollieMicrophoneModeControl()
                 .accessibilityIdentifier("collie-microphone-mode-control")
-            Text(settingsText("使用 iOS 系统语音处理；开关变更从下一次录音生效。"))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
             if isRecording {
-                Label(settingsText("录音中也可从语音输入栏打开系统麦克风模式选择。"), systemImage: "mic.fill")
+                Label(settingsText("录音中也可在底部栏切换麦克风模式。"), systemImage: "mic.fill")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
         } header: {
             Text(settingsText("近场收音"))
         } footer: {
-            Text(settingsText("人声突显可减少背景声音，帮助突出附近的人声。系统麦克风模式由 iOS 控制。"))
+            Text(settingsText("开启后可减弱环境杂音，突出近处说话声。"))
         }
     }
 }
@@ -154,22 +151,13 @@ struct CollieRecognitionParametersSection: View {
                 }
             }
             .accessibilityIdentifier("collie-recognition-language")
-            Text(settingsText("中英混说请选择自动识别。指定中文或英文只提供单一语言提示，不保证准确率提高。"))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
             Toggle(settingsText("使用常用词提示"), isOn: $usesTerms)
                 .accessibilityIdentifier("collie-recognition-use-terms")
-            Text(settingsText("关闭后保留词表，但识别时不参考。可在上方“常用词”编辑提示词及优先顺序。"))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
             Stepper(value: boundedTokens, in: CollieRecognitionPreferences.tokenRange, step: 64) {
-                LabeledContent(settingsText("最大输出 token 数"), value: boundedTokens.wrappedValue.formatted())
+                LabeledContent(settingsText("单次输出上限"), value: boundedTokens.wrappedValue.formatted())
             }
             .accessibilityIdentifier("collie-recognition-max-tokens")
-            Text(settingsText("默认 448，可调 64–1024。不是字数；设得太低可能截断转写，调高只增加输出上限，仍受模型缓存限制，不会直接提高准确率。"))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Button(settingsText("恢复默认识别参数")) {
+            Button(settingsText("恢复默认参数")) {
                 language = CollieRecognitionPreferences.Language.automatic.rawValue
                 maxTokens = CollieRecognitionPreferences.defaultMaxTokens
                 usesTerms = true
@@ -179,7 +167,7 @@ struct CollieRecognitionParametersSection: View {
         } header: {
             Text(settingsText("识别参数"))
         } footer: {
-            Text(settingsText("自动保存在本机，从下一次识别生效，语音输入和语音笔记共用。恢复默认不改变常用词表或收音设置。当前模型固定使用 16 kHz 单声道及贪心解码，不支持温度、top-p、beam size 调节。"))
+            Text(settingsText("默认自动识别中英文。常说的专有名词可添加到上方「常用词」。"))
         }
         .disabled(isBusy)
     }
@@ -194,12 +182,12 @@ struct CollieVoiceModelSection: View {
         Section {
             NavigationLink(settingsText("只认我的声音")) { CollieVoiceprintSettingsView(voice: voice) }
                 .accessibilityIdentifier("collie-voiceprint-settings")
-            LabeledContent(settingsText("状态"), value: status)
+            LabeledContent(settingsText("离线模型"), value: status)
                 .accessibilityIdentifier("collie-voice-model-status")
             NavigationLink {
                 CollieRecognitionTermsView(voice: voice)
             } label: {
-                LabeledContent(settingsText("常用词"), value: voice.recognitionTerms.isEmpty ? settingsText("未使用") : voice.recognitionTerms.count.formatted())
+                LabeledContent(settingsText("常用词"), value: voice.recognitionTerms.isEmpty ? settingsText("未设置") : voice.recognitionTerms.count.formatted())
                     .frame(minHeight: 44)
             }
             .accessibilityIdentifier("collie-recognition-terms")
@@ -212,7 +200,7 @@ struct CollieVoiceModelSection: View {
         } header: {
             Text(settingsText("语音输入"))
         } footer: {
-            Text(settingsText("语音只在这台 iPhone 上识别，不会上传。"))
+            Text(settingsText("语音在本机离线识别，不会上传。"))
         }
         .confirmationDialog(settingsText("删除语音模型？"), isPresented: $confirmingRemoval, titleVisibility: .visible) {
             Button(settingsText("删除"), role: .destructive) { Task { await voice.removeModel() } }
@@ -229,7 +217,7 @@ struct CollieVoiceModelSection: View {
         case .downloading: String(format: settingsText("正在下载 %lld%%"), Int64(voice.downloadProgress * 100))
         case .failed where voice.failureKind == .modelDownload: settingsText("下载未完成")
         case .failed where voice.failureKind == .model: settingsText("无法加载")
-        default: settingsText("已下载（约 950 MB）")
+        default: settingsText("已就绪（约 950 MB）")
         }
     }
 }
@@ -254,7 +242,7 @@ struct CollieRecognitionTermsView: View {
             } header: {
                 Text(settingsText("每行一个"))
             } footer: {
-                Text(settingsText("识别时会参考这些词，适合常说的英文术语、产品名和人名。越靠前越优先；录音越长，能带上的词越少。清空即不使用。"))
+                Text(settingsText("适合常说的英文缩写、产品名和人名，越靠前越优先。"))
             }
             Section {
                 Button(settingsText("恢复默认词表")) {
@@ -305,7 +293,7 @@ struct CollieHermesPushSection: View {
         } header: {
             Text(settingsText("任务提醒"))
         } footer: {
-            Text(settingsText("在 Hermes WebUI 里交代的任务，会在锁屏和灵动岛显示进度，完成后提醒你。只包含工具名和状态，不含对话内容。需要开启 Tailscale。"))
+            Text(settingsText("在锁屏和灵动岛显示任务进度，完成后推送通知（需开启 Tailscale）。"))
         }
     }
 }
@@ -317,15 +305,15 @@ struct CollieHotspotBridgeSection: View {
 
     var body: some View {
         Section {
-            Toggle(settingsText("附近 Mac 断网自动唤醒热点"), isOn: $bridge.isEnabled)
+            Toggle(settingsText("靠近断网 Mac 时自动唤醒"), isOn: $bridge.isEnabled)
                 .accessibilityIdentifier("collie-hotspot-ble-toggle")
             Text(bridge.statusSummary)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .accessibilityIdentifier("collie-hotspot-ble-status")
-            Toggle(settingsText("前台唤醒时联动快捷指令广播热点"), isOn: $bridge.autoRunShortcutInForeground)
+            Toggle(settingsText("同时运行快捷指令开启热点"), isOn: $bridge.autoRunShortcutInForeground)
                 .accessibilityIdentifier("collie-hotspot-shortcut-toggle")
-            LabeledContent(settingsText("手机热点名称")) {
+            LabeledContent(settingsText("热点名称")) {
                 TextField(CollieHotspotBLEProtocol.defaultHotspotSSID, text: $bridge.hotspotSSID)
                     .multilineTextAlignment(.trailing)
                     .textInputAutocapitalization(.never)
@@ -333,7 +321,7 @@ struct CollieHotspotBridgeSection: View {
                     .accessibilityIdentifier("collie-hotspot-ssid")
             }
             if bridge.autoRunShortcutInForeground {
-                LabeledContent(settingsText("快捷指令名称")) {
+                LabeledContent(settingsText("快捷指令")) {
                     TextField(CollieHotspotBLEProtocol.defaultShortcutName, text: $bridge.shortcutName)
                         .multilineTextAlignment(.trailing)
                         .textInputAutocapitalization(.never)
@@ -344,14 +332,14 @@ struct CollieHotspotBridgeSection: View {
             Button {
                 bridge.triggerManualWake(runShortcut: bridge.autoRunShortcutInForeground)
             } label: {
-                Label(settingsText("立即通过蓝牙唤醒 Mac 热点"), systemImage: "personalhotspot")
+                Label(settingsText("立即唤醒附近 Mac"), systemImage: "personalhotspot")
                     .frame(minHeight: 44)
             }
             .accessibilityIdentifier("collie-hotspot-wake-now")
         } header: {
-            Text(settingsText("Mac 蓝牙热点唤醒"))
+            Text(settingsText("Mac 热点唤醒"))
         } footer: {
-            Text(settingsText("配合 Mac 端蓝牙守护进程使用。当手机靠近断网的 MacBook 时，通过 BLE 自动唤醒 Mac 的蓝牙与手机热点连接；若开启快捷指令联动，前台唤醒时会调用同名快捷指令刷新个人热点 Wi‑Fi 广播。"))
+            Text(settingsText("当断网的 MacBook 在附近时，通过蓝牙自动连回这台 iPhone 的个人热点。"))
         }
     }
 }

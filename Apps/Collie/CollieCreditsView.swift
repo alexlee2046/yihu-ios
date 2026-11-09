@@ -21,7 +21,7 @@ struct CollieCreditsView: View {
                     .font(.subheadline)
                     .accessibilityIdentifier("collie-app-version")
 
-                Text("一呼使用的第三方源码、模型与历史图标许可。远端工作台仍称 Collie。", tableName: "Yihu")
+                Text("第三方开源组件与模型许可声明。", tableName: "Yihu")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

@@ -47,7 +47,7 @@ struct CollieVoiceprintTestView: View {
     var body: some View {
         Form {
             Section {
-                Text(voiceprintText("请在安静和另一处日常环境各试几句。每句分别显示 WeSpeaker 与 CAM++ 对本机声纹的得分；两模型的分数不能直接互比。目前只使用 WeSpeaker 决定是否自动填入。"))
+                Text(voiceprintText("录制一句 1–10 秒的话，查看与本机声纹的匹配得分。"))
                     .fixedSize(horizontal: false, vertical: true)
                 if hasOldReference && !store.captureModeMatches(currentNearFieldEnabled: nearFieldEnabled) {
                     Text(CollieVoiceprint.captureModeChangedNotice)
@@ -58,23 +58,23 @@ struct CollieVoiceprintTestView: View {
                 if !hasOldReference {
                     Label(voiceprintText("请先返回录制本人声纹。"), systemImage: "exclamationmark.circle")
                 } else if !hasCAMReference {
-                    Label(voiceprintText("CAM++ 暂无可用基准（旧版三句声纹或候选模型录制失败）；WeSpeaker 仍可测试。"), systemImage: "info.circle")
+                    Label(voiceprintText("CAM++ 暂无基准，当前仅测试 WeSpeaker。"), systemImage: "info.circle")
                 }
-                Picker(voiceprintText("本句是谁说的"), selection: $speaker) {
+                Picker(voiceprintText("说话人"), selection: $speaker) {
                     ForEach(Speaker.allCases, id: \.self) { kind in Text(voiceprintText(kind.rawValue)).tag(kind) }
                 }
                 .pickerStyle(.segmented)
                 .disabled(recording || processing)
                 .accessibilityIdentifier("collie-voiceprint-test-speaker")
-                Button(recording ? voiceprintText("结束测试录音") : voiceprintText("录制一句并查看得分")) {
+                Button(recording ? voiceprintText("结束录音") : voiceprintText("开始试音")) {
                     if recording { stop() } else { start() }
                 }
                 .disabled(!recording && (!hasOldReference || requesting || processing || voice.canCancel || voice.phase == .delivering))
                 .accessibilityIdentifier("collie-voiceprint-test-record")
-                if processing { ProgressView(hasCAMReference ? voiceprintText("正在本机计算两模型得分…") : voiceprintText("正在本机计算 WeSpeaker 得分…")) }
+                if processing { ProgressView(voiceprintText("正在计算匹配度…")) }
                 if let status { Text(status).foregroundStyle(.secondary).accessibilityIdentifier("collie-voiceprint-test-status") }
             } header: { Text(voiceprintText("声纹测试")) } footer: {
-                Text(voiceprintText("建议单句说话约 1–10 秒；本页有效语音满 1 秒即可打分。开启声纹过滤后，1–2 秒照常由 WeSpeaker 判定，少于 1 秒保留文字供手动确认。本页只保留本次查看的分数，退出即清空，不上传声音或向量。"))
+                Text(voiceprintText("得分仅在当前页面显示，退出后自动清空。"))
             }
             if !rows.isEmpty {
                 Section(voiceprintText("本轮每句得分")) {
