@@ -9680,9 +9680,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/guides/radar-feed-url-boundary-preflight/
 
-场景指南 · 相关使用指南 Radar源URL为什么被拒？路径、查询和证据链接的不同边界 证据链接能点，不代表同一地址能作为Radar源 CollieRadarFeed.validate允许源URL带路径，但要求HTTPS、非空host、无内嵌用户名密码、无query和fragment；端口可省略，若显式指定则须在1至65535。证据URL另用parseSafeEvidenceURLs，规则不能互换。通过源形态校验仍不证明认证、可达、成功读取或快照有效，本页不新增源服务或凭据配置。 与证据URL准入和离线排障的分工 证据指南核可点候选，离线指南核失败状态；这里先核 配置为数据源的地址本身是否符合消费者边界 。不发网络请求、不输入真实凭据、不把有效URL当私有来源身份认证。 检查项 已核范围 人工复核 不应推断 首尾空白 先去首尾空白再解析 原配置与实际返回URL 清洗所有内部字符 协议与host HTTPS且host非空 实际来源身份另核 可信域白名单或TLS实测 path 源可有路径 路径是否实际提供源 浏览器可信origin规则直接代用 内嵌凭据 user/password必须空 沿既有获准认证流程 把密码塞URL就能使用 query/fragment 必须都不存在 即使只是view=demo也不同 证据链接允许就源也允许 端口 可省略；显式指定时为1…65535 服务可达性与访问权限 所有端口和来源已测试 返回内容 形态校验不是JSON解码 真实模型/日期/大小/身份 任意网页地址都是快照源 失败处理 保持原守卫 错误类别和原来源配置 自动改HTTP/换服务/公开私有源 合成地址比较 https://example.com/radar.json只是带path的形态示意；加?view=demo或#part会触及当前源校验的query/fragment限制。示例未访问，不代表实际源存在。 不要为了通过校验删掉真实认证条件或改用未批准公开服务。形态、认证、读取和内容验收是四类证据；其中一项通过不补齐其余，也不产生回复写权。 FAQ HTTPS链接可点就能当源吗？ 不能。证据候选和源URL有不同消费者规则，尤其query/fragment。 源必须只有域名不能有path吗？ 不是。该校验允许path，但路径是否实际有效仍需获准读取证据。 无敏感内容的query也允许吗？ 当前校验要求query不存在，不能按内容无害自行放宽。 通过validate是否证明认证成功？ 不证明。没有发出请求，身份、权限与真实响应另核。 地址失败能改HTTP绕过吗？ 不应。按原错误和获准配置处理，不绕HTTPS边界。 本页是否创建或访问了示例源？ 没有，未注册服务、输入凭据或发网络请求。 相关指南与源码 证据链接准入 · 离线与来源失败 · JSON消费者条件 · 开始 · 隐私 CollieRadarFeed与证据URL校验 · 来源与工作台边界
+场景指南 · 相关使用指南 Radar源URL为什么被拒？路径、查询和证据链接的不同边界 SYN-RFU-49 Radar源URL边界自检 SYNTHETIC_EXAMPLE · pending · not_run。源、证据、origin形态与身份/权限分账。 /samples/p28-radar-feed-url-boundary-preflight/README.md · /samples/p28-radar-feed-url-boundary-preflight/preflight.zh.json · /samples/p28-radar-feed-url-boundary-preflight/preflight.en.json ID 检查 预期/边界 U01 空串 feed=false; evidence=0; origin=false; shape only U02 空白 feed=false; evidence=0; origin=false; shape only U03 裸host feed=true; evidence=1; origin=true; shape only U04 根斜线 feed=true; evidence=1; origin=true; shape only U05 源可带path feed=true; evidence=1; origin=false; shape only U06 只去首尾空白 feed=true; evidence=1; origin=false; shape only U07 query被源拒绝 feed=false; evidence=1; origin=false; shape only U08 fragment被源拒绝 feed=false; evidence=1; origin=false; shape only U09 空query仍存在 feed=false; evidence=1; origin=false; shape only U10 空fragment仍存在 feed=false; evidence=1; origin=false; shape only U11 HTTP拒绝 feed=false; evidence=0; origin=false; shape only U12 缺host feed=false; evidence=0; origin=false; shape only U13 合成内嵌user拒绝 feed=false; evidence=0; origin=false; shape only U14 端口0 feed=false; evidence=0; origin=false; shape only U15 端口越界 feed=false; evidence=0; origin=false; shape only U16 端口上界 feed=true; evidence=1; origin=true; shape only U17 显式443 feed=true; evidence=1; origin=true; shape only U18 host大小写归一不同 feed=true; evidence=1; origin=true; shape only U19 编码逗号path feed=true; evidence=1; origin=false; shape only U20 原逗号path与分词 feed=true; evidence=1; origin=false; shape only U21 标签非源URL feed=false; evidence=0; origin=false; shape only U22 单URL与分号拆项 feed=true; evidence=2; origin=false; shape only U23 不是域白名单 feed=true; evidence=1; origin=false; shape only U24 编码字节在path feed=true; evidence=1; origin=false; shape only M01 形态不等身份 通过validate不证明TLS、来源身份、认证/读取/JSON或写权限，不把supportsWatchDrafts布尔当设备功能验收。 M02 拒绝不自动修复 query无论是否空/无害都不可自行删除认证条件来绕门；不改HTTP/端口、不公开私有来源。 M03 origin不等feed origin只允许空/root path并规范host/443；feed可有path但不认证，来源身份与账户存储另核。 M04 提醒有自己的门 提醒HTTPS/relay-host、origin验证、已保存来源不能由feed或证据准入互相授权；未知来源不新建服务器。 M05 pending不是送达 pending单槽、笔记/语音保护、connected后消费与导航/登录/业务回执分账，保留原文和未知副作用。 M06 不请求示例 example.invalid、localhost与SYN只是合成字符串，不DNS/HTTP/注册，不收私有源URL或凭据，不盲重试。 证据链接能点，不代表同一地址能作为Radar源 CollieRadarFeed.validate允许源URL带路径，但要求HTTPS、非空host、无内嵌用户名密码、无query和fragment；端口可省略，若显式指定则须在1至65535。证据URL另用parseSafeEvidenceURLs，规则不能互换。通过源形态校验仍不证明认证、可达、成功读取或快照有效，本页不新增源服务或凭据配置。 与证据URL准入和离线排障的分工 证据指南核可点候选，离线指南核失败状态；这里先核 配置为数据源的地址本身是否符合消费者边界 。不发网络请求、不输入真实凭据、不把有效URL当私有来源身份认证。 检查项 已核范围 人工复核 不应推断 首尾空白 先去首尾空白再解析 原配置与实际返回URL 清洗所有内部字符 协议与host HTTPS且host非空 实际来源身份另核 可信域白名单或TLS实测 path 源可有路径 路径是否实际提供源 浏览器可信origin规则直接代用 内嵌凭据 user/password必须空 沿既有获准认证流程 把密码塞URL就能使用 query/fragment 必须都不存在 即使只是view=demo也不同 证据链接允许就源也允许 端口 可省略；显式指定时为1…65535 服务可达性与访问权限 所有端口和来源已测试 返回内容 形态校验不是JSON解码 真实模型/日期/大小/身份 任意网页地址都是快照源 失败处理 保持原守卫 错误类别和原来源配置 自动改HTTP/换服务/公开私有源 合成地址比较 https://example.com/radar.json只是带path的形态示意；加?view=demo或#part会触及当前源校验的query/fragment限制。示例未访问，不代表实际源存在。 不要为了通过校验删掉真实认证条件或改用未批准公开服务。形态、认证、读取和内容验收是四类证据；其中一项通过不补齐其余，也不产生回复写权。 FAQ HTTPS链接可点就能当源吗？ 不能。证据候选和源URL有不同消费者规则，尤其query/fragment。 源必须只有域名不能有path吗？ 不是。该校验允许path，但路径是否实际有效仍需获准读取证据。 无敏感内容的query也允许吗？ 当前校验要求query不存在，不能按内容无害自行放宽。 通过validate是否证明认证成功？ 不证明。没有发出请求，身份、权限与真实响应另核。 地址失败能改HTTP绕过吗？ 不应。按原错误和获准配置处理，不绕HTTPS边界。 本页是否创建或访问了示例源？ 没有，未注册服务、输入凭据或发网络请求。 相关指南与源码 证据链接准入 · 离线与来源失败 · JSON消费者条件 · 开始 · 隐私 CollieRadarFeed与证据URL校验 · 来源与工作台边界
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>检查</th>
+<th>预期/边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>U01</td>
+<td>空串</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U02</td>
+<td>空白</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U03</td>
+<td>裸host</td>
+<td>feed=true; evidence=1; origin=true; shape only</td>
+</tr>
+<tr>
+<td>U04</td>
+<td>根斜线</td>
+<td>feed=true; evidence=1; origin=true; shape only</td>
+</tr>
+<tr>
+<td>U05</td>
+<td>源可带path</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U06</td>
+<td>只去首尾空白</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U07</td>
+<td>query被源拒绝</td>
+<td>feed=false; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U08</td>
+<td>fragment被源拒绝</td>
+<td>feed=false; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U09</td>
+<td>空query仍存在</td>
+<td>feed=false; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U10</td>
+<td>空fragment仍存在</td>
+<td>feed=false; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U11</td>
+<td>HTTP拒绝</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U12</td>
+<td>缺host</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U13</td>
+<td>合成内嵌user拒绝</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U14</td>
+<td>端口0</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U15</td>
+<td>端口越界</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U16</td>
+<td>端口上界</td>
+<td>feed=true; evidence=1; origin=true; shape only</td>
+</tr>
+<tr>
+<td>U17</td>
+<td>显式443</td>
+<td>feed=true; evidence=1; origin=true; shape only</td>
+</tr>
+<tr>
+<td>U18</td>
+<td>host大小写归一不同</td>
+<td>feed=true; evidence=1; origin=true; shape only</td>
+</tr>
+<tr>
+<td>U19</td>
+<td>编码逗号path</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U20</td>
+<td>原逗号path与分词</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U21</td>
+<td>标签非源URL</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U22</td>
+<td>单URL与分号拆项</td>
+<td>feed=true; evidence=2; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U23</td>
+<td>不是域白名单</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U24</td>
+<td>编码字节在path</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>形态不等身份</td>
+<td>通过validate不证明TLS、来源身份、认证/读取/JSON或写权限，不把supportsWatchDrafts布尔当设备功能验收。</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>拒绝不自动修复</td>
+<td>query无论是否空/无害都不可自行删除认证条件来绕门；不改HTTP/端口、不公开私有来源。</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>origin不等feed</td>
+<td>origin只允许空/root path并规范host/443；feed可有path但不认证，来源身份与账户存储另核。</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>提醒有自己的门</td>
+<td>提醒HTTPS/relay-host、origin验证、已保存来源不能由feed或证据准入互相授权；未知来源不新建服务器。</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>pending不是送达</td>
+<td>pending单槽、笔记/语音保护、connected后消费与导航/登录/业务回执分账，保留原文和未知副作用。</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>不请求示例</td>
+<td>example.invalid、localhost与SYN只是合成字符串，不DNS/HTTP/注册，不收私有源URL或凭据，不盲重试。</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
@@ -9749,9 +9911,171 @@ Parameter/comparison tables (HTML) / 参数对照表：
 
 Canonical: https://getyihu.com/en/guides/radar-feed-url-boundary-preflight/
 
-All scenarios · Related practical guide Why a Radar feed URL is rejected: paths, queries and evidence-link differences A clickable evidence URL is not automatically a valid Radar feed CollieRadarFeed.validate permits a path but requires HTTPS, nonempty host, no embedded user/password, no query/fragment. The port may be omitted; if explicitly specified, it must be within 1–65535. Evidence uses separate parseSafeEvidenceURLs rules. Passing feed shape proves neither authentication, reachability, a successful read nor valid snapshot. No source service or credential setup is added. Different from evidence admission and offline diagnosis Evidence admission checks clickable candidates; offline review checks failures. Here whether a configured source address meets consumer boundaries comes first. No network request or real credentials are used, and shape is not private-source identity verification. Check Verified scope Manual review Not established Edge whitespace Trim before parsing Original configuration/returned URL Every internal character cleansed Scheme/host HTTPS/nonempty host Actual source identity Trusted-domain allowlist or TLS test Path Allowed on feeds Actual source endpoint Browser-origin rules interchangeable Credentials No user/password Existing authorized auth process Passwords in URLs are supported Query/fragment Both absent Even view=demo differs Evidence allowance transfers to feeds Port Optional; if specified, 1…65535 Access/reachability Every port/source tested Response URL validation is not JSON decoding Model/date/size/identity Any web page is a snapshot Failure Original guards remain Category/original configuration Automatic HTTP/other service/private disclosure Synthetic address comparison https://example.com/radar.json illustrates a path only. Adding ?view=demo or #part meets current query/fragment rejection conditions. Nothing is fetched and no real source is established. Do not remove real authentication conditions or use an unapproved public service to pass a check. Shape, authentication, reading and content acceptance are separate; none silently supplies the others or write access. FAQ Can every clickable HTTPS link be a source? No. Consumers differ, especially query/fragment rules. Must a feed be a bare domain without path? No. A path is allowed; actual endpoint validity still needs authorized evidence. Is a harmless query allowed? The current validator requires no query, irrespective of assumed harmlessness. Does validate prove authentication? No request occurs there. Identity, permissions and response remain separate. Can failure be bypassed with HTTP? Do not bypass HTTPS; inspect actual errors/authorized configuration. Was the example source created or fetched? No service registration, credentials or network request occurred. Reading and source Evidence URL admission · Offline/source failures · JSON consumer conditions · Start · Privacy Feed/evidence URL validators · Source/workbench boundaries
+All scenarios · Related practical guide Why a Radar feed URL is rejected: paths, queries and evidence-link differences SYN-RFU-49 Radar feed URL preflight SYNTHETIC_EXAMPLE · pending · not_run. Feed/evidence/origin shapes are not identity or authority. /samples/p28-radar-feed-url-boundary-preflight/README.md · /samples/p28-radar-feed-url-boundary-preflight/preflight.zh.json · /samples/p28-radar-feed-url-boundary-preflight/preflight.en.json ID Check Expectation/boundary U01 Empty feed=false; evidence=0; origin=false; shape only U02 Whitespace feed=false; evidence=0; origin=false; shape only U03 Bare host feed=true; evidence=1; origin=true; shape only U04 Root slash feed=true; evidence=1; origin=true; shape only U05 Feed path allowed feed=true; evidence=1; origin=false; shape only U06 Edge whitespace trim feed=true; evidence=1; origin=false; shape only U07 Feed rejects query feed=false; evidence=1; origin=false; shape only U08 Feed rejects fragment feed=false; evidence=1; origin=false; shape only U09 Empty query still present feed=false; evidence=1; origin=false; shape only U10 Empty fragment still present feed=false; evidence=1; origin=false; shape only U11 Reject HTTP feed=false; evidence=0; origin=false; shape only U12 Missing host feed=false; evidence=0; origin=false; shape only U13 Reject synthetic user info feed=false; evidence=0; origin=false; shape only U14 Port zero feed=false; evidence=0; origin=false; shape only U15 Out-of-range port feed=false; evidence=0; origin=false; shape only U16 Port upper bound feed=true; evidence=1; origin=true; shape only U17 Explicit 443 feed=true; evidence=1; origin=true; shape only U18 Host normalization differs feed=true; evidence=1; origin=true; shape only U19 Encoded comma path feed=true; evidence=1; origin=false; shape only U20 Comma path versus tokenization feed=true; evidence=1; origin=false; shape only U21 Label is not feed URL feed=false; evidence=0; origin=false; shape only U22 One URL versus semicolon tokens feed=true; evidence=2; origin=false; shape only U23 Not a domain allowlist feed=true; evidence=1; origin=false; shape only U24 Encoded bytes in path feed=true; evidence=1; origin=false; shape only M01 Shape is not identity validate proves neither TLS, identity, auth/read/JSON nor write authority; supportsWatchDrafts is not device acceptance. M02 Rejection is not auto-repair Never remove real authentication/query conditions to bypass a gate, even empty/assumed harmless; no HTTP/port rewrite or private-source publication. M03 Origin is not feed Origin allows empty/root paths and normalizes host/443; feeds allow paths without authenticating. Review source/account/storage separately. M04 Reminders have their own gate Reminder HTTPS/relay-host, origin validation and saved origins are not authorized by feed/evidence admission; unknown origins never add a server. M05 Pending is not delivery Keep pending slot, note/speech guards, connected consumption and navigation/login/business receipt separate; retain originals and unknown effects. M06 Do not fetch examples example.invalid, localhost and SYN are synthetic strings: no DNS/HTTP/registration, private-source URL/credential collection or blind retry. A clickable evidence URL is not automatically a valid Radar feed CollieRadarFeed.validate permits a path but requires HTTPS, nonempty host, no embedded user/password, no query/fragment. The port may be omitted; if explicitly specified, it must be within 1–65535. Evidence uses separate parseSafeEvidenceURLs rules. Passing feed shape proves neither authentication, reachability, a successful read nor valid snapshot. No source service or credential setup is added. Different from evidence admission and offline diagnosis Evidence admission checks clickable candidates; offline review checks failures. Here whether a configured source address meets consumer boundaries comes first. No network request or real credentials are used, and shape is not private-source identity verification. Check Verified scope Manual review Not established Edge whitespace Trim before parsing Original configuration/returned URL Every internal character cleansed Scheme/host HTTPS/nonempty host Actual source identity Trusted-domain allowlist or TLS test Path Allowed on feeds Actual source endpoint Browser-origin rules interchangeable Credentials No user/password Existing authorized auth process Passwords in URLs are supported Query/fragment Both absent Even view=demo differs Evidence allowance transfers to feeds Port Optional; if specified, 1…65535 Access/reachability Every port/source tested Response URL validation is not JSON decoding Model/date/size/identity Any web page is a snapshot Failure Original guards remain Category/original configuration Automatic HTTP/other service/private disclosure Synthetic address comparison https://example.com/radar.json illustrates a path only. Adding ?view=demo or #part meets current query/fragment rejection conditions. Nothing is fetched and no real source is established. Do not remove real authentication conditions or use an unapproved public service to pass a check. Shape, authentication, reading and content acceptance are separate; none silently supplies the others or write access. FAQ Can every clickable HTTPS link be a source? No. Consumers differ, especially query/fragment rules. Must a feed be a bare domain without path? No. A path is allowed; actual endpoint validity still needs authorized evidence. Is a harmless query allowed? The current validator requires no query, irrespective of assumed harmlessness. Does validate prove authentication? No request occurs there. Identity, permissions and response remain separate. Can failure be bypassed with HTTP? Do not bypass HTTPS; inspect actual errors/authorized configuration. Was the example source created or fetched? No service registration, credentials or network request occurred. Reading and source Evidence URL admission · Offline/source failures · JSON consumer conditions · Start · Privacy Feed/evidence URL validators · Source/workbench boundaries
 
 Parameter/comparison tables (HTML) / 参数对照表：
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Check</th>
+<th>Expectation/boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>U01</td>
+<td>Empty</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U02</td>
+<td>Whitespace</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U03</td>
+<td>Bare host</td>
+<td>feed=true; evidence=1; origin=true; shape only</td>
+</tr>
+<tr>
+<td>U04</td>
+<td>Root slash</td>
+<td>feed=true; evidence=1; origin=true; shape only</td>
+</tr>
+<tr>
+<td>U05</td>
+<td>Feed path allowed</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U06</td>
+<td>Edge whitespace trim</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U07</td>
+<td>Feed rejects query</td>
+<td>feed=false; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U08</td>
+<td>Feed rejects fragment</td>
+<td>feed=false; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U09</td>
+<td>Empty query still present</td>
+<td>feed=false; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U10</td>
+<td>Empty fragment still present</td>
+<td>feed=false; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U11</td>
+<td>Reject HTTP</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U12</td>
+<td>Missing host</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U13</td>
+<td>Reject synthetic user info</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U14</td>
+<td>Port zero</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U15</td>
+<td>Out-of-range port</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U16</td>
+<td>Port upper bound</td>
+<td>feed=true; evidence=1; origin=true; shape only</td>
+</tr>
+<tr>
+<td>U17</td>
+<td>Explicit 443</td>
+<td>feed=true; evidence=1; origin=true; shape only</td>
+</tr>
+<tr>
+<td>U18</td>
+<td>Host normalization differs</td>
+<td>feed=true; evidence=1; origin=true; shape only</td>
+</tr>
+<tr>
+<td>U19</td>
+<td>Encoded comma path</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U20</td>
+<td>Comma path versus tokenization</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U21</td>
+<td>Label is not feed URL</td>
+<td>feed=false; evidence=0; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U22</td>
+<td>One URL versus semicolon tokens</td>
+<td>feed=true; evidence=2; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U23</td>
+<td>Not a domain allowlist</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>U24</td>
+<td>Encoded bytes in path</td>
+<td>feed=true; evidence=1; origin=false; shape only</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>Shape is not identity</td>
+<td>validate proves neither TLS, identity, auth/read/JSON nor write authority; supportsWatchDrafts is not device acceptance.</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>Rejection is not auto-repair</td>
+<td>Never remove real authentication/query conditions to bypass a gate, even empty/assumed harmless; no HTTP/port rewrite or private-source publication.</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>Origin is not feed</td>
+<td>Origin allows empty/root paths and normalizes host/443; feeds allow paths without authenticating. Review source/account/storage separately.</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>Reminders have their own gate</td>
+<td>Reminder HTTPS/relay-host, origin validation and saved origins are not authorized by feed/evidence admission; unknown origins never add a server.</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>Pending is not delivery</td>
+<td>Keep pending slot, note/speech guards, connected consumption and navigation/login/business receipt separate; retain originals and unknown effects.</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>Do not fetch examples</td>
+<td>example.invalid, localhost and SYN are synthetic strings: no DNS/HTTP/registration, private-source URL/credential collection or blind retry.</td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <thead>
