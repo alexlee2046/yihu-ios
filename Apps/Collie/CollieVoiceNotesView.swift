@@ -65,6 +65,18 @@ struct CollieVoiceNotesView: View {
                 ProgressView(value: Double(store.recorder.level))
                     .tint(.red)
                     .accessibilityLabel(notesText("麦克风音量"))
+            } else {
+                HStack(spacing: 12) {
+                    BenchsideStyle.rowBadge("waveform")
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(notesText("长语音闪念"))
+                            .font(.subheadline.weight(.semibold))
+                        Text(notesText("本机离线转写，锁屏可持续录音"))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                }
             }
             Button {
                 Task {
@@ -74,37 +86,49 @@ struct CollieVoiceNotesView: View {
                 Label(store.recorder.isRecording ? notesText("结束记录") : notesText("开始记录"),
                       systemImage: store.recorder.isRecording ? "stop.fill" : "record.circle")
                     .font(.headline)
-                    .frame(maxWidth: .infinity, minHeight: 52)
+                    .frame(maxWidth: .infinity, minHeight: 50)
             }
             .buttonStyle(.borderedProminent)
+            .buttonBorderShape(.capsule)
             .tint(store.recorder.isRecording ? .red : BenchsideStyle.accent)
             .accessibilityIdentifier("collie-note-record")
         }
-        .padding(.vertical, 8)
+        .padding(.vertical, 6)
     }
 
     private func row(_ note: CollieVoiceNote) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(note.createdAt, format: .dateTime.month().day().hour().minute())
-                    .font(.body.weight(.medium))
-                Spacer()
-                Text(Self.clock(note.duration)).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
-            }
-            switch note.status {
-            case .done:
-                Text(note.transcript).font(.caption).foregroundStyle(.secondary).lineLimit(2)
-            case .transcribing, .pending:
-                ProgressView(value: store.progress[note.id] ?? 0) {
-                    Text(note.status == .pending ? notesText("等待转写") : notesText("正在转写")).font(.caption)
+        HStack(alignment: .top, spacing: 12) {
+            BenchsideStyle.rowBadge(
+                note.status == .done ? "waveform.circle.fill" : (note.status == .failed ? "exclamationmark.circle" : "ellipsis.circle"),
+                tint: note.status == .failed ? .red : BenchsideStyle.accent
+            )
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text(note.createdAt, format: .dateTime.month().day().hour().minute())
+                        .font(.subheadline.weight(.semibold))
+                    Spacer()
+                    Text(Self.clock(note.duration))
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 2)
+                        .background(Capsule().fill(BenchsideStyle.surfaceMuted))
                 }
-            case .failed:
-                Text(note.failure ?? notesText("转写失败")).font(.caption).foregroundStyle(.red)
-            case .recording:
-                EmptyView()
+                switch note.status {
+                case .done:
+                    Text(note.transcript).font(.footnote).foregroundStyle(.secondary).lineLimit(2)
+                case .transcribing, .pending:
+                    ProgressView(value: store.progress[note.id] ?? 0) {
+                        Text(note.status == .pending ? notesText("等待转写") : notesText("正在转写")).font(.caption)
+                    }
+                case .failed:
+                    Text(note.failure ?? notesText("转写失败")).font(.caption).foregroundStyle(.red)
+                case .recording:
+                    EmptyView()
+                }
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 4)
     }
 
     static func clock(_ seconds: TimeInterval) -> String {
@@ -155,7 +179,7 @@ struct CollieVoiceNoteDetail: View {
                 }
                 .disabled(isHandingOff || current.handOffAttempted == true)
                 if let onDirectInsert {
-                    Button(notesText("填入当前输入框")) {
+                    Button {
                         guard !isHandingOff, current.handOffAttempted != true else { return }
                         let text = instruction.isEmpty ? current.transcript : "\(instruction)\n\n\(current.transcript)"
                         let id = current.id
@@ -167,13 +191,16 @@ struct CollieVoiceNoteDetail: View {
                                 handOffError = notesText("未能填入，请先点选输入框或直接复制。")
                             }
                         }
+                    } label: {
+                        Label(notesText("填入当前输入框"), systemImage: "arrow.up.doc")
+                            .frame(minHeight: 44)
                     }
                     .disabled(current.status != .done || current.transcript.count > 3_000 ||
                               current.handOffAttempted == true || isHandingOff)
                     .accessibilityIdentifier("collie-note-direct-insert")
                 }
                 if let onSaveRadarDraft, !radarCandidates.isEmpty {
-                    Menu(notesText("存为雷达草稿")) {
+                    Menu {
                         ForEach(radarCandidates) { candidate in
                             Button("\(candidate.workbenchName) · \(candidate.action.title)") {
                                 guard !isHandingOff, current.handOffAttempted != true else { return }
@@ -186,22 +213,33 @@ struct CollieVoiceNoteDetail: View {
                                 }
                             }
                         }
+                    } label: {
+                        Label(notesText("存为雷达草稿"), systemImage: "scope")
+                            .frame(minHeight: 44)
                     }
                     .disabled(current.status != .done || current.transcript.unicodeScalars.count > 4_000 ||
                               current.handOffAttempted == true || isHandingOff)
                     .accessibilityIdentifier("collie-note-radar-draft")
                 }
-                Button(notesText("暂存到分享托盘")) {
+                Button {
                     guard !isHandingOff, current.handOffAttempted != true else { return }
                     isHandingOff = true
                     defer { isHandingOff = false }
                     handOffError = store.handOff(current, instruction: instruction, inbox: CollieShareInbox.shared())
                     if handOffError == nil { onHandedOff() }
+                } label: {
+                    Label(notesText("暂存到分享托盘"), systemImage: "tray.and.arrow.down")
+                        .frame(minHeight: 44)
                 }
                 .disabled(current.status != .done || current.handOffAttempted == true || isHandingOff)
                 .accessibilityIdentifier("collie-note-handoff")
-                Button(notesText("复制全文")) { UIPasteboard.general.string = current.transcript }
-                    .disabled(current.transcript.isEmpty)
+                Button {
+                    UIPasteboard.general.string = current.transcript
+                } label: {
+                    Label(notesText("复制全文"), systemImage: "doc.on.doc")
+                        .frame(minHeight: 44)
+                }
+                .disabled(current.transcript.isEmpty)
                 if current.handOffAttempted == true {
                     Text(notesText("已交接过一次，如需再次使用请直接复制全文。"))
                         .font(.footnote).foregroundStyle(.secondary)

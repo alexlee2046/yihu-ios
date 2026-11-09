@@ -307,7 +307,7 @@ struct CollieRadarView: View {
                 }
             }
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
+                HStack(spacing: 8) {
                     Picker(radarText("筛选项目"), selection: projectBinding) {
                         Text(radarText("所有项目")).tag("")
                         ForEach(snapshot.projectNames, id: \.self) { key in
@@ -318,7 +318,9 @@ struct CollieRadarView: View {
                         }
                     }
                     .pickerStyle(.menu)
+                    .padding(.horizontal, 8)
                     .frame(minHeight: 44)
+                    .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                     Picker(radarText("筛选状态"), selection: statusBinding) {
                         Text(radarText("所有状态")).tag("")
                         ForEach(snapshot.allTaskStatuses, id: \.self) { status in
@@ -329,7 +331,9 @@ struct CollieRadarView: View {
                         }
                     }
                     .pickerStyle(.menu)
+                    .padding(.horizontal, 8)
                     .frame(minHeight: 44)
+                    .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .accessibilityIdentifier("collie-radar-status-filter")
                     Picker(radarText("筛选优先级"), selection: priorityBinding) {
                         Text(radarText("所有优先级")).tag("")
@@ -339,7 +343,9 @@ struct CollieRadarView: View {
                         }
                     }
                     .pickerStyle(.menu)
+                    .padding(.horizontal, 8)
                     .frame(minHeight: 44)
+                    .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .accessibilityIdentifier("collie-radar-priority-filter")
                 }
             }
@@ -347,10 +353,14 @@ struct CollieRadarView: View {
                 Toggle(radarText("含已完成"), isOn: historyBinding)
                     .font(.subheadline)
                     .accessibilityIdentifier("collie-radar-history")
+                Divider().frame(height: 18)
                 Toggle(radarText("只看我的"), isOn: mentioningMeBinding)
                     .font(.subheadline)
                     .accessibilityIdentifier("collie-radar-mentioning-me")
             }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
         }
         if display.page == .overview {
             if snapshot.colab_unavailable == true {
@@ -533,19 +543,19 @@ struct CollieRadarView: View {
     }
 
     private func metric(_ title: String, count: Int, icon: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
             Label(title, systemImage: icon)
-                .font(.caption)
+                .font(.caption.weight(.medium))
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
             Text(count, format: .number)
-                .font(.title2.weight(.semibold).monospacedDigit())
+                .font(.system(.title2, design: .rounded).weight(.bold).monospacedDigit())
                 .foregroundStyle(count > 0 ? BenchsideStyle.ink : BenchsideStyle.secondary)
         }
-        .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
+        .frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 12))
+        .background(BenchsideStyle.surfaceRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     @ViewBuilder
@@ -559,7 +569,7 @@ struct CollieRadarView: View {
         let state = CollieRadarTaskState.classify(status)
         let text = status.trimmingCharacters(in: .whitespacesAndNewlines)
         return Label(text.isEmpty ? "—" : text, systemImage: state.icon)
-            .font(.caption)
+            .font(.caption.weight(.medium))
             .foregroundStyle(state == .blocked ? Color.orange : state == .progressing ? BenchsideStyle.accent : BenchsideStyle.secondary)
     }
 
@@ -568,11 +578,14 @@ struct CollieRadarView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 6) {
                 Text(snapshot.projectName(action.project))
-                    .font(.caption.weight(.medium))
+                    .font(.caption2.weight(.semibold))
                     .foregroundStyle(.secondary)
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 2.5)
+                    .background(BenchsideStyle.surfaceMuted, in: RoundedRectangle(cornerRadius: 5, style: .continuous))
                 if let priority = action.priority?.trimmingCharacters(in: .whitespacesAndNewlines), !priority.isEmpty {
-                    Text("· " + priority)
-                        .font(.caption)
+                    Text(priority)
+                        .font(.caption2.weight(.semibold).monospaced())
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
@@ -586,13 +599,22 @@ struct CollieRadarView: View {
             if display.showNext {
                 let nextText = action.next.trimmingCharacters(in: .whitespacesAndNewlines)
                 if !nextText.isEmpty {
-                    Text(nextText).font(.footnote).foregroundStyle(.secondary)
+                    HStack(alignment: .top, spacing: 8) {
+                        Capsule()
+                            .fill(BenchsideStyle.border)
+                            .frame(width: 2)
+                        Text(nextText)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
             }
             HStack(spacing: 10) {
                 if ["等你决策", "等你验收"].contains(action.status ?? ""), action.id != nil {
                     Button(radarText(action.status == "等你决策" ? "回复决策" : "提交验收")) { replying = action }
                         .buttonStyle(.borderedProminent)
+                        .buttonBorderShape(.capsule)
                         .controlSize(.small)
                         .frame(minHeight: 44)
                         .disabled(snapshot.reply_supported != true || record?.source.isEmpty != false)
@@ -600,6 +622,7 @@ struct CollieRadarView: View {
                 if let id = action.id, !id.isEmpty {
                     Button(radarText("查看记录")) { replying = action }
                         .buttonStyle(.bordered)
+                        .buttonBorderShape(.capsule)
                         .controlSize(.small)
                         .frame(minHeight: 44)
                         .disabled(record?.source.isEmpty != false)

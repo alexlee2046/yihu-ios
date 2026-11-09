@@ -20,12 +20,25 @@ struct CollieLinkSettingsView: View {
     var body: some View {
         List {
             Section {
-                Text(session.baseURL.absoluteString)
-                    .textSelection(.enabled)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityIdentifier("collie-current-workbench")
+                HStack(spacing: 12) {
+                    BenchsideStyle.rowBadge("globe", tint: session.errorMessage == nil ? BenchsideStyle.accent : .orange)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(settings.name(for: session.baseURL))
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(BenchsideStyle.ink)
+                        Text(session.baseURL.absoluteString)
+                            .font(.caption.monospaced())
+                            .foregroundStyle(.secondary)
+                            .textSelection(.enabled)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("collie-current-workbench")
+                    }
+                    Spacer()
+                }
+                .padding(.vertical, 2)
                 if session.isLoading {
                     Label(settingsText("正在连接…"), systemImage: "arrow.clockwise")
+                        .font(.footnote)
                         .foregroundStyle(.secondary)
                 } else if let errorMessage = session.errorMessage {
                     Label(errorMessage, systemImage: "exclamationmark.triangle")
@@ -35,7 +48,7 @@ struct CollieLinkSettingsView: View {
                         session.reload()
                     } label: {
                         Label(settingsText("重新加载"), systemImage: "arrow.clockwise")
-                            .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                     }
                     .accessibilityIdentifier("collie-reconnect")
                 }
@@ -104,9 +117,11 @@ struct CollieNearFieldCaptureSection: View {
 
     var body: some View {
         Section {
-            Toggle(settingsText("近场收音"), isOn: $isEnabled)
-                .accessibilityIdentifier("collie-near-field-capture-toggle")
-                .disabled(isBusy)
+            Toggle(isOn: $isEnabled) {
+                Label(settingsText("近场收音"), systemImage: "mic.badge.plus")
+            }
+            .accessibilityIdentifier("collie-near-field-capture-toggle")
+            .disabled(isBusy)
             CollieMicrophoneModeControl()
                 .accessibilityIdentifier("collie-microphone-mode-control")
             if isRecording {
@@ -145,24 +160,35 @@ struct CollieRecognitionParametersSection: View {
 
     var body: some View {
         Section {
-            Picker(settingsText("识别语言"), selection: selectedLanguage) {
+            Picker(selection: selectedLanguage) {
                 ForEach(CollieRecognitionPreferences.Language.allCases) { option in
                     Text(option.label).tag(option)
                 }
+            } label: {
+                Label(settingsText("识别语言"), systemImage: "globe.asia.australia")
             }
             .accessibilityIdentifier("collie-recognition-language")
-            Toggle(settingsText("使用常用词提示"), isOn: $usesTerms)
-                .accessibilityIdentifier("collie-recognition-use-terms")
+            Toggle(isOn: $usesTerms) {
+                Label(settingsText("使用常用词提示"), systemImage: "text.badge.checkmark")
+            }
+            .accessibilityIdentifier("collie-recognition-use-terms")
             Stepper(value: boundedTokens, in: CollieRecognitionPreferences.tokenRange, step: 64) {
-                LabeledContent(settingsText("单次输出上限"), value: boundedTokens.wrappedValue.formatted())
+                LabeledContent {
+                    Text(boundedTokens.wrappedValue.formatted())
+                        .monospacedDigit()
+                } label: {
+                    Label(settingsText("单次输出上限"), systemImage: "number")
+                }
             }
             .accessibilityIdentifier("collie-recognition-max-tokens")
-            Button(settingsText("恢复默认参数")) {
+            Button {
                 language = CollieRecognitionPreferences.Language.automatic.rawValue
                 maxTokens = CollieRecognitionPreferences.defaultMaxTokens
                 usesTerms = true
+            } label: {
+                Label(settingsText("恢复默认参数"), systemImage: "arrow.counterclockwise")
+                    .frame(minHeight: 44)
             }
-            .frame(minHeight: 44)
             .accessibilityIdentifier("collie-recognition-reset")
         } header: {
             Text(settingsText("识别参数"))
@@ -180,22 +206,37 @@ struct CollieVoiceModelSection: View {
 
     var body: some View {
         Section {
-            NavigationLink(settingsText("只认我的声音")) { CollieVoiceprintSettingsView(voice: voice) }
-                .accessibilityIdentifier("collie-voiceprint-settings")
-            LabeledContent(settingsText("离线模型"), value: status)
-                .accessibilityIdentifier("collie-voice-model-status")
+            NavigationLink {
+                CollieVoiceprintSettingsView(voice: voice)
+            } label: {
+                Label(settingsText("只认我的声音"), systemImage: "waveform.badge.person.crop")
+                    .frame(minHeight: 44)
+            }
+            .accessibilityIdentifier("collie-voiceprint-settings")
+            LabeledContent {
+                Text(status)
+            } label: {
+                Label(settingsText("离线模型"), systemImage: "cpu")
+            }
+            .accessibilityIdentifier("collie-voice-model-status")
             NavigationLink {
                 CollieRecognitionTermsView(voice: voice)
             } label: {
-                LabeledContent(settingsText("常用词"), value: voice.recognitionTerms.isEmpty ? settingsText("未设置") : voice.recognitionTerms.count.formatted())
-                    .frame(minHeight: 44)
+                LabeledContent {
+                    Text(voice.recognitionTerms.isEmpty ? settingsText("未设置") : voice.recognitionTerms.count.formatted())
+                } label: {
+                    Label(settingsText("常用词"), systemImage: "character.book.closed")
+                }
+                .frame(minHeight: 44)
             }
             .accessibilityIdentifier("collie-recognition-terms")
             if voice.phase == .ready, !voice.canRetryDelivery {
-                Button(settingsText("删除语音模型"), role: .destructive) { confirmingRemoval = true }
-                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                    .contentShape(Rectangle())
-                    .accessibilityIdentifier("collie-voice-model-remove")
+                Button(role: .destructive) { confirmingRemoval = true } label: {
+                    Label(settingsText("删除语音模型"), systemImage: "trash")
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                        .contentShape(Rectangle())
+                }
+                .accessibilityIdentifier("collie-voice-model-remove")
             }
         } header: {
             Text(settingsText("语音输入"))
@@ -305,28 +346,38 @@ struct CollieHotspotBridgeSection: View {
 
     var body: some View {
         Section {
-            Toggle(settingsText("靠近断网 Mac 时自动唤醒"), isOn: $bridge.isEnabled)
-                .accessibilityIdentifier("collie-hotspot-ble-toggle")
-            Text(bridge.statusSummary)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .accessibilityIdentifier("collie-hotspot-ble-status")
-            Toggle(settingsText("同时运行快捷指令开启热点"), isOn: $bridge.autoRunShortcutInForeground)
-                .accessibilityIdentifier("collie-hotspot-shortcut-toggle")
-            LabeledContent(settingsText("热点名称")) {
+            Toggle(isOn: $bridge.isEnabled) {
+                Label(settingsText("靠近断网 Mac 时自动唤醒"), systemImage: "laptopcomputer.and.iphone")
+            }
+            .accessibilityIdentifier("collie-hotspot-ble-toggle")
+            if bridge.isEnabled {
+                Text(bridge.statusSummary)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .accessibilityIdentifier("collie-hotspot-ble-status")
+            }
+            Toggle(isOn: $bridge.autoRunShortcutInForeground) {
+                Label(settingsText("同时运行快捷指令开启热点"), systemImage: "bolt.horizontal.circle")
+            }
+            .accessibilityIdentifier("collie-hotspot-shortcut-toggle")
+            LabeledContent {
                 TextField(CollieHotspotBLEProtocol.defaultHotspotSSID, text: $bridge.hotspotSSID)
                     .multilineTextAlignment(.trailing)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .accessibilityIdentifier("collie-hotspot-ssid")
+            } label: {
+                Label(settingsText("热点名称"), systemImage: "wifi")
             }
             if bridge.autoRunShortcutInForeground {
-                LabeledContent(settingsText("快捷指令")) {
+                LabeledContent {
                     TextField(CollieHotspotBLEProtocol.defaultShortcutName, text: $bridge.shortcutName)
                         .multilineTextAlignment(.trailing)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .accessibilityIdentifier("collie-hotspot-shortcut-name")
+                } label: {
+                    Label(settingsText("快捷指令"), systemImage: "square.stack.3d.up")
                 }
             }
             Button {

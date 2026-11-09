@@ -66,9 +66,17 @@ struct CollieVoiceprintTestView: View {
                 .pickerStyle(.segmented)
                 .disabled(recording || processing)
                 .accessibilityIdentifier("collie-voiceprint-test-speaker")
-                Button(recording ? voiceprintText("结束录音") : voiceprintText("开始试音")) {
+                Button {
                     if recording { stop() } else { start() }
+                } label: {
+                    Label(recording ? voiceprintText("结束录音") : voiceprintText("开始试音"),
+                          systemImage: recording ? "stop.fill" : "waveform")
+                        .font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 46)
                 }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
+                .tint(recording ? .red : BenchsideStyle.accent)
                 .disabled(!recording && (!hasOldReference || requesting || processing || voice.canCancel || voice.phase == .delivering))
                 .accessibilityIdentifier("collie-voiceprint-test-record")
                 if processing { ProgressView(voiceprintText("正在计算匹配度…")) }

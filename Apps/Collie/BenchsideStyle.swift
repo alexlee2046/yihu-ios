@@ -26,9 +26,26 @@ enum BenchsideStyle {
     @ViewBuilder
     static func chromeIcon(_ systemName: String, active: Bool = false) -> some View {
         Image(systemName: systemName)
-            .font(.system(size: 16, weight: .medium))
+            .font(.system(size: 15, weight: .medium))
             .foregroundStyle(active ? accent : ink)
+            .frame(width: 32, height: 32)
+            .background(
+                Circle()
+                    .fill(active ? accentSoft : surfaceRaised)
+            )
             .frame(width: 44, height: 44)
             .contentShape(Rectangle())
+    }
+
+    @ViewBuilder
+    static func rowBadge(_ systemName: String, tint: Color = accent) -> some View {
+        Image(systemName: systemName)
+            .font(.system(size: 14, weight: .semibold))
+            .foregroundStyle(tint)
+            .frame(width: 28, height: 28)
+            .background(
+                RoundedRectangle(cornerRadius: 7, style: .continuous)
+                    .fill(tint.opacity(0.12))
+            )
     }
 }

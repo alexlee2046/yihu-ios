@@ -45,14 +45,37 @@ struct CollieVoiceprintSettingsView: View {
             }
             Section {
                 Text(voiceprintText("按顺序朗读 6 句话（每句 5–10 秒）。前 3 句在安静室内录，后 3 句换到日常环境录。"))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                HStack(spacing: 6) {
+                    ForEach(0..<CollieVoiceprint.enrollmentPhraseCount, id: \.self) { index in
+                        Capsule()
+                            .fill(index < vectors.count || (vectors.isEmpty && enrolled && index < enrolledPhraseCount)
+                                  ? BenchsideStyle.accent : BenchsideStyle.surfaceMuted)
+                            .frame(height: 6)
+                    }
+                }
+                .padding(.vertical, 4)
+                .accessibilityHidden(true)
                 if vectors.count < CollieVoiceprint.enrollmentPhraseCount {
                     Text(String(format: voiceprintText("第 %lld 句 · %@：%@"), Int64(vectors.count + 1), vectors.count < 3 ? voiceprintText("安静环境") : voiceprintText("另一日常环境"), CollieVoiceprint.prompts[vectors.count]))
-                        .font(.headline)
+                        .font(.subheadline.weight(.semibold))
+                        .padding(12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(BenchsideStyle.surfaceMuted, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                         .accessibilityIdentifier("collie-voiceprint-prompt")
                 }
-                Button(recording ? voiceprintText("结束这一句") : voiceprintText("开始录制")) {
+                Button {
                     if recording { stop() } else { start() }
+                } label: {
+                    Label(recording ? voiceprintText("结束这一句") : voiceprintText("开始录制"),
+                          systemImage: recording ? "stop.fill" : "mic.fill")
+                        .font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 46)
                 }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
+                .tint(recording ? .red : BenchsideStyle.accent)
                 .disabled(requestingPermission || processing || voice.isRecording || vectors.count == CollieVoiceprint.enrollmentPhraseCount)
                 .accessibilityIdentifier("collie-voiceprint-record")
                 if processing { ProgressView(voiceprintText("正在本机提取声纹…")) }

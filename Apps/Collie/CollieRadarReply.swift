@@ -526,11 +526,16 @@ struct CollieRadarReplyView: View {
                             }
                         }
                     } label: {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(radarText(entry.kind == "reply" ? "已发送" : "备注"))
-                                .font(.subheadline.bold())
-                            if let stamp = entry.created_at {
-                                Text(Date(timeIntervalSince1970: stamp), format: .dateTime).font(.caption)
+                        HStack(spacing: 10) {
+                            BenchsideStyle.rowBadge(entry.kind == "reply" ? "paperplane.fill" : "text.bubble")
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(radarText(entry.kind == "reply" ? "已发送" : "备注"))
+                                    .font(.subheadline.weight(.semibold))
+                                if let stamp = entry.created_at {
+                                    Text(Date(timeIntervalSince1970: stamp), format: .dateTime)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
                             }
                         }
                     }
@@ -559,15 +564,33 @@ struct CollieRadarReplyView: View {
                 } else {
                     if let target = session.history?.target ?? session.target {
                         Section(radarText("当前事项")) {
-                            Text(target.title).font(.headline)
-                            Text(target.status).font(.subheadline).foregroundStyle(.secondary)
-                            if !target.next.isEmpty {
-                                Text(target.next).font(.subheadline)
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(target.status)
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(BenchsideStyle.accent)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 3)
+                                        .background(Capsule().fill(BenchsideStyle.accentSoft))
+                                    Spacer()
+                                    if let ownerSession = target.owner_session, !ownerSession.isEmpty {
+                                        Text(ownerSession)
+                                            .font(.caption.monospaced())
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                Text(target.title)
+                                    .font(.headline)
+                                if !target.next.isEmpty {
+                                    Text(target.next)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                        .padding(10)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(BenchsideStyle.surfaceMuted, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                                }
                             }
-                            if let ownerSession = target.owner_session, !ownerSession.isEmpty {
-                                Text(radarText("会话") + "：" + ownerSession)
-                                    .font(.caption).foregroundStyle(.secondary)
-                            }
+                            .padding(.vertical, 2)
                             ForEach(Array(session.evidenceURLs.enumerated()), id: \.offset) { index, url in
                                 Link(radarText("查看证据") + (session.evidenceURLs.count > 1 ? " #\(index + 1)" : ""), destination: url)
                                     .font(.caption)

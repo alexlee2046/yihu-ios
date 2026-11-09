@@ -36,22 +36,27 @@ struct CollieWorkbenchShortcutBar: View {
                             let isSelected = selected == item.id
                             Button { select(item.id) } label: {
                                 Text(item.name)
-                                    .font(.subheadline.weight(isSelected ? .semibold : .regular))
+                                    .font(.subheadline.weight(isSelected ? .semibold : .medium))
                                     .foregroundStyle(isSelected ? BenchsideStyle.ink : BenchsideStyle.secondary)
                                     .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
                                     .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? 240 : 200)
-                                    .padding(.horizontal, 10)
-                                    .frame(minHeight: 44)
-                                    .contentShape(Rectangle())
+                                    .padding(.horizontal, 11)
+                                    .padding(.vertical, 6)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                            .fill(isSelected ? BenchsideStyle.surfaceRaised : Color.clear)
+                                    )
                                     .overlay(alignment: .bottom) {
                                         if isSelected {
                                             Capsule()
                                                 .fill(BenchsideStyle.accent)
-                                                .frame(height: 2)
-                                                .padding(.horizontal, 10)
+                                                .frame(height: 2.5)
+                                                .padding(.horizontal, 12)
                                                 .accessibilityHidden(true)
                                         }
                                     }
+                                    .frame(minHeight: 44)
+                                    .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
                             .id(item.id)
@@ -128,6 +133,33 @@ struct CollieWorkbenchPicker: View {
     @State private var renaming: URL?
     @State private var renameDraft = ""
 
+    private func workbenchRow(title: String, subtitle: String? = nil, icon: String,
+                              favorite: Bool = false, selected: Bool = false) -> some View {
+        HStack(spacing: 12) {
+            BenchsideStyle.rowBadge(favorite ? "star.fill" : icon,
+                                    tint: favorite ? .orange : BenchsideStyle.accent)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.body.weight(selected ? .semibold : .regular))
+                    .foregroundStyle(BenchsideStyle.ink)
+                if let subtitle, !subtitle.isEmpty, subtitle != title {
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+            }
+            Spacer()
+            if selected {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(BenchsideStyle.accent)
+            }
+        }
+        .frame(minHeight: 44)
+        .contentShape(Rectangle())
+    }
+
     var body: some View {
         NavigationStack {
             List {
@@ -142,9 +174,14 @@ struct CollieWorkbenchPicker: View {
                                     CollieWorkbenchShortcutItem(id: $0.id.uuidString, name: $0.name, icon: "scope")
                                 })
                         } label: {
-                            Label(radarText("自定义快捷入口"), systemImage: "slider.horizontal.3")
-                                .frame(minHeight: 44)
+                            HStack(spacing: 12) {
+                                BenchsideStyle.rowBadge("slider.horizontal.3")
+                                Text(radarText("自定义快捷入口"))
+                                    .font(.body.weight(.medium))
+                            }
+                            .frame(minHeight: 44)
                         }
+                        .accessibilityLabel(radarText("自定义快捷入口"))
                         .accessibilityIdentifier("collie-shortcuts-customize")
                     }
                 }
@@ -153,12 +190,28 @@ struct CollieWorkbenchPicker: View {
                         ForEach(settings.recentOrigins.filter { settings.favorites.contains($0) }, id: \.absoluteString) { origin in
                             Button {
                                 if selectWeb(origin) { dismiss() }
-                            } label: { Label(settings.name(for: origin), systemImage: "star.fill").frame(minHeight: 44) }
+                            } label: {
+                                workbenchRow(title: settings.name(for: origin),
+                                             subtitle: origin.host,
+                                             icon: "globe",
+                                             favorite: true,
+                                             selected: selectedRadar == nil && origin == settings.currentOrigin)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel(settings.name(for: origin))
                         }
                         ForEach(radar.workbenches.filter(\.favorite)) { item in
                             Button {
                                 if selectRadar(item.id) { dismiss() }
-                            } label: { Label(item.name, systemImage: "star.fill").frame(minHeight: 44) }
+                            } label: {
+                                workbenchRow(title: item.name,
+                                             subtitle: URL(string: item.source)?.host,
+                                             icon: "scope",
+                                             favorite: true,
+                                             selected: selectedRadar == item.id)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel(item.name)
                         }
                     }
                 }
@@ -167,14 +220,14 @@ struct CollieWorkbenchPicker: View {
                         Button {
                             if selectWeb(origin) { dismiss() }
                         } label: {
-                            HStack {
-                                Label(settings.name(for: origin), systemImage: settings.favorites.contains(origin) ? "star.fill" : "globe")
-                                Spacer()
-                                if selectedRadar == nil, origin == settings.currentOrigin {
-                                    Image(systemName: "checkmark").foregroundStyle(BenchsideStyle.accent)
-                                }
-                            }.frame(minHeight: 44)
+                            workbenchRow(title: settings.name(for: origin),
+                                         subtitle: origin.host,
+                                         icon: "globe",
+                                         favorite: settings.favorites.contains(origin),
+                                         selected: selectedRadar == nil && origin == settings.currentOrigin)
                         }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(settings.name(for: origin))
                         .contextMenu {
                             Button(radarText("重命名工作台")) {
                                 renameDraft = settings.name(for: origin)
@@ -186,24 +239,25 @@ struct CollieWorkbenchPicker: View {
                         }
                     }
                     .onMove { settings.moveOrigins(from: $0, to: $1) }
-                    Button(radarText("添加网页工作台"), systemImage: "plus") {
+                    Button(radarText("添加网页工作台"), systemImage: "plus.circle.fill") {
                         dismiss()
                         addWeb()
                     }
+                    .frame(minHeight: 44)
                 }
                 Section {
                     ForEach(radar.workbenches) { item in
                         Button {
                             if selectRadar(item.id) { dismiss() }
                         } label: {
-                            HStack {
-                                Label(item.name, systemImage: item.favorite ? "star.fill" : "scope")
-                                Spacer()
-                                if selectedRadar == item.id {
-                                    Image(systemName: "checkmark").foregroundStyle(BenchsideStyle.accent)
-                                }
-                            }.frame(minHeight: 44)
+                            workbenchRow(title: item.name,
+                                         subtitle: URL(string: item.source)?.host,
+                                         icon: "scope",
+                                         favorite: item.favorite,
+                                         selected: selectedRadar == item.id)
                         }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(item.name)
                         .swipeActions {
                             Button(radarText("删除"), role: .destructive) { pendingDelete = item.id }
                             Button(radarText(item.favorite ? "取消收藏" : "收藏")) {
@@ -215,9 +269,11 @@ struct CollieWorkbenchPicker: View {
                     }
                     .onMove { radar.move(from: $0, to: $1) }
                     if let error = radar.configurationError { Text(error).foregroundStyle(.orange) }
-                    Button(radarText("添加 PM Radar"), systemImage: "plus") {
+                    Button(radarText("添加 PM Radar"), systemImage: "plus.circle.fill") {
                         if let id = radar.add(), selectRadar(id) { dismiss() }
-                    }.disabled(radar.configurationError != nil)
+                    }
+                    .frame(minHeight: 44)
+                    .disabled(radar.configurationError != nil)
                 } header: { Text("PM Radar") } footer: {
                     Text(radarText("可添加多个雷达源，各自独立保存筛选视图。"))
                 }
