@@ -23,11 +23,11 @@
     <key>CFBundleVersion</key>
     <string>$(CURRENT_PROJECT_VERSION)</string>
     <key>NSCameraUsageDescription</key>
-    <string>用于拍摄诊断或工作台参考照片。</string>
+    <string>Yihu uses the camera only when you choose to take diagnostic or workbench reference photos to attach to a task.</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>仅在您点击原生麦克风按钮后录音，并由 iPhone 上的 Qwen3 模型离线转成文字。</string>
+    <string>Yihu uses the microphone only after you tap the native microphone button. Audio is transcribed offline on this iPhone by the Qwen3 model.</string>
     <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>仅在您启用 Mac 蓝牙热点唤醒后，用于感知附近的 MacBook 并在其断网时激活手机热点连接。</string>
+    <string>Yihu uses Bluetooth only when you enable Mac Bluetooth Hotspot Wake, so it can detect your nearby MacBook and activate Personal Hotspot when your Mac loses internet connectivity.</string>
     <key>CFBundleDocumentTypes</key>
     <array>
         <dict>

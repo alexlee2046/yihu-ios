@@ -26,66 +26,66 @@ struct YihuWatchRecoveryView: View {
     }
     var body: some View {
         List {
-            Section("文字草稿") {
+            Section(watchText("文字草稿")) {
                 if let draft {
-                    Text(draft.title ?? "原事项草稿").font(.headline)
-                    Text(draft.phoneSaved == true ? "已同步至手机草稿" :
-                         draft.transferAttempted != false ? "传输结果待核" : "保存在手表")
+                    Text(draft.title.map(watchText) ?? watchText("原事项草稿")).font(.headline)
+                    Text(draft.phoneSaved == true ? watchText("已同步至手机草稿") :
+                         draft.transferAttempted != false ? watchText("传输结果待核") : watchText("保存在手表"))
                         .font(.footnote)
                     Text(draft.text)
                     if let item = draftItem {
-                        NavigationLink("查看／继续原草稿") { YihuWatchDraftView(item: item, link: link) }
+                        NavigationLink(watchText("查看／继续原草稿")) { YihuWatchDraftView(item: item, link: link) }
                     } else {
-                        Text("原事项已变化或未同步，请先与手机同步。")
+                        Text(watchText("原事项已变化或未同步，请先与手机同步。"))
                             .font(.footnote).foregroundStyle(.orange)
                     }
                 } else if unreadable {
-                    Text("原草稿暂不可读，文件仍保留。解锁后重试；清除将永久移除手表副本。")
+                    Text(watchText("原草稿暂不可读，文件仍保留。解锁后重试；清除将永久移除手表副本。"))
                         .font(.footnote).foregroundStyle(.orange)
-                } else { Text("暂无本地草稿").foregroundStyle(.secondary) }
+                } else { Text(watchText("暂无本地草稿")).foregroundStyle(.secondary) }
                 if draft != nil || unreadable {
-                    Button("清除手表草稿副本", role: .destructive) { clearingDraft = true }
+                    Button(watchText("清除手表草稿副本"), role: .destructive) { clearingDraft = true }
                         .disabled(link.voice.recording || link.voice.sending)
                 }
             }
-            Section("录音／识别结果") {
+            Section(watchText("录音／识别结果")) {
                 if link.voice.hasAudio {
                     if let result = link.voice.result { Text(result.text) }
                     if let item = voiceItem {
-                        Text(item.title)
-                        NavigationLink("继续原事项录音") { YihuWatchDraftView(item: item, link: link) }
+                        Text(watchText(item.title))
+                        NavigationLink(watchText("继续原事项录音")) { YihuWatchDraftView(item: item, link: link) }
                     } else {
-                        Text("原录音已保留，请先与手机同步对应事项。")
+                        Text(watchText("原录音已保留，请先与手机同步对应事项。"))
                             .font(.footnote).foregroundStyle(.orange)
                     }
-                    Button("核对后丢弃录音副本", role: .destructive) { clearingAudio = true }
+                    Button(watchText("核对后丢弃录音副本"), role: .destructive) { clearingAudio = true }
                         .disabled(link.voice.recording || link.voice.sending)
-                } else { Text("暂无本地录音").foregroundStyle(.secondary) }
+                } else { Text(watchText("暂无本地录音")).foregroundStyle(.secondary) }
                 if let message = link.voice.notice { Text(message).font(.footnote) }
             }
-            Button("重新读取本地副本") { reload() }
-            Button("同步手机已有数据") { link.request() }
+            Button(watchText("重新读取本地副本")) { reload() }
+            Button(watchText("同步手机已有数据")) { link.request() }
             if let message = link.notice { Text(message).font(.footnote) }
             if let notice { Text(notice).font(.footnote) }
         }
-        .navigationTitle("未完成内容")
+        .navigationTitle(watchText("未完成内容"))
         .onAppear { reload() }
         .onChange(of: scenePhase) { _, phase in if phase == .active { reload() } }
-        .alert("清除这份手表草稿？", isPresented: $clearingDraft) {
-            Button("取消", role: .cancel) {}
-            Button("清除副本", role: .destructive) {
-                do { try drafts.clear(); reload(); notice = "手表草稿已清除" }
-                catch { notice = "未能清除，原副本保留" }
+        .alert(watchText("清除这份手表草稿？"), isPresented: $clearingDraft) {
+            Button(watchText("取消"), role: .cancel) {}
+            Button(watchText("清除副本"), role: .destructive) {
+                do { try drafts.clear(); reload(); notice = watchText("手表草稿已清除") }
+                catch { notice = watchText("未能清除，原副本保留") }
             }
-        } message: { Text("清除手表上的草稿副本，已同步到手机的内容请在手机查看。") }
-        .alert("丢弃这份录音副本？", isPresented: $clearingAudio) {
-            Button("取消", role: .cancel) {}
-            Button("丢弃副本", role: .destructive) {
+        } message: { Text(watchText("清除手表上的草稿副本，已同步到手机的内容请在手机查看。")) }
+        .alert(watchText("丢弃这份录音副本？"), isPresented: $clearingAudio) {
+            Button(watchText("取消"), role: .cancel) {}
+            Button(watchText("丢弃副本"), role: .destructive) {
                 if link.voice.blocked { link.voice.clearUnreadableCopy() }
                 else { link.voice.discard() }
             }
         } message: {
-            Text(link.voice.blocked ? "记录不可读，无法核实手机；将删除手表上的录音副本。" : "先连接手机核对识别状态，成功后才清除手表上的录音副本。")
+            Text(link.voice.blocked ? watchText("记录不可读，无法核实手机；将删除手表上的录音副本。") : watchText("先连接手机核对识别状态，成功后才清除手表上的录音副本。"))
         }
     }
 }

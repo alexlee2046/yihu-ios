@@ -25,20 +25,24 @@ struct HermesTaskAttributes: ActivityAttributes {
 
         var phaseText: String {
             switch phase {
-            case "done": return "已完成"
-            case "failed": return "出错了"
-            case "interrupted": return "已中断"
-            default: return toolName.map { "正在执行：\(Self.toolLabel($0))" } ?? "正在思考…"
+            case "done": return NSLocalizedString("已完成", tableName: "Yihu", comment: "")
+            case "failed": return NSLocalizedString("出错了", tableName: "Yihu", comment: "")
+            case "interrupted": return NSLocalizedString("已中断", tableName: "Yihu", comment: "")
+            default:
+                if let toolName {
+                    return String(format: NSLocalizedString("正在执行：%@", tableName: "Yihu", comment: ""), Self.toolLabel(toolName))
+                }
+                return NSLocalizedString("正在思考…", tableName: "Yihu", comment: "")
             }
         }
 
         static func toolLabel(_ name: String) -> String {
             switch name {
-            case "terminal": return "终端命令"
-            case "web_search", "search": return "网页搜索"
-            case "read_file", "file_read": return "读取文件"
-            case "write_file", "file_write", "patch": return "修改文件"
-            case "browser", "browser_navigate": return "浏览网页"
+            case "terminal": return NSLocalizedString("终端命令", tableName: "Yihu", comment: "")
+            case "web_search", "search": return NSLocalizedString("网页搜索", tableName: "Yihu", comment: "")
+            case "read_file", "file_read": return NSLocalizedString("读取文件", tableName: "Yihu", comment: "")
+            case "write_file", "file_write", "patch": return NSLocalizedString("修改文件", tableName: "Yihu", comment: "")
+            case "browser", "browser_navigate": return NSLocalizedString("浏览网页", tableName: "Yihu", comment: "")
             default: return name
             }
         }

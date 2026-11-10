@@ -1,0 +1,3 @@
+"CFBundleDisplayName" = "Yihu";
+"CFBundleName" = "Yihu";
+"NSMicrophoneUsageDescription" = "Yihu Watch uses the microphone only when you record a voice draft on your Apple Watch. Audio is sent to your paired iPhone for offline transcription and never uploaded to the cloud.";

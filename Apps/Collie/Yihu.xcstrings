@@ -8840,6 +8840,5922 @@
           }
         }
       }
+    },
+    "一呼 · 待刷新": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yihu · Refresh Needed"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一呼 · 待刷新"
+          }
+        }
+      }
+    },
+    "一呼 · 待处理 %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yihu · Pending %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一呼 · 待处理 %@"
+          }
+        }
+      }
+    },
+    "一呼 · 待我处理": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yihu · Action Items"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一呼 · 待我处理"
+          }
+        }
+      }
+    },
+    "一呼待处理 %@，%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yihu pending %@, %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一呼待处理 %@，%@"
+          }
+        }
+      }
+    },
+    "一呼待我处理": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yihu Action Items"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一呼待我处理"
+          }
+        }
+      }
+    },
+    "决策 %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decisions %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "决策 %@"
+          }
+        }
+      }
+    },
+    "验收 %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acceptance %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "验收 %@"
+          }
+        }
+      }
+    },
+    "查看手机已有的待决策与待验收数量；更新由系统调度。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View pending decision and acceptance counts synced from iPhone; refreshed on system schedule."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看手机已有的待决策与待验收数量；更新由系统调度。"
+          }
+        }
+      }
+    },
+    "请打开一呼同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Yihu on iPhone to sync"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请打开一呼同步"
+          }
+        }
+      }
+    },
+    "读取于": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updated"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "读取于"
+          }
+        }
+      }
+    },
+    "手机已有数据": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synced with iPhone"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机已有数据"
+          }
+        }
+      }
+    },
+    "数据待刷新": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh needed"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数据待刷新"
+          }
+        }
+      }
+    },
+    "数量不完整": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incomplete count"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数量不完整"
+          }
+        }
+      }
+    },
+    "请在手机同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync on iPhone"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在手机同步"
+          }
+        }
+      }
+    },
+    "部分来源待刷新": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some sources need refresh"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "部分来源待刷新"
+          }
+        }
+      }
+    },
+    "请补充验收证据。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please attach acceptance evidence."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请补充验收证据。"
+          }
+        }
+      }
+    },
+    "请说明影响范围。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please clarify the impact scope."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请说明影响范围。"
+          }
+        }
+      }
+    },
+    "我稍后处理，请先保留当前状态。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I will review this shortly; please keep the current status."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "我稍后处理，请先保留当前状态。"
+          }
+        }
+      }
+    },
+    "事项详情": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task Details"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "事项详情"
+          }
+        }
+      }
+    },
+    "列表已同步；表盘数据暂未保存，请检查共享容器配置": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "List synced; watch face data could not be saved. Please check App Group settings."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "列表已同步；表盘数据暂未保存，请检查共享容器配置"
+          }
+        }
+      }
+    },
+    "加载示例事项": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load Sample Tasks"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加载示例事项"
+          }
+        }
+      }
+    },
+    "退出示例事项": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear Sample Tasks"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "退出示例事项"
+          }
+        }
+      }
+    },
+    "已加载示例事项，可体验草稿与录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sample tasks loaded. Tap a task to try drafts and voice input."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已加载示例事项，可体验草稿与录音"
+          }
+        }
+      }
+    },
+    "可在 iPhone 的 Watch App → 通知中开启一呼通知镜像": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can enable Yihu notification mirroring in the Watch app → Notifications on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可在 iPhone 的 Watch App → 通知中开启一呼通知镜像"
+          }
+        }
+      }
+    },
+    "同步手机已有数据": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync iPhone Data"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同步手机已有数据"
+          }
+        }
+      }
+    },
+    "在手机查看原条目后确认": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Review the original item on iPhone before confirming"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在手机查看原条目后确认"
+          }
+        }
+      }
+    },
+    "已请求同步手机数据": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requested iPhone data sync"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已请求同步手机数据"
+          }
+        }
+      }
+    },
+    "已请求手机接续，请解锁并打开一呼": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Handoff requested. Please unlock your iPhone and open Yihu."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已请求手机接续，请解锁并打开一呼"
+          }
+        }
+      }
+    },
+    "当前传输未包含此类事项，请在手机查看": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not included in this watch snapshot. Please view on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前传输未包含此类事项，请在手机查看"
+          }
+        }
+      }
+    },
+    "当前快照暂无事项": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No items in current snapshot"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前快照暂无事项"
+          }
+        }
+      }
+    },
+    "当前手机服务不支持原生通知": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current iPhone service does not support native notifications"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前手机服务不支持原生通知"
+          }
+        }
+      }
+    },
+    "手机可达": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone Connected"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机可达"
+          }
+        }
+      }
+    },
+    "手机数据无法读取，保留上次数据": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read iPhone data; keeping previous snapshot."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机数据无法读取，保留上次数据"
+          }
+        }
+      }
+    },
+    "手机暂不可达，请稍后重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone unreachable. Please try again shortly."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机暂不可达，请稍后重试"
+          }
+        }
+      }
+    },
+    "手机暂未连接": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone Disconnected"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机暂未连接"
+          }
+        }
+      }
+    },
+    "手机系统通知未授权": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone Notifications Not Authorized"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机系统通知未授权"
+          }
+        }
+      }
+    },
+    "手机通知已开启": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone Notifications Enabled"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机通知已开启"
+          }
+        }
+      }
+    },
+    "手机通知未开启": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone Notifications Disabled"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机通知未开启"
+          }
+        }
+      }
+    },
+    "数据过期或读取失败，请在手机刷新": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data expired or unreadable. Please refresh on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数据过期或读取失败，请在手机刷新"
+          }
+        }
+      }
+    },
+    "暂无手机数据；请在已配对手机打开一呼并刷新台账": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No iPhone data yet. Open Yihu on your paired iPhone to refresh, or tap Load Sample Tasks above."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂无手机数据；请在已配对手机打开一呼并刷新台账"
+          }
+        }
+      }
+    },
+    "更多事项请在手机查看": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More items available on iPhone"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更多事项请在手机查看"
+          }
+        }
+      }
+    },
+    "未完成草稿／录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unfinished Drafts & Audio"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未完成草稿／录音"
+          }
+        }
+      }
+    },
+    "查看全部待处理": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View All Action Items"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看全部待处理"
+          }
+        }
+      }
+    },
+    "核对清单并在手机反馈": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verify checklist and send feedback on iPhone"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "核对清单并在手机反馈"
+          }
+        }
+      }
+    },
+    "此设备不支持手机接续": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone handoff is not supported on this device"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此设备不支持手机接续"
+          }
+        }
+      }
+    },
+    "确认下一阶段范围": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm Next Phase Scope"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "确认下一阶段范围"
+          }
+        }
+      }
+    },
+    "示例项目": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sample Project"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "示例项目"
+          }
+        }
+      }
+    },
+    "草稿传输不可用；请在手机检查数据源并刷新，再同步到手表": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft transfer unavailable. Please check the data source on iPhone, refresh, and sync to Watch."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "草稿传输不可用；请在手机检查数据源并刷新，再同步到手表"
+          }
+        }
+      }
+    },
+    "语音／文字草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice / Text Draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "语音／文字草稿"
+          }
+        }
+      }
+    },
+    "请先在手机刷新并重新同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please refresh on iPhone and sync again first"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先在手机刷新并重新同步"
+          }
+        }
+      }
+    },
+    "请先在手机配置或刷新需求台账": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please configure or refresh PM Radar on iPhone first"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先在手机配置或刷新需求台账"
+          }
+        }
+      }
+    },
+    "请在手机检查通知设置": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check notification settings on iPhone"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在手机检查通知设置"
+          }
+        }
+      }
+    },
+    "请在手机继续操作": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please continue on your iPhone"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在手机继续操作"
+          }
+        }
+      }
+    },
+    "请连接并解锁手机，打开一呼后重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect and unlock your iPhone, open Yihu, and try again"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请连接并解锁手机，打开一呼后重试"
+          }
+        }
+      }
+    },
+    "转手机继续处理": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue on iPhone"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "转手机继续处理"
+          }
+        }
+      }
+    },
+    "通知状态与镜像": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications & Mirroring"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知状态与镜像"
+          }
+        }
+      }
+    },
+    "部分来源刷新未完成": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some sources did not finish refreshing"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "部分来源刷新未完成"
+          }
+        }
+      }
+    },
+    "验收管理视图": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accept Management View"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "验收管理视图"
+          }
+        }
+      }
+    },
+    "丢弃录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard Audio"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "丢弃录音"
+          }
+        }
+      }
+    },
+    "丢弃录音副本": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard Audio Copy"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "丢弃录音副本"
+          }
+        }
+      }
+    },
+    "丢弃这段录音？": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard this recording?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "丢弃这段录音？"
+          }
+        }
+      }
+    },
+    "事项或来源已变化，草稿保留；请在手机核对": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task or source changed. Draft preserved on Watch; please verify on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "事项或来源已变化，草稿保留；请在手机核对"
+          }
+        }
+      }
+    },
+    "传输未确认，草稿已保留，可重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transfer unconfirmed. Draft preserved on Watch; you can retry."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "传输未确认，草稿已保留，可重试"
+          }
+        }
+      }
+    },
+    "保存到手机草稿后可在手机上继续编辑并确认发送": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Once saved to iPhone drafts, you can review, edit, and confirm sending on your iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存到手机草稿后可在手机上继续编辑并确认发送"
+          }
+        }
+      }
+    },
+    "保存草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save Draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存草稿"
+          }
+        }
+      }
+    },
+    "停止并交手机本地识别": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop & Transcribe on iPhone"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "停止并交手机本地识别"
+          }
+        }
+      }
+    },
+    "副本未能清除，原记录保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not clear copy; original record preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "副本未能清除，原记录保留"
+          }
+        }
+      }
+    },
+    "原草稿无法读取，记录已保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original draft unreadable; record preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原草稿无法读取，记录已保留"
+          }
+        }
+      }
+    },
+    "已同步至手机草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synced to iPhone Drafts"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已同步至手机草稿"
+          }
+        }
+      }
+    },
+    "已同步至手机草稿，请在手机继续": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synced to iPhone drafts. Please continue on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已同步至手机草稿，请在手机继续"
+          }
+        }
+      }
+    },
+    "已填入草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserted into draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已填入草稿"
+          }
+        }
+      }
+    },
+    "已恢复草稿，可用原编号核实／重试传输": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft restored. You can verify or retry transfer."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已恢复草稿，可用原编号核实／重试传输"
+          }
+        }
+      }
+    },
+    "已有其他事项或旧来源录音，副本已保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio from another task or older source is preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已有其他事项或旧来源录音，副本已保留"
+          }
+        }
+      }
+    },
+    "录音，由手机端侧识别": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record Voice (On-iPhone AI)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音，由手机端侧识别"
+          }
+        }
+      }
+    },
+    "快捷草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick Drafts"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "快捷草稿"
+          }
+        }
+      }
+    },
+    "手机保存结果待核，原草稿及编号保留；可重试传输": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone save status pending verification. Draft preserved; you can retry."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机保存结果待核，原草稿及编号保留；可重试传输"
+          }
+        }
+      }
+    },
+    "手机已确认保存，但手表回执未能落盘；请在手机核对": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved on iPhone, but Watch receipt could not be written. Please check on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机已确认保存，但手表回执未能落盘；请在手机核对"
+          }
+        }
+      }
+    },
+    "手机未连接，草稿已保留；打开手机一呼后重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone not connected. Draft saved on Watch; open Yihu on iPhone and retry."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机未连接，草稿已保留；打开手机一呼后重试"
+          }
+        }
+      }
+    },
+    "手机正在处理其他内容，草稿保留；请结束后重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone is busy with another item. Draft preserved; please retry shortly."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机正在处理其他内容，草稿保留；请结束后重试"
+          }
+        }
+      }
+    },
+    "手机端侧识别已填入手表草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On-iPhone transcription inserted into Watch draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机端侧识别已填入手表草稿"
+          }
+        }
+      }
+    },
+    "手机草稿已保存；请在手机继续确认": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft saved on iPhone. Please review and confirm on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机草稿已保存；请在手机继续确认"
+          }
+        }
+      }
+    },
+    "手表草稿已清除": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch draft cleared"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手表草稿已清除"
+          }
+        }
+      }
+    },
+    "有另一事项或旧版本草稿，原记录保留；请先在手机核对": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Another draft exists on Watch and is preserved. Please verify on iPhone first."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有另一事项或旧版本草稿，原记录保留；请先在手机核对"
+          }
+        }
+      }
+    },
+    "核实／重试传到手机": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verify / Retry Transfer to iPhone"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "核实／重试传到手机"
+          }
+        }
+      }
+    },
+    "核实／重试手机本地识别": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verify / Retry iPhone Transcription"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "核实／重试手机本地识别"
+          }
+        }
+      }
+    },
+    "核对手机后可丢弃手表上的录音副本。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After verifying on iPhone, you can discard the Watch audio copy."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "核对手机后可丢弃手表上的录音副本。"
+          }
+        }
+      }
+    },
+    "清除副本": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear Copy"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除副本"
+          }
+        }
+      }
+    },
+    "清除手表上的草稿副本，已传到手机的草稿请在手机查看。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clears the local copy on Watch. Any draft already sent to iPhone remains on your iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除手表上的草稿副本，已传到手机的草稿请在手机查看。"
+          }
+        }
+      }
+    },
+    "清除手表副本？": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear Watch Copy?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除手表副本？"
+          }
+        }
+      }
+    },
+    "清除手表草稿副本": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear Watch Draft Copy"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除手表草稿副本"
+          }
+        }
+      }
+    },
+    "确认传输草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm Draft Transfer"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "确认传输草稿"
+          }
+        }
+      }
+    },
+    "确认转为手机草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send to iPhone Drafts"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "确认转为手机草稿"
+          }
+        }
+      }
+    },
+    "草稿为空、过长或版本不支持": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft is empty, too long, or unsupported"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "草稿为空、过长或版本不支持"
+          }
+        }
+      }
+    },
+    "草稿已有内容，识别结果已保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft already has text; transcription result kept separately"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "草稿已有内容，识别结果已保留"
+          }
+        }
+      }
+    },
+    "草稿未能安全保存，尚未传输": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft could not be safely saved and was not transferred"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "草稿未能安全保存，尚未传输"
+          }
+        }
+      }
+    },
+    "语音或文字草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice or text draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "语音或文字草稿"
+          }
+        }
+      }
+    },
+    "转手机继续确认": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue on iPhone"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "转手机继续确认"
+          }
+        }
+      }
+    },
+    "输入草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft Input"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "输入草稿"
+          }
+        }
+      }
+    },
+    "丢弃副本": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard Copy"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "丢弃副本"
+          }
+        }
+      }
+    },
+    "丢弃这份录音副本？": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard this audio copy?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "丢弃这份录音副本？"
+          }
+        }
+      }
+    },
+    "传输结果待核": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transfer Pending Verification"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "传输结果待核"
+          }
+        }
+      }
+    },
+    "保存在手表": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved on Watch"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存在手表"
+          }
+        }
+      }
+    },
+    "先连接手机核对识别状态，成功后才清除手表上的录音副本。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connects to iPhone to verify transcription status before clearing the Watch audio copy."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "先连接手机核对识别状态，成功后才清除手表上的录音副本。"
+          }
+        }
+      }
+    },
+    "原事项已变化或未同步，请先与手机同步。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original task changed or not synced. Please sync with iPhone first."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原事项已变化或未同步，请先与手机同步。"
+          }
+        }
+      }
+    },
+    "原事项草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original Task Draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原事项草稿"
+          }
+        }
+      }
+    },
+    "原录音已保留，请先与手机同步对应事项。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original recording preserved. Please sync the matching task with iPhone first."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原录音已保留，请先与手机同步对应事项。"
+          }
+        }
+      }
+    },
+    "原草稿暂不可读，文件仍保留。解锁后重试；清除将永久移除手表副本。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draft file is temporarily unreadable and remains preserved. Unlock and retry, or clear to remove the Watch copy."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原草稿暂不可读，文件仍保留。解锁后重试；清除将永久移除手表副本。"
+          }
+        }
+      }
+    },
+    "录音／识别结果": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio & Transcription"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音／识别结果"
+          }
+        }
+      }
+    },
+    "文字草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text Draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文字草稿"
+          }
+        }
+      }
+    },
+    "暂无本地录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No local audio recordings"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂无本地录音"
+          }
+        }
+      }
+    },
+    "暂无本地草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No local text drafts"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂无本地草稿"
+          }
+        }
+      }
+    },
+    "未完成内容": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unfinished Items"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未完成内容"
+          }
+        }
+      }
+    },
+    "未能清除，原副本保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not clear; original copy preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未能清除，原副本保留"
+          }
+        }
+      }
+    },
+    "查看／继续原草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View / Continue Draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看／继续原草稿"
+          }
+        }
+      }
+    },
+    "核对后丢弃录音副本": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verify & Discard Audio Copy"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "核对后丢弃录音副本"
+          }
+        }
+      }
+    },
+    "清除手表上的草稿副本，已同步到手机的内容请在手机查看。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clears the draft copy on Watch. Content already synced to iPhone remains on your iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除手表上的草稿副本，已同步到手机的内容请在手机查看。"
+          }
+        }
+      }
+    },
+    "清除这份手表草稿？": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear this Watch draft?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除这份手表草稿？"
+          }
+        }
+      }
+    },
+    "继续原事项录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue Task Recording"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "继续原事项录音"
+          }
+        }
+      }
+    },
+    "记录不可读，无法核实手机；将删除手表上的录音副本。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record unreadable and cannot be verified with iPhone. This will delete the audio copy on Watch."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "记录不可读，无法核实手机；将删除手表上的录音副本。"
+          }
+        }
+      }
+    },
+    "重新读取本地副本": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reload Local Copies"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重新读取本地副本"
+          }
+        }
+      }
+    },
+    "丢弃结果待核，原录音仍保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard status pending; original recording preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "丢弃结果待核，原录音仍保留"
+          }
+        }
+      }
+    },
+    "事项或来源已变化；录音保留，请在手机核对": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task or source changed; recording preserved. Please verify on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "事项或来源已变化；录音保留，请在手机核对"
+          }
+        }
+      }
+    },
+    "传输结果待核，录音及原编号保留；可重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transfer status pending; recording preserved. You can retry."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "传输结果待核，录音及原编号保留；可重试"
+          }
+        }
+      }
+    },
+    "原录音无法读取，副本保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original recording unreadable; copy preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原录音无法读取，副本保留"
+          }
+        }
+      }
+    },
+    "原录音编号无法读取，副本保留；请在手机核对": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording ID unreadable; copy preserved. Please verify on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原录音编号无法读取，副本保留；请在手机核对"
+          }
+        }
+      }
+    },
+    "原录音记录无法读取，副本已保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording metadata unreadable; copy preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原录音记录无法读取，副本已保留"
+          }
+        }
+      }
+    },
+    "已恢复原录音，可用原编号重试手机本地识别": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording restored. You can retry on-iPhone transcription."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已恢复原录音，可用原编号重试手机本地识别"
+          }
+        }
+      }
+    },
+    "已离开前台，未开始录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left foreground; recording was not started"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已离开前台，未开始录音"
+          }
+        }
+      }
+    },
+    "录音副本已丢弃": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio copy discarded"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音副本已丢弃"
+          }
+        }
+      }
+    },
+    "录音副本未能清除，原编号保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio copy could not be cleared; original ID preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音副本未能清除，原编号保留"
+          }
+        }
+      }
+    },
+    "录音已保留，等待手机本地识别": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording saved; waiting for on-iPhone transcription"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音已保留，等待手机本地识别"
+          }
+        }
+      }
+    },
+    "录音已保留；请解锁并打开手机一呼后重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording saved on Watch. Unlock your iPhone, open Yihu, and retry."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音已保留；请解锁并打开手机一呼后重试"
+          }
+        }
+      }
+    },
+    "录音未能开始；请检查麦克风权限，副本保持原样": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start recording. Please check microphone permissions."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音未能开始；请检查麦克风权限，副本保持原样"
+          }
+        }
+      }
+    },
+    "录音过长或未能安全保存，原副本保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording too long or could not be saved; previous copy preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音过长或未能安全保存，原副本保留"
+          }
+        }
+      }
+    },
+    "手机仍在识别，请等待结果后再丢弃": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone is still transcribing. Please wait for the result before discarding."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机仍在识别，请等待结果后再丢弃"
+          }
+        }
+      }
+    },
+    "手机声纹校验未通过，录音已保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone voiceprint check did not match; recording preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机声纹校验未通过，录音已保留"
+          }
+        }
+      }
+    },
+    "手机忙碌或有待回传结果；录音保留，稍后重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone is busy or has a pending result; recording preserved, retry shortly."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机忙碌或有待回传结果；录音保留，稍后重试"
+          }
+        }
+      }
+    },
+    "手机忙碌或来源变化，录音保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone busy or source changed; recording preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机忙碌或来源变化，录音保留"
+          }
+        }
+      }
+    },
+    "手机本地识别中；结果会返回此手表草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcribing offline on iPhone; result will return to this Watch draft."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机本地识别中；结果会返回此手表草稿"
+          }
+        }
+      }
+    },
+    "手机本地识别完成": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On-iPhone transcription complete"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机本地识别完成"
+          }
+        }
+      }
+    },
+    "手机识别未完成；录音保留，可重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone transcription incomplete; recording preserved, you can retry."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机识别未完成；录音保留，可重试"
+          }
+        }
+      }
+    },
+    "正在录音，最多10秒；停止后交手机本地识别": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording (up to 10s). Tap stop to transcribe offline on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在录音，最多10秒；停止后交手机本地识别"
+          }
+        }
+      }
+    },
+    "识别结果未能安全保存，录音保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcription result could not be saved; recording preserved"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "识别结果未能安全保存，录音保留"
+          }
+        }
+      }
+    },
+    "请先在手机准备好端侧语音模型；录音保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please prepare the offline voice model on iPhone first; recording preserved."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先在手机准备好端侧语音模型；录音保留"
+          }
+        }
+      }
+    },
+    "请先连接手机核对识别结果，再丢弃录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please connect to iPhone to verify transcription status before discarding."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先连接手机核对识别结果，再丢弃录音"
+          }
+        }
+      }
+    },
+    "请在手表设置允许一呼使用麦克风": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please allow Yihu to access the Microphone in Watch Settings"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在手表设置允许一呼使用麦克风"
+          }
+        }
+      }
+    },
+    "修改文件": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editing file"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "修改文件"
+          }
+        }
+      }
+    },
+    "出错了": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出错了"
+          }
+        }
+      }
+    },
+    "已中断": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interrupted"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已中断"
+          }
+        }
+      }
+    },
+    "已完成": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已完成"
+          }
+        }
+      }
+    },
+    "正在思考…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thinking…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在思考…"
+          }
+        }
+      }
+    },
+    "正在执行：%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Running: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在执行：%@"
+          }
+        }
+      }
+    },
+    "浏览网页": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Browsing web"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "浏览网页"
+          }
+        }
+      }
+    },
+    "终端命令": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminal command"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "终端命令"
+          }
+        }
+      }
+    },
+    "网页搜索": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Web search"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "网页搜索"
+          }
+        }
+      }
+    },
+    "读取文件": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading file"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "读取文件"
+          }
+        }
+      }
+    },
+    "放入后，打开一呼点「填入当前工作台」。不会自动发送。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After saving, open Yihu and tap \"Insert into Workbench\". Nothing is sent automatically."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "放入后，打开一呼点「填入当前工作台」。不会自动发送。"
+          }
+        }
+      }
+    },
+    "第三方开源组件与模型许可声明。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Third-party open-source component and model license notices."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第三方开源组件与模型许可声明。"
+          }
+        }
+      }
+    },
+    "%@ 已在线": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is online"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 已在线"
+          }
+        }
+      }
+    },
+    "%@ 已连上热点": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ connected to Personal Hotspot"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 已连上热点"
+          }
+        }
+      }
+    },
+    "%@ 正在连接热点…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is connecting to hotspot…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 正在连接热点…"
+          }
+        }
+      }
+    },
+    "%@ 离线，准备唤醒热点": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ offline, preparing to wake hotspot"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 离线，准备唤醒热点"
+          }
+        }
+      }
+    },
+    "当前设备不支持蓝牙低功耗 (BLE)。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth Low Energy (BLE) is not supported on this device."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前设备不支持蓝牙低功耗 (BLE)。"
+          }
+        }
+      }
+    },
+    "未开启": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未开启"
+          }
+        }
+      }
+    },
+    "未获得蓝牙权限，请在系统设置中允许“一呼”使用蓝牙。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth permission not granted. Please allow Yihu to use Bluetooth in Settings."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未获得蓝牙权限，请在系统设置中允许“一呼”使用蓝牙。"
+          }
+        }
+      }
+    },
+    "正在唤醒 %@ 的热点连接…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waking Personal Hotspot for %@…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在唤醒 %@ 的热点连接…"
+          }
+        }
+      }
+    },
+    "正在寻找附近的 Mac…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanning for nearby Mac…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在寻找附近的 Mac…"
+          }
+        }
+      }
+    },
+    "正在连接 %@…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting to %@…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在连接 %@…"
+          }
+        }
+      }
+    },
+    "蓝牙已关闭，请在控制中心开启蓝牙。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth is turned off. Please enable Bluetooth in Control Center."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "蓝牙已关闭，请在控制中心开启蓝牙。"
+          }
+        }
+      }
+    },
+    "Mac 热点唤醒": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac Hotspot Wake"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac 热点唤醒"
+          }
+        }
+      }
+    },
+    "单次输出上限": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max Output Tokens"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "单次输出上限"
+          }
+        }
+      }
+    },
+    "同时运行快捷指令开启热点": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Also Run Shortcut to Enable Hotspot"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同时运行快捷指令开启热点"
+          }
+        }
+      }
+    },
+    "在锁屏和灵动岛显示任务进度，完成后推送通知（需开启 Tailscale）。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show task progress on Lock Screen and Dynamic Island, and push completion alerts (requires Tailscale)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在锁屏和灵动岛显示任务进度，完成后推送通知（需开启 Tailscale）。"
+          }
+        }
+      }
+    },
+    "已就绪（约 950 MB）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready (~950 MB)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已就绪（约 950 MB）"
+          }
+        }
+      }
+    },
+    "开启后可减弱环境杂音，突出近处说话声。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reduces background noise and isolates nearby speech when enabled."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开启后可减弱环境杂音，突出近处说话声。"
+          }
+        }
+      }
+    },
+    "当断网的 MacBook 在附近时，通过蓝牙自动连回这台 iPhone 的个人热点。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatically reconnects your nearby offline MacBook to this iPhone's Personal Hotspot over Bluetooth."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当断网的 MacBook 在附近时，通过蓝牙自动连回这台 iPhone 的个人热点。"
+          }
+        }
+      }
+    },
+    "录音中也可在底部栏切换麦克风模式。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can also switch microphone modes from the bottom bar while recording."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录音中也可在底部栏切换麦克风模式。"
+          }
+        }
+      }
+    },
+    "快捷指令": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shortcut"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "快捷指令"
+          }
+        }
+      }
+    },
+    "恢复默认参数": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset to Defaults"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢复默认参数"
+          }
+        }
+      }
+    },
+    "未设置": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not Set"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未设置"
+          }
+        }
+      }
+    },
+    "热点名称": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hotspot SSID"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "热点名称"
+          }
+        }
+      }
+    },
+    "离线模型": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On-Device Model"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "离线模型"
+          }
+        }
+      }
+    },
+    "立即唤醒附近 Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wake Nearby Mac Now"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "立即唤醒附近 Mac"
+          }
+        }
+      }
+    },
+    "语音在本机离线识别，不会上传。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech is transcribed offline on this iPhone and never uploaded."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "语音在本机离线识别，不会上传。"
+          }
+        }
+      }
+    },
+    "适合常说的英文缩写、产品名和人名，越靠前越优先。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best for frequent acronyms, product names, and people. Earlier terms take higher priority."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "适合常说的英文缩写、产品名和人名，越靠前越优先。"
+          }
+        }
+      }
+    },
+    "靠近断网 Mac 时自动唤醒": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto-Wake Nearby Offline Mac"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "靠近断网 Mac 时自动唤醒"
+          }
+        }
+      }
+    },
+    "默认自动识别中英文。常说的专有名词可添加到上方「常用词」。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatically recognizes Chinese and English. Add frequent proper nouns to Custom Vocabulary above."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "默认自动识别中英文。常说的专有名词可添加到上方「常用词」。"
+          }
+        }
+      }
+    },
+    "开启后接收当前工作台的消息与进度提醒。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receive message and progress notifications from the current workbench."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开启后接收当前工作台的消息与进度提醒。"
+          }
+        }
+      }
+    },
+    "接收当前工作台的消息与进度提醒。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receive message and progress notifications from the current workbench."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "接收当前工作台的消息与进度提醒。"
+          }
+        }
+      }
+    },
+    "已搁置": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已搁置"
+          }
+        }
+      }
+    },
+    "已阻塞": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocked"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已阻塞"
+          }
+        }
+      }
+    },
+    "待办": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To Do"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "待办"
+          }
+        }
+      }
+    },
+    "推进中": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In Progress"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "推进中"
+          }
+        }
+      }
+    },
+    "搁置": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On Hold"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搁置"
+          }
+        }
+      }
+    },
+    "未知操作": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown Action"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知操作"
+          }
+        }
+      }
+    },
+    "校准晋级": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calibrate Promotion"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "校准晋级"
+          }
+        }
+      }
+    },
+    "核对并释放实验资源": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verify & Release Resources"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "核对并释放实验资源"
+          }
+        }
+      }
+    },
+    "申请发布固定版本": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Request Pinned Release"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "申请发布固定版本"
+          }
+        }
+      }
+    },
+    "真实阻塞": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocked"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "真实阻塞"
+          }
+        }
+      }
+    },
+    "等人操作": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting on Action"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "等人操作"
+          }
+        }
+      }
+    },
+    "等你处理": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Needs Your Action"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "等你处理"
+          }
+        }
+      }
+    },
+    "等待反馈": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awaiting Feedback"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "等待反馈"
+          }
+        }
+      }
+    },
+    "续跑实验": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume Experiment"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "续跑实验"
+          }
+        }
+      }
+    },
+    "运行实验": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Run Experiment"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "运行实验"
+          }
+        }
+      }
+    },
+    "阻塞": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocked"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "阻塞"
+          }
+        }
+      }
+    },
+    "下一条": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下一条"
+          }
+        }
+      }
+    },
+    "刷新事项状态": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh Task Status"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刷新事项状态"
+          }
+        }
+      }
+    },
+    "刷新记录": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh History"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刷新记录"
+          }
+        }
+      }
+    },
+    "取消录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel Recording"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消录音"
+          }
+        }
+      }
+    },
+    "同意按当前方案推进。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approved to proceed with the current plan."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同意按当前方案推进。"
+          }
+        }
+      }
+    },
+    "后续跟进": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow-Up"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "后续跟进"
+          }
+        }
+      }
+    },
+    "回复与记录": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reply & History"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "回复与记录"
+          }
+        }
+      }
+    },
+    "回复内容": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reply Draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "回复内容"
+          }
+        }
+      }
+    },
+    "固定指纹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pinned Digest"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "固定指纹"
+          }
+        }
+      }
+    },
+    "填入保留的语音转写": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Insert Saved Transcript"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "填入保留的语音转写"
+          }
+        }
+      }
+    },
+    "备注": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "备注"
+          }
+        }
+      }
+    },
+    "工程阶段通过，生产发布暂缓。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engineering stage passed; hold production release for now."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工程阶段通过，生产发布暂缓。"
+          }
+        }
+      }
+    },
+    "已发送": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已发送"
+          }
+        }
+      }
+    },
+    "已提交内容": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submitted Content"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已提交内容"
+          }
+        }
+      }
+    },
+    "已达显示上限，请在原条目查看更早记录。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Display limit reached. Open the original item to view older entries."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已达显示上限，请在原条目查看更早记录。"
+          }
+        }
+      }
+    },
+    "当前事项": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current Task"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前事项"
+          }
+        }
+      }
+    },
+    "往来记录": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activity History"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "往来记录"
+          }
+        }
+      }
+    },
+    "授权申请到期": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Authorization Request Expires"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "授权申请到期"
+          }
+        }
+      }
+    },
+    "授权确认已记录；尚未执行，仍须原执行入口核验。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Authorization recorded; not yet executed. Verification at the original execution entry is still required."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "授权确认已记录；尚未执行，仍须原执行入口核验。"
+          }
+        }
+      }
+    },
+    "放弃保留的转写": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard Saved Transcript"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "放弃保留的转写"
+          }
+        }
+      }
+    },
+    "数据源已变更，请关闭后重新打开。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data source changed. Please close and reopen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数据源已变更，请关闭后重新打开。"
+          }
+        }
+      }
+    },
+    "暂无记录。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No history entries yet."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂无记录。"
+          }
+        }
+      }
+    },
+    "暂缓此子项，先推进其余已确认部分。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold this sub-item and proceed with the remaining confirmed parts first."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂缓此子项，先推进其余已确认部分。"
+          }
+        }
+      }
+    },
+    "本次授权范围": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Authorization Scope"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本次授权范围"
+          }
+        }
+      }
+    },
+    "查回发送结果": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verify Delivery Status"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查回发送结果"
+          }
+        }
+      }
+    },
+    "查看原文": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View Original"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看原文"
+          }
+        }
+      }
+    },
+    "查看证据": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View Evidence"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看证据"
+          }
+        }
+      }
+    },
+    "正在读取…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在读取…"
+          }
+        }
+      }
+    },
+    "清空草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear Draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清空草稿"
+          }
+        }
+      }
+    },
+    "确认并记录本次授权": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm & Record Authorization"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "确认并记录本次授权"
+          }
+        }
+      }
+    },
+    "确认本次操作授权？": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm this operation authorization?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "确认本次操作授权？"
+          }
+        }
+      }
+    },
+    "结束语音输入": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish Voice Input"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "结束语音输入"
+          }
+        }
+      }
+    },
+    "语音输入回复": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice Reply"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "语音输入回复"
+          }
+        }
+      }
+    },
+    "请补充备选方案对比后再决策。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please add a comparison of alternatives before deciding."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请补充备选方案对比后再决策。"
+          }
+        }
+      }
+    },
+    "请补充实机或预览证据后再验。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please attach device or preview evidence before acceptance."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请补充实机或预览证据后再验。"
+          }
+        }
+      }
+    },
+    "Colab 实验看板": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colab Experiments"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colab 实验看板"
+          }
+        }
+      }
+    },
+    "Colab 数据读取失败；台账仍可查看，请刷新重试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colab data could not be loaded; ledger remains available. Refresh to retry."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colab 数据读取失败；台账仍可查看，请刷新重试。"
+          }
+        }
+      }
+    },
+    "会话": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "会话"
+          }
+        }
+      }
+    },
+    "切到网页工作台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch to Web Workbench"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切到网页工作台"
+          }
+        }
+      }
+    },
+    "只看我的": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mine Only"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "只看我的"
+          }
+        }
+      }
+    },
+    "含已完成": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Include Done"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "含已完成"
+          }
+        }
+      }
+    },
+    "实验快照已过期，建议刷新。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experiment snapshot is stale; refresh recommended."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "实验快照已过期，建议刷新。"
+          }
+        }
+      }
+    },
+    "导入本地 JSON 快照，或配置 HTTPS 数据源地址。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import a local JSON snapshot, or configure an HTTPS data source URL."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入本地 JSON 快照，或配置 HTTPS 数据源地址。"
+          }
+        }
+      }
+    },
+    "已释放资源": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resources Released"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已释放资源"
+          }
+        }
+      }
+    },
+    "快照已过期": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snapshot Stale"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "快照已过期"
+          }
+        }
+      }
+    },
+    "手表接续事项": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Handoff from Watch"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手表接续事项"
+          }
+        }
+      }
+    },
+    "提交验收": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submit for Acceptance"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "提交验收"
+          }
+        }
+      }
+    },
+    "支持 HTTPS JSON 地址（如 Tailnet 内部地址），也可直接导入本地 JSON 快照。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supports HTTPS JSON URLs (such as Tailnet addresses) or importing local JSON snapshots."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "支持 HTTPS JSON 地址（如 Tailnet 内部地址），也可直接导入本地 JSON 快照。"
+          }
+        }
+      }
+    },
+    "未知": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知"
+          }
+        }
+      }
+    },
+    "查看记录": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View History"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看记录"
+          }
+        }
+      }
+    },
+    "正在同步…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Syncing…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在同步…"
+          }
+        }
+      }
+    },
+    "资源释放未确认": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resource Release Unconfirmed"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "资源释放未确认"
+          }
+        }
+      }
+    },
+    "资源释放状态未知": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resource Status Unknown"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "资源释放状态未知"
+          }
+        }
+      }
+    },
+    "返回台账继续处理": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to Ledger"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "返回台账继续处理"
+          }
+        }
+      }
+    },
+    "手表事项已变化或不可见，请在手机刷新台账。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch task changed or is not visible. Please refresh the ledger on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手表事项已变化或不可见，请在手机刷新台账。"
+          }
+        }
+      }
+    },
+    "蓝牙唤醒附近 Mac 热点": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth Wake for Nearby Mac Hotspot"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "蓝牙唤醒附近 Mac 热点"
+          }
+        }
+      }
+    },
+    "（录音全文见附件）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(Full transcript attached)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "（录音全文见附件）"
+          }
+        }
+      }
+    },
+    "下面是我的语音记录，请帮我整理成通顺的文字，不要遗漏信息。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below is my voice note. Please organize it into clear, fluent text without omitting any details."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下面是我的语音记录，请帮我整理成通顺的文字，不要遗漏信息。"
+          }
+        }
+      }
+    },
+    "填入当前输入框": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Insert into Active Input"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "填入当前输入框"
+          }
+        }
+      }
+    },
+    "填入或暂存后不会自动发送，可在工作台确认后再提交。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserting or staging never sends automatically; review in your workbench before submitting."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "填入或暂存后不会自动发送，可在工作台确认后再提交。"
+          }
+        }
+      }
+    },
+    "存为雷达草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save as Radar Draft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "存为雷达草稿"
+          }
+        }
+      }
+    },
+    "已交接过一次，如需再次使用请直接复制全文。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Already handed off once. Copy the full text directly if you need it again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已交接过一次，如需再次使用请直接复制全文。"
+          }
+        }
+      }
+    },
+    "无法保存草稿，请确认该事项仍在待处理列表。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save draft. Please verify the task is still in your action list."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法保存草稿，请确认该事项仍在待处理列表。"
+          }
+        }
+      }
+    },
+    "暂存到分享托盘": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stage to Share Tray"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂存到分享托盘"
+          }
+        }
+      }
+    },
+    "未能填入，请先点选输入框或直接复制。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not insert. Tap an input field first or copy the text directly."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未能填入，请先点选输入框或直接复制。"
+          }
+        }
+      }
+    },
+    "本机离线转写，锁屏可持续录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offline on-device transcription · continues while locked"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本机离线转写，锁屏可持续录音"
+          }
+        }
+      }
+    },
+    "本机离线转写，锁屏后仍可继续录音。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcribed offline on this iPhone; recording continues even when the screen locks."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本机离线转写，锁屏后仍可继续录音。"
+          }
+        }
+      }
+    },
+    "润色成文": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Polish Text"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "润色成文"
+          }
+        }
+      }
+    },
+    "要点与待办": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key Points & Action Items"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要点与待办"
+          }
+        }
+      }
+    },
+    "请把下面的录音整理成会议纪要：结论、讨论要点、待办（负责人和时间）。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please organize the transcript below into meeting minutes: Decisions, Key Discussion Points, and Action Items (owner & timeline)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请把下面的录音整理成会议纪要：结论、讨论要点、待办（负责人和时间）。"
+          }
+        }
+      }
+    },
+    "请把下面的录音整理成要点清单，并列出需要我跟进的事项。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please summarize the transcript below into a bulleted list and highlight my follow-up items."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请把下面的录音整理成要点清单，并列出需要我跟进的事项。"
+          }
+        }
+      }
+    },
+    "长语音闪念": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice Notes"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "长语音闪念"
+          }
+        }
+      }
+    },
+    "一呼语音输入": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yihu Voice Input"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一呼语音输入"
+          }
+        }
+      }
+    },
+    "打开一呼并切换到 PM Radar 的「待我处理」视图。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Yihu and switch to the PM Radar Action Items view."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开一呼并切换到 PM Radar 的「待我处理」视图。"
+          }
+        }
+      }
+    },
+    "打开一呼开始录音；录音时再次运行则结束，并把文字填入当前工作台（不会发送）。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Yihu to start recording. Run it again to stop and fill the text into the current workbench; nothing will be sent."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开一呼开始录音；录音时再次运行则结束，并把文字填入当前工作台（不会发送）。"
+          }
+        }
+      }
+    },
+    "打开一呼待我处理": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Yihu Action Items"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开一呼待我处理"
+          }
+        }
+      }
+    },
+    "安静": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quiet"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安静"
+          }
+        }
+      }
+    },
+    "我正在录制自己的声音，the quick brown fox jumps over the lazy dog。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I am recording my voice, the quick brown fox jumps over the lazy dog."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "我正在录制自己的声音，the quick brown fox jumps over the lazy dog。"
+          }
+        }
+      }
+    },
+    "无论附近是否有声音，请只识别我的说话声。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please recognize only my voice regardless of nearby background sound."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无论附近是否有声音，请只识别我的说话声。"
+          }
+        }
+      }
+    },
+    "日常": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everyday"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日常"
+          }
+        }
+      }
+    },
+    "早上好，今天我想用一呼整理任务，please help me plan my day。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good morning, I want to organize my tasks with Yihu today, please help me plan my day."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "早上好，今天我想用一呼整理任务，please help me plan my day。"
+          }
+        }
+      }
+    },
+    "现在换一个地方，我会继续用正常语速说话。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Now in a different spot, I will continue speaking at a normal pace."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "现在换一个地方，我会继续用正常语速说话。"
+          }
+        }
+      }
+    },
+    "请记录这个想法，明天我们再讨论 next steps and priorities。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please record this idea, and tomorrow we will discuss next steps and priorities."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请记录这个想法，明天我们再讨论 next steps and priorities。"
+          }
+        }
+      }
+    },
+    "这是另一处日常环境里的声纹录音。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is another voiceprint sample recorded in an everyday environment."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这是另一处日常环境里的声纹录音。"
+          }
+        }
+      }
+    },
+    "声纹匹配测试": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voiceprint Match Test"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "声纹匹配测试"
+          }
+        }
+      }
+    },
+    "开启后，语音填入前会比对你的声音，减少旁人说话误触。声纹仅保存在本机。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When enabled, Yihu verifies your voice before inserting speech to filter out nearby speakers. Voiceprints stay on this iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开启后，语音填入前会比对你的声音，减少旁人说话误触。声纹仅保存在本机。"
+          }
+        }
+      }
+    },
+    "按顺序朗读 6 句话（每句 5–10 秒）。前 3 句在安静室内录，后 3 句换到日常环境录。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read 6 prompts in order (5–10s each): record the first 3 in a quiet room and the last 3 in an everyday environment."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按顺序朗读 6 句话（每句 5–10 秒）。前 3 句在安静室内录，后 3 句换到日常环境录。"
+          }
+        }
+      }
+    },
+    "请先录完 6 句或重新开始。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please finish recording all 6 prompts or start over."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先录完 6 句或重新开始。"
+          }
+        }
+      }
+    },
+    "CAM++ 暂无基准，当前仅测试 WeSpeaker。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CAM++ baseline unavailable; currently testing WeSpeaker only."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CAM++ 暂无基准，当前仅测试 WeSpeaker。"
+          }
+        }
+      }
+    },
+    "开始试音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start Voice Test"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开始试音"
+          }
+        }
+      }
+    },
+    "录制一句 1–10 秒的话，查看与本机声纹的匹配得分。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record a 1–10 second phrase to check the match score against your on-device voiceprint."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "录制一句 1–10 秒的话，查看与本机声纹的匹配得分。"
+          }
+        }
+      }
+    },
+    "得分仅在当前页面显示，退出后自动清空。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scores are shown only on this screen and cleared when you leave."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "得分仅在当前页面显示，退出后自动清空。"
+          }
+        }
+      }
+    },
+    "正在计算匹配度…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calculating match score…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在计算匹配度…"
+          }
+        }
+      }
+    },
+    "结束录音": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop Recording"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "结束录音"
+          }
+        }
+      }
+    },
+    "说话人": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speaker"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "说话人"
+          }
+        }
+      }
+    },
+    "工作台响应超时，请稍后重试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workbench timed out. Please try again shortly."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工作台响应超时，请稍后重试。"
+          }
+        }
+      }
+    },
+    "工作台没有响应，请确认服务正在运行。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workbench is not responding. Please verify the service is running."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工作台没有响应，请确认服务正在运行。"
+          }
+        }
+      }
+    },
+    "工作台页面加载失败，请重新加载。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workbench page failed to load. Please reload."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工作台页面加载失败，请重新加载。"
+          }
+        }
+      }
+    },
+    "工作台页面尚未准备好。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workbench page is not ready yet."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工作台页面尚未准备好。"
+          }
+        }
+      }
+    },
+    "工作台页面意外关闭，请重新加载。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workbench page closed unexpectedly. Please reload."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工作台页面意外关闭，请重新加载。"
+          }
+        }
+      }
+    },
+    "找不到这个工作台地址，请检查地址是否正确。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workbench address not found. Please check the URL."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到这个工作台地址，请检查地址是否正确。"
+          }
+        }
+      }
+    },
+    "无法建立安全连接，请检查工作台的 HTTPS 证书。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not establish a secure connection. Please check the workbench HTTPS certificate."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法建立安全连接，请检查工作台的 HTTPS 证书。"
+          }
+        }
+      }
+    },
+    "暂时无法访问工作台，请检查网络后重试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workbench temporarily unreachable. Please check your network and try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂时无法访问工作台，请检查网络后重试。"
+          }
+        }
+      }
+    },
+    "这台 iPhone 目前没有网络连接。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This iPhone is currently offline."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这台 iPhone 目前没有网络连接。"
+          }
+        }
+      }
+    },
+    "进入会话后再启用键盘": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open a session before enabling the keyboard"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "进入会话后再启用键盘"
+          }
+        }
+      }
+    },
+    "仅从本机移除，不影响远端数据。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removes from this iPhone only; remote data is unaffected."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅从本机移除，不影响远端数据。"
+          }
+        }
+      }
+    },
+    "可添加多个雷达源，各自独立保存筛选视图。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add multiple PM Radar sources, each with its own saved filters."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可添加多个雷达源，各自独立保存筛选视图。"
+          }
+        }
+      }
+    },
+    "打开接入指南": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Integration Guide"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开接入指南"
+          }
+        }
+      }
+    },
+    "使用与接入指南": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usage & Integration Guide"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用与接入指南"
+          }
+        }
+      }
+    },
+    "核心使用与接入卖点": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Core Capabilities & Integrations"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "核心使用与接入卖点"
+          }
+        }
+      }
+    },
+    "一呼（Yihu）将 iPhone 与 Apple Watch 变成 OpenClaw、Hermes、Dot / Dot Live 与 Collie 的原生移动工作台：端侧 Qwen3 0.6B 离线语音直填草稿、锁屏长语音闪念、灵动岛进度追踪与多项目决策简报。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yihu turns your iPhone and Apple Watch into a native mobile workbench for OpenClaw, Hermes, Dot / Dot Live, and Collie—with on-device Qwen3 0.6B offline voice-to-draft, lock-screen voice notes, Dynamic Island live progress, and multi-project decision briefings."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一呼（Yihu）将 iPhone 与 Apple Watch 变成 OpenClaw、Hermes、Dot / Dot Live 与 Collie 的原生移动工作台：端侧 Qwen3 0.6B 离线语音直填草稿、锁屏长语音闪念、灵动岛进度追踪与多项目决策简报。"
+          }
+        }
+      }
+    },
+    "端侧语音直填（免弹系统键盘）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On-Device Voice-to-Draft (Zero Keyboard Popup)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "端侧语音直填（免弹系统键盘）"
+          }
+        }
+      }
+    },
+    "点按底部麦克风，Qwen3 0.6B + WeSpeaker 声纹过滤在 iPhone 本地完成转写，直接写入工作台输入框草稿，绝不误触发自动发送。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the native microphone button: Qwen3 0.6B + WeSpeaker voiceprint filtering transcribe offline on your iPhone and insert directly into the workbench draft without auto-sending."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点按底部麦克风，Qwen3 0.6B + WeSpeaker 声纹过滤在 iPhone 本地完成转写，直接写入工作台输入框草稿，绝不误触发自动发送。"
+          }
+        }
+      }
+    },
+    "长语音闪念 + 分享托盘交接": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lock-Screen Voice Notes + Share Tray Handoff"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "长语音闪念 + 分享托盘交接"
+          }
+        }
+      }
+    },
+    "左滑底部工具栏可录制最高 60 分钟锁屏长语音，或从系统分享菜单将图片、文件、网页暂存至一呼托盘，一键附带整理提示词填入当前会话。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe the bottom bar to record up to 60 minutes of lock-screen voice notes, or share files, photos, and links into the Yihu tray to insert with one tap."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "左滑底部工具栏可录制最高 60 分钟锁屏长语音，或从系统分享菜单将图片、文件、网页暂存至一呼托盘，一键附带整理提示词填入当前会话。"
+          }
+        }
+      }
+    },
+    "灵动岛实时进度 + Apple Watch 协同": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dynamic Island Live Progress + Apple Watch Companion"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "灵动岛实时进度 + Apple Watch 协同"
+          }
+        }
+      }
+    },
+    "Hermes 长任务在锁屏与灵动岛实时展示当前执行工具与耗时；PM Radar 待决策与待验收事项同步至 Apple Watch 表盘与腕上语音草稿。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Track Hermes long tasks on Lock Screen and Dynamic Island, and review PM Radar decisions or dictate drafts right from your Apple Watch."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hermes 长任务在锁屏与灵动岛实时展示当前执行工具与耗时；PM Radar 待决策与待验收事项同步至 Apple Watch 表盘与腕上语音草稿。"
+          }
+        }
+      }
+    },
+    "填入示例地址": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fill Example URL"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "填入示例地址"
+          }
+        }
+      }
+    },
+    "接入步骤": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Integration Steps"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "接入步骤"
+          }
+        }
+      }
+    },
+    "打开在线接入文档（getyihu.com）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Online Documentation (getyihu.com)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开在线接入文档（getyihu.com）"
+          }
+        }
+      }
+    },
+    "复制仓库与文档地址": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Repository & Docs URL"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "复制仓库与文档地址"
+          }
+        }
+      }
+    },
+    "已复制 https://getyihu.com": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied https://getyihu.com"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已复制 https://getyihu.com"
+          }
+        }
+      }
+    },
+    "查看完整 README、AEO 问答与 Dot Live 对接说明。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View full README, AEO FAQ, and Dot Live integration guide."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看完整 README、AEO 问答与 Dot Live 对接说明。"
+          }
+        }
+      }
+    },
+    "工作台接入方法": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workbench Setup Guides"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工作台接入方法"
+          }
+        }
+      }
+    },
+    "原生接入 · 18789 端口": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Native Integration · Port 18789"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原生接入 · 18789 端口"
+          }
+        }
+      }
+    },
+    "直接连接 OpenClaw Gateway Web Control UI，底部原生麦克风离线转写直填 Prompt 草稿，无需唤醒系统键盘。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect directly to OpenClaw Gateway Web Control UI and dictate prompts offline into the draft box without popping up the system keyboard."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "直接连接 OpenClaw Gateway Web Control UI，底部原生麦克风离线转写直填 Prompt 草稿，无需唤醒系统键盘。"
+          }
+        }
+      }
+    },
+    "在运行 OpenClaw 的主机上通过 Tailscale 暴露本地 18789 端口为 HTTPS 地址。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expose local port 18789 as an HTTPS endpoint via Tailscale on your OpenClaw host."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在运行 OpenClaw 的主机上通过 Tailscale 暴露本地 18789 端口为 HTTPS 地址。"
+          }
+        }
+      }
+    },
+    "在一呼「连接设置」填入你的 Tailnet HTTPS 地址（仅填主机名或端口，不带路径或 ?token= 参数）。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter your Tailnet HTTPS origin in Yihu Connection Settings (host and port only, without paths or ?token= query strings)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在一呼「连接设置」填入你的 Tailnet HTTPS 地址（仅填主机名或端口，不带路径或 ?token= 参数）。"
+          }
+        }
+      }
+    },
+    "首次进入网页后完成一次 Gateway Token 或 Tailscale 身份认证，WebView 会自动保持登录会话，并可通过底部麦克风或「长语音闪念」直接注入长段指令草稿。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Authenticate once in the web session; Yihu preserves your session and lets you inject voice drafts or long voice notes directly."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "首次进入网页后完成一次 Gateway Token 或 Tailscale 身份认证，WebView 会自动保持登录会话，并可通过底部麦克风或「长语音闪念」直接注入长段指令草稿。"
+          }
+        }
+      }
+    },
+    "灵动岛 · APNs · 9444 端口": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dynamic Island · APNs · Port 9444"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "灵动岛 · APNs · 9444 端口"
+          }
+        }
+      }
+    },
+    "原生支持 Hermes WebUI 会话、端侧语音草稿填入，以及 ActivityKit 锁屏/灵动岛实时任务进度与完成推送。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Native support for Hermes WebUI sessions, on-device voice drafts, and ActivityKit Lock Screen / Dynamic Island live task progress."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原生支持 Hermes WebUI 会话、端侧语音草稿填入，以及 ActivityKit 锁屏/灵动岛实时任务进度与完成推送。"
+          }
+        }
+      }
+    },
+    "在主机启动 Hermes WebUI（默认 9444 端口），并用 Tailscale Serve 映射为 HTTPS 地址。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start Hermes WebUI (default port 9444) on your host and expose it as HTTPS with Tailscale Serve."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在主机启动 Hermes WebUI（默认 9444 端口），并用 Tailscale Serve 映射为 HTTPS 地址。"
+          }
+        }
+      }
+    },
+    "在一呼连接该 HTTPS 地址后，打开「设置 → 原生通知与灵动岛」开启实时任务提醒。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After connecting in Yihu, open Settings → Native Notifications & Dynamic Island to enable live task updates."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在一呼连接该 HTTPS 地址后，打开「设置 → 原生通知与灵动岛」开启实时任务提醒。"
+          }
+        }
+      }
+    },
+    "当 Hermes 执行终端命令、网页搜索或修改文件时，锁屏与灵动岛会实时显示当前工具与计时。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "While Hermes runs terminal commands, web searches, or file edits, Lock Screen and Dynamic Island display the active tool and elapsed timer."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当 Hermes 执行终端命令、网页搜索或修改文件时，锁屏与灵动岛会实时显示当前工具与计时。"
+          }
+        }
+      }
+    },
+    "双向实时语音 · 10000 端口": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two-Way Live Voice · Port 10000"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "双向实时语音 · 10000 端口"
+          }
+        }
+      }
+    },
+    "当工作台域名包含 dot. 时自动激活原生「Live 通话」胶囊按钮，通过 WebRTC + 硬件级回声消除（AEC）直连 Dot Live 语音会话。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatically activates the native \"Live Call\" capsule button on dot.* origins for two-way WebRTC voice with hardware acoustic echo cancellation."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当工作台域名包含 dot. 时自动激活原生「Live 通话」胶囊按钮，通过 WebRTC + 硬件级回声消除（AEC）直连 Dot Live 语音会话。"
+          }
+        }
+      }
+    },
+    "将你的 Dot 工作台通过 HTTPS 映射为包含 dot. 的主机名（例如 https://dot.your-tailnet.ts.net:10000）。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expose your Dot workbench over HTTPS using a hostname containing dot. (e.g., https://dot.your-tailnet.ts.net:10000)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将你的 Dot 工作台通过 HTTPS 映射为包含 dot. 的主机名（例如 https://dot.your-tailnet.ts.net:10000）。"
+          }
+        }
+      }
+    },
+    "连接后，一呼底部工具栏会自动出现「Live 通话」按钮与麦克风收音模式切换（自动 / 降噪 / 宽谱）。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Once connected, the bottom bar displays the \"Live Call\" button and microphone mode switcher (Auto / Voice Isolation / Wide Spectrum)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "连接后，一呼底部工具栏会自动出现「Live 通话」按钮与麦克风收音模式切换（自动 / 降噪 / 宽谱）。"
+          }
+        }
+      }
+    },
+    "点击「Live 通话」开启 WebRTC 双向实时语音（/dot-voice/call · /attach · /stop），自动启用 iOS 硬件回声消除与蓝牙耳机路由，支持随时插话打断。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap \"Live Call\" to start two-way WebRTC voice (/dot-voice/call · /attach · /stop) with hardware echo cancellation, Bluetooth routing, and barge-in interruption."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击「Live 通话」开启 WebRTC 双向实时语音（/dot-voice/call · /attach · /stop），自动启用 iOS 硬件回声消除与蓝牙耳机路由，支持随时插话打断。"
+          }
+        }
+      }
+    },
+    "输入 Collie 工作台 HTTPS 地址即可使用原生 `__collieInsertVoiceText` 与 `__collieInsertSharedItems` 桥接，不抢焦点、不弹键盘。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect your Collie HTTPS origin to use native __collieInsertVoiceText and __collieInsertSharedItems bridges without stealing focus or popping up the keyboard."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "输入 Collie 工作台 HTTPS 地址即可使用原生 `__collieInsertVoiceText` 与 `__collieInsertSharedItems` 桥接，不抢焦点、不弹键盘。"
+          }
+        }
+      }
+    },
+    "配对 Apple Watch 后，可在表盘查看待办数量并在腕上录音生成回复草稿，回传手机端侧 Qwen3 离线识别。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With a paired Apple Watch, view action counts on your watch face and record voice drafts on your wrist for offline Qwen3 transcription on iPhone."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配对 Apple Watch 后，可在表盘查看待办数量并在腕上录音生成回复草稿，回传手机端侧 Qwen3 离线识别。"
+          }
+        }
+      }
+    },
+    "工作台连接与切换": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workbench Connection & Switching"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工作台连接与切换"
+          }
+        }
+      }
+    },
+    "连接、切换与使用指南": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connection, Switching & Guide"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "连接、切换与使用指南"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

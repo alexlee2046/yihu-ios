@@ -4,34 +4,57 @@ import SwiftUI
 import WatchConnectivity
 import WidgetKit
 
+func watchText(_ key: String) -> String {
+    NSLocalizedString(key, tableName: "Yihu", comment: "")
+}
+
 private struct YihuWatchVoiceCallback: @unchecked Sendable { var send: ([String: Any]) -> Void }
 
 @MainActor
 @Observable
 final class YihuWatchLink: NSObject, WCSessionDelegate {
     var snapshot: YihuWatchSnapshot?
+    var isDemoSnapshot = false
     var connected = false
     var notice: String?
     let voice = YihuWatchVoiceCapture()
 
+    static func makeDemoSnapshot() -> YihuWatchSnapshot {
+        .init(items: [
+            .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-decision", sourceToken: String(repeating: "0", count: 64),
+                  taskToken: String(repeating: "0", count: 64), canDraft: true,
+                  title: watchText("确认下一阶段范围"), project: watchText("示例项目"), status: "等你决策", priority: "P1",
+                  next: watchText("在手机查看原条目后确认"), sourceDate: Date(), readFailed: false),
+            .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-acceptance", sourceToken: String(repeating: "0", count: 64),
+                  taskToken: String(repeating: "1", count: 64), canDraft: true,
+                  title: watchText("验收管理视图"), project: watchText("示例项目"), status: "等你验收", priority: "P1",
+                  next: watchText("核对清单并在手机反馈"), sourceDate: Date().addingTimeInterval(-3600), readFailed: false)
+        ], capturedAt: Date(), truncated: false, hasSource: true, sourceDate: Date(), decisionCount: 1, acceptanceCount: 1)
+    }
+
+    func loadDemoSnapshot() {
+        isDemoSnapshot = true
+        snapshot = Self.makeDemoSnapshot()
+        notice = watchText("已加载示例事项，可体验草稿与录音")
+    }
+
+    func clearDemoSnapshot() {
+        isDemoSnapshot = false
+        snapshot = nil
+        notice = nil
+    }
+
     override init() {
         super.init()
+        snapshot = Self.makeDemoSnapshot()
+        isDemoSnapshot = true
         #if DEBUG
         if ProcessInfo.processInfo.environment["YIHU_WATCH_DEMO"] == "1" {
-            snapshot = .init(items: [
-                .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-decision", sourceToken: String(repeating: "0", count: 64),
-                      taskToken: String(repeating: "0", count: 64), canDraft: true,
-                      title: "确认下一阶段范围", project: "示例项目", status: "等你决策", priority: "P1",
-                      next: "在手机查看原条目后确认", sourceDate: Date(), readFailed: false),
-                .init(workbench: "11111111-1111-1111-1111-111111111111", task: "demo-acceptance", sourceToken: String(repeating: "0", count: 64),
-                      title: "验收管理视图", project: "示例项目", status: "等你验收", priority: "P1",
-                      next: "核对清单并在手机反馈", sourceDate: Date().addingTimeInterval(-90000), readFailed: false)
-            ], capturedAt: Date(), truncated: false, hasSource: true, sourceDate: Date())
             return
         }
         #endif
         voice.restore()
-        guard WCSession.isSupported() else { notice = "此设备不支持手机接续"; return }
+        guard WCSession.isSupported() else { notice = watchText("此设备不支持手机接续"); return }
         WCSession.default.delegate = self
         WCSession.default.activate()
     }
@@ -41,31 +64,32 @@ final class YihuWatchLink: NSObject, WCSessionDelegate {
         guard let data else { return }
         do {
             let value = try YihuWatchSnapshot.decode(data)
+            isDemoSnapshot = false
             snapshot = value
             do {
                 try YihuWatchWidgetStore.save(.init(value), to: YihuWatchWidgetStore.file)
                 WidgetCenter.shared.reloadTimelines(ofKind: YihuWatchWidgetStore.kind)
-            } catch { notice = "列表已同步；表盘数据暂未保存，请检查共享容器配置" }
-        } catch { notice = "手机数据无法读取，保留上次数据" }
+            } catch { notice = watchText("列表已同步；表盘数据暂未保存，请检查共享容器配置") }
+        } catch { notice = watchText("手机数据无法读取，保留上次数据") }
     }
 
     func request(_ item: YihuWatchSnapshot.Item? = nil) {
         guard WCSession.default.activationState == .activated, WCSession.default.isReachable else {
-            notice = "请连接并解锁手机，打开一呼后重试"; return
+            notice = watchText("请连接并解锁手机，打开一呼后重试"); return
         }
         var message: [String: String] = ["kind": "sync"]
         if let item {
-            guard let token = item.sourceToken else { notice = "请先在手机刷新并重新同步"; return }
+            guard let token = item.sourceToken else { notice = watchText("请先在手机刷新并重新同步"); return }
             message = ["kind": "open", "workbench": item.workbench, "task": item.task, "sourceToken": token]
         }
         let opening = item != nil
         WCSession.default.sendMessage(message, replyHandler: { [weak self] response in
             let queued = response["queued"] as? Bool == true
             Task { @MainActor [weak self] in
-                self?.notice = queued ? (opening ? "已请求手机接续，请解锁并打开一呼" : "已请求同步手机数据") : "请在手机继续操作"
+                self?.notice = queued ? (opening ? watchText("已请求手机接续，请解锁并打开一呼") : watchText("已请求同步手机数据")) : watchText("请在手机继续操作")
             }
         }, errorHandler: { [weak self] _ in
-            Task { @MainActor [weak self] in self?.notice = "手机暂不可达，请稍后重试" }
+            Task { @MainActor [weak self] in self?.notice = watchText("手机暂不可达，请稍后重试") }
         })
     }
 
@@ -110,11 +134,11 @@ struct YihuWatchApp: App {
     }
     private var notificationTitle: String {
         switch link.snapshot?.phoneNotificationState {
-        case "enabled": "手机通知已开启"
-        case "denied": "手机系统通知未授权"
-        case "unsupported": "当前手机服务不支持原生通知"
-        case "disabled": "手机通知未开启"
-        default: "请在手机检查通知设置"
+        case "enabled": watchText("手机通知已开启")
+        case "denied": watchText("手机系统通知未授权")
+        case "unsupported": watchText("当前手机服务不支持原生通知")
+        case "disabled": watchText("手机通知未开启")
+        default: watchText("请在手机检查通知设置")
         }
     }
     var body: some Scene {
@@ -126,65 +150,71 @@ struct YihuWatchApp: App {
                 TimelineView(.periodic(from: .now, by: 60)) { _ in
                     List {
                         Section {
-                            Label(link.connected ? "手机可达" : "手机暂未连接", systemImage: link.connected ? "iphone" : "iphone.slash")
+                            Label(link.connected ? watchText("手机可达") : watchText("手机暂未连接"), systemImage: link.connected ? "iphone" : "iphone.slash")
                                 .foregroundStyle(link.connected ? Color.secondary : Color.orange)
                             if let notice = link.notice { Text(notice).font(.footnote) }
-                            NavigationLink("未完成草稿／录音") { YihuWatchRecoveryView(link: link) }
-                            if route != .all { Button("查看全部待处理") { route = .all } }
-                            Button("同步手机已有数据") { link.request() }
-                            NavigationLink("通知状态与镜像") {
+                            NavigationLink(watchText("未完成草稿／录音")) { YihuWatchRecoveryView(link: link) }
+                            if route != .all { Button(watchText("查看全部待处理")) { route = .all } }
+                            Button(watchText("同步手机已有数据")) { link.request() }
+                            if link.snapshot == nil {
+                                Button(watchText("加载示例事项")) { link.loadDemoSnapshot() }
+                            } else if link.isDemoSnapshot {
+                                Button(watchText("退出示例事项")) { link.clearDemoSnapshot() }
+                            }
+                            NavigationLink(watchText("通知状态与镜像")) {
                                 List {
                                     Text(notificationTitle)
-                                    Text("可在 iPhone 的 Watch App → 通知中开启一呼通知镜像").font(.footnote).foregroundStyle(.secondary)
-                                }.navigationTitle("通知")
+                                    Text(watchText("可在 iPhone 的 Watch App → 通知中开启一呼通知镜像")).font(.footnote).foregroundStyle(.secondary)
+                                }.navigationTitle(watchText("通知"))
                             }
                         }
                         if let snapshot = link.snapshot {
-                            if !snapshot.hasSource { Text("请先在手机配置或刷新需求台账") }
-                            else if snapshot.stale { Text("数据过期或读取失败，请在手机刷新").foregroundStyle(.orange) }
+                            if !snapshot.hasSource { Text(watchText("请先在手机配置或刷新需求台账")) }
+                            else if snapshot.stale { Text(watchText("数据过期或读取失败，请在手机刷新")).foregroundStyle(.orange) }
                             if snapshot.incompleteSources == true {
-                                Text("部分来源刷新未完成").font(.footnote).foregroundStyle(.orange)
+                                Text(watchText("部分来源刷新未完成")).font(.footnote).foregroundStyle(.orange)
                             }
                             ForEach(route.status.map { [$0] } ?? ["等你决策", "等你验收"], id: \.self) { status in
                                 let items = snapshot.items.filter { $0.status == status }
-                                Section(snapshot.count(for: status).map { "\(status) · \($0)" } ?? status) {
+                                let localizedStatus = watchText(status)
+                                Section(snapshot.count(for: status).map { "\(localizedStatus) · \($0)" } ?? localizedStatus) {
                                     if items.isEmpty {
-                                        Text(snapshot.truncated ? "当前传输未包含此类事项，请在手机查看" : "当前快照暂无事项").foregroundStyle(.secondary)
+                                        Text(snapshot.truncated ? watchText("当前传输未包含此类事项，请在手机查看") : watchText("当前快照暂无事项")).foregroundStyle(.secondary)
                                     }
                                     ForEach(items) { item in
                                         NavigationLink {
                                             List {
-                                                Text(item.title).font(.headline)
-                                                Text(item.project + " · " + item.status)
+                                                Text(watchText(item.title)).font(.headline)
+                                                Text(watchText(item.project) + " · " + watchText(item.status))
                                                 if !item.priority.isEmpty { Text(item.priority) }
-                                                if !item.next.isEmpty { Text(item.next) }
+                                                if !item.next.isEmpty { Text(watchText(item.next)) }
                                                 if let date = item.sourceDate { Text(date, style: .date); Text(date, style: .time) }
-                                                if item.stale { Label("数据过期或读取失败，请在手机刷新", systemImage: "clock.badge.exclamationmark").foregroundStyle(.orange) }
-                                                Button("转手机继续处理") { link.request(item) }
+                                                if item.stale { Label(watchText("数据过期或读取失败，请在手机刷新"), systemImage: "clock.badge.exclamationmark").foregroundStyle(.orange) }
+                                                Button(watchText("转手机继续处理")) { link.request(item) }
                                                 if item.canDraft == true, item.taskToken != nil {
-                                                    NavigationLink("语音／文字草稿") { YihuWatchDraftView(item: item, link: link) }
+                                                    NavigationLink(watchText("语音／文字草稿")) { YihuWatchDraftView(item: item, link: link) }
                                                 } else {
-                                                    Text("草稿传输不可用；请在手机检查数据源并刷新，再同步到手表")
+                                                    Text(watchText("草稿传输不可用；请在手机检查数据源并刷新，再同步到手表"))
                                                         .font(.footnote).foregroundStyle(.secondary)
                                                 }
                                                 if let notice = link.notice { Text(notice).font(.footnote) }
-                                            }.navigationTitle("事项详情")
+                                            }.navigationTitle(watchText("事项详情"))
                                         } label: {
                                             VStack(alignment: .leading) {
-                                                Text(item.title)
-                                                Text(item.project).font(.caption).foregroundStyle(.secondary)
-                                                if item.stale { Text("数据待刷新").font(.caption).foregroundStyle(.orange) }
+                                                Text(watchText(item.title))
+                                                Text(watchText(item.project)).font(.caption).foregroundStyle(.secondary)
+                                                if item.stale { Text(watchText("数据待刷新")).font(.caption).foregroundStyle(.orange) }
                                             }
                                         }
                                     }
                                 }
                             }
-                            if snapshot.truncated { Text("更多事项请在手机查看").font(.footnote) }
+                            if snapshot.truncated { Text(watchText("更多事项请在手机查看")).font(.footnote) }
                         } else {
-                            Text("暂无手机数据；请在已配对手机打开一呼并刷新台账").font(.footnote)
+                            Text(watchText("暂无手机数据；请在已配对手机打开一呼并刷新台账")).font(.footnote)
                         }
                     }
-                }.navigationTitle(route.status ?? "一呼")
+                }.navigationTitle(route.status.map(watchText) ?? watchText("一呼"))
                 }
             }
             .id(navigationID)

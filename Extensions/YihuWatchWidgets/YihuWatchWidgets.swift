@@ -1,5 +1,10 @@
+import Foundation
 import SwiftUI
 import WidgetKit
+
+private func watchWidgetText(_ key: String) -> String {
+    NSLocalizedString(key, tableName: "Yihu", comment: "")
+}
 
 private struct ActionsEntry: TimelineEntry {
     var date: Date
@@ -34,33 +39,35 @@ private struct ActionsWidgetView: View {
     private func count(_ value: Int?) -> String {
         entry.snapshot?.hasSource == true ? value.map(String.init) ?? "—" : "—"
     }
-    private var status: String { entry.snapshot?.status(at: entry.date) ?? "请打开一呼同步" }
+    private var status: String {
+        watchWidgetText(entry.snapshot?.status(at: entry.date) ?? "请打开一呼同步")
+    }
     private var warning: Bool { (entry.snapshot?.needsRefresh(at: entry.date) ?? true) || entry.snapshot?.total == nil }
 
     var body: some View {
         Group {
             switch family {
             case .accessoryInline:
-                Text(warning ? "一呼 · 待刷新" : "一呼 · 待处理 \(total)")
+                Text(warning ? watchWidgetText("一呼 · 待刷新") : String(format: watchWidgetText("一呼 · 待处理 %@"), total))
             case .accessoryCircular:
                 VStack(spacing: 0) {
                     Image(systemName: warning ? "clock.badge.exclamationmark" : "checklist")
                     Text(total).font(.headline).minimumScaleFactor(0.6)
                 }
-                .accessibilityLabel("一呼待处理 \(total)，\(status)")
+                .accessibilityLabel(String(format: watchWidgetText("一呼待处理 %@，%@"), total, status))
             default:
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("一呼 · 待我处理").font(.headline)
+                    Text(watchWidgetText("一呼 · 待我处理")).font(.headline)
                     HStack {
                         Link(destination: YihuWatchRoute.decision.url) {
-                            Text("决策 \(count(entry.snapshot?.decisionCount))")
+                            Text(String(format: watchWidgetText("决策 %@"), count(entry.snapshot?.decisionCount)))
                         }
                         Link(destination: YihuWatchRoute.acceptance.url) {
-                            Text("验收 \(count(entry.snapshot?.acceptanceCount))")
+                            Text(String(format: watchWidgetText("验收 %@"), count(entry.snapshot?.acceptanceCount)))
                         }
                     }
                     HStack(spacing: 4) {
-                        Text(warning || entry.snapshot?.total == nil ? status : "读取于")
+                        Text(warning || entry.snapshot?.total == nil ? status : watchWidgetText("读取于"))
                         if let date = entry.snapshot?.sourceDate, !warning {
                             Text(date, style: .time)
                         }
@@ -80,8 +87,8 @@ struct YihuWatchActionsWidget: Widget {
         StaticConfiguration(kind: YihuWatchWidgetStore.kind, provider: ActionsProvider()) { entry in
             ActionsWidgetView(entry: entry)
         }
-        .configurationDisplayName("一呼待我处理")
-        .description("查看手机已有的待决策与待验收数量；更新由系统调度。")
+        .configurationDisplayName(watchWidgetText("一呼待我处理"))
+        .description(watchWidgetText("查看手机已有的待决策与待验收数量；更新由系统调度。"))
         .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline])
     }
 }

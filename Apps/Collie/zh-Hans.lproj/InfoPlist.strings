@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "一呼";
 "CFBundleName" = "一呼";
+"NSCameraUsageDescription" = "仅在您选择拍摄诊断或工作台参考照片并附加到任务时使用相机。";
 "NSMicrophoneUsageDescription" = "仅在您点击一呼的原生麦克风按钮后录音，并由 iPhone 上的 Qwen3 模型离线转成文字。";
+"NSBluetoothAlwaysUsageDescription" = "仅在您启用 Mac 蓝牙热点唤醒后，用于感知附近的 MacBook 并在其断网时激活手机热点连接。";
