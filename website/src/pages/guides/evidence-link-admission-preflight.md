@@ -5,51 +5,6 @@ description: "按safeEvidenceURLs核分词、边界标点、HTTPS、无内嵌凭
 lang: zh
 ---
 
-## SYN-ELA-46 证据链接准入自检
-
-SYNTHETIC_EXAMPLE · pending · not_run。形态准入不是安全、真实性、脱敏或访问授权。
-
-[/samples/p25-evidence-link-admission-preflight/README.md](/samples/p25-evidence-link-admission-preflight/README.md) · [/samples/p25-evidence-link-admission-preflight/preflight.zh.json](/samples/p25-evidence-link-admission-preflight/preflight.zh.json) · [/samples/p25-evidence-link-admission-preflight/preflight.en.json](/samples/p25-evidence-link-admission-preflight/preflight.en.json)
-
-<div role="region" aria-label="SYN-ELA-46" tabindex="0">
-
-| ID | 检查项 | 不应推断 |
-| --- | --- | --- |
-| E01 | 空值 | 原文为空不等业务证据不存在。 |
-| E02 | 空串 | 不补造证据或URL。 |
-| E03 | 空白换行 | 空链接列表不是删除源记录指令。 |
-| E04 | 独立HTTPS | 只证明形态准入，不是可信或获准访问。 |
-| E05 | 边界标点 | 仅trim列出的边界字符，不是完整语法解析。 |
-| E06 | 换行分项 | 保留首次顺序，不证明引用关系。 |
-| E07 | 指定分隔符 | 分号逗号中文标点竖线拆词，不是全部引用语法。 |
-| E08 | 相同串去重 | 按absoluteString去重，不代表内容去重。 |
-| E09 | HTTP拒绝 | 拒绝形态不证明目的地不存在或恶意。 |
-| E10 | 其他协议 | 不改写为HTTPS伪造准入。 |
-| E11 | 缺host | 不补造主机名。 |
-| E12 | 内嵌用户 | SYN-user是虚构占位；无user不等路径查询已脱敏。 |
-| E13 | 端口0 | 端口门不是所有端点可用性检查。 |
-| E14 | 超范围端口 | 不修写端口掩盖原文。 |
-| E15 | 端口上界 | 形态准入不是端口安全认证或网络测试。 |
-| E16 | 显式443 | 不宣称与省略端口的拼法语义全面归一。 |
-| E17 | Markdown标签 | 此例不提取；不是完整Markdown解析器。 |
-| E18 | 逗号切URL | 逗号切出前段，候选可能不等原意；保留原文人工核。 |
-| E19 | 查询片段保留 | 全部虚构标记；筛选不脱敏、不授权公开路径查询片段。 |
-| E20 | 句点不是trim字符 | 末尾句点仍在，不能假定自动纠正文案。 |
-| E21 | 非域名白名单 | localhost也可过形态门；不打开、不绕内网授权。 |
-| E22 | 编码逗号 | 不按解码后语义全面归一。 |
-| E23 | 片段不同 | 不同absoluteString可并存，不证明不同内容或已读。 |
-| E24 | 斜线拼法 | 不同串不自动语义合并，也不执行跳转解析。 |
-| R01 | 证据链接与提醒解析不可互授准入 | 证据仅形态；提醒另核relay HTTPS/host，不是同一白名单。 |
-| R02 | 待定槽不是打开回执 | handleTap设pendingURL，consume后清空，不是全量审计队列。 |
-| R03 | 保留录文和笔记 | notesPresented、canCancel、delivering、canRetryDelivery及onWillSaveConnection门不能为导航绕过。 |
-| R04 | 当前源连接 | connected后才消费，不证明登录/会话/内容可信或业务成功。 |
-| R05 | 已保存与未知源 | 其他源须已保存；未知源消费丢弃，不新增服务器，不放宽权限。 |
-| R06 | 目的地与原材料 | 不访问例子，不抹原文/副作用；目的地可保存同步处理，未知不盲重试。 |
-
-</div>
-
-
-
 <h2 id="first-answer">能点只代表通过当前形态筛选，不代表证据可信或已脱敏</h2>
 
 Radar保留evidence文字，再从中筛选可点URL。当前解析按空白/换行与列出的分隔符拆项，去边界标点，只接纳HTTPS、非空host、无内嵌用户名密码及有效端口，再按absoluteString去重。它不是完整Markdown解析器、安全扫描或业务证据认证。

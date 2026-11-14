@@ -71,7 +71,4 @@ isSupersededNavigation过滤NSURLErrorDomain的取消和WebKitErrorDomain的102�
 
 [取消分类/导航失败/进程终止](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieWebView.swift)
 
-
-## SYN-HRI-50 页面状态不是历史回执（保持退休）
-
-[同语历史引用完整性核对](/guides/history-reference-integrity-review/)核目标组件、位置/ID、draft条件与明确references；结构通过或关联存在不证明已读、审批、服务完成或来源可信。Web取消/策略交接、500ms spinner复核和15秒防环也不证明原生历史已加载/分页完整；不要用页面reload替代generation、原请求和已记录回执，也不要为消错补造引用或盲重放。真实导航/历史读取/账号/网络均not_run。保持indexable: false/noindex,follow，不入sitemap或LLM独立section，不新增下载/Store/转换卡，原ZH Store块边界、配置、守卫与退页正文不改。
+[核对历史引用](/guides/history-reference-integrity-review/)

@@ -5,49 +5,6 @@ description: "区分权限弹窗inactive、真实background、短语音取消和
 lang: zh
 ---
 
-<h2 id="syn-rebind-36">SYN-REBIND-36：前台切回、端口漂移与缓冲恢复核查包</h2>
-
-SYNTHETIC_EXAMPLE。仅源方法与内存自检，不是设备日志/导入协议；前台回来不等无缝重绑或后台续录。
-
-[ZH: /samples/p15-foreground-rebind/foreground-rebind-preflight.zh.json](/samples/p15-foreground-rebind/foreground-rebind-preflight.zh.json) · [EN: /samples/p15-foreground-rebind/foreground-rebind-preflight.en.json](/samples/p15-foreground-rebind/foreground-rebind-preflight.en.json) · [Card: /samples/p15-foreground-rebind/preflight-card.md](/samples/p15-foreground-rebind/preflight-card.md)
-
-<div role="region" aria-label="合成前台请求与输入核查表，可左右滚动" tabindex="0">
-
-| Case | Synthetic condition / 合成条件 | Scoped expectation / 范围内结果 | Not certified / 未证 |
-| --- | --- | --- | --- |
-| L1 | 权限弹窗inactive保留准备请求 | phase=preparing; session_changed=false; cancel/start=0/0 | Memory spy only; no real permission/capture/handoff |
-| L2 | 真正background使旧请求失效；迟到许可不能复活 | phase=failed; session_changed=true; cancel/start=1/0 | Memory spy only; no real permission/capture/handoff |
-| L3 | 非许可弹窗的inactive取消准备 | phase=failed; session_changed=true; cancel/start=1/0 | Memory spy only; no real permission/capture/handoff |
-| L4 | 录音后台取消，不承诺续录 | phase=failed; session_changed=true; cancel/start=1/0 | Memory spy only; no real permission/capture/handoff |
-| L5 | 转写离活动态取消，不抹已发生副作用 | phase=failed; session_changed=true; cancel/start=1/0 | Memory spy only; no real permission/capture/handoff |
-| L6 | ready且空字符串pending仍保留，不自动交接 | phase=ready; session_changed=false; cancel/start=0/0 | Memory spy only; no real permission/capture/handoff |
-| L7 | delivering不在canCancel集合，不能宣已撤回 | phase=delivering; session_changed=false; cancel/start=0/0 | Memory spy only; no real permission/capture/handoff |
-| L8 | active但尚不在foreground不启动 | phase=preparing; session_changed=false; cancel/start=0/0 | Memory spy only; no real permission/capture/handoff |
-| L9 | 许可+前台+准备才调用内存采集spy | phase=recording; session_changed=false; cancel/start=0/1 | Memory spy only; no real permission/capture/handoff |
-| L10 | 内存start抛错走失败，不强制重绑 | phase=failed; session_changed=false; cancel/start=0/1 | Memory spy only; no real permission/capture/handoff |
-| S1 | request_ms=[]; consume_ms=[0] | consume=[False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
-| S2 | request_ms=[0]; consume_ms=[29999] | consume=[True]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
-| S3 | request_ms=[0]; consume_ms=[30000, 30001] | consume=[True, False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
-| S4 | request_ms=[0]; consume_ms=[30001] | consume=[False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
-| S5 | request_ms=[0, 25000]; consume_ms=[50000, 50001] | consume=[True, False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
-| S6 | request_ms=[0]; consume_ms=[31000, 31000] | consume=[False, False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
-| S7 | request_ms=[0, 1, 2]; consume_ms=[3, 4, 5] | consume=[True, False, False]; pending Bool consumed/expired, not a queue | Injected monotonic instants; no Siri binding or30s SLA |
-| F1 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False}; inputs=['port-A', 'port-B'] | same format=True; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
-| F2 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False}; inputs=['port-B', 'port-A'] | same format=True; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
-| F3 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False}; inputs=['port-C'] | same format=True; same sorted UIDs=False | Fake formats/ports; no physical route or real PCM |
-| F4 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 44100, 'channels': 1, 'common_format': 1, 'interleaved': False}; inputs=['port-A', 'port-B'] | same format=False; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
-| F5 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 2, 'common_format': 1, 'interleaved': False}; inputs=['port-A', 'port-B'] | same format=False; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
-| F6 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 1, 'common_format': 3, 'interleaved': False}; inputs=['port-A', 'port-B'] | same format=False; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
-| F7 | {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': False} → {'sample_rate': 48000, 'channels': 1, 'common_format': 1, 'interleaved': True}; inputs=['port-A', 'port-B'] | same format=False; same sorted UIDs=True | Fake formats/ports; no physical route or real PCM |
-| B1 | foreground callback alone | startCaptureIfReady + prewarm; not direct engine recovery | Source read only; runtime not_run |
-| B2 | current-token engine-change recovery with unchanged format | source keeps converter/PCM, reinstalls tap; conditional source path, no no-loss guarantee | Source read only; runtime not_run |
-| B3 | changed native format or configure/start throw | source fails pipeline, clears recordingActive and stops engine; no padding/relabel fix | Source read only; runtime not_run |
-| B4 | input UID drift even with equal format | source route comparison is false; route notifications and expected-recovery suppression have independent guards | Source read only; runtime not_run |
-
-</div>
-
-许可弹窗inactive特例不等真正background；30秒含端点是请求寿命而非SLA，Bool重复刷新不排N次。源输入UID排序忽略排列、仍会识别端口漂移，格式四字段须分开；格式相同也不证明硬件缓冲完整。源码条件恢复与实际帧/草稿/发送回执分账，失败原件保留，不盲重录/重发。商店0.1.0无需Mac/自签名，自有可信工作台、模型/权限与目的地另核；目的地可能保存/同步/自动处理。ASR、真实切换/麦克风/填入/发送/锁屏续录全部not_run。
-
 <h2 id="first-answer">回到前台是状态事件，不是录音、音频重绑或交接成功回执</h2>
 
 一呼当前前台回调会进入短语音准备检查，并恢复既有笔记转写；离开活动状态会走相应取消/暂停逻辑。权限弹窗造成的 `inactive` 与真正 `background` 不能混为一谈。本页的“重绑前检”是人工重新核状态、路由和目标，不是App承诺所有音频会话自动无缝续上。

@@ -73,8 +73,4 @@ No. Condition review only, without setting changes/event injection.
 
 [Recovery debouncer/call path](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
 
-## SYN-BUSY-36: suppression does not release busy state
-
-Debounce decides whether this configuration notification is suppressed, without changing controller phase, pending text or test reservation. Other local guards still consider pending work, foreground/permission and pipeline state. True does not prove accessory recovery; false grants no recapture/resend. The new worked case checks these layers rather than treating two seconds as admission waiting time or a recovery deadline.
-
-[Continue to the filled example on the same-language active busy-state page](/en/guides/audio-busy-state-admission/#syn-busy-36). This remains a noindex,follow retired technical reference outside the150-URL reading export, with no new resource/Store promotion or automatic recovery feature here.
+[Check recording availability](/en/guides/audio-busy-state-admission/)

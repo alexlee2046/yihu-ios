@@ -54,11 +54,3 @@ lang: zh
 [README](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/README.md) · [冻结实现](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
 
 </details>
-
-<h2 id="syn-level-35">SYN-LEVEL-35：静止试音先核原词，不追满电平条</h2>
-
-合成包预填14组双管线数值：短语音RMS乘2限制到0至1，长笔记成功写入后RMS乘12并上限1。同输入可短条未满/长条已满，不同RMS也可显示同0.5；空新块或合成写失败可保长路旧level。条长不是风噪/标准dB SPL/识别率或已保存证据，显示裁剪也不证明麦克风削波。
-
-<a href="/samples/p12-level-preflight/level-preflight.zh.json" download>下载SYN-LEVEL-35中文合成输入与预期</a> · <a href="/samples/p12-level-preflight/preflight-card.md" download>阅读中英已填静止试音核对卡</a>
-
-仅原函数隔离数值/内存替身核验；真实麦克风、风噪、标准声压、准确率、ASR/填入/发送全not_run。商店0.1.0/id6819057500安装不需Mac/Xcode/自行签名，与上文源码准备分开；沿11/05官方证据按同语商店段核自有工作台/账号、模型/权限/安全目标。先静止并取得同意，不为追满条加音量、重复填入或后台监听。

@@ -66,7 +66,3 @@ No. Static message/UI routing only, without navigation or business action.
 [Cross-device fields](/en/guides/cross-device-field-presentation/) · [Voice stages](/en/guides/watch-voice-queued-ready-boundaries/) · [Draft restoration](/en/guides/reply-draft-restoration-scope/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Open acceptance](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieWatchPhoneBridge.swift) · [Open routing](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift)
-
-## SYN-REC-41 technical forwarding (still retired)
-
-Watch open queued is request admission, not phone UI/navigation, fresh source or business completion. sourceToken grants no approval/clinical authority; do not import voice/draft taskToken rules into open. The [same-language recording-note review](/en/guides/recording-notes-handoff/) separates source text/external timing worksheet/instruction/durable reservation and actual target receipt; medical decisions are excluded, not automatically filtered by a new App guard. This page stays indexable: false/noindex,follow, no sitemap/LLM section, downloads or Store card. SYNTHETIC_EXAMPLE is not real Watch/ASR/clinical acceptance; no blind resend on uncertain effects.

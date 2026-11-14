@@ -66,7 +66,3 @@ No. Fixed paths only, without actual cross-device acceptance.
 [Cross-device fields](/en/guides/cross-device-field-presentation/) · [PCM guards](/en/guides/pcm-format-admission-review/) · [Phone drafts](/en/guides/reply-draft-restoration-scope/) · [Voiceprint scope](/en/guides/voiceprint-filter-not-authorization/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Voice/cache/result flow](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieWatchPhoneBridge.swift) · [Foreground/delivery scope](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceController.swift)
-
-## SYN-XDEV-38 technical forwarding (still retired)
-
-queued admission/cache acknowledgement, ready transcription result, phone draft persistence, web insertion and server submission are distinct stages. Displayed text/local fingerprints are not authentication or write authorization. The [same-language cross-device field review](/en/guides/cross-device-field-presentation/) separates subsets, placeholders, character prefixes and byte/row pruning, not full-field sync/recovery. This page keeps indexable: false/noindex,follow, no sitemap/LLM section, downloads or Store card. SYNTHETIC_EXAMPLE is not real Watch capture/pairing/ASR/send; preserve failures/unknowns and do not blindly retry.

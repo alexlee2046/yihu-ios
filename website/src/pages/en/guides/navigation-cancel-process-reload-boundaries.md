@@ -71,7 +71,4 @@ If you are preparing administrative notes after a hospital shift swap, a page re
 
 [Cancellation/failure/termination](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieWebView.swift)
 
-
-## SYN-HRI-50 page state is not a history receipt (still retired)
-
-The [same-language history reference review](/en/guides/history-reference-integrity-review/) checks target components, positions/IDs, draft conditions and explicit references. Valid structure/association proves neither reading, approval, completion nor source trust. Web cancellation/policy handoff, 500ms spinner rechecks and 15s loop guards do not prove native history loaded or paging complete. Never replace generation/original requests/recorded receipts with reload, invent references to hide errors or blindly replay. Real navigation/history reads/accounts/network remain not_run. Keep indexable: false/noindex,follow, no sitemap/standalone LLM section, no new download/Store/conversion card, or changes to original ZH Store boundaries, configuration, guards or retired content.
+[Review history references](/en/guides/history-reference-integrity-review/)

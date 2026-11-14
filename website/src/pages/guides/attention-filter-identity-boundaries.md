@@ -71,8 +71,3 @@ indexable: false
 [状态别名](/guides/status-alias-approval-boundaries/) · [认领责任](/guides/department-minutes-ownership-archive/) · [显示占位](/guides/empty-field-display-defaults/) · [开始](/start/) · [隐私](/privacy/)
 
 [requiresMyAttention/matchingActions](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieRadarModel.swift) · [显示过滤入口](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieRadarView.swift)
-
-
-## SYN-RJN-51 空集合与attention不证明身份（保持退休）
-
-[同语Radar JSON类型/null核对](/guides/radar-json-null-validation/)区分tasks缺失/null回退与显式[]、可选类型和原decode后校验。allTasks或筛选为空不证明全台账已完成；状态trim、next固定字样、reply_supported=true也不授当前账户/负责人身份、审批或写权，不改原字段绕门。真实读取/UI/prepare/回复/网络全not_run，保原件与未知，不补日期或伪造能力。保原P22转接、indexable: false/noindex,follow，不入sitemap或LLM独立section，不新增下载/Store/转换卡；既有英文P8下载与历史P4转换块及全站原ZH Store边界原样保留，不改配置或退页正文。

@@ -5,51 +5,6 @@ description: "Separate fixed UTC+08 date_str, Unix task updates, phone requests 
 lang: en
 ---
 
-## SYN-TZR-52 time and request lifetime preflight
-
-SYNTHETIC_EXAMPLE · pending · not_run. Dates, events, epochs and lifetimes differ.
-
-[/samples/p31-timezone-timestamp-review/README.md](/samples/p31-timezone-timestamp-review/README.md) · [/samples/p31-timezone-timestamp-review/preflight.zh.json](/samples/p31-timezone-timestamp-review/preflight.zh.json) · [/samples/p31-timezone-timestamp-review/preflight.en.json](/samples/p31-timezone-timestamp-review/preflight.en.json)
-
-<div role="region" aria-label="SYN-TZR-52" tabindex="0">
-
-| ID | Check | Expectation/boundary |
-| --- | --- | --- |
-| D01 | Fixed UTC+08 | parse=true; 2026-10-18T01:00:00Z |
-| D02 | Previous UTC date | parse=true; 2026-10-17T16:30:00Z |
-| D03 | Valid leap day | parse=true; 2024-02-28T16:00:00Z |
-| D04 | Invalid leap day | parse=false; reject, no repair |
-| D05 | ISO is not source format | parse=false; reject, no repair |
-| D06 | Offset suffix differs | parse=false; reject, no repair |
-| D07 | Non-padded format | parse=false; reject, no repair |
-| D08 | Extra seconds | parse=false; reject, no repair |
-| D09 | Minute out of range | parse=false; reject, no repair |
-| D10 | Hour24 roundtrip differs | parse=false; reject, no repair |
-| D11 | No whitespace repair | parse=false; reject, no repair |
-| D12 | Fixed offset not device DST | parse=true; 2026-03-07T18:30:00Z |
-| W01 | Source versus packaging | Date JSON source=813978000; captured=813978060; reference2001 seconds |
-| W02 | Date boundary same instant | Date JSON source=813947400; captured=813947520; reference2001 seconds |
-| W03 | New package not new source | Date JSON source=813978000; captured=814064400; reference2001 seconds |
-| W04 | Unix zero is not Date zero | Date JSON source=-978307200; captured=813978000; reference2001 seconds |
-| W05 | Date zero is2001 | Date JSON source=0; captured=813978000; reference2001 seconds |
-| W06 | Unknown source not package time | Date JSON source=unknown/omitted; captured=813978000; reference2001 seconds |
-| S01 | No request | consume=[false]; pending=false |
-| S02 | Immediate one-time consume | consume=[true, false]; pending=false |
-| S03 | One ms before endpoint | consume=[true]; pending=false |
-| S04 | Inclusive30s endpoint | consume=[true]; pending=false |
-| S05 | After endpoint expires | consume=[false, false]; pending=false |
-| S06 | Repeat refresh not N-queue | consume=[true, false]; pending=false |
-| M01 | Identify the event first | Source read, task update, phone request, Watch packaging and file edit are distinct; never replace source time with now. |
-| M02 | Explicit offset and format | Original date_str uses fixed Gregorian/POSIX UTC+08 with exact roundtrip, not phone zone/DST; UTC display does not authorize ISO source rewrites. |
-| M03 | Seconds milliseconds and Date epoch | Task Unix seconds, default JSONEncoder Date reference2001 and ContinuousClock relative Duration differ; no digit-count /1000 repair or cross-domain subtraction. |
-| M04 | Freshness thresholds are not SLA | 24h stale/>5m future are source-only here; isOutdated/isFutureDated/stale are not run, not refresh/response/business-deadline promises. |
-| M05 | Consumption is not capture | Inclusive30s belongs to original request center; Intent return/Bool consume proves no foreground/system binding/permission/capture/insertion/send. |
-| M06 | Preserve originals and stop | Synthetic only, no source fetch/current-time masking/rename-or-unit bypass. Preserve unknowns/reservations; destinations may sync, no blind retry. |
-
-</div>
-
-
-
 <h2 id="first-answer">Identify the event before comparing timezone, units and ordering</h2>
 
 Current Radar parses `date_str` using fixed `yyyy-MM-dd HH:mm` in UTC+08:00. Last successful source read cannot be replaced with a phone request, cache hit or file modification. Optional task `timestamp` is a separate Unix-time field; Watch `sourceDate` and `capturedAt` also differ. Establish event/contract first instead of treating all times as equivalent numbers.

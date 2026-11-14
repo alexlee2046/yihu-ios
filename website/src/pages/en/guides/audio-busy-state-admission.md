@@ -65,11 +65,3 @@ No. Local guards/call scope only, without a new scheduler or device/concurrency 
 [Permission/sampling](/en/guides/microphone-permission-sample-contract/) · [Foreground](/en/guides/foreground-audio-rebind-preflight/) · [Voiceprint results](/en/guides/voiceprint-filter-not-authorization/) · [Preview/final](/en/guides/replaceable-voice-preview-review/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Action/phase/test reservation](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceController.swift) · [Note admission closures](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift) · [Capture/worker entry](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceNotes.swift)
-
-<h2 id="syn-busy-36">SYN-BUSY-36: buttons, admission and suppression are separate</h2>
-
-The filled synthetic pack uses eight scenarios/thirty operations for pending text/test reservation, enabled needsModel without capture, non-cancellable delivery that is not idle, and transcription versus an empty lower pipeline. Preparation still intersects permission and foreground. Neither debounce result releases controller busy state; the recording-phase primary button means stop, not a second capture.
-
-<a href="/samples/p13-busy-debounce/busy-debounce-preflight.en.json" download>Download SYN-BUSY-36 English offline fixture</a> · <a href="/samples/p13-busy-debounce/preflight-card.md" download>Read the filled bilingual busy/debounce card</a>
-
-Original guards were checked only in a Foundation memory-spy adapter. Start/prewarm/preview counters are not microphone or model results. Device interruption/routes/accessory recovery, ASR/insertion/sending are not_run. Do not erase pending text or falsify flags; waiting two seconds does not grant recapture/resend. The card separates store0.1.0 installation from source signing and still requires your own workspace/account, models, permission and a safe destination.

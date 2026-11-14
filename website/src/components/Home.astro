@@ -17,13 +17,13 @@ const features = en ? [
 ];
 ---
 <section class="task-hero wrap" aria-labelledby="hero-title">
-  <h1 id="hero-title">{en ? 'Yihu. Speak your next step.' : '一呼，让下一步更轻。'}</h1>
-  <p>{en ? 'An iPhone voice companion for the workspace you already use. Bring your own address and account.' : '你自己的工作台，iPhone 上的语音入口。用已有地址和账号，少打字，继续手边的工作。'}</p>
-  <div class="hero-actions"><a class="button button-primary" href="#experience">{en ? 'Try a sample' : '试试免登录预览'}</a><a class="button button-text app-store-link" href={store.url}>{en ? 'View on App Store' : '在 App Store 查看'} →</a></div>
+  <h1 id="hero-title">{en ? 'Speak it. Review it. Keep moving.' : '说下来，理清下一步。'}</h1>
+  <p>{en ? 'Voice drafts and recording notes for your own iPhone workspace. Keep the original, check the wording, and decide what happens next.' : '在 iPhone 上口述草稿、整理录音笔记。保留原文，核对文字，再回自己的工作台继续处理。'}</p>
+  <div class="hero-actions"><a class="button button-primary app-store-link" href={store.url}>{en ? 'Get Yihu on the App Store' : '从 App Store 获取一呼'}</a><a class="button button-text" href="#experience">{en ? 'Preview recording notes' : '先看录音笔记预览'} ↓</a></div>
 </section>
 <section class="task-preview wrap" id="experience" aria-labelledby="experience-title">
-  <h2 id="experience-title">{en ? 'Try a task. No login.' : '不用登录，先试一个场景。'}</h2>
-  <Demo client:visible lang={lang} />
+  <h2 id="experience-title">{en ? 'From recording notes to a next step. Try it here.' : '录音笔记到下一步，先在这里试。'}</h2>
+  <Demo client:load lang={lang} initialVoiceSample="meeting" />
 </section>
 <HomeAnswers lang={lang} part="intro" />
 <section class="features-section wrap" aria-labelledby="features-title"><h2 id="features-title">{en ? 'Less distance between you and your work.' : '让想法，离工作更近一点。'}</h2><div class="feature-list">{features.map(([icon, title, label, description]) => <article class="feature-row"><div class="feature-label"><img src={`/icons/${icon}.svg`} alt="" width="24" height="24" /><span>{label}</span></div><div><h3>{title}</h3><p>{description}</p></div></article>)}</div></section>

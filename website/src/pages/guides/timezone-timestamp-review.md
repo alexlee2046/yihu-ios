@@ -5,51 +5,6 @@ description: "按现有UTC+08 date_str格式区分来源读取、任务更新时
 lang: zh
 ---
 
-## SYN-TZR-52 时间口径/请求寿命自检
-
-SYNTHETIC_EXAMPLE · pending · not_run。日期、事件、纪元与有效窗口分账。
-
-[/samples/p31-timezone-timestamp-review/README.md](/samples/p31-timezone-timestamp-review/README.md) · [/samples/p31-timezone-timestamp-review/preflight.zh.json](/samples/p31-timezone-timestamp-review/preflight.zh.json) · [/samples/p31-timezone-timestamp-review/preflight.en.json](/samples/p31-timezone-timestamp-review/preflight.en.json)
-
-<div role="region" aria-label="SYN-TZR-52" tabindex="0">
-
-| ID | 检查 | 预期/边界 |
-| --- | --- | --- |
-| D01 | 固定UTC+08 | parse=true; 2026-10-18T01:00:00Z |
-| D02 | 跨到UTC前日 | parse=true; 2026-10-17T16:30:00Z |
-| D03 | 有效闰日 | parse=true; 2024-02-28T16:00:00Z |
-| D04 | 无效闰日 | parse=false; reject, no repair |
-| D05 | ISO非原格式 | parse=false; reject, no repair |
-| D06 | 偏移后缀不符 | parse=false; reject, no repair |
-| D07 | 非补零格式 | parse=false; reject, no repair |
-| D08 | 多出秒字段 | parse=false; reject, no repair |
-| D09 | 分钟越界 | parse=false; reject, no repair |
-| D10 | 24点回读不符 | parse=false; reject, no repair |
-| D11 | 首尾空白不补救 | parse=false; reject, no repair |
-| D12 | 固定偏移非手机DST | parse=true; 2026-03-07T18:30:00Z |
-| W01 | 来源与封包不同 | Date JSON source=813978000; captured=813978060; reference2001 seconds |
-| W02 | 跨日同一时刻 | Date JSON source=813947400; captured=813947520; reference2001 seconds |
-| W03 | 新封包不刷新来源 | Date JSON source=813978000; captured=814064400; reference2001 seconds |
-| W04 | Unix零非Date零 | Date JSON source=-978307200; captured=813978000; reference2001 seconds |
-| W05 | Date零在2001 | Date JSON source=0; captured=813978000; reference2001 seconds |
-| W06 | 未知来源不补封包 | Date JSON source=unknown/omitted; captured=813978000; reference2001 seconds |
-| S01 | 无请求 | consume=[false]; pending=false |
-| S02 | 即时一次消费 | consume=[true, false]; pending=false |
-| S03 | 端点前1毫秒 | consume=[true]; pending=false |
-| S04 | 30秒含端点 | consume=[true]; pending=false |
-| S05 | 超过端点失效 | consume=[false, false]; pending=false |
-| S06 | 重复刷新不排N队 | consume=[true, false]; pending=false |
-| M01 | 先分事件口径 | source成功读取、task更新、手机请求、Watch封包、文件编辑不是同一事件；不以now替源日期。 |
-| M02 | 显式偏移与格式 | 原date_str固定Gregorian/POSIX UTC+08且回读相等，不随手机时区或DST；UTC显示不授权改写源为ISO。 |
-| M03 | 秒毫秒与Date纪元 | 任务Unix秒、JSONEncoder默认Date参考2001、ContinuousClock相对Duration分账，不凭位数除1000或互减。 |
-| M04 | 时效阈值非SLA | 24小时旧/超前5分钟只核源码，未跑isOutdated/isFutureDated/stale；不是刷新/响应或业务逾期承诺。 |
-| M05 | 请求消费非开麦 | 30秒含端点只属原请求中心，Intent返回/Bool消费不证明前台、系统绑定、权限、实际开麦/填入/发送。 |
-| M06 | 保原件与停止 | 全部合成不访问来源，不填当前时间掩旧值、不改名/单位绕门；保未知和一次标记，目标可同步，未知不盲重试。 |
-
-</div>
-
-
-
 <h2 id="first-answer">先问这个时间描述哪件事，再比较时区、单位与先后</h2>
 
 一呼当前Radar把 `date_str` 按固定 `yyyy-MM-dd HH:mm`、UTC+08:00解析，来源最后成功读取时间不能用手机请求、缓存命中或文件修改时间替换。任务 `timestamp` 是另外的可选Unix时间字段；Watch的 `sourceDate` 与 `capturedAt` 又有各自含义。跨时区核对应先分事件与契约，不把所有“时间”都当同一种数字。

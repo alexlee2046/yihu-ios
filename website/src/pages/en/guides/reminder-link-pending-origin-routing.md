@@ -66,13 +66,3 @@ No. Existing source route only, without third-party registration/authority.
 [Payload model](/en/guides/notification-payload-model-preflight/) · [Watch route](/en/guides/watch-open-request-ui-boundaries/) · [Origin scope](/en/guides/workbench-origin-page-boundaries/) · [Pending material](/en/guides/degraded-handoff-go-no-go/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Parsing/pending link](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieHermesPush.swift) · [Reminder routing](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift) · [Connection/navigation](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieWebView.swift)
-
-
-## SYN-ELA-46 evidence candidates versus reminder navigation (still retired)
-
-The [same-language evidence link review](/en/guides/evidence-link-admission-preflight/) checks evidence tokenization/HTTPS/credentials/ports/deduplication only, not reminder relay-host admission, an origin allowlist, scanning, truth or redaction. safeEvidenceURLs admission does not authorize handleTap or a saved origin. Keep pendingURL, speech/note guards, connected consumption, actual navigation/login and business receipt separate. Unknown origins are consumed/dropped, never added as servers; do not discard original text, bypass guards or blindly retry. All examples are synthetic; real notifications/device/page/network remain not_run. Keep indexable: false/noindex,follow, no sitemap/standalone LLM section, no new download/Store card or conversion block, and no changes to existing retired-page structure, permissions or configuration.
-
-
-## SYN-RFU-49 feed URLs do not authorize reminder routing (still retired)
-
-The [same-language Radar feed review](/en/guides/radar-feed-url-boundary-preflight/) separates feed path/query/fragment gates, evidence tokenization and root-origin normalization. None replaces reminder HTTPS/relay-host, saved origins or account authority. Preserve the pending slot, speech/note guards, connected consumption and unknown-origin drop; never remove real auth conditions or widen a source gate to force navigation. Real notifications/navigation/auth/read/network remain not_run; shape is not receipt and unknown effects forbid blind retry. Preserve SYN-ELA-46 forwarding and indexable: false/noindex,follow, no sitemap/standalone LLM section, no new download/Store/conversion card, or changes to original ZH Store boundaries, layouts/config or guards.

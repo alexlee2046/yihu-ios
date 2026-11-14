@@ -66,12 +66,3 @@ No. Source entries only, without specific-device setup/tests.
 [Permission](/en/guides/microphone-permission-sample-contract/) · [Busy guards](/en/guides/audio-busy-state-admission/) · [Foreground rebind](/en/guides/foreground-audio-rebind-preflight/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Intent/lifetime/consume](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceShortcuts.swift) · [Foreground consumer](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift) · [Capture/handoff](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceController.swift)
-
-## SYN-REBIND-36 technical forwarding (still retired)
-
-The inclusive30s lifetime, one-time consumption and refreshed Bool are not a response guarantee, background-microphone permission or N-item queue. An Intent result does not certify capture/destination success. The [same-language foreground review](/en/guides/foreground-audio-rebind-preflight/) separates consent-sheet inactive, real background, current requests/ports and uncertain buffers. This page stays indexable: false/noindex,follow: no sitemap/LLM section, downloads or Store card. SYNTHETIC_EXAMPLE self-checks are not system-binding/lockscreen tests or rollback of existing side effects.
-
-
-## SYN-TZR-52 date meanings are not request lifetimes (still retired)
-
-The [same-language time review](/en/guides/timezone-timestamp-review/) separates fixed UTC+08 source dates, Unix task seconds, Watch Date reference epoch/packaging and monotonic ContinuousClock request lifetime. Inclusive30s, one-time consume and repeated Bool refresh do not prove capture within30s, real foreground/authority or completion. Never substitute wall/source time into a monotonic window or fill now to mask stale values. Synthetic memory-instance methods only; real Intent/Siri/device/permission/recording/network remain not_run. Preserve unknowns/reservations, no blind retry. Keep SYN-REBIND-36 forwarding, indexable: false/noindex,follow, no sitemap/standalone LLM section, no new download/Store/conversion card or changes to original ZH Store boundaries, config or foreground guards.

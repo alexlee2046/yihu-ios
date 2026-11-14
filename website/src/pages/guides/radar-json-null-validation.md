@@ -5,51 +5,6 @@ description: "以通用PM Radar源码契约说明必填字符串、数组、可�
 lang: zh
 ---
 
-## SYN-RJN-51 JSON类型与null自检
-
-SYNTHETIC_EXAMPLE · pending · not_run。模型/空集合、展示与真实写权分账。
-
-[/samples/p30-radar-json-null-validation/README.md](/samples/p30-radar-json-null-validation/README.md) · [/samples/p30-radar-json-null-validation/preflight.zh.json](/samples/p30-radar-json-null-validation/preflight.zh.json) · [/samples/p30-radar-json-null-validation/preflight.en.json](/samples/p30-radar-json-null-validation/preflight.en.json)
-
-<div role="region" aria-label="SYN-RJN-51" tabindex="0">
-
-| ID | 检查 | 预期/边界 |
-| --- | --- | --- |
-| J01 | tasks缺失回退 | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
-| J02 | tasks null回退 | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
-| J03 | 空tasks不回退 | decode=true; allTasks=0; attention=0; visible=0; synthetic only |
-| J04 | 显式tasks覆盖回退 | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
-| J05 | 可选null保未知 | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
-| J06 | true和attention非写权 | decode=true; allTasks=1; attention=1; visible=1; synthetic only |
-| J07 | next固定字样命中 | decode=true; allTasks=1; attention=1; visible=1; synthetic only |
-| J08 | 标题字样不代next | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
-| J09 | 未知键不补契约 | decode=true; allTasks=1; attention=0; visible=0; synthetic only |
-| J10 | 必需数组显式空 | decode=true; allTasks=0; attention=0; visible=0; synthetic only |
-| J11 | 项目过滤仍可排除 | decode=true; allTasks=1; attention=1; visible=0; synthetic only |
-| J12 | 状态过滤仍可排除 | decode=true; allTasks=1; attention=1; visible=0; synthetic only |
-| J13 | 必需日期缺失 | decode=false; views not_run; synthetic only |
-| J14 | 必需数组null | decode=false; views not_run; synthetic only |
-| J15 | projects不能补active | decode=false; views not_run; synthetic only |
-| J16 | 必需title null | decode=false; views not_run; synthetic only |
-| J17 | 可选数字错类型 | decode=false; views not_run; synthetic only |
-| J18 | 字符串true非Bool | decode=false; views not_run; synthetic only |
-| J19 | 空白project | decode=false; views not_run; synthetic only |
-| J20 | 空白title | decode=false; views not_run; synthetic only |
-| J21 | 无效来源日期 | decode=false; views not_run; synthetic only |
-| J22 | tasks非空ID重复 | decode=false; views not_run; synthetic only |
-| J23 | 项目时间越界 | decode=false; views not_run; synthetic only |
-| J24 | 2MiB加1超限 | decode=false; views not_run; synthetic only |
-| M01 | 四层验收分账 | JSON语法、模型类型、decode后校验、业务来源/权限各自留证；true可解码不等可写。 |
-| M02 | 缺失null空集合不同 | tasks缺失/null只兼容回退decisions，[]不回退；任一空列表都不证明全台账已清空。 |
-| M03 | attention非账户 | 状态trim或next固定Alex仅为源码派生条件；不读当前登录者，不改原status，不自动认领/审批。 |
-| M04 | 多重过滤与能力分开 | onlyMentioningMe使用allTasks，项目/状态仍可排除；reply_supported、匹配与真实prepare/目标/账户写权分账。 |
-| M05 | 不修出通过 | 不补当前时间、把null改0/false、复制旧记录改日期或伪造ID以消错；不转换纪要/抓线索或新建外贸源。 |
-| M06 | 最小披露与停止 | 仅合成不读顾客正文或请求链接，保原件/缺口/既有一次标记；目标可保存同步，未知不盲重放。 |
-
-</div>
-
-
-
 <h2 id="first-answer">语法正确的JSON不一定能被Radar解码，更不代表业务数据完整</h2>
 
 先确认文件来自有权使用的自有台账，再核JSON语法、模型字段类型、解码后的验证和业务含义。一呼使用现有PM Radar模型读取快照，不把任意外贸简报当作任务数据。缺字段、显式 `null`、空字符串和空数组不能混为一谈；本文的合成样例只帮助解释契约，不连接真实源、转换纪要或启用回复。

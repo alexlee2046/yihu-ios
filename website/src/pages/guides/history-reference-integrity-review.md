@@ -5,51 +5,6 @@ description: "核来源历史的目标组件、entry身份与明确引用；结�
 lang: zh
 ---
 
-## SYN-HRI-50 历史引用完整性自检
-
-SYNTHETIC_EXAMPLE · pending · not_run。结构/关联不等身份、已读、审批或完成。
-
-[/samples/p29-history-reference-integrity-review/README.md](/samples/p29-history-reference-integrity-review/README.md) · [/samples/p29-history-reference-integrity-review/preflight.zh.json](/samples/p29-history-reference-integrity-review/preflight.zh.json) · [/samples/p29-history-reference-integrity-review/preflight.en.json](/samples/p29-history-reference-integrity-review/preflight.en.json)
-
-<div role="region" aria-label="SYN-HRI-50" tabindex="0">
-
-| ID | 检查 | 预期/边界 |
-| --- | --- | --- |
-| H01 | UUID明确引用 | validate=true; feedback=1 associated update(s); synthetic only |
-| H02 | 评论URL明确引用 | validate=true; feedback=1 associated update(s); synthetic only |
-| H03 | 仅说已看不关联 | validate=true; feedback=0 associated update(s); synthetic only |
-| H04 | 引用其他请求 | validate=true; feedback=0 associated update(s); synthetic only |
-| H05 | 较早update不关联 | validate=true; feedback=0 associated update(s); synthetic only |
-| H06 | draft UUID关联 | validate=true; feedback=1 associated update(s); synthetic only |
-| H07 | draft拒绝评论引用 | validate=false; feedback=not_run; synthetic only |
-| H08 | draft拒绝正式时间 | validate=false; feedback=not_run; synthetic only |
-| H09 | draft URL不完全相同 | validate=false; feedback=not_run; synthetic only |
-| H10 | 目标ID不符 | validate=false; feedback=not_run; synthetic only |
-| H11 | 重复entry ID | validate=false; feedback=not_run; synthetic only |
-| H12 | 已加载ID冲突 | validate=false; feedback=not_run; synthetic only |
-| H13 | kind越界 | validate=false; feedback=not_run; synthetic only |
-| H14 | reply UUID无效 | validate=false; feedback=not_run; synthetic only |
-| H15 | 引用UUID非规范小写 | validate=false; feedback=not_run; synthetic only |
-| H16 | 重复reference | validate=false; feedback=not_run; synthetic only |
-| H17 | 跨任务评论引用 | validate=false; feedback=not_run; synthetic only |
-| H18 | entry host不符 | validate=false; feedback=not_run; synthetic only |
-| H19 | 显式端口组件不同 | validate=false; feedback=not_run; synthetic only |
-| H20 | entry path不符 | validate=false; feedback=not_run; synthetic only |
-| H21 | entry query不符 | validate=false; feedback=not_run; synthetic only |
-| H22 | position次序错误 | validate=false; feedback=not_run; synthetic only |
-| H23 | 未完页缺cursor | validate=false; feedback=not_run; synthetic only |
-| H24 | 5条页保未读缺口 | validate=true; feedback=4 associated update(s); synthetic only |
-| M01 | 关联不等已读/处理 | 结构通过/明确references只给原关联，不授身份、审批、真实性或业务完成。 |
-| M02 | Web重载不等历史读成 | spinner、取消过滤或reload不是原生历史已加载/当前目标完整/服务动作完成的证据。 |
-| M03 | 不同取消路径不互代 | 网页导航取消与原生历史generation/请求回执不同；不把旧结果或迟到正文自动拼入新目标，不以取消抹回执。 |
-| M04 | 调度非恢复SLA | NSURLErrorDomain取消与WebKitErrorDomain/102按域代码合核，500ms复核和15秒防环不是恢复/未执行保证。 |
-| M05 | 缺口不补造引用 | 保原目标、位置、引用与缺口，不从正文猜reference、不改时间/URL修出通过，不跨账户建索引。 |
-| M06 | 最小披露与停止 | 全部合成不访问链接；真实授权、已读、处理与远端回执未知即停，目的地可保存同步，不盲重放。 |
-
-</div>
-
-
-
 <h2 id="first-answer">有后续文字不等于关联反馈，明确引用也不代表已处理</h2>
 
 CollieRadarReplyHistory只把位置晚于原reply、kind为update且references明确指向request_id或非draft回复URL的记录关联为反馈。历史还校验目标、条目身份、位置与URL组件。它是只读来源结构，不是已读、业务完成或真实性认证；本文不新建历史库或关联引擎。

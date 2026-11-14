@@ -66,7 +66,3 @@ No. Fixed source only, not framework compatibility certification.
 [Page boundary](/en/guides/workbench-origin-page-boundaries/) · [Bridge results](/en/guides/host-bridge-outcome-boundaries/) · [Keyboard ack](/en/guides/keyboard-acknowledgement-scope/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Editable/usable/draft/frame](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieTextInsertion.swift) · [Native insertion guards](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieWebView.swift)
-
-## SYN-BRG-39 technical forwarding (still retired)
-
-Focus/editability/usability/known draft mode are adapter conditions, not identity or submission permission. Do not unlock disabled/readOnly/aria-busy or forge a bridge. The [same-language host outcome review](/en/guides/host-bridge-outcome-boundaries/) separates refused/unavailable/accepted, DOM value/receipt and business submission; unknown/errors are not safe fallback/replay. This page keeps indexable: false/noindex,follow, no sitemap/LLM section, downloads or Store card. SYNTHETIC_EXAMPLE is not live editing/framework certification; preserve failures and uncertain prior effects.
