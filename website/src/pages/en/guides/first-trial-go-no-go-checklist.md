@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Try Yihu on iPhone: App Store Setup & First Voice Draft"
-description: "Get Yihu on the App Store, connect your own HTTPS workspace, and download the optional speech model (about 950 MB). Check one sample draft before real work."
+title: "Try Yihu Before Installing | iPhone Voice Draft Setup"
+description: "Try a sample draft with no login or microphone, then get Yihu on the App Store. Bring your own HTTPS workspace and account; download speech models when needed."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Start with one useful check</h2>
+<h2 id="first-answer">Preview one draft, then prepare your workspace</h2>
 
 Start with the App Store edition, your own HTTPS workspace and account, and one safe sample draft. Download the optional speech model (about 950 MB) when you want voice input.
 

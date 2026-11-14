@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "一呼怎么开始用？App Store 安装与首次语音试用清单"
-description: "从 App Store 安装一呼，准备自己的 HTTPS 工作台与账号，按需下载约 950 MB 语音模型，再用一句示例检查草稿与目的地。"
+title: "一呼怎么用？先试免登录草稿，再装 iPhone 客户端"
+description: "无需登录或麦克风，先用示例体验一呼语音草稿，再从 App Store 安装。准备自己的 HTTPS 工作台与账号，需要语音时再下载模型，核对文字后发送。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">先做一个有用的检查</h2>
+<h2 id="first-answer">先试一句示例草稿，再准备自己的工作台</h2>
 
 先从 App Store 安装，准备自己的 HTTPS 工作台、账号和一份安全草稿。需要语音输入时，再下载约 950 MB 的可选语音模型。
 

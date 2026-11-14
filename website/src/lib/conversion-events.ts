@@ -22,12 +22,17 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/history-retrieval-manual-comparison/': 'radar',
   '/guides/handoff-evidence-audit-checklist/': 'notes',
   '/en/guides/handoff-evidence-audit-checklist/': 'notes',
+  '/guides/first-trial-go-no-go-checklist/': 'voice',
+  '/en/guides/first-trial-go-no-go-checklist/': 'voice',
+  '/guides/bluetooth-audio-input-troubleshooting/': 'audio',
+  '/en/guides/bluetooth-audio-input-troubleshooting/': 'audio',
+  '/guides/app-group-inbox-access-evidence/': 'voice',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',
   notes: 'recording-notes-handoff', radar: 'multi-project-radar-watch',
 };
-export const conversionPaths = [...previewPaths, '/start/', '/en/start/', ...Object.keys(conversionGuides)];
+export const conversionPaths = [...new Set([...previewPaths, '/start/', '/en/start/', ...Object.keys(conversionGuides)])];
 const copy = {
   zh: {
     labels: { voice: '先试语音草稿示例', audio: '先做蓝牙四问预览', notes: '先看录文到待办示例', radar: '先看合成简报示例' },
@@ -50,7 +55,7 @@ export function guideConversion(path: string) {
 function pageContext(path: string) {
   if (!conversionPaths.includes(path)) return null;
   const language = path.startsWith('/en/') ? 'en' : 'zh';
-  const page_group = Object.hasOwn(conversionGuides, path) ? 'guide' : path.endsWith('/start/') ? 'setup' : path === '/' || path === '/en/' ? 'home' : 'scenario';
+  const page_group = path.endsWith('/start/') ? 'setup' : path === '/' || path === '/en/' ? 'home' : previewPaths.includes(path) ? 'scenario' : 'guide';
   const scenario = conversionGuides[path] ?? (Object.keys(pillars) as BuyerScenario[]).find(s => path.endsWith('/' + pillars[s] + '/')) ?? 'voice';
   return { language, page_group, scenario } as const;
 }
