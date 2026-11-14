@@ -66,7 +66,3 @@ No. No Keychain/credentials/settings/third-party request operation ran.
 [Notification model](/en/guides/notification-payload-model-preflight/) · [Source separation](/en/guides/source-switch-cache-isolation/) · [Deletion scope](/en/guides/note-removal-retention-boundaries/) · [Reminder routing](/en/guides/reminder-link-pending-origin-routing/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Disable/rotation/Keychain/auth scope](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieNativeNotifications.swift)
-
-## SYN-NTF-42 technical forwarding (still retired)
-
-Local disable, attempted unregisterPending storage, remote response and old-installation matching rotation are distinct receipts. Timeout/localfalse is not proof the server did nothing, unbound or revoked system notification permission; pending persistence can fail. The [same-language notification parser/route review](/en/guides/notification-payload-model-preflight/) separates two schemas, memory routing and remote delivery, not account/business authority from UUID/hash shape. This page stays indexable: false/noindex,follow, no sitemap/LLM section, downloads or Store card. SYNTHETIC_EXAMPLE is not a real Keychain/unregister/APNs call; preserve pending/unknown effects, no blind resend.

@@ -5,51 +5,6 @@ description: "按CollieRadarFeed核HTTPS、host、凭据、端口与query/fragme
 lang: zh
 ---
 
-## SYN-RFU-49 Radar源URL边界自检
-
-SYNTHETIC_EXAMPLE · pending · not_run。源、证据、origin形态与身份/权限分账。
-
-[/samples/p28-radar-feed-url-boundary-preflight/README.md](/samples/p28-radar-feed-url-boundary-preflight/README.md) · [/samples/p28-radar-feed-url-boundary-preflight/preflight.zh.json](/samples/p28-radar-feed-url-boundary-preflight/preflight.zh.json) · [/samples/p28-radar-feed-url-boundary-preflight/preflight.en.json](/samples/p28-radar-feed-url-boundary-preflight/preflight.en.json)
-
-<div role="region" aria-label="SYN-RFU-49" tabindex="0">
-
-| ID | 检查 | 预期/边界 |
-| --- | --- | --- |
-| U01 | 空串 | feed=false; evidence=0; origin=false; shape only |
-| U02 | 空白 | feed=false; evidence=0; origin=false; shape only |
-| U03 | 裸host | feed=true; evidence=1; origin=true; shape only |
-| U04 | 根斜线 | feed=true; evidence=1; origin=true; shape only |
-| U05 | 源可带path | feed=true; evidence=1; origin=false; shape only |
-| U06 | 只去首尾空白 | feed=true; evidence=1; origin=false; shape only |
-| U07 | query被源拒绝 | feed=false; evidence=1; origin=false; shape only |
-| U08 | fragment被源拒绝 | feed=false; evidence=1; origin=false; shape only |
-| U09 | 空query仍存在 | feed=false; evidence=1; origin=false; shape only |
-| U10 | 空fragment仍存在 | feed=false; evidence=1; origin=false; shape only |
-| U11 | HTTP拒绝 | feed=false; evidence=0; origin=false; shape only |
-| U12 | 缺host | feed=false; evidence=0; origin=false; shape only |
-| U13 | 合成内嵌user拒绝 | feed=false; evidence=0; origin=false; shape only |
-| U14 | 端口0 | feed=false; evidence=0; origin=false; shape only |
-| U15 | 端口越界 | feed=false; evidence=0; origin=false; shape only |
-| U16 | 端口上界 | feed=true; evidence=1; origin=true; shape only |
-| U17 | 显式443 | feed=true; evidence=1; origin=true; shape only |
-| U18 | host大小写归一不同 | feed=true; evidence=1; origin=true; shape only |
-| U19 | 编码逗号path | feed=true; evidence=1; origin=false; shape only |
-| U20 | 原逗号path与分词 | feed=true; evidence=1; origin=false; shape only |
-| U21 | 标签非源URL | feed=false; evidence=0; origin=false; shape only |
-| U22 | 单URL与分号拆项 | feed=true; evidence=2; origin=false; shape only |
-| U23 | 不是域白名单 | feed=true; evidence=1; origin=false; shape only |
-| U24 | 编码字节在path | feed=true; evidence=1; origin=false; shape only |
-| M01 | 形态不等身份 | 通过validate不证明TLS、来源身份、认证/读取/JSON或写权限，不把supportsWatchDrafts布尔当设备功能验收。 |
-| M02 | 拒绝不自动修复 | query无论是否空/无害都不可自行删除认证条件来绕门；不改HTTP/端口、不公开私有来源。 |
-| M03 | origin不等feed | origin只允许空/root path并规范host/443；feed可有path但不认证，来源身份与账户存储另核。 |
-| M04 | 提醒有自己的门 | 提醒HTTPS/relay-host、origin验证、已保存来源不能由feed或证据准入互相授权；未知来源不新建服务器。 |
-| M05 | pending不是送达 | pending单槽、笔记/语音保护、connected后消费与导航/登录/业务回执分账，保留原文和未知副作用。 |
-| M06 | 不请求示例 | example.invalid、localhost与SYN只是合成字符串，不DNS/HTTP/注册，不收私有源URL或凭据，不盲重试。 |
-
-</div>
-
-
-
 <h2 id="first-answer">证据链接能点，不代表同一地址能作为Radar源</h2>
 
 CollieRadarFeed.validate允许源URL带路径，但要求HTTPS、非空host、无内嵌用户名密码、无query和fragment；端口可省略，若显式指定则须在1至65535。证据URL另用parseSafeEvidenceURLs，规则不能互换。通过源形态校验仍不证明认证、可达、成功读取或快照有效，本页不新增源服务或凭据配置。

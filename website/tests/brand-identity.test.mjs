@@ -28,7 +28,7 @@ test('both homepage graphs identify the same app, with genuine store metadata an
   assert.deepEqual(faq.mainEntity.map(x=>x.name),copy.faqs.map(x=>x.question));
   assert.deepEqual(faq.mainEntity.map(x=>x.acceptedAnswer.text),copy.faqs.map(x=>x.answer));
   for(const item of copy.faqs)assert.ok(html.includes(item.question));
-  assert.ok(html.includes('class="button button-text app-store-link"'));
+  assert.ok(html.includes('class="button button-primary app-store-link"'));
   assert.ok(html.includes(prefix?'Source development':'源码')||html.includes(prefix?'source work':'源码'));
  }
 });

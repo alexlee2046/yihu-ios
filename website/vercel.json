@@ -4,5 +4,107 @@
   "buildCommand": "npm run build",
   "installCommand": "npm ci",
   "outputDirectory": "dist",
-  "trailingSlash": true
+  "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/samples/p10-token-recapture/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p11-model-preflight/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p12-level-preflight/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p13-busy-debounce/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p14-pcm-admission/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p15-foreground-rebind/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p16-buffer-pressure/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p17-cross-device-fields/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p18-host-bridge-outcomes/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p19-file-chunk-bridge/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p20-recording-notes-handoff/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p21-notification-payload-model/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p22-empty-field-display-defaults/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p23-department-minutes-ownership-archive/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p24-attachment-name-metadata-provenance/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p25-evidence-link-admission-preflight/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p26-export-encoding-delimiter-preflight/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p27-audio-level-not-accuracy-review/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p28-radar-feed-url-boundary-preflight/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p29-history-reference-integrity-review/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p30-radar-json-null-validation/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p31-timezone-timestamp-review/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p32-radar-evidence-second-check/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p8-opportunity-preflight/:path*",
+      "destination": "/api/retired-sample"
+    },
+    {
+      "source": "/samples/p9-audio-preflight/:path*",
+      "destination": "/api/retired-sample"
+    }
+  ]
 }

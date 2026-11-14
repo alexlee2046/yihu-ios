@@ -66,9 +66,3 @@ No. Source/evidence review only, without performance/device acceptance.
 [Whole-chain trial](/en/guides/first-trial-go-no-go-checklist/) · [Voiceprint distinction](/en/guides/voiceprint-filter-not-authorization/) · [Material/version mapping](/en/guides/batch-change-record-retention/) · [Preview/final](/en/guides/replaceable-voice-preview-review/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Manifest/install/verification](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/Qwen3ModelStore.swift) · [Load/validation](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/Qwen3OnDeviceTranscriber.swift) · [Existing preparation](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceController.swift)
-
-## SYN-MODEL-34 manifest and generation example
-
-The manifest revision, per-asset sizes and SHA checks establish a listed-file scope. installGeneration actually belongs to Transcriber and changes at install/removal entry points. A stale integrity result must not resurrect a removed model or publish an obsolete generation; a loaded instance can skip a new scan. Tiny-file hashes and memory CoreML spies certify neither the real24 assets, device warmth nor accuracy.
-
-[Continue to the filled example on the same-language active first-trial page](/en/guides/first-trial-go-no-go-checklist/#syn-model-34). This remains a noindex,follow reference outside the150-URL reading export, without instructing changes to real markers/hashes or model installation/removal for a demo.

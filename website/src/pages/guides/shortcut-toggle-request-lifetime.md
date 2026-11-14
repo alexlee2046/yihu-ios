@@ -66,12 +66,3 @@ ToggleVoiceInputIntent设置pendingToggle并请求打开App，真正开始或结
 [权限样本](/guides/microphone-permission-sample-contract/) · [忙态准入](/guides/audio-busy-state-admission/) · [前台重绑](/guides/foreground-audio-rebind-preflight/) · [开始](/start/) · [隐私](/privacy/)
 
 [Intent/30秒/一次消费](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceShortcuts.swift) · [runPendingShortcut](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieShellApp.swift) · [实际采集/交接状态](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceController.swift)
-
-## SYN-REBIND-36技术转接（仍退休）
-
-请求30秒含端点、一次消费与Bool覆盖不是响应保证、后台开麦许可或N次队列。系统意图返回不等设备采集/输入目标已成功；[同语前台切回核查](/guides/foreground-audio-rebind-preflight/)把许可弹窗inactive、真正background、当前请求/输入与缓冲不确定边界分开。此页保持indexable: false/noindex,follow，不入sitemap或LLM独立出口，不增下载/Store卡。SYNTHETIC_EXAMPLE只供自检，真实系统入口和锁屏录音未测，不抹历史副作用。
-
-
-## SYN-TZR-52 日期口径不等请求寿命（保持退休）
-
-[同语时间字段核对](/guides/timezone-timestamp-review/)区分固定UTC+08来源日期、Unix任务秒、Watch Date参考纪元/封包与单调ContinuousClock请求寿命。原中心30秒含端点、一次消费和重复Bool刷新不证明30秒必开麦、真实前台/许可或目标完成；不要把墙钟/来源日期塞进单调窗口或填now掩旧值。仅合成内存实例原方法宿主，真实Intent/Siri/设备/权限/录音/网络全not_run，保未知与既有标记不盲重试。保原SYN-REBIND-36转接、indexable: false/noindex,follow，不入sitemap/LLM独立section，不新增下载/Store/转换卡，不改原ZH Store边界、配置或前台守卫。

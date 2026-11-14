@@ -66,14 +66,3 @@ No general tool is added; fixed internal PCM review only.
 [Format admission](/en/guides/pcm-format-admission-review/) · [Queue/final](/en/guides/capture-buffer-pressure-checklist/) · [Recognition segments](/en/guides/note-segment-join-provenance/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Converter/convertOnce/finish](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/ColliePCMStream.swift) · [Tap/stop entry](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
-
-## SYN-PCM-36 stream-end frame boundary example
-
-SYNTHETIC_EXAMPLE checks distinguish temporary lack of a block from declared end. Zero samples/silence are not EOF magic bytes; source finish flushes delayed converter samples without automatic silence padding. Preserve cut interleaved frames/samples and gaps rather than presenting zero fill as original content. The16-call budget is not16 seconds/frames or an ASR SLA.
-
-[Continue to the same-language active PCM admission checklist](/en/guides/pcm-format-admission-review/#syn-pcm-36). This remains an indexable:false/noindex,follow retired technical reference, without public sample links or a new import/transcode/repair feature.
-
-
-## SYN-ECD-47 stream ending versus text encoding (still retired)
-
-The [same-language encoding/delimiter review](/en/guides/export-encoding-delimiter-preflight/) separates characters, UTF-8 bytes, JSON escaping, internal manifests and Radar consumers; not an audio-file converter or repair service. Ordinary noDataNow, finish endOfStream and up to 16 drain calls describe internal stream state, not newline/character delimiters, 16 seconds or completeness. Readable display/tail output/file writing grants neither remote completion nor resend authority. Preserve gaps, original text and reservations; no re-encoding, zero-fill, reset or rename to conceal errors. Real audio/PCM/ASR/page/network remain not_run. Preserve the original SYN-PCM-36 forwarding and indexable: false/noindex,follow, no sitemap/standalone LLM section, no new download/Store/conversion card or changes to audio code, permissions or retired-page structure.

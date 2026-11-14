@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Is an inaccessible share inbox offline? App Group declarations, signing and local containers"
-description: "Review App/Extension variables, YihuAppGroup and runtime containerURL. Matching source is not signing/device acceptance; local sharing is not a public API or site identity isolation."
+title: "Yihu Share Inbox Not Opening? Check App Group & Signing"
+description: "Shared material missing from Yihu’s inbox? Check the app and extension’s App Group, signing entitlements and local container before retrying the handoff."
 lang: en
 indexable: false
 ---
@@ -66,12 +66,3 @@ No. No configuration/third-party grant/signing/device operation ran.
 [Batch publication](/en/guides/share-manifest-visibility-review/) · [Protection](/en/guides/local-file-protection-scope/) · [Site caches](/en/guides/source-switch-cache-isolation/) · [Declaration evidence](/en/guides/privacy-declaration-evidence-scope/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Group/container/root](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Shared/CollieShareInbox.swift) · [App key](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/Info.plist) · [Extension key](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Extensions/CollieShare/Info.plist) · [App declaration](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/Collie.entitlements) · [Extension declaration](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Extensions/CollieShare/CollieShare.entitlements)
-
-## SYN-CHK-40 technical forwarding (still retired)
-
-AppGroup source declaration, signed entitlement and runtime containerURL are distinct evidence. A test root cannot certify system access; visible files/manifests do not certify decode/import. The [same-language file chunk outcome review](/en/guides/file-chunk-bridge-not-upload-receipt/) separates raw reads, JS staging, page controls, inbox pending and remote completion; discard is not server revocation. This page stays indexable: false/noindex,follow, with no sitemap/LLM section, downloads or Store card. SYNTHETIC_EXAMPLE is not real container/signing/AppStore/API acceptance; no permission/config changes or blind retry.
-
-
-## SYN-ANM-45 metadata provenance boundary (still retired)
-
-Source declaration, final signature, system containerURL, manifest publication, pending decoding, page placement and remote receipt are separate evidence. An injected root does not prove cross-process system authority; suffix/MIME/byteCount do not prove revision, content or provenance. The [same-language attachment metadata guide](/en/guides/attachment-name-metadata-provenance/) offers synthetic review only, not real attachment inspection, container or concurrent-write acceptance. Real signing/Extension/network remain not_run; no blind retry with unknown effects. Keep indexable: false/noindex,follow, no sitemap/standalone LLM section, no download/Store card, and no permission/signing/config changes.

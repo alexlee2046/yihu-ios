@@ -45,6 +45,9 @@ for url in urls:
  title=html.unescape(re.search(r'<title>(.*?)</title>',raw,re.S)[1])
  parser=MainText();parser.feed(raw);text=' '.join(' '.join(parser.parts).split())
  assert text
+ retired_markers = re.compile('|'.join(['SYNTHETIC_' + 'EXAMPLE', 'not_' + 'run', 'SYN' + '-']))
+ assert not retired_markers.search(raw), f'{url} contains retired sample content'
+ assert not re.search(r'/samples/p(?:[89]|1\d|2\d|3[0-2])-', raw), f'{url} links to a retired download'
  short.append(f'### [{title}]({url})\n\n{text[:850]}'+('…' if len(text)>850 else '')+'\n\n')
  full.append(f'### {title}\n\nCanonical: {url}\n\n{text}\n\n')
  # Preserve semantic parameter tables in addition to complete plain text.

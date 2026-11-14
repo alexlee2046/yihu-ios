@@ -204,10 +204,10 @@
     .preview-panel { padding:16px; }
     .preview-columns,.preview-checks { grid-template-columns:1fr; gap:18px; }
     .preview-brief > div { grid-template-columns:92px minmax(0,1fr); gap:12px; }
-    .task-document .preview-scenes { grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
-    .task-document .preview-scenes > button { padding:10px; min-height:72px; }
-    .task-document .preview-scenes > button > .preview-scene-title { font-size:12px; }
-    .task-document .preview-scenes > button > span:last-child { display:none; }
+    :is(.task-document, .task-preview) .preview-scenes { grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+    :is(.task-document, .task-preview) .preview-scenes > button { padding:10px; min-height:72px; }
+    :is(.task-document, .task-preview) .preview-scenes > button > .preview-scene-title { font-size:12px; }
+    :is(.task-document, .task-preview) .preview-scenes > button > span:last-child { display:none; }
     .features-section { padding-block:36px 60px; }
     .features-section h2 { margin-bottom:32px; }
     .feature-row { grid-template-columns:1fr; gap:20px; padding:28px 0; }

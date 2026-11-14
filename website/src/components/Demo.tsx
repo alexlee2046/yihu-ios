@@ -31,11 +31,11 @@ export default function Demo({ lang, initialScene = 'voice', initialVoiceSample 
   const snapshot = data.radar[radarCase];
   const task = snapshot.tasks[0];
   const cards = en ? [
-    ['voice', 'Read & draft', 'Sample material → editable reply'],
+    ['voice', 'Voice drafts & notes', 'Sample material → editable next step'],
     ['audio', 'Audio self-check', 'Four questions → a useful next step'],
     ['radar', 'Daily sales brief', 'Inquiry / market / follow-up samples'],
   ] as const : [
-    ['voice', '网页朗读与草稿', '示例材料 → 可编辑回复'],
+    ['voice', '语音草稿与笔记', '示例材料 → 可编辑下一步'],
     ['audio', '蓝牙四步自检', '四个问题 → 一个排查方向'],
     ['radar', '外贸每日简报', '询盘 / 市场 / 跟进样例切换'],
   ] as const;
@@ -118,7 +118,7 @@ export default function Demo({ lang, initialScene = 'voice', initialVoiceSample 
   }
 
   return <div id="interactive-preview" tabIndex={-1} className="demo scenario-preview" data-preview={scene}>
-    <div className="demo-topline"><span>{en ? 'SAMPLE PREVIEW' : '场景预览 · 合成样例'}</span><span>{en ? 'No login or microphone needed' : '无需登录 · 无需麦克风'}</span></div>
+    <div className="demo-topline"><span>{en ? 'SAMPLE PREVIEW' : '场景预览'}</span><span>{en ? 'No login or microphone needed' : '无需登录 · 无需麦克风'}</span></div>
     <div className="preview-scenes" role="group" aria-label={en ? 'Choose a preview' : '选择一个预览'}>
       {cards.map(([value, title, description], i) => <button type="button" key={value} id={`${id}-${value}`} aria-controls={`${id}-panel`} aria-pressed={scene === value} aria-keyshortcuts="ArrowLeft ArrowRight Home End" onClick={() => chooseScene(value)} onKeyDown={event => {
         const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
@@ -141,7 +141,7 @@ export default function Demo({ lang, initialScene = 'voice', initialVoiceSample 
         <div className="preview-columns">
           <div><p className="preview-label">{en ? 'Sample source → preset summary' : '示例原文 → 预设摘要'}</p><p className="preview-material">{voice.material}</p>
             <div className="preview-actions"><button type="button" className="button preview-secondary" onClick={reading ? () => { stopReading(); setAudioStatus(en ? 'Read-aloud stopped.' : '朗读已停止。'); } : readAloud}>{reading ? (en ? 'Stop read-aloud' : '停止朗读') : (en ? 'Read sample aloud' : '朗读示例材料')}</button></div>
-            <p className="preview-summary"><strong>{en ? 'Preset summary: ' : '预设摘要：'}</strong>{voice.summary}</p><p className="preview-status" role="status">{audioStatus}</p>
+            <p className="preview-summary"><strong>{en ? 'Preset summary: ' : '预设摘要：'}</strong>{voice.summary}</p>{audioStatus && <p className="preview-status" role="status">{audioStatus}</p>}
           </div>
           <div><label className="preview-label" htmlFor={`${id}-draft`}>{en ? 'Edit the sample draft' : '编辑示例草稿'}</label><textarea id={`${id}-draft`} value={text} maxLength={600} onChange={event => { setText(event.target.value); setDraft(''); }} />
             <div className="preview-actions"><button type="button" className="button button-primary" disabled={!text.trim()} onClick={() => { setDraft(text.trim()); complete('voice', 'insert'); }}>{en ? 'Place in sample draft' : '填入本页示例草稿'}</button><button type="button" className="button preview-secondary" onClick={() => { stopReading(); setText(voice.draft); setDraft(''); }}>{en ? 'Reset' : '重置'}</button></div>

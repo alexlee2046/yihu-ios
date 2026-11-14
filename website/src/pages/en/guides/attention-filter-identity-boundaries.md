@@ -71,16 +71,3 @@ No. Derived display only, without provisioning accounts/authority/dispatch.
 [Status aliases](/en/guides/status-alias-approval-boundaries/) · [Ownership](/en/guides/department-minutes-ownership-archive/) · [Placeholders](/en/guides/empty-field-display-defaults/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Attention/matchingActions](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieRadarModel.swift) · [Display controls](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieRadarView.swift)
-
-## Filled offline example: attention is not identity or write authority
-
-A synthetic 12-swatch request provides two source-format actions and a worked identity check. Action A retains surrounding spaces in its raw decision status: attention trims and matches, while exact raw candidate-state matching does not. A candidate also does not establish reply capability or a verified recipient; the sample keeps reply_supported=false. Do not change names or states to bypass guards.
-
-<a href="/samples/p8-opportunity-preflight/radar-brief.en.json" download>Download the synthetic English Radar-shaped brief</a> · <a href="/samples/p8-opportunity-preflight/buyer-card.md" download>Read the filled bilingual attention/identity card</a>
-
-These are offline source examples, not acceptance of Radar/identity features in store edition0.1.0, a new lead backend or a sending operation. The separate store exercise only prepares a voice draft in your authorized workspace; no background listening, CRM write or automatic send is included. This page remains retired/noindex.
-
-
-## SYN-RJN-51 empty views and attention do not prove identity (still retired)
-
-The [same-language Radar JSON/null review](/en/guides/radar-json-null-validation/) separates missing/null task fallback, explicit [], optional types and original post-decode validation. Empty allTasks/filtered views do not prove a completed ledger; trimmed state, a fixed next literal and reply_supported=true grant no account/owner identity, approval or write authority. Never alter source fields to bypass guards. Real reads/UI/prepare/replies/network remain not_run; preserve originals/unknowns without invented dates/capabilities. Preserve P22 forwarding and indexable: false/noindex,follow, no sitemap/standalone LLM section or new download/Store/conversion card. Existing English P8 downloads, historical P4 conversion block and all original ZH Store boundaries remain unchanged; no config or original retired-body edits.

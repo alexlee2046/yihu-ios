@@ -66,7 +66,3 @@ No. Source units/timing only, without performance/accuracy acceptance.
 [Vocabulary](/en/guides/multilingual-terms-preflight/) · [PCM admission](/en/guides/pcm-format-admission-review/) · [Preview meaning](/en/guides/replaceable-voice-preview-review/) · [Retry scope](/en/guides/note-transcription-retry-checkpoint/) · [Start](/en/start/) · [Privacy](/en/privacy/)
 
 [Pass snapshot/arguments](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/Qwen3OnDeviceTranscriber.swift) · [Defaults/range/clamp](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieVoiceInterfaces.swift) · [Settings/busy scope](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieLinkSettingsView.swift)
-
-## SYN-BUF-37 technical forwarding (still retired)
-
-Output maxTokens is a recognition-pass budget, not source frames, pending watermark, bytes or recording seconds. Raising it cannot repair capture gaps, revive cancellation or authorize resend. The [same-language capture buffer checklist](/en/guides/capture-buffer-pressure-checklist/) separates bounded FIFO, overflow failure, duration clipping and snapshot/final receipts; no overwrite-oldest ring or automatic segmentation guarantee. This page stays indexable: false/noindex,follow, without sitemap/LLM section, downloads or Store card. SYNTHETIC_EXAMPLE is not real model/hardware pressure/drop/accuracy testing or rollback of earlier side effects.

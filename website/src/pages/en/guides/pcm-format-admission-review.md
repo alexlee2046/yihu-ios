@@ -5,25 +5,6 @@ description: "Review finite rate range, 1–8 channels, non-interleaved Float32 
 lang: en
 ---
 
-<h2 id="syn-pcm-36">SYNTHETIC_EXAMPLE · SYN-PCM-36 PCM/EOF preflight</h2>
-
-<a href="/samples/p14-pcm-admission/pcm-admission-preflight.en.json" download>/samples/p14-pcm-admission/pcm-admission-preflight.en.json</a> · <a href="/samples/p14-pcm-admission/preflight-card.md" download>/samples/p14-pcm-admission/preflight-card.md</a>
-
-Fourteen byte-declaration cases, seven source guard cases and stream-end references are SYNTHETIC_EXAMPLE, not an app raw PCM importer. Valid s16le/f32le structure does not grant native Float32 non-interleaved admission. Source finish drains delayed samples; it does not repair cut frames by zero padding. Device/conversion/ASR/SLA results are not_run.
-
-<div role="region" aria-label="Synthetic PCM structure preflight table" tabindex="0">
-<table>
-<thead><tr><th>Layer</th><th>Worked check</th><th>Not established</th></tr></thead>
-<tbody>
-<tr><td>16/24/48k declaration</td><td>Compare independent producer metadata; byte length is not a rate detector</td><td>Relabeling resamples audio</td></tr>
-<tr><td>s16le/f32le</td><td>16/32bit, little endian and actual layout checked separately</td><td>Integer/interleaved raw is native converter input</td></tr>
-<tr><td>Mono/stereo frames</td><td>Interleaved frame=channels×sample bytes;6B stereo s16le is incomplete</td><td>Zero fill recovers missing original content</td></tr>
-<tr><td>Stream end</td><td>noDataNow between blocks; endOfStream at finish, at most16 flush calls</td><td>16 seconds/frames or automatic-padding SLA</td></tr>
-</tbody></table>
-</div>
-
-Store0.1.0/id6819057500 installation needs no Mac/Xcode/self-signing; your account/models/permission/safe destination remain separate, without source/binary parity certification.
-
 <h2 id="first-answer">Within range is an admission prerequisite, not an all-accessory conversion guarantee</h2>
 
 ColliePCMStreamConverter requires finite 8000–192000 Hz input, 1–8 channels and non-interleaved Float32 before attempting a 16 kHz mono output converter. Creation/conversion can still fail. This reviews exact admission, not a user rate control, hardware certification or universal audio importer.

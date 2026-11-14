@@ -66,14 +66,3 @@ indexable: false
 [格式准入](/guides/pcm-format-admission-review/) · [队列与final](/guides/capture-buffer-pressure-checklist/) · [识别分段](/guides/note-segment-join-provenance/) · [开始](/start/) · [隐私](/privacy/)
 
 [转换器/convertOnce/finish](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/ColliePCMStream.swift) · [tap与停止入口](https://github.com/alexlee2046/yihu-ios/blob/a59676a72c1931bb36dc29ef0810b5e6dc9339ea/Apps/Collie/CollieAudioRecorder.swift)
-
-## SYN-PCM-36流结束帧边界补例
-
-SYNTHETIC_EXAMPLE自检区分“暂缺下一块”和“已声明结束”：PCM零值/静音帧不是EOF魔术字节，原finish排出转换器延迟样本而不自动补静音。交错声道/样本截断先保原件与缺口，不用尾部填零冒原内容完整；最多16次调用预算也不是16秒/16帧或识别SLA。
-
-[转到同语在役PCM格式准入页查看自检表](/guides/pcm-format-admission-review/#syn-pcm-36)。本页继续indexable:false/noindex,follow退休技术参考，不挂公开样例下载，也不新增导入/云转码/修复功能。
-
-
-## SYN-ECD-47 流结束与文字编码分账（保持退休）
-
-[同语导出编码与分隔符核对](/guides/export-encoding-delimiter-preflight/)区分字符、UTF-8字节、JSON转义、内部manifest与Radar消费者；不是音频文件转换或自动修复服务。普通块noDataNow、finish的endOfStream与最多16次排空，是内部流状态，不是换行/字符分隔、16秒或完整性证明。显示正常/尾部输出/文件写出都不授远端完成或重发权；保留缺口、原文和一次标记，不以重编码、填零、reset或改名掩盖错误。真实音频/PCM/ASR/网页/网络均not_run。保原SYN-PCM-36转接与indexable: false/noindex,follow，不入sitemap或LLM独立section，不新增下载/Store/转换卡，不改音频实现、权限或既有退页结构。

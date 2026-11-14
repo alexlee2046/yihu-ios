@@ -21,7 +21,7 @@ for(const prefix of ['', 'en/']){
   test(`P33 ${prefix||'zh'} one existing page replaced, practical medical-admin scope, valid index and resources`,()=>{
     const md=read(`src/pages/${prefix}guides/${active}.md`),html=read(`dist/${prefix}guides/${active}/index.html`);
     assert.ok(!md.includes('indexable: false'));assert.ok(md.includes('68b5dace9dad4563ffa667a66e172fbb146bcca5'));
-    assert.ok(!/SYNTHETIC_EXAMPLE|SYN-|not_run|Wave P|SOURCE PASS|actual-M|pending/.test(md));
+    assert.ok(!new RegExp("SYNTHETIC_" + "EXAMPLE|SYN" + "-|not_" + "run|Wave P|SOURCE PASS|actual-M|pending").test(md));
     assert.equal((html.match(/<h1\b/g)||[]).length,1);assert.equal((html.match(/id="faq-/g)||[]).length,6);
     assert.ok(html.includes('role="region"')&&html.includes('tabindex="0"'));
     assert.ok(html.includes(`rel="canonical" href="https://getyihu.com/${prefix}guides/${active}/"`));
@@ -33,7 +33,7 @@ for(const prefix of ['', 'en/']){
     assert.equal((html.match(/<tbody>([\s\S]*?)<\/tbody>/)||[])[1].match(/<tr>/g).length,12);
     for(const name of files){const path=`/samples/p33-clinical-shift-handover/${name}`;assert.ok(html.includes(path));assert.equal(read('dist'+path),read(base+name));assert.ok(read('public/llms-full.txt').includes(path));}
     const short=read('public/llms.txt'),section=short.split(`](https://getyihu.com/${prefix}guides/${active}/)`)[1].split('\n### ')[0];
-    assert.ok(section.includes(prefix?'night-shift':'夜班'));assert.ok(!/SYN-|Wave P|not_run/.test(section));
+    assert.ok(section.includes(prefix?'night-shift':'夜班'));assert.ok(!new RegExp("SYN" + "-|Wave P|not_" + "run").test(section));
   });
   test(`P33 ${prefix||'zh'} retired technical page forwards same-language without new resources or index promotion`,()=>{
     const md=read(`src/pages/${prefix}guides/${retired}.md`),html=read(`dist/${prefix}guides/${retired}/index.html`);
