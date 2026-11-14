@@ -1,12 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Yihu Share Inbox Not Opening? Check App Group & Signing"
-description: "Shared material missing from Yihu’s inbox? Check the app and extension’s App Group, signing entitlements and local container before retrying the handoff."
+title: "Yihu Share Inbox Empty? Check App Group & Signing"
+description: "Shared material missing from Yihu’s inbox? Keep the original, check App Group, signing and local access, then review the handoff. Try a no-mic draft preview before setup."
 lang: en
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">Local App Group access, signed authority and website network/accounts are separate evidence</h2>
+<h2 id="first-answer">Keep the original and check the local inbox before sharing again</h2>
+
+If a shared item is missing, first check the app’s inbox and existing handoff state. Keep the source material in its approved location. Review App Group declarations, the final signed entitlements and actual container access separately before deciding the next step.
 
 App and Share Extension Info.plist/entitlements reference YIHU_APP_GROUP. Runtime reads YihuAppGroup and asks the system for containerURL; shared() returns nil without it. Matching declarations establish intent, not signed entitlement or real-device access. Local sharing is not public upload or third-party account authority.
 

@@ -30,7 +30,7 @@ const pillar = /model-artifact|app-group/.test(slug) ? 'iphone-agent-voice-draft
       </details>}
       {privacyPreview && <p>{conversion.storeContext}</p>}
     </section>}
-    {preview && <><p class="lead">{description}</p><Demo client:visible lang={lang} initialScene={preview} initialVoiceSample={voiceSample} /></>}
+    {preview && <>{!privacyPreview && <p class="lead">{description}</p>}<Demo client:visible lang={lang} initialScene={preview} initialVoiceSample={voiceSample} /></>}
     <slot />
   </article>
 </Layout>

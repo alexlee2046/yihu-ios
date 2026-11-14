@@ -1,12 +1,15 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "一呼共享收件箱打不开？先查 App Group 与签名"
-description: "分享材料没有进入一呼收件箱？按顺序检查 App 与扩展的 App Group、签名权限和本机容器，再核对材料状态，避免盲目重发。"
+title: "分享后收件箱没内容？一呼 App Group 与签名排查"
+description: "分享的材料没出现在一呼收件箱？先保留原件，检查 App 与扩展的 App Group、签名和本机容器，再核对交接状态。先试无麦克风草稿预览，了解接入与隐私。"
 lang: zh
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">AppGroup本机容器、产物权限与网站网络/账户，是不同证据</h2>
+<h2 id="first-answer">先保留原材料，检查本机收件箱，再决定是否重新分享</h2>
+
+分享后没看到材料，先检查 App 收件箱与已有交接状态，原件继续留在获准位置。依次核对 App Group 声明、最终签名权限与实际容器访问，再决定下一步，避免盲目重复分享。
 
 App和Share Extension的Info.plist、entitlements引用YIHU_APP_GROUP；运行代码读取YihuAppGroup，再向系统请求containerURL。shared()未取到容器就返回nil。相同声明只能说明配置意图，不证明产物签名权限或真实设备可访问；本机共享不等公网上传或第三方账户授权。
 
