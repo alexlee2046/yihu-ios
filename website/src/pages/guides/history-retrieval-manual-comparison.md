@@ -1,8 +1,9 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "历史归档怎样检索比对？来源分页、正文省略与未命中边界"
-description: "来源历史只读分页和获准外部归档分开；每页5项、界面最多加载100条并不等于全量索引，未命中不证明从未发生。"
+title: "一呼 Yihu 历史记录怎么查？分页、原文与人工比对"
+description: "找不到历史回复时，先核已加载页、正文省略和原条目，再决定下一步。查看一呼 Yihu 的示例简报与隐私预览，了解自有工作台接入和 App Store 安装。"
 lang: zh
+privacyPreview: true
 ---
 
 <h2 id="first-answer">先核已有材料与缺口，再决定是否重录或重新比较</h2>

@@ -16,6 +16,9 @@ const selected = {
  '/en/guides/followup-evidence-minimization/':'radar', '/en/guides/mobile-agent-decisions/':'radar',
  '/en/guides/outdoor-store-voice-preflight/':'audio', '/en/guides/pcm-format-admission-review/':'audio',
  '/guides/cross-device-field-presentation/':'radar', '/guides/noisy-transcript-text-correction/':'notes',
+ '/guides/followup-evidence-minimization/':'radar',
+ '/guides/history-retrieval-manual-comparison/':'radar', '/en/guides/history-retrieval-manual-comparison/':'radar',
+ '/guides/handoff-evidence-audit-checklist/':'notes', '/en/guides/handoff-evidence-audit-checklist/':'notes',
 };
 function harness(opts={}) {
  const path=opts.path??'/en/guides/mobile-agent-decisions/';
@@ -38,9 +41,9 @@ function harness(opts={}) {
  const conversion={}; vm.runInNewContext(conversionCode,{...env,exports:conversion,require(p){if(p==='./preview-events')return preview;if(p==='../data/app-store.json')return store;throw Error('unexpected module');}});
  return {calls,browser,preview,conversion,setChoice(v){choice=v;},notify(){for(const fn of winListeners['yihu:analytics-choice']??[])fn();},click(href,intro=false){for(const fn of docListeners.click??[])fn({target:new Anchor(href,intro)});}};
 }
-test('P4 uses exactly the 14 approved routes; no filename heuristics or broad bilingual expansion',()=>{
+test('P4 and D60 use exactly 19 selected routes; no filename heuristics or broad bilingual expansion',()=>{
  const h=harness();assert.deepEqual(JSON.parse(JSON.stringify(h.conversion.conversionGuides)),selected);
- assert.equal(h.preview.previewPaths.length,10);assert.equal(h.conversion.conversionPaths.length,26);
+ assert.equal(h.preview.previewPaths.length,10);assert.equal(h.conversion.conversionPaths.length,31);
  assert.equal(h.conversion.guideConversion('/guides/mobile-agent-decisions/'),null);
  assert.equal(h.conversion.guideConversion('/en/guides/cross-device-field-presentation/'),null);
  assert.equal(h.conversion.guideConversion('/guides/unknown/'),null);
@@ -109,17 +112,17 @@ test('store wording and telemetry do not add permissions, network, storage write
  for(const forbidden of ['localStorage.setItem','sessionStorage','fetch(','sendBeacon','XMLHttpRequest','setTimeout','preventDefault','user_id','query_string','editor_text'])assert.ok(!event.includes(forbidden),forbidden);
 });
 const built=existsSync(new URL('dist/index.html',root));
-test('built 14-only paired intro links retain source warnings and unchanged 180/150/30 discovery', {skip:!built},()=>{
+test('built 19 selected intro links retain scope, privacy and unchanged 180/150/30 discovery', {skip:!built},()=>{
  function pages(p='dist/'){return readdirSync(new URL(p,root),{withFileTypes:true}).flatMap(x=>x.isDirectory()?pages(p+x.name+'/'):x.name==='index.html'?[p+x.name]:[]);}
  const all=pages();assert.equal(all.length,180);let count=0,retired=0;
  for(const file of all){const html=read(file),path='/'+file.slice(5).replace(/index\.html$/,'');
   if(html.includes('content="noindex,follow"'))retired++;
   const blocks=[...html.matchAll(/<section\b[^>]*\bdata-guide-conversion\b[^>]*>[\s\S]*?<\/section>/g)];
   assert.equal(blocks.length,Object.hasOwn(selected,path)?1:0,path);if(!blocks.length)continue;count++;
-  const c=harness().conversion.guideConversion(path),block=blocks[0][0];assert.ok(block.includes('href="'+c.demoHref+'"'));assert.ok(block.includes('href="'+store.url+'"'));assert.ok(block.includes(c.sourceContext));
+  const c=harness().conversion.guideConversion(path),block=blocks[0][0];assert.ok(block.includes('href="'+c.demoHref+'"'));assert.ok(block.includes('href="'+store.url+'"'));assert.ok(block.includes(/followup-evidence-minimization|history-retrieval-manual-comparison|handoff-evidence-audit-checklist/.test(path) ? 'id="privacy-preview"' : c.sourceContext));
   assert.ok(html.indexOf('<h1')<html.indexOf('data-guide-conversion'));assert.ok(html.indexOf('data-guide-conversion')<html.indexOf('id="first-answer"')||path.endsWith('/mobile-agent-decisions/'));
   assert.ok(!html.includes('<astro-island'),'references do not add heavy preview islands');
   const target=read('dist'+c.demoHref.split('#')[0]+'index.html');assert.ok(target.includes('id="interactive-preview"'));
  }
- assert.equal(count,14);assert.equal(retired,30);assert.equal([...read('public/sitemap.xml').matchAll(/<loc>/g)].length,150);
+ assert.equal(count,19);assert.equal(retired,30);assert.equal([...read('public/sitemap.xml').matchAll(/<loc>/g)].length,150);
 });

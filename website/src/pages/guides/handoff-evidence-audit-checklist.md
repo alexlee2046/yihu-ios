@@ -1,8 +1,9 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "医院夜班换班交接核对清单：排班版本、跨午夜时段与接班确认"
-description: "临时调班后，逐项核对获准排班表、班次起止、岗位覆盖与接班反馈。用一呼整理非患者信息草稿，不把语音转写、草稿可见或发送回执当作换班获批。"
+title: "夜班换班交接清单｜排班、时段与接班确认 · 一呼 Yihu"
+description: "下载十二项空白行政交接清单，核对排班版本、跨午夜时段和接班反馈。用一呼 Yihu 的无麦克风示例了解草稿交接，患者信息继续留在医院规定的临床渠道。"
 lang: zh
+privacyPreview: true
 ---
 
 <h2 id="first-answer">先回获准排班表核实换班，再整理交班草稿；消息发出不代表接班已确认</h2>
@@ -47,7 +48,7 @@ lang: zh
 
 直接填入有 3,000 个 Swift Character 的长度门槛，较长笔记沿用既有 Markdown 附件暂存路径；这不是拆分或改名绕过一次交接的许可。附件暂存不等于上传、发送、审批或接班确认。复制粘贴也可能产生副本和重复记录，不能承诺所有内容始终不离机或删除后全部撤回。
 
-## 下载空白核对表
+<h2 id="download-checklist">下载空白核对表</h2>
 
 使用说明：[/samples/p33-clinical-shift-handover/README.md](/samples/p33-clinical-shift-handover/README.md) · 中文：[/samples/p33-clinical-shift-handover/checklist.zh.json](/samples/p33-clinical-shift-handover/checklist.zh.json) · English: [/samples/p33-clinical-shift-handover/checklist.en.json](/samples/p33-clinical-shift-handover/checklist.en.json)
 

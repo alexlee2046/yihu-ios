@@ -1,8 +1,9 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Retrieve and compare history: pagination, omitted text and no-match boundaries"
-description: "Read-only source history differs from authorized external archives. Five-item pages and 100 loaded entries are not a full index; no match does not prove no event."
+title: "Yihu History Guide: Find Replies & Compare Originals"
+description: "Missing a reply? Check loaded pages, omitted text and authorized originals before trying again. Preview Yihu’s sample brief, review privacy, then explore App Store setup."
 lang: en
+privacyPreview: true
 ---
 
 <h2 id="first-answer">Check saved material before deciding to record or compare again</h2>

@@ -1,15 +1,15 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "客户跟进证据归档前：最小披露、私有引用与副本范围核对"
-description: "为获准的自有任务材料选择最少必要归档证据，区分私有原记录与可公开合成说明；不提供CRM归档、自动脱敏、客户采集或删除保证。"
+title: "一呼 Yihu 跟进资料怎么分享？最小披露与隐私检查"
+description: "分享跟进资料前，先检查正文、证据链接和副本范围。用一呼 Yihu 的无麦克风预览了解工作流，私有原记录留在获准范围，再决定下载与接入。"
 lang: zh
+privacyPreview: true
 indexable: false
 ---
 
-## 同语种认领与最小披露边界
+## 私有原件留在原处，只分享任务需要的部分
 
-[部门纪要归属与归档自检](/guides/department-minutes-ownership-archive/)：本页保持退休noindex，仅同语技术转接，不挂样本下载/Store卡。私有原证据留在原获准范围，公开材料只用完全合成内容；HTTPS或改名不等脱敏/公开权限，副本保留/删除回原目的地规则，不保证统一归档或全部撤回。
-
+用[部门纪要归属与归档自检](/guides/department-minutes-ownership-archive/)确认谁有权阅读和保存。原记录留在获准工具中，共享草稿只带必要材料，并核对实际目的地的访问与保留规则。
 
 <h2 id="first-answer">证据足够不等于资料越多越好，先核可保留与可披露的范围</h2>
 

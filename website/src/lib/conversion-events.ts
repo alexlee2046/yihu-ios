@@ -1,7 +1,7 @@
 import { analyticsContext, previewPaths, type BuyerScenario } from './preview-events';
 import store from '../data/app-store.json';
 
-// P4's selected 14 references only. "brief" uses the existing "radar" event value.
+// Explicit P4 and D60 guide routes only. "brief" uses the existing "radar" event value.
 export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/audio-route-recovery-matrix/': 'audio',
   '/guides/audio-level-not-accuracy-review/': 'audio',
@@ -17,6 +17,11 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/pcm-format-admission-review/': 'audio',
   '/guides/cross-device-field-presentation/': 'radar',
   '/guides/noisy-transcript-text-correction/': 'notes',
+  '/guides/followup-evidence-minimization/': 'radar',
+  '/guides/history-retrieval-manual-comparison/': 'radar',
+  '/en/guides/history-retrieval-manual-comparison/': 'radar',
+  '/guides/handoff-evidence-audit-checklist/': 'notes',
+  '/en/guides/handoff-evidence-audit-checklist/': 'notes',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',

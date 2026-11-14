@@ -67,6 +67,10 @@
   .task-hero h1 { font-size:clamp(36px,4.5vw,64px); }
   .task-hero > p { color:var(--muted); font-size:clamp(16px,1.8vw,21px); max-width:900px; margin-top:14px; }
   .task-hero .hero-actions { margin-top:18px; }
+  .privacy-preview { margin-top:16px; font-size:14px; color:var(--muted); }
+  .privacy-preview summary { cursor:pointer; color:var(--ink); min-height:44px; padding-block:10px; }
+  .privacy-preview p { margin-block:8px; max-width:900px; }
+  .privacy-preview a { text-decoration:underline; }
   .task-preview { padding-bottom:60px; }
   .task-preview > h2 { font-size:24px; margin-bottom:18px; }
   .demo { min-width:0; }
