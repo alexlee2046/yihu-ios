@@ -1,15 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before archiving follow-up evidence: minimal disclosure, private references and copies"
-description: "Choose necessary evidence from authorized task material, separating private originals from public synthetic explanations. No CRM archive, automatic redaction, customer collection or deletion guarantee."
+title: "Yihu Follow-up Privacy: What to Share, What to Keep Private"
+description: "Review follow-up text, evidence links and copies before sharing. Preview Yihu with sample material and no microphone; keep private originals within authorized access."
 lang: en
+privacyPreview: true
 indexable: false
 ---
 
-## Same-language ownership and minimum-disclosure boundary
+## Keep the original private; share only what the task needs
 
-[Department minutes ownership/archive checks](/en/guides/department-minutes-ownership-archive/): this retired noindex page is a same-language technical transition only, without sample downloads/Store cards. Authorized originals stay private; public content must be entirely synthetic. HTTPS/renaming does not grant disclosure or anonymity. Copies/retention/deletion follow actual destination rules, not universal archive or recall guarantees.
-
+Use the [ownership and archive checks](/en/guides/department-minutes-ownership-archive/) to confirm who may read and retain each item. Keep private originals in approved tools, remove unnecessary details from shared drafts, and check the actual destination’s access and retention rules.
 
 <h2 id="first-answer">Sufficient evidence is not maximum collection; check retention and disclosure scope first</h2>
 

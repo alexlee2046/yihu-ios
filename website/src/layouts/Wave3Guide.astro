@@ -4,9 +4,9 @@ import Demo from '../components/Demo';
 import GuideQuickCheck from '../components/GuideQuickCheck.astro';
 import { guideConversion } from '../lib/conversion-events';
 interface Props {
-  frontmatter: { title: string; description: string; lang: 'zh' | 'en'; indexable?: boolean; quickCheck?: 'audio' | 'notes'; preview?: 'voice' | 'audio' | 'radar'; voiceSample?: 'web' | 'meeting' };
+  frontmatter: { title: string; description: string; lang: 'zh' | 'en'; indexable?: boolean; privacyPreview?: boolean; quickCheck?: 'audio' | 'notes'; preview?: 'voice' | 'audio' | 'radar'; voiceSample?: 'web' | 'meeting' };
 }
-const { title, description, lang, indexable = true, preview, voiceSample, quickCheck } = Astro.props.frontmatter;
+const { title, description, lang, indexable = true, privacyPreview = false, preview, voiceSample, quickCheck } = Astro.props.frontmatter;
 const home = lang === 'en' ? '/en/' : '/';
 const conversion = guideConversion(Astro.url.pathname);
 const slug = Astro.url.pathname.split('/').filter(Boolean).at(-1) ?? '';
@@ -19,9 +19,16 @@ const pillar = /model-artifact|app-group/.test(slug) ? 'iphone-agent-voice-draft
     <h1>{title}</h1>
     {quickCheck && <GuideQuickCheck lang={lang} task={quickCheck} />}
     {conversion && <section class="guide-conversion" data-guide-conversion aria-label={lang === 'en' ? 'Try a sample or view the store edition' : '先试示例或查看商店版'}>
-      <p>{conversion.sourceContext}</p>
+      <p>{privacyPreview ? description : conversion.sourceContext}</p>
       <div class="hero-actions"><a class="button button-primary" href={conversion.demoHref}>{conversion.demoLabel}</a><a class="button button-text app-store-link" href={conversion.storeHref}>{conversion.storeLabel}</a></div>
-      <p>{conversion.storeContext}</p>
+      {!privacyPreview && <p>{conversion.storeContext}</p>}
+      {privacyPreview && slug === 'handoff-evidence-audit-checklist' && <p><a href="#download-checklist">{lang === 'en' ? 'Download the blank 12-check worksheet' : '下载十二项空白核对清单'} ↓</a></p>}
+      {privacyPreview && <details class="privacy-preview" id="privacy-preview">
+        <summary>{lang === 'en' ? 'Preview privacy before you try' : '先看预览如何处理资料'}</summary>
+        <p>{lang === 'en' ? 'The linked preview uses preset material, needs no login or microphone, and keeps edits only in the open page. Reloading resets edits. Optional read-aloud uses the browser’s voice service; usage analytics require consent.' : '链接预览使用预设材料，无需登录或麦克风，编辑仅留在当前打开的页面，刷新即重置。可选朗读使用浏览器语音服务；使用统计须经同意。'}</p>
+        <p>{lang === 'en' ? 'Keep private originals in approved tools. In the app, on-device recognition and the destination’s storage, sync and access rules are separate steps. Review the installed version before using a source-described workflow.' : '私有原件留在获准工具中。App 本机识别与目标工作台的保存、同步和访问是不同步骤；使用源码指南中的工作流前，先核对已安装版本。'} <a href={`${home}privacy/`}>{lang === 'en' ? 'Read the data-flow guide' : '查看完整资料流向'}</a></p>
+      </details>}
+      {privacyPreview && <p>{conversion.storeContext}</p>}
     </section>}
     {preview && <><p class="lead">{description}</p><Demo client:visible lang={lang} initialScene={preview} initialVoiceSample={voiceSample} /></>}
     <slot />

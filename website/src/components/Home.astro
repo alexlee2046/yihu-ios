@@ -17,12 +17,17 @@ const features = en ? [
 ];
 ---
 <section class="task-hero wrap" aria-labelledby="hero-title">
-  <h1 id="hero-title">{en ? 'Speak it. Review it. Keep moving.' : '说下来，理清下一步。'}</h1>
-  <p>{en ? 'Voice drafts and recording notes for your own iPhone workspace. Keep the original, check the wording, and decide what happens next.' : '在 iPhone 上口述草稿、整理录音笔记。保留原文，核对文字，再回自己的工作台继续处理。'}</p>
-  <div class="hero-actions"><a class="button button-primary app-store-link" href={store.url}>{en ? 'Get Yihu on the App Store' : '从 App Store 获取一呼'}</a><a class="button button-text" href="#experience">{en ? 'Preview recording notes' : '先看录音笔记预览'} ↓</a></div>
+  <h1 id="hero-title">{en ? 'Yihu. Your workspace, by voice.' : '一呼 Yihu，让工作台听见你。'}</h1>
+  <p>{en ? 'Your iPhone voice client for an AI workspace you own. Bring your HTTPS address and account; use on-device speech and review before sending.' : '自有 AI 工作台的 iPhone 语音客户端。使用自己的 HTTPS 地址与账号，端侧识别，核对草稿，再由你决定何时发送。'}</p>
+  <div class="hero-actions"><a class="button button-primary app-store-link" href={store.url}>{en ? 'Get Yihu on the App Store' : '从 App Store 获取一呼'}</a><a class="button button-text" href="#experience">{en ? 'Try the no-mic preview' : '试试无麦克风预览'} ↓</a></div>
+  <details class="privacy-preview" id="privacy-preview">
+    <summary>{en ? 'Preview privacy: what stays here, what leaves?' : '预览隐私：哪些留在本页，哪些会交出去？'}</summary>
+    <p>{en ? 'Start with preset sample text: no account, microphone or Bluetooth access. Edits stay in this page while it is open; reloading resets them. Read-aloud uses your browser’s voice service. Usage analytics require your consent.' : '从预设示例文字开始，无需账号、麦克风或蓝牙权限。编辑内容只保留在当前打开的页面，刷新即重置；朗读使用浏览器语音服务，使用统计须经你同意。'}</p>
+    <p>{en ? 'In the app, optional speech recognition runs on your device. Text you choose to hand off follows your workspace’s storage and access rules.' : 'App 中可选语音识别在本机运行。你选择交接的文字，按目标工作台的保存与访问规则处理。'} <a href={`${home}privacy/`}>{en ? 'Read the data-flow guide' : '查看完整资料流向'}</a></p>
+  </details>
 </section>
 <section class="task-preview wrap" id="experience" aria-labelledby="experience-title">
-  <h2 id="experience-title">{en ? 'From recording notes to a next step. Try it here.' : '录音笔记到下一步，先在这里试。'}</h2>
+  <h2 id="experience-title">{en ? 'Preview a recording note. Try the next step.' : '录音笔记到下一步，先在这里试。'}</h2>
   <Demo client:load lang={lang} initialVoiceSample="meeting" />
 </section>
 <HomeAnswers lang={lang} part="intro" />

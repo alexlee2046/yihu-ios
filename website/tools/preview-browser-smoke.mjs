@@ -206,7 +206,15 @@ async function conversionGuide(page, engine, path, width) {
   assert.ok(href.startsWith(path.startsWith('/en/') ? '/en/guides/' : '/guides/'));
   assert.ok(href.endsWith('/#interactive-preview'));
   assert.equal(await app.getAttribute('href'), store.url);
-  assert.match(await root.innerText(), path.startsWith('/en/') ? /source\/troubleshooting/ : /源码\/排障/);
+  if (/followup-evidence-minimization|history-retrieval-manual-comparison|handoff-evidence-audit-checklist/.test(path)) {
+    const privacy = root.locator('#privacy-preview');
+    assert.equal(await privacy.getAttribute('open'), null);
+    await privacy.locator('summary').focus(); await page.keyboard.press('Enter');
+    assert.notEqual(await privacy.getAttribute('open'), null);
+    assert.ok(await privacy.getByRole('link').getAttribute('href') === (path.startsWith('/en/') ? '/en/privacy/' : '/privacy/'));
+    assert.equal((await events(page)).length, 0, 'privacy inspection is usable without analytics consent');
+    await page.keyboard.press('Enter');
+  } else assert.match(await root.innerText(), path.startsWith('/en/') ? /source\/troubleshooting/ : /源码\/排障/);
   const intentOnly = async locator => {
     await locator.evaluate(a => a.addEventListener('click', e => e.preventDefault(), { once: true }));
     await locator.click();
@@ -238,9 +246,9 @@ async function conversionGuide(page, engine, path, width) {
 }
 const p4Source = await readFile('src/lib/conversion-events.ts','utf8');
 const p4Paths = [...p4Source.matchAll(/'(\/[^']+)': '(?:voice|audio|notes|radar)'/g)].map(x => x[1]);
-assert.equal(p4Paths.length,14);
+assert.equal(p4Paths.length,19);
 const targets = [
-  ['/', 390, 844, 'voice', 'home-zh-390'], ['/en/', 1440, 1000, 'voice', 'home-en-1440'],
+  ['/', 390, 844, 'voice', 'home-zh-390'], ['/en/', 1440, 1000, 'voice', 'home-en-1440'], ['/en/', 390, 844, 'voice', 'home-en-390'],
   ['/guides/bluetooth-audio-input-troubleshooting/', 390, 844, 'audio', 'audio-zh-390'],
   ['/en/guides/multi-project-radar-watch/', 390, 844, 'radar', 'radar-en-390'],
   ['/en/guides/recording-notes-handoff/', 1440, 1000, 'voice', 'comparison-en-1440'],
@@ -282,6 +290,12 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
         assert.equal(await p.page.locator('[data-preview]').getAttribute('data-preview'), expected);
         if (path === '/' || path === '/en/') {
           assert.ok(g.cards.every(bottom => bottom <= height),'three cards in first viewport');
+          const privacy = p.page.locator('#privacy-preview');
+          assert.equal(await privacy.getAttribute('open'), null);
+          await privacy.locator('summary').focus(); await p.page.keyboard.press('Enter');
+          assert.notEqual(await privacy.getAttribute('open'), null);
+          assert.equal(await p.page.evaluate(() => window.__permissions), 0);
+          await p.page.keyboard.press('Enter');
           const link=p.page.locator('.hero-actions .app-store-link');assert.equal(await link.getAttribute('href'),store.url);
           assert.ok(await link.evaluate(a=>a.getBoundingClientRect().bottom<=innerHeight),'store entry above fold');
         }
@@ -314,6 +328,18 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
         record.pages.push({ path, javascript:false, fallback:'native task-guide link navigates with no JavaScript' });
       } finally { await p.close(); }
     }
+    for (const path of ['/en/', '/en/guides/history-retrieval-manual-comparison/']) {
+      const p = await openPage(activeBrowser, path, 390, 844, false);
+      try {
+        const privacy = p.page.locator('#privacy-preview');
+        assert.equal(await privacy.getAttribute('open'), null);
+        await privacy.locator('summary').focus(); await p.page.keyboard.press('Enter');
+        assert.notEqual(await privacy.getAttribute('open'), null);
+        assert.equal(await privacy.getByRole('link').getAttribute('href'), '/en/privacy/');
+        assert.equal(await p.page.locator('.hero-actions .app-store-link').getAttribute('href'), store.url);
+        record.pages.push({ path, javascript:false, privacy:'native keyboard disclosure and download available' });
+      } finally { await p.close(); }
+    }
     assert.deepEqual(failures, []);
   } finally {
     await activeBrowser?.close(); activeBrowser = undefined;
@@ -321,4 +347,4 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
     await writeFile(resolve(output, 'evidence.json'), JSON.stringify({ results, failures }, null, 2));
   }
 }
-console.log('Browser preview acceptance PASS: Chromium + WebKit, 5 original pages + 2 store/source setup views + 8 P2 views + 28 P4 views + 2 no-JavaScript navigations per engine; consent-only funnel, actual same-language preview navigation, store intent stub only; native speech API separate; browsers closed.');
+console.log('Browser preview acceptance PASS: Chromium + WebKit, 6 home/scenario pages + 2 store/source setup views + 8 P2 views + 38 selected-guide views + 2 no-JavaScript navigations + 2 no-JavaScript privacy disclosures per engine; consent-only funnel, actual same-language preview navigation, store intent stub only; native speech API separate; browsers closed.');

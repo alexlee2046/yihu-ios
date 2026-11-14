@@ -1,8 +1,9 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Hospital night-shift swap handover checklist: roster version, midnight boundaries and acknowledgement"
-description: "After a shift swap, check the approved roster, exact start and end times, role coverage and receiving staff acknowledgement. Prepare non-patient administrative drafts with Yihu; a transcript, visible draft or service receipt is not swap approval."
+title: "Night-Shift Swap Checklist: 12 Handover Checks | Yihu"
+description: "Download a blank 12-check administrative worksheet for night-shift roster changes, midnight boundaries and staff acknowledgement. Preview Yihu drafts without a mic; keep patient data in clinical channels."
 lang: en
+privacyPreview: true
 ---
 
 <h2 id="first-answer">Verify the swap against the approved roster before drafting the handover; a sent message does not confirm acceptance</h2>
@@ -47,7 +48,7 @@ Check hospital rules and the relevant people's permission before recording. If r
 
 Direct insertion has a 3,000 Swift Character limit; longer notes use the existing Markdown attachment-staging path. This is not permission to split or rename content to bypass the one-handoff boundary. Staging is not upload, sending, approval or acceptance. Copy and paste can also create copies and duplicates; do not assume everything stays on-device or that deleting one copy retracts all others.
 
-## Download the blank checklist
+<h2 id="download-checklist">Download the blank checklist</h2>
 
 Instructions: [/samples/p33-clinical-shift-handover/README.md](/samples/p33-clinical-shift-handover/README.md) · English: [/samples/p33-clinical-shift-handover/checklist.en.json](/samples/p33-clinical-shift-handover/checklist.en.json) · 中文：[/samples/p33-clinical-shift-handover/checklist.zh.json](/samples/p33-clinical-shift-handover/checklist.zh.json)
 
