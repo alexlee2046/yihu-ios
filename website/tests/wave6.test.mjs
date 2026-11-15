@@ -28,7 +28,7 @@ test('Wave6 six built pages carry new task boundaries, semantic tables, FAQs and
     assert.ok(voice.includes('WebKit') && voice.includes('TTS'));
     assert.ok(voice.includes(prefix ? 'not universal acceptance' : '不等于所有站点'));
     const notes = read('dist/' + prefix + 'guides/multi-note-review-handoff/index.html');
-    assert.ok(notes.includes(prefix ? 'not automatic merging' : '不等于App已经提供自动合并'));
+    assert.ok(notes.includes(prefix ? 'editorial review adds no automatic merging' : '人工汇总不新增自动合并'));
     assert.ok(notes.includes(prefix ? 'three versus two' : '三项/两项'));
   }
 });

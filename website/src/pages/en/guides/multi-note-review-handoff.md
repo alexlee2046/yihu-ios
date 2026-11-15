@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Review multiple voice notes: sources, conflicts and unconfirmed to-dos"
-description: "A manual checklist for multiple notes separates audio segments, transcripts, summaries and approved actions. It adds no Yihu merge feature or bypass of one-handoff guards."
+title: "Review Multiple Voice Notes: Sources & Next Steps | Yihu"
+description: "Keep each recording, transcript and handoff state. Compare conflicts and action candidates manually, then try Yihu’s no-mic notes preview and review privacy before installing."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">An editorial summary is not automatic merging or deduplication</h2>
+<h2 id="first-answer">Keep each source, then compare conflicts and next steps</h2>
 
-Existing Yihu notes retain their own local audio, transcript and handoff state. This guide suggests manually comparing sources, marking repetition/conflicts/gaps and checking unconfirmed to-dos before organizing text in an already authorized tool. It does not implement audio joining, cross-note merging, task extraction or deduplication. A new summary cannot erase uncertainty about an original handoff.
+Keep each note’s audio, transcript, source location and handoff state first. Manually compare repeated wording and conflicting versions, separating proposals from confirmed points and open actions. Verify missing owners or dates. Organize only necessary text in approved tools and check prior handoffs at the destination; editorial review adds no automatic merging, deduplication or execution.
 
 ## Three meanings of multiple segments
 

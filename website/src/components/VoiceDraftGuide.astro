@@ -1,10 +1,12 @@
 ---
 import Demo from './Demo';
+import { guideConversion } from '../lib/conversion-events';
 import store from '../data/app-store.json';
 interface Props { lang?: 'zh' | 'en' }
 const { lang = 'zh' } = Astro.props;
 const en = lang === 'en';
 const home = en ? '/en/' : '/';
+const conversion = guideConversion(Astro.url.pathname);
 const rows = en ? [
   ['Mobile browser + typing / copy and paste', 'You already have the text or can dictate into an editor.', 'Select the destination, move the text and review it.'],
   ['Standalone recording / transcription tool', 'You mainly need a recording and its transcript.', 'Check storage, then choose a later organizing tool if needed.'],
@@ -17,11 +19,20 @@ const rows = en ? [
 ---
 <article class="document voice-guide task-document">
   <nav aria-label={en ? 'Guide context' : '指南归属'}><a href={`${home}#scenarios`}>{en ? 'All scenarios' : '场景指南'}</a></nav>
-  <h1>{en ? 'Voice drafts on iPhone, ready for your web workspace' : 'iPhone 语音 AI 草稿，把想法接到网页工作台'}</h1>
-  <p class="lead">{en ? 'Speak the next step while it is fresh. Yihu transcribes on your phone and can place text in a compatible workspace draft. Review it, then decide when to send.' : '想法出现时，先说下来。一呼在手机转写，并可把文字填入兼容的工作台草稿。检查后，再由你决定什么时候发送。'}</p>
+  <h1>{en ? 'iPhone voice drafts for your workspace' : 'iPhone 语音草稿，接到自己的工作台'}</h1>
+  {conversion && <section class="guide-conversion" data-guide-conversion aria-label={en ? 'Try a sample or view the store edition' : '先试示例或查看商店版'}>
+    <p>{en ? 'Prepare a reviewable voice draft for your own AI workspace. Try the no-mic sample before connecting your HTTPS address and account.' : '把口述想法留作自己 AI 工作台里可核对的草稿。先试无麦克风示例，再连接自己的 HTTPS 地址与账号。'}</p>
+    <div class="hero-actions"><a class="button button-primary" href={conversion.demoHref}>{conversion.demoLabel}</a><a class="button button-text app-store-link" href={conversion.storeHref}>{conversion.storeLabel}</a></div>
+    <details class="privacy-preview" id="privacy-preview">
+      <summary>{en ? 'Preview privacy before you try' : '先看预览如何处理资料'}</summary>
+      <p>{en ? 'The linked preview uses preset material, needs no login or microphone, and keeps edits only in the open page. Reloading resets edits. Optional read-aloud uses the browser’s voice service; usage analytics require consent.' : '链接预览使用预设材料，无需登录或麦克风，编辑仅留在当前打开的页面，刷新即重置。可选朗读使用浏览器语音服务；使用统计须经同意。'}</p>
+      <p>{en ? 'Keep private originals in approved tools. In the app, on-device recognition and the destination’s storage, sync and access rules are separate steps. Review the installed version before using a source-described workflow.' : '私有原件留在获准工具中。App 本机识别与目标工作台的保存、同步和访问是不同步骤；使用源码指南中的工作流前，先核对已安装版本。'} <a href={`${home}privacy/`}>{en ? 'Read the data-flow guide' : '查看完整资料流向'}</a></p>
+    </details>
+    <p>{conversion.storeContext}</p>
+  </section>}
   <Demo client:visible lang={lang} />
-  <h2 id="first-answer">{en ? 'Less app switching, one clear next step' : '少切一次应用，把下一步说清楚'}</h2>
-  <p>{en ? 'For example: after reading project material, dictate a question or a reply outline instead of switching through notes and clipboard steps. Keep the wording editable in your own workspace.' : '例如：看完项目资料，口述一个追问或回复提纲，不必先切到笔记再来回复制。文字留作你自己工作台里可检查的草稿。'}</p>
+  <h2 id="first-answer">{en ? 'Choose the draft, speak, then check the wording' : '先选好工作台草稿，口述后核对文字'}</h2>
+  <p>{en ? 'Open a compatible draft in your trusted workspace, dictate one question or reply outline, then check names, numbers and the destination. Keep missing facts unconfirmed and review existing text before another insertion. You decide when to send; the workspace may save or sync drafts.' : '先打开可信工作台中的兼容草稿，口述一个追问或回复提纲，再核对人名、数字和目的地。缺少的事实先核实，重复填入前先看已有文字。发送由你决定，工作台仍可能保存或同步草稿。'}</p>
   <h2 id="compare">{en ? 'Voice-first workspace vs mobile-browser copy and paste' : '语音工作台，还是手机浏览器手动复制粘贴？'}</h2>
   <div role="region" aria-label={en ? 'Choose an input workflow' : '选择输入工作流'} tabindex="0">
     <table><thead><tr>{(en ? ['Approach', 'A good fit when', 'Your next step'] : ['方式', '适合什么任务', '你接着做什么']).map(x => <th scope="col">{x}</th>)}</tr></thead><tbody>{rows.map(r => <tr><th scope="row">{r[0]}</th><td>{r[1]}</td><td>{r[2]}</td></tr>)}</tbody></table>
