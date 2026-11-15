@@ -1,13 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Cross-department minutes: ownership acknowledgment and archive checks"
-description: "After manual minutes, verify responsible-role acknowledgment, approved scope and existing retention rules. Not Yihu task assignment, e-signature, document storage or automatic archiving."
+title: "Team Meeting Minutes: Confirm Owners & Archives | Yihu"
+description: "Check owner acknowledgment, approved scope and existing storage rules before archiving minutes. Try Yihu’s no-mic notes preview, then review privacy and App Store setup."
 lang: en
+privacyPreview: true
+trialLabel: "Preview meeting-note review"
 ---
 
-<h2 id="first-answer">Naming a role is not acknowledgment, and saving a document is not formal archiving</h2>
+<h2 id="first-answer">Check acknowledgment and scope before choosing an archive</h2>
 
-Yihu provides voice text, notes and workbench handoff; this article adds no cross-department assignment/archive system. After drafting minutes manually, distinguish a proposed responsible role, its explicit acknowledgment through an existing process, the approved scope and an authorized document location. Visible drafts, receipt, ownership acknowledgment, approval and completed work need separate evidence; saved does not cover them all.
+Check the original, minutes version and the relevant role’s explicit acknowledgment. Separate proposed responsibility from confirmed ownership. Use existing team processes to verify approval scope, access and retention. Without evidence, stay in an authorized draft rather than creating a new share location. A manual checklist does not assign work or sign for anyone.
 
 ## A different task from fields and to-do extraction
 
