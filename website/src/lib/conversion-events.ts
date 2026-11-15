@@ -32,6 +32,12 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/audio-level-not-accuracy-review/': 'audio',
   '/guides/foreground-audio-rebind-preflight/': 'audio',
   '/en/guides/foreground-audio-rebind-preflight/': 'audio',
+  '/guides/meeting-notes-brief-fields/': 'notes',
+  '/en/guides/meeting-notes-brief-fields/': 'notes',
+  '/guides/recording-notes-handoff/': 'notes',
+  '/en/guides/recording-notes-handoff/': 'notes',
+  '/guides/offline-workbench-handoff-troubleshooting/': 'voice',
+  '/en/guides/offline-workbench-handoff-troubleshooting/': 'voice',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',

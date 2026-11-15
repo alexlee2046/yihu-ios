@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Meeting notes template: decisions, action items and open questions"
-description: "A practical template for turning a transcript into reviewable follow-ups, with owners, dates and a synthetic example."
+title: "Meeting Notes Template: Decisions & Next Steps | Yihu"
+description: "Organize decisions, actions, owners, dates and open questions against the original transcript. Try Yihu’s no-mic note preview, then review privacy and App Store setup."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Keep the original, make the next step easy to find</h2>
+<h2 id="first-answer">Check the original; separate decisions, actions and questions</h2>
 
-Start with the transcript and separate decisions, actions and open questions. Leave owners and dates unconfirmed when the conversation did not supply them. Your chosen organizing tool can help draft; review the result against the original.
+Keep the transcript first and separate confirmed decisions, concrete actions and open questions. Record owners and dates only when agreed; ask about missing facts rather than guessing. After drafting in your chosen tool, check numbers, conditions and negation against the original.
 
 <div role="region" aria-label="Meeting note template" tabindex="0">
 

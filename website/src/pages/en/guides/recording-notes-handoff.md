@@ -1,15 +1,16 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Turn voice notes into action items: keep the original and the next step"
-description: "Turn iPhone recordings into reviewable next steps. Keep the original transcript, check decisions and owners, and continue in your own workspace."
+title: "iPhone Recording to Action Items: Review & Handoff | Yihu"
+description: "Keep the recording and transcript, check actions and the destination, then continue in your own workspace. Try Yihu’s no-login note preview and review privacy before installing."
 lang: en
+privacyPreview: true
 preview: voice
 voiceSample: meeting
 ---
 
-<h2 id="first-answer">Start with a useful next step</h2>
+<h2 id="first-answer">Keep audio and text; check the next step and destination</h2>
 
-Keep the recording and transcript first, then use your chosen workspace or tool to organize them. Separate confirmed points, follow-ups and unanswered questions so the next phone visit starts with a clear action.
+Keep the recording and transcript first, then check names, numbers, decisions and actions. Confirm your workspace, needed material and any existing draft before handing over necessary text. Verify owners and dates against the original; if an outcome is unclear, inspect the destination before another handoff.
 
 ## A note you can pick up after the meeting
 
@@ -59,7 +60,7 @@ Use the synthetic transcript above for each approach. The test is whether you ca
 | Additional work | Correct words needed for later use. | Separate proposals from decisions; verify names, numbers, owners and dates. |
 | Missing information | Leave unclear wording marked. | Keep owner/deadline unconfirmed instead of assigning them by guess. |
 | Data handling | Inspect the selected tool's storage/export settings. | Inspect both the recorder and the organizing destination; hand over only needed material. |
-| Where Yihu fits | A lighter transcription tool may meet this task. | Local notes plus your existing Agent web workspace, with model/signing setup. |
+| Where Yihu fits | A lighter transcription tool may meet this task. | Local notes plus your existing Agent web workspace, with optional models and your own account. |
 
 </div>
 
