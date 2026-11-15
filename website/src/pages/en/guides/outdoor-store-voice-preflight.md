@@ -1,18 +1,19 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Pause outdoors or during a quiet store moment, then leave a draft"
-description: "Find a safe stationary place. Try a phrase without real business data through recording, text and the intended draft, then decide whether to continue. For immediate communication, use the team's existing channel."
+title: "Outdoor or Store Voice Notes? Stop, Draft & Review | Yihu"
+description: "Stop somewhere safe and test a phrase without orders or personal data. Review audio, text and the draft; try Yihu’s no-mic page preview before checking privacy and setup."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Start with one useful check</h2>
+<h2 id="first-answer">Stop safely, test one harmless phrase, then check the draft</h2>
 
-Find a safe stationary place. Try a phrase without real business data through recording, text and the intended draft, then decide whether to continue. For immediate communication, use the team's existing channel.
+Stop moving or serving customers and stay clear of vehicles, heat and aisles. Obtain the required recording consent before trying a harmless phrase. Replay saved audio, compare the words and inspect the existing destination draft before continuing. Use your team’s channel for immediate replies; retain originals and check the destination if a result is unclear.
 
 ## Try this order
 
 1. Stop safely outdoors; stay clear of heat, vehicles, aisles and active service areas in a store.
-2. Prepare your signing, compatible models, microphone permission and trusted HTTPS workspace.
+2. Prepare the app, your workspace account, compatible models, microphone permission and trusted HTTPS workspace. Store installation needs no self-signing.
 3. Choose one path: a short voice draft or a local voice note. Try “organize a sample item list.”
 4. Inspect existing destination text before acting. If the result is uncertain, retain the original and check the target.
 

@@ -43,6 +43,11 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/guides/mobile-agent-decisions/': 'radar',
   '/guides/multi-note-review-handoff/': 'notes',
   '/en/guides/multi-note-review-handoff/': 'notes',
+  '/guides/voice-workbench-vs-radio-chat/': 'voice',
+  '/en/guides/voice-workbench-vs-radio-chat/': 'voice',
+  '/guides/multi-project-radar-watch/': 'radar',
+  '/en/guides/multi-project-radar-watch/': 'radar',
+  '/guides/outdoor-store-voice-preflight/': 'audio',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',
