@@ -1,18 +1,19 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Try Yihu Before Installing | iPhone Voice Draft Setup"
-description: "Try a sample draft with no login or microphone, then get Yihu on the App Store. Bring your own HTTPS workspace and account; download speech models when needed."
+title: "Is Yihu Right for You? Try a Draft Before Setup"
+description: "Edit one sample draft with no login or microphone before installing Yihu. Check the fit for your HTTPS workspace, review privacy, then explore App Store setup and optional voice models."
 lang: en
 privacyPreview: true
+trialLabel: "Try one sample draft"
 ---
 
-<h2 id="first-answer">Preview one draft, then prepare your workspace</h2>
+<h2 id="first-answer">Preview one draft in the page before choosing to install</h2>
 
-Start with the App Store edition, your own HTTPS workspace and account, and one safe sample draft. Download the optional speech model (about 950 MB) when you want voice input.
+Edit the preset text, place it in the on-page sample draft and review it. No account or microphone is needed for this preview. If the workflow fits your own HTTPS workspace, check the App Store listing and prepare your address and account. Download the optional speech model (about 950 MB) only when choosing voice input.
 
 ## Try this order
 
-1. Name the task, for example placing one spoken thought into your own web draft.
+1. Open the sample above, edit harmless text, then choose one task you want to continue in your own workspace.
 2. [Get Yihu on the App Store](https://apps.apple.com/us/app/yihu/id6819057500), then connect your trusted HTTPS workspace. Store installation needs no Mac or self-signing; check the listing for device and regional availability.
 3. Confirm compatible models are downloaded and usable, then arrange mic permission and recording consent where needed.
 4. Try one synthetic phrase, inspect its wording and destination, then decide whether to continue.

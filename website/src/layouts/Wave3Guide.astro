@@ -4,9 +4,9 @@ import Demo from '../components/Demo';
 import GuideQuickCheck from '../components/GuideQuickCheck.astro';
 import { guideConversion } from '../lib/conversion-events';
 interface Props {
-  frontmatter: { title: string; description: string; lang: 'zh' | 'en'; indexable?: boolean; privacyPreview?: boolean; quickCheck?: 'audio' | 'notes'; preview?: 'voice' | 'audio' | 'radar'; voiceSample?: 'web' | 'meeting' };
+  frontmatter: { title: string; description: string; lang: 'zh' | 'en'; indexable?: boolean; privacyPreview?: boolean; trialLabel?: string; quickCheck?: 'audio' | 'notes'; preview?: 'voice' | 'audio' | 'radar'; voiceSample?: 'web' | 'meeting' };
 }
-const { title, description, lang, indexable = true, privacyPreview = false, preview, voiceSample, quickCheck } = Astro.props.frontmatter;
+const { title, description, lang, indexable = true, privacyPreview = false, trialLabel, preview, voiceSample, quickCheck } = Astro.props.frontmatter;
 const home = lang === 'en' ? '/en/' : '/';
 const conversion = guideConversion(Astro.url.pathname);
 const slug = Astro.url.pathname.split('/').filter(Boolean).at(-1) ?? '';
@@ -20,7 +20,7 @@ const pillar = /model-artifact|app-group/.test(slug) ? 'iphone-agent-voice-draft
     {quickCheck && <GuideQuickCheck lang={lang} task={quickCheck} />}
     {conversion && <section class="guide-conversion" data-guide-conversion aria-label={lang === 'en' ? 'Try a sample or view the store edition' : '先试示例或查看商店版'}>
       <p>{privacyPreview ? description : conversion.sourceContext}</p>
-      <div class="hero-actions"><a class="button button-primary" href={conversion.demoHref}>{conversion.demoLabel}</a><a class="button button-text app-store-link" href={conversion.storeHref}>{conversion.storeLabel}</a></div>
+      <div class="hero-actions"><a class="button button-primary" href={conversion.demoHref}>{trialLabel || conversion.demoLabel}</a><a class="button button-text app-store-link" href={conversion.storeHref}>{conversion.storeLabel}</a></div>
       {!privacyPreview && <p>{conversion.storeContext}</p>}
       {privacyPreview && slug === 'handoff-evidence-audit-checklist' && <p><a href="#download-checklist">{lang === 'en' ? 'Download the blank 12-check worksheet' : '下载十二项空白核对清单'} ↓</a></p>}
       {privacyPreview && <details class="privacy-preview" id="privacy-preview">

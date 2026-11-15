@@ -48,6 +48,8 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/guides/multi-project-radar-watch/': 'radar',
   '/en/guides/multi-project-radar-watch/': 'radar',
   '/guides/outdoor-store-voice-preflight/': 'audio',
+  '/guides/department-minutes-ownership-archive/': 'notes',
+  '/en/guides/department-minutes-ownership-archive/': 'notes',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',

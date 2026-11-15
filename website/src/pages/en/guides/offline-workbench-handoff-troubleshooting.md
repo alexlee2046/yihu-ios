@@ -1,14 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Transcript Ready but Workspace Offline? 3 Checks | Yihu"
-description: "Keep local audio and text, then check HTTPS access, login and existing drafts. Inspect prior results before retrying. Try Yihu’s no-mic preview and review setup and privacy."
+title: "Workspace Offline? Save Text Before Retrying | Yihu"
+description: "Keep local audio and text, check HTTPS access and existing drafts, then inspect the same request before retrying. Try an editable sample draft and review privacy before App Store setup."
 lang: en
 privacyPreview: true
+trialLabel: "Try an editable draft"
 ---
 
-<h2 id="first-answer">Keep audio and text; check connectivity and existing drafts</h2>
+<h2 id="first-answer">Keep originals; check the existing draft and request first</h2>
 
-Keep saved audio and text first, inspect local processing, then check the correct HTTPS workspace and login. Prepared local transcription and network handoff have separate requirements. When connectivity returns, inspect the destination draft and the same request result before deciding what to do next.
+Keep saved audio and text, check whether local processing finished, then inspect the correct HTTPS workspace and login. Once connected, review the existing draft and the same request result. If still unclear, retain the record and use the authorized process rather than testing a resend with a new request. Prepared local transcription and online workspace access have separate requirements.
 
 ## Try this order
 
