@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Contact a colleague or organize work? Choose by the recipient"
-description: "To reach a person immediately, start with your team's communication tool. To turn a thought into reviewable text, consider Yihu around the web workspace you already use."
+title: "Voice Workspace or Radio Chat? Choose Your Task | Yihu"
+description: "For immediate contact, use your team’s communication tool. For reviewable text, explore Yihu with your own workspace. Try the no-mic sample and review privacy before installing."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Start with one useful check</h2>
+<h2 id="first-answer">Choose the recipient before the voice tool</h2>
 
-To reach a person immediately, start with your team's communication tool. To turn a thought into reviewable text, consider Yihu around the web workspace you already use.
+Decide whether a colleague must hear this now or whether the thought belongs in your own workspace draft. Use your team’s approved channel for immediate contact. For text tasks, choose the draft and review the wording before sending. Compare steps, accounts and data flow with harmless sample material before setting up Yihu.
 
 ## Try this order
 
@@ -21,7 +22,7 @@ To reach a person immediately, start with your team's communication tool. To tur
 |---|---|---|
 | Reach a person on site | Radio equipment matching the system and local rules. | Check recipients, device instructions and communication procedures. |
 | Reach an existing group | Your team's voice-chat service. | Inspect the particular product's account, network and retention settings. |
-| Continue an Agent web task | Yihu and a trusted HTTPS workspace. | Prepare models/signing, review the draft and choose when to send. |
+| Continue an Agent web task | Yihu and a trusted HTTPS workspace. | Prepare the app, optional models and your own account; review the draft before sending. |
 | Organize a recording later | A recorder/transcription tool, or Yihu voice notes. | Retain the original and choose how to organize and hand off text. |
 
 </div>

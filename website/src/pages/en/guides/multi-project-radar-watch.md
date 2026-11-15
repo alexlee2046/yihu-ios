@@ -1,14 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Daily inquiry & market brief for export sales, on iPhone"
-description: "Review your existing inquiry tasks, source material and next steps from a supported JSON brief. Includes a synthetic export-sales example."
+title: "Daily Sales Brief on iPhone: Sources & Next Steps | Yihu"
+description: "Review your prepared inquiry, market and follow-up tasks on iPhone. Check sources before acting; try Yihu’s no-mic sample brief, then review privacy and App Store setup."
 lang: en
+privacyPreview: true
 preview: radar
 ---
 
-<h2 id="first-answer">Start with a useful next step</h2>
+<h2 id="first-answer">Check source time and missing facts before following up</h2>
 
-Start the day with what needs your decision or follow-up, then inspect its source and next step. Yihu reads your structured brief; your existing business workflow provides the customer and market material.
+Start with items needing a decision or follow-up, then check source time, original evidence and missing facts. Confirm quote scope and delivery time before continuing in your own business tool. Your existing export or compatible source supplies the brief. List open questions and retain originals instead of filling gaps from a sample or old snapshot.
 
 ## Three inputs, three useful next steps
 
