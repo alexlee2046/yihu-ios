@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Returning to foreground: request invalidation, transcription resume and target review"
-description: "Separate permission-dialog inactive, true background, short-speech cancellation and note transcription. Recheck state/route/target without seamless audio rebinding or lock-screen recording promises."
+title: "Recording Stopped After Returning to Yihu? Check First"
+description: "Back in the app? Check saved audio, transcript state and the destination draft before recording again. Try Yihu’s no-mic audio preview, then review privacy and App Store setup."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Foreground is a state event, not capture, audio-rebind or delivery confirmation</h2>
+<h2 id="first-answer">Check saved material and the destination before recording again</h2>
 
-The current foreground callback enters short-speech readiness checks and resumes existing note transcription. Leaving the active state follows cancellation/pause logic. A permission dialog's `inactive` differs from true `background`. Rebind preflight here means manual state/route/target review, not a promise that every audio session seamlessly resumes.
+On returning to Yihu, inspect saved clips, pending text and errors, then check the current input and existing workspace draft. Keep the original and review prior handoff before deciding to record or send again. A permission dialog’s inactive state differs from true background; resumed note transcription and restarted recording must be checked separately.
 
 ## Different from audio recovery and format preflight
 

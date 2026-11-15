@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "What an audio meter proves: RMS is not accuracy, wind score or delivery"
-description: "Review different short-speech/long-note RMS scaling and clipping. Levels are not calibrated decibels, identity or content truth; no actual acoustic benchmark."
+title: "Audio Meter Moving but Words Wrong? What to Check | Yihu"
+description: "Replay saved audio, check names, numbers and negation, then review input and transcription separately. Try Yihu’s no-mic audio checklist and review privacy before installing."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">A moving meter is not correct speech, and full scale is not 100% recognition</h2>
+<h2 id="first-answer">Replay saved audio, then compare the words and input</h2>
 
-Short-speech PCM scales sample RMS into a 0–1 range; long-note writes use another multiplier. These are level displays, not recognition confidence, voiceprint identity, wind rating or delivery receipts. Matching bar lengths across paths do not directly compare sound quality. No acoustic scoring/calibration tool is added.
+Keep saved audio and text first. Replay a short section and check names, numbers and negation. If the words differ, review the actual input, speech model and final transcript separately; do not raise input merely to fill the meter. Short speech and long notes use different RMS scaling. Meter levels are not recognition confidence; compare the transcript with the saved audio.
 
 ## Different from silence, voiceprint and original-word review
 

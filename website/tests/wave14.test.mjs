@@ -30,11 +30,11 @@ test('placeholders, foreground callbacks and editorial roles do not imply source
   for (const prefix of ['', 'en/']) {
     const defaults = read('src/pages/' + prefix + 'guides/empty-field-display-defaults.md');
     for (const field of ['status', 'priority', 'next', 'reply_supported', 'transcript']) assert.ok(defaults.includes(field));
-    assert.ok(defaults.includes(prefix ? 'No default-value fixer' : '不提供默认值修复器'));
+    assert.ok(defaults.includes(prefix ? 'Keep missing values unknown' : '缺少的值先保留未知'));
     const lifecycle = read('src/pages/' + prefix + 'guides/foreground-audio-rebind-preflight.md');
     for (const state of ['inactive', 'background', 'preparing', 'applicationDidBecomeActive', 'resumeTranscription']) assert.ok(lifecycle.includes(state));
     assert.ok(lifecycle.includes(prefix ? 'late permission responses' : '迟到许可结果'));
-    assert.ok(lifecycle.includes(prefix ? 'not a promise' : '不是App承诺'));
+    assert.ok(lifecycle.includes(prefix ? 'One callback cannot establish lock-screen continuity' : '不能把一个回调推广成所有录音路径的锁屏连续性保证'));
     const roles = read('src/pages/' + prefix + 'guides/multi-role-approval-receipt-checklist.md');
     for (const field of ['approval_reference', 'content_scope', 'actor_role', 'recipient_confirmation', 'remaining_unknowns']) assert.ok(roles.includes(field));
     assert.ok(roles.includes(prefix ? 'not JSON imports, authorization parameters or a native approval API' : '不是导入JSON、授权参数或原生审批API'));

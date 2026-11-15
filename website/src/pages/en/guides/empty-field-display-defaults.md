@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Empty fields and display defaults: placeholders must not become source values"
-description: "Separate missing values, UI placeholders, sorting fallbacks and capability checks. No fabricated titles, business defaults or automatic source-repair feature."
+title: "Empty Task Fields? Check Values Before Drafting | Yihu"
+description: "Missing status, priority or next steps? Check source values before drafting. Try Yihu’s no-login sample brief, keep unknowns separate, and review privacy before downloading."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">A missing-value label may be UI explanation, not supplied business data</h2>
+<h2 id="first-answer">Check source values; draft only what is confirmed</h2>
 
-Some task-card branches display status not provided, priority pending or next step pending when fields are empty. These branches do not mean source fields were assigned a default business state, priority or action. Separate raw values from rendering. Do not fill unknowns with confirmed facts to complete a screen. No default-value fixer or source autocompletion is added.
+Check status, priority and next steps in the authorized source first. Keep missing values unknown rather than guessing an owner, date or business state. Compare the card with the source and put only checked information into the draft. Display placeholders and sorting fallbacks need separate review.
 
 ## Different from JSON type validation
 
