@@ -25,6 +25,9 @@ const selected = {
  '/guides/empty-field-display-defaults/':'radar', '/en/guides/empty-field-display-defaults/':'radar',
  '/en/guides/audio-level-not-accuracy-review/':'audio',
  '/guides/foreground-audio-rebind-preflight/':'audio', '/en/guides/foreground-audio-rebind-preflight/':'audio',
+ '/guides/meeting-notes-brief-fields/':'notes', '/en/guides/meeting-notes-brief-fields/':'notes',
+ '/guides/recording-notes-handoff/':'notes', '/en/guides/recording-notes-handoff/':'notes',
+ '/guides/offline-workbench-handoff-troubleshooting/':'voice', '/en/guides/offline-workbench-handoff-troubleshooting/':'voice',
 };
 function harness(opts={}) {
  const path=opts.path??'/en/guides/mobile-agent-decisions/';
@@ -47,9 +50,9 @@ function harness(opts={}) {
  const conversion={}; vm.runInNewContext(conversionCode,{...env,exports:conversion,require(p){if(p==='./preview-events')return preview;if(p==='../data/app-store.json')return store;throw Error('unexpected module');}});
  return {calls,browser,preview,conversion,setChoice(v){choice=v;},notify(){for(const fn of winListeners['yihu:analytics-choice']??[])fn();},click(href,intro=false){for(const fn of docListeners.click??[])fn({target:new Anchor(href,intro)});}};
 }
-test('P4 and D60 use exactly 29 selected routes; no filename heuristics or broad bilingual expansion',()=>{
+test('P4 and D60 use exactly 35 selected routes; no filename heuristics or broad bilingual expansion',()=>{
  const h=harness();assert.deepEqual(JSON.parse(JSON.stringify(h.conversion.conversionGuides)),selected);
- assert.equal(h.preview.previewPaths.length,10);assert.equal(h.conversion.conversionPaths.length,39);
+ assert.equal(h.preview.previewPaths.length,10);assert.equal(h.conversion.conversionPaths.length,43);
  assert.equal(h.conversion.guideConversion('/guides/mobile-agent-decisions/'),null);
  assert.equal(h.conversion.guideConversion('/en/guides/cross-device-field-presentation/'),null);
  assert.equal(h.conversion.guideConversion('/guides/unknown/'),null);
@@ -59,9 +62,9 @@ for(const [path,scenario] of Object.entries(selected)) test('selected guide keep
  assert.equal(c.scenario,scenario);assert.equal(c.storeHref,'https://apps.apple.com/us/app/yihu/id6819057500');assert.ok(c.demoHref.startsWith(en?'/en/guides/':'/guides/'));
  assert.ok(c.demoHref.endsWith('/#interactive-preview'));assert.match(c.sourceContext,en?/source\/troubleshooting.*do not establish/:/源码\/排障.*不证明/);
  assert.match(c.storeContext,en?/No Mac or self-signing/:/不需 Mac 或自行签名/);assert.ok(c.storeContext.includes('950 MB'));assert.ok(c.storeLabel.includes('0.1.0'));
- assert.equal(harness({path}).preview.trackPreviewEvent('preview_complete',scenario,en?'en':'zh','insert'),path.endsWith('/bluetooth-audio-input-troubleshooting/'),'original preview-only route list unchanged');
+ assert.equal(harness({path}).preview.trackPreviewEvent('preview_complete',scenario,en?'en':'zh','insert'),/\/(bluetooth-audio-input-troubleshooting|recording-notes-handoff)\/$/.test(path),'original preview-only route list unchanged');
  h.conversion.bindConversionEvents();assert.equal(h.calls.length,1);
- assert.deepEqual(JSON.parse(JSON.stringify(h.calls[0])),['event','funnel_entry',{language:en?'en':'zh',scenario,placement:'page_entry',page_group:path.endsWith('/bluetooth-audio-input-troubleshooting/')?'scenario':'guide'}]);
+ assert.deepEqual(JSON.parse(JSON.stringify(h.calls[0])),['event','funnel_entry',{language:en?'en':'zh',scenario,placement:'page_entry',page_group:/\/(bluetooth-audio-input-troubleshooting|recording-notes-handoff)\/$/.test(path)?'scenario':'guide'}]);
  h.click('https://getyihu.com'+c.demoHref,true);h.click(store.url,true);
  assert.deepEqual(h.calls.map(c=>c[1]),['funnel_entry','guide_demo_click','app_store_click']);
  for(const c of h.calls)assert.deepEqual(Object.keys(c[2]).sort(),['language','page_group','placement','scenario']);
@@ -118,17 +121,17 @@ test('store wording and telemetry do not add permissions, network, storage write
  for(const forbidden of ['localStorage.setItem','sessionStorage','fetch(','sendBeacon','XMLHttpRequest','setTimeout','preventDefault','user_id','query_string','editor_text'])assert.ok(!event.includes(forbidden),forbidden);
 });
 const built=existsSync(new URL('dist/index.html',root));
-test('built 29 selected intro links retain scope, privacy and unchanged 180/150/30 discovery', {skip:!built},()=>{
+test('built 35 selected intro links retain scope, privacy and unchanged 180/150/30 discovery', {skip:!built},()=>{
  function pages(p='dist/'){return readdirSync(new URL(p,root),{withFileTypes:true}).flatMap(x=>x.isDirectory()?pages(p+x.name+'/'):x.name==='index.html'?[p+x.name]:[]);}
  const all=pages();assert.equal(all.length,180);let count=0,retired=0;
  for(const file of all){const html=read(file),path='/'+file.slice(5).replace(/index\.html$/,'');
   if(html.includes('content="noindex,follow"'))retired++;
   const blocks=[...html.matchAll(/<section\b[^>]*\bdata-guide-conversion\b[^>]*>[\s\S]*?<\/section>/g)];
   assert.equal(blocks.length,Object.hasOwn(selected,path)?1:0,path);if(!blocks.length)continue;count++;
-  const c=harness().conversion.guideConversion(path),block=blocks[0][0];assert.ok(block.includes('href="'+c.demoHref+'"'));assert.ok(block.includes('href="'+store.url+'"'));assert.ok(block.includes(/followup-evidence-minimization|history-retrieval-manual-comparison|handoff-evidence-audit-checklist|first-trial-go-no-go-checklist|bluetooth-audio-input-troubleshooting|app-group-inbox-access-evidence|empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight/.test(path) ? 'id="privacy-preview"' : c.sourceContext));
+  const c=harness().conversion.guideConversion(path),block=blocks[0][0];assert.ok(block.includes('href="'+c.demoHref+'"'));assert.ok(block.includes('href="'+store.url+'"'));assert.ok(block.includes(/followup-evidence-minimization|history-retrieval-manual-comparison|handoff-evidence-audit-checklist|first-trial-go-no-go-checklist|bluetooth-audio-input-troubleshooting|app-group-inbox-access-evidence|empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight|meeting-notes-brief-fields|recording-notes-handoff|offline-workbench-handoff-troubleshooting/.test(path) ? 'id="privacy-preview"' : c.sourceContext));
   assert.ok(html.indexOf('<h1')<html.indexOf('data-guide-conversion'));assert.ok(html.indexOf('data-guide-conversion')<html.indexOf('id="first-answer"')||path.endsWith('/mobile-agent-decisions/'));
-  assert.equal(html.includes('<astro-island'),path.endsWith('/bluetooth-audio-input-troubleshooting/'),'only existing audio preview pages keep their island');
+  assert.equal(html.includes('<astro-island'),/\/(bluetooth-audio-input-troubleshooting|recording-notes-handoff)\/$/.test(path),'only existing preview pages keep their island');
   const target=read('dist'+c.demoHref.split('#')[0]+'index.html');assert.ok(target.includes('id="interactive-preview"'));
  }
- assert.equal(count,29);assert.equal(retired,30);assert.equal([...read('public/sitemap.xml').matchAll(/<loc>/g)].length,150);
+ assert.equal(count,35);assert.equal(retired,30);assert.equal([...read('public/sitemap.xml').matchAll(/<loc>/g)].length,150);
 });

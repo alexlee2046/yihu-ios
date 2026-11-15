@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Text is ready but the page will not open? Continue in three steps"
-description: "Keep the original. Inspect local audio/text first, then check the web connection separately. Resume after confirming the network and destination, rather than repeating the handoff to test it."
+title: "Transcript Ready but Workspace Offline? 3 Checks | Yihu"
+description: "Keep local audio and text, then check HTTPS access, login and existing drafts. Inspect prior results before retrying. Try Yihu’s no-mic preview and review setup and privacy."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Start with one useful check</h2>
+<h2 id="first-answer">Keep audio and text; check connectivity and existing drafts</h2>
 
-Keep the original. Inspect local audio/text first, then check the web connection separately. Resume after confirming the network and destination, rather than repeating the handoff to test it.
+Keep saved audio and text first, inspect local processing, then check the correct HTTPS workspace and login. Prepared local transcription and network handoff have separate requirements. When connectivity returns, inspect the destination draft and the same request result before deciding what to do next.
 
 ## Try this order
 
