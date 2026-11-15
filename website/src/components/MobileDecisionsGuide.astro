@@ -3,11 +3,12 @@ import { guideConversion } from '../lib/conversion-events';
 interface Props { lang?: 'zh' | 'en' }
 const { lang = 'zh' } = Astro.props;
 const en = lang === 'en';
+const home = en ? '/en/' : '/';
 const conversion = guideConversion(Astro.url.pathname);
 const decisionsCopy = {
   "zh": {
-    "title": "手机查看 Agent 待决策与待验收：先读，再确认",
-    "lead": "一呼 PM Radar 从你自己的 JSON 导出或兼容 HTTPS 数据源读取台账，按工作台筛选事项；读到一条任务不代表已经授权回复，更不代表任务已执行。下面用两条合成记录解释筛选、来源时效、手机确认与回执边界；Watch 是配对 iPhone 的伴侣，不是独立审批入口。",
+    "title": "手机查看 Agent 事项，核对后再确认",
+    "lead": "先查看自己的台账，核对待决策、待验收事项的来源时间、证据与下一步。用免登录示例预览了解筛选，再准备获准服务与账号。",
     "nav": "移动决策指南导航",
     "exampleTitle": "最小合成 JSON：不是一个在线服务",
     "exampleIntro": "本例仅有 demo 项目的两条合成事项。example.invalid 不可作为服务入口；reply_supported=false 将样例标为不支持回复，不能代替服务端授权。date_str 固定为演示时点，不会跟着网页时间更新；日后导入可能显示过期，这不是让样例冒充实时台账的理由。不要把私有台账或带凭据的 feed 放到公开网站。",
@@ -133,8 +134,8 @@ const decisionsCopy = {
     "homeLink": "返回能力概览"
   },
   "en": {
-    "title": "Mobile Agent decisions: read first, then confirm",
-    "lead": "Yihu PM Radar reads your own JSON export or compatible HTTPS ledger feed and filters items per workbench. Seeing a task does not authorize a reply or prove execution. Two synthetic records illustrate filters, source freshness, phone confirmation and receipts. Watch is a paired-iPhone companion, not an independent approval endpoint.",
+    "title": "Agent decisions on iPhone: check first",
+    "lead": "Check decision and acceptance items against source time, evidence and next steps in your own ledger. Try the no-login sample before connecting approved services.",
     "nav": "Mobile decisions guide navigation",
     "exampleTitle": "Minimal synthetic JSON, not a live service",
     "exampleIntro": "This example has two synthetic items in project demo. example.invalid is not a service endpoint; reply_supported=false marks the sample as not supporting replies and does not replace server authorization. date_str is a fixed demonstration time, not refreshed with the website clock. A later import may appear stale; do not relabel it as live data. Never publish private ledger data or credential-bearing feeds.",
@@ -364,12 +365,18 @@ const sources = [
     .decisions-guide pre code { display:block; padding:0; background:transparent; }
   </style>
   <h1>{copy.title}</h1>
-  <p class="lead">{copy.lead}</p>
-  {conversion && <section class="guide-conversion" data-guide-conversion aria-label="Try a sample or view the store edition">
-    <p>{conversion.sourceContext}</p>
+  {conversion && <section class="guide-conversion" data-guide-conversion aria-label={en ? 'Try a sample or view the store edition' : '先试示例或查看商店版'}>
+    <p>{copy.lead}</p>
     <div class="hero-actions"><a class="button button-primary" href={conversion.demoHref}>{conversion.demoLabel}</a><a class="button button-text app-store-link" href={conversion.storeHref}>{conversion.storeLabel}</a></div>
+    <details class="privacy-preview" id="privacy-preview">
+      <summary>{en ? 'Preview privacy before you try' : '先看预览如何处理资料'}</summary>
+      <p>{en ? 'The linked preview uses preset material, needs no login or microphone, and keeps edits only in the open page. Reloading resets edits. Optional read-aloud uses the browser’s voice service; usage analytics require consent.' : '链接预览使用预设材料，无需登录或麦克风，编辑仅留在当前打开的页面，刷新即重置。可选朗读使用浏览器语音服务；使用统计须经同意。'}</p>
+      <p>{en ? 'Keep private originals in approved tools. In the app, on-device recognition and the destination’s storage, sync and access rules are separate steps. Review the installed version before using a source-described workflow.' : '私有原件留在获准工具中。App 本机识别与目标工作台的保存、同步和访问是不同步骤；使用源码指南中的工作流前，先核对已安装版本。'} <a href={`${home}privacy/`}>{en ? 'Read the data-flow guide' : '查看完整资料流向'}</a></p>
+    </details>
     <p>{conversion.storeContext}</p>
   </section>}
+  <h2 id="first-answer">{en ? 'Check the item, source time and evidence before confirming' : '先核事项、来源时间与依据，再明确确认'}</h2>
+  <p>{en ? 'Read the current item and its original evidence, then check whether the source is fresh and the target is correct. Keep proposals separate from acceptance. Use only an authorized phone confirmation flow; if a receipt is unclear, inspect the same request instead of sending another. The sample below is read-only and supplies no writable service.' : '先读当前事项与原始依据，核对来源是否新鲜、目标是否正确，把提议与验收结论分开。实际确认只走已获准的手机流程；回执不明时核对同一次请求，不盲目重发。下方示例只供只读比较，不提供可写服务。'}</p>
   <nav aria-label={copy.nav}>
     <a href="#example">{copy.exampleTitle}</a><a href="#filters">{copy.filterTitle}</a><a href="#freshness">{copy.freshnessTitle}</a><a href="#reply-flow">{copy.stateTitle}</a><a href="#watch-notifications">{copy.watchTitle}</a>
   </nav>

@@ -38,6 +38,11 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/recording-notes-handoff/': 'notes',
   '/guides/offline-workbench-handoff-troubleshooting/': 'voice',
   '/en/guides/offline-workbench-handoff-troubleshooting/': 'voice',
+  '/guides/iphone-agent-voice-drafts/': 'voice',
+  '/en/guides/iphone-agent-voice-drafts/': 'voice',
+  '/guides/mobile-agent-decisions/': 'radar',
+  '/guides/multi-note-review-handoff/': 'notes',
+  '/en/guides/multi-note-review-handoff/': 'notes',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',
