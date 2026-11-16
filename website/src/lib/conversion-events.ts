@@ -50,6 +50,12 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/guides/outdoor-store-voice-preflight/': 'audio',
   '/guides/department-minutes-ownership-archive/': 'notes',
   '/en/guides/department-minutes-ownership-archive/': 'notes',
+  '/guides/degraded-handoff-go-no-go/': 'notes',
+  '/en/guides/degraded-handoff-go-no-go/': 'notes',
+  '/guides/follow-up-context-preflight/': 'voice',
+  '/en/guides/follow-up-context-preflight/': 'voice',
+  '/guides/watch-voice-queued-ready-boundaries/': 'voice',
+  '/en/guides/watch-voice-queued-ready-boundaries/': 'voice',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',
