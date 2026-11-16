@@ -1,0 +1,55 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
+const slugs = ['audio-busy-state-admission', 'audio-route-recovery-matrix', 'brief-format-change-compatibility'];
+const store = JSON.parse(read('src/data/app-store.json'));
+const forbidden = new RegExp(['SYNTHETIC_' + 'EXAMPLE', 'not_' + 'run', 'SYN' + '-'].join('|'));
+
+test('Wave10 keeps two-worker tests, 150-route discovery and clean committed exports', () => {
+  assert.equal(JSON.parse(read('package.json')).scripts.test, 'node --test --test-concurrency=2 tests/*.test.mjs');
+  assert.equal((read('public/sitemap.xml').match(/<loc>/g) || []).length, 150);
+  for (const name of ['llms.txt', 'llms-full.txt']) {
+    const text = read('public/' + name);
+    assert.ok(!forbidden.test(text));
+    assert.equal(read('dist/' + name), text);
+    for (const prefix of ['', 'en/']) for (const slug of slugs) assert.ok(text.includes(`https://getyihu.com/${prefix}guides/${slug}/`));
+  }
+});
+
+for (const prefix of ['', 'en/']) for (const slug of slugs) {
+  test(`Wave10 ${prefix || 'zh'} ${slug} has actionable review and first-screen trial/privacy/store`, () => {
+    const source = read(`src/pages/${prefix}guides/${slug}.md`);
+    const html = read(`dist/${prefix}guides/${slug}/index.html`);
+    assert.ok(source.includes('privacyPreview: true'));
+    assert.ok(!forbidden.test(source) && !forbidden.test(html));
+    assert.ok(!html.includes('content="noindex,follow"'));
+    assert.ok(html.includes(`rel="canonical" href="https://getyihu.com/${prefix}guides/${slug}/"`));
+    assert.ok(html.includes('hreflang="en"') && html.includes('hreflang="zh-CN"'));
+    assert.equal((html.match(/<h1\b/g) || []).length, 1);
+    const answer = html.match(/id="first-answer"[^>]*>([^<]+)<\/h2>\s*<p>([\s\S]*?)<\/p>/);
+    assert.ok(answer && answer[2].length > 60);
+    assert.match(answer[1], prefix ? /Check|Replay|Fix/ : /先/);
+    const label = source.match(/^trialLabel: "([^"]+)"$/m)?.[1];
+    assert.ok(label && label.trim());
+    const block = html.match(/<section\b[^>]*data-guide-conversion[^>]*>[\s\S]*?<\/section>/)[0];
+    const pillar = slug === 'brief-format-change-compatibility' ? 'multi-project-radar-watch' : 'bluetooth-audio-input-troubleshooting';
+    assert.ok(block.includes(`href="/${prefix}guides/${pillar}/#interactive-preview">${label}</a>`));
+    assert.ok(block.includes(`href="${store.url}"`));
+    assert.ok(block.includes('<details class="privacy-preview" id="privacy-preview">'));
+    assert.ok(block.includes(`href="/${prefix}privacy/"`));
+    assert.ok(block.includes(prefix ? 'no login or microphone' : '无需登录或麦克风'));
+    assert.ok(block.includes(prefix ? 'keeps edits only in the open page' : '编辑仅留在当前打开的页面'));
+    assert.ok(block.includes(prefix ? 'browser’s voice service' : '浏览器语音服务'));
+    assert.ok(html.indexOf('data-guide-conversion') < html.indexOf('id="first-answer"'));
+    assert.ok(!html.includes('<astro-island'));
+    if (slug === 'audio-route-recovery-matrix') {
+      assert.equal((html.match(/<section\b[^>]*data-guide-quick-check/g) || []).length, 1);
+      assert.ok(html.indexOf('data-guide-conversion') < html.indexOf('data-guide-quick-check'));
+      assert.ok(html.indexOf('data-guide-quick-check') < html.indexOf('id="first-answer"'));
+      assert.ok(source.includes('CollieAudioRecorder.swift') && source.includes('CollieNoteRecorder.swift'));
+    }
+    if (slug === 'audio-busy-state-admission') for (const term of ['primaryActionEnabled', 'canCancel', 'canRecord', 'canTranscribe', 'pendingTranscript']) assert.ok(source.includes(term));
+    if (slug === 'brief-format-change-compatibility') for (const term of ['date_str', 'tasks', 'unconfirmed_proposals', 'confirmed_decisions']) assert.ok(source.includes(term));
+  });
+}

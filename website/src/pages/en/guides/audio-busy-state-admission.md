@@ -1,15 +1,19 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Enabled is not recording: separate capture, transcription and test busy states"
-description: "Review primaryActionEnabled, canCancel, canRecord/canTranscribe and test reservations. Local booleans do not prove global concurrency safety or new scheduling."
+title: "Record Button Enabled but No Audio? Check Yihu’s State"
+description: "Check the current phase, pending text, model and mic permission before starting again. Try Yihu’s no-mic audio questions, then review privacy and App Store setup."
 lang: en
+privacyPreview: true
+trialLabel: "Try the audio-state questions"
 ---
 
-<h2 id="first-answer">Clickable, cancellable, recordable and transcribable are different states</h2>
+<h2 id="first-answer">Check the phase and pending text before recording again</h2>
 
-primaryActionEnabled depends on phase; clickable in needsModel is not capture. canCancel covers preparing/recording/transcribing, not sampling alone. Notes use separate canRecord/foreground canTranscribe checks, and voiceprint testing has a reservation flag. One true boolean establishes neither global exclusion, permission nor arbitrary concurrency.
+Check whether the app is preparing a model, capturing, transcribing or handing off, and retain text that still needs review. Prepare the model in needsModel and inspect any pendingTranscript before another capture. Review permissions, test reservations and actual results for the specific entry point. Do not repeatedly tap or discard uncertain text to force a new recording.
 
 ## Different from permission, lifecycle and voiceprint decisions
+
+Implementation review follows `primaryActionEnabled`, `canCancel`, and the separate note-entry `canRecord` / foreground `canTranscribe` conditions. Inspect the corresponding phase and result instead of treating these properties as one global ready flag.
 
 Permission checks consent, lifecycle checks foreground, voiceprints check filtering. Here **entry/resource busy meanings and call-chain scope** matter. No recording, calibration, model execution or pending-text clearing occurs.
 
