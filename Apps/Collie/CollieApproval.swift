@@ -15,6 +15,111 @@ enum CollieApprovalError: Error, Equatable {
     case presentationUnavailable
 }
 
+/// Evaluates Mozilla Public Suffix List (ICANN + PRIVATE) rules, including `*` wildcards
+/// and `!` exception rules. Fails closed if the bundled rule table is unavailable.
+struct ColliePublicSuffixList: Sendable {
+    static let shared = ColliePublicSuffixList.loadDefault()
+
+    let exactRules: Set<String>
+    let wildcardParents: Set<String>
+    let exceptionRules: Set<String>
+    let isLoaded: Bool
+
+    init(rulesText: String) {
+        var exact = Set<String>()
+        var wild = Set<String>()
+        var exceptions = Set<String>()
+
+        for rawLine in rulesText.split(whereSeparator: \.isNewline) {
+            let line = rawLine.trimmingCharacters(in: .whitespaces)
+            if line.isEmpty || line.hasPrefix("//") { continue }
+            if line.hasPrefix("!") {
+                exceptions.insert(String(line.dropFirst()))
+            } else if line.hasPrefix("*.") {
+                let parent = String(line.dropFirst(2))
+                wild.insert(parent)
+                if parent.contains(".") {
+                    exact.insert(parent)
+                }
+            } else {
+                exact.insert(line)
+            }
+        }
+
+        self.exactRules = exact
+        self.wildcardParents = wild
+        self.exceptionRules = exceptions
+        self.isLoaded = !exact.isEmpty
+    }
+
+    static func loadDefault() -> ColliePublicSuffixList {
+        var candidateURLs: [URL] = []
+        if let mainURL = Bundle.main.url(forResource: "PublicSuffixRules", withExtension: "txt") {
+            candidateURLs.append(mainURL)
+        }
+        for bundle in Bundle.allBundles where bundle != .main {
+            if let url = bundle.url(forResource: "PublicSuffixRules", withExtension: "txt") {
+                candidateURLs.append(url)
+            }
+        }
+        candidateURLs.append(
+            URL(fileURLWithPath: #filePath)
+                .deletingLastPathComponent()
+                .appendingPathComponent("PublicSuffixRules.txt")
+        )
+        candidateURLs.append(URL(fileURLWithPath: "Apps/Collie/PublicSuffixRules.txt"))
+
+        for url in candidateURLs {
+            if let contents = try? String(contentsOf: url, encoding: .utf8) {
+                let list = ColliePublicSuffixList(rulesText: contents)
+                if list.isLoaded {
+                    return list
+                }
+            }
+        }
+        return ColliePublicSuffixList(rulesText: "")
+    }
+
+    /// Number of trailing labels belonging to the public/multi-tenant suffix, or `nil` when unloaded.
+    func publicSuffixLabelCount(for labels: [Substring]) -> Int? {
+        guard isLoaded, !labels.isEmpty else { return nil }
+        let n = labels.count
+        if n >= 2 {
+            for count in 2...n {
+                let candidate = labels[(n - count)...].joined(separator: ".")
+                if exceptionRules.contains(candidate) {
+                    return count - 1
+                }
+            }
+            var best = 1
+            for count in stride(from: n, through: 2, by: -1) {
+                let candidate = labels[(n - count)...].joined(separator: ".")
+                if exactRules.contains(candidate) {
+                    best = max(best, count)
+                    break
+                }
+            }
+            for parentCount in stride(from: n - 1, through: 1, by: -1) {
+                let parent = labels[(n - parentCount)...].joined(separator: ".")
+                if wildcardParents.contains(parent) {
+                    best = max(best, parentCount + 1)
+                    break
+                }
+            }
+            return best
+        }
+        return 1
+    }
+
+    /// True only when `labels` contains at least one private registrable label above its public suffix.
+    func isRegistrableSuffix(_ labels: [Substring]) -> Bool {
+        guard let pslCount = publicSuffixLabelCount(for: labels) else {
+            return false
+        }
+        return labels.count > pslCount
+    }
+}
+
 /// Production approval helper and URL policy.
 ///
 /// `WKWebView` does not expose platform passkeys (`navigator.credentials`) for the
@@ -25,32 +130,25 @@ enum CollieApproval {
     static let port = 8443
     static let callbackScheme = "benchside-approval"
     static let maxRecentTargets = 6
+    static let maxApprovalCandidates = 4
     private static let rememberedOriginsDefaultsKey = "collie.approval.origins.v1"
 
-    /// Shared multi-tenant or two-label public suffixes that must never match across tenants.
-    /// Three-label tenant suffixes beneath these (such as `<tailnet>.ts.net` or `<org>.co.uk`)
-    /// remain eligible for sibling matching.
-    private static let sharedPublicSuffixes: Set<String> = [
-        "ts.net",
-        "co.uk", "org.uk", "gov.uk", "ac.uk",
-        "com.cn", "net.cn", "org.cn", "gov.cn",
-        "com.hk", "com.tw",
-        "com.au", "net.au", "org.au",
-        "co.jp", "ne.jp", "or.jp",
-        "co.kr", "com.sg", "com.my", "com.br", "com.mx",
-        "github.io", "gitlab.io", "vercel.app", "pages.dev", "workers.dev",
-        "onrender.com", "fly.dev", "railway.app", "netlify.app", "herokuapp.com",
-        "ngrok.io", "ngrok.app", "ngrok-free.app", "trycloudflare.com", "amazonaws.com"
-    ]
-
-    static func isApprovalURL(_ url: URL?, workbenchURL: URL?) -> Bool {
+    static func isApprovalURL(
+        _ url: URL?,
+        workbenchURL: URL?,
+        suffixList: ColliePublicSuffixList = .shared
+    ) -> Bool {
         guard let workbenchURL, workbenchURL.scheme?.lowercased() == "https" else {
             return false
         }
-        return isApprovalURL(url, host: workbenchURL.host)
+        return isApprovalURL(url, host: workbenchURL.host, suffixList: suffixList)
     }
 
-    static func isApprovalURL(_ url: URL?, host: String?) -> Bool {
+    static func isApprovalURL(
+        _ url: URL?,
+        host: String?,
+        suffixList: ColliePublicSuffixList = .shared
+    ) -> Bool {
         guard let url,
               let host,
               url.scheme?.lowercased() == "https",
@@ -61,14 +159,18 @@ enum CollieApproval {
               let candidateHost = url.host else {
             return false
         }
-        return matchesApprovalHost(candidateHost, workbenchHost: host)
+        return matchesApprovalHost(candidateHost, workbenchHost: host, suffixList: suffixList)
     }
 
     private static func isAllowedApprovalPath(_ path: String) -> Bool {
         path.isEmpty || path == "/" || path == "/approval" || path == "/approval/"
     }
 
-    static func matchesApprovalHost(_ candidateHost: String, workbenchHost: String) -> Bool {
+    static func matchesApprovalHost(
+        _ candidateHost: String,
+        workbenchHost: String,
+        suffixList: ColliePublicSuffixList = .shared
+    ) -> Bool {
         guard let candidate = normalizedHost(candidateHost),
               let workbench = normalizedHost(workbenchHost) else {
             return false
@@ -99,8 +201,7 @@ enum CollieApproval {
         guard let suffix = sharedSuffixLabels, suffix.count >= 2 else {
             return false
         }
-        let joinedSuffix = suffix.joined(separator: ".")
-        return !sharedPublicSuffixes.contains(joinedSuffix)
+        return suffixList.isRegistrableSuffix(suffix)
     }
 
     private static func normalizedHost(_ raw: String) -> String? {
@@ -252,11 +353,14 @@ enum CollieApproval {
         defaults.set(stored, forKey: rememberedOriginsDefaultsKey)
     }
 
-    /// Ordered candidate `:8443` base URLs for the current workbench (same host or remembered/recent sibling host).
+    /// Ordered candidate `:8443` base URLs for the current workbench.
+    /// Always reserves slot 0 for `workbenchURL` itself so historical sibling entries
+    /// can never evict a healthy `:8443` service on the active workbench host.
     static func candidateBaseURLs(
         for workbenchURL: URL,
         recentOrigins: [URL] = [],
-        defaults: UserDefaults = .standard
+        defaults: UserDefaults = .standard,
+        suffixList: ColliePublicSuffixList = .shared
     ) -> [URL] {
         guard workbenchURL.scheme?.lowercased() == "https" else { return [] }
         var seen = Set<String>()
@@ -264,23 +368,23 @@ enum CollieApproval {
 
         func appendIfEligible(_ candidateOrigin: URL) {
             guard let base = baseURL(for: candidateOrigin),
-                  isApprovalURL(base, workbenchURL: workbenchURL),
+                  isApprovalURL(base, workbenchURL: workbenchURL, suffixList: suffixList),
                   seen.insert(base.absoluteString).inserted else {
                 return
             }
             candidates.append(base)
         }
 
+        appendIfEligible(workbenchURL)
         for raw in defaults.stringArray(forKey: rememberedOriginsDefaultsKey) ?? [] {
             if let url = URL(string: raw) {
                 appendIfEligible(url)
             }
         }
-        appendIfEligible(workbenchURL)
         for origin in recentOrigins {
             appendIfEligible(origin)
         }
-        return Array(candidates.prefix(3))
+        return Array(candidates.prefix(maxApprovalCandidates))
     }
 
     static func isCancellation(_ error: Error) -> Bool {

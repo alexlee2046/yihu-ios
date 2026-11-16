@@ -112,6 +112,52 @@ private func runApprovalChecks() async throws {
         workbenchURL: URL(string: "https://first.co.uk")
     ))
     precondition(!CollieApproval.isApprovalURL(
+        URL(string: "https://tenant-b.co.nz:8443/?target=demo-service"),
+        workbenchURL: URL(string: "https://tenant-a.co.nz")
+    ))
+    precondition(CollieApproval.isApprovalURL(
+        URL(string: "https://approver.corp.co.nz:8443/?target=demo-service"),
+        workbenchURL: URL(string: "https://lead.corp.co.nz")
+    ))
+    precondition(!CollieApproval.isApprovalURL(
+        URL(string: "https://tenant-b.appspot.com:8443/?target=demo-service"),
+        workbenchURL: URL(string: "https://tenant-a.appspot.com")
+    ))
+    precondition(!CollieApproval.isApprovalURL(
+        URL(string: "https://tenant-b.s3.amazonaws.com:8443/?target=demo-service"),
+        workbenchURL: URL(string: "https://tenant-a.s3.amazonaws.com")
+    ))
+    // PSL wildcard (*.kawasaki.jp, *.ck) and exception (!city.kawasaki.jp, !www.ck) coverage
+    precondition(!CollieApproval.isApprovalURL(
+        URL(string: "https://b.ward.kawasaki.jp:8443/?target=demo-service"),
+        workbenchURL: URL(string: "https://a.ward.kawasaki.jp")
+    ))
+    precondition(CollieApproval.isApprovalURL(
+        URL(string: "https://b.city.kawasaki.jp:8443/?target=demo-service"),
+        workbenchURL: URL(string: "https://a.city.kawasaki.jp")
+    ))
+    precondition(!CollieApproval.isApprovalURL(
+        URL(string: "https://b.tenant.ck:8443/?target=demo-service"),
+        workbenchURL: URL(string: "https://a.tenant.ck")
+    ))
+    precondition(CollieApproval.isApprovalURL(
+        URL(string: "https://b.www.ck:8443/?target=demo-service"),
+        workbenchURL: URL(string: "https://a.www.ck")
+    ))
+    // Fail-closed when PSL rule table is unavailable: exact host still works, sibling suffix is denied
+    let unloadedPSL = ColliePublicSuffixList(rulesText: "")
+    precondition(!unloadedPSL.isLoaded)
+    precondition(CollieApproval.isApprovalURL(
+        URL(string: "https://workbench.example.com:8443/?target=demo-service"),
+        workbenchURL: workbench,
+        suffixList: unloadedPSL
+    ))
+    precondition(!CollieApproval.isApprovalURL(
+        URL(string: "https://approver.workbench.example.com:8443/?target=demo-service"),
+        workbenchURL: workbench,
+        suffixList: unloadedPSL
+    ))
+    precondition(!CollieApproval.isApprovalURL(
         URL(string: "https://other.github.io:8443/?target=demo-service"),
         workbenchURL: URL(string: "https://first.github.io")
     ))
@@ -199,26 +245,31 @@ private func runApprovalChecks() async throws {
     precondition(CollieApproval.resultAlertMessage(for: .success("demo-service")) != nil)
     precondition(CollieApproval.resultAlertMessage(for: .failure(CollieApprovalError.rejected)) != nil)
 
-    // 7. Remembered sibling candidate ordering
+    // 7. Remembered sibling candidate ordering: current workbench ALWAYS occupies slot 0
+    // even when >= 3 historical sibling origins exist in UserDefaults.
     let suiteName = "org.example.yihu.approval-checks.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
     defer { defaults.removePersistentDomain(forName: suiteName) }
-    CollieApproval.rememberApprovalURL(
-        URL(string: "https://approver.net-alpha.ts.net:8443/?target=demo-service")!,
-        defaults: defaults
-    )
+    for host in ["old-1", "old-2", "old-3", "approver"] {
+        CollieApproval.rememberApprovalURL(
+            URL(string: "https://\(host).net-alpha.ts.net:8443/?target=demo-service")!,
+            defaults: defaults
+        )
+    }
     let candidates = CollieApproval.candidateBaseURLs(
         for: URL(string: "https://lead.net-alpha.ts.net")!,
         recentOrigins: [
             URL(string: "https://evil.net-beta.ts.net")!,
+            URL(string: "https://tenant-b.co.nz")!,
             URL(string: "https://backup.net-alpha.ts.net")!
         ],
         defaults: defaults
     )
     precondition(candidates.map(\.absoluteString) == [
-        "https://approver.net-alpha.ts.net:8443/",
         "https://lead.net-alpha.ts.net:8443/",
-        "https://backup.net-alpha.ts.net:8443/"
+        "https://approver.net-alpha.ts.net:8443/",
+        "https://old-3.net-alpha.ts.net:8443/",
+        "https://old-2.net-alpha.ts.net:8443/"
     ])
 
     // 8. Real WKWebView chat link interception (same-frame, target="_blank", window.open, foreign block)

@@ -187,6 +187,34 @@ final class CollieEnhancementTests: XCTestCase {
             workbenchURL: URL(string: "https://lead.net-alpha.ts.net")
         ))
         XCTAssertFalse(CollieApproval.isApprovalURL(
+            URL(string: "https://tenant-b.co.nz:8443/?target=demo-service"),
+            workbenchURL: URL(string: "https://tenant-a.co.nz")
+        ))
+        XCTAssertFalse(CollieApproval.isApprovalURL(
+            URL(string: "https://tenant-b.appspot.com:8443/?target=demo-service"),
+            workbenchURL: URL(string: "https://tenant-a.appspot.com")
+        ))
+        XCTAssertTrue(CollieApproval.isApprovalURL(
+            URL(string: "https://approver.corp.co.nz:8443/?target=demo-service"),
+            workbenchURL: URL(string: "https://lead.corp.co.nz")
+        ))
+
+        let suiteName = "org.example.yihu.approval-tests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        for index in 1...4 {
+            CollieApproval.rememberApprovalURL(
+                URL(string: "https://stale-\(index).net-alpha.ts.net:8443/?target=demo-service")!,
+                defaults: defaults
+            )
+        }
+        let candidates = CollieApproval.candidateBaseURLs(
+            for: URL(string: "https://lead.net-alpha.ts.net")!,
+            defaults: defaults
+        )
+        XCTAssertEqual(candidates.first?.absoluteString, "https://lead.net-alpha.ts.net:8443/")
+        XCTAssertEqual(candidates.count, 4)
+        XCTAssertFalse(CollieApproval.isApprovalURL(
             URL(string: "https://evil.other-domain.org:8443/?target=demo-service"),
             workbenchURL: workbench
         ))
