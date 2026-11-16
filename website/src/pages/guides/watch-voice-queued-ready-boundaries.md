@@ -1,14 +1,16 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "Watch语音queued和ready代表什么？手机转写结果不是已存回复草稿"
-description: "核配对语音请求目标指纹、176000帧输入与前台门；queued非完成，ready单槽结果缓存非phone草稿/网页插入/服务回执，无云中继。"
+title: "Watch 语音 queued / ready：下一步看哪里？"
+description: "先回手机查看原请求、转写结果与草稿，分别核对 queued 接纳与 ready 回报。页面预览无需麦克风或 Watch 配对；查看一呼隐私与 App Store 入口后再决定接入。"
 lang: zh
+privacyPreview: true
+trialLabel: "先试页面草稿示例"
 indexable: false
 ---
 
-<h2 id="first-answer">Watch语音接纳、手机转写就绪、回复草稿保存是不同阶段</h2>
+<h2 id="first-answer">先回手机核原请求，再分别看结果与草稿</h2>
 
-receiveVoice可对新请求、同请求或缓存复用回queued；不能仅据此称已转写。新转写核目标、busy/前台和音频门，再次核目标后缓存ready结果；源码明确这一个有界重试回报不是phone reply草稿或网页插入。后续保存草稿是另一条请求，不是服务端提交。
+先在配对手机核对原请求、目标和当前状态。queued 可确认接纳、同请求或缓存复用，仍须查看后续结果；ready 的有界回报不是phone reply草稿或网页插入。缺少下一阶段依据时保留原请求，不换 ID 或目标盲重发。receiveVoice 的接收与新转写仍受目标、前台和忙态条件约束。
 
 ## 与跨端显示、PCM和草稿恢复的区别
 

@@ -1,14 +1,16 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "What Watch voice queued and ready mean: a transcription is not a saved phone draft"
-description: "Review target tokens, 176000-frame audio and foreground gates. queued is not complete; bounded ready cache is not a phone draft/web insertion/service receipt or cloud relay."
+title: "Watch Voice queued or ready? Check the Next Step | Yihu"
+description: "Check the phone’s original request, transcription result and draft separately. Preview Yihu with no mic or Watch pairing, then review privacy and App Store setup."
 lang: en
+privacyPreview: true
+trialLabel: "Try the on-page draft"
 indexable: false
 ---
 
-<h2 id="first-answer">Watch acceptance, phone transcription readiness and saved reply drafts are separate stages</h2>
+<h2 id="first-answer">Check the phone’s request, then the result and draft</h2>
 
-receiveVoice can return queued for new acceptance, the same request or cache reuse; it does not alone establish transcription completion. New execution checks target, busy/foreground/audio conditions, then rechecks target before caching ready. This bounded retry result explicitly is not a phone reply draft or web insertion. Saving a draft is a separate request, not server submission.
+Check the paired phone’s original request, target and current state. queued can confirm acceptance, the same request or cache reuse; inspect the later result. A bounded ready result is not a phone reply draft or web insertion. Keep the original request when evidence is missing instead of inventing IDs or targets to resend. receiveVoice still checks target and foreground/busy conditions for new transcription.
 
 ## Different from presentation, PCM and draft restoration
 

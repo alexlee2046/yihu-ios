@@ -1,13 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before a voice follow-up: references, workbench page and Agent context"
-description: "Check what previous/continue/it refers to, the actual service conversation and draft target. Native transcription/page binding is not Agent memory or proof history reached a backend."
+title: "Voice Follow-Up: Check the Reference and Draft | Yihu"
+description: "Before saying continue or change it, check the referenced material, current conversation and existing draft. Try Yihu’s no-mic sample, then review privacy and App Store setup."
 lang: en
+privacyPreview: true
+trialLabel: "Try a clearly scoped draft"
 ---
 
-<h2 id="first-answer">The page staying open does not prove Agent memory; resolve references before following up</h2>
+<h2 id="first-answer">Name the reference, then check the conversation and draft</h2>
 
-Yihu transcribes native speech and attempts guarded delivery to compatible drafts. It supplies no universal Agent backend or cross-workbench conversation memory. Actual context belongs to the site/service. Previous, it and continue can become ambiguous after page/workbench changes or unverified history. Identify the referenced material, current conversation and composer first, not an app-inferred intent.
+Name the passage or item instead of relying on it or previous. Check the current workspace, actual service conversation and unsent target draft, then inspect the history the service supplies. Yihu has no universal Agent backend or cross-workbench memory. If the earlier result is unclear, keep the text and inspect the destination instead of resending to restore context.
 
 ## Different from setup, correction and repeat delivery
 

@@ -1,13 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Older-adult follow-up appointment handover checklist: documents, rides and companion roles"
-description: "When relatives take turns accompanying an older adult to a follow-up visit, check the original booking, document categories, hospital site and rides before drafting non-patient administrative notes. Sending is not acceptance."
+title: "Older-Adult Follow-Up Checklist: Visits, Documents & Rides"
+description: "With consent, check the original follow-up booking, document categories and rides before drafting administrative notes. Try a non-sensitive Yihu sample and review privacy and setup."
 lang: en
+privacyPreview: true
+trialLabel: "Try a non-sensitive draft"
 ---
 
-<h2 id="first-answer">Check the hospital booking first, then who brings documents and handles each ride; a sent checklist is not an accepted arrangement</h2>
+<h2 id="first-answer">Check the booking, then confirm documents and each ride</h2>
 
-When relatives take turns accompanying an older adult to a follow-up appointment, the gap may be a changed booking, a different hospital site, document custody or an unconfirmed return ride—not a missing medical summary. With the person's consent, verify these arrangements in the hospital-accepted original channels, then share only necessary non-sensitive administrative questions with the actual responsible people. A chat acknowledgement, workbench draft or service receipt does not prove registration, a confirmed ride or the person's authorization. Conditions, test results, medication and clinical handover stay in hospital-required channels. Do not wait for this checklist or a message receipt during sudden illness or an emergency.
+With the person’s consent, verify the follow-up booking, date, hospital site and required document categories through hospital-accepted original channels. Confirm each ride and companion role with the actual responsible people. Keep only necessary non-sensitive administrative notes, not patient or family data. Leave missing confirmations open. Clinical matters stay in hospital-required channels; do not wait for this checklist or message receipts in an emergency.
 
 ## Scope: companion logistics, not clinical handover
 
