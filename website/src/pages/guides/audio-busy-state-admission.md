@@ -1,15 +1,19 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "按钮可用为什么未必在录音？采集、转写、声纹测试的忙态分层"
-description: "核primaryActionEnabled、canCancel、canRecord/canTranscribe与测试麦克风标记；局部布尔不证明全局并发安全，不新增多路调度功能。"
+title: "录音按钮可点却没录？先查模型与忙态｜一呼"
+description: "先看当前阶段、待处理文字、模型与麦克风权限，分清录音、转写和测试入口。试用无需登录或麦克风的四问预览，再查看一呼隐私与 App Store 接入条件。"
 lang: zh
+privacyPreview: true
+trialLabel: "先试录音状态四问"
 ---
 
-<h2 id="first-answer">可点击、可取消、可采集和可转写不是同一个布尔状态</h2>
+<h2 id="first-answer">先看阶段与待处理文字，再决定是否录音</h2>
 
-主语音primaryActionEnabled会按phase决定动作，needsModel时可点击不等于正在录音；canCancel覆盖准备/录音/转写而不只采样。笔记canRecord与前台canTranscribe分别检查，声纹测试另有保留标记。不能从某一个true推全局音频互斥、权限或任意并发能力。
+先确认当前是在准备模型、录音、转写还是交接，并保留已有待核文字。needsModel 时先准备模型，pendingTranscript 存在时先核结果；再分别检查所用入口的权限、测试保留与实际返回。不要靠反复点按钮判断收音，也不要为开始新录音清掉不确定的结果。
 
 ## 与权限、生命周期和声纹结论的区别
+
+实现参考分别核对主按钮 `primaryActionEnabled`、`canCancel` 与笔记入口 `canRecord` / 前台 `canTranscribe`。逐项看对应阶段和返回结果，不把这些属性合成一个全局就绪结论。
 
 权限核系统许可，生命周期核前后台，声纹核过滤结果；这里核**资源/入口忙态的不同含义与调用范围**。不启动录音、校准、模型或清空待处理文字。
 

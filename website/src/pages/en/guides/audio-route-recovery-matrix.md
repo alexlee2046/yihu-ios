@@ -1,14 +1,16 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Recording stopped after switching headsets? Check what was saved"
-description: "Choose a next step for silent playback, missing input or interrupted recording: compare the phone microphone, inspect saved passages, then review text and drafts."
+title: "Recording Stopped After a Call or Headset Switch? | Yihu"
+description: "Keep saved audio, check words around the interruption, then compare the phone mic. Try Yihu’s no-mic audio preview and review privacy before setup. Park before car-audio checks."
 lang: en
+privacyPreview: true
+trialLabel: "Try the interruption checklist"
 quickCheck: audio
 ---
 
-<h2 id="first-answer">Listen to the saved passage, then compare the phone microphone</h2>
+<h2 id="first-answer">Replay saved audio, mark gaps, then check the phone input</h2>
 
-In a safe stationary setting, check whether recording is still active and whether the app reports a saved result or error. Play back the saved passage and inspect numbers and negation around the interruption. Make a separate short phone-mic sample to compare with headset input. Do not operate while driving.
+In a safe stationary setting, inspect saved results and errors. Replay the retained passage and mark missing words, numbers and negation around the interruption. Make a separate short phone-mic comparison without overwriting the original. Inspect the existing destination draft before recording or handing off again; pause on uncertainty. Do not operate while driving.
 
 ## Try this order
 

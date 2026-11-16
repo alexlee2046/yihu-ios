@@ -17,7 +17,7 @@ const pillar = /model-artifact|app-group/.test(slug) ? 'iphone-agent-voice-draft
     <nav class="guide-context" aria-label={lang === 'en' ? 'Guide context' : '指南归属'}><a href={`${home}#scenarios`}>{lang === 'en' ? 'All scenarios' : '场景指南'}</a>{slug !== pillar && <> · <a href={`${home}guides/${pillar}/`}>{lang === 'en' ? 'Related practical guide' : '相关使用指南'}</a></>}</nav>
     {!indexable && <p class="reference-label">{lang === 'en' ? 'Technical reference · for existing users' : '技术参考 · 供现有用户查阅'}</p>}
     <h1>{title}</h1>
-    {quickCheck && <GuideQuickCheck lang={lang} task={quickCheck} />}
+    {quickCheck && !privacyPreview && <GuideQuickCheck lang={lang} task={quickCheck} />}
     {conversion && <section class="guide-conversion" data-guide-conversion aria-label={lang === 'en' ? 'Try a sample or view the store edition' : '先试示例或查看商店版'}>
       <p>{privacyPreview ? description : conversion.sourceContext}</p>
       <div class="hero-actions"><a class="button button-primary" href={conversion.demoHref}>{trialLabel || conversion.demoLabel}</a><a class="button button-text app-store-link" href={conversion.storeHref}>{conversion.storeLabel}</a></div>
@@ -30,6 +30,7 @@ const pillar = /model-artifact|app-group/.test(slug) ? 'iphone-agent-voice-draft
       </details>}
       {privacyPreview && <p>{conversion.storeContext}</p>}
     </section>}
+    {quickCheck && privacyPreview && <GuideQuickCheck lang={lang} task={quickCheck} />}
     {preview && <>{!privacyPreview && <p class="lead">{description}</p>}<Demo client:visible lang={lang} initialScene={preview} initialVoiceSample={voiceSample} /></>}
     <slot />
   </article>

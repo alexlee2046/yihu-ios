@@ -1,13 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before changing a structured-note or Radar brief format: compatibility and meaning"
-description: "Separate editorial-template revisions from actual PM Radar export contracts. Review required keys, types, scope and approval semantics without adding migration or field-conversion features."
+title: "Changing a Radar Brief Format? Check Fields & Meaning | Yihu"
+description: "Fix the client version, compare required fields, nulls and approval meaning before adopting a format. Try Yihu’s sample brief, then review privacy and App Store setup."
 lang: en
+privacyPreview: true
+trialLabel: "Preview the brief fields"
 ---
 
-<h2 id="first-answer">A revision label is not compatibility evidence, and a note template is not the Radar protocol</h2>
+<h2 id="first-answer">Fix the target version, then compare fields and meaning</h2>
 
-An editorial structured note can have its own revision, but that does not make it an app import schema. Radar reads the contract in the actual source version. Review editorial meaning and producer JSON changes separately. Renaming keys to resemble `tasks`, or writing v2 in a file, does not establish migration, feature support or execution approval.
+Record the actual client version and retain harmless before-and-after examples. Compare required keys, types, nulls, source time and confirmation scope. Review editorial labels separately from Radar snapshot fields; renaming a proposal cannot create approval. Pause adoption on a mismatch and consult the existing producer workflow rather than inventing defaults to hide errors.
 
 ## A separate task from types and batch values
 
