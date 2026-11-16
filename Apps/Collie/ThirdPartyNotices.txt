@@ -38,3 +38,8 @@ Collie is a separate project: https://github.com/AltanS/collie
 This repository does not redistribute the Collie server or its artwork.
 The app icon is the Yihu tiger design, not Collie's favicon. Names and
 trademarks are not licensed by the source-code license.
+
+5. Mozilla Public Suffix List
+Apps/Collie/PublicSuffixRules.txt contains normalized public suffix rules
+derived from the Mozilla Public Suffix List (https://publicsuffix.org/list/).
+Licensed under the Mozilla Public License 2.0 (https://mozilla.org/MPL/2.0/).

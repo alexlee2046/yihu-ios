@@ -126,6 +126,9 @@ targets:
     sources:
       - Tests/CollieUI
       - Apps/Collie/BenchsideStyle.swift
+      - Apps/Collie/CollieApproval.swift
+      - path: Apps/Collie/PublicSuffixRules.txt
+        buildPhase: resources
       - Apps/Collie/CollieVoiceNote.swift
       - Apps/Collie/CollieDiagnosticImage.swift
       - Apps/Collie/CollieRadarModel.swift

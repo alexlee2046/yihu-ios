@@ -16,6 +16,8 @@ struct CollieLinkSettingsView: View {
     var onWillSave: ((URL) -> String?)?
     var onSaved: ((URL) -> Void)?
     @Environment(\.dismiss) private var dismiss
+    @State private var approval = CollieApprovalPresenter()
+    @State private var approvalRefreshToken = 0
 
     var body: some View {
         List {
@@ -57,6 +59,19 @@ struct CollieLinkSettingsView: View {
             }
 
             CollieNativeNotificationsSection(controller: notifications, session: session)
+
+            if session.baseURL.scheme?.lowercased() == "https" {
+                CollieProductionApprovalSection(
+                    session: session,
+                    recentOrigins: settings.recentOrigins,
+                    refreshToken: approvalRefreshToken,
+                    isBusy: approval.isPresenting
+                ) { url in
+                    approval.start(url: url) { _ in
+                        approvalRefreshToken &+= 1
+                    }
+                }
+            }
 
             CollieVoiceModelSection(voice: voice)
 
@@ -111,7 +126,18 @@ struct CollieLinkSettingsView: View {
         .navigationBarTitleDisplayMode(.large)
         .tint(BenchsideStyle.accent)
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) { Button(settingsText("完成")) { dismiss() } }
+            ToolbarItem(placement: .confirmationAction) {
+                Button(settingsText("完成")) { dismiss() }
+                    .disabled(approval.isPresenting)
+            }
+        }
+        .alert(settingsText("审批结果"), isPresented: Binding(
+            get: { approval.resultMessage != nil },
+            set: { if !$0 { approval.resultMessage = nil } }
+        )) {
+            Button(settingsText("完成"), role: .cancel) { approval.resultMessage = nil }
+        } message: {
+            Text(approval.resultMessage ?? "")
         }
     }
 }
@@ -398,5 +424,148 @@ struct CollieHotspotBridgeSection: View {
         } footer: {
             Text(settingsText("当断网的 MacBook 在附近时，通过蓝牙自动连回这台 iPhone 的个人热点。"))
         }
+    }
+}
+
+struct CollieProductionApprovalSection: View {
+    let session: CollieWebSession
+    let recentOrigins: [URL]
+    let refreshToken: Int
+    let isBusy: Bool
+    let onApprove: (URL) -> Void
+
+    @State private var targets: [String] = []
+    @State private var activeBaseURL: URL?
+    @State private var isLoading = false
+    @State private var loadFailed = false
+
+    private var reloadKey: String {
+        "\(session.baseURL.absoluteString)#\(refreshToken)"
+    }
+
+    var body: some View {
+        Section {
+            if isLoading, targets.isEmpty {
+                HStack(spacing: 10) {
+                    ProgressView()
+                    Text(settingsText("正在读取最近项目…"))
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(minHeight: 44)
+                .accessibilityIdentifier("collie-approval-loading")
+            } else if loadFailed, targets.isEmpty {
+                Label(settingsText("无法连接审批服务"), systemImage: "exclamationmark.triangle")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .accessibilityIdentifier("collie-approval-status")
+                if let base = activeBaseURL, !CollieApproval.isSyntheticTestHost(base) {
+                    Button {
+                        Task { await loadTargets() }
+                    } label: {
+                        Label(settingsText("重试"), systemImage: "arrow.clockwise")
+                            .frame(minHeight: 44)
+                    }
+                    .disabled(isLoading || isBusy)
+                    .accessibilityIdentifier("collie-approval-retry")
+                }
+            } else {
+                ForEach(targets, id: \.self) { target in
+                    Button {
+                        openTarget(target)
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "faceid")
+                                .font(.headline)
+                                .foregroundStyle(BenchsideStyle.accent)
+                                .frame(width: 24)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(target)
+                                    .font(.body.weight(.semibold))
+                                    .foregroundStyle(BenchsideStyle.ink)
+                                    .lineLimit(1)
+                                Text(settingsText("Face ID 确认 · 24 小时有效"))
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer(minLength: 0)
+                            Image(systemName: "chevron.right")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.tertiary)
+                        }
+                        .frame(minHeight: 44)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(isBusy)
+                    .accessibilityIdentifier("collie-approval-target-\(target)")
+                }
+            }
+
+            if let base = activeBaseURL,
+               !CollieApproval.isSyntheticTestHost(base),
+               let pageURL = CollieApproval.targetApprovalURL(baseURL: base, target: nil) {
+                Button {
+                    onApprove(pageURL)
+                } label: {
+                    Label(settingsText("打开审批页"), systemImage: "checkmark.shield")
+                        .frame(minHeight: 44)
+                }
+                .disabled(isBusy)
+                .accessibilityIdentifier("collie-approval-open-page")
+            }
+        } header: {
+            Text(settingsText("上生产审批"))
+        }
+        .task(id: reloadKey) {
+            await loadTargets()
+        }
+    }
+
+    private func openTarget(_ target: String) {
+        guard let base = activeBaseURL ?? CollieApproval.baseURL(for: session.baseURL),
+              let url = CollieApproval.targetApprovalURL(baseURL: base, target: target) else {
+            return
+        }
+        onApprove(url)
+    }
+
+    private func loadTargets() async {
+        let candidates = CollieApproval.candidateBaseURLs(
+            for: session.baseURL,
+            recentOrigins: recentOrigins
+        )
+        activeBaseURL = candidates.first ?? CollieApproval.baseURL(for: session.baseURL)
+        let reachableCandidates = candidates.filter { !CollieApproval.isSyntheticTestHost($0) }
+        guard !reachableCandidates.isEmpty else {
+            isLoading = false
+            loadFailed = true
+            return
+        }
+
+        isLoading = true
+        defer { isLoading = false }
+
+        for candidate in reachableCandidates {
+            if Task.isCancelled { return }
+            var request = URLRequest(url: candidate.appending(path: "api/state"))
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "content-type")
+            request.httpBody = Data("{}".utf8)
+            request.timeoutInterval = 4
+            guard let (data, response) = try? await URLSession.shared.data(for: request),
+                  (response as? HTTPURLResponse)?.statusCode == 200,
+                  let decoded = try? CollieApproval.decodeTargets(from: data) else {
+                continue
+            }
+            activeBaseURL = candidate
+            targets = decoded
+            loadFailed = false
+            CollieApproval.rememberApprovalURL(candidate)
+            return
+        }
+
+        guard !Task.isCancelled else { return }
+        loadFailed = true
     }
 }
