@@ -356,10 +356,10 @@ struct CollieHotspotBridgeSection: View {
                 Label(settingsText("靠近断网 Mac 时自动唤醒"), systemImage: "laptopcomputer.and.iphone")
             }
             .accessibilityIdentifier("collie-hotspot-ble-toggle")
-            if bridge.isEnabled {
+            if bridge.isEnabled || bridge.phase != .disabled {
                 Text(bridge.statusSummary)
                     .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(bridge.isErrorPhase ? Color.orange : (bridge.isSuccessPhase ? Color.green : Color.secondary))
                     .accessibilityIdentifier("collie-hotspot-ble-status")
             }
             Toggle(isOn: $bridge.autoRunShortcutInForeground) {

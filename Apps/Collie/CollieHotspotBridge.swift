@@ -68,6 +68,8 @@ struct CollieHotspotMacStatus: Codable, Equatable, Sendable {
     var host: String
     var ssid: String?
     var ts: Double
+    var onHotspot: Bool? = nil
+    var lastWakeResult: String? = nil
 }
 
 struct CollieHotspotWakeCommand: Codable, Equatable, Sendable {
@@ -101,6 +103,7 @@ final class CollieHotspotBridge: NSObject {
         case monitoring(host: String, state: CollieHotspotMacStatus.NetworkState, rssi: Int?)
         case waking(host: String)
         case recovered(host: String)
+        case wakeFailed(String)
     }
 
     private let defaults: UserDefaults
@@ -146,6 +149,9 @@ final class CollieHotspotBridge: NSObject {
     @ObservationIgnored private var commandCharacteristic: CBCharacteristic?
     @ObservationIgnored private var pendingManualWake = false
     @ObservationIgnored private var awaitingShortcutReturn = false
+    @ObservationIgnored private var pendingShortcutAfterWakeWrite = false
+    @ObservationIgnored private var manualWakeGuardUntil: Date?
+    @ObservationIgnored private var manualWakeTimeoutTask: Task<Void, Never>?
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -163,6 +169,26 @@ final class CollieHotspotBridge: NSObject {
         }
     }
 
+    var isErrorPhase: Bool {
+        switch phase {
+        case .bluetoothUnavailable, .wakeFailed:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var isSuccessPhase: Bool {
+        switch phase {
+        case .recovered:
+            return true
+        case .monitoring(_, let state, _):
+            return state == .online && lastMacStatus?.onHotspot == true
+        default:
+            return false
+        }
+    }
+
     var statusSummary: String {
         switch phase {
         case .disabled:
@@ -176,6 +202,9 @@ final class CollieHotspotBridge: NSObject {
         case .monitoring(let host, let state, _):
             switch state {
             case .online:
+                if lastMacStatus?.onHotspot == true {
+                    return String(format: hotspotText("%@ 已连上热点"), host)
+                }
                 return String(format: hotspotText("%@ 已在线"), host)
             case .connecting:
                 return String(format: hotspotText("%@ 正在连接热点…"), host)
@@ -186,6 +215,8 @@ final class CollieHotspotBridge: NSObject {
             return String(format: hotspotText("正在唤醒 %@ 的热点连接…"), host)
         case .recovered(let host):
             return String(format: hotspotText("%@ 已连上热点"), host)
+        case .wakeFailed(let reason):
+            return reason
         }
     }
 
@@ -203,6 +234,10 @@ final class CollieHotspotBridge: NSObject {
     }
 
     func stop() {
+        manualWakeTimeoutTask?.cancel()
+        manualWakeTimeoutTask = nil
+        manualWakeGuardUntil = nil
+        pendingShortcutAfterWakeWrite = false
         pendingManualWake = false
         awaitingShortcutReturn = false
         if let central {
@@ -219,26 +254,66 @@ final class CollieHotspotBridge: NSObject {
         phase = .disabled
     }
 
-    /// Manually wakes the nearby MacBook's hotspot connection over BLE and optionally runs the iOS Hotspot Shortcut.
+    private func scheduleShortcutIfNeeded() {
+        guard pendingShortcutAfterWakeWrite else { return }
+        pendingShortcutAfterWakeWrite = false
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .milliseconds(400))
+            self?.launchHotspotShortcutIfPossible()
+        }
+    }
+
+    /// Manually wakes the nearby MacBook's hotspot connection over BLE and optionally runs the iOS Hotspot Shortcut after sending the BLE wake command.
     func triggerManualWake(runShortcut: Bool = false) {
+        manualWakeTimeoutTask?.cancel()
+        manualWakeTimeoutTask = nil
         pendingManualWake = true
+        pendingShortcutAfterWakeWrite = (runShortcut || autoRunShortcutInForeground)
+        manualWakeGuardUntil = Date().addingTimeInterval(25)
+
         if !isEnabled {
             isEnabled = true
         } else {
             startIfNeeded()
         }
+
+        if let central, central.state == .poweredOff || central.state == .unauthorized || central.state == .unsupported {
+            pendingManualWake = false
+            pendingShortcutAfterWakeWrite = false
+            manualWakeGuardUntil = nil
+            handleCentralState()
+            return
+        }
+
         let targetHost = lastMacStatus?.host ?? peripheral?.name ?? "MacBook"
         phase = .waking(host: targetHost)
+
+        manualWakeTimeoutTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(10))
+            guard let self, !Task.isCancelled else { return }
+            if self.pendingManualWake {
+                self.pendingManualWake = false
+                self.pendingShortcutAfterWakeWrite = false
+                self.manualWakeGuardUntil = nil
+                self.phase = .wakeFailed(hotspotText("未发现附近的 Mac，请确认 Mac 已开启蓝牙并允许“一呼蓝牙热点守护”使用蓝牙。"))
+                return
+            }
+            try? await Task.sleep(for: .seconds(25))
+            guard !Task.isCancelled else { return }
+            if self.isWakingPhase {
+                self.manualWakeGuardUntil = nil
+                self.phase = .wakeFailed(hotspotText("唤醒超时：请打开 iPhone「设置 → 个人热点」页面后再点一次立即唤醒。"))
+            }
+        }
+
         if sendCommand(.wakeHotspot) {
             pendingManualWake = false
             lastWakeDate = Date()
+            scheduleShortcutIfNeeded()
         } else if let peripheral, peripheral.state == .connected {
             peripheral.discoverServices([CollieHotspotBLEProtocol.serviceUUID])
         } else {
             beginScanIfPoweredOn()
-        }
-        if runShortcut || autoRunShortcutInForeground {
-            launchHotspotShortcutIfPossible()
         }
     }
 
@@ -273,15 +348,30 @@ final class CollieHotspotBridge: NSObject {
             }
             beginScanIfPoweredOn()
         case .poweredOff:
+            manualWakeTimeoutTask?.cancel()
+            manualWakeTimeoutTask = nil
+            pendingManualWake = false
+            pendingShortcutAfterWakeWrite = false
+            manualWakeGuardUntil = nil
             phase = .bluetoothUnavailable(hotspotText("蓝牙已关闭，请在控制中心开启蓝牙。"))
         case .unauthorized:
+            manualWakeTimeoutTask?.cancel()
+            manualWakeTimeoutTask = nil
+            pendingManualWake = false
+            pendingShortcutAfterWakeWrite = false
+            manualWakeGuardUntil = nil
             phase = .bluetoothUnavailable(hotspotText("未获得蓝牙权限，请在系统设置中允许“一呼”使用蓝牙。"))
         case .unsupported:
+            manualWakeTimeoutTask?.cancel()
+            manualWakeTimeoutTask = nil
+            pendingManualWake = false
+            pendingShortcutAfterWakeWrite = false
+            manualWakeGuardUntil = nil
             phase = .bluetoothUnavailable(hotspotText("当前设备不支持蓝牙低功耗 (BLE)。"))
         case .resetting, .unknown:
-            phase = .scanning
+            if !pendingManualWake { phase = .scanning }
         @unknown default:
-            phase = .scanning
+            if !pendingManualWake { phase = .scanning }
         }
     }
 
@@ -342,9 +432,39 @@ final class CollieHotspotBridge: NSObject {
         guard let status = try? JSONDecoder().decode(CollieHotspotMacStatus.self, from: data) else { return }
         let previousState = lastMacStatus?.state
         lastMacStatus = status
+
+        if status.onHotspot == true || status.lastWakeResult == "connected" || status.lastWakeResult == "already-on-hotspot" {
+            manualWakeTimeoutTask?.cancel()
+            manualWakeTimeoutTask = nil
+            manualWakeGuardUntil = nil
+            phase = .recovered(host: status.host)
+            onMacBecameOnline?()
+            return
+        }
+
+        if let result = status.lastWakeResult, result.hasPrefix("failed:") {
+            manualWakeTimeoutTask?.cancel()
+            manualWakeTimeoutTask = nil
+            manualWakeGuardUntil = nil
+            phase = .wakeFailed(hotspotText("Mac 未搜到手机热点信号，请先打开 iPhone「设置 → 个人热点」页面后再试。"))
+            return
+        }
+
+        if status.state == .connecting {
+            phase = (manualWakeGuardUntil != nil) ? .waking(host: status.host) : .monitoring(host: status.host, state: .connecting, rssi: lastRSSI)
+            return
+        }
+
+        if isWakingPhase, let guardUntil = manualWakeGuardUntil, Date() < guardUntil {
+            return
+        }
+
         switch status.state {
         case .online:
             if previousState == .offline || previousState == .connecting || isWakingPhase {
+                manualWakeTimeoutTask?.cancel()
+                manualWakeTimeoutTask = nil
+                manualWakeGuardUntil = nil
                 phase = .recovered(host: status.host)
                 onMacBecameOnline?()
             } else {
@@ -500,16 +620,19 @@ extension CollieHotspotBridge: CBPeripheralDelegate {
                     if characteristic.uuid == CollieHotspotBLEProtocol.statusCharacteristicUUID {
                         self.statusCharacteristic = characteristic
                         current.setNotifyValue(true, for: characteristic)
-                        current.readValue(for: characteristic)
                     } else if characteristic.uuid == CollieHotspotBLEProtocol.commandCharacteristicUUID {
                         self.commandCharacteristic = characteristic
-                        if self.pendingManualWake {
-                            self.pendingManualWake = false
-                            self.lastWakeDate = Date()
-                            _ = self.sendCommand(.wakeHotspot)
-                        }
                     }
                 }
+            }
+            if self.pendingManualWake, self.commandCharacteristic != nil {
+                self.pendingManualWake = false
+                self.lastWakeDate = Date()
+                self.manualWakeGuardUntil = Date().addingTimeInterval(25)
+                _ = self.sendCommand(.wakeHotspot)
+                self.scheduleShortcutIfNeeded()
+            } else if let statusChar = self.statusCharacteristic {
+                current.readValue(for: statusChar)
             }
         }
     }

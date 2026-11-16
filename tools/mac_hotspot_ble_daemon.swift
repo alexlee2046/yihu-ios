@@ -3,6 +3,57 @@ import CoreBluetooth
 import Foundation
 import IOBluetooth
 
+enum DaemonLog {
+    private static let lock = NSLock()
+    static var logFilePath: String = ("~/Library/Logs/yihu-hotspot-ble.log" as NSString).expandingTildeInPath
+    private static let maxBytes: UInt64 = 512 * 1024
+    private static let formatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        f.locale = Locale(identifier: "en_US_POSIX")
+        return f
+    }()
+
+    static func configure(path: String?) {
+        lock.lock()
+        defer { lock.unlock() }
+        if let path, !path.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            logFilePath = (path as NSString).expandingTildeInPath
+        }
+    }
+
+    static func log(_ message: String) {
+        let line = "[\(formatter.string(from: Date()))] [mac-hotspot-ble] \(message)"
+        print(line)
+        fflush(stdout)
+
+        lock.lock()
+        defer { lock.unlock() }
+        let fm = FileManager.default
+        let url = URL(fileURLWithPath: logFilePath)
+        let dir = url.deletingLastPathComponent()
+        try? fm.createDirectory(at: dir, withIntermediateDirectories: true)
+
+        if let attrs = try? fm.attributesOfItem(atPath: url.path),
+           let size = attrs[.size] as? UInt64,
+           size > maxBytes {
+            let backup = URL(fileURLWithPath: url.path + ".1")
+            try? fm.removeItem(at: backup)
+            try? fm.moveItem(at: url, to: backup)
+        }
+
+        guard let data = (line + "\n").data(using: .utf8) else { return }
+        if !fm.fileExists(atPath: url.path) {
+            fm.createFile(atPath: url.path, contents: data, attributes: [.posixPermissions: 0o600])
+        } else if let handle = try? FileHandle(forWritingTo: url) {
+            defer { try? handle.close() }
+            _ = try? handle.seekToEnd()
+            try? handle.write(contentsOf: data)
+            try? fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
+        }
+    }
+}
+
 struct MacHotspotStatus: Codable, Equatable {
     enum NetworkState: String, Codable {
         case offline
@@ -14,6 +65,8 @@ struct MacHotspotStatus: Codable, Equatable {
     var host: String
     var ssid: String?
     var ts: Double
+    var onHotspot: Bool? = nil
+    var lastWakeResult: String? = nil
 }
 
 struct HotspotWakeCommand: Codable, Equatable {
@@ -34,7 +87,8 @@ enum HotspotBLEConstants {
     static var commandCharacteristicUUID: CBUUID { CBUUID(string: "D8A47B12-6C91-4E52-9F01-3B7D8E21C4A0") }
     static let defaultSSID = "AL IPower"
     static let offlineMarkerPath = ("~/Library/Caches/hotspot-fallback-offline-since" as NSString).expandingTildeInPath
-    static let helperBinaryPath = ("~/Library/Scripts/HotspotFallback.app/Contents/MacOS/HotspotFallback" as NSString).expandingTildeInPath
+    static let helperAppPath = ("~/Applications/HotspotFallback.app" as NSString).expandingTildeInPath
+    static let helperBinaryPath = helperAppPath + "/Contents/MacOS/HotspotFallback"
 }
 
 enum MacNetworkActivator {
@@ -57,7 +111,7 @@ enum MacNetworkActivator {
         }
         let deadline = Date().addingTimeInterval(timeout)
         while process.isRunning && Date() < deadline {
-            RunLoop.current.run(mode: .default, before: Date().addingTimeInterval(0.05))
+            Thread.sleep(forTimeInterval: 0.05)
         }
         if process.isRunning {
             process.terminate()
@@ -68,22 +122,80 @@ enum MacNetworkActivator {
         return (process.terminationStatus, output)
     }
 
-    static func isInternetReachable() -> Bool {
-        if FileManager.default.fileExists(atPath: HotspotBLEConstants.offlineMarkerPath) {
-            // Double-check with a fast probe in case connectivity just recovered.
-            let (code, _) = runProcess(
-                "/usr/bin/curl",
-                arguments: ["-fsSI", "--max-time", "3", "http://captive.apple.com/hotspot-detect.html"],
-                timeout: 4
-            )
-            return code == 0
+    static func isOnHotspot(ssid: String) -> Bool {
+        let (routerCode, routerOut) = runProcess("/usr/sbin/ipconfig", arguments: ["getoption", "en0", "router"], timeout: 3)
+        if routerCode == 0 && routerOut.trimmingCharacters(in: .whitespacesAndNewlines).hasPrefix("172.20.10.") {
+            return true
         }
-        let (code, _) = runProcess(
-            "/usr/bin/curl",
-            arguments: ["-fsSI", "--max-time", "3", "http://captive.apple.com/hotspot-detect.html"],
-            timeout: 4
-        )
-        return code == 0
+        let (wifiCode, wifiOut) = runProcess("/usr/sbin/networksetup", arguments: ["-getairportnetwork", "en0"], timeout: 3)
+        if wifiCode == 0, let colonRange = wifiOut.range(of: ": ") {
+            let current = wifiOut[colonRange.upperBound...].trimmingCharacters(in: .whitespacesAndNewlines)
+            if !current.isEmpty, current.caseInsensitiveCompare("<redacted>") != .orderedSame {
+                let candidates = [ssid, "AL IPower", "AL Ipower"]
+                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                    .filter { !$0.isEmpty }
+                if candidates.contains(where: { current.caseInsensitiveCompare($0) == .orderedSame }) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    private static func systemProxyURL() -> String? {
+        let (code, out) = runProcess("/usr/sbin/scutil", arguments: ["--proxy"], timeout: 3)
+        guard code == 0 else { return nil }
+        var fields: [String: String] = [:]
+        for line in out.components(separatedBy: .newlines) {
+            let parts = line.split(separator: ":", maxSplits: 1)
+            if parts.count == 2 {
+                let k = parts[0].trimmingCharacters(in: .whitespaces)
+                let v = parts[1].trimmingCharacters(in: .whitespaces)
+                fields[k] = v
+            }
+        }
+        for (prefix, scheme) in [("HTTPS", "http"), ("HTTP", "http"), ("SOCKS", "socks5h")] {
+            if fields["\(prefix)Enable"] == "1",
+               let host = fields["\(prefix)Proxy"], !host.isEmpty,
+               let port = fields["\(prefix)Port"], port.allSatisfy(\.isNumber), !port.isEmpty {
+                return "\(scheme)://\(host):\(port)"
+            }
+        }
+        return nil
+    }
+
+    private static func probeURL(proxyArgs: [String]) -> Bool {
+        let probes: [(url: String, status: String, requireSuccessTitle: Bool)] = [
+            ("https://captive.apple.com/hotspot-detect.html", "200", true),
+            ("https://cp.cloudflare.com/generate_204", "204", false)
+        ]
+        for probe in probes {
+            let args = proxyArgs + ["-fsS", "--max-time", "4", "--max-redirs", "0", "-w", "\n%{http_code}", probe.url]
+            let (code, output) = runProcess("/usr/bin/curl", arguments: args, timeout: 6)
+            guard code == 0 else { continue }
+            let lines = output.components(separatedBy: "\n")
+            guard let statusLine = lines.last?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  statusLine == probe.status else { continue }
+            if probe.requireSuccessTitle {
+                let body = lines.dropLast().joined(separator: "\n")
+                if body.range(of: "<title>\\s*Success\\s*</title>", options: [.regularExpression, .caseInsensitive]) != nil {
+                    return true
+                }
+            } else {
+                return true
+            }
+        }
+        return false
+    }
+
+    static func isInternetReachable() -> Bool {
+        if probeURL(proxyArgs: ["--noproxy", "*"]) {
+            return true
+        }
+        if let proxy = systemProxyURL(), probeURL(proxyArgs: ["--proxy", proxy, "--noproxy", ""]) {
+            return true
+        }
+        return false
     }
 
     /// Wakes the Bluetooth baseband / PAN / Continuity channel to the paired iPhone even when the Mac screen is locked.
@@ -103,50 +215,89 @@ enum MacNetworkActivator {
         return "openConnection(\(match.name ?? targetName)) status=\(result)"
     }
 
-    /// Attempts direct CoreWLAN / networksetup join + HotspotFallback.app Instant Hotspot activation.
-    static func activateHotspot(ssid rawSSID: String) -> Bool {
-        let ssid = rawSSID.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            ? HotspotBLEConstants.defaultSSID
-            : rawSSID.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        let btSummary = wakePairedBluetoothDevice(matching: ssid)
-        print("[mac-hotspot-ble] Bluetooth wake: \(btSummary)")
-
-        // Ensure Wi-Fi power is on.
-        _ = runProcess("/usr/sbin/networksetup", arguments: ["-setairportpower", "en0", "on"], timeout: 5)
-
-        // Try direct Wi-Fi association first (succeeds immediately if iPhone hotspot beacon is active).
-        let candidates = Array(NSOrderedSet(array: [ssid, "AL IPower", "AL Ipower"])).compactMap { $0 as? String }
+    private static func tryDirectWifiJoin(candidates: [String], ssid: String) -> Bool {
         for candidate in candidates {
             let (code, output) = runProcess(
                 "/usr/sbin/networksetup",
                 arguments: ["-setairportnetwork", "en0", candidate],
                 timeout: 10
             )
-            if code == 0 && !output.lowercased().contains("could not find network") && !output.lowercased().contains("failed") {
-                if isInternetReachable() {
-                    try? FileManager.default.removeItem(atPath: HotspotBLEConstants.offlineMarkerPath)
+            let lower = output.lowercased()
+            let failed = code != 0
+                || lower.contains("could not find")
+                || lower.contains("failed")
+                || lower.contains("error")
+            DaemonLog.log("Direct Wi-Fi join '\(candidate)' exit=\(code) output=\(output)")
+            if !failed {
+                Thread.sleep(forTimeInterval: 2.0)
+                if isOnHotspot(ssid: ssid) {
                     return true
                 }
             }
         }
+        return false
+    }
 
-        // Fall back to HotspotFallback.app (Instant Hotspot / Control Center) without waiting 180s.
-        if FileManager.default.isExecutableFile(atPath: HotspotBLEConstants.helperBinaryPath) {
-            let (code, output) = runProcess(HotspotBLEConstants.helperBinaryPath, arguments: ["--connect"], timeout: 15)
-            print("[mac-hotspot-ble] HotspotFallback --connect exit=\(code) output=\(output)")
+    /// Attempts direct Wi-Fi join + HotspotFallback.app Instant Hotspot activation (under LaunchServices TCC identity).
+    static func activateHotspot(ssid rawSSID: String) -> (Bool, String) {
+        let ssid = rawSSID.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            ? HotspotBLEConstants.defaultSSID
+            : rawSSID.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if isOnHotspot(ssid: ssid) && isInternetReachable() {
+            try? FileManager.default.removeItem(atPath: HotspotBLEConstants.offlineMarkerPath)
+            DaemonLog.log("Already on hotspot '\(ssid)' with internet reachable")
+            return (true, "already-on-hotspot")
         }
 
-        // Retry direct Wi-Fi association once more after Bluetooth/Instant Hotspot beacon wake.
-        for candidate in candidates {
-            _ = runProcess("/usr/sbin/networksetup", arguments: ["-setairportnetwork", "en0", candidate], timeout: 8)
-            if isInternetReachable() {
-                try? FileManager.default.removeItem(atPath: HotspotBLEConstants.offlineMarkerPath)
-                return true
+        let btSummary = wakePairedBluetoothDevice(matching: ssid)
+        DaemonLog.log("Bluetooth wake: \(btSummary)")
+
+        // Ensure Wi-Fi power is on.
+        _ = runProcess("/usr/sbin/networksetup", arguments: ["-setairportpower", "en0", "on"], timeout: 5)
+
+        let candidates = Array(NSOrderedSet(array: [ssid, "AL IPower", "AL Ipower"])).compactMap { $0 as? String }
+        if tryDirectWifiJoin(candidates: candidates, ssid: ssid) {
+            try? FileManager.default.removeItem(atPath: HotspotBLEConstants.offlineMarkerPath)
+            DaemonLog.log("Connected directly via Wi-Fi to hotspot '\(ssid)'")
+            return (true, "connected-direct")
+        }
+
+        // Trigger macOS Instant Hotspot via LaunchServices so HotspotFallback.app runs under its own TCC Accessibility grant.
+        if FileManager.default.fileExists(atPath: HotspotBLEConstants.helperAppPath) {
+            let (openCode, openOut) = runProcess(
+                "/usr/bin/open",
+                arguments: ["-g", "-W", "-a", HotspotBLEConstants.helperAppPath, "--args", "--connect"],
+                timeout: 28
+            )
+            DaemonLog.log("open HotspotFallback.app --connect exit=\(openCode) output=\(openOut)")
+            if openCode != 0 && FileManager.default.isExecutableFile(atPath: HotspotBLEConstants.helperBinaryPath) {
+                let (binCode, binOut) = runProcess(HotspotBLEConstants.helperBinaryPath, arguments: ["--connect"], timeout: 25)
+                DaemonLog.log("Fallback direct HotspotFallback --connect exit=\(binCode) output=\(binOut)")
             }
+        } else {
+            DaemonLog.log("HotspotFallback.app missing at \(HotspotBLEConstants.helperAppPath)")
         }
 
-        return isInternetReachable()
+        // Wait up to 5s for DHCP / Instant Hotspot interface to settle on 172.20.10.x or hotspot SSID.
+        for _ in 0..<5 {
+            if isOnHotspot(ssid: ssid) {
+                try? FileManager.default.removeItem(atPath: HotspotBLEConstants.offlineMarkerPath)
+                DaemonLog.log("Connected via Instant Hotspot helper to '\(ssid)'")
+                return (true, "connected-instant-hotspot")
+            }
+            Thread.sleep(forTimeInterval: 1.0)
+        }
+
+        // Retry direct Wi-Fi join once more in case Instant Hotspot woke the iPhone Wi-Fi beacon.
+        if tryDirectWifiJoin(candidates: candidates, ssid: ssid) {
+            try? FileManager.default.removeItem(atPath: HotspotBLEConstants.offlineMarkerPath)
+            DaemonLog.log("Connected via second-pass Wi-Fi join to '\(ssid)'")
+            return (true, "connected-instant-hotspot")
+        }
+
+        DaemonLog.log("Wake failed: hotspot-not-found for '\(ssid)'")
+        return (false, "hotspot-not-found")
     }
 }
 
@@ -156,6 +307,7 @@ final class MacHotspotBLEDaemon: NSObject, CBPeripheralManagerDelegate, @uncheck
     private var commandCharacteristic: CBMutableCharacteristic?
     private var currentState: MacHotspotStatus.NetworkState = .online
     private var targetSSID: String = HotspotBLEConstants.defaultSSID
+    private var lastWakeResult: String? = nil
     private var pollTimer: Timer?
     private var isWaking = false
 
@@ -169,11 +321,14 @@ final class MacHotspotBLEDaemon: NSObject, CBPeripheralManagerDelegate, @uncheck
     }
 
     private func currentStatusPayload() -> Data {
+        let onHotspot = MacNetworkActivator.isOnHotspot(ssid: targetSSID)
         let status = MacHotspotStatus(
             state: currentState,
             host: MacNetworkActivator.hostName,
             ssid: targetSSID,
-            ts: Date().timeIntervalSince1970
+            ts: Date().timeIntervalSince1970,
+            onHotspot: onHotspot,
+            lastWakeResult: lastWakeResult
         )
         return (try? JSONEncoder().encode(status)) ?? Data()
     }
@@ -196,6 +351,7 @@ final class MacHotspotBLEDaemon: NSObject, CBPeripheralManagerDelegate, @uncheck
     }
 
     private func handleWakeCommand(_ command: HotspotWakeCommand) {
+        DaemonLog.log("Received BLE command: \(command.action.rawValue) ssid=\(command.ssid)")
         if !command.ssid.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             targetSSID = command.ssid.trimmingCharacters(in: .whitespacesAndNewlines)
         }
@@ -204,18 +360,27 @@ final class MacHotspotBLEDaemon: NSObject, CBPeripheralManagerDelegate, @uncheck
             notifySubscribers()
             return
         }
-        guard !isWaking else { return }
+        // Only .wakeHotspot and .wifiReady reach here.
+        guard !isWaking else {
+            DaemonLog.log("Wake already in progress; notifying current connecting state")
+            notifySubscribers()
+            return
+        }
         isWaking = true
         currentState = .connecting
+        lastWakeResult = "connecting"
         notifySubscribers()
 
         let ssid = targetSSID
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let connected = MacNetworkActivator.activateHotspot(ssid: ssid)
+            let (ok, reason) = MacNetworkActivator.activateHotspot(ssid: ssid)
+            let reachable = MacNetworkActivator.isInternetReachable()
             DispatchQueue.main.async {
                 guard let self else { return }
                 self.isWaking = false
-                self.currentState = connected ? .online : (MacNetworkActivator.isInternetReachable() ? .online : .offline)
+                self.currentState = reachable ? .online : .offline
+                self.lastWakeResult = ok ? "connected" : "failed:\(reason)"
+                DaemonLog.log("Wake completed: ok=\(ok) reason=\(reason) reachable=\(reachable) onHotspot=\(MacNetworkActivator.isOnHotspot(ssid: ssid))")
                 self.notifySubscribers()
             }
         }
@@ -223,7 +388,7 @@ final class MacHotspotBLEDaemon: NSObject, CBPeripheralManagerDelegate, @uncheck
 
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         guard peripheral.state == .poweredOn else {
-            print("[mac-hotspot-ble] Peripheral state: \(peripheral.state.rawValue)")
+            DaemonLog.log("Peripheral state: \(peripheral.state.rawValue)")
             return
         }
         let statusChar = CBMutableCharacteristic(
@@ -248,17 +413,18 @@ final class MacHotspotBLEDaemon: NSObject, CBPeripheralManagerDelegate, @uncheck
 
     func peripheralManager(_ peripheral: CBPeripheralManager, didAdd service: CBService, error: (any Error)?) {
         if let error {
-            print("[mac-hotspot-ble] Failed to add service: \(error.localizedDescription)")
+            DaemonLog.log("Failed to add service: \(error.localizedDescription)")
             return
         }
         peripheral.startAdvertising([
             CBAdvertisementDataServiceUUIDsKey: [HotspotBLEConstants.serviceUUID],
             CBAdvertisementDataLocalNameKey: MacNetworkActivator.hostName
         ])
-        print("[mac-hotspot-ble] Advertising BLE service \(HotspotBLEConstants.serviceUUID.uuidString) as \(MacNetworkActivator.hostName)")
+        DaemonLog.log("Advertising BLE service \(HotspotBLEConstants.serviceUUID.uuidString) as \(MacNetworkActivator.hostName)")
     }
 
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
+        DaemonLog.log("Central subscribed: \(central.identifier.uuidString)")
         refreshNetworkStatus()
         notifySubscribers()
     }
@@ -293,8 +459,19 @@ final class MacHotspotBLEDaemon: NSObject, CBPeripheralManagerDelegate, @uncheck
 }
 
 let args = Array(CommandLine.arguments.dropFirst())
+if let logIdx = args.firstIndex(of: "--log"), logIdx + 1 < args.count {
+    DaemonLog.configure(path: args[logIdx + 1])
+}
+
 if args.contains("--self-test") {
-    let status = MacHotspotStatus(state: .offline, host: MacNetworkActivator.hostName, ssid: HotspotBLEConstants.defaultSSID, ts: 1_780_000_000)
+    let status = MacHotspotStatus(
+        state: .offline,
+        host: MacNetworkActivator.hostName,
+        ssid: HotspotBLEConstants.defaultSSID,
+        ts: 1_780_000_000,
+        onHotspot: false,
+        lastWakeResult: "failed:hotspot-not-found"
+    )
     let encodedStatus = try JSONEncoder().encode(status)
     let decodedStatus = try JSONDecoder().decode(MacHotspotStatus.self, from: encodedStatus)
     precondition(decodedStatus == status)
@@ -308,11 +485,12 @@ if args.contains("--self-test") {
     print("MacHotspotBLEDaemon self-test passed: host=\(MacNetworkActivator.hostName), service=\(HotspotBLEConstants.serviceUUID.uuidString), pairedDevices=\(pairedNames)")
     exit(0)
 } else if let idx = args.firstIndex(of: "--wake-once") {
-    let ssid = (idx + 1 < args.count) ? args[idx + 1] : HotspotBLEConstants.defaultSSID
-    let ok = MacNetworkActivator.activateHotspot(ssid: ssid)
-    print("MacHotspotBLEDaemon wake-once(\(ssid)) -> reachable=\(ok)")
+    let ssid = (idx + 1 < args.count && !args[idx + 1].hasPrefix("--")) ? args[idx + 1] : HotspotBLEConstants.defaultSSID
+    let (ok, reason) = MacNetworkActivator.activateHotspot(ssid: ssid)
+    print("MacHotspotBLEDaemon wake-once(\(ssid)) -> ok=\(ok) reason=\(reason) onHotspot=\(MacNetworkActivator.isOnHotspot(ssid: ssid)) reachable=\(MacNetworkActivator.isInternetReachable())")
     exit(ok ? 0 : 1)
 } else {
+    DaemonLog.log("Starting YihuHotspotBLE daemon on \(MacNetworkActivator.hostName)")
     let daemon = MacHotspotBLEDaemon()
     withExtendedLifetime(daemon) {
         RunLoop.main.run()

@@ -14756,6 +14756,57 @@
           }
         }
       }
+    },
+    "未发现附近的 Mac，请确认 Mac 已开启蓝牙并允许“一呼蓝牙热点守护”使用蓝牙。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No nearby Mac found. Make sure Bluetooth is enabled on your Mac and YihuHotspotBLE is allowed in Bluetooth Settings."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未发现附近的 Mac，请确认 Mac 已开启蓝牙并允许“一呼蓝牙热点守护”使用蓝牙。"
+          }
+        }
+      }
+    },
+    "唤醒超时：请打开 iPhone「设置 → 个人热点」页面后再点一次立即唤醒。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wake timed out. Open iPhone Settings → Personal Hotspot once, then tap Wake Nearby Mac Now again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "唤醒超时：请打开 iPhone「设置 → 个人热点」页面后再点一次立即唤醒。"
+          }
+        }
+      }
+    },
+    "Mac 未搜到手机热点信号，请先打开 iPhone「设置 → 个人热点」页面后再试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac could not find your iPhone hotspot signal. Open iPhone Settings → Personal Hotspot and try again."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac 未搜到手机热点信号，请先打开 iPhone「设置 → 个人热点」页面后再试。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
