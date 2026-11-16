@@ -112,6 +112,7 @@ final class CollieShellPresentation {
     var notePageURL: URL?
     var noteInsertionID: UUID?
     var notePrepared = false
+    let approval = CollieApprovalPresenter()
 
     func openNotes(in session: CollieWebSession, voice: CollieVoiceController) {
         noteSession = session
@@ -420,6 +421,7 @@ private struct CollieRootView: View {
         workbenchesPresented || addingWeb || radarPresentation.importing || radarPresentation.configuring ||
         radarPresentation.replyPresented || radarPresentation.watchTask != nil ||
         shellPresentation.settingsPresented || shellPresentation.notesPresented ||
+        shellPresentation.approval.isPresenting || shellPresentation.approval.resultMessage != nil ||
         shellPresentation.cameraPresented || shellPresentation.photosPickerPresented ||
         requestingCamera || shareTray.isImportingImage || shareTray.imageError != nil ||
         voiceNotes.recorder.isRecording || notifications.isBusy || voice.canCancel ||
@@ -485,7 +487,9 @@ private struct CollieRootView: View {
     }
 
     private func canSelect() -> Bool {
-        if shellPresentation.notesPresented {
+        if shellPresentation.approval.isPresenting {
+            selectionNotice = radarText("请先完成或取消当前审批，再切换工作台。")
+        } else if shellPresentation.notesPresented {
             selectionNotice = radarText("请先关闭语音记录，再切换工作台。")
         } else if voiceNotes.recorder.isRecording {
             selectionNotice = radarText("请先结束语音笔记录音，再切换工作台。")
@@ -589,7 +593,11 @@ struct CollieShellView: View {
                     // subtree must not overlap native navigation after a switch.
                     isVisible: isWorkbenchActive && webSession.errorMessage == nil,
                     pageReady: { notifications?.applicationDidBecomeActive(session: webSession) },
-                    openNotificationSettings: { presentation.settingsPresented = true }
+                    openNotificationSettings: { presentation.settingsPresented = true },
+                    onApproval: { url in
+                        webSession.dismissKeyboard()
+                        presentation.approval.start(url: url)
+                    }
                 ) {
                     guard !voice.canCancel, voice.phase != .delivering else { return }
                     await webSession.setKeyboardEnabled(true)
@@ -776,6 +784,14 @@ struct CollieShellView: View {
         } message: {
             Text(shellText("名称保存在本机的本地设置中；清空可恢复页面标题或地址。"))
         }
+        .alert(shellText("审批结果"), isPresented: Binding(
+            get: { presentation.approval.resultMessage != nil && !presentation.settingsPresented },
+            set: { if !$0 { presentation.approval.resultMessage = nil } }
+        )) {
+            Button(shellText("完成"), role: .cancel) { presentation.approval.resultMessage = nil }
+        } message: {
+            Text(presentation.approval.resultMessage ?? "")
+        }
         .sheet(isPresented: $presentation.settingsPresented) {
             NavigationStack {
                 if let connectionSettings, let notifications {
@@ -852,7 +868,7 @@ struct CollieShellView: View {
     /// start when ready, finish when recording; otherwise keep it pending.
     private func runPendingShortcut() {
         guard isWorkbenchActive, shortcuts.pendingToggle, scenePhase == .active,
-              !presentation.notesPresented,
+              !presentation.notesPresented, !presentation.approval.isPresenting,
               voiceNotes?.recorder.isRecording != true else { return }
         if voice.isRecording {
             guard shortcuts.consumeToggle() else { return }

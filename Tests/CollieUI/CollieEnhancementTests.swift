@@ -167,4 +167,50 @@ final class CollieEnhancementTests: XCTestCase {
         state.agentName = String(repeating: "A", count: 1_000)
         XCTAssertEqual(state.displayTitle.count, 80)
     }
+
+    func testProductionApprovalURLMatchingAndCallbackParsing() throws {
+        let workbench = URL(string: "https://workbench.example.com")!
+        XCTAssertTrue(CollieApproval.isApprovalURL(
+            URL(string: "https://workbench.example.com:8443/?target=demo-service"),
+            workbenchURL: workbench
+        ))
+        XCTAssertTrue(CollieApproval.isApprovalURL(
+            URL(string: "https://approver.workbench.example.com:8443/?target=demo-service"),
+            workbenchURL: workbench
+        ))
+        XCTAssertTrue(CollieApproval.isApprovalURL(
+            URL(string: "https://approver.net-alpha.ts.net:8443/?target=demo-service"),
+            workbenchURL: URL(string: "https://lead.net-alpha.ts.net")
+        ))
+        XCTAssertFalse(CollieApproval.isApprovalURL(
+            URL(string: "https://evil.net-beta.ts.net:8443/?target=demo-service"),
+            workbenchURL: URL(string: "https://lead.net-alpha.ts.net")
+        ))
+        XCTAssertFalse(CollieApproval.isApprovalURL(
+            URL(string: "https://evil.other-domain.org:8443/?target=demo-service"),
+            workbenchURL: workbench
+        ))
+        XCTAssertFalse(CollieApproval.isApprovalURL(
+            URL(string: "http://workbench.example.com:8443/?target=demo-service"),
+            workbenchURL: workbench
+        ))
+        XCTAssertFalse(CollieApproval.isApprovalURL(
+            URL(string: "https://workbench.example.com:443/?target=demo-service"),
+            workbenchURL: workbench
+        ))
+
+        let inApp = CollieApproval.inAppURL(URL(string: "https://workbench.example.com:8443/?target=demo-service")!)
+        XCTAssertEqual(inApp.absoluteString, "https://workbench.example.com:8443/?target=demo-service&app=1")
+        XCTAssertEqual(CollieApproval.inAppURL(inApp), inApp)
+
+        XCTAssertEqual(
+            CollieApproval.parseCallback(URL(string: "benchside-approval://done?status=ok&target=demo-service")!),
+            .success("demo-service")
+        )
+        XCTAssertEqual(
+            CollieApproval.parseCallback(URL(string: "benchside-approval://done?status=failed&target=demo-service")!),
+            .failure(.rejected)
+        )
+        XCTAssertNil(CollieApproval.resultAlertMessage(for: .failure(URLError(.cancelled))))
+    }
 }

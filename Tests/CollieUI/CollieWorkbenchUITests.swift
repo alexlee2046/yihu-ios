@@ -154,6 +154,11 @@ final class CollieWorkbenchUITests: XCTestCase {
         attachWorkbenchScreen(name: "settings-notification-status")
         if !notificationStatus.exists { print("Synthetic settings hierarchy: \(app.debugDescription)") }
         XCTAssertTrue(notificationStatus.waitForExistence(timeout: 5))
+        let approvalStatus = app.descendants(matching: .any)["collie-approval-status"]
+        for _ in 0..<3 where !approvalStatus.exists {
+            settingsList.swipeUp()
+        }
+        XCTAssertTrue(approvalStatus.waitForExistence(timeout: 5))
         app.terminate()
         app.launch()
         XCTAssertTrue(all.waitForExistence(timeout: 15))

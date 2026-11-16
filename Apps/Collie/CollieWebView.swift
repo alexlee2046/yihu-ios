@@ -353,11 +353,13 @@ struct CollieWebView: UIViewRepresentable {
     var isVisible = true
     var pageReady: @MainActor () -> Void = {}
     var openNotificationSettings: @MainActor () -> Void = {}
+    var onApproval: @MainActor (URL) -> Void = { _ in }
     var requestKeyboard: @MainActor () async -> Void = {}
 
     func makeCoordinator() -> Coordinator {
         Coordinator(session: session, requestKeyboard: requestKeyboard,
-                    pageReady: pageReady, openNotificationSettings: openNotificationSettings)
+                    pageReady: pageReady, openNotificationSettings: openNotificationSettings,
+                    onApproval: onApproval)
     }
 
     // SwiftUI owns visibility/accessibility on the representable's root view.
@@ -423,6 +425,7 @@ struct CollieWebView: UIViewRepresentable {
         context.coordinator.requestKeyboard = requestKeyboard
         context.coordinator.pageReady = pageReady
         context.coordinator.openNotificationSettings = openNotificationSettings
+        context.coordinator.onApproval = onApproval
         session.attach(webView)
     }
 
@@ -445,6 +448,7 @@ struct CollieWebView: UIViewRepresentable {
         var requestKeyboard: @MainActor () async -> Void
         var pageReady: @MainActor () -> Void
         var openNotificationSettings: @MainActor () -> Void
+        var onApproval: @MainActor (URL) -> Void
         private var urlObservation: NSKeyValueObservation?
         private var titleObservation: NSKeyValueObservation?
         private var dotAudioActive = false
@@ -469,11 +473,13 @@ struct CollieWebView: UIViewRepresentable {
         }
 
         init(session: CollieWebSession, requestKeyboard: @escaping @MainActor () async -> Void = {},
-             pageReady: @escaping @MainActor () -> Void = {}, openNotificationSettings: @escaping @MainActor () -> Void = {}) {
+             pageReady: @escaping @MainActor () -> Void = {}, openNotificationSettings: @escaping @MainActor () -> Void = {},
+             onApproval: @escaping @MainActor (URL) -> Void = { _ in }) {
             self.session = session
             self.requestKeyboard = requestKeyboard
             self.pageReady = pageReady
             self.openNotificationSettings = openNotificationSettings
+            self.onApproval = onApproval
         }
 
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -512,6 +518,16 @@ struct CollieWebView: UIViewRepresentable {
             _ webView: WKWebView,
             decidePolicyFor navigationAction: WKNavigationAction
         ) async -> WKNavigationActionPolicy {
+            let isMainOrNewWindow = navigationAction.targetFrame?.isMainFrame == true
+                || navigationAction.targetFrame == nil
+            if isMainOrNewWindow,
+               navigationAction.sourceFrame.isMainFrame,
+               session.isTrusted(webView.url) || session.isTrusted(navigationAction.sourceFrame.request.url),
+               let url = navigationAction.request.url,
+               CollieApproval.isApprovalURL(url, workbenchURL: session.baseURL) {
+                onApproval(CollieApproval.inAppURL(url))
+                return .cancel
+            }
             guard navigationAction.targetFrame?.isMainFrame == true else { return .allow }
             guard session.isTrusted(navigationAction.request.url) else {
                 if let url = navigationAction.request.url, ["http", "https"].contains(url.scheme?.lowercased() ?? "") {
@@ -520,6 +536,21 @@ struct CollieWebView: UIViewRepresentable {
                 return .cancel
             }
             return .allow
+        }
+
+        func webView(
+            _ webView: WKWebView,
+            createWebViewWith configuration: WKWebViewConfiguration,
+            for navigationAction: WKNavigationAction,
+            windowFeatures: WKWindowFeatures
+        ) -> WKWebView? {
+            if navigationAction.sourceFrame.isMainFrame,
+               session.isTrusted(webView.url) || session.isTrusted(navigationAction.sourceFrame.request.url),
+               let url = navigationAction.request.url,
+               CollieApproval.isApprovalURL(url, workbenchURL: session.baseURL) {
+                onApproval(CollieApproval.inAppURL(url))
+            }
+            return nil
         }
 
         func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
