@@ -15,7 +15,10 @@ test('container ships only the static build, with a proxy-independent health che
   assert.ok(runtime);
   assert.match(runtime, /RUN rm -rf \/usr\/share\/nginx\/html/);
   assert.match(runtime, /COPY --from=build \/app\/dist \/usr\/share\/nginx\/html/);
-  assert.match(runtime, /COPY nginx\.conf \/etc\/nginx\/conf\.d\/default\.conf/);
+  assert.match(runtime, /COPY nginx\.conf \/etc\/nginx\/templates\/default\.conf\.template/);
+  assert.ok(runtime.includes('ENV SHADOW_NOINDEX=0'));
+  assert.ok(runtime.includes('ENV NGINX_ENVSUBST_FILTER="^SHADOW_NOINDEX$"'));
+  assert.ok(runtime.includes('rm -f /etc/nginx/conf.d/default.conf'));
   assert.match(runtime, /EXPOSE 80/);
   assert.match(runtime, /HEALTHCHECK[\s\S]*wget -Y off -q -O \/dev\/null http:\/\/127\.0\.0\.1\/health/);
   assert.doesNotMatch(runtime, /npm|node_modules|COPY \. /);
@@ -56,6 +59,12 @@ test('nginx preserves 308 slash redirects, HTTPS behind a proxy, health and hard
   assert.match(nginx, /types \{ audio\/mp4 m4a; \}/);
   assert.ok(nginx.includes(String.raw`if ($request_uri ~ "^[^?]*\\\\") { return 400; }`));
   assert.match(nginx, /absolute_redirect off;/);
+  assert.ok(nginx.includes('map "${SHADOW_NOINDEX}" $shadow_robots {'));
+  assert.match(nginx, /default "";\s*"1" "noindex";/);
+  assert.match(nginx, /add_header X-Robots-Tag \$shadow_robots always;/);
+  for (const [, block] of nginx.matchAll(/location[^\n]*\{([\s\S]*?)\n    \}/g)) {
+    if (block.includes('add_header ')) assert.match(block, /add_header X-Robots-Tag (?:noindex|\$shadow_robots) always;/);
+  }
   assert.match(nginx, /gzip on;/);
   assert.match(nginx, /gzip_vary on;/);
   assert.ok(nginx.includes('add_header Cache-Control "public, max-age=0, must-revalidate" always;'));
@@ -68,7 +77,7 @@ test('nginx preserves 308 slash redirects, HTTPS behind a proxy, health and hard
   assert.doesNotMatch(nginx, /try_files[^;]*\/index\.html/);
 });
 
-function fixture({ changedPath, changedStatus, wrongRedirect = false, missingNoindex = false, cacheDrift = false, duplicateHydrationIDs = false } = {}) {
+function fixture({ changedPath, changedStatus, wrongRedirect = false, missingNoindex = false, cacheDrift = false, duplicateHydrationIDs = false, shadowHeaders = false, skipShadowHeaderPath } = {}) {
   let active = 0;
   let peak = 0;
   const fetchImpl = async (url, options) => {
@@ -106,15 +115,16 @@ function fixture({ changedPath, changedStatus, wrongRedirect = false, missingNoi
       else body = 'changed';
     }
     if (candidate && cacheDrift && path === '/llms.txt') headers['cache-control'] = 'public, max-age=120';
+    if (candidate && shadowHeaders && path !== skipShadowHeaderPath) headers['x-robots-tag'] = 'noindex';
     return new Response(body, { status, headers });
   };
   return { fetchImpl, peak: () => peak };
 }
 
 const settings = { routes: ['/', '/en/'], retiredPaths: ['/samples/retired-check'] };
-const compare = (fixtureOptions) => {
+const compare = (fixtureOptions, options = {}) => {
   const probe = fixture(fixtureOptions);
-  return { run: () => compareHosts('https://baseline.example.test', 'http://candidate.example.test', { ...settings, fetchImpl: probe.fetchImpl }), probe };
+  return { run: () => compareHosts('https://baseline.example.test', 'http://candidate.example.test', { ...settings, fetchImpl: probe.fetchImpl, ...options }), probe };
 };
 
 test('host comparison covers exact public payloads, resources, 410/noindex, 308s, 404s and health with two workers', async () => {
@@ -131,9 +141,19 @@ test('host comparison fails on body, asset, status, host redirect and noindex dr
   await assert.rejects(compare({ changedPath: '/icon.svg' }).run(), /Body differs at \/icon\.svg/);
   await assert.rejects(compare({ changedPath: '/en/', changedStatus: 404 }).run(), /Status differs at \/en\//);
   await assert.rejects(compare({ wrongRedirect: true }).run(), /Redirect leaves its host or downgrades HTTPS/);
-  await assert.rejects(compare({ missingNoindex: true }).run(), /Retired route lost noindex/);
+  await assert.rejects(compare({ missingNoindex: true }).run(), /Robots policy differs|Retired route lost noindex/);
   await assert.rejects(compare({ cacheDrift: true }).run(), /Cache policy differs at \/llms\.txt/);
   await assert.rejects(compare({ duplicateHydrationIDs: true }).run(), /Body differs at \//);
+});
+
+test('shadow mode requires noindex on every response, while normal mode preserves baseline robots policy', async () => {
+  const result = await compare({ shadowHeaders: true }, { shadowNoindex: true }).run();
+  assert.equal(result.shadowNoindex, true);
+  await assert.rejects(compare({ shadowHeaders: true }).run(), /Robots policy differs/);
+  for (const path of ['/', '/icon.svg', '/en', '/__yihu_missing_route__/']) {
+    await assert.rejects(compare({ shadowHeaders: true, skipShadowHeaderPath: path }, { shadowNoindex: true }).run(), /Shadow noindex missing/);
+  }
+  await assert.rejects(compare({ shadowHeaders: true, skipShadowHeaderPath: '/en', changedPath: '/en', changedStatus: 301 }, { shadowNoindex: true }).run(), /Shadow noindex missing.*status 301/);
 });
 
 test('comparison rejects credential-bearing or non-root origins', async () => {

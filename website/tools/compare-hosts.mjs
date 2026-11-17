@@ -51,6 +51,10 @@ export async function compareHosts(baselineValue, candidateValue, options = {}) 
       credentials: 'omit',
       signal: AbortSignal.timeout(15_000),
     });
+    if (options.shadowNoindex && host === candidate
+        && !/\bnoindex\b/i.test(response.headers.get('x-robots-tag') ?? '')) {
+      throw new Error(`Shadow noindex missing at ${path} (status ${response.status})`);
+    }
     return { status: response.status, headers: response.headers, body: Buffer.from(await response.arrayBuffer()) };
   }
 
@@ -59,6 +63,9 @@ export async function compareHosts(baselineValue, candidateValue, options = {}) 
     const b = await request(candidate, path);
     if (a.status !== expectedStatus || b.status !== a.status) {
       throw new Error(`Status differs at ${path}: baseline=${a.status}, candidate=${b.status}, expected=${expectedStatus}`);
+    }
+    if (!options.shadowNoindex && a.headers.get('x-robots-tag') !== b.headers.get('x-robots-tag')) {
+      throw new Error(`Robots policy differs at ${path}`);
     }
     if (compareBody && a.status === 200 && a.headers.get('cache-control') !== b.headers.get('cache-control')) {
       throw new Error(`Cache policy differs at ${path}`);
@@ -111,16 +118,16 @@ export async function compareHosts(baselineValue, candidateValue, options = {}) 
 
   const missing = ['/__yihu_missing_route__/', '/.well-known/__yihu_missing_route__'];
   await each(missing, async (path) => { await pair(path, 404, false); });
-  return { pages: routes.length, resources: resources.size, retired: retiredFiles.length, redirects: redirects.size, missing: missing.length, health: true };
+  return { pages: routes.length, resources: resources.size, retired: retiredFiles.length, redirects: redirects.size, missing: missing.length, health: true, ...(options.shadowNoindex ? { shadowNoindex: true } : {}) };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const [, , baseline, candidate] = process.argv;
-  if (!baseline || !candidate) {
-    console.error('Usage: npm run container:compare -- https://getyihu.com http://127.0.0.1:8080');
+  const [, , baseline, candidate, flag] = process.argv;
+  if (!baseline || !candidate || (flag && flag !== '--shadow-noindex')) {
+    console.error('Usage: npm run container:compare -- https://getyihu.com http://127.0.0.1:8080 [--shadow-noindex]');
     process.exitCode = 1;
   } else {
-    try { console.log(JSON.stringify(await compareHosts(baseline, candidate))); }
+    try { console.log(JSON.stringify(await compareHosts(baseline, candidate, { shadowNoindex: flag === '--shadow-noindex' }))); }
     catch (error) { console.error(error.message); process.exitCode = 1; }
   }
 }

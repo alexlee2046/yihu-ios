@@ -6,8 +6,10 @@ COPY . .
 RUN npm run build
 
 FROM nginx:alpine AS runtime
-RUN rm -rf /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN rm -rf /usr/share/nginx/html && rm -f /etc/nginx/conf.d/default.conf
+ENV SHADOW_NOINDEX=0
+ENV NGINX_ENVSUBST_FILTER="^SHADOW_NOINDEX$"
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \

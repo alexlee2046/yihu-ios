@@ -10,7 +10,7 @@ From the repository root, in a local Docker environment:
 
 ```sh
 docker build --pull -t yihu-website:shadow website
-docker run --rm --name yihu-website-shadow -p 127.0.0.1:8080:80 yihu-website:shadow
+docker run --rm --name yihu-website-shadow -e SHADOW_NOINDEX=1 -p 127.0.0.1:8080:80 yihu-website:shadow
 ```
 
 In a second terminal:
@@ -18,7 +18,7 @@ In a second terminal:
 ```sh
 docker exec yihu-website-shadow wget -Y off -q -O - http://127.0.0.1/health
 cd website
-npm run container:compare -- https://getyihu.com http://127.0.0.1:8080
+npm run container:compare -- https://getyihu.com http://127.0.0.1:8080 --shadow-noindex
 # Stop only the local container created above when verification is complete.
 docker stop yihu-website-shadow
 ```
@@ -26,6 +26,16 @@ docker stop yihu-website-shadow
 `/health` returns `200`, `ok\n`, `Cache-Control: no-store` and `X-Robots-Tag: noindex`. Docker's built-in
 health check uses `wget -Y off`, so inherited proxy settings cannot redirect the
 probe. Keep this path outside the sitemap.
+
+`SHADOW_NOINDEX` defaults to `0`. Set it to `1` only in the shadow runtime: the
+nginx entrypoint renders `nginx.conf` as a template, substituting only this flag.
+`X-Robots-Tag: noindex` then covers HTML, assets (including immutable cached
+assets), redirects and errors. Health and retired downloads always retain their
+existing noindex. `--shadow-noindex` checks this header on every candidate
+response; without the option the comparator requires the production robots
+policy to match. Production promotion must use the default/explicit `0` and
+repeat comparison without `--shadow-noindex`. If an ingress emits a redirect
+before nginx, the deployment owner must verify that ingress response separately.
 
 The read-only comparator uses two workers and checks:
 
