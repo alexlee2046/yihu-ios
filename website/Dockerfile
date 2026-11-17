@@ -6,7 +6,8 @@ COPY . .
 RUN npm run build
 
 FROM nginx:alpine AS runtime
-RUN rm -rf /usr/share/nginx/html && rm -f /etc/nginx/conf.d/default.conf
+RUN apk upgrade --no-cache libxslt \
+    && rm -rf /usr/share/nginx/html && rm -f /etc/nginx/conf.d/default.conf
 ENV SHADOW_NOINDEX=0
 ENV NGINX_ENVSUBST_FILTER="^SHADOW_NOINDEX$"
 COPY nginx.conf /etc/nginx/templates/default.conf.template

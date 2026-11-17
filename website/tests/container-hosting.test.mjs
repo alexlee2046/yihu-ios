@@ -13,7 +13,8 @@ test('container ships only the static build, with a proxy-independent health che
   assert.match(docker, /RUN npm run build/);
   const runtime = docker.split('FROM nginx:alpine AS runtime')[1];
   assert.ok(runtime);
-  assert.match(runtime, /RUN rm -rf \/usr\/share\/nginx\/html/);
+  assert.match(runtime, /RUN apk upgrade --no-cache libxslt/);
+  assert.match(runtime, /&& rm -rf \/usr\/share\/nginx\/html/);
   assert.match(runtime, /COPY --from=build \/app\/dist \/usr\/share\/nginx\/html/);
   assert.match(runtime, /COPY nginx\.conf \/etc\/nginx\/templates\/default\.conf\.template/);
   assert.ok(runtime.includes('ENV SHADOW_NOINDEX=0'));
