@@ -274,6 +274,7 @@ async function conversionGuide(page, engine, path, width) {
 const p4Source = await readFile('src/lib/conversion-events.ts','utf8');
 const p4Paths = [...p4Source.matchAll(/'(\/[^']+)': '(?:voice|audio|notes|radar)'/g)].map(x => x[1]);
 assert.equal(p4Paths.length,63);
+const p4Widths = [390, 1440];
 const targets = [
   ['/', 390, 844, 'voice', 'home-zh-390'], ['/en/', 1440, 1000, 'voice', 'home-en-1440'], ['/en/', 390, 844, 'voice', 'home-en-390'],
   ['/guides/bluetooth-audio-input-troubleshooting/', 390, 844, 'audio', 'audio-zh-390'],
@@ -338,7 +339,7 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
         else await geometry(p.page, width);
       } finally { await p.close(); }
     }
-    for (const path of p4Paths) for (const width of [390,1440]) {
+    for (const path of p4Paths) for (const width of p4Widths) {
       const p = await openPage(activeBrowser,path,width,width===390?844:1000);
       try { record.pages.push({path,width,p4:await conversionGuide(p.page,engine,path,width)}); }
       finally { await p.close(); }
@@ -374,4 +375,4 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
     await writeFile(resolve(output, 'evidence.json'), JSON.stringify({ results, failures }, null, 2));
   }
 }
-console.log('Browser preview acceptance PASS: Chromium + WebKit, 6 home/scenario pages + 2 store/source setup views + 8 P2 views + 114 selected-guide views + 2 no-JavaScript navigations + 10 no-JavaScript privacy disclosures per engine; consent-only funnel, actual same-language preview navigation, store intent stub only; native speech API separate; browsers closed.');
+console.log(`Browser preview acceptance PASS: Chromium + WebKit, 6 home/scenario pages + 2 store/source setup views + 8 P2 views + ${p4Paths.length * p4Widths.length} selected-guide views + 2 no-JavaScript navigations + 10 no-JavaScript privacy disclosures per engine; consent-only funnel, actual same-language preview navigation, store intent stub only; native speech API separate; browsers closed.`);
