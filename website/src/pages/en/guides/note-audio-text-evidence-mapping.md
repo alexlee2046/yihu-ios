@@ -1,13 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Map audio, note metadata and transcript evidence: progress is not verbatim truth"
-description: "Separate audio.caf, note.json, transcript, transcribedFrames and text-only handoff. Completion does not certify every word; no forced alignment or original-file backup."
+title: "Sharing a transcript? Check what goes with it | Yihu"
+description: "Match the recording, metadata and transcript before sharing reviewed text. Try a local handoff example, then check Yihu’s App Store setup requirements."
 lang: en
+privacyPreview: true
+trialLabel: "Try a transcript handoff"
 ---
 
-<h2 id="first-answer">Audio, text and metadata differ; handing off text does not share the audio</h2>
+<h2 id="first-answer">Match the recording and transcript by note ID before sharing reviewed text</h2>
 
-Notes relate audio.caf and note.json by one id. Transcription resumes at transcribedFrames and accumulates transcript. Done does not establish every word was reviewed; the emptyTranscript branch can advance frames without adding text. Workbench handoff shares transcription, not recording files. This is an editorial mapping checklist, not forced alignment or original-file archiving.
+Open the same note and compare its recording with the transcript. Mark unclear or unchecked passages before handing off the text. If the recipient needs the audio, confirm permission and arrange delivery separately: this workbench handoff shares transcription, not recording files. In the source, `transcribedFrames` tracks processing position, `emptyTranscript` can advance it without adding text, and `done` marks the end of processing.
 
 ## Different from passage review and revision retention
 

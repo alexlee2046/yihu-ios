@@ -215,6 +215,7 @@ async function conversionGuide(page, engine, path, width) {
   const wave7 = /voice-workbench-vs-radio-chat|multi-project-radar-watch|outdoor-store-voice-preflight/.test(path);
   const wave8 = /first-trial-go-no-go-checklist|department-minutes-ownership-archive|offline-workbench-handoff-troubleshooting/.test(path);
   const wave9 = /degraded-handoff-go-no-go|follow-up-context-preflight|watch-voice-queued-ready-boundaries/.test(path);
+  const wave11b = /note-audio-text-evidence-mapping|reply-draft-restoration-scope|radar-summary-claim-provenance/.test(path);
   const wave10 = /audio-busy-state-admission|audio-route-recovery-matrix|brief-format-change-compatibility/.test(path);
   assert.equal(await page.locator('[data-preview]').count(), inlinePreview ? 1 : 0);
   const demo = root.locator('a').first(), app = root.locator('.app-store-link');
@@ -222,11 +223,11 @@ async function conversionGuide(page, engine, path, width) {
   assert.ok(href.startsWith(path.startsWith('/en/') ? '/en/guides/' : '/guides/'));
   assert.ok(href.endsWith('/#interactive-preview'));
   assert.equal(await app.getAttribute('href'), store.url);
-  if (wave10 || wave9 || wave8 || wave7 || wave6 || wave5 || /first-trial-go-no-go-checklist|bluetooth-audio-input-troubleshooting|app-group-inbox-access-evidence|empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight/.test(path)) {
+  if (wave11b || wave10 || wave9 || wave8 || wave7 || wave6 || wave5 || /first-trial-go-no-go-checklist|bluetooth-audio-input-troubleshooting|app-group-inbox-access-evidence|empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight/.test(path)) {
     assert.ok(await demo.evaluate(a => a.getBoundingClientRect().bottom <= innerHeight), 'Selected trial action above fold');
     assert.ok(await app.evaluate(a => a.getBoundingClientRect().bottom <= innerHeight), 'Selected store action above fold');
   }
-  if (wave10 || wave9 || wave8 || wave7 || wave6 || wave5 || /empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight/.test(path)) {
+  if (wave11b || wave10 || wave9 || wave8 || wave7 || wave6 || wave5 || /empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight/.test(path)) {
     assert.ok(await root.locator('#privacy-preview summary').evaluate(a => a.getBoundingClientRect().bottom <= innerHeight), 'Selected privacy disclosure above fold');
   }
   if (await root.locator('#privacy-preview').count()) {
@@ -272,7 +273,7 @@ async function conversionGuide(page, engine, path, width) {
 }
 const p4Source = await readFile('src/lib/conversion-events.ts','utf8');
 const p4Paths = [...p4Source.matchAll(/'(\/[^']+)': '(?:voice|audio|notes|radar)'/g)].map(x => x[1]);
-assert.equal(p4Paths.length,57);
+assert.equal(p4Paths.length,63);
 const targets = [
   ['/', 390, 844, 'voice', 'home-zh-390'], ['/en/', 1440, 1000, 'voice', 'home-en-1440'], ['/en/', 390, 844, 'voice', 'home-en-390'],
   ['/guides/bluetooth-audio-input-troubleshooting/', 390, 844, 'audio', 'audio-zh-390'],

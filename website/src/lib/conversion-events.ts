@@ -60,6 +60,12 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/guides/audio-route-recovery-matrix/': 'audio',
   '/guides/brief-format-change-compatibility/': 'radar',
   '/en/guides/brief-format-change-compatibility/': 'radar',
+  '/guides/note-audio-text-evidence-mapping/': 'notes',
+  '/en/guides/note-audio-text-evidence-mapping/': 'notes',
+  '/guides/reply-draft-restoration-scope/': 'voice',
+  '/en/guides/reply-draft-restoration-scope/': 'voice',
+  '/guides/radar-summary-claim-provenance/': 'radar',
+  '/en/guides/radar-summary-claim-provenance/': 'radar',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',
