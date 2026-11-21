@@ -1,11 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Why a Radar feed URL is rejected: paths, queries and evidence-link differences"
-description: "Review HTTPS, host, credentials, ports and absent query/fragment. A path is allowed, but URL shape is not authentication, read success or JSON acceptance."
+title: "Radar feed URL rejected? Check HTTPS and query parameters | Yihu"
+description: "Radar feeds allow a path but require HTTPS and reject embedded credentials, queries and fragments. A valid URL doesn’t prove the feed can be read."
 lang: en
+privacyPreview: true
+trialLabel: "See a local Radar brief"
 ---
 
-<h2 id="first-answer">A clickable evidence URL is not automatically a valid Radar feed</h2>
+<h2 id="first-answer">Check the feed URL format, then verify the read separately</h2>
+
+First distinguish the configured feed from an evidence link. Check for HTTPS, a nonempty host, and any embedded username or password, query or fragment. Keep credentials out of the preview. If the service requires those URL components, ask its maintainer for an approved feed URL rather than stripping them and assuming it identifies the same source.
 
 CollieRadarFeed.validate permits a path but requires HTTPS, nonempty host, no embedded user/password, no query/fragment. The port may be omitted; if explicitly specified, it must be within 1–65535. Evidence uses separate parseSafeEvidenceURLs rules. Passing feed shape proves neither authentication, reachability, a successful read nor valid snapshot. No source service or credential setup is added.
 

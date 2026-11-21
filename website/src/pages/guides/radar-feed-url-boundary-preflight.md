@@ -1,11 +1,15 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "Radar源URL为什么被拒？路径、查询和证据链接的不同边界"
-description: "按CollieRadarFeed核HTTPS、host、凭据、端口与query/fragment；源可有path，但有效URL不等认证、读取或JSON模型验收。"
+title: "Radar 源地址被拒？先查 HTTPS 和查询参数｜一呼"
+description: "Radar 源可带路径，但必须用 HTTPS，不能带内嵌凭据、查询参数或片段。地址合规不代表读取得到；先看本地简报示例。"
 lang: zh
+privacyPreview: true
+trialLabel: "先看 Radar 简报示例"
 ---
 
-<h2 id="first-answer">证据链接能点，不代表同一地址能作为Radar源</h2>
+<h2 id="first-answer">先核源地址形态，再单独确认读取结果</h2>
+
+先区分你填的是 Radar 源地址还是证据链接。检查源地址是否用 HTTPS、主机是否非空，以及是否附带内嵌用户名密码、query 或 fragment；有凭据的地址不要贴进网页预览。若服务要求参数或凭据，不要擅自删掉再假定是同一来源，先向维护者确认获准的源地址。
 
 CollieRadarFeed.validate允许源URL带路径，但要求HTTPS、非空host、无内嵌用户名密码、无query和fragment；端口可省略，若显式指定则须在1至65535。证据URL另用parseSafeEvidenceURLs，规则不能互换。通过源形态校验仍不证明认证、可达、成功读取或快照有效，本页不新增源服务或凭据配置。
 

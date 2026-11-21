@@ -1,13 +1,17 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before a trade brief reaches PM Radar: JSON types, nulls and missing fields"
-description: "Check required strings/arrays, optional nulls, tasks fallback and source times against the general PM Radar contract. Authorized task-data interpretation, not a trade feed or import converter."
+title: "Radar JSON parses but won’t load? Check nulls and missing fields | Yihu"
+description: "Valid JSON syntax doesn’t guarantee Radar can decode it. Check missing fields, nulls, empty strings and empty arrays separately."
 lang: en
+privacyPreview: true
+trialLabel: "Open the Radar brief preview"
 ---
 
-<h2 id="first-answer">Valid JSON syntax does not establish model decoding or complete business data</h2>
+<h2 id="first-answer">Check field types before interpreting an empty value</h2>
 
-First verify that a file is an authorized export from your own ledger, then check syntax, model types, post-decode validation and business meaning. Yihu reads the existing PM Radar snapshot contract, not arbitrary trade briefs. Missing fields, explicit `null`, empty strings and empty arrays are not interchangeable. This synthetic example explains the contract without connecting to a real source, converting minutes or enabling replies.
+Use an export you’re authorized to review. Check JSON syntax, then required strings and arrays, fields that allow `null`, and the `tasks` fallback. Don’t normalize missing fields, `null`, empty strings and empty arrays to the same value. After decoding, check the source time and what the data means. In the preview, select **JSON** to see the sample structure. The preview doesn’t validate or upload your file.
+
+Yihu reads the existing PM Radar snapshot contract, not arbitrary trade briefs. The synthetic example neither connects to a real source nor enables replies.
 
 ## Four checks, not one valid-JSON label
 

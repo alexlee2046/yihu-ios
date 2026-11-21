@@ -62,6 +62,12 @@ const selected = {
  '/en/guides/note-transcription-retry-checkpoint/':'notes',
  '/guides/recording-segment-review-labels/':'notes',
  '/en/guides/recording-segment-review-labels/':'notes',
+ '/guides/radar-feed-url-boundary-preflight/':'radar',
+ '/en/guides/radar-feed-url-boundary-preflight/':'radar',
+ '/guides/radar-json-null-validation/':'radar',
+ '/en/guides/radar-json-null-validation/':'radar',
+ '/guides/radar-snapshot-batch-comparison/':'radar',
+ '/en/guides/radar-snapshot-batch-comparison/':'radar',
 };
 function harness(opts={}) {
  const path=opts.path??'/en/guides/mobile-agent-decisions/';
@@ -84,9 +90,9 @@ function harness(opts={}) {
  const conversion={}; vm.runInNewContext(conversionCode,{...env,exports:conversion,require(p){if(p==='./preview-events')return preview;if(p==='../data/app-store.json')return store;throw Error('unexpected module');}});
  return {calls,browser,preview,conversion,setChoice(v){choice=v;},notify(){for(const fn of winListeners['yihu:analytics-choice']??[])fn();},click(href,intro=false){for(const fn of docListeners.click??[])fn({target:new Anchor(href,intro)});}};
 }
-test('P4 and D60 use exactly 79 selected routes; no filename heuristics or broad bilingual expansion',()=>{
+test('P4 and D60 use exactly 85 selected routes; no filename heuristics or broad bilingual expansion',()=>{
  const h=harness();assert.deepEqual(JSON.parse(JSON.stringify(h.conversion.conversionGuides)),selected);
- assert.equal(h.preview.previewPaths.length,10);assert.equal(h.conversion.conversionPaths.length,83);
+ assert.equal(h.preview.previewPaths.length,10);assert.equal(h.conversion.conversionPaths.length,89);
  assert.equal(h.conversion.guideConversion('/guides/notification-payload-model-preflight/'),null);
  assert.equal(h.conversion.guideConversion('/en/guides/cross-device-field-presentation/'),null);
  assert.equal(h.conversion.guideConversion('/guides/unknown/'),null);
@@ -155,17 +161,17 @@ test('store wording and telemetry do not add permissions, network, storage write
  for(const forbidden of ['localStorage.setItem','sessionStorage','fetch(','sendBeacon','XMLHttpRequest','setTimeout','preventDefault','user_id','query_string','editor_text'])assert.ok(!event.includes(forbidden),forbidden);
 });
 const built=existsSync(new URL('dist/index.html',root));
-test('built 79 selected intro links retain scope, privacy and unchanged 180/150/30 discovery', {skip:!built},()=>{
+test('built 85 selected intro links retain scope, privacy and unchanged 180/150/30 discovery', {skip:!built},()=>{
  function pages(p='dist/'){return readdirSync(new URL(p,root),{withFileTypes:true}).flatMap(x=>x.isDirectory()?pages(p+x.name+'/'):x.name==='index.html'?[p+x.name]:[]);}
  const all=pages();assert.equal(all.length,180);let count=0,retired=0;
  for(const file of all){const html=read(file),path='/'+file.slice(5).replace(/index\.html$/,'');
   if(html.includes('content="noindex,follow"'))retired++;
   const blocks=[...html.matchAll(/<section\b[^>]*\bdata-guide-conversion\b[^>]*>[\s\S]*?<\/section>/g)];
   assert.equal(blocks.length,Object.hasOwn(selected,path)?1:0,path);if(!blocks.length)continue;count++;
-  const c=harness().conversion.guideConversion(path),block=blocks[0][0];assert.ok(block.includes('href="'+c.demoHref+'"'));assert.ok(block.includes('href="'+store.url+'"'));assert.ok(block.includes(/followup-evidence-minimization|history-retrieval-manual-comparison|handoff-evidence-audit-checklist|first-trial-go-no-go-checklist|bluetooth-audio-input-troubleshooting|app-group-inbox-access-evidence|empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight|meeting-notes-brief-fields|recording-notes-handoff|offline-workbench-handoff-troubleshooting|iphone-agent-voice-drafts|mobile-agent-decisions|multi-note-review-handoff|voice-workbench-vs-radio-chat|multi-project-radar-watch|outdoor-store-voice-preflight|department-minutes-ownership-archive|degraded-handoff-go-no-go|follow-up-context-preflight|watch-voice-queued-ready-boundaries|audio-busy-state-admission|audio-route-recovery-matrix|brief-format-change-compatibility|note-audio-text-evidence-mapping|reply-draft-restoration-scope|radar-summary-claim-provenance|audio-recovery-debounce-boundaries|capture-buffer-pressure-checklist|interruption-recapture-preflight|microphone-permission-sample-contract|multilingual-terms-preflight|note-organization-prompt-not-minutes|note-transcription-retry-checkpoint|recording-segment-review-labels/.test(path) ? 'id="privacy-preview"' : c.sourceContext));
+  const c=harness().conversion.guideConversion(path),block=blocks[0][0];assert.ok(block.includes('href="'+c.demoHref+'"'));assert.ok(block.includes('href="'+store.url+'"'));assert.ok(block.includes(/followup-evidence-minimization|history-retrieval-manual-comparison|handoff-evidence-audit-checklist|first-trial-go-no-go-checklist|bluetooth-audio-input-troubleshooting|app-group-inbox-access-evidence|empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight|meeting-notes-brief-fields|recording-notes-handoff|offline-workbench-handoff-troubleshooting|iphone-agent-voice-drafts|mobile-agent-decisions|multi-note-review-handoff|voice-workbench-vs-radio-chat|multi-project-radar-watch|outdoor-store-voice-preflight|department-minutes-ownership-archive|degraded-handoff-go-no-go|follow-up-context-preflight|watch-voice-queued-ready-boundaries|audio-busy-state-admission|audio-route-recovery-matrix|brief-format-change-compatibility|note-audio-text-evidence-mapping|reply-draft-restoration-scope|radar-summary-claim-provenance|audio-recovery-debounce-boundaries|capture-buffer-pressure-checklist|interruption-recapture-preflight|microphone-permission-sample-contract|multilingual-terms-preflight|note-organization-prompt-not-minutes|note-transcription-retry-checkpoint|recording-segment-review-labels|radar-feed-url-boundary-preflight|radar-json-null-validation|radar-snapshot-batch-comparison/.test(path) ? 'id="privacy-preview"' : c.sourceContext));
   assert.ok(html.indexOf('<h1')<html.indexOf('data-guide-conversion'));assert.ok(html.indexOf('data-guide-conversion')<html.indexOf('id="first-answer"')||path.endsWith('/mobile-agent-decisions/'));
   assert.equal(html.includes('<astro-island'),/\/(bluetooth-audio-input-troubleshooting|recording-notes-handoff|iphone-agent-voice-drafts|multi-project-radar-watch)\/$/.test(path),'only existing preview pages keep their island');
   const target=read('dist'+c.demoHref.split('#')[0]+'index.html');assert.ok(target.includes('id="interactive-preview"'));
  }
- assert.equal(count,79);assert.equal(retired,30);assert.equal([...read('public/sitemap.xml').matchAll(/<loc>/g)].length,150);
+ assert.equal(count,85);assert.equal(retired,30);assert.equal([...read('public/sitemap.xml').matchAll(/<loc>/g)].length,150);
 });

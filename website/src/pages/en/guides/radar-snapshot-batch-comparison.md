@@ -1,13 +1,17 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Compare two task-brief JSON batches: source, scope and field changes"
-description: "Manually compare authorized PM Radar exports after source/scope/identity checks. Nulls or absent records do not establish deletion or completion; no snapshot version store or automatic diff feature."
+title: "How to compare two Radar snapshots without overclaiming | Yihu"
+description: "Match source, scope and record IDs before comparing Radar exports. A record absent from the later batch doesn’t prove deletion or completion."
 lang: en
+privacyPreview: true
+trialLabel: "See fields to review in one Radar brief"
 ---
 
-<h2 id="first-answer">Establish comparability before calling records added, changed or missing</h2>
+<h2 id="first-answer">Match source and scope before comparing records by ID</h2>
 
-Two decodable JSON files can have different sources, permissions or export scopes. Yihu reads your Radar snapshots and bounded cache; this guide does not assert a historical snapshot store or automatic diff interface. For two already authorized exports, first check source/scope, then identities and fields. A record absent from a later batch does not prove deletion, completion or handling.
+For two exports you’re authorized to retain, check source, permissions and filters first. Check batch order using the source timestamp (`date_str`), not the export time. If timestamps match or a refresh failed, verify the order against the source. Until then, record differences without assigning a direction. If scope differs, compare only the verified overlap. Match stable IDs before checking status, priority and empty values. If a record is absent later, report it as not seen in that batch; verify against the source before calling it deleted or complete.
+
+Yihu reads Radar snapshots and a bounded cache; the linked preview lets you switch between preset briefs and view one at a time. It doesn’t provide snapshot history or automatic diffs.
 
 ## A separate task from JSON type validation
 
@@ -34,6 +38,8 @@ Type checks concern one file's shape; batch comparison asks whether two files ar
 
 This is a **manual comparison record, not a Radar import format**, real business data or output from an executed diff tool.
 
+<div role="region" aria-label="Sample batch comparison, scroll horizontally" tabindex="0">
+
 | Item | Earlier sample batch | Later sample batch | Supported wording only |
 | --- | --- | --- | --- |
 | Source scope | Claims sample scope; unverified | Claims sample scope; unverified | Observations remain pending until source/permission checks |
@@ -42,6 +48,8 @@ This is a **manual comparison record, not a Radar import format**, real business
 | sample-A status | In progress | null | Later status is unknown, not an inferred outcome |
 | sample-B | Present | Absent | Could be scope/permission/collection difference; deletion unproven |
 | Display order | sample-B first | sample-A first | Position alone proves neither modification nor priority change |
+
+</div>
 
 After obtaining actual source evidence, compare raw fields only within the verified common scope. This page fetches no real data, writes no fields and sends no notifications. Do not retain customer content or credentials for a public demo. Source files and comparison notes still need authorized storage/access rules.
 

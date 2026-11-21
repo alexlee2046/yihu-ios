@@ -82,6 +82,12 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/note-transcription-retry-checkpoint/': 'notes',
   '/guides/recording-segment-review-labels/': 'notes',
   '/en/guides/recording-segment-review-labels/': 'notes',
+  '/guides/radar-feed-url-boundary-preflight/': 'radar',
+  '/en/guides/radar-feed-url-boundary-preflight/': 'radar',
+  '/guides/radar-json-null-validation/': 'radar',
+  '/en/guides/radar-json-null-validation/': 'radar',
+  '/guides/radar-snapshot-batch-comparison/': 'radar',
+  '/en/guides/radar-snapshot-batch-comparison/': 'radar',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',
