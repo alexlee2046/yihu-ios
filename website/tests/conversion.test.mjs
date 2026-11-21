@@ -202,6 +202,10 @@ test('built selected intro links retain scope, privacy and unchanged 180/150/30 
   const c=harness().conversion.guideConversion(path),block=blocks[0][0];
   assert.ok(block.includes('href="'+c.demoHref+'"'),path);
   assert.ok(block.includes('href="'+store.url+'"'),path);
+  if(finalPaths.includes(path)) {
+   const nav=html.match(/<nav class="guide-context"[^>]*>[\s\S]*?<\/nav>/)?.[0];
+   assert.ok(nav?.includes('href="'+c.demoHref.split('#')[0]+'"'),path);
+  }
   const sourcePath='src/pages'+path.slice(0,-1);
   const source=read(sourcePath+(existsSync(new URL(sourcePath+'.md',root))?'.md':'.astro'));
   const disclosed=/^privacyPreview: true$/m.test(source)||/privacyPreview=\{true\}/.test(source);

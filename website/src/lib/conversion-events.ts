@@ -43,6 +43,11 @@ const bilingualGuides: Record<string, BuyerScenario> = {
   'workbench-origin-page-boundaries': 'voice',
 };
 
+const finalGuidePaths = Object.fromEntries(Object.entries(bilingualGuides).flatMap(([slug, scenario]) => [
+  [`/guides/${slug}/`, scenario],
+  [`/en/guides/${slug}/`, scenario],
+]));
+
 // Explicit P4 and D60 guide routes only. "brief" uses the existing "radar" event value.
 export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/audio-route-recovery-matrix/': 'audio',
@@ -136,10 +141,7 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/note-removal-retention-boundaries/': 'notes',
   '/guides/note-segment-join-provenance/': 'notes',
   '/en/guides/note-segment-join-provenance/': 'notes',
-  ...Object.fromEntries(Object.entries(bilingualGuides).flatMap(([slug, scenario]) => [
-    [`/guides/${slug}/`, scenario],
-    [`/en/guides/${slug}/`, scenario],
-  ])),
+  ...finalGuidePaths,
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',
@@ -163,7 +165,8 @@ const copy = {
 export function guideConversion(path: string) {
   if (!Object.hasOwn(conversionGuides, path)) return null;
   const scenario = conversionGuides[path], language = path.startsWith('/en/') ? 'en' : 'zh';
-  return { ...copy[language], scenario, demoLabel: copy[language].labels[scenario], demoHref: (language === 'en' ? '/en/' : '/') + 'guides/' + pillars[scenario] + '/#interactive-preview', storeHref: store.url };
+  const pillarHref = (language === 'en' ? '/en/' : '/') + 'guides/' + pillars[scenario] + '/';
+  return { ...copy[language], scenario, demoLabel: copy[language].labels[scenario], demoHref: pillarHref + '#interactive-preview', relatedGuideHref: Object.hasOwn(finalGuidePaths, path) ? pillarHref : undefined, storeHref: store.url };
 }
 function pageContext(path: string) {
   if (!conversionPaths.includes(path)) return null;
