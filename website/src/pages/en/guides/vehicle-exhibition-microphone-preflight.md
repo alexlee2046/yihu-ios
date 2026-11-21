@@ -1,19 +1,20 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before recording at a parked car or exhibition, test one phrase"
-description: "Move somewhere safe where recording is permitted. Choose the intended microphone, record a synthetic phrase and play it back. Check the sound and text before starting your own note."
+title: "Parked car or busy exhibition? Test the microphone first | Yihu"
+description: "When safely parked or out of foot traffic, test one harmless phrase and check the audio source and text before taking real notes."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Start with one useful check</h2>
+<h2 id="first-answer">When it is safe and permitted, record a short input test before taking notes</h2>
 
-Move somewhere safe where recording is permitted. Choose the intended microphone, record a synthetic phrase and play it back. Check the sound and text before starting your own note.
+Move somewhere safe where recording is permitted. Use a recorder that supports playback to compare the intended input against the phone mic. Then try the same harmless phrase in Yihu and check the draft before taking real notes.
 
 ## Try this order
 
 1. Park fully or leave the exhibition aisle; confirm participant consent and recording scope.
 2. Pause other playback and calls. Inspect available input options separately from output.
-3. Record “Do not send these 3 sample items; keep a draft,” play it back and check the number and negation in the text.
+3. Use “Do not send these 3 sample items; keep a draft” for the microphone comparison. In Yihu, check the number and negation in the recognized text; clear text alone does not identify which mic was active.
 4. Check the intended unsent draft. After changing devices or finishing a call, repeat a short sample.
 
 <div role="region" aria-label="Choose your next step" tabindex="0">

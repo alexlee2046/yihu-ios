@@ -1,6 +1,48 @@
 import { analyticsContext, previewPaths, type BuyerScenario } from './preview-events';
 import store from '../data/app-store.json';
 
+// Publish both language routes only for these explicitly listed final-batch guides.
+const bilingualGuides: Record<string, BuyerScenario> = {
+  'attachment-name-metadata-provenance': 'notes',
+  'batch-change-record-retention': 'radar',
+  'carrier-redaction-archive-matrix': 'notes',
+  'evidence-link-admission-preflight': 'radar',
+  'export-encoding-delimiter-preflight': 'notes',
+  'file-chunk-bridge-not-upload-receipt': 'voice',
+  'focused-editable-admission-review': 'voice',
+  'history-generation-receipt-priority': 'radar',
+  'history-reference-integrity-review': 'radar',
+  'host-bridge-outcome-boundaries': 'voice',
+  'keyboard-acknowledgement-scope': 'voice',
+  'list-preview-not-transcript-archive': 'notes',
+  'local-file-protection-scope': 'notes',
+  'multi-role-approval-receipt-checklist': 'notes',
+  'navigation-cancel-process-reload-boundaries': 'voice',
+  'near-field-policy-route-review': 'audio',
+  'notification-disable-unregister-pending': 'radar',
+  'notification-payload-model-preflight': 'radar',
+  'pcm-stream-end-boundaries': 'audio',
+  'privacy-declaration-evidence-scope': 'voice',
+  'recognition-error-layer-review': 'audio',
+  'recognition-pass-parameter-budget': 'voice',
+  'reminder-link-pending-origin-routing': 'voice',
+  'replaceable-voice-preview-review': 'voice',
+  'reply-request-receipt-mapping': 'radar',
+  'reply-transport-budget-preflight': 'radar',
+  'share-batch-item-preflight': 'voice',
+  'share-manifest-visibility-review': 'voice',
+  'shortcut-toggle-request-lifetime': 'voice',
+  'source-switch-cache-isolation': 'radar',
+  'status-alias-approval-boundaries': 'radar',
+  'timezone-timestamp-review': 'radar',
+  'vehicle-exhibition-microphone-preflight': 'audio',
+  'voiceprint-enrollment-profile-version-review': 'audio',
+  'voiceprint-filter-not-authorization': 'audio',
+  'watch-open-request-ui-boundaries': 'radar',
+  'web-read-aloud-microphone-boundaries': 'voice',
+  'workbench-origin-page-boundaries': 'voice',
+};
+
 // Explicit P4 and D60 guide routes only. "brief" uses the existing "radar" event value.
 export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/audio-route-recovery-matrix/': 'audio',
@@ -94,6 +136,10 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/note-removal-retention-boundaries/': 'notes',
   '/guides/note-segment-join-provenance/': 'notes',
   '/en/guides/note-segment-join-provenance/': 'notes',
+  ...Object.fromEntries(Object.entries(bilingualGuides).flatMap(([slug, scenario]) => [
+    [`/guides/${slug}/`, scenario],
+    [`/en/guides/${slug}/`, scenario],
+  ])),
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',

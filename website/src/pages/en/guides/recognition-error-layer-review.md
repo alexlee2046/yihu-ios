@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "No text does not mean a broken model: capture, input, model and empty-result layers"
-description: "Review error mapping and different emptyTranscript callers. A notice proves neither silence nor corruption; no recording, model deletion or fallback is performed."
+title: "Recording but no transcript? Find which step failed | Yihu"
+description: "An empty result does not identify a broken model. Check permission, captured sound and model readiness before retrying with a harmless sample."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">The same missing-text symptom can come from different layers</h2>
+<h2 id="first-answer">Check that you captured usable sound before blaming the model</h2>
 
 The controller separates permission denial, recording/PCM failures and missing/load-model errors. ASR checks nonempty finite samples/length, and empty final text produces emptyTranscript. Short speech maps empty results to recording failure; long notes can skip text and advance frames. Notices are categories, not complete diagnosis or proof the original contained nothing.
 

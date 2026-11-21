@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "跨时区简报时间怎样核对？来源日期、Unix任务时间与载体时间分账"
-description: "按现有UTC+08 date_str格式区分来源读取、任务更新时间、手机请求和Watch封包；提供人工跨日核对，不新增时区转换器或刷新SLA。"
+title: "iPhone 和 Watch 上的 Radar 时间为什么不同？ | 一呼"
+description: "来源时间、任务时间和 Watch 采集时间记录的是不同事件。对照前先明确事件及其时区。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">先问这个时间描述哪件事，再比较时区、单位与先后</h2>
+<h2 id="first-answer">先找到时间对应的事件和时区，再做对照</h2>
 
 一呼当前Radar把 `date_str` 按固定 `yyyy-MM-dd HH:mm`、UTC+08:00解析，来源最后成功读取时间不能用手机请求、缓存命中或文件修改时间替换。任务 `timestamp` 是另外的可选Unix时间字段；Watch的 `sourceDate` 与 `capturedAt` 又有各自含义。跨时区核对应先分事件与契约，不把所有“时间”都当同一种数字。
 

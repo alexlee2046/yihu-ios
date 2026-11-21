@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Does attachment 2 mean version two? Batch names, MIME and byte-count evidence"
-description: "Review case-insensitive batch-local naming, extension-derived MIME and byteCount. Suffixes are not revisions/deduplication; metadata is not hash or truth."
+title: "Does “report 2” mean a new attachment version? | Yihu"
+description: "A numbered name avoids a collision in one batch. Check the original and its revision before using the copy as evidence."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">A staged rename distinguishes files; it does not certify versions, deduplication or contents</h2>
+<h2 id="first-answer">Compare the original files, not the suffix</h2>
 
 Each save creates batch-local usedNames. uniqueName detects conflicts case-insensitively and preserves files under numbered names instead of merging/dropping contents. contentType comes from the extension; byteCount estimates source size. None establishes business version, actual format, byte identity or redaction. No archive deduplication/inspection service is added.
 

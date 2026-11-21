@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Does an enabled keyboard mean ready? Local state, asynchronous ack and page focus"
-description: "Review optimistic state, keyboardRequest ordering and Bool acknowledgement. Display/focus is not universal input support, draft storage or sending."
+title: "Keyboard enabled, but the workbench won’t take text? | Yihu"
+description: "The toggle can update before the page responds. Check the intended draft field and whether the page acknowledged the request."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Local enabled/visible is not page acknowledgement or inserted text</h2>
+<h2 id="first-answer">Separate the visible switch from the page’s acknowledgement and the draft text</h2>
 
 setKeyboardEnabled updates keyboardEnabled/keyboardVisible before awaiting enqueueKeyboard's Bool result, then rejects stale results through keyboardRequest. Failure can revert state/show an entry notice. dismissKeyboard requests UIKit end-editing and queues page disable. Local hiding proves neither immediate page acknowledgement nor saved/sent drafts.
 

@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "证据文本为什么没变可点链接？分隔、HTTPS与去重准入核对"
-description: "按safeEvidenceURLs核分词、边界标点、HTTPS、无内嵌凭据与端口；形态筛选不是安全扫描、真实性认证或完整Markdown解析。"
+title: "Radar 证据里的网址为什么点不了？ | 一呼"
+description: "Radar 只会从文本里提取符合条件的 HTTPS 网址。链接格式、访问安全和证据可信度要分开核对。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">能点只代表通过当前形态筛选，不代表证据可信或已脱敏</h2>
+<h2 id="first-answer">先查原文里的 HTTPS 地址，再单独核验证据来源</h2>
 
 Radar保留evidence文字，再从中筛选可点URL。当前解析按空白/换行与列出的分隔符拆项，去边界标点，只接纳HTTPS、非空host、无内嵌用户名密码及有效端口，再按absoluteString去重。它不是完整Markdown解析器、安全扫描或业务证据认证。
 

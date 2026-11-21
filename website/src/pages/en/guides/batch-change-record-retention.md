@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Retain batch-change review evidence: originals, consumer version and decision scope"
-description: "After batch/format comparison, manually preserve the mapping between before/after material, rules and approval. No snapshot version store, immutable log, migration or archive service."
+title: "What should you keep after comparing two Radar exports? | Yihu"
+description: "Keep the original batches, the reader version and the scope of the review. A summary does not replace those records."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Retain a reviewable relationship, not a new summary pretending to be an original batch</h2>
+<h2 id="first-answer">Save both original batches and record which version read them</h2>
 
 After comparing exports or formats, a team still needs to identify the original materials, consumer version and confirmed scope behind its conclusion. Record these relationships in existing authorized tools. Yihu supplies no complete snapshot version store, migration ledger or immutable audit chain here. Existing cache/reply history has its own limits, not permanent archives of every batch.
 

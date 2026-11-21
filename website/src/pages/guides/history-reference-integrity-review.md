@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "历史反馈怎样关联原回复？目标、位置与references结构核查"
-description: "核来源历史的目标组件、entry身份与明确引用；结构合法不证明已读/已处理，引用文字相似不替代关联，不新增历史数据库。"
+title: "怎样确认 Radar 历史里的反馈对应哪条回复？ | 一呼"
+description: "同时核对回复引用、目标和条目顺序。时间较晚的文字不一定在回复原消息。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">有后续文字不等于关联反馈，明确引用也不代表已处理</h2>
+<h2 id="first-answer">先把明确引用对回原回复，再标记为已反馈</h2>
 
 CollieRadarReplyHistory只把位置晚于原reply、kind为update且references明确指向request_id或非draft回复URL的记录关联为反馈。历史还校验目标、条目身份、位置与URL组件。它是只读来源结构，不是已读、业务完成或真实性认证；本文不新建历史库或关联引擎。
 

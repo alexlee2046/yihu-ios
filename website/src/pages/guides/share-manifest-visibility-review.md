@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "manifest出现后代表什么？本地批次可见点与残留目录核查"
-description: "核先复制后写manifest、pending解码及缺manifest旧目录清理；可见不等所有文件已复核或服务提交，3600秒非统一保留期。"
+title: "分享收件箱显示批次，附件就都在吗？ | 一呼"
+description: "不一定。显示批次只说明本地清单可读。逐项确认附件还可打开，别把清单当成送达回执。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">manifest是本地批次可见条件，不是服务回执或不可变归档</h2>
+<h2 id="first-answer">打开暂存附件逐项核对，不要只看批次计数</h2>
 
 共享收件箱save先复制文件、组装条目，最后atomic写manifest.json；pending读取并解码manifest后列出批次。该列表并不在此逐个验证附件仍存在或内容已审核。后续update可重写manifest，所以它不是服务器提交、送达、业务批准或不可变归档凭证。
 

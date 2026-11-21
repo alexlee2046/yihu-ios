@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Associate history feedback: target, position and references checks"
-description: "Review target components, entry identity and explicit references. Valid structure is not read/handled status, and similar text cannot replace association."
+title: "How can you tell which Radar reply a follow-up refers to? | Yihu"
+description: "Check the reply reference, target and order together. Later text alone does not prove that the original reply got a response."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Later text is not necessarily feedback; an explicit link is not completion</h2>
+<h2 id="first-answer">Match the explicit reference to the original reply before marking it answered</h2>
 
 CollieRadarReplyHistory associates only later-position updates whose references explicitly identify the reply's request_id or, outside draft mode, its URL. History also checks target, entry identity, positions and URL components. This read-only structure is not reading, completion or truth certification. No history database/association engine is added.
 

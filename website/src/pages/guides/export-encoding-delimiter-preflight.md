@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "笔记和Radar简报导出前：编码、换行、引号与分隔符核对"
-description: "区分UTF-8 Markdown、共享收件箱清单和源JSON，检查字符/字节与字符串转义；词表分隔规则不是CSV或JSON转换协议，不新增转码器。"
+title: "笔记交接前，怎么核对 Markdown、JSON 和分隔符？ | 一呼"
+description: "先确认文件格式和接收工具，再判断逗号或换行是否有问题。Markdown 笔记和 Radar JSON 快照不能互换。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">先确认导出载体和消费者，不能把所有逗号都当作字段分隔</h2>
+<h2 id="first-answer">先确认接收工具要求什么格式，再动文件内容</h2>
 
 一呼较长笔记的现有暂存路径写UTF-8 Markdown；共享收件箱也有自己的内部JSON清单，而Radar读另一套快照模型。三者不能因“都是文字文件”而互换。编码、换行、引号转义、字符数和字段契约须分别核对；本文不提供CSV导出、转码器或自动修复真实文件功能。
 

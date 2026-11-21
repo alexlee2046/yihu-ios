@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "声纹结果能证明什么？便捷过滤、未就绪与账户权限分账"
-description: "源码明确本地声纹是便捷过滤而非认证；match/bypass/unavailable与0.70阈值不构成实名、概率、签名或操作授权，不运行采样或登记。"
+title: "声纹匹配就能授权一呼执行操作吗？ | 一呼"
+description: "不能。匹配只是本地便捷过滤，不验证身份，也不授予发送权限。另行核对账号和目标。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">声纹match不是身份认证，bypass也不是成功匹配</h2>
+<h2 id="first-answer">即使声纹匹配，也要单独核对账号权限和交接目标</h2>
 
 CollieVoiceprint源码明确写明“便捷过滤、不是认证，误接受始终可能”。其Decision有bypass、match、mismatch、unavailable；未启用时bypass不表示做过比较。数值阈值0.70也不是70%身份概率。任何过滤结果都不能代替账户、目标权限、手机确认或实际执行回执。
 

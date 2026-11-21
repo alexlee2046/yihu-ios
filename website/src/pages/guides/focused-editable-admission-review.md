@@ -1,14 +1,15 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "焦点框为什么不能接收录文？DOM可编辑、可用与草稿准入"
-description: "核受守卫DOM的元素类型、连接/禁用/只读例外与已知Collie草稿条件；焦点非授权或通用表单支持，不操作网页。"
+title: "光标已经在输入框里，为什么还是填不进录文？ | 一呼"
+description: "有光标不等于字段可用。重试前，先确认目标草稿框能编辑，且属于支持的输入场景。"
 lang: zh
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">有焦点只是一项条件，不是任意输入框都能接收原生文字</h2>
+<h2 id="first-answer">先在目标草稿框手动输入一句无敏感信息的示例</h2>
 
-现有DOM适配关注textarea、指定text类input和contenteditable，并进一步核连接、禁用、只读/键盘策略例外、inert/aria状态及可见性。已知Collie结构还须证明单一草稿模式。不是看到框或placeholder就自动识别所有表单，未知布局也不应被假定兼容。
+有焦点只是一项条件，不代表任意字段都能接收录文。 现有DOM适配关注textarea、指定text类input和contenteditable，并进一步核连接、禁用、只读/键盘策略例外、inert/aria状态及可见性。已知Collie结构还须证明单一草稿模式。不是看到框或placeholder就自动识别所有表单，未知布局也不应被假定兼容。
 
 ## 与origin、桥回执和键盘的区别
 

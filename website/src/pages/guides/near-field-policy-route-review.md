@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "近讲偏好不等于路由实测：HFP允许、会话模式与当前输入核对"
-description: "按现有近讲设置和短语音启动策略核playAndRecord/voiceChat、HFP允许与输入图；不承诺强制选麦、高噪性能或所有录音路径一致。"
+title: "打开近讲模式，就会用蓝牙麦克风吗？ | 一呼"
+description: "不一定。允许蓝牙路线不等于已选中它；先核对实际输入，再用无敏感信息的短句做对比。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">allowBluetoothHFP是允许条件，不是外设已被选中或更准确的证明</h2>
+<h2 id="first-answer">以实际输入为准，不要只看近讲开关</h2>
 
 现有短语音在start读取近讲偏好。启用策略采用playAndRecord、voiceChat及mixWithOthers/allowBluetoothHFP；关闭策略为record/default。输入图策略也随该偏好分支。它们是实现选择，不是当前硬件已成功启用、强制选择某支麦克风或实测准确率；本页不新增降噪/选麦服务。
 

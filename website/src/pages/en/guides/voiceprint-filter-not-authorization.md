@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "What voiceprint decisions prove: convenience filtering is not identity or authority"
-description: "Source explicitly calls local voiceprint filtering non-authentication. match/bypass/unavailable and threshold 0.70 are not identity probability, signing or operation permission."
+title: "Does a voiceprint match authorize a Yihu action? | Yihu"
+description: "No. A match is a local convenience filter, not proof of identity or permission to send. Confirm the account and target separately."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Voiceprint match is not authentication; bypass is not a successful comparison</h2>
+<h2 id="first-answer">Verify account authority and the destination even after a match</h2>
 
 CollieVoiceprint explicitly describes a local convenience filter, not authentication, with false positives possible. Decision includes bypass, match, mismatch and unavailable. Disabled comparison can bypass without matching. Threshold 0.70 is not a 70% identity probability. No decision replaces account/target authority, phone confirmation or execution receipts.
 

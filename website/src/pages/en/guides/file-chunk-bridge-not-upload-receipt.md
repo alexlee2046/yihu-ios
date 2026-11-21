@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "What file chunks establish: a 768 KiB bridge is not resumable upload or a receipt"
-description: "Review native base64 reads, JS parts and page inputs. Chunking is not server streaming, constant whole-process memory or delivery; no transfer service added."
+title: "Does a file appearing in the draft mean it uploaded? | Yihu"
+description: "No. A WebKit file bridge can place an attachment into a page field without proving that the server received it."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Chunks crossing a WebKit bridge do not prove the destination saved a complete file</h2>
+<h2 id="first-answer">Look for the destination’s receipt, not the presence of a file in the draft</h2>
 
 attachFiles reads up to 768 KiB raw data per chunk, base64-encodes bridge arguments, then asks the page's own file control to accept them. JS accumulates parts and constructs File objects. Chunking proves neither constant memory everywhere nor server streaming/resume. attached is a page-stage result, not remote completion or sending.
 

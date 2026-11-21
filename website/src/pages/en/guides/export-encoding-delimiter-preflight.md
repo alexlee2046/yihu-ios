@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before exporting notes or Radar briefs: encoding, line breaks and delimiters"
-description: "Separate UTF-8 Markdown, internal share manifests and source JSON. Check characters/bytes and string escaping without a CSV exporter, universal transcoder or file-repair feature."
+title: "Before exporting notes: Markdown, JSON and delimiter checks | Yihu"
+description: "Check the file type and receiving tool before changing commas or line breaks. A Markdown note and a Radar JSON snapshot are not interchangeable."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Identify carrier and consumer first; commas are not universally field separators</h2>
+<h2 id="first-answer">Check what format the receiving tool expects before editing the file</h2>
 
 The existing longer-note staging path writes UTF-8 Markdown. The share inbox also has an internal JSON manifest, while Radar consumes another snapshot model. Being text files does not make them interchangeable. Encoding, newlines, escaping, character counts and field contracts need separate review. No CSV exporter, transcoder or automatic repair of live files is added.
 

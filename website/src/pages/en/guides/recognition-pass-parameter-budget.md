@@ -1,12 +1,13 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "When recognition settings apply: per-pass snapshots and output-token budgets"
-description: "Review language/usesTerms/maxTokens snapshots, default 448 and 64–1024 bounds. Tokens are not characters/audio seconds or accuracy, and no live/cloud tuning is added."
+title: "When do speech settings take effect, and what do tokens limit? | Yihu"
+description: "Settings are read per transcription pass. The token ceiling limits text output, not recording duration or guaranteed accuracy."
 lang: en
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">Per-pass settings are not a permanently fixed session or real-time tuning feature</h2>
+<h2 id="first-answer">Compare two new passes with the same short phrase and one changed setting</h2>
 
 Each Qwen3OnDeviceTranscriber.transcribe reads language, usesTerms and maxTokens preferences for that pass. Maximum output defaults to 448 tokens with a clamped 64–1024 range. Tokens are neither character count nor audio duration. Raising the ceiling does not directly improve accuracy and remains model-cache bounded. Busy UI disables the section; no live capture-time tuning is added.
 

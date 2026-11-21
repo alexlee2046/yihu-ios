@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "关闭历史是否撤回提交？迟到历史、generation与已记录回执优先级"
-description: "核历史读取代际与recorded后失效旧读取；关闭只读视图不等取消写入，旧响应不是新证据，不新增回执或归档服务。"
+title: "关闭 Radar 历史，会撤回刚提交的回复吗？ | 一呼"
+description: "不会。关闭只读界面不能撤回写入，较早发起的历史查询也不能覆盖已确认的回执。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">关闭历史回显不撤回提交，先发出的历史也不能抢走已确认回执</h2>
+<h2 id="first-answer">准备处理旧查询结果前，先核对已确认的回执</h2>
 
 历史读取捕获historyGeneration，返回后还核historyActive、当前来源、generation和任务取消。cancelHistory更新本地活动/代际；写回复complete也使旧历史代际失效，避免预提交读取抢在已确认回执后生效。它不是服务器撤回，不能把迟到/被忽略的历史当最新absent或业务状态。
 

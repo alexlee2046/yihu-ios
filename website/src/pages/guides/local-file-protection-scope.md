@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "本地文件保护能证明什么？atomic、备份排除与不同载体分账"
-description: "按路径核本地写入选项；atomic不等端到端加密、排除备份不等全无副本，未显式选项不代表明文，不新增安全或恢复认证。"
+title: "iOS 本地文件保护也覆盖分享出去的副本吗？ | 一呼"
+description: "不会自动覆盖。先核对本地文件的写入和备份设置，再单独确认交接副本的去向。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">本地写选项不能替代传输、远端、备份与保留规则</h2>
+<h2 id="first-answer">分清哪份留在手机、哪份交给其他工具</h2>
 
 源码不同路径使用不同文件选项：部分iOS缓存/待核/临时图片写入带completeFileProtection，收件箱manifest和笔记元数据有atomic写入；部分目录设置备份排除。必须按实际路径核，不能把单个选项扩展为端到端加密、全部文件统一保护或所有副本消失。
 

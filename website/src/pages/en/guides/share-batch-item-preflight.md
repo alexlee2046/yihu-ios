@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Review every item before sharing a mixed batch of text, links and attachments"
-description: "Tray counts do not establish per-item content/permission review. Files-first and later text insertion are separate stages, not bulk sending, atomic rollback or batch approval."
+title: "Sharing text, links and files together? Check each draft item | Yihu"
+description: "Files and text can reach the draft in different steps. Check what actually arrived and remove unintended items before sending."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">A batch is a staging container, not per-item validation or atomic delivery</h2>
+<h2 id="first-answer">Review the destination draft item by item after placement</h2>
 
-The share tray can retain multiple batches containing text, links and files. Its total is a count. Existing placement handles files first, updates/removes their staged items after attachment, then inserts non-file text. Errors can stop at a stage. Review each item's content, type, authority and destination instead of calling one placement business acceptance, a transaction or bulk message sending.
+Staging is not per-item validation or atomic delivery. The share tray can retain multiple batches containing text, links and files. Its total is a count. Existing placement handles files first, updates/removes their staged items after attachment, then inserts non-file text. Errors can stop at a stage. Review each item's content, type, authority and destination instead of calling one placement business acceptance, a transaction or bulk message sending.
 
 ## Different from multi-note review and completion auditing
 

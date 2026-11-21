@@ -1,14 +1,15 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "Watch点了在手机打开就打开了吗？queued、前台路由与本地任务核对"
-description: "核open基本消息确认与phone前台二次验证；sourceToken不当登录权限，不套用voice/draft的taskToken门，queued非UI/业务成功。"
+title: "Watch 显示已排队，Radar 任务已在 iPhone 打开吗？ | 一呼"
+description: "已排队只表示打开请求已受理。要继续操作，先在手机上核对实际显示的是不是那条任务。"
 lang: zh
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">接纳打开请求，不等手机已经显示正确事项</h2>
+<h2 id="first-answer">以 iPhone 显示的任务为准，不要只看 Watch 回执</h2>
 
-open消息的queued仅确认基本字段形状，随后才设置openRequest。phone须前台，再核UUID、当前本地snapshot事项、待处理状态及sourceToken，且通过切换/交接门才呈现。不能把queued当已打开，也不能把voice/draft路径的taskToken检查搬到这条open路径。打开不是提交或审批。
+已排队不等手机已经显示正确事项。 open消息的queued仅确认基本字段形状，随后才设置openRequest。phone须前台，再核UUID、当前本地snapshot事项、待处理状态及sourceToken，且通过切换/交接门才呈现。不能把queued当已打开，也不能把voice/draft路径的taskToken检查搬到这条open路径。打开不是提交或审批。
 
 ## 与跨端字段、Watch语音和草稿恢复的区别
 

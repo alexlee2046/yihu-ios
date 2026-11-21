@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Why evidence text has no clickable link: tokenization, HTTPS and URL admission"
-description: "Review safeEvidenceURLs splitting, edge punctuation, HTTPS, credentials, ports and deduplication. Shape filtering is not security scanning, truth or full Markdown parsing."
+title: "Why isn’t a Radar evidence URL clickable? | Yihu"
+description: "Radar extracts eligible HTTPS URLs from text. Check the link’s shape separately from whether the destination is safe or supports the claim."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Clickable means admitted shape, not trusted, redacted evidence</h2>
+<h2 id="first-answer">Check the HTTPS address as written, then verify the source separately</h2>
 
 Radar retains evidence text and extracts clickable URLs. Parsing splits whitespace/newlines and listed delimiters, trims edge punctuation, requires HTTPS/nonempty host/no embedded user-password/valid port, then deduplicates by absoluteString. This is not full Markdown parsing, security scanning or business-evidence certification.
 

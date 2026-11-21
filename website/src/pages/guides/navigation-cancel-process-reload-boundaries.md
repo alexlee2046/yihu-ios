@@ -1,12 +1,13 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "取消导航等于断网吗？加载替换、转圈复核与进程重载边界"
-description: "按error domain/code区分取消/策略交接与真实加载错误；500ms复核和15秒防重载环不是恢复SLA，不保证表单或服务动作恢复。"
+title: "工作台显示导航取消，就是断网了吗？ | 一呼"
+description: "不一定。新加载可能替换了旧加载。判断断网或草稿丢失前，先检查当前页面。"
 lang: zh
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">导航被替换、页面加载失败与Web进程关闭，不是同一结论</h2>
+<h2 id="first-answer">先看当前页面是否仍报错，再判断连接状态</h2>
 
 isSupersededNavigation过滤NSURLErrorDomain的取消和WebKitErrorDomain的102；它们不直接设置加载失败卡片。延迟500ms仅在没有继续加载/错误时复核spinner。Web进程终止则尝试reload；连续终止间隔小于15秒会停下提示手动处理。这些是UI控制，不是网络、草稿或服务动作恢复保证。
 

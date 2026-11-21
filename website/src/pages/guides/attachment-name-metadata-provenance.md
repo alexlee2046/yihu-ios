@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "同名附件加2是新版本吗？批次命名、MIME与大小元数据核对"
-description: "核uniqueName不区分大小写的局部冲突处理、扩展名类型和byteCount；编号非业务版本/内容去重，名称大小不等hash或真实性。"
+title: "附件名带“2”，就是新版本吗？ | 一呼"
+description: "编号只为避免同批次重名。要确认版本，先核对原件和修订记录。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">暂存重命名只是区分文件，不是版本、去重或内容认证</h2>
+<h2 id="first-answer">先比对附件原件，不要凭文件名尾号判断版本</h2>
 
 收件箱save为每个批次新建usedNames，uniqueName不区分大小写检测命名冲突，保留文件并加数字区分；不是丢弃或合并同名内容。contentType由扩展名推断，byteCount为来源大小统计。它们都不能证明业务版本、真实格式、字节一致或已脱敏，本页不新增档案去重/鉴定服务。
 

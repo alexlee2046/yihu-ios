@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "通知负载源码能证明什么？事件模型不等于推送已上线"
-description: "核Radar事件模型的精确键、版本、UUID与eventKey形状；类型存在不证明订阅、送达、导航或写入能力，不新增推送服务。"
+title: "Radar 通知负载格式正确，就能证明推送可用吗？ | 一呼"
+description: "不能。通过格式校验只说明事件结构符合要求；订阅、送达和打开正确条目要分别验证。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">只验出事件形状，不等于验过端到端通知或动作授权</h2>
+<h2 id="first-answer">把负载校验、实际送达和打开条目分开查</h2>
 
 当前源码的CollieRadarNotificationEvent解析yihuRadar负载，约束version、subscriptionId与eventKey。它表示不透明事件意图，不是任意URL或写命令。仅看到这个模型，不能宣布订阅/推送/点击导航已完整接入或线上送达；本页不新建推送基础设施。
 

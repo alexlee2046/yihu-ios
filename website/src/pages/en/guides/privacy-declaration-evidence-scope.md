@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "What privacy manifests and permission copy prove: declarations versus runtime and sites"
-description: "Review current API-use categories and Info.plist copy, not runtime network auditing, third-party zero collection or App Store approval. No compliance certification."
+title: "Does a privacy manifest show where your voice draft goes? | Yihu"
+description: "No. The manifest covers source declarations. Follow the actual data path from microphone to draft to understand what stays local and what may leave."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">A declaration is not whole-path acceptance or proof that data never leaves</h2>
+<h2 id="first-answer">Trace recognition and draft handoff separately from the source declaration</h2>
 
 Current PrivacyInfo.xcprivacy lists UserDefaults/FileTimestamp accessed-API categories and reason codes. Info.plist separately contains microphone/camera purpose text and other configuration. These are source declarations/copy, not audits of every runtime entry, third-party page or later handoff. They establish neither zero collection, App Store review nor legal/privacy certification.
 
