@@ -4,12 +4,12 @@ title: "Radar JSON parses but won’t load? Check nulls and missing fields | Yih
 description: "Valid JSON syntax doesn’t guarantee Radar can decode it. Check missing fields, nulls, empty strings and empty arrays separately."
 lang: en
 privacyPreview: true
-trialLabel: "See a Radar JSON example"
+trialLabel: "Open the Radar brief preview"
 ---
 
 <h2 id="first-answer">Check field types before interpreting an empty value</h2>
 
-Use an export you’re authorized to review. Check JSON syntax, then required strings and arrays, fields that allow `null`, and the `tasks` fallback. Don’t normalize missing fields, `null`, empty strings and empty arrays to the same value. After decoding, check the source time and what the data means. The preview shows structure; it doesn’t validate or upload your file.
+Use an export you’re authorized to review. Check JSON syntax, then required strings and arrays, fields that allow `null`, and the `tasks` fallback. Don’t normalize missing fields, `null`, empty strings and empty arrays to the same value. After decoding, check the source time and what the data means. In the preview, select **JSON** to see the sample structure. The preview doesn’t validate or upload your file.
 
 Yihu reads the existing PM Radar snapshot contract, not arbitrary trade briefs. The synthetic example neither connects to a real source nor enables replies.
 
