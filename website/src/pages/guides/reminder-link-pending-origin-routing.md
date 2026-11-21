@@ -1,12 +1,13 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "提醒点开为什么还没跳转？pendingURL、语音保护与已保存来源"
-description: "核Hermes提醒URL门、未填录文/笔记阻塞、当前或已保存origin及connected后消费；不添加新服务器，不保证登录/会话或服务完成。"
+title: "点了提醒，工作台为什么没有跳转？ | 一呼"
+description: "提醒链接可以先等待，不代表已经打开。先确认是否有草稿交接在进行，再核对目标工作台是否已经保存。"
 lang: zh
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">点击提醒只产生待处理链接，不等目标会话已经可用</h2>
+<h2 id="first-answer">先保留或处理当前草稿，再核对提醒目标</h2>
 
 Hermes提醒先经既有HTTPS/host解析门并设置pendingURL。界面路由还核笔记、语音取消/交接/待填文字等条件；当前源要connected后才消费，其他源只允许已保存origin，未知源会丢弃而不新建服务器。点开不证明登录、会话存在或业务动作成功，也不代表自带通用推送服务。
 

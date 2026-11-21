@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "What local file options prove: atomic writes, backup exclusion and carrier scope"
-description: "Review per-path options. atomic is not end-to-end encryption; backup exclusion is not no copies; absent explicit options do not prove plaintext or certification."
+title: "Does iOS local file protection cover shared copies? | Yihu"
+description: "Not automatically. Check the file’s own write and backup settings, then review any copies made during handoff separately."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Local write options do not replace network, remote, backup and retention review</h2>
+<h2 id="first-answer">Identify which copy stays on the phone and which goes to another tool</h2>
 
 Source paths use different options: some iOS cache/pending/temporary-image writes specify completeFileProtection; inbox manifests and note metadata use atomic writes, with backup exclusion on selected directories. Review actual paths instead of claiming end-to-end encryption, uniform protection or disappearance of every copy.
 

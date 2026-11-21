@@ -1,12 +1,13 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "音频块结束不等录音结束：noDataNow、endOfStream与尾部排空"
-description: "核有状态转换器跨块保留、finish至多16次排空与停止边界；块/尾部不是语义断句或零丢失保证，不新增文件转码器。"
+title: "一个音频块结束，就代表整段录音结束吗？ | 一呼"
+description: "不代表。块间暂时没有数据不等于流结束。判断转换输出前，先核对采集是否真的收尾。"
 lang: zh
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">暂时没有下一块，不该被解释成整段音频已经结束</h2>
+<h2 id="first-answer">先分清块间空档和整次采集的结束信号</h2>
 
 现有PCM转换器跨tap块保留状态，普通块之后用noDataNow，而非每块endOfStream。finish才发出流结束并在有界循环中排出延迟样本，最多16次且可提前结束。它是内部流处理，不是文件转码工具、语义分段或录音完整性认证。
 

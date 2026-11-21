@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "文件分块交接代表什么？768KiB桥传输不是断点上传或服务回执"
-description: "核原生读取/base64、JS parts和页面文件控件阶段；分块不等服务端流式/恒定总内存/断点续传，attached非业务送达。"
+title: "草稿里显示附件，就代表上传成功了吗？ | 一呼"
+description: "不代表。文件桥可以把附件交给网页控件，但不能证明服务端已收到文件。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">跨WK桥分块，不等于目标服务已收到完整文件</h2>
+<h2 id="first-answer">看目标服务的回执，不要只看草稿里的附件</h2>
 
 attachFiles将本地文件按最多768 KiB原始数据分块读成base64，交给页面侧helper，再请求页面自己的文件控件接纳。JS会累积parts并组装File；因此分块不证明所有端总内存恒定，也不是服务端流式/断点上传协议。attached是页面阶段结果，不是远端完成或消息发送回执。
 

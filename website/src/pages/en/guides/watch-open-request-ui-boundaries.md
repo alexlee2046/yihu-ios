@@ -1,14 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Did Open on iPhone actually open? Watch queued messages, foreground routing and local tasks"
-description: "Review basic open acknowledgement versus phone UI checks. sourceToken is not login authority; do not import voice/draft taskToken guards or treat queued as UI/business success."
+title: "Watch says “queued”: did the Radar task open on iPhone? | Yihu"
+description: "Queued means the request was accepted for routing. Check which task actually appears on the phone before acting."
 lang: en
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">Accepting an open request does not prove the correct task appeared on iPhone</h2>
+<h2 id="first-answer">Verify the task shown on iPhone rather than relying on the Watch acknowledgement</h2>
 
-Open-message queued acknowledges basic field shape before openRequest is set. Foreground phone routing then checks UUID, task in the current local snapshot, eligible status and sourceToken, plus switching/handoff guards. queued is not opened UI. The voice/draft taskToken checks cannot be copied onto this open path; opening is not submission or approval.
+A queued request does not prove the correct task appeared on the phone. Open-message queued acknowledges basic field shape before openRequest is set. Foreground phone routing then checks UUID, task in the current local snapshot, eligible status and sourceToken, plus switching/handoff guards. queued is not opened UI. The voice/draft taskToken checks cannot be copied onto this open path; opening is not submission or approval.
 
 ## Different from fields, Watch voice and draft restoration
 

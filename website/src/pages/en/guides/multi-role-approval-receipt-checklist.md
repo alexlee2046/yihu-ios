@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Multi-role handoff: content approval, phone confirmation and recipient feedback differ"
-description: "Manually separate transcript review, approval, operation and receipt identities/scopes. No workflow engine, electronic signature, organizational permissions or proxy authorization."
+title: "Who approved the note, and who actually received it? | Yihu"
+description: "Content review, permission to send and recipient acknowledgement are separate checks. Keep a record of each before closing the handoff."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Multiple participants do not combine into authority; each confirmation has its own scope</h2>
+<h2 id="first-answer">Record who checked the content, who can send it and who confirmed receipt</h2>
 
 A note/brief can involve a transcriber, reviewer, operator and recipient. One person's seen/approved does not replace another's permission, phone confirmation or feedback. Yihu is a workbench shell/source presentation, not a multi-role approval or electronic-signature engine. This manual checklist creates no organization roles, delegation or server permissions.
 

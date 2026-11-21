@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "语音预览为何会改字？可替换partial、最终返回与归档范围"
-description: "按完整可替换partial字符串、bufferingNewest和会话/阶段守卫核预览；中间文字不可累计成原话，不代表最终识别或送达。"
+title: "实时录文为什么会改字？ | 一呼"
+description: "实时文字是可替换的预览。应核对最终草稿，不要把前后几次预览拼成新内容。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">partial是可替换显示，不是一段段可直接相加的录文</h2>
+<h2 id="first-answer">核对最终草稿是否符合原意，不要拼接中间预览</h2>
 
 识别接口把onPartialText定义为完整、可替换的部分文字，只有返回的最终结果进入原可交付边界。控制器用bufferingNewest(1)处理更新，并核sessionID、阶段和取消状态。预览可能被重解码或最终结果纠正，不能把多次显示拼成多条原话、批准或执行证据。
 

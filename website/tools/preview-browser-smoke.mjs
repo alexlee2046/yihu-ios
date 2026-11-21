@@ -209,7 +209,7 @@ async function quickCheck(page, audio, en) {
   assert.equal(await page.evaluate(() => window.__permissions),0);
   return { initialFold:fold, localChoices:'all three PASS', nativeKeyboard:'Tab/focus/Enter navigation PASS', destination:'existing three-card preview', analytics:'no denied preview events', hardwarePermissions:0 };
 }
-async function conversionGuide(page, engine, path, width) {
+async function conversionGuide(page, engine, path, width, finalPillar) {
   const root = page.locator('[data-guide-conversion]');
   assert.equal(await root.count(), 1);
   const inlinePreview = /\/(bluetooth-audio-input-troubleshooting|recording-notes-handoff|iphone-agent-voice-drafts|multi-project-radar-watch)\/$/.test(path);
@@ -231,11 +231,16 @@ async function conversionGuide(page, engine, path, width) {
   assert.ok(href.startsWith(path.startsWith('/en/') ? '/en/guides/' : '/guides/'));
   assert.ok(href.endsWith('/#interactive-preview'));
   assert.equal(await app.getAttribute('href'), store.url);
-  if (wave16b || wave15b || wave14b || wave13b || wave12b || wave11b || wave10 || wave9 || wave8 || wave7 || wave6 || wave5 || /first-trial-go-no-go-checklist|bluetooth-audio-input-troubleshooting|app-group-inbox-access-evidence|empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight/.test(path)) {
+  if (finalPillar) {
+    assert.equal(href, `${path.startsWith('/en/') ? '/en' : ''}/guides/${finalPillar}/#interactive-preview`);
+    assert.equal(await page.locator('h2#first-answer').count(), 1);
+    assert.equal(await root.locator('#privacy-preview').count(), 1);
+  }
+  if (finalPillar || wave16b || wave15b || wave14b || wave13b || wave12b || wave11b || wave10 || wave9 || wave8 || wave7 || wave6 || wave5 || /first-trial-go-no-go-checklist|bluetooth-audio-input-troubleshooting|app-group-inbox-access-evidence|empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight/.test(path)) {
     assert.ok(await demo.evaluate(a => a.getBoundingClientRect().bottom <= innerHeight), 'Selected trial action above fold');
     assert.ok(await app.evaluate(a => a.getBoundingClientRect().bottom <= innerHeight), 'Selected store action above fold');
   }
-  if (wave16b || wave15b || wave14b || wave13b || wave12b || wave11b || wave10 || wave9 || wave8 || wave7 || wave6 || wave5 || /empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight/.test(path)) {
+  if (finalPillar || wave16b || wave15b || wave14b || wave13b || wave12b || wave11b || wave10 || wave9 || wave8 || wave7 || wave6 || wave5 || /empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight/.test(path)) {
     assert.ok(await root.locator('#privacy-preview summary').evaluate(a => a.getBoundingClientRect().bottom <= innerHeight), 'Selected privacy disclosure above fold');
   }
   if (await root.locator('#privacy-preview').count()) {
@@ -282,6 +287,18 @@ async function conversionGuide(page, engine, path, width) {
 const p4Source = await readFile('src/lib/conversion-events.ts','utf8');
 const p4Paths = [...p4Source.matchAll(/'(\/[^']+)': '(?:voice|audio|notes|radar)'/g)].map(x => x[1]);
 assert.equal(p4Paths.length,91);
+// Keep the existing interaction matrix and add one bilingual canary per preview task.
+// conversion.test.mjs validates the rendered links and consent contract of all 38 new pairs.
+const finalCanaries = {
+  'focused-editable-admission-review': 'iphone-agent-voice-drafts',
+  'vehicle-exhibition-microphone-preflight': 'bluetooth-audio-input-troubleshooting',
+  'carrier-redaction-archive-matrix': 'recording-notes-handoff',
+  'reply-request-receipt-mapping': 'multi-project-radar-watch',
+};
+const guideViews = [
+  ...p4Paths.map(path => [path, undefined]),
+  ...Object.entries(finalCanaries).flatMap(([slug, pillar]) => ['', '/en'].map(prefix => [`${prefix}/guides/${slug}/`, pillar])),
+];
 const p4Widths = [390, 1440];
 const targets = [
   ['/', 390, 844, 'voice', 'home-zh-390'], ['/en/', 1440, 1000, 'voice', 'home-en-1440'], ['/en/', 390, 844, 'voice', 'home-en-390'],
@@ -347,9 +364,9 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
         else await geometry(p.page, width);
       } finally { await p.close(); }
     }
-    for (const path of p4Paths) for (const width of p4Widths) {
+    for (const [path, pillar] of guideViews) for (const width of p4Widths) {
       const p = await openPage(activeBrowser,path,width,width===390?844:1000);
-      try { record.pages.push({path,width,p4:await conversionGuide(p.page,engine,path,width)}); }
+      try { record.pages.push({path,width,p4:await conversionGuide(p.page,engine,path,width,pillar)}); }
       finally { await p.close(); }
     }
     for (const path of ['/guides/audio-route-recovery-matrix/','/en/guides/noisy-transcript-text-correction/']) {
@@ -364,7 +381,7 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
         record.pages.push({ path, javascript:false, fallback:'native task-guide link navigates with no JavaScript' });
       } finally { await p.close(); }
     }
-    for (const path of ['/en/', '/en/guides/history-retrieval-manual-comparison/', '/en/guides/first-trial-go-no-go-checklist/', '/en/guides/empty-field-display-defaults/', '/en/guides/recording-notes-handoff/', '/en/guides/iphone-agent-voice-drafts/', '/en/guides/multi-project-radar-watch/', '/en/guides/department-minutes-ownership-archive/', '/en/guides/watch-voice-queued-ready-boundaries/', '/en/guides/audio-route-recovery-matrix/']) {
+    for (const path of ['/en/', '/en/guides/history-retrieval-manual-comparison/', '/en/guides/first-trial-go-no-go-checklist/', '/en/guides/empty-field-display-defaults/', '/en/guides/recording-notes-handoff/', '/en/guides/iphone-agent-voice-drafts/', '/en/guides/multi-project-radar-watch/', '/en/guides/department-minutes-ownership-archive/', '/en/guides/watch-voice-queued-ready-boundaries/', '/en/guides/audio-route-recovery-matrix/', '/en/guides/focused-editable-admission-review/']) {
       const p = await openPage(activeBrowser, path, 390, 844, false);
       try {
         const privacy = p.page.locator('#privacy-preview');
@@ -383,4 +400,4 @@ for (const [engine, type] of [['chromium', chromium], ['webkit', webkit]]) {
     await writeFile(resolve(output, 'evidence.json'), JSON.stringify({ results, failures }, null, 2));
   }
 }
-console.log(`Browser preview acceptance PASS: Chromium + WebKit, 6 home/scenario pages + 2 store/source setup views + 8 P2 views + ${p4Paths.length * p4Widths.length} selected-guide views + 2 no-JavaScript navigations + 10 no-JavaScript privacy disclosures per engine; consent-only funnel, actual same-language preview navigation, store intent stub only; native speech API separate; browsers closed.`);
+console.log(`Browser preview acceptance PASS: Chromium + WebKit, 6 home/scenario pages + 2 store/source setup views + 8 P2 views + ${guideViews.length * p4Widths.length} selected-guide views + 2 no-JavaScript navigations + 11 no-JavaScript privacy disclosures per engine; consent-only funnel, actual same-language preview navigation, store intent stub only; native speech API separate; browsers closed.`);

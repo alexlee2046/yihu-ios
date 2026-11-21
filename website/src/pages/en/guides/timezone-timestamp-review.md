@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Review brief timestamps across timezones: source, task and carrier clocks"
-description: "Separate fixed UTC+08 date_str, Unix task updates, phone requests and Watch packaging. Manual date-boundary checks, not a new timezone converter or refresh SLA."
+title: "Why do Radar timestamps differ between iPhone and Watch? | Yihu"
+description: "Source time, task time and Watch capture time mark different events. Identify the event and timezone before sorting or comparing."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Identify the event before comparing timezone, units and ordering</h2>
+<h2 id="first-answer">Match the event and timezone before comparing two times</h2>
 
 Current Radar parses `date_str` using fixed `yyyy-MM-dd HH:mm` in UTC+08:00. Last successful source read cannot be replaced with a phone request, cache hit or file modification. Optional task `timestamp` is a separate Unix-time field; Watch `sourceDate` and `capturedAt` also differ. Establish event/contract first instead of treating all times as equivalent numbers.
 

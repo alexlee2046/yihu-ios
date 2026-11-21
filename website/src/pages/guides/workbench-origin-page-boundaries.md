@@ -1,13 +1,14 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "同源为什么仍不能填入？浏览器origin、页面与存储范围核对"
-description: "核scheme/host/有效端口、origin派生WebKit存储及页面/请求守卫；工作台名不同不保证存储隔离，同源不等账户、草稿或写权限。"
+title: "工作台同源，为什么仍填不进语音草稿？ | 一呼"
+description: "同源判定和目标页面判定是两道检查。不要凭域名相同就填入，先回到正确草稿。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">同origin不是同页面、同草稿或已获得操作许可</h2>
+<h2 id="first-answer">回到目标草稿核对页面，再尝试填入</h2>
 
-CollieWebSession的isTrusted比较配置baseURL的scheme、host和有效端口，并检查会话未失效；不是靠页面标题或域名看起来相似。WebKit持久存储键从归一origin派生，路径或工作台名称不同不自动变成独立存储。插入路径仍可核expectedPageURL、requestID和适配器条件，同源通过不等可发送。
+同源不是同页面、同草稿或已获得操作许可。 CollieWebSession的isTrusted比较配置baseURL的scheme、host和有效端口，并检查会话未失效；不是靠页面标题或域名看起来相似。WebKit持久存储键从归一origin派生，路径或工作台名称不同不自动变成独立存储。插入路径仍可核expectedPageURL、requestID和适配器条件，同源通过不等可发送。
 
 ## 与Radar源URL、追问上下文和草稿恢复的区别
 

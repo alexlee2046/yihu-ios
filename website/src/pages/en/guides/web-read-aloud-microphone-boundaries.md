@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Agent web read-aloud and voice input: output, microphone and draft boundaries"
-description: "Separate site-provided read-aloud, WebKit media settings, microphone capture, native transcription and destination drafts. No built-in TTS or continuous two-way voice-service guarantee."
+title: "Switching from Agent read-aloud to dictation on iPhone | Yihu"
+description: "Hearing the webpage confirms playback, not microphone input. Stop read-aloud and check a short unsent draft before using real text."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Web playback does not establish built-in Yihu TTS or a voice-call backend</h2>
+<h2 id="first-answer">Stop playback, then verify a harmless phrase in the unsent draft</h2>
 
 Yihu wraps WebKit for your own Agent workbench and adds native transcription/draft delivery. When a site offers read-aloud, its text, voice, generation service and playback controls belong to that site's implementation. Source configuration permits inline media, not universal acceptance of TTS, continuous two-way voice or lock-screen playback. This guide addresses the transition from listening to a web page to dictating a phrase, not another pairing checklist or certification of arbitrary voice Agents.
 

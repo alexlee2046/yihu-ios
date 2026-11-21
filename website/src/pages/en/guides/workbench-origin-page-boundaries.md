@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Same origin but insertion refused: browser origin, page and storage boundaries"
-description: "Review scheme/host/effective port, origin-derived WebKit storage and page/request guards. Different workbench names do not establish separate storage or accounts."
+title: "Same workbench origin, but the draft won’t accept dictation? | Yihu"
+description: "Origin checks and target-page checks are separate. Reopen the intended draft instead of assuming a page with a matching domain can receive it."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Same origin is not the same page, draft or operation authority</h2>
+<h2 id="first-answer">Return to the intended draft and check the page before reinserting</h2>
 
-CollieWebSession.isTrusted compares baseURL scheme/host/effective port and invalidation state, not similar-looking titles/domains. Persistent WebKit storage is derived from normalized origin; paths/workbench names do not automatically create separate stores. Insertion can still check expectedPageURL, requestID and adapters. Origin acceptance is not sending permission.
+The same origin is not the same page, draft or operation authority. CollieWebSession.isTrusted compares baseURL scheme/host/effective port and invalidation state, not similar-looking titles/domains. Persistent WebKit storage is derived from normalized origin; paths/workbench names do not automatically create separate stores. Insertion can still check expectedPageURL, requestID and adapters. Origin acceptance is not sending permission.
 
 ## Different from feed URLs, context and restored drafts
 

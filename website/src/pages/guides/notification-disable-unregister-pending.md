@@ -1,12 +1,13 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "关闭通知就远端解绑了吗？本地停用、待注销与绑定轮换回报"
-description: "核disable先本地关闭、尝试保留标记、unregister响应和轮换保存；disabled/超时非远端停推或零副本证明，不读Keychain或改变授权。"
+title: "关闭 Radar 通知，远端就解绑了吗？ | 一呼"
+description: "本机可以先停用，远端注销仍可能待核。确认旧绑定已解除前，先查注销结果。"
 lang: zh
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">本地开关关闭，不等远端已注销或系统通知权限已撤回</h2>
+<h2 id="first-answer">把本机关闭和远端确认注销分开看</h2>
 
 disable先把本地启用决定设false，再尝试保留unregisterPending并请求原工作台注销；响应ok和绑定轮换保存仍需分别通过，否则可保留unbindPending。标记写入有可能失败，不能承诺必持久。超时不是远端未执行证明，关闭也不是立即全停推、注销网页登录或撤回系统通知权限。
 

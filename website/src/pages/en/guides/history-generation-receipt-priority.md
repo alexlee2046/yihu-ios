@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Does closing history undo a submit? Late reads, generations and confirmed receipts"
-description: "Review history generations and recorded-state priority. Closing read-only views does not recall writes; late responses are not new evidence or archive certificates."
+title: "Does closing Radar history undo a reply? | Yihu"
+description: "No. Closing the read-only view does not recall a write, and an earlier read does not supersede a confirmed receipt."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Closing history does not recall a submit; earlier reads cannot supersede a confirmed receipt</h2>
+<h2 id="first-answer">Check the confirmed receipt before acting on an older history result</h2>
 
 History reads capture historyGeneration and recheck historyActive, current source, generation and cancellation after awaiting. cancelHistory changes local state/generation; reply complete also invalidates old history reads so pre-submit results do not win over confirmed receipts. This is not server recall or permission to treat late/ignored history as current absent/business state.
 

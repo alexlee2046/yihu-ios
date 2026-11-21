@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "What a notification payload model proves: shape is not deployed push"
-description: "Review exact keys, version, UUID and eventKey constraints without inferring subscriptions, delivery, navigation, write authority or new push infrastructure."
+title: "Does a valid Radar payload prove push notifications work? | Yihu"
+description: "No. A valid event only proves its shape was accepted. Subscription, delivery and opening the right item are separate checks."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Parsing an event shape is not end-to-end notification acceptance or authority</h2>
+<h2 id="first-answer">Verify delivery and opening separately from the payload format</h2>
 
 CollieRadarNotificationEvent parses a yihuRadar payload with version, subscriptionId and eventKey constraints. It represents an opaque intent, not an arbitrary URL/write command. A model alone does not establish subscription wiring, push delivery or click navigation. No push service is provisioned here.
 

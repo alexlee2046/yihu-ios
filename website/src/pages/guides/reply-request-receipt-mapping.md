@@ -1,13 +1,14 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "回复归档怎样对应请求？request_id、目标版本与待核回执分账"
-description: "按原生回复的持久待核、check与recorded路径人工核请求身份，不拿文字相似或超时当重试许可，不新增通用幂等/归档服务。"
+title: "Radar 回复待核？重发前先查请求编号 | 一呼"
+description: "按请求编号和目标核对结果。回执显示已记录，不代表要求的动作已经执行。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">同一文字不代表同一次请求，recorded也不代表已执行</h2>
+<h2 id="first-answer">先找到原请求和目标，再决定要不要重试</h2>
 
-原生Radar回复在submit前持久保存含requestID的待核记录，避免不确定写入变成新回复；网络结果不明时先check。recorded会显示已记录、待处理，授权确认的提示更明确说明尚未执行。归档要对应实际请求与目标，不把文字相似、时间接近或HTTP阶段当业务完成。
+回执显示 recorded也不代表已执行。 原生Radar回复在submit前持久保存含requestID的待核记录，避免不确定写入变成新回复；网络结果不明时先check。recorded会显示已记录、待处理，授权确认的提示更明确说明尚未执行。归档要对应实际请求与目标，不把文字相似、时间接近或HTTP阶段当业务完成。
 
 ## 与最终主张审计、角色清单的区别
 

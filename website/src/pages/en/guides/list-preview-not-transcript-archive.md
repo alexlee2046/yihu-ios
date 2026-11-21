@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "What forty characters or two lines prove: previews, originals and sharing scope"
-description: "Separate text displayName prefix(40) from a two-line SwiftUI layout. Short display is not truncated storage, summarization or redaction; inspect actual fields."
+title: "Only two lines of transcript: did Yihu cut the note? | Yihu"
+description: "The list can show a short preview while the full transcript remains longer. Open the note before deciding what to share."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">A short list preview does not mean saved or shared contents are equally short</h2>
+<h2 id="first-answer">Read the full note or shared text, not the list snippet</h2>
 
 Shared text displayName takes 40 Swift Characters; URLs/filenames use other branches. A done-note row displays Text(transcript) with lineLimit(2). Prefix derivation and line layout are different, and neither proves automatic minutes, redaction or truncated originals. Review actual text/transcript, not screenshots, for handoff scope.
 

@@ -1,12 +1,13 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "识别参数什么时候生效？每pass快照与输出token预算核对"
-description: "核语言/usesTerms/maxTokens快照、448默认64–1024范围；token不是字数/音频秒，调高不直接提高准确率，不提供实时或Agent云端调参。"
+title: "识别设置何时生效？Token 上限管什么？ | 一呼"
+description: "设置按识别轮次读取。Token 上限限制输出预算，不代表录音时长或识别准确率。"
 lang: zh
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">一次识别的参数快照，不等整段会话永久同设置或实时调参</h2>
+<h2 id="first-answer">用同一句短句重试两次，每次只对比一项设置</h2>
 
 Qwen3OnDeviceTranscriber每次transcribe先读取语言、usesTerms和maxTokens偏好，再按该pass使用。默认最大输出448 token，配置范围64–1024并作clamp。token不是字数或音频时长；提高只增输出上限，仍受模型缓存等条件影响，不直接证明准确率。UI忙态会禁用该设置区，本页不新增录音中实时调参。
 

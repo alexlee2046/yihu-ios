@@ -8,7 +8,7 @@ const read = p => readFileSync(new URL(p, root), 'utf8');
 const store = JSON.parse(read('src/data/app-store.json'));
 const code = p => ts.transpileModule(read('src/lib/'+p+'.ts'), {compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText;
 const previewCode=code('preview-events'), conversionCode=code('conversion-events');
-const selected = {
+const legacy = {
  '/en/guides/audio-route-recovery-matrix/':'audio', '/guides/audio-level-not-accuracy-review/':'audio',
  '/en/guides/attention-filter-identity-boundaries/':'radar', '/en/guides/radar-evidence-second-check/':'radar',
  '/guides/capture-completion-token-review/':'audio', '/guides/model-artifact-validation-evidence/':'voice',
@@ -75,6 +75,11 @@ const selected = {
  '/guides/note-segment-join-provenance/':'notes',
  '/en/guides/note-segment-join-provenance/':'notes',
 };
+const guideFiles = prefix => readdirSync(new URL('src/pages/'+prefix+'guides/',root));
+const finalSlugs = guideFiles('en/').map(f=>f.replace(/\.(md|astro)$/,''))
+ .filter(slug=>!Object.hasOwn(legacy,'/guides/'+slug+'/')&&!Object.hasOwn(legacy,'/en/guides/'+slug+'/'));
+const finalPaths = finalSlugs.flatMap(slug=>['/guides/'+slug+'/','/en/guides/'+slug+'/']);
+const pillars = {voice:'iphone-agent-voice-drafts', audio:'bluetooth-audio-input-troubleshooting', notes:'recording-notes-handoff', radar:'multi-project-radar-watch'};
 function harness(opts={}) {
  const path=opts.path??'/en/guides/mobile-agent-decisions/';
  const calls=[], winListeners={}, docListeners={}; let choice='preference' in opts?opts.preference:'granted';
@@ -96,17 +101,36 @@ function harness(opts={}) {
  const conversion={}; vm.runInNewContext(conversionCode,{...env,exports:conversion,require(p){if(p==='./preview-events')return preview;if(p==='../data/app-store.json')return store;throw Error('unexpected module');}});
  return {calls,browser,preview,conversion,setChoice(v){choice=v;},notify(){for(const fn of winListeners['yihu:analytics-choice']??[])fn();},click(href,intro=false){for(const fn of docListeners.click??[])fn({target:new Anchor(href,intro)});}};
 }
-test('P4 and D60 use exactly 91 selected routes; no filename heuristics or broad bilingual expansion',()=>{
- const h=harness();assert.deepEqual(JSON.parse(JSON.stringify(h.conversion.conversionGuides)),selected);
- assert.equal(h.preview.previewPaths.length,10);assert.equal(h.conversion.conversionPaths.length,95);
- assert.equal(h.conversion.guideConversion('/guides/notification-payload-model-preflight/'),null);
+const selected = harness().conversion.conversionGuides;
+test('explicitly cover the 38 remaining bilingual pairs without changing legacy routes',()=>{
+ const h=harness();
+ assert.deepEqual(guideFiles(''),guideFiles('en/'));
+ assert.equal(finalSlugs.length,38);
+ assert.deepEqual(Object.keys(selected).sort(),[...Object.keys(legacy),...finalPaths].sort());
+ for(const [path,scenario] of Object.entries(legacy)) assert.equal(selected[path],scenario,path);
+ for(const slug of finalSlugs) {
+  const zh='/guides/'+slug+'/', en='/en/guides/'+slug+'/';
+  assert.ok(Object.hasOwn(pillars,selected[zh]),slug);
+  assert.equal(selected[zh],selected[en],slug);
+  for(const path of [zh,en]){
+   const source=read('src/pages'+path.slice(0,-1)+'.md');
+   assert.match(source,/^privacyPreview: true$/m,path);
+   assert.match(source,/^<h2 id="first-answer">[^<]+<\/h2>$/m,path);
+  }
+ }
+ for(const [slug,scenario] of Object.entries({
+  'reply-request-receipt-mapping':'radar','focused-editable-admission-review':'voice',
+  'vehicle-exhibition-microphone-preflight':'audio','carrier-redaction-archive-matrix':'notes',
+ })) assert.equal(selected['/guides/'+slug+'/'],scenario,slug);
+ assert.equal(h.preview.previewPaths.length,10);assert.equal(h.conversion.conversionPaths.length,171);
  assert.equal(h.conversion.guideConversion('/en/guides/cross-device-field-presentation/'),null);
  assert.equal(h.conversion.guideConversion('/guides/unknown/'),null);
 });
-for(const [path,scenario] of Object.entries(selected)) test('selected guide keeps language, synthetic sample and store boundary: '+path,()=>{
+test('selected guides keep language, sample destination, consent events and store boundary',()=>{
+ for(const [path,scenario] of Object.entries(selected)){
  const h=harness({path}),c=h.conversion.guideConversion(path),en=path.startsWith('/en/');
  assert.equal(c.scenario,scenario);assert.equal(c.storeHref,'https://apps.apple.com/us/app/yihu/id6819057500');assert.ok(c.demoHref.startsWith(en?'/en/guides/':'/guides/'));
- assert.ok(c.demoHref.endsWith('/#interactive-preview'));assert.match(c.sourceContext,en?/source\/troubleshooting.*do not establish/:/源码\/排障.*不证明/);
+ assert.equal(c.demoHref,(en?'/en':'')+'/guides/'+pillars[scenario]+'/#interactive-preview',path);assert.match(c.sourceContext,en?/source\/troubleshooting.*do not establish/:/源码\/排障.*不证明/);
  assert.match(c.storeContext,en?/No Mac or self-signing/:/不需 Mac 或自行签名/);assert.ok(c.storeContext.includes('950 MB'));assert.ok(c.storeLabel.includes('0.1.0'));
  assert.equal(harness({path}).preview.trackPreviewEvent('preview_complete',scenario,en?'en':'zh','insert'),/\/(bluetooth-audio-input-troubleshooting|recording-notes-handoff|iphone-agent-voice-drafts|multi-project-radar-watch)\/$/.test(path),'original preview-only route list unchanged');
  h.conversion.bindConversionEvents();assert.equal(h.calls.length,1);
@@ -114,6 +138,7 @@ for(const [path,scenario] of Object.entries(selected)) test('selected guide keep
  h.click('https://getyihu.com'+c.demoHref,true);h.click(store.url,true);
  assert.deepEqual(h.calls.map(c=>c[1]),['funnel_entry','guide_demo_click','app_store_click']);
  for(const c of h.calls)assert.deepEqual(Object.keys(c[2]).sort(),['language','page_group','placement','scenario']);
+ }
 });
 for(const opts of [
  {preference:null},{preference:'denied'},{preference:''},{preference:'malformed'},{preference:'GRANTED'},
@@ -167,17 +192,30 @@ test('store wording and telemetry do not add permissions, network, storage write
  for(const forbidden of ['localStorage.setItem','sessionStorage','fetch(','sendBeacon','XMLHttpRequest','setTimeout','preventDefault','user_id','query_string','editor_text'])assert.ok(!event.includes(forbidden),forbidden);
 });
 const built=existsSync(new URL('dist/index.html',root));
-test('built 91 selected intro links retain scope, privacy and unchanged 180/150/30 discovery', {skip:!built},()=>{
+test('built selected intro links retain scope, privacy and unchanged 180/150/30 discovery', {skip:!built},()=>{
  function pages(p='dist/'){return readdirSync(new URL(p,root),{withFileTypes:true}).flatMap(x=>x.isDirectory()?pages(p+x.name+'/'):x.name==='index.html'?[p+x.name]:[]);}
  const all=pages();assert.equal(all.length,180);let count=0,retired=0;
  for(const file of all){const html=read(file),path='/'+file.slice(5).replace(/index\.html$/,'');
   if(html.includes('content="noindex,follow"'))retired++;
   const blocks=[...html.matchAll(/<section\b[^>]*\bdata-guide-conversion\b[^>]*>[\s\S]*?<\/section>/g)];
   assert.equal(blocks.length,Object.hasOwn(selected,path)?1:0,path);if(!blocks.length)continue;count++;
-  const c=harness().conversion.guideConversion(path),block=blocks[0][0];assert.ok(block.includes('href="'+c.demoHref+'"'));assert.ok(block.includes('href="'+store.url+'"'));assert.ok(block.includes(/followup-evidence-minimization|history-retrieval-manual-comparison|handoff-evidence-audit-checklist|first-trial-go-no-go-checklist|bluetooth-audio-input-troubleshooting|app-group-inbox-access-evidence|empty-field-display-defaults|audio-level-not-accuracy-review|foreground-audio-rebind-preflight|meeting-notes-brief-fields|recording-notes-handoff|offline-workbench-handoff-troubleshooting|iphone-agent-voice-drafts|mobile-agent-decisions|multi-note-review-handoff|voice-workbench-vs-radio-chat|multi-project-radar-watch|outdoor-store-voice-preflight|department-minutes-ownership-archive|degraded-handoff-go-no-go|follow-up-context-preflight|watch-voice-queued-ready-boundaries|audio-busy-state-admission|audio-route-recovery-matrix|brief-format-change-compatibility|note-audio-text-evidence-mapping|reply-draft-restoration-scope|radar-summary-claim-provenance|audio-recovery-debounce-boundaries|capture-buffer-pressure-checklist|interruption-recapture-preflight|microphone-permission-sample-contract|multilingual-terms-preflight|note-organization-prompt-not-minutes|note-transcription-retry-checkpoint|recording-segment-review-labels|radar-feed-url-boundary-preflight|radar-json-null-validation|radar-snapshot-batch-comparison|note-radar-draft-candidate-preflight|note-removal-retention-boundaries|note-segment-join-provenance/.test(path) ? 'id="privacy-preview"' : c.sourceContext));
+  const c=harness().conversion.guideConversion(path),block=blocks[0][0];
+  assert.ok(block.includes('href="'+c.demoHref+'"'),path);
+  assert.ok(block.includes('href="'+store.url+'"'),path);
+  if(finalPaths.includes(path)) {
+   const nav=html.match(/<nav class="guide-context"[^>]*>[\s\S]*?<\/nav>/)?.[0];
+   assert.ok(nav?.includes('href="'+c.demoHref.split('#')[0]+'"'),path);
+  }
+  const sourcePath='src/pages'+path.slice(0,-1);
+  const source=read(sourcePath+(existsSync(new URL(sourcePath+'.md',root))?'.md':'.astro'));
+  const disclosed=/^privacyPreview: true$/m.test(source)||/privacyPreview=\{true\}/.test(source);
+  if(disclosed||path.endsWith('/iphone-agent-voice-drafts/')||path.endsWith('/mobile-agent-decisions/')){
+   assert.ok(block.includes('id="privacy-preview"'),path);
+   assert.ok(block.includes('href="'+(path.startsWith('/en/')?'/en':'')+'/privacy/"'),path);
+  }else assert.ok(block.includes(c.sourceContext),path);
   assert.ok(html.indexOf('<h1')<html.indexOf('data-guide-conversion'));assert.ok(html.indexOf('data-guide-conversion')<html.indexOf('id="first-answer"')||path.endsWith('/mobile-agent-decisions/'));
   assert.equal(html.includes('<astro-island'),/\/(bluetooth-audio-input-troubleshooting|recording-notes-handoff|iphone-agent-voice-drafts|multi-project-radar-watch)\/$/.test(path),'only existing preview pages keep their island');
   const target=read('dist'+c.demoHref.split('#')[0]+'index.html');assert.ok(target.includes('id="interactive-preview"'));
  }
- assert.equal(count,91);assert.equal(retired,30);assert.equal([...read('public/sitemap.xml').matchAll(/<loc>/g)].length,150);
+ assert.equal(count,167);assert.equal(retired,30);assert.equal([...read('public/sitemap.xml').matchAll(/<loc>/g)].length,150);
 });

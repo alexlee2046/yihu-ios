@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Near-field preference versus actual route: HFP allowance and capture policy"
-description: "Review existing short-speech playAndRecord/voiceChat, HFP allowance and graph policy. No forced microphone, noisy-environment performance or universal-path guarantee."
+title: "Does near-field mode select the Bluetooth microphone? | Yihu"
+description: "No. Allowing a Bluetooth route does not select it. Check the active input and use a short non-sensitive comparison recording."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">allowBluetoothHFP is permission to use a route, not proof it was selected or more accurate</h2>
+<h2 id="first-answer">Check the active input rather than relying on the near-field switch</h2>
 
 Short-speech start reads the near-field preference. Enabled policy uses playAndRecord/voiceChat with mixWithOthers/allowBluetoothHFP; disabled policy uses record/default. Input graph policy branches too. These are implementation choices, not successful hardware activation, forced mic selection or measured accuracy. No noise-removal/mic-selection service is added.
 

@@ -1,14 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Why a focused field refuses transcription: editable, usable and draft conditions"
-description: "Review element types, connected/disabled/readOnly exceptions and known Collie drafts. Focus is not authority or universal forms support; no page is operated."
+title: "Why won’t a focused field accept voice text? | Yihu"
+description: "A cursor is not enough. Check that the intended draft field is usable and supported before trying again."
 lang: en
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">Focus is one prerequisite, not permission for every field to receive native text</h2>
+<h2 id="first-answer">Check whether you can type a harmless example in the intended draft field</h2>
 
-The guarded adapter considers textarea, specified text-like inputs and contenteditable, then checks connection, disabled/readOnly-with-keyboard-exception, inert/aria and visibility conditions. Known Collie structures must prove a unique draft mode. Visible boxes/placeholders do not establish universal form identification or compatibility.
+Focus is one prerequisite, not permission for every field to receive native text. The guarded adapter considers textarea, specified text-like inputs and contenteditable, then checks connection, disabled/readOnly-with-keyboard-exception, inert/aria and visibility conditions. Known Collie structures must prove a unique draft mode. Visible boxes/placeholders do not establish universal form identification or compatibility.
 
 ## Different from origin, bridge and keyboard review
 

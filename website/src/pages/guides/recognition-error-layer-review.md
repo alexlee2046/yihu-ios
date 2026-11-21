@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "没有文字就坏模型吗？采集、输入、模型与空转写错误分层"
-description: "按采集/ASR错误映射核提示类别；emptyTranscript不证明语音不存在或模型损坏，短语音与长笔记分支不同，不执行重录或删除模型。"
+title: "有录音却没有文字，先排查哪一步？ | 一呼"
+description: "空转写不等于模型损坏。重试前先核对麦克风权限、有效采音和模型状态。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">同样“没有文字”，可能是不同层失败，不能自动归为模型损坏</h2>
+<h2 id="first-answer">先确认有可用音频，再排查识别模型</h2>
 
 控制器将权限拒绝、录音/PCM失败和模型missing/load失败分到不同提示。ASR还检查非空、有限样本和长度；最终空文字会产生emptyTranscript。短语音将空结果视作录音类失败，长笔记可略过该片段文字并推进帧位。提示是分类，不是完整底层诊断或原音频无内容证明。
 

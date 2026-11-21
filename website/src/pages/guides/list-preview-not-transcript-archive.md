@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "列表只显示40字或两行代表什么？预览、正文与分享范围核对"
-description: "区分text displayName前40 Character和SwiftUI两行布局；短显示不等原文截短、语义摘要或脱敏，分享仍按实际字段核。"
+title: "录音笔记只显示两行，正文被截短了吗？ | 一呼"
+description: "列表摘要可能比正文短得多。分享前打开笔记，核对实际会交出去的文字。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">看到短预览，不等保存或交接的内容也只有这么短</h2>
+<h2 id="first-answer">打开笔记正文或待分享文本，不要只看列表摘要</h2>
 
 共享文字的displayName返回前40个Swift Character，而URL/文件名走其他分支；笔记done行用完整transcript的Text配lineLimit(2)限制布局。一个是派生前缀，一个是显示行数，都不是自动纪要、隐私脱敏或原文已截短的证明。分享应核真正text/transcript，不凭列表截图认定范围。
 

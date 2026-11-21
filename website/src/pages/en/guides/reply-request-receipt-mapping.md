@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Map reply evidence to request identity, target version and pending receipts"
-description: "Review native persist-before-submit, check and recorded paths. Similar text/timeouts are not retry authority; no universal idempotency or archive service."
+title: "Radar reply pending? Match the request before retrying | Yihu"
+description: "Use the request ID and target to check the outcome. A recorded receipt confirms retention, not that the requested work ran."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Identical text is not request identity, and recorded is not executed</h2>
+<h2 id="first-answer">Find the original request and target before deciding whether to retry</h2>
 
-Native Radar replies persist a pending record with requestID before submit so uncertain writes do not silently become new replies. Unclear network outcomes require check. Recorded means retained/pending handling; authorization-confirmed notices explicitly say not executed. Map evidence to actual request/target rather than similar text, nearby times or transport stages.
+The receipt boundary matters: recorded is not executed. Native Radar replies persist a pending record with requestID before submit so uncertain writes do not silently become new replies. Unclear network outcomes require check. Recorded means retained/pending handling; authorization-confirmed notices explicitly say not executed. Map evidence to actual request/target rather than similar text, nearby times or transport stages.
 
 ## Different from completion claims and role approval
 

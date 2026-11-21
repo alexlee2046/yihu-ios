@@ -1,12 +1,13 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Did a shortcut return start recording? A 30-second toggle request consumed once"
-description: "AppIntent sets pendingToggle; foreground ready starts, recording finishes. A 30-second lifetime is not SLA/background authority, repeated Bool requests are not an N-item queue."
+title: "Did a Yihu Shortcut actually start recording? | Yihu"
+description: "A Shortcut requests a toggle; the foreground workbench must consume it before it expires. Check the recording state before speaking."
 lang: en
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">An Intent result is not completed recording, insertion or sending</h2>
+<h2 id="first-answer">Confirm the workbench shows active recording before you speak</h2>
 
 ToggleVoiceInputIntent sets pendingToggle and requests opening the App. The foreground workbench actually consumes start/stop requests. A live request lasts 30 seconds and is consumed once; repeated requests refresh a Bool/timestamp rather than enqueue N actions. Ready can start, recording can finish, other conditions wait or expire. Neither timely response nor bypass of microphone/target guards follows.
 

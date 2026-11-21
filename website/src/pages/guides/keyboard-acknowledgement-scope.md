@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "键盘开关亮了就就绪吗？本地状态、异步回执与页面焦点核对"
-description: "核setKeyboardEnabled乐观状态、keyboardRequest顺序与Bool回执；显示/DOM焦点非所有输入兼容或草稿送达，不执行网页操作。"
+title: "键盘开关已打开，为什么工作台仍不能输入？ | 一呼"
+description: "开关可以先于网页回执更新。分别核对目标草稿框、网页是否响应，以及正文是否真的填入。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">本地enabled/visible不等网页已确认，更不等文字已填入</h2>
+<h2 id="first-answer">分别检查开关状态、网页回执和草稿文字</h2>
 
 setKeyboardEnabled先更新本地keyboardEnabled/keyboardVisible，再等enqueueKeyboard的脚本Bool回执，并用keyboardRequest排除旧结果。失败可回退显示并提示进入会话。dismissKeyboard发起UIKit结束编辑并排队禁用页面；本地隐藏不独立证明网页立即确认，也不代表草稿保存或发送。
 

@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "What a share manifest establishes: local visibility and incomplete directories"
-description: "Review copy-before-manifest, pending decoding and incomplete-directory cleanup. Visible is not reviewed/delivered; 3600 seconds is not universal retention."
+title: "Does a share inbox entry prove all attachments are there? | Yihu"
+description: "An entry means the local manifest is readable. Check that each staged file still opens; a manifest is not a delivery receipt."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">A manifest makes local batches visible; it is not a service receipt or immutable archive</h2>
+<h2 id="first-answer">Open the staged files rather than trusting the inbox count</h2>
 
 Inbox save copies files/builds items before atomically writing manifest.json last. pending reads/decodes manifests to list batches, without verifying every attachment still exists or was reviewed. update can rewrite a manifest. It therefore certifies neither server submission, delivery, business approval nor immutable archiving.
 

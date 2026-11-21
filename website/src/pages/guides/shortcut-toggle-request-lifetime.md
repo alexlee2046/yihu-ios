@@ -1,12 +1,13 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "快捷指令返回就开麦了吗？30秒录音切换请求与一次消费"
-description: "核AppIntent仅置pendingToggle、前台就绪消费与录音中结束；30秒窗口非响应SLA/后台权限，重复请求Bool非N次排队，不保证设备绑定。"
+title: "快捷指令返回后，一呼已经开始录音了吗？ | 一呼"
+description: "不一定。快捷指令提出切换请求，前台工作台需在过期前处理。开口前先看录音状态。"
 lang: zh
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">系统意图返回，不等录音、填入或发送已经完成</h2>
+<h2 id="first-answer">确认工作台正在录音，再开口</h2>
 
 ToggleVoiceInputIntent设置pendingToggle并请求打开App，真正开始或结束由前台工作台消费。活请求窗口30秒、一次消费；重复请求刷新Bool/时点，不是逐次计数队列。就绪可开始、录音中可结束，其他条件等待或过期失效。窗口不是30秒必响应，也不绕过麦克风权限和目标交接。
 

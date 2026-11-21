@@ -1,12 +1,13 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Why a reminder tap stays pending: voice guards, pendingURL and saved origins"
-description: "Review Hermes HTTPS/host admission, retained speech/notes, known origins and connected consumption. No new server is added; login/session/service success is not established."
+title: "Why does a reminder tap leave the workbench unchanged? | Yihu"
+description: "A reminder can queue a link without opening it. Check whether an active draft is blocking the move and whether the destination is already saved."
 lang: en
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">A reminder tap creates a pending link, not proof the destination session is usable</h2>
+<h2 id="first-answer">Save or finish the current draft before checking the reminder destination</h2>
 
 Hermes reminders pass the existing HTTPS/host parser and set pendingURL. Routing still checks notes and voice cancel/delivery/retained-text conditions. Current origin must be connected before consumption; other origins must already be saved, and unknown ones are dropped rather than added as servers. A tap proves neither login/session existence nor business success or a bundled universal push service.
 

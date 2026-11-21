@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "桥拒绝与桥不可用能混同吗？accepted/refused/unavailable核对"
-description: "按页面桥协议观测与原生分支核回执；仅unavailable可继续受守卫DOM适配，拒绝/异常不盲降级，不新增发送或适配服务。"
+title: "工作台桥返回“拒绝”和“不可用”，有什么区别？ | 一呼"
+description: "明确返回不可用才会尝试受保护的后备路径。桥报告接受不代表服务端已经处理。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">refused不是unavailable，accepted也不是服务端处理回执</h2>
+<h2 id="first-answer">先确认返回的结果，不要把所有填入失败都当作不可用</h2>
 
 当前页面collieBridgeScript先核origin、完整pageURL与页面可见性，再观测事件detail的读取/accepted设置及preventDefault。结果为accepted/refused/unavailable；原生分支只有明确unavailable才继续受守卫DOM适配，拒绝、异常或其他结果不因此变成安全降级。accepted也只是协议回报，不证明已发送或业务处理。
 

@@ -1,12 +1,13 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Does disabling notifications unregister remotely? Local choice, pending removal and binding rotation"
-description: "Review local false, attempted pending persistence, unregister acknowledgement and rotation. Disabled/timeout is not stopped remote delivery or deletion; no Keychain/authority change runs."
+title: "Are Radar notifications unregistered as soon as you turn them off? | Yihu"
+description: "The local switch can be off while remote removal is still pending. Check the remote outcome before assuming the old binding is gone."
 lang: en
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">A local off switch is not completed remote unregister or revoked system permission</h2>
+<h2 id="first-answer">Treat local off and confirmed remote removal as different states</h2>
 
 disable sets local enablement false before attempting to retain unregisterPending and requesting the old workbench to unregister. Response ok and binding-rotation persistence must still pass; otherwise unbindPending can remain. Marker writes can fail and are not guaranteed durable. Timeout does not prove no remote execution; off does not establish immediate global silence, web logout or revoked system notification permission.
 

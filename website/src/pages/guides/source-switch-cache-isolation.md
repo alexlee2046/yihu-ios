@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "切换Radar源前核什么？旧缓存、待核记录与迟到读取隔离"
-description: "按source变更流程核旧缓存清理、sourceRevisions与显示筛选重置；本地隔离非服务身份认证或全量迁移，不执行切源。"
+title: "还有待核回复，可以切换 Radar 来源吗？ | 一呼"
+description: "先处理旧来源里结果不明的回复。切换后，确认当前来源和新快照都正确，再使用简报。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">配置改成新源，不表示旧缓存或旧请求可当新源材料</h2>
+<h2 id="first-answer">先核清旧来源的回复，再信任新快照</h2>
 
 CollieRadarStore在source字段实际变化时先查本地回复记录，未处理时拒绝切源；旧缓存清理失败也不提交本次来源变更。成功路径递增本地sourceRevisions、清内存快照、更新Watch来源标识并重置部分筛选。异步读取写入前核revision，不把旧源迟到结果作为新源成功。
 

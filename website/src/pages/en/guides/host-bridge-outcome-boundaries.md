@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Refused is not unavailable: inspect accepted/refused/unavailable bridge outcomes"
-description: "Review protocol observation and native fallback. Only unavailable can continue guarded DOM adaptation; no blind retry, sender or new bridge service."
+title: "Why a workbench bridge refusal differs from “unavailable” | Yihu"
+description: "Only an explicit unavailable result permits the guarded fallback. Accepted means the bridge reported success, not that the server completed the action."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">refused differs from unavailable; accepted is not a backend handling receipt</h2>
+<h2 id="first-answer">Record the actual outcome rather than treating every failed insertion alike</h2>
 
 collieBridgeScript checks origin/full pageURL/visibility and observes detail reads, accepted writes and event cancellation. It returns accepted/refused/unavailable. Native handling continues to guarded DOM only for explicit unavailable, not refusals, exceptions or arbitrary results. accepted is a protocol report, not sending or business completion.
 

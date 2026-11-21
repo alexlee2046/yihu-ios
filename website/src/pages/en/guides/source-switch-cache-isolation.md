@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before changing a Radar source: old cache, pending records and late reads"
-description: "Review cache cleanup, sourceRevisions and filter resets. Local isolation is not server identity, full migration or cross-device cleanup; no source is changed."
+title: "Can you switch Radar sources with a reply still pending? | Yihu"
+description: "Resolve unclear reply outcomes first. After a switch, verify the active source and a fresh snapshot before using the brief."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">A new configured source cannot make old cache or late reads new-source evidence</h2>
+<h2 id="first-answer">Resolve the old source’s pending replies before trusting a new snapshot</h2>
 
 On an actual source-field change, CollieRadarStore checks local reply records and refuses switching while unresolved. Failed old-cache cleanup also prevents the change. The success path increments local sourceRevisions, clears the snapshot, updates Watch source identity and resets selected filters. Reads check revision before storage instead of treating an old response as new-source success.
 

@@ -1,13 +1,14 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "waiting分类能当审批吗？原状态、展示别名与回复资格归档核对"
-description: "按任务状态分类核trim/lowercase与显式别名；waiting/done图标不代表审批或执行证据，分类不回写源值，不新增工作流引擎。"
+title: "Radar 任务显示“等待”，代表已经审批吗？ | 一呼"
+description: "不代表。“等待”可能只是展示分类。行动前要核对来源原状态和实际审批或回复条件。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">展示类别是派生结果，不是源状态改写、审批或回复权限</h2>
+<h2 id="first-answer">保留原状态，另查实际审批记录</h2>
 
-CollieRadarTaskState.classify对状态去首尾空白、转小写后匹配显式别名；waiting/pending可归waiting，done/completed可归completed，未知仍unknown。分类说明展示语义，不把源原文改成中文状态，也不独立证明批准、业务完成或具备回复权限。
+展示分类不是源状态改写。 CollieRadarTaskState.classify对状态去首尾空白、转小写后匹配显式别名；waiting/pending可归waiting，done/completed可归completed，未知仍unknown。分类说明展示语义，不把源原文改成中文状态，也不独立证明批准、业务完成或具备回复权限。
 
 ## 与空字段默认、角色审批和批次比对的区别
 

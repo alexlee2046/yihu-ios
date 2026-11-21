@@ -1,11 +1,12 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "隐私manifest和权限文案能证明什么？声明、运行时与网页服务分账"
-description: "核当前PrivacyInfo的API用途类别与Info.plist文案；声明不是实机网络审计、第三方网页零收集或App Store审核，不新增合规认证。"
+title: "隐私清单能说明语音草稿最后去了哪里吗？ | 一呼"
+description: "不能。清单记录的是源码声明。要判断资料是否出设备，需分别追踪识别和草稿交接的实际路径。"
 lang: zh
+privacyPreview: true
 ---
 
-<h2 id="first-answer">有声明不等全路径已验，权限说明也不是数据从未离机的证明</h2>
+<h2 id="first-answer">除了源码声明，还要单独核对识别和草稿交接</h2>
 
 当前PrivacyInfo.xcprivacy列出UserDefaults和FileTimestamp访问API类别及理由码；Info.plist另有麦克风/相机用途等配置。它们说明源码声明/文案，不是运行时所有入口、第三方工作台脚本或后续交接的审计证据，不能据此宣传零收集、App Store已审核或合法合规认证。
 

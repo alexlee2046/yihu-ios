@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Why six enrollment phrases? Voiced frames, legacy profile versions and capture mode"
-description: "Separate six-phrase enrollment, v1 three/v2 six groups and 32000 voiced frames. Partial consistency is not completion, arbitrary import or identity; no biometrics are read."
+title: "Why does Yihu voiceprint enrollment ask for six phrases? | Yihu"
+description: "Enrollment checks voiced audio for each phrase. Older profile compatibility does not reduce the requirements for a new profile."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Phrase count, voiced estimates and legacy compatibility are separate enrollment conditions</h2>
+<h2 id="first-answer">Check that each phrase has enough voiced audio before trying enrollment again</h2>
 
 Current enrollment requires 6 phrases and 32000 voiced frames per phrase, unlike the 16000-frame matching floor. voicedRange estimates counts, not total recording seconds or semantic truth. Current v2 profiles require six groups; legacy v1 allows three only with dimension/finite/consistency conditions. This is not arbitrary three-phrase import, mode bypass or identity authentication.
 

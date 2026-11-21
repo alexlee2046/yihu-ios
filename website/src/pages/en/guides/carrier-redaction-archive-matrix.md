@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Text, screenshots and attachments: carrier-specific redaction/archive checks"
-description: "Separate text, visible pixels, metadata in the explicit camera/photo staging path and other files. Resizing or not copying source metadata is not automatic masking or universal attachment cleaning."
+title: "Does removing photo metadata hide text in a screenshot? | Yihu"
+description: "No. Check visible text and hidden metadata separately before keeping or sharing a copy."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Identify carrier and processing path: metadata removal is not pixel-text redaction</h2>
+<h2 id="first-answer">Open the exact copy you plan to share and inspect what is visible</h2>
 
-Review text, screenshots, photos and other files separately before retention/sharing. Yihu's explicit camera/photo staging path performs bounded JPEG processing without copying source metadata. This is not automatic pixel masking, OCR redaction, universal attachment cleaning or an archive service. Minimization decides what to retain; here **which layer in a selected carrier may still disclose information** needs review.
+Metadata removal is not pixel-text redaction. Review text, screenshots, photos and other files separately before retention/sharing. Yihu's explicit camera/photo staging path performs bounded JPEG processing without copying source metadata. This is not automatic pixel masking, OCR redaction, universal attachment cleaning or an archive service. Minimization decides what to retain; here **which layer in a selected carrier may still disclose information** needs review.
 
 ## Carrier-specific scope matrix
 

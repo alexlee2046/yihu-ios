@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Reply timeout or oversized response: transport limits do not prove no write"
-description: "Review 20k request bytes, 40k/128 KiB responses and operation-specific timeouts. Client budgets are not service SLAs or permission to resend."
+title: "Radar reply timed out: was it recorded anyway? | Yihu"
+description: "Possibly. A timeout or oversized response does not settle what the server recorded. Check the existing request before sending another."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">Byte/time limits protect the consumer; they are not business results or response SLAs</h2>
+<h2 id="first-answer">Check the existing request instead of treating a timeout as a clean retry</h2>
 
 Native reply bodies are capped at 20000 bytes. Non-history responses are capped at 40000 bytes; history at 128 KiB, including streaming enforcement. Request/resource timeouts vary by operation. Hitting limits does not establish that nothing was recorded server-side and cannot automatically authorize resending. No request, new API or tuning feature is supplied.
 

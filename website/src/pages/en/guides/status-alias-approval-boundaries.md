@@ -1,13 +1,14 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Does waiting mean approval? Archive raw status, display aliases and reply eligibility"
-description: "Review trimmed/lowercase explicit status aliases. waiting/done icons are not approval/execution evidence, source rewrites or a new workflow engine."
+title: "Does “waiting” mean a Radar task was approved? | Yihu"
+description: "No. Waiting can be a display category. Check the raw status and separate approval or reply rules before acting."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">A display category is not a source rewrite, approval or reply permission</h2>
+<h2 id="first-answer">Keep the raw status and check the actual approval separately</h2>
 
-CollieRadarTaskState.classify trims/lowercases then matches explicit aliases. waiting/pending can map to waiting; done/completed to completed; unmatched stays unknown. Display meaning neither rewrites source text into another status nor independently proves approval, completion or reply eligibility.
+A display category is not a source rewrite. CollieRadarTaskState.classify trims/lowercases then matches explicit aliases. waiting/pending can map to waiting; done/completed to completed; unmatched stays unknown. Display meaning neither rewrites source text into another status nor independently proves approval, completion or reply eligibility.
 
 ## Different from missing defaults, roles and batch review
 

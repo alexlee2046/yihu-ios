@@ -1,11 +1,12 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Why voice previews change: replaceable partials, final returns and evidence scope"
-description: "Review complete replaceable partial strings, bufferingNewest and session/phase guards. Intermediate text is not cumulative verbatim speech or delivery proof."
+title: "Why does the live voice transcript change words? | Yihu"
+description: "Live text is a replaceable preview. Review the final draft instead of appending partial text as though it were new speech."
 lang: en
+privacyPreview: true
 ---
 
-<h2 id="first-answer">A partial is replaceable display, not another transcript fragment to append</h2>
+<h2 id="first-answer">Compare the final draft with the intended wording, not a sequence of partials</h2>
 
 The recognition interface defines onPartialText as complete replaceable strings; only returned final text enters original deliverable boundaries. The controller uses bufferingNewest(1) with sessionID, phase and cancellation guards. Redecoding/final results can correct previews. Multiple displays cannot be joined into extra quotations, approvals or executed actions.
 

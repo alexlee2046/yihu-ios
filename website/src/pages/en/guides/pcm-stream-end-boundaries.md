@@ -1,12 +1,13 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "A block ending is not capture ending: noDataNow, endOfStream and converter tails"
-description: "Review state across blocks and up to 16 finish drains. Block/tail handling is not semantic segmentation, zero-loss evidence or a general file transcoder."
+title: "Does the last audio block mean recording is finished? | Yihu"
+description: "A temporary gap is not end-of-stream. Check whether capture actually finished before drawing conclusions from the converter output."
 lang: en
+privacyPreview: true
 indexable: false
 ---
 
-<h2 id="first-answer">Temporarily missing another block is not the end of the entire audio stream</h2>
+<h2 id="first-answer">Distinguish a gap between blocks from the capture finish signal</h2>
 
 The PCM converter persists across tap blocks, using noDataNow between ordinary blocks rather than endOfStream for each. finish ends the stream and drains delayed samples in a bounded loop, up to 16 calls with early exits. This internal stream processing is not file transcoding, semantic segmentation or completeness certification.
 
