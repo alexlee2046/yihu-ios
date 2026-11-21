@@ -1,13 +1,17 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "录音处理跟不上输入怎样核？短语音队列、预览快照与最终结果"
-description: "核短语音源帧队列预算与bufferOverflow、停止排空和final边界；半秒量级预算非延迟SLA、总内存或长笔记上限，不新增自适应调参。"
+title: "录音预览有内容却报溢出？先核最终结果｜一呼"
+description: "短语音出现缓冲溢出时，先区分预览和最终结果，再决定是否重录。用无需麦克风的四问预览练习重试前的输入检查。"
 lang: zh
+privacyPreview: true
+trialLabel: "先做短录音重试前检查"
 ---
 
-<h2 id="first-answer">bufferOverflow是失败边界，不应把部分预览当完整录音</h2>
+<h2 id="first-answer">先核最终结果，别拿预览补成完整录音</h2>
 
-短语音PCM管线用串行队列和有界源帧预算；等待帧超过max(ceil(sourceRate / 2), 4096)会记录bufferOverflow并停止接纳，最终走失败。snapshot不等待队列排空，只是当前输出快照。不能凭预览已有文字/音量，宣布完整采集和交付成功。
+保留现有片段，先查停止后的最终结果。如果是 `bufferOverflow`，按失败处理，不把当前预览当成可交付录音。需要重试时先核输入，再在有权限的 App 做一次短录音并回放；网页预览只能练习输入检查，不能测队列压力。
+
+短语音 PCM 管线等待帧超过 `max(ceil(sourceRate / 2), 4096)` 会停止接纳并最终失败；`snapshot` 不等待排空，只反映当前输出。
 
 ## 与PCM准入和路由恢复的区别
 

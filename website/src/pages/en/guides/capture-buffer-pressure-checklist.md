@@ -1,13 +1,17 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Capture cannot keep up: short-speech queues, previews and final results"
-description: "Review source-frame budget, bufferOverflow, draining and final state. Rough half-second queue admission is not latency SLA, total RAM or a long-note limit."
+title: "Recording buffer overflow? Check the final capture, not the preview | Yihu"
+description: "A visible preview isn’t a finished recording. Check the final short-capture result before retrying, and rehearse input checks without microphone access."
 lang: en
+privacyPreview: true
+trialLabel: "Try input checks before a capture retry"
 ---
 
-<h2 id="first-answer">bufferOverflow is a failure boundary; partial previews are not complete recording</h2>
+<h2 id="first-answer">Check the final result before using a partial preview</h2>
 
-The short-speech PCM pipeline uses a serial queue and bounded waiting source frames. Exceeding max(ceil(sourceRate / 2), 4096) records bufferOverflow, stops admission and ultimately fails. snapshot does not drain the queue; it captures current output only. Visible previews/levels do not prove complete capture or delivery.
+Keep any existing material and check the final result after stopping. If it reports `bufferOverflow`, treat the capture as failed; don’t deliver the current preview as a complete recording. Before retrying, check the input and play back a short test in an app with permission. The web preview rehearses input checks only; it doesn’t test queue pressure.
+
+The short-speech PCM pipeline stops accepting frames and ultimately fails above `max(ceil(sourceRate / 2), 4096)` waiting source frames. A `snapshot` shows current output without draining the queue.
 
 ## Different from format and route review
 

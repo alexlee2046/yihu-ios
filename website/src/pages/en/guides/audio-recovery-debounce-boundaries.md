@@ -1,20 +1,24 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Why recovery notifications are suppressed: a two-second window is not a recovery SLA"
-description: "Review matching token, running engine and unchanged route/format. Real same-shape changes can be suppressed too; no forced recovery or zero-miss guarantee."
+title: "No recording recovery alert? Check the input, not the clock | Yihu"
+description: "Check the capture token, engine and input route before treating a missing alert as recovery. Two seconds isn’t a deadline. Rehearse input checks without mic access."
 lang: en
+privacyPreview: true
+trialLabel: "Rehearse input checks after a disruption"
 indexable: false
 ---
+
+<h2 id="first-answer">Check input and playback for this capture before assuming only the alert was missing</h2>
+
+Compare this capture’s result with the audio route, format and engine state. Keep the original if playback is incomplete; a missing alert doesn’t show recovery succeeded. The four-question preview helps you distinguish output from input without triggering a recovery event.
+
+Source reference: `CollieAudioRecoveryChangeDebouncer` defaults to two seconds. A matching `expectedToken`, unexpired `deadline`, running engine and unchanged format and route can suppress a notice. Even genuine same-route/format changes can be ignored. The window is neither a recovery deadline nor a required wait.
 
 <aside aria-label="Companion arrangements after interrupted recording">
 
 For an older adult's follow-up companion arrangements, an interrupted recording or a suppressed recovery notice does not prove the draft is complete or the ride accepted. First check the original booking and prior message; use the [follow-up companion handover checklist](/en/guides/degraded-handoff-go-no-go/) for non-patient administrative scope. Do not re-record or resend to prove an earlier result. Clinical and urgent matters use hospital-required channels.
 
 </aside>
-
-<h2 id="first-answer">Two seconds is notification policy, not guaranteed recovery or a mandatory wait</h2>
-
-CollieAudioRecoveryChangeDebouncer defaults to two seconds. Matching expectedToken, unexpired deadline, running engine and unchanged format/route permit suppression while retaining expectation for the window. Source also acknowledges genuine same-route/format changes can be ignored then. This tradeoff is not zero-miss, zero-latency or universal recovery evidence.
 
 ## Different from event recovery and completion tokens
 

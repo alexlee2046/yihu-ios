@@ -1,20 +1,24 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "恢复通知为什么被抑制？2秒去抖窗口不是恢复时限或零漏报保证"
-description: "核同token、引擎运行、相同格式/路由的去抖条件；窗口内真实同形态变化也可能被抑制，不新增强制恢复或时延SLA。"
+title: "录音恢复没提示？先核输入，别只等两秒｜一呼"
+description: "录音恢复没提示时，先查令牌、引擎和输入路由，别把两秒窗口当作恢复承诺。用无需麦克风的预览练习输入对照。"
 lang: zh
+privacyPreview: true
+trialLabel: "先练恢复后的输入对照"
 indexable: false
 ---
+
+<h2 id="first-answer">先核当次录音的输入和回放，再判断是否只是没提示</h2>
+
+把当次采集结果与路由、格式和引擎状态对照；回放不完整就保留原件，别因没有通知就当作恢复成功。只想练习怎样区分能听和能录，可用上方四问，不会触发系统恢复事件。
+
+源码参考：`CollieAudioRecoveryChangeDebouncer` 默认窗口为两秒。`expectedToken` 匹配、未过 `deadline`、引擎运行且格式和路由未变时可抑制通知；真实同路由/格式变化可能被忽略。两秒不是恢复时限，也不是必须等待的时长。
 
 <aside aria-label="录音中断后的陪诊安排核对">
 
 整理老人复诊陪诊安排时，录音中断或恢复通知被抑制都不能证明草稿完整、接送已确认。先查原预约与原消息，按[复诊陪诊交接清单](/guides/degraded-handoff-go-no-go/)核非患者行政范围，不重录重发来证明旧结果。诊疗与紧急事项走医院规定渠道。
 
 </aside>
-
-<h2 id="first-answer">2秒是通知抑制策略，不是两秒内必恢复或必须等待两秒</h2>
-
-CollieAudioRecoveryChangeDebouncer默认窗口2秒。匹配expectedToken、未过deadline、引擎运行且格式/路由未变时可抑制通知，并保留整个窗口的预期。源码也说明窗口内真实同路由/格式变化可能被忽略。这是策略权衡，不是零漏报、零延迟或所有音频恢复成功证明。
 
 ## 与恢复矩阵、回调令牌的分工
 
