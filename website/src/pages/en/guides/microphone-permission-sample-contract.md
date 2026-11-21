@@ -7,9 +7,9 @@ privacyPreview: true
 trialLabel: "Try the external-mic input checks"
 ---
 
-<h2 id="first-answer">Check Yihu’s permission, then record and play back a short sample</h2>
+<h2 id="first-answer">Check Yihu’s permission, then compare short dictation results</h2>
 
-Confirm microphone permission for Yihu in system settings. Connect the accessory, record one phrase through the native capture entry and play it back. If startup or conversion fails, keep the error and compare with the phone mic; don’t bypass permission or treat a partial result as success. Web permissions, pairing and model downloads don’t replace this check.
+Confirm microphone permission for Yihu in system settings. Connect the accessory, dictate a nonprivate phrase in Yihu and check the final text or error. Disconnect the accessory and repeat with the phone mic. If you need to listen for silence or distortion, compare the two inputs in a recording app that offers playback; Yihu’s short dictation returns text, not a playable clip. Web permissions, pairing and model downloads don’t replace this check, and a partial result isn’t success.
 
 16 kHz mono PCM is the internal recognition contract, not a required accessory output or a guarantee that arbitrary input converts. No user downgrade-sampling switch is provided.
 

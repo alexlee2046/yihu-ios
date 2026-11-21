@@ -1,15 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
 title: "Recording interrupted? Check saved audio before a retake | Yihu"
-description: "Play back saved audio after a lock, call or low battery. Separate pending transcription from missing audio; rehearse input checks without mic access."
+description: "Check your note after a lock, call or low battery. Separate pending transcription from confirmed gaps; rehearse input checks without mic access."
 lang: en
 privacyPreview: true
 trialLabel: "Try input checks before a retake"
 ---
 
-<h2 id="first-answer">Listen to what was saved and record only the confirmed gap</h2>
+<h2 id="first-answer">Check the saved note and record only a confirmed gap</h2>
 
-Open the original note, play back the saved audio and mark the last passage you can verify. If audio is intact but text is missing, check transcription with Yihu open before recording again. If audio is missing, keep the original and record only that passage as a separate, labeled retake. Don’t ask the model to reconstruct words it never heard.
+Check the note’s duration and transcription status with Yihu open. The note view doesn’t play back the saved audio, and missing text alone doesn’t prove a gap. If you have a playable original, use it to verify what was captured; otherwise mark uncertain passages as unverified. If you confirm a gap, keep the original and record only that passage as a separate, labeled retake. Don’t ask the model to reconstruct words it never heard.
 
 The long-note interface says recording continues while locked and transcription runs with Yihu open. That is not zero-loss evidence for battery, shutdown or write failures, and short speech has different cancellation rules.
 

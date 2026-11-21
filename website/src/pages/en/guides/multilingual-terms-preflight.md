@@ -9,7 +9,7 @@ trialLabel: "Try reviewing terms in a voice draft"
 
 <h2 id="first-answer">Check key terms in one short sample before handing off the draft</h2>
 
-Check the language options in your installed version; try Automatic for mixed Chinese and English. Put the most important terms first, then dictate a short line with no private material. Compare names and terms against the original after playback. Flag uncertain wording for review before handing off the draft.
+Check the language options in your installed version; try Automatic for mixed Chinese and English. Put the most important terms first, then dictate a short line with no private material. Compare names and terms in the final transcript against the phrase you dictated. Flag uncertain wording for review before handing off the draft.
 
 Language hints, parsed terms and final text are separate. The 80-item, 40-character and context-budget limits are source boundaries. A term list is recognition context, not a guarantee of spelling or automatic translation. The web draft sample rehearses manual review, not recognition.
 
