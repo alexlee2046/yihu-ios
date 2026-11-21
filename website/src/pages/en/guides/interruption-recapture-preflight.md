@@ -1,13 +1,17 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Low power or screen lock: inspect saved segments before rerecording"
-description: "Existing long-note UI permits lock-screen recording with foreground transcription. Not a battery-loss guarantee, automatic repair, recovery or recapture feature."
+title: "Recording interrupted? Check saved audio before a retake | Yihu"
+description: "Play back saved audio after a lock, call or low battery. Separate pending transcription from missing audio; rehearse input checks without mic access."
 lang: en
+privacyPreview: true
+trialLabel: "Try input checks before a retake"
 ---
 
-<h2 id="first-answer">Check saved material before deciding to record or compare again</h2>
+<h2 id="first-answer">Listen to what was saved and record only the confirmed gap</h2>
 
-Screen lock does not establish lost long notes. Existing UI says recording continues while locked and transcription runs with Yihu open. Long capture writes to disk and handles calls, resets and write errors. This is not zero-loss evidence for every power, shutdown, storage or accessory condition. Inspect saved material, pending transcription and actual gaps before rerecording; never fabricate missing words.
+Open the original note, play back the saved audio and mark the last passage you can verify. If audio is intact but text is missing, check transcription with Yihu open before recording again. If audio is missing, keep the original and record only that passage as a separate, labeled retake. Don’t ask the model to reconstruct words it never heard.
+
+The long-note interface says recording continues while locked and transcription runs with Yihu open. That is not zero-loss evidence for battery, shutdown or write failures, and short speech has different cancellation rules.
 
 ## Different from foreground and route recovery
 

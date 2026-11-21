@@ -1,13 +1,17 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before using an external mic: permission, 16 kHz mono contract and stop rules"
-description: "Separate system authorization, actual input format, pipeline conversion and model readiness. No user downsampling bypass, arbitrary-format compatibility or automatic cloud fallback."
+title: "External mic allowed but not recording? Check input and format | Yihu"
+description: "Check Yihu’s microphone permission, active input and short recording separately. Rehearse the four input checks without letting the browser access your device."
 lang: en
+privacyPreview: true
+trialLabel: "Try the external-mic input checks"
 ---
 
-<h2 id="first-answer">Permission is not format readiness, and internal 16 kHz is not hardware certification</h2>
+<h2 id="first-answer">Check Yihu’s permission, then record and play back a short sample</h2>
 
-Native capture has its own microphone request and authorization check at start. The recognition interface uses bounded 16 kHz mono PCM. Actual system input and the internal contract remain distinct; conversion/start can fail. No user downgrade-sampling switch is provided here, and permission, pairing or downloaded models do not establish complete capture success.
+Confirm microphone permission for Yihu in system settings. Connect the accessory, record one phrase through the native capture entry and play it back. If startup or conversion fails, keep the error and compare with the phone mic; don’t bypass permission or treat a partial result as success. Web permissions, pairing and model downloads don’t replace this check.
+
+16 kHz mono PCM is the internal recognition contract, not a required accessory output or a guarantee that arbitrary input converts. No user downgrade-sampling switch is provided.
 
 ## Different from input diagnosis and in-progress recovery
 

@@ -70,6 +70,12 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/audio-recovery-debounce-boundaries/': 'audio',
   '/guides/capture-buffer-pressure-checklist/': 'audio',
   '/en/guides/capture-buffer-pressure-checklist/': 'audio',
+  '/guides/interruption-recapture-preflight/': 'audio',
+  '/en/guides/interruption-recapture-preflight/': 'audio',
+  '/guides/microphone-permission-sample-contract/': 'audio',
+  '/en/guides/microphone-permission-sample-contract/': 'audio',
+  '/guides/multilingual-terms-preflight/': 'voice',
+  '/en/guides/multilingual-terms-preflight/': 'voice',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',
