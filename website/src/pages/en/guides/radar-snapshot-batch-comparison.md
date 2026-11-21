@@ -1,13 +1,17 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Compare two task-brief JSON batches: source, scope and field changes"
-description: "Manually compare authorized PM Radar exports after source/scope/identity checks. Nulls or absent records do not establish deletion or completion; no snapshot version store or automatic diff feature."
+title: "How to compare two Radar snapshots without overclaiming | Yihu"
+description: "Match source, scope and record IDs before comparing Radar exports. A record absent from the later batch doesn’t prove deletion or completion."
 lang: en
+privacyPreview: true
+trialLabel: "See fields to review in one Radar brief"
 ---
 
-<h2 id="first-answer">Establish comparability before calling records added, changed or missing</h2>
+<h2 id="first-answer">Match source and scope before comparing records by ID</h2>
 
-Two decodable JSON files can have different sources, permissions or export scopes. Yihu reads your Radar snapshots and bounded cache; this guide does not assert a historical snapshot store or automatic diff interface. For two already authorized exports, first check source/scope, then identities and fields. A record absent from a later batch does not prove deletion, completion or handling.
+For two exports you’re authorized to retain, check source, permissions, filters and export times first. If scope differs, compare only the verified overlap. Match stable IDs before checking status, priority and empty values. If a record is absent later, report it as not seen in that batch; verify against the source before calling it deleted or complete.
+
+Yihu reads Radar snapshots and a bounded cache; the linked preview shows one synthetic brief, not a snapshot history or an automatic diff.
 
 ## A separate task from JSON type validation
 
