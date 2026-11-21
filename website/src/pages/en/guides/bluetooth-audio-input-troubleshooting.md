@@ -10,7 +10,7 @@ preview: audio
 
 <h2 id="first-answer">Record and play back a sample from each mic before blaming Bluetooth</h2>
 
-Park first if you’re checking car audio. Pause calls and other playback. In an app with microphone access, record and play back a short phrase with the Bluetooth device, then repeat with the phone mic. If only Bluetooth is silent, check the active input. If both are silent, check the app’s microphone permission first.
+Park first if you’re checking car audio. Pause calls and other playback. Record a short phrase with the Bluetooth device, then disconnect it and record the same phrase with the phone mic in the same app. Confirm the phone speaker can play a known-good clip, then play both samples through that speaker. If only the Bluetooth sample is silent, check which input the app used. If both are silent, check the app’s microphone permission first.
 
 ## Four checks, in order
 
