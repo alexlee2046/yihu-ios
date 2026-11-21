@@ -76,6 +76,12 @@ export const conversionGuides: Record<string, BuyerScenario> = {
   '/en/guides/microphone-permission-sample-contract/': 'audio',
   '/guides/multilingual-terms-preflight/': 'voice',
   '/en/guides/multilingual-terms-preflight/': 'voice',
+  '/guides/note-organization-prompt-not-minutes/': 'notes',
+  '/en/guides/note-organization-prompt-not-minutes/': 'notes',
+  '/guides/note-transcription-retry-checkpoint/': 'notes',
+  '/en/guides/note-transcription-retry-checkpoint/': 'notes',
+  '/guides/recording-segment-review-labels/': 'notes',
+  '/en/guides/recording-segment-review-labels/': 'notes',
 };
 const pillars: Record<BuyerScenario, string> = {
   voice: 'iphone-agent-voice-drafts', audio: 'bluetooth-audio-input-troubleshooting',

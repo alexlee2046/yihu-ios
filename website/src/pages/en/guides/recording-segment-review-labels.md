@@ -1,13 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Review one meeting recording: manual labels, numbers and negations"
-description: "Use editorial passage labels to check joins, quantities, units, negations and conditions within one transcript. Labels are not app timestamps, speaker detection or automatic minutes."
+title: "How to review a meeting transcript in sections | Yihu"
+description: "Manual passage labels are not app timestamps. Check quantities, units, negations and conditions, then try a local transcript-to-next-step sample."
 lang: en
+privacyPreview: true
+trialLabel: "Try reviewing transcript-to-next-step text"
 ---
 
-<h2 id="first-answer">Recognition windows are not chapters, and editorial labels are not app annotations</h2>
+<h2 id="first-answer">Label passages for review, then check numbers, negations and conditions</h2>
 
-Yihu notes process 16 kHz audio frames in current windows of up to 28 seconds, searching the last eight seconds for a low-energy cut. This is not topic detection, diarization, word timestamps or accuracy evidence. For one recording, use manual labels such as sample passage A/B to locate review work. This does not modify audio, add native annotations or replace checking the original transcript and recording.
+Keep the original wording and mark passages A and B in your own review copy. Check quantities and units, negations and conditions one passage at a time. If you have a playable original recording, use it to resolve doubts; otherwise leave uncertain wording flagged. Labels are not native timestamps. Recognition windows are up to 28 seconds and look for a low-energy cut in the last eight seconds; they are not meeting chapters.
 
 ## A different task from combining independent notes
 
