@@ -34,5 +34,9 @@ for (const prefix of ['', 'en/']) for (const [slug, pillar, boundary, summary] o
     assert.ok(discovery.every(text => text.includes(canonical)));
     const excerpt = discovery[1].split(`](${canonical})\n\n`)[1]?.split('\n\n')[0];
     assert.match(excerpt ?? '', summary);
+    if (slug === 'radar-snapshot-batch-comparison') {
+      const regions = [...html.matchAll(/<div\b[^>]*role="region"[^>]*tabindex="0"[^>]*>([\s\S]*?)<\/div>/g)];
+      assert.equal(regions.filter(([, body]) => body.includes('<table')).length, 2);
+    }
   });
 }
