@@ -9,9 +9,9 @@ trialLabel: "See fields to review in one Radar brief"
 
 <h2 id="first-answer">Match source and scope before comparing records by ID</h2>
 
-For two exports you’re authorized to retain, check source, permissions, filters and export times first. If scope differs, compare only the verified overlap. Match stable IDs before checking status, priority and empty values. If a record is absent later, report it as not seen in that batch; verify against the source before calling it deleted or complete.
+For two exports you’re authorized to retain, check source, permissions and filters first. Use the source timestamp (`date_str`), not the export time, to establish batch order. If scope differs, compare only the verified overlap. Match stable IDs before checking status, priority and empty values. If a record is absent later, report it as not seen in that batch; verify against the source before calling it deleted or complete.
 
-Yihu reads Radar snapshots and a bounded cache; the linked preview shows one synthetic brief, not a snapshot history or an automatic diff.
+Yihu reads Radar snapshots and a bounded cache; the linked preview lets you switch between preset briefs and view one at a time. It doesn’t provide snapshot history or automatic diffs.
 
 ## A separate task from JSON type validation
 

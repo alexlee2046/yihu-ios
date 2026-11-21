@@ -62,7 +62,10 @@ async function openPage(browser, path, width, height, scripting = true) {
     await page.locator('#analytics-deny').click();
     await page.evaluate(() => document.activeElement?.blur());
     return { page, close: () => context.close() };
-  } catch (error) { await context.close(); throw error; }
+  } catch (error) {
+    await context.close();
+    throw new Error(`Preview setup failed: ${browser.browserType().name()} ${path} (${width}×${height})`, { cause: error });
+  }
 }
 async function nativeSpeech(page, en) {
   const capability = await page.evaluate(() => ({ available: !!window.speechSynthesis && typeof SpeechSynthesisUtterance === 'function', voices: typeof window.speechSynthesis?.getVoices === 'function' ? window.speechSynthesis.getVoices().length : 0 }));
