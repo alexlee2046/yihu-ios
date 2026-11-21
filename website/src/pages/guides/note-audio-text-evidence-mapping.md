@@ -1,13 +1,15 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "音频、笔记元数据与转写归档怎样对应？进度不等于逐字真实性"
-description: "区分audio.caf、note.json、transcript与transcribedFrames，以及只交接文字的范围；处理完成不证明每词准确，不新增音文强制对齐或原件备份。"
+title: "只交接转写？先核录音是否随附｜一呼"
+description: "交接前先对照同一条笔记的录音、元数据和转写，只分享已核文字。用浏览器内示例试走交接步骤，再查看一呼 App Store 安装条件。"
 lang: zh
+privacyPreview: true
+trialLabel: "先试录音转写交接"
 ---
 
-<h2 id="first-answer">文字、音频与元数据是不同材料，交接文字不代表音频也已分享</h2>
+<h2 id="first-answer">先按笔记 ID 对照录音与转写，再交接已核文字</h2>
 
-现有笔记按同一id管理audio.caf与note.json，转写从transcribedFrames继续并累积transcript。处理到done不等于每个词都已核对；emptyTranscript分支可以推进帧进度却不增加文字。交给工作台的路径分享转写文字，不含录音文件。本页是人工材料对应清单，不新增音文对齐或原件归档服务。
+打开同一条笔记，对照录音与转写，圈出听不清或尚未复核的段落。工作台这条交接路径分享转写文字，不含录音文件；若对方还需要原音，先另行确认分享权限和交付方式。源码中 `transcribedFrames` 记录处理位置，`emptyTranscript` 可推进帧而不增加文字，`done` 只说明处理已结束。
 
 ## 与片段审校和版本材料归档的区别
 

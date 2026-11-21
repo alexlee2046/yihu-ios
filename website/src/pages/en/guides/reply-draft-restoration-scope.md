@@ -1,13 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Whose restored reply draft is this? submitted, original target and source binding"
-description: "Separate unsent drafts, pending records and current selection. Restored text is not submission or send authority; no cloud sync or background relay."
+title: "Restored an old reply? Check its target first | Yihu"
+description: "Check the workspace, original target and submission state before sending. Rehearse a pre-send review with a local voice draft, then see Yihu’s App Store setup."
 lang: en
+privacyPreview: true
+trialLabel: "Try a pre-send draft review"
 ---
 
-<h2 id="first-answer">Restored text is not a receipt and may still belong to the earlier target</h2>
+<h2 id="first-answer">Check the original workspace and target before continuing</h2>
 
-Native replies load per-workbench local records, verify saved source and restore text, target and requestID. Explicit submitted=false denotes an unsent draft; missing/unclear state conservatively restores pending. The target can differ from current selection, with prepare prompting review of the earlier draft. Visible text proves neither server receipt nor authority for a new target.
+Open the restored record and compare its saved workspace and original target with your current selection. Check the request ID and submission state: review it as unsent only when `submitted=false`. A missing/unclear state conservatively restores pending; keep the record and look for a receipt first. If the target changed, return to the original task before deciding what to do next.
 
 ## Different from pending receipts and material retention
 

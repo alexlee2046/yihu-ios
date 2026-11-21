@@ -1,13 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Trace a manual opportunity-task summary: sentence-to-field provenance"
-description: "Map each editorial summary sentence to authorized source fields, distinguishing attributed status, proposals and independent conclusions. No summary engine, opportunity feed or automatic citations."
+title: "How to fact-check a Radar summary, line by line | Yihu"
+description: "Trace each claim to an authorized Radar field and keep pending or unknown items explicit. Try a local brief example, then check Yihu’s App Store setup."
 lang: en
+privacyPreview: true
+trialLabel: "Try a brief evidence check"
 ---
 
-<h2 id="first-answer">Shorter wording must not expand evidence; trace each sentence to its source</h2>
+<h2 id="first-answer">Map each sentence to a source field before writing conclusions</h2>
 
-Teams supplying existing inquiry/follow-up tasks as PM Radar JSON may write manual summaries; this article adds no opportunity-summary engine. Establish source/scope, then map sentences to fields and retain unknowns. Waiting for acceptance cannot become accepted, and a link cannot turn a proposal into approval or an independently verified external fact.
+Open the authorized Radar JSON and label each sentence with its source, project and corresponding field. Separate the source’s status from your proposed next step. Keep “waiting for acceptance” as written. If a claim lacks evidence, flag it for review before handing off the brief. Use this as a manual editing checklist; this article adds no opportunity-summary engine.
 
 ## Different from second checks and batch comparison
 
