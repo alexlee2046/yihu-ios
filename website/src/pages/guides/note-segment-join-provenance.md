@@ -4,7 +4,7 @@ title: "分段转写接缝有空格？先核原词再交接｜一呼"
 description: "ASCII 字母或数字相接时，拼接可能加空格；空格不证明原话或断句。用本地示例练习交接前的文本复核。"
 lang: zh
 privacyPreview: true
-trialLabel: "先试转写接缝复核"
+trialLabel: "先试交接前的文本复核"
 ---
 
 <h2 id="first-answer">先保留接缝两侧文字，再核对原词</h2>
