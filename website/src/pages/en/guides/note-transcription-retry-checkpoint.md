@@ -1,13 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Does retry start over? Existing text, transcribedFrames and pending state"
-description: "Review retry/load/transcribe checkpoints. pending is not successful recovery; retry is not recapture, deduplication or cloud resume. No real note is modified."
+title: "Does retry restart note transcription from scratch? | Yihu"
+description: "Retry keeps existing text and the saved checkpoint. Pending means queued, not recovered. Try reviewing a local handoff example."
 lang: en
+privacyPreview: true
+trialLabel: "Try reviewing text before handoff"
 ---
 
-<h2 id="first-answer">retry queues preserved fields; it does not automatically clear and re-recognize everything</h2>
+<h2 id="first-answer">Check the existing text and status before retrying</h2>
 
-Note retry sets the supplied note pending, clears failure and saves without clearing transcript/transcribedFrames there. Transcription opens audio at the recorded frame position and joins later results. Loading leftover recording/transcribing can also mark pending. State reset proves neither complete recovery nor word accuracy, and does not start a new recording.
+Open the original note and distinguish a failed transcription from one that is still queued. If the current view offers Retry, distinguish earlier text from any later additions; `pending` means queued, not recovered. In the source, retry clears the failure and saves the pending state without clearing transcript/transcribedFrames, so processing can resume at the recorded frame. Retry does not record again or authorize another handoff.
 
 ## Different from recapture, mapping and joining
 
