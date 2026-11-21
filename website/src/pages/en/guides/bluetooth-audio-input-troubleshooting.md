@@ -20,8 +20,8 @@ Park first if you’re checking car audio. Pause calls and other playback. Recor
 |---|---|---|
 | 1. Device | Phone, headset or parked-car audio? | Decide which microphone you intend to use; a paired name alone does not select it. |
 | 2. Playback | Can you hear a prompt or recording after pausing other playback? | Check output and volume first if not, then check recording. |
-| 3. Sample | Record a phrase in an app with permission and play it back. | For quiet/silent input, check that app's mic permission and compare the phone mic. |
-| 4. Switch | Disconnect the accessory, record on the phone, then reconnect and compare. | If only the accessory fails, inspect available input choices, device settings and app compatibility. |
+| 3. Record | Record a phrase with the accessory connected. | Disconnect the accessory and record the same phrase with the phone mic in the same app. |
+| 4. Compare | Play a known-good clip through the phone speaker, then play both recordings through that speaker. | If only the accessory sample is silent, check which input the app used. If both are silent, check the app's mic permission. |
 
 </div>
 
