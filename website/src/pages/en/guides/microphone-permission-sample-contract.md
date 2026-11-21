@@ -1,10 +1,10 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
 title: "External mic allowed but not recording? Check input and format | Yihu"
-description: "Check Yihu’s microphone permission, active input and short recording separately. Rehearse the four input checks without letting the browser access your device."
+description: "Check Yihu’s microphone permission, active input and short recording separately. Try the Bluetooth self-check preview without giving the browser device access."
 lang: en
 privacyPreview: true
-trialLabel: "Try the external-mic input checks"
+trialLabel: "Try the Bluetooth self-check preview"
 ---
 
 <h2 id="first-answer">Check Yihu’s permission, then compare short dictation results</h2>

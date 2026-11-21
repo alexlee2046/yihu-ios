@@ -1,10 +1,10 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
 title: "外接麦克风已授权却录不了？分开查输入和格式｜一呼"
-description: "接入外设时，先查一呼麦克风权限和实际输入，再确认格式转换与短录音结果。先用不访问设备的四问预览练习排查。"
+description: "接入外设时，先查一呼麦克风权限和实际输入，再确认格式转换与短录音结果。可用不访问设备的蓝牙四问预览练习排查。"
 lang: zh
 privacyPreview: true
-trialLabel: "先试外设麦克风四问"
+trialLabel: "试做蓝牙四问预览"
 ---
 
 <h2 id="first-answer">先核一呼权限，再对比两次短语音转写</h2>
