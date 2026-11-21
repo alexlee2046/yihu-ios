@@ -1,15 +1,16 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "iPhone Bluetooth Plays but Won’t Record? 4 Mic Checks | Yihu"
-description: "Headset connected but recording silent? Answer four questions about playback, mic permission and a phone-mic test. No browser device access needed; park before car-audio checks."
+title: "iPhone Bluetooth mic silent? Compare it with the phone mic | Yihu"
+description: "Hear audio but can’t record? Compare the headset and phone mics to narrow down input or permission issues. Try four checks without device access; park first in a car."
 lang: en
 privacyPreview: true
+trialLabel: "Try the four Bluetooth mic checks"
 preview: audio
 ---
 
-<h2 id="first-answer">Check microphone input separately from playback</h2>
+<h2 id="first-answer">Record and play back a sample from each mic before blaming Bluetooth</h2>
 
-Park or move somewhere safe, pause calls and other playback, then record a short sample. Compare the device, audible output, recording playback and a second sample after switching.
+Park first if you’re checking car audio. Pause calls and other playback. In an app with microphone access, record and play back a short phrase with the Bluetooth device, then repeat with the phone mic. If only Bluetooth is silent, check the active input. If both are silent, check the app’s microphone permission first.
 
 ## Four checks, in order
 
