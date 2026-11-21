@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
 title: "Does the Meeting Minutes template create minutes? | Yihu"
-description: "Check what direct insertion, the tray and Radar drafts carry. The template is a prompt, not finished minutes. Try reviewing a local handoff example."
+description: "Meeting Minutes is a prompt, not a finished draft. Direct insertion and the tray can carry the prompt; Radar drafts carry the transcript only. Try a local sample."
 lang: en
 privacyPreview: true
 trialLabel: "Try reviewing handoff text"

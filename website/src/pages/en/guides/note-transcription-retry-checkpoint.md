@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
 title: "Does retry restart note transcription from scratch? | Yihu"
-description: "Retry keeps existing text and the saved checkpoint. Check the note status before comparing old and new text. Try reviewing a local handoff example."
+description: "Retry keeps existing text and the saved checkpoint. Pending means queued, not recovered. Try reviewing a local handoff example."
 lang: en
 privacyPreview: true
 trialLabel: "Try reviewing text before handoff"

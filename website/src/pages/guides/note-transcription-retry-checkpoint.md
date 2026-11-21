@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
 title: "笔记转写失败，重试会从头开始吗？｜一呼"
-description: "重试会保留已有文字和处理断点。先看当前状态，再区分旧文字与新增结果；用本地示例练习交接前复核。"
+description: "重试会保留已有文字和处理断点。待处理表示排队，不等于恢复成功。用本地示例练习交接前复核。"
 lang: zh
 privacyPreview: true
 trialLabel: "先试交接前的转写核对"

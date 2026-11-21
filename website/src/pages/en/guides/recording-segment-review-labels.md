@@ -1,7 +1,7 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
 title: "How to review a meeting transcript in sections | Yihu"
-description: "Label passages by hand, then check quantities, units, negations and conditions. Try reviewing a local transcript-to-next-step example before sharing."
+description: "Manual passage labels are not app timestamps. Check quantities, units, negations and conditions, then try a local transcript-to-next-step sample."
 lang: en
 privacyPreview: true
 trialLabel: "Try reviewing transcript-to-next-step text"

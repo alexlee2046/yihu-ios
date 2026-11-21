@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
 title: "选了「会议纪要」就有成稿？先核交接内容｜一呼"
-description: "「会议纪要」只是整理指令。先核直接填入、托盘和 Radar 草稿各带什么，再用本地示例练习核对交接文字。"
+description: "「会议纪要」只是整理指令，不是成稿。直接填入和托盘可带指令，Radar 草稿只带原转写。用本地示例练习核对交接文字。"
 lang: zh
 privacyPreview: true
 trialLabel: "先试交接文字核对"
