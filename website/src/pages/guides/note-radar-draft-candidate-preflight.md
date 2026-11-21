@@ -1,11 +1,15 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "笔记存为Radar草稿前：候选目标为什么不等于已具备回复写权"
-description: "按本地候选枚举与saveUnsubmittedDraft核源/状态/ID、原标记和eligible=false；候选不是实时能力或批量分发，不新增商机后台。"
+title: "笔记存为 Radar 草稿前，先核目标和来源｜一呼"
+description: "Radar 候选来自本地筛选，不证明来源最新或可以回复。先核原任务，再用本地示例练习检查交接文字。"
 lang: zh
+privacyPreview: true
+trialLabel: "先试核对笔记交接文字"
 ---
 
-<h2 id="first-answer">看见候选只说明本地筛选通过，保存草稿不是提交回复</h2>
+<h2 id="first-answer">先核来源和原任务，再决定是否保存草稿</h2>
+
+对照原工作台和任务标识，确认目标没选错，再检查准备交接的文字。看到候选不等于获得回复权；保存的是未提交草稿。若保存报错，先检查已有草稿和笔记交接状态，不要直接重试。
 
 writableDraftCandidates从本地工作台与快照枚举目标：源URL形态有效、无本地回复记录、指定待决策/验收状态及非空id。该枚举不额外证明reply_supported或快照时效。保存后target设eligible=false、epoch/version为空且submitted=false，仍需原生prepare/确认；不是自动发送或商机采集后台。
 

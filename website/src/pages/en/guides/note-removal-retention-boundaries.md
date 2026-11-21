@@ -1,11 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "After a note leaves the list: async saves, disk removal and remote copies differ"
-description: "Review recordingID, in-memory deleted guards and attempted directory removal. List changes are not secure erasure, permanent tombstones or remote recall; no data is deleted."
+title: "Note gone from the list? Check handed-off copies separately | Yihu"
+description: "List removal doesn’t prove disk erasure or recall handed-off copies. Check each destination separately; the local preview only rehearses handoff."
 lang: en
+privacyPreview: true
+trialLabel: "See a sample note handoff"
 ---
 
-<h2 id="first-answer">List removal proves neither deletion of every copy nor recoverability</h2>
+<h2 id="first-answer">Check list status and handed-off copies separately</h2>
+
+If a note no longer appears, record that as a list change, not evidence of disk erasure or recoverability. For a prior handoff, use your existing access to check the copy at its destination and follow its retention rules. The browser sample rehearses handoff with preset material; it does not delete or recall anything.
 
 Note deletion refuses the current recordingID. For other notes it records an in-memory deleted id, pauses transcription if needed, attempts directory removal, updates the list and clears progress. save checks deleted against async rewrites. Removal uses try?, so list changes do not independently verify disk deletion, permanent tombstones, secure erasure or remote recall.
 

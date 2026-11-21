@@ -1,11 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Segment joining: low-energy cuts, ASCII spaces and original-word evidence"
-description: "Review 28-second windows, last-eight-second search and ASCII boundary joining. Not semantic segmentation, punctuation repair, alignment or a minutes engine."
+title: "Transcript segments joined oddly? Check the words at the join | Yihu"
+description: "Joining adjacent ASCII letters or digits may add a space. That isn’t evidence of the original wording. Try reviewing a local handoff sample."
 lang: en
+privacyPreview: true
+trialLabel: "Try reviewing text before handoff"
 ---
 
-<h2 id="first-answer">Joining may add a boundary space; it does not certify grammar, punctuation or meaning</h2>
+<h2 id="first-answer">Keep the text on both sides of the join before reviewing the words</h2>
+
+Keep the transcript on both sides of the join in your review copy. Check names, numbers and negations. If you have a playable original recording, use it to resolve doubts; otherwise flag uncertain words. Keep your edits separate from the original transcript. An inserted space isn’t evidence of what was said.
 
 CollieNoteSegmenter uses 16 kHz, 28-second windows and a low-energy search over the last eight seconds in 1600-frame steps, with final/short-window handling. join inserts one space only when both adjacent characters are ASCII letters/digits; other boundaries concatenate. It is not semantic splitting, punctuation repair, diarization or word alignment. No structured-minutes engine is added.
 

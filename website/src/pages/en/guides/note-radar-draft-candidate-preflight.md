@@ -1,11 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before saving a note as a Radar draft: candidates do not grant reply access"
-description: "Review local enumeration, source/state/id checks, reservation and eligible=false. Candidates are not live capabilities, bulk dispatch or a new opportunity backend."
+title: "Saving a note as a Radar draft? Verify the target first | Yihu"
+description: "A Radar candidate passed local filters; it doesn’t prove the source is current or replies are allowed. Check the task, then try a local handoff sample."
 lang: en
+privacyPreview: true
+trialLabel: "Try reviewing note handoff text"
 ---
 
-<h2 id="first-answer">A visible candidate passed local filters; draft saving is not reply submission</h2>
+<h2 id="first-answer">Verify the source and original task before saving a draft</h2>
+
+Match the workspace and task ID to the original item, then review the text you intend to hand off. Being listed doesn’t grant reply access, and saving leaves an unsubmitted draft. If saving fails, check the existing draft and note handoff status before trying again.
 
 writableDraftCandidates enumerates local workbenches/snapshots with valid feed shape, no local reply record, specified decision/acceptance states and nonempty id. Enumeration does not additionally establish reply_supported or freshness. Saved targets use eligible=false, empty epoch/version and submitted=false; original prepare/confirmation remains. No automatic sender or opportunity-collection backend is added.
 
