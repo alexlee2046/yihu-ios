@@ -1,13 +1,15 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Does choosing Meeting Minutes generate minutes? Templates, originals and handoff payloads"
-description: "Organization is instruction text, not local summarization. Direct/tray and Radar draft payloads differ; selection does not edit transcript or certify owners/dates/execution."
+title: "Does the Meeting Minutes template create minutes? | Yihu"
+description: "Check what direct insertion, the tray and Radar drafts carry. The template is a prompt, not finished minutes. Try reviewing a local handoff example."
 lang: en
+privacyPreview: true
+trialLabel: "Try reviewing handoff text"
 ---
 
-<h2 id="first-answer">Meeting Minutes is a handoff prompt template, not completed native minutes</h2>
+<h2 id="first-answer">Check what goes out before treating anything as finished minutes</h2>
 
-The organization Picker selects instruction without rewriting stored transcript. Direct insertion can prepend it; short tray text includes instruction/body, long tray material uses Markdown body plus separate instruction. Radar draft save passes transcript directly. These are not identical payloads, and a selected label establishes no generated minutes, filled owners/dates or destination execution.
+Keep the original transcript and identify the handoff route. Direct insertion can prepend the instruction; short tray text combines instruction and body, while longer tray material keeps the Markdown body separate from the instruction. A Radar draft receives the transcript. The Picker selects an instruction without rewriting stored transcript text. If the destination produces minutes, compare them with the original and leave unclear owners or dates unresolved.
 
 ## Different from brief fields, multi-note review and candidate admission
 

@@ -1,13 +1,15 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "点重试会从头转写吗？已有文字、transcribedFrames与pending核对"
-description: "按retry/load/transcribe核保留文字与帧断点；pending不是恢复成功，重试不等重录、自动去重或云端续传，不修改真实笔记。"
+title: "笔记转写失败，重试会从头开始吗？｜一呼"
+description: "重试会保留已有文字和处理断点。先看当前状态，再区分旧文字与新增结果；用本地示例练习交接前复核。"
 lang: zh
+privacyPreview: true
+trialLabel: "先试交接前的转写核对"
 ---
 
-<h2 id="first-answer">retry保留原字段并排队，不是自动清空全文从头识别</h2>
+<h2 id="first-answer">先核已有文字和状态，再决定是否重试</h2>
 
-笔记retry把传入笔记状态设pending、清failure后保存，未在此清空transcript或transcribedFrames。转写读取音频时从已记帧位置继续并拼接后续结果；加载时遗留recording/transcribing也可转pending。状态重置不是完整恢复或逐词准确率验收，更不是自动重新录制。
+打开原笔记，先确认这是转写失败，而不是仍在排队。若当前界面提供重试，使用后把旧文字与后续新增内容分开核对；看到 `pending` 只表示待处理，不等于恢复成功。源码中 retry 保存待处理状态、清除失败标记，未在此清空transcript或transcribedFrames；处理按已记录的帧位置继续。重试不重录，也不授权重新交接。
 
 ## 与重录前检、音文映射和拼接的区别
 

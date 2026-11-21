@@ -1,13 +1,15 @@
 ---
 layout: ../../layouts/Wave3Guide.astro
-title: "选了会议纪要就生成纪要了吗？整理模板、原文与交接载荷"
-description: "整理方式是instruction文本而非本机摘要；direct/托盘与radar草稿载荷不同，选择不改transcript，不保证负责人/时间或目标执行。"
+title: "选了「会议纪要」就有成稿？先核交接内容｜一呼"
+description: "「会议纪要」只是整理指令。先核直接填入、托盘和 Radar 草稿各带什么，再用本地示例练习核对交接文字。"
 lang: zh
+privacyPreview: true
+trialLabel: "先试交接文字核对"
 ---
 
-<h2 id="first-answer">“会议纪要”是交接提示模板，不是已完成的本机纪要</h2>
+<h2 id="first-answer">先看交接要带什么，再判断有没有纪要成稿</h2>
 
-整理方式Picker选择instruction文本，不重写保存的transcript。直接填入可加指令前缀；托盘短文带指令和正文，长文以Markdown全文加单独指令；存Radar草稿直接传transcript。三路不能互当同一payload，也不能从选择标签推出本机已生成纪要、补齐负责人/时间或目标服务已执行。
+保留转写原文，先确认要走哪个交接入口。直接填入可附整理指令；托盘短文带指令和正文，长文将 Markdown 正文和指令分开；Radar 草稿传的是原转写。Picker 选的是 `instruction`，不重写保存的transcript。只有看到目标端实际产物并对照原文，才能判断纪要是否可用；负责人或日期不明就保持待核。
 
 ## 与字段简报、多笔记复核和草稿候选的区别
 
