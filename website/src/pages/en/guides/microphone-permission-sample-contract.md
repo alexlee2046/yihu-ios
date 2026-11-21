@@ -1,13 +1,17 @@
 ---
 layout: ../../../layouts/Wave3Guide.astro
-title: "Before using an external mic: permission, 16 kHz mono contract and stop rules"
-description: "Separate system authorization, actual input format, pipeline conversion and model readiness. No user downsampling bypass, arbitrary-format compatibility or automatic cloud fallback."
+title: "External mic allowed but not recording? Check input and format | Yihu"
+description: "Check Yihu’s microphone permission, active input and short recording separately. Try the Bluetooth self-check preview without giving the browser device access."
 lang: en
+privacyPreview: true
+trialLabel: "Try the Bluetooth self-check preview"
 ---
 
-<h2 id="first-answer">Permission is not format readiness, and internal 16 kHz is not hardware certification</h2>
+<h2 id="first-answer">Check Yihu’s permission, then compare short dictation results</h2>
 
-Native capture has its own microphone request and authorization check at start. The recognition interface uses bounded 16 kHz mono PCM. Actual system input and the internal contract remain distinct; conversion/start can fail. No user downgrade-sampling switch is provided here, and permission, pairing or downloaded models do not establish complete capture success.
+Confirm microphone permission for Yihu in system settings. Connect the accessory, check the active input for that capture if it’s visible, then dictate a nonprivate phrase in Yihu and check the final text or error. Disconnect the accessory and repeat the same phrase. If you can’t verify the active input, a successful transcript doesn’t prove the accessory mic worked. To check for silence or distortion, use the same recording app for both samples and verify its input and playback; that app’s input doesn’t establish which input Yihu used. Yihu’s short dictation returns text, not a playable clip. Web permissions, pairing and model downloads don’t replace this check, and a partial result isn’t success.
+
+16 kHz mono PCM is the internal recognition contract, not a required accessory output or a guarantee that arbitrary input converts. No user downgrade-sampling switch is provided.
 
 ## Different from input diagnosis and in-progress recovery
 
