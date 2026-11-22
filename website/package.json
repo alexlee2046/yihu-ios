@@ -9,7 +9,8 @@
     "preview": "astro preview --host 127.0.0.1",
     "check": "astro check",
     "test": "node --test --test-concurrency=2 tests/*.test.mjs",
-    "llms:export": "python3 tools/export-llms.py"
+    "llms:export": "python3 tools/export-llms.py",
+    "container:compare": "node tools/compare-hosts.mjs"
   },
   "dependencies": {
     "@astrojs/react": "7.0.0",
