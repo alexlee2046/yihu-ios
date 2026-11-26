@@ -15,7 +15,14 @@ const sdkStub = `// Literal fixture, never fetched from the platform.
 window.__contactFixture = { runs: [], toggles: [] };
 window.chatwootSDK = { run(config) {
   window.__contactFixture.runs.push(config);
-  window.$chatwoot = { ...config, hasLoaded:true, toggle(state) { window.__contactFixture.toggles.push(state ?? 'toggle'); } };
+  const holder = document.createElement('div');
+  holder.id = 'cw-widget-holder';
+  document.body.append(holder);
+  window.$chatwoot = { ...config, hasLoaded:true, isOpen:false, toggle(state) {
+    window.__contactFixture.toggles.push(state ?? 'toggle');
+    this.isOpen = state ? state === 'open' : !this.isOpen;
+    holder.classList.toggle('open', this.isOpen);
+  } };
   window.dispatchEvent(new Event('chatwoot:ready'));
 } };`;
 for (const signal of ['SIGTERM','SIGINT']) process.once(signal, async () => {
@@ -78,6 +85,8 @@ for (const [engine,type] of [['chromium',chromium],['webkit',webkit]]) {
         else {
           assert.equal(await email.getAttribute('href'),'mailto:support@example.test');
           const button=page.locator('[data-contact-chat] button');
+          assert.equal(await button.innerText(),path==='/en/'?'Chat':'在线客服');
+          assert.equal(await button.evaluate(b=>b.getBoundingClientRect().height),46);
           await button.focus();
           assert.ok(await button.evaluate(b=>getComputedStyle(b).outlineStyle!=='none'&&parseFloat(getComputedStyle(b).outlineWidth)>=3),'visible keyboard focus');
           item.before=await geometry(page);
@@ -87,18 +96,27 @@ for (const [engine,type] of [['chromium',chromium],['webkit',webkit]]) {
           await page.waitForFunction(()=>window.__contactFixture?.toggles.length===1,null,{timeout:5000});
           assert.equal(network.sdkStubRequests,1);
           assert.deepEqual(await page.evaluate(()=>window.__contactFixture.runs),[{baseUrl:'https://chatwoot.kynora.world',websiteToken:'synthetic-not-a-real-inbox'}]);
-          assert.ok(await button.evaluate(b=>b===document.activeElement),'loading preserves keyboard focus');
-          await page.keyboard.press('Space'); await page.keyboard.press('Escape');
-          assert.deepEqual(await page.evaluate(()=>window.__contactFixture.toggles),['open','toggle','close']);
+          await button.waitFor({state:'hidden'});
+          assert.equal(await page.evaluate(()=>window.chatwootSettings.darkMode),'light');
+          await page.evaluate(()=>window.$chatwoot.toggle('close'));
+          await button.waitFor({state:'visible'});
+          assert.ok(await button.evaluate(b=>b===document.activeElement),'widget close restores launcher focus');
+          await page.keyboard.press('Space'); await button.waitFor({state:'hidden'});
+          await page.evaluate(()=>window.$chatwoot.toggle('close'));
+          await button.waitFor({state:'visible'});
+          assert.deepEqual(await page.evaluate(()=>window.__contactFixture.toggles),['open','close','toggle','close']);
           assert.equal(await button.getAttribute('aria-expanded'),null,'do not invent external iframe state');
           await page.locator('#analytics-deny').click();
           await page.waitForFunction(()=>document.querySelector('[data-contact-chat]').style.getPropertyValue('--contact-bottom')==='20px');
           await button.focus(); await page.keyboard.press('Enter');
           assert.equal(await page.evaluate(()=>window.__contactFixture.toggles.at(-1)),'toggle','contact remains independent after analytics denial');
+          await button.waitFor({state:'hidden'});
+          await page.evaluate(()=>window.$chatwoot.toggle('close'));
+          await button.waitFor({state:'visible'});
           item.afterDenial=await geometry(page);
           const events=await page.evaluate(()=>(window.dataLayer||[]).map(x=>Array.from(x)).filter(x=>x[0]==='event'));
           assert.equal(events.length,0,'contact never adds preview/user-content telemetry');
-          item.keys='native Enter/Space and focused-launcher Escape; external iframe keyboard untested';
+          item.keys='native Enter/Space; stub close restores launcher focus; external iframe keyboard untested';
           item.mail='href only; no mail app or sending API invoked';
           await page.screenshot({path:resolve(output,`${engine}-configured-main-${path==='/en/'?'en':'zh'}-${width}.png`),fullPage:false});
           await email.scrollIntoViewIfNeeded();
