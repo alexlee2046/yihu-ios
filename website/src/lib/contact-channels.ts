@@ -79,7 +79,9 @@ export function mountContactChat(root: HTMLElement) {
   const syncVisibility = () => {
     const current = api();
     const wasHidden = button.hidden;
+    const launcherFocused = document.activeElement === button;
     button.hidden = !!holder?.isConnected && current?.isOpen === true;
+    if (!wasHidden && button.hidden && launcherFocused) holder?.querySelector('iframe')?.focus();
     if (wasHidden && !button.hidden && current &&
         (document.activeElement === document.body || holder?.contains(document.activeElement))) button.focus();
   };

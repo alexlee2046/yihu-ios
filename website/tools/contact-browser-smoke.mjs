@@ -17,10 +17,15 @@ window.chatwootSDK = { run(config) {
   window.__contactFixture.runs.push(config);
   const holder = document.createElement('div');
   holder.id = 'cw-widget-holder';
+  holder.style.position = 'fixed';
+  holder.style.bottom = '0';
+  holder.hidden = true;
+  holder.append(document.createElement('iframe'));
   document.body.append(holder);
   window.$chatwoot = { ...config, hasLoaded:true, isOpen:false, toggle(state) {
     window.__contactFixture.toggles.push(state ?? 'toggle');
     this.isOpen = state ? state === 'open' : !this.isOpen;
+    holder.hidden = !this.isOpen;
     holder.classList.toggle('open', this.isOpen);
   } };
   window.dispatchEvent(new Event('chatwoot:ready'));
@@ -97,6 +102,7 @@ for (const [engine,type] of [['chromium',chromium],['webkit',webkit]]) {
           assert.equal(network.sdkStubRequests,1);
           assert.deepEqual(await page.evaluate(()=>window.__contactFixture.runs),[{baseUrl:'https://chatwoot.kynora.world',websiteToken:'synthetic-not-a-real-inbox'}]);
           await button.waitFor({state:'hidden'});
+          assert.ok(await page.locator('#cw-widget-holder iframe').evaluate(f=>document.activeElement===f),'keyboard open moves focus to chat');
           assert.equal(await page.evaluate(()=>window.chatwootSettings.darkMode),'light');
           await page.evaluate(()=>window.$chatwoot.toggle('close'));
           await button.waitFor({state:'visible'});
