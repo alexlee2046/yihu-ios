@@ -51,9 +51,10 @@ function harness(options = {}) {
   const banner = { hidden: false, getBoundingClientRect: () => ({ top: 740 }) };
   const box = { dataset: { baseUrl: base.PUBLIC_CHATWOOT_BASE_URL, websiteToken: base.PUBLIC_CHATWOOT_WEBSITE_TOKEN, lang: 'en', ...options.dataset }, style: { setProperty(k,v) { styles[k]=v; } }, querySelector(selector) { return selector === 'button' ? button : status; } };
   class Observer { constructor(fn) { this.fn=fn; observers.push(this); } observe() {} disconnect() {} }
-  const doc = { getElementById(id) { assert.equal(id, 'analytics-consent'); return banner; }, createElement(tag) { assert.equal(tag, 'script'); return { removed:false, remove() { this.removed=true; } }; }, head: { appendChild(s) { scripts.push(s); } } };
+  const body = {}, holder = { isConnected: true, contains: () => false };
+  const doc = { body, activeElement: body, getElementById(id) { return id==='cw-widget-holder' ? (options.holder ? holder : null) : banner; }, createElement(tag) { assert.equal(tag, 'script'); return { removed:false, remove() { this.removed=true; } }; }, head: { appendChild(s) { scripts.push(s); } } };
   const exports = module({ window: win, document: doc, ResizeObserver: Observer, MutationObserver: Observer, setTimeout(fn) { const n=nextTimer++; timers.set(n,fn); return n; }, clearTimeout(n) { timers.delete(n); } });
-  const ownedAPI = { baseUrl:base.PUBLIC_CHATWOOT_BASE_URL, websiteToken:base.PUBLIC_CHATWOOT_WEBSITE_TOKEN, hasLoaded:true, toggle(state) { calls.push(state); } };
+  const ownedAPI = { baseUrl:base.PUBLIC_CHATWOOT_BASE_URL, websiteToken:base.PUBLIC_CHATWOOT_WEBSITE_TOKEN, hasLoaded:true, isOpen:false, toggle(state) { calls.push(state); this.isOpen = state ? state==='open' : !this.isOpen; } };
   const mount = () => exports.mountContactChat(box);
   const click = () => button.dispatchEvent(new Event('click'));
   const ready = () => win.dispatchEvent(new Event('chatwoot:ready'));
@@ -82,7 +83,17 @@ test('one click lazily loads only the approved SDK and only two public run field
   assert.equal(h.win.chatwootSettings.hideMessageBubble,true);
   assert.equal(h.win.chatwootSettings.showUnreadMessagesDialog,false);
   assert.equal(h.win.chatwootSettings.locale,'en');
+  assert.equal(h.win.chatwootSettings.darkMode,'light');
   assert.equal('aria-expanded' in h.button.attrs,false,'do not invent a cross-frame open state');
+});
+test('only owned open state hides the pill; iframe close restores it and its focus', () => {
+  const h=harness({holder:true}); h.click(); h.load();
+  assert.equal(h.button.hidden,true);
+  h.ownedAPI.isOpen=false; h.observers[2].fn();
+  assert.equal(h.button.hidden,false); assert.equal(h.button.focusCount,1);
+  h.click(); assert.equal(h.button.hidden,true);
+  h.win.$chatwoot={...h.ownedAPI}; h.observers[2].fn();
+  assert.equal(h.button.hidden,false); assert.equal(h.button.focusCount,1);
 });
 test('early/duplicate ready events cannot run/open the widget again', () => {
   const h = harness(); h.ready(); assert.equal(h.calls.length,0);

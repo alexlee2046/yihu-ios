@@ -24,7 +24,7 @@ export function contactConfig(env: Record<string, unknown>): ContactConfig {
   return result;
 }
 
-type ChatAPI = { baseUrl: string; websiteToken: string; hasLoaded: boolean; toggle(state?: 'open' | 'close'): void };
+type ChatAPI = { baseUrl: string; websiteToken: string; hasLoaded: boolean; isOpen?: boolean; toggle(state?: 'open' | 'close'): void };
 type ChatSDK = { run(config: { baseUrl: string; websiteToken: string }): void };
 type ChatWindow = Window & {
   chatwootSettings?: Record<string, unknown>;
@@ -59,8 +59,11 @@ export function mountContactChat(root: HTMLElement) {
   if (banner) { resize?.observe(banner); mutation?.observe(banner, { attributes: true, attributeFilter: ['hidden'] }); }
   window.addEventListener('resize', position);
   position();
+  let holder: HTMLElement | null = null;
   const fail = () => {
     failed = true;
+    visibility?.disconnect();
+    button.hidden = false;
     clearTimeout(timer);
     script?.remove();
     button.disabled = true;
@@ -73,6 +76,21 @@ export function mountContactChat(root: HTMLElement) {
   const installedAPI = (): ChatAPI | undefined => win.$chatwoot;
   const api = () => ready && !failed && !inactive && installer() && win.$chatwoot === ownedAPI
     && binding(ownedAPI) && ownedAPI.toggle === ownedToggle && ownedAPI.hasLoaded === true ? ownedAPI : null;
+  const syncVisibility = () => {
+    const current = api();
+    const wasHidden = button.hidden;
+    const launcherFocused = document.activeElement === button;
+    button.hidden = !!holder?.isConnected && current?.isOpen === true;
+    if (!wasHidden && button.hidden && launcherFocused) holder?.querySelector('iframe')?.focus();
+    if (wasHidden && !button.hidden && current &&
+        (document.activeElement === document.body || holder?.contains(document.activeElement))) button.focus();
+  };
+  // Chatwoot updates the holder class when its own iframe closes the panel.
+  // The class is only a notification; state comes from the currently owned API.
+  const visibility = typeof MutationObserver === 'undefined' ? undefined : new MutationObserver(syncVisibility);
+  const observeVisibility = () => {
+    if (holder) visibility?.observe(holder, { attributes: true, attributeFilter: ['class'] });
+  };
   const finishReady = () => {
     if (!installer() || win.$chatwoot !== ownedAPI || !binding(ownedAPI) || ownedAPI.toggle !== ownedToggle) { fail(); return; }
     // The upstream SDK installs this flag as false and sets it before ready.
@@ -83,7 +101,11 @@ export function mountContactChat(root: HTMLElement) {
     button.disabled = false;
     button.removeAttribute('aria-busy');
     status.textContent = '';
-    try { ownedAPI.toggle('open'); } catch { fail(); }
+    if (visibility) holder = document.getElementById('cw-widget-holder');
+    observeVisibility();
+    const current = api();
+    if (!current) { fail(); return; }
+    try { current.toggle('open'); syncVisibility(); } catch { fail(); }
   };
   window.addEventListener('chatwoot:ready', () => {
     if (!sdkStarted || failed || inactive || ready) return;
@@ -103,13 +125,13 @@ export function mountContactChat(root: HTMLElement) {
   });
   button.addEventListener('click', () => {
     const current = api();
-    if (current) { try { current.toggle(); } catch { fail(); } return; }
+    if (current) { try { current.toggle(); syncVisibility(); } catch { fail(); } return; }
     if (ready && !inactive && !failed) { fail(); return; }
     if (started || failed || inactive) return;
     started = true;
     // Never adopt a pre-existing widget which could belong to another inbox.
     if (win.chatwootSDK || win.$chatwoot || win.chatwootSettings) { fail(); return; }
-    win.chatwootSettings = { hideMessageBubble: true, showUnreadMessagesDialog: false, locale: en ? 'en' : 'zh_CN', useBrowserLanguage: false };
+    win.chatwootSettings = { hideMessageBubble: true, showUnreadMessagesDialog: false, darkMode: 'light', locale: en ? 'en' : 'zh_CN', useBrowserLanguage: false };
     // Keep native keyboard focus while the guarded single attempt is pending.
     button.setAttribute('aria-busy', 'true');
     status.textContent = en ? 'Loading chat…' : '正在加载客服…';
@@ -146,12 +168,14 @@ export function mountContactChat(root: HTMLElement) {
   // Native Enter/Space click behavior stays intact. This handles only the focused launcher.
   button.addEventListener('keydown', event => {
     const current = api();
-    if (event.key === 'Escape' && current) { event.preventDefault(); try { current.toggle('close'); button.focus(); } catch { fail(); } }
+    if (event.key === 'Escape' && current) { event.preventDefault(); try { current.toggle('close'); const wasHidden = button.hidden; syncVisibility(); if (!wasHidden) button.focus(); } catch { fail(); } }
   });
   window.addEventListener('pagehide', () => {
     const current = api();
     if (current) { try { current.toggle('close'); } catch { /* Leaving the document. */ } }
     inactive = true;
+    visibility?.disconnect();
+    button.hidden = false;
     clearTimeout(timer);
     if (started && !ready) { failed = true; script?.remove(); }
     resize?.disconnect(); mutation?.disconnect();
@@ -163,5 +187,7 @@ export function mountContactChat(root: HTMLElement) {
     if (banner) { resize?.observe(banner); mutation?.observe(banner, { attributes: true, attributeFilter: ['hidden'] }); }
     window.addEventListener('resize', position);
     position();
+    observeVisibility();
+    syncVisibility();
   });
 }
